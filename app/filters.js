@@ -1,4 +1,7 @@
-module.exports = function (env) {
+// There might be a better way to use this data.
+var applications = require('./data/applications.json')
+
+module.exports = function(env) {
   /**
    * Instantiate object used to store the methods registered as a
    * 'filter' (of the same name) within nunjucks. You can override
@@ -6,6 +9,51 @@ module.exports = function (env) {
    * @type {Object}
    */
   var filters = {}
+
+
+  // get application information
+  filters.appInfo = function(id, key) {
+    var app = {};
+    applications.forEach(function(item) {
+      if (item.index == id) {
+        app = item;
+      }
+    })
+
+    return app[key];
+  }
+
+  // show hide infomation based on search results
+  filters.showHide = function(obj, text) {
+    var query = text.split();
+    for (key in obj) {
+      for (var v = 0; v < query.length; v++) {
+        if (obj[key].indexOf(query[v]) != -1) {
+          return "show";
+        }
+      }
+    }
+    return "hide";
+  }
+
+  // Way of increasing a number in nunjucks
+  filters.increase = function(num) {
+    return num += 1;
+  }
+
+
+  filters.toMonth = function(x) {
+    months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    if (x > 0) {
+      return months[x - 1]; // returns date as per month
+    } else {
+      return x;
+    }
+  }
+  filters.toMoney = function(x) {
+    return ("£" + x);
+    //TO ADD - case to handle nothing being there
+  }
 
   /* ------------------------------------------------------------------
     add your methods to the filters obj below this comment block:

@@ -8,7 +8,7 @@ module.exports = function(router) {
 
 
   // CHANGE VERSION each time you create a new version
-  const version = 'poc/dev'
+  const version = 'alpha-1'
   const base_url = version + "/"
   const file_url = version + "/dev"
 
@@ -52,7 +52,7 @@ module.exports = function(router) {
   // router.post('/'+base_url+'*/clone', function(req, res) {
   //     res.redirect(301, '/' + base_url +req.params[0]+'/another page');
   // })
-  // 
+  //
   //
   // router.get('/poc/dev/index', function(req, res) {
   //   console.log("working")
