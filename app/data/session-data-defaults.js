@@ -16,7 +16,7 @@ Example usage:
 ============================================================================
 
 */
-var applications = require('./data/applications.json')
+var applications = require('./applications.json')
 module.exports = {
   "applications" : applications,
   // Insert values here

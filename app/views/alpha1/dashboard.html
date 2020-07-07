@@ -3,14 +3,14 @@
 GOV.UK Prototype Kit
 {% endblock %}
 {% block beforeContent %}
-<div class="login-nav login-border">
+<!-- <div class="login-nav login-border">
   <ul class="login-nav__list">
     <li class="login-nav__list-item" id="Nav-DisplayName">Ann Cooper</li>
     <li class="login-nav__list-item"> | <a href="https://identity-management-app.herokuapp.com/manage/team-members/services-on-team-member-admin-account_company-exports?serviceLine=Exporter%20Service&serviceRole=Exporter&numUsers=1&numAgents=0&numServices=1&multiOrg=no&parentChild=parent"
         class="govuk-link login-nav__link govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a>|</li>
     <li class="login-nav__list-item"><a href="#ß" class="govuk-link login-nav__link govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
   </ul>
-</div>
+</div> -->
 {% endblock%}
 {% block content %}
 <style>
@@ -94,7 +94,7 @@ GOV.UK Prototype Kit
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">Your applications</h1>
-    <a class="govuk-heading-m govuk-link--no-visited-state govuk-!-margin-bottom-6" href="select-certificate" style="display: inline-block;">Start a new application</a>
+    <a class="govuk-heading-m govuk-link--no-visited-state govuk-!-margin-bottom-6" href="application/setup/what-export" style="display: inline-block;">Start a new application</a>
   </div>
 </div>
 <div class="govuk-grid-row">
@@ -102,7 +102,7 @@ GOV.UK Prototype Kit
     <form method="GET">
       <div class="search-wrapper govuk-form-group">
         <label for="search-reservations" class="govuk-label">
-          Search by reference, destination, EHC, certificate or application number
+          Search by reference, destination, certificate or application number
         </label>
         <div class="search-input-wrapper">
           <input type="search" value="{{query.search or ''}}" id="search-reservations" name="search" title="Search" class="govuk-input">
@@ -343,38 +343,40 @@ GOV.UK Prototype Kit
                 <p class="govuk-body">Show applications created by:</p>
                 <div class="govuk-radios govuk-radios--small govuk-radios--conditional" data-module="govuk-radios">
                   <div class="govuk-radios__item">
-                    <input class="govuk-radios__input" id="show_applications_by_me" name="show_applications_by" type="radio" value="me" {%if (data.show_applications_by and data.show_applications_by=="me" ) or not data.show_applications_by %}checked="checked" {%endif%}>
+                    <input class="govuk-radios__input" id="show_applications_by_me" name="show_applications_by" type="radio" value="me" {%if (data.show_applications_by and data.show_applications_by=="me" ) or not data.show_applications_by %}checked="checked"
+                      {%endif%}>
                     <label class="govuk-label govuk-radios__label" for="show_applications_by_me">
                       Me
                     </label>
                   </div>
                   <div class="govuk-radios__item">
-                    <input class="govuk-radios__input" id="show_applications_by_everyone" name="show_applications_by" type="radio" value="everyone" {%if data.show_applications_by and data.show_applications_by=="everyone" %}checked="checked" {%endif%} data-aria-controls="conditional-how-contacted-conditional-3">
+                    <input class="govuk-radios__input" id="show_applications_by_everyone" name="show_applications_by" type="radio" value="everyone" {%if data.show_applications_by and data.show_applications_by=="everyone" %}checked="checked"
+                      {%endif%} data-aria-controls="conditional-how-contacted-conditional-3">
                     <label class="govuk-label govuk-radios__label" for="show_applications_by_everyone">
                       Someone else
                     </label>
                   </div>
 
-            <div class=" govuk-form-group govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional-3">
+                  <div class=" govuk-form-group govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional-3">
 
-                <!-- <label class="govuk-label" for="filter_name">
+                    <!-- <label class="govuk-label" for="filter_name">
                   Filter by user name
                 </label> -->
-                {% set logged_in_as = "Ann Cooper" %}
-                <select class="govuk-select govuk-!-width-full" id="filter_name" name="filter_name">
-                  <option value="All users" {% if not data.filter_name or data.filter_name=="All users" %}selected{%endif%}>All users</option>
-                  {% set list = []%}
-                  {% for cert in data.applications %}
-                  {% if not cert.name in list %}
-                  <option value="{{cert.name}}" {% if cert.name==data.filter_name %}selected{%endif%}>{{cert.name}}{% if logged_in_as == cert.name %} <strong>(you)</strong>{%endif%}</option>
-                  {{list.push(cert.name)}}
-                  {% endif %}
+                    {% set logged_in_as = "Ann Cooper" %}
+                    <select class="govuk-select govuk-!-width-full" id="filter_name" name="filter_name">
+                      <option value="All users" {% if not data.filter_name or data.filter_name=="All users" %}selected{%endif%}>All users</option>
+                      {% set list = []%}
+                      {% for cert in data.applications %}
+                      {% if not cert.name in list %}
+                      <option value="{{cert.name}}" {% if cert.name==data.filter_name %}selected{%endif%}>{{cert.name}}{% if logged_in_as == cert.name %} <strong>(you)</strong>{%endif%}</option>
+                      {{list.push(cert.name)}}
+                      {% endif %}
 
-                  {% endfor %}
-                </select>
-              </div>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
             </div>
-          </div>
           </div>
 
           <div class="govuk-grid-column-full">
@@ -424,7 +426,6 @@ GOV.UK Prototype Kit
         {% endfor %} -->
       {% endif %}
     </div>
-       = {{data.applications}}
 
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
@@ -434,10 +435,8 @@ GOV.UK Prototype Kit
               <th class="govuk-table__header">
                 <div class="applicationRef-column" style="width:15%">Application reference</div>
               </th>
-              <th class="govuk-table__header">EHC</th>
               <th class="govuk-table__header" style="width:5%!important">Destination</th>
               <th class="govuk-table__header">Submitted</th>
-              {% if data.show_applications_by == "everyone"%}<th class="govuk-table__header">Created by</th>{%endif%}
               <th class="govuk-table__header">Status</th>
               <th class="govuk-table__header"></th>
             </tr>
@@ -462,12 +461,9 @@ GOV.UK Prototype Kit
             <tr class="govuk-table__row result">
               <th id="1721147986456-appRef" class="govuk-table__cell applicationRef-column table-header" scope="row">
                 <a href="application?id={{app.index}}" class="govuk-link govuk-link--no-visited-state"> <span class="table-heading table-heading-full" aria-hidden="true">Case ID </span> {% if app.reference %}{{app.reference}}{%else%}{{app.applicationID}}{%endif%}</a>
-                {% if app.is_block =="yes" %}<br><div class=" govuk-!-margin-top-1 govuk-!-font-weight-regular">Block of {{data.certificate_request_amount or "50"}} certificataes</div>{% endif %}
+                {% if app.is_block =="yes" %}<br>
+                <div class=" govuk-!-margin-top-1 govuk-!-font-weight-regular">Block of {{data.certificate_request_amount or "50"}} certificataes</div>{% endif %}
               </th>
-              <td id="1721147986456-group-number" class="govuk-table__cell" scope="row">
-                <span class="table-heading" aria-hidden="true">EHC </span>
-                {{app.EHC}}
-              </td>
 
               <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
                 <span class="table-heading" aria-hidden="true">Destination </span>
@@ -507,11 +503,7 @@ GOV.UK Prototype Kit
                 <span class="table-heading" aria-hidden="true">Submitted</span>
                 {{app.date}}
               </td>
-              <!-- //only show if filered to view everyones applciations.  -->
-              <td id="1721147986456-group-number" class="govuk-table__cell" scope="row">
-                <span class="table-heading" aria-hidden="true">Created by </span>
-                {{app.name}}
-              </td>
+
               <td id="1721147986456-status" class="govuk-table__cell" scope="row">
                 <span class="table-heading" aria-hidden="true">Status</span>
                 <div class="app-status-tag app-status-tag--{{app.tag | lower}}">

@@ -1,0 +1,159 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+GOV.UK Prototype Kit
+{% endblock %}
+{% block beforeContent%}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <span class="govuk-caption-xl">Reference {{data.reference_num}}</span>
+      <h1 class="govuk-heading-xl">
+        Apply to export plants products to china
+      </h1>
+
+
+      <!-- <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Application incomplete</h2> -->
+      <p class="govuk-body govuk-!-margin-bottom-7">You have completed <span class="task-list-completed">1</span> of <span class="task-list-max">8</span> sections.</p>
+
+      <ol class="app-task-list">
+        <li>
+          <h2 class="app-task-list__section">
+            <span class="app-task-list__section-number">1. </span> Before you start
+          </h2>
+          <ul class="app-task-list__items">
+            <li class="app-task-list__item">
+              <span class="app-task-list__task-name">
+                <a href="setup/reference?return_url=../task-list" aria-describedby="eligibility-status">
+                  Create a unique reference
+                </a>
+              </span>
+              {% if data.reference_num %}
+              <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Completed</strong>
+              {% else %}
+              <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="list-convictions-status">Not started</strong>
+              {% endif %}
+            </li>
+
+          </ul>
+        </li>
+
+        <li>
+          <h2 class="app-task-list__section">
+            <span class="app-task-list__section-number">2. </span> Prepare application
+          </h2>
+          <ul class="app-task-list__items">
+            <li class="app-task-list__item">
+              <span class="app-task-list__task-name">
+                <a href="exporter" aria-describedby="company-information-status">
+                  Exporter details
+                </a>
+              </span>
+              {% if data.applicant and data.exporter %}
+              <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Completed</strong>
+              {% elseif data.applicant or  data.exporter%}
+              <strong class="govuk-tag govuk-tag--blue app-task-list__tag" id="contact-details-status">In progress</strong>
+              {% else%}
+              <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="list-convictions-status">Not started</strong>
+              {% endif %}
+            </li>
+            <li class="app-task-list__item">
+              <span class="app-task-list__task-name">
+                <a href="commodity_input" aria-describedby="contact-details-status">
+                  Your commodity
+                </a>
+              </span>
+              {% if data.genus or data.commodity_file %}
+              <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Completed</strong>
+              {% else%}
+              <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="list-convictions-status">Not started</strong>
+              {% endif %}
+            </li>
+            <li class="app-task-list__item">
+              <span class="app-task-list__task-name">
+                <a href="destination-entry-point" aria-describedby="list-convictions-status">
+                  Destination and consignee details
+                </a>
+              </span>
+              {% if data.import_permit and data.consignee and data.transport_method and data.port_entry %}
+              <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Completed</strong>
+              {% elseif data.import_permit or data.consignee or data.transport_method or data.port_entry %}
+              <strong class="govuk-tag govuk-tag--blue app-task-list__tag" id="contact-details-status">In progress</strong>
+              {% else%}
+              <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="list-convictions-status">Not started</strong>
+              {% endif %}
+            </li>
+          </ul>
+        </li>
+        <li>
+          <h2 class="app-task-list__section">
+            <span class="app-task-list__section-number">3. </span> Upload attachments (optional)
+          </h2>
+          <ul class="app-task-list__items">
+            <li class="app-task-list__item">
+              <span class="app-task-list__task-name">
+                <a href="destination-entry-point" aria-describedby="list-convictions-status">
+                Upload attachments
+                </a>
+              </span>
+              <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="medical-information-status">0 files attached</strong>
+            </li>
+            </ul>
+          </li>
+        <li>
+          <h2 class="app-task-list__section">
+            <span class="app-task-list__section-number">4. </span> Apply
+          </h2>
+          <ul class="app-task-list__items">
+           <li class="app-task-list__item" >
+              <span class="task-list-submit-disabled">
+              <span class="app-task-list__task-name">
+                Check and submit your application
+              </span>
+              <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="submit-pay-status">Cannot start yet</strong>
+              </span>
+              <span class="task-list-submit-enabled" style="display:none">
+                <span class="app-task-list__task-name">
+                  <a href="check-your-answers" aria-describedby="list-convictions-status">
+                  Check and submit your application
+                  </a>
+                </span>
+                <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="submit-pay-status">Not started</strong>
+              </span>
+           </li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+  </div>
+{% endblock %}
+{% block scripts %}
+{{super()}}
+<script type="text/javascript">
+  window.addEventListener('load', function() {
+  var tasks = $('.app-task-list__tag')
+  var max = tasks.length
+  $('.task-list-max').text(max)
+  var count = 0
+  tasks.each(function(index, value){
+    console.log($(value).text())
+    if($(value).text() == "Completed"){
+      count+=1
+    }
+
+  })
+  if(count==4){
+    $('.task-list-submit-enabled').show()
+    $('.task-list-submit-disabled').hide()
+  }
+  $('.task-list-completed').text(count)
+
+})
+</script>
+
+function getcount(){
+
+}
+{% endblock %}
