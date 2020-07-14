@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+{{page.title}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent%}
+{{super()}}
+<a href="{{page.content.prev or 'javascript:history.back()'}}" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      {{ product.title or 'Your products'}}
+    </h1>
+    {% if product.content.paragraph %}
+    <p class="govuk-body">{{product.content.paragraph}}</p>
+
+    {% else %}
+    <p class="govuk-body">You can add up to 5 products to this certificate.</p>
+    <p class="govuk-body">For longer product lists, attach a schedule as a <a href="exa/supporting-documents" class="govuk-link">supporting document</a> at the end of this application.</p>
+    {% endif %}
+  </div>
+
+  <div class="govuk-grid-column-full">
+
+
+
+    <!-- <p class="govuk-body">{{ data.products | length }} product{% if (data.products | length )!=1%}s{%endif%} added</p> -->
+    {% if (data.products | length ) >0 %}
+    <table class="govuk-table" id="Table-RepeatablePageReview">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          {% for question in product.content.fields %}
+          <th class="govuk-table__header">{{question.label}} {% if question.required != 'yes'%}{%endif%}</th>
+          {% endfor %}
+          <th class="govuk-table__header"></th>
+        </tr>
+      </thead>
+
+      <tbody class="govuk-table__body" id="TableBody-RepeatablePageReview">
+        {% for prod in data.products %}
+        <tr class="govuk-table__row">
+          {% for question in product.content.fields %}
+          <td class="govuk-table__cell">{{prod[question.name]}}</td>
+          {% endfor %}
+          <td class="govuk-table__cell">
+            <a class="govuk-link" href="page?id={{query.id or 2}}&edit={{prod.id}}&next=product-list&product_page=yes" data-qa-id="Link-ChangeRepeatablePage" id="Link-ChangeRepeatablePage-0">Edit</a>
+            <a class="govuk-link" href="product-list?delete={{loop.index -1}}&id={{query.id}}" id="0-deleteLink">Delete</a>
+          </td>
+        </tr>
+
+        {% endfor %}
+      </tbody>
+
+    </table>
+    {% endif %}
+    <a class="govuk-button grey-black-text" style="color:#000000" href="page?id={{query.id or 2}}&next=product-list&product_page=yes&new=yes" id="Button-AddAnother">{% if (data.products | length) == 0 %}Add{%else%}Add another{% endif %}</a>
+    <form {% if query.change=="yes" %} action="check-your-answers" {% elseif page.content.prodcut and query.change=="product" %} action="product-list" {% else %} action="{{page.content.next or 'check-your-progress'}}" {% endif %} method="POST">
+      <input type="hidden" name="crumb_csrf_token" value="nAitoNVyVGtnnzUQ-QQk78LOMzR_-9L6qqu86Lg9aRY">
+      <div class="govuk-!-margin-left-0 govuk-grid-column-one-quarter govuk-!-padding-0">
+        <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+      </div>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full govuk-body">
+          <input class="link-button" type="submit" value="Save and continue later" name="saveAndResumeLater" data-qa-id="Button-SaveAndResumeLater" id="Button-SaveAndResumeLater">
+        </div>
+      </div>
+    </form>
+  </div>
+  {% endblock %}

@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+GOV.UK Prototype Kit
+{% endblock %}
+{% block beforeContent%}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      What are your commodity?
+    </h1>
+
+    <form action="{{query.return_url or '../create/task-list'}}" method="POST">
+      <fieldset class="govuk-fieldset" role="group">
+
+            <!-- <div class="govuk-form-group">
+              <label class="govuk-label" for="commodity_host_genus">
+                Genus
+              </label>
+
+              <input class="govuk-input" id="commodity_host_genus" name="genus" type="text" aria-describedby="passport-number-hint">
+              </div> -->
+                {% block genus %}{% include "../modules/_genus.html" %}{% endblock %}
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="commodity_host_species">
+          Species
+        </label>
+        <!-- <span id="passport-number-hint" class="govuk-hint">
+          For example, 502135326
+        </span> -->
+        <input class="govuk-input" id="commodity_host_species" name="commodity_host_species" type="text" aria-describedby="passport-number-hint">
+      </div>
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="passport-number">
+          Common name
+        </label>
+        <!-- <span id="passport-number-hint" class="govuk-hint">
+          For example, 502135326
+        </span> -->
+        <input class="govuk-input" id="passport-number" name="commodity_common_name" type="text" aria-describedby="passport-number-hint">
+      </div>
+      <!-- <div class="govuk-form-group">
+        <label class="govuk-label" for="passport-number">
+          Primary country where grown
+        </label>
+
+        <input class="govuk-input" id="passport-number" name="commodity_were_grown" type="text" aria-describedby="passport-number-hint">
+      </div> -->
+      {% set country_module_lable = "Primary country where grown"%}
+      {% block country %}{% include "../modules/_country-select.html" %}{% endblock %}
+      </fieldset>
+
+
+      <fieldset class="govuk-fieldset" role="group">
+        <div class="govuk-form-group">
+        <label class="govuk-label" for="more-detail">
+      Further information (optional)
+    </label>
+  <span id="more-detail-hint" class="govuk-hint">
+    Add any extra information that will help identify the consignment
+  </span>
+  <textarea class="govuk-textarea" id="more-detail" name="more-detail" rows="5" aria-describedby="more-detail-hint"></textarea>
+        </div>
+      </fieldset>
+      <div class="govuk-form-group">
+        <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+      </div>
+    </form>
+
+  </div>
+</div>
+{% endblock %}
