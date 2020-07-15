@@ -33,4 +33,5 @@ fs.readdirSync(normalizedPath).forEach(function(file) {
 
 const tools = require('./routes/tools.js')
 require('./routes/routes.js')(router);
+require('./routes/dev.js')(router);
 module.exports = router
