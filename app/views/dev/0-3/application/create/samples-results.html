@@ -1,0 +1,129 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Check your answers
+{% endblock %}
+
+{% block beforeContent %}
+<!-- call the same block in the main layout file -->
+{{super()}}
+<!-- add admin navbar from includes folder -->
+<!-- back button -->
+<div>
+  <a class="govuk-back-link" id="link-back" href="../certifier-{{data.orgs or 'single'}}-org-dashboard">Back</a>
+</div>
+<style media="screen">
+  .app-add-another--item {position:relative;}
+  .app-add-another__remove-button {
+    margin:0 0 0 20px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 id="supplementary-documents" class="govuk-heading-xl">Sample {{data.sample_ref or "32D233"}}</h1>
+    <p class="govuk-body">Please check your sample details we have found</p>
+    <dl class="govuk-summary-list govuk-summary-list--no-border">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Test type
+        </dt>
+        <dd class="govuk-summary-list__value">
+          Bean yellow mosaic virus, cucumber mosaic virus, pea seed-borne mosaic virus, Tobacco streak virus,
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Result
+        </dt>
+        <dd class="govuk-summary-list__value">
+          Free of disease
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Date of test
+        </dt>
+        <dd class="govuk-summary-list__value">
+          5 Jan 2020
+        </dd>
+      </div>
+    </dl>
+    <form method="get">
+      <fieldset class="govuk-fieldset" aria-describedby="applicant-conditional-hint">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-!-margin-bottom-6">
+          <h3 class="govuk-fieldset__heading">
+            Is this the correct sample?
+          </h3>
+        </legend>
+
+        <div class="govuk-form-group">
+          <div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input " id="applicant-conditional" name="is_confirmed_sample" type="radio" value="yes~samples" data-aria-controls="conditional-applicant-conditional">
+              <label class="govuk-label govuk-radios__label" for="applicant-conditional">
+                Yes
+              </label>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="applicant-conditional-2" name="is_confirmed_sample" type="radio" value="no~samples" data-aria-controls="conditional-applicant-conditional-2">
+              <label class="govuk-label govuk-radios__label" for="applicant-conditional-2">
+                No
+              </label>
+            </div>
+
+
+          </div>
+        </div>
+      </fieldset>
+      <div class="govuk-!-margin-left-0 govuk-grid-column-one-quarter govuk-!-padding-0">
+        <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+      </div>
+      <div class="govuk-grid-row">
+        <!-- <div class="govuk-grid-column-full govuk-body">
+            <input class="link-button" type="submit" value="Save and continue later" name="saveAndResumeLater" data-qa-id="Button-SaveAndResumeLater" id="Button-SaveAndResumeLater">
+          </div> -->
+      </div>
+    </form>
+  </div>
+</div>
+
+
+
+</div>
+<script type="text/javascript">
+  window.addEventListener('load', function() {
+    function checkItemCount() {
+      console.log($('.app-add-another--item').length)
+      if ($('.app-add-another--item').length > 1) {
+        $('.app-add-another__remove-button').show()
+      } else {
+        $('.app-add-another__remove-button').hide()
+      }
+    }
+
+    $('.app-add-another--button').on("click", function() {
+
+
+      $('.app-add-another--content').append('<div id="app-repeatable-' + $('.app-add-another').length +
+        '" class="app-add-another--item govuk-form-group"><label class="govuk-label" for="event-name">Laboratory reference number</label><input class="govuk-input govuk-input--width-20" id="event-name" name="sample_ref" type="text"><button type="button" class="govuk-button govuk-button--secondary app-add-another__remove-button">Remove</button></div>'
+      )
+      checkItemCount()
+      $('.app-add-another__remove-button').on("click", function() {
+
+        $(this).parent().remove();
+        checkItemCount()
+      })
+      return false;
+    })
+
+    $('.file_count').text($('tbody .govuk-table__row').length)
+
+    checkItemCount()
+  })
+</script>
+{% endblock %}
