@@ -8,8 +8,9 @@ GOV.UK Prototype Kit
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+    {% if data.has_reference=="yes"%}<span class="govuk-caption-xl">{{data.reference_num}}</span>{% endif%}
     <h1 class="govuk-heading-xl">
-      Apply for the examination and certification of plant products for export
+      Apply to export {{data.application_commodity or 'plant products'}} to {{data.countrySelect[0] or 'China'}}
     </h1>
     <!-- <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Application incomplete</h2> -->
     <p class="govuk-body govuk-!-margin-bottom-7">You have completed <span class="task-list-completed">1</span> of <span class="task-list-max">8</span> required sections</p>
@@ -31,18 +32,7 @@ GOV.UK Prototype Kit
             <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="list-convictions-status">Not started</strong>
             {% endif %}
           </li>
-          <li class="app-task-list__item">
-            <span class="app-task-list__task-name">
-              <a href="submit-date" aria-describedby="eligibility-status">
-                When do you need this by
-              </a>
-            </span>
-            {% if data.submit_date_day%}
-            <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Completed</strong>
-            {% else %}
-            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="list-convictions-status">Not started</strong>
-            {% endif %}
-          </li>
+
           <li class="app-task-list__item">
             <span class="app-task-list__task-name">
               <a href="exporter" aria-describedby="company-information-status">
@@ -66,29 +56,40 @@ GOV.UK Prototype Kit
         <ul class="app-task-list__items">
           <li class="app-task-list__item">
             <span class="app-task-list__task-name">
-              <a href="commodity-page" aria-describedby="contact-details-status">
-                Plant details
+              {% if data.commodity_file %}
+              <a href="  commodity-list-3" aria-describedby="contact-details-status">
+                Your commodity
               </a>
+              {% elseif data.genus  %}
+              <a href="  commodity-list-1" aria-describedby="contact-details-status">
+                Your commodity
+              </a>
+              {% else %}
+              <a href="commodity_input" aria-describedby="contact-details-status">
+                Your commodity
+              </a>
+              {% endif %}
             </span>
-            {% if data.genus %}
+            {% if data.genus or data.commodity_file %}
             <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Completed</strong>
             {% else%}
             <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="list-convictions-status">Not started</strong>
             {% endif %}
+
           </li>
           <li class="app-task-list__item">
             <span class="app-task-list__task-name">
-              <a href="shipping" aria-describedby="contact-details-status">
-                Packaging and transport
+              <a href="destination-entry-point" aria-describedby="contact-details-status">
+                Transport and consignee
               </a>
             </span>
-            {% if data.shipping %}
+            {% if data.packaging %}
             <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Completed</strong>
             {% else%}
             <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="list-convictions-status">Not started</strong>
             {% endif %}
           </li>
-          <li class="app-task-list__item">
+          <!-- <li class="app-task-list__item">
             <span class="app-task-list__task-name">
               <a href="destination-consignee" aria-describedby="list-convictions-status">
                 Consignee details
@@ -99,13 +100,31 @@ GOV.UK Prototype Kit
             {% else%}
             <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="list-convictions-status">Not started</strong>
             {% endif %}
+          </li> -->
+        </ul>
+      </li>
+      <li>
+        <h2 class="app-task-list__section">
+          <span class="app-task-list__section-number">3. </span> Samples
+        </h2>
+        <ul class="app-task-list__items">
+          <li class="app-task-list__item">
+            <span class="app-task-list__task-name">
+              <a href="samples" aria-describedby="list-convictions-status">
+                Add sample details
+              </a>
+            </span>
+            {% if  data.sample_ref %}
+            <strong class="govuk-tag app-task-list__tag" id="medical-information-status">Completed</strong>
+            {% else %}
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="medical-information-status">Not started</strong>
+            {% endif %}
           </li>
         </ul>
       </li>
-
       <li>
         <h2 class="app-task-list__section">
-          <span class="app-task-list__section-number">3. </span> Upload attachments (optional)
+          <span class="app-task-list__section-number">4. </span> Upload attachments (optional)
         </h2>
         <ul class="app-task-list__items">
           <li class="app-task-list__item">
@@ -124,7 +143,7 @@ GOV.UK Prototype Kit
       </li>
       <li>
         <h2 class="app-task-list__section">
-          <span class="app-task-list__section-number">4. </span> Submit
+          <span class="app-task-list__section-number">5. </span> Submit
         </h2>
         <ul class="app-task-list__items">
           <li class="app-task-list__item">
@@ -146,6 +165,8 @@ GOV.UK Prototype Kit
         </ul>
       </li>
     </ol>
+    {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+
   </div>
 </div>
 {% endblock %}

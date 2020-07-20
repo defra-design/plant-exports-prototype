@@ -1,0 +1,162 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Check your answers
+{% endblock %}
+
+{% block beforeContent %}
+<!-- call the same block in the main layout file -->
+{{super()}}
+<!-- add admin navbar from includes folder -->
+<!-- back button -->
+<div>
+  <a class="govuk-back-link" id="link-back" href="../certifier-{{data.orgs or 'single'}}-org-dashboard">Back</a>
+</div>
+<style media="screen">
+  .app-add-another--item {position:relative;}
+  .app-add-another__remove-button {
+    margin:0 0 0 20px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+    {% if query.delete_ref== 'yes'%}
+    <div class="app-alert app-alert--success">
+      <p class="govuk-body govuk-!-margin-bottom-0">Succesfully deleted sample {{data.file}}</p>
+    </div>
+    {% endif %}
+    <h1 id="supplementary-documents" class="govuk-heading-xl">Your samples</h1>
+    <p class="govuk-body">Before you can apply, you need to have submitted samples of your commodity for laboratory testing.</p>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        {% if data.sample_ref and query.delete_ref != 'yes'%}
+        <h3 class="govuk-heading-m"><span class="file_count">1</span> sample added</h3>
+
+        <table class="govuk-table">
+
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th scope="col" class="govuk-table__header app-custom-class govuk-!-width-one-half">Sample</th>
+              <th scope="col" class="govuk-table__header app-custom-class ">Description</th>
+              <th scope="col" class="govuk-table__header app-custom-class govuk-!-width-one-quarter govuk-table__header--numeric ">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody class="govuk-table__body">
+
+
+            <tr class="govuk-table__row">
+              <th scope="row" class="govuk-table__header">{{data.sample_ref}}</th>
+              <td class="govuk-table__cell">Someother data</td>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                <a id="view_link_test_support.docx" href="?delete_ref=yes" rel="noreferrer noopener" class="govuk-link">Delete</a></td>
+            </tr>
+
+          </tbody>
+        </table>
+        {% endif %}
+      </div>
+    </div>
+
+    <form method="post" action="{{query.return_to or 'samples-results'}}">
+      {% if data.sample_ref and query.delete_ref != 'yes'%}
+      <fieldset class="govuk-fieldset" aria-describedby="applicant-conditional-hint">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-!-margin-bottom-6">
+          <h3 class="govuk-fieldset__heading">
+            Do you want to add more sample references?
+          </h3>
+        </legend>
+
+        <div class="govuk-form-group">
+          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input " id="applicant-conditional" name="commmodity_input_type" type="radio" value="upload~samples-results" data-aria-controls="conditional-applicant-conditional">
+              <label class="govuk-label govuk-radios__label" for="applicant-conditional">
+                Yes, add another reference
+              </label>
+            </div>
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-applicant-conditional">
+              <div class=" govuk-form-group">
+                <label class="govuk-label" for="event-name">
+                  Laboratory reference number
+                </label>
+                <input class="govuk-input govuk-input--width-20" id="event-name" name="sample_ref2" type="text">
+              </div>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="applicant-conditional-2" name="commmodity_input_type" type="radio" value="manually~task-list" data-aria-controls="conditional-applicant-conditional-2">
+              <label class="govuk-label govuk-radios__label" for="applicant-conditional-2">
+                No, I have finished adding samples
+              </label>
+            </div>
+
+
+          </div>
+        </div>
+      </fieldset>
+      {% else %}
+      <fieldset class="govuk-fieldset app-repeatable--wrapper">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+          <h3 class="govuk-fieldset__heading">
+            Add your sample references
+          </h3>
+        </legend>
+        <div class="app-add-another--content">
+          <div class="app-add-another--item govuk-form-group">
+            <label class="govuk-label" for="event-name">
+              Laboratory reference number
+            </label>
+            <input class="govuk-input govuk-input--width-20" id="event-name" name="sample_ref" type="text">
+          </div>
+        </div>
+
+      </fieldset>
+      <!-- <div class="govuk-form-group">
+            <input class="govuk-button govuk-button--secondary app-add-another--button" type="submit" name="upload" value="Add another reference" id="Upload" data-qa-id="Button-Upload">
+          </div> -->
+
+
+      {% endif %}
+      <input class="govuk-button" type="submit" value="Continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+    </form>
+    {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+
+  </div>
+</div>
+
+<script type="text/javascript">
+  window.addEventListener('load', function() {
+    function checkItemCount() {
+      console.log($('.app-add-another--item').length)
+      if ($('.app-add-another--item').length > 1) {
+        $('.app-add-another__remove-button').show()
+      } else {
+        $('.app-add-another__remove-button').hide()
+      }
+    }
+
+    $('.app-add-another--button').on("click", function() {
+
+
+      $('.app-add-another--content').append('<div id="app-repeatable-' + $('.app-add-another').length +
+        '" class="app-add-another--item govuk-form-group"><label class="govuk-label" for="event-name">Laboratory reference number</label><input class="govuk-input govuk-input--width-20" id="event-name" name="sample_ref" type="text"><button type="button" class="govuk-button govuk-button--secondary app-add-another__remove-button">Remove</button></div>'
+      )
+      checkItemCount()
+      $('.app-add-another__remove-button').on("click", function() {
+
+        $(this).parent().remove();
+        checkItemCount()
+      })
+      return false;
+    })
+
+    $('.file_count').text($('tbody .govuk-table__row').length)
+
+    checkItemCount()
+  })
+</script>
+{% endblock %}
