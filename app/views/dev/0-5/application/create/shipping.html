@@ -1,0 +1,123 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+GOV.UK Prototype Kit
+{% endblock %}
+{% block beforeContent%}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      Packaging and transportaion
+    </h1>
+
+    <form action="{{query.return_url or '../create/task-list'}}" method="POST">
+
+
+      <fieldset class="govuk-fieldset" role="group">
+        {% block packing %}{% include "../modules/_packaging.html" %}{% endblock %}
+      <!-- <div class="govuk-form-group">
+        <label class="govuk-label" for="passport-number">
+          Packaging type
+        </label>
+        <span id="passport-number-hint" class="govuk-hint">
+          For example, crates, boxes
+        </span>
+        <input class="govuk-input govuk-input--width-20" id="passport-number" name="shipping" type="packaging_type" aria-describedby="passport-number-hint">
+      </div> -->
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="passport-number">
+          Number of packages
+        </label>
+        <!-- <span id="passport-number-hint" class="govuk-hint">
+          example, Crates, boxes etc
+        </span> -->
+        <input class="govuk-input govuk-input--width-10" id="passport-number" name="passport-number" type="packaging_type" aria-describedby="passport-number-hint">
+      </div>
+
+      <div class="govuk-form-group">
+        <!-- <div class="govuk-radios govuk-radios--inline">
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="changed-name" name="changed-name" type="radio" value="yes">
+        <label class="govuk-label govuk-radios__label" for="changed-name">
+          Killograms
+        </label>
+      </div>
+      <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="changed-name-2" name="changed-name" type="radio" value="no">
+        <label class="govuk-label govuk-radios__label" for="changed-name-2">
+          Tones
+        </label>
+      </div>
+    </div> -->
+        <label class="govuk-label" for="passport-number">
+          Quantity
+        </label>
+        <span id="passport-number-hint" class="govuk-hint">
+          For example, 10KG, 1 tonne etc
+        </span>
+        <input class="govuk-input govuk-input--width-10" id="passport-number" name="shipping-quantity" type="text" aria-describedby="passport-number-hint">
+      </div>
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="reference_num">Point of entry into {{data.countrySelect[0] or 'China'}}</label>
+        <input class="govuk-input govuk-input--width-20" id="reference_num" name="port_entry" value="{% if query.change=='yes'%}{{ data.point_of_entry }}{%endif%}" type="text" data-qa-id="Question-7006EHC-1">
+      </div>
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--s govuk-!-margin-bottom-6">
+            <h1 class="govuk-fieldset__heading">
+              How will the consignment be transported?
+            </h1>
+          </legend>
+          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="transport_method_plants" name="transport_method" type="radio" value="plants">
+              <label class="govuk-label govuk-radios__label" for="transport_method_plants">
+                Air
+              </label>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="transport_method_plants_products" name="transport_method" type="radio" value="plant products">
+              <label class="govuk-label govuk-radios__label" for="transport_method_plants_products">
+                Sea
+              </label>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="transport_method_potatoes" name="transport_method" type="radio" value="potatoes">
+              <label class="govuk-label govuk-radios__label" for="atransport_method_potatoes">
+                Rail
+              </label>
+            </div>
+            <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="transport_method_seeds" name="transport_method" type="radio" value="seeds">
+            <label class="govuk-label govuk-radios__label" for="transport_method_seeds"">
+                Road
+              </label>
+            </div>
+            <div class=" govuk-radios__item">
+              <input class="govuk-radios__input" id="transport_method_bulbs" name="transport_method" type="radio" value="bulbs" data-aria-controls="conditional-applicant-conditional-2">
+              <label class="govuk-label govuk-radios__label" for="transport_method_bulbs">
+                Other
+              </label>
+          </div>
+          <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-applicant-conditional-2">
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="reference_num">Other means of transport</label>
+              <input class="govuk-input govuk-input--width-20" id="reference_num" name="other_transport" value="{% if query.change=='yes'%}{{ data.other_transport }}{%endif%}" type="text" data-qa-id="Question-7006EHC-1">
+            </div>
+            </div>
+
+      </div>
+      </fieldset>
+  </div>
+      </fieldset>
+        <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+    </form>
+    {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+
+
+  </div>
+</div>
+{% endblock %}
