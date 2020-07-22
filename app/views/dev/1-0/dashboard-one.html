@@ -1,0 +1,576 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+GOV.UK Prototype Kit
+{% endblock %}
+{% block beforeContent %}
+<!-- <div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item" id="Nav-DisplayName">Ann Cooper</li>
+    <li class="login-nav__list-item"> | <a href="https://identity-management-app.herokuapp.com/manage/team-members/services-on-team-member-admin-account_company-exports?serviceLine=Exporter%20Service&serviceRole=Exporter&numUsers=1&numAgents=0&numServices=1&multiOrg=no&parentChild=parent"
+        class="govuk-link login-nav__link govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a>|</li>
+    <li class="login-nav__list-item"><a href="#ß" class="govuk-link login-nav__link govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
+  </ul>
+</div> -->
+{% endblock%}
+{% block content %}
+<style>
+  main{padding-top: 0px!important;}
+    .green-tag{background: #00823b}
+</style>
+
+<style>
+  #filter-cert-org #filter-container {
+        bottom: 0px;
+        color: rgb(255, 255, 255);
+        height: 40px;
+        left: 0px;
+        position: relative;
+        right: 0px;
+        text-decoration: none solid rgb(255, 255, 255);
+        text-size-adjust: 100%;
+        top: 0px;
+        width: 300px;
+        column-rule-color: rgb(255, 255, 255);
+        perspective-origin: 150px 20px;
+        transform-origin: 150px 20px;
+        caret-color: rgb(255, 255, 255);
+        background: rgb(0, 94, 165) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36' width='40' height='40'%3E%3Cpath d='M25.7 24.8L21.9 21c.7-1 1.1-2.2 1.1-3.5 0-3.6-2.9-6.5-6.5-6.5S10 13.9 10 17.5s2.9 6.5 6.5 6.5c1.6 0 3-.6 4.1-1.5l3.7 3.7 1.4-1.4zM12 17.5c0-2.5 2-4.5 4.5-4.5s4.5 2 4.5 4.5-2 4.5-4.5 4.5-4.5-2-4.5-4.5z' fill='white'%3E%3C/path%3E%3C/svg%3E") no-repeat scroll 0% 0% / 40px 40px padding-box border-box;
+        border: 0px none rgb(255, 255, 255);
+        font: normal normal 400 normal 16px / normal "Times New Roman";
+        outline: rgb(255, 255, 255) none 0px;
+    }/*#filter-container*/
+    #filter-cert-org #filter-container:after {
+        color: rgb(255, 255, 255);
+        text-decoration: none solid rgb(255, 255, 255);
+        text-size-adjust: 100%;
+        column-rule-color: rgb(255, 255, 255);
+        caret-color: rgb(255, 255, 255);
+        border: 0px none rgb(255, 255, 255);
+        font: normal normal 400 normal 16px / normal "Times New Roman";
+        outline: rgb(255, 255, 255) none 0px;
+    }/*#DIV_4:after*/
+    #filter-cert-org #filter-container:before {
+        color: rgb(255, 255, 255);
+        text-decoration: none solid rgb(255, 255, 255);
+        text-size-adjust: 100%;
+        column-rule-color: rgb(255, 255, 255);
+        caret-color: rgb(255, 255, 255);
+        border: 0px none rgb(255, 255, 255);
+        font: normal normal 400 normal 16px / normal "Times New Roman";
+        outline: rgb(255, 255, 255) none 0px;
+    }/*#DIV_4:before*/
+    #filter-cert-org #filter-input {
+        bottom: 0px;
+        height: 22px;
+        left: 0px;
+        position: relative;
+        right: 0px;
+        text-size-adjust: 100%;
+        top: 0px;
+        width: 260px;
+        perspective-origin: 130px 20px;
+        transform-origin: 130px 20px;
+        border: 2px solid rgb(255, 255, 255);
+        font: normal normal 400 normal 19px / 25px nta, Arial, sans-serif;
+        margin: 0px 0px 0px 40px;
+        padding: 9px 10px 5px;
+        border: solid 2px #000;
+        outline: none;
+    }/*#filter-input*/
+    #filter-cert-org #filter-input:focus {
+        border: solid 2px #ffbf47;
+        outline: none;
+    }/*#filter-input*/
+    #filter-cert-org #filter-input:after {
+        text-size-adjust: 100%;
+        font: normal normal 400 normal 19px / 25px nta, Arial, sans-serif;
+    }/*#filter-input:after*/
+    #filter-cert-org #filter-input:before {
+        text-size-adjust: 100%;
+        font: normal normal 400 normal 19px / 25px nta, Arial, sans-serif;
+    }/*#filter-input:before*/
+    .govuk-details__summary:before{display: none}
+</style>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl govuk-!-margin-top-8">Your applications</h1>
+    <a class="govuk-heading-m govuk-link--no-visited-state govuk-!-margin-bottom-6" href="application/setup/what-export" style="display: inline-block;">Start a new application</a>
+  </div>
+</div>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <form method="GET">
+      <div class="search-wrapper govuk-form-group">
+        <label for="search-reservations" class="govuk-label">
+          Search by reference, destination, certificate or application number
+        </label>
+        <div class="search-input-wrapper">
+          <input type="search" value="{{query.search or ''}}" id="search-reservations" name="search" title="Search" class="govuk-input">
+          <div class="search-input-submit-wrapper">
+            <button type="submit" class="search-submit">Search</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="govuk-grid-column-one-third">
+    <div class="defra-filter--action" style="display:none">
+      <button id="defra-filter--button" class="govuk-button govuk-button--secondary govuk-!-margin-top-6 {% if (data.has_filter == 'yes' and data.filter_status != 'any') or (data.filter_name and data.filter_name != 'any')%}defra-filter-button--active{% endif%}"
+        type="button" aria-expanded="false"><span class="defra-filter--button-content">Show filters</span><span class="defra-filter__icon"></span></button>
+    </div>
+  </div>
+</div>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <div class="derfa-filter--content">
+      <form method="get">
+        <div class="govuk-grid-row">
+          <!-- <div class="govuk-grid-column-one-third ">
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="filter-status">
+                  Filter by status
+                </label>
+                <select class="govuk-select govuk-!-width-full" id="filter-status" name="filter_status">
+                  <option value="any" {% if (data.filter_status and data.filter_status=='any' ) or not data.filter_status %}selected="selected" {% endif %}>Any status</option>
+                  <option value="draft" {% if (data.filter_status and data.filter_status=='draft' ) %}selected="selected" {% endif %}>Draft</option>
+                  <option value="processing" {% if (data.filter_status and data.filter_status=='processing' )  %}selected="selected" {% endif %}>Processing</option>
+                  <option value="dispatched" {% if (data.filter_status and data.filter_status=='dispatched' )  %}selected="selected" {% endif %}>Dispatched</option>
+                  <option value="certifier action" {% if (data.filter_status and data.filter_status=='certifier action' ) %}selected="selected" {% endif %}>Certifier action</option>
+                  <option value="completed" {% if (data.filter_status and data.filter_status=='completed' )  %}selected="selected" {% endif %}>Completed</option>
+                  <option value="cancelled" {% if (data.filter_status and data.filter_status=='cancelled' ) %}selected="selected" {% endif %}>Cancelled</option>
+                  <option value="rejected" {% if (data.filter_status and data.filter_status=='rejected' )  %}selected="selected" {% endif %}>Rejected</option>
+
+                </select>
+              </div>
+            </div> -->
+          <div class="govuk-grid-column-one-third">
+            <div class="govuk-form-group">
+              <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                  Filter by status
+                </legend>
+                <div class="govuk-radios govuk-radios--small ">
+                  <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="type-9" name="filter_status" type="radio" value="any" {% if (data.filter_status and data.filter_status=='any' ) or not data.filter_status %}checked="checked" {% endif %}>
+                    <label class="govuk-label govuk-radios__label" for="type-9">
+                      Any status
+                    </label>
+                  </div>
+                  <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="type-20" name="filter_status" type="radio" value="draft" {% if data.filter_status and data.filter_status=='draft' %}checked="checked" {% endif %}>
+                    <label class="govuk-label govuk-radios__label" for="type-20">
+                      Draft
+                    </label>
+                  </div>
+                  <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="type-3" name="filter_status" type="radio" value="processing" {% if data.filter_status and data.filter_status=='processing' %}checked="checked" {% endif %}>
+                    <label class="govuk-label govuk-radios__label" for="type-3">
+                      Processing
+                    </label>
+                  </div>
+                  <div class="govuk-radios__item ">
+                    <input class="govuk-radios__input" id="type" name="filter_status" type="radio" value="dispatched" {% if data.filter_status and data.filter_status=='dispatched' %}checked="checked" {% endif %}>
+                    <label class="govuk-label govuk-radios__label" for="type">
+                      Dispatched
+                    </label>
+                  </div>
+                </div>
+                <div class="govuk-radios govuk-radios--small">
+                  <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="type-2" name="filter_status" type="radio" value="needs pre-check" {% if data.filter_status and data.filter_status=='certifier action' %}checked="checked" {% endif %}>
+                    <label class="govuk-label govuk-radios__label" for="type-2">
+                      Needs pre-check
+                    </label>
+                  </div>
+                  <div class="  govuk-radios__item">
+                    <input class="govuk-radios__input" id="type-8" name="filter_status" type="radio" value="completed" {% if data.filter_status and data.filter_status=='completed' %}checked="checked" {% endif %}>
+                    <label class="govuk-label govuk-radios__label" for="type-8">
+                      Completed
+                    </label>
+                  </div>
+                  <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="type-4" name="filter_status" type="radio" value="cancelled" {% if data.filter_status and data.filter_status=='cancelled' %}checked="checked" {% endif %}>
+                    <label class="govuk-label govuk-radios__label" for="type-4">
+                      Cancelled
+                    </label>
+                  </div>
+
+                  <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="type-6" name="filter_status" type="radio" value="rejected" {% if data.filter_status and data.filter_status=='rejected' %}checked="checked" {% endif %}>
+                    <label class="govuk-label govuk-radios__label" for="type-6">
+                      Rejected
+                    </label>
+                  </div>
+
+
+
+                </div>
+
+              </fieldset>
+            </div>
+          </div>
+          <div class="govuk-grid-column-one-third ">
+
+            <div class="govuk-form-group">
+              <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                  Filter by export date
+                </legend>
+                <div class="govuk-radios govuk-radios--small govuk-radios--conditional" data-module="govuk-radios">
+                  <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="date_range" name="date_range" type="radio" value="any" {%if (data.date_range and data.date_range=="any" ) or not data.date_range %}checked="checked" {%endif%}>
+                    <label class="govuk-label govuk-radios__label" for="date_range">
+                      Any
+                    </label>
+                  </div>
+                  <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="date_range-1" name="date_range" type="radio" value="today" {%if data.date_range and data.date_range=="today" %}checked="checked" {%endif%}>
+                    <label class="govuk-label govuk-radios__label" for="date_range-1">
+                      Today
+                    </label>
+                  </div>
+                  <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="date_range-3" name="date_range" type="radio" value="tomorrow" {%if data.date_range and data.date_range=="tomorrow" %}checked="checked" {%endif%}>
+                    <label class="govuk-label govuk-radios__label" for="date_range-3">
+                      Tomorrow
+                    </label>
+                  </div>
+                  <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="date_range-2" name="date_range" type="radio" value="in the next 7 days" {%if data.date_range and data.date_range=="in next 7 days" %}checked="checked" {%endif%}>
+                    <label class="govuk-label govuk-radios__label" for="date_range-2">
+                      Next 7 days
+                    </label>
+                  </div>
+
+                  <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="date_range-4" name="date_range" type="radio" value="custom" {%if data.date_range and data.date_range=="custom" %}checked="checked" {%endif%} data-aria-controls="conditional-how-contacted-conditional-2">
+                    <label class="govuk-label govuk-radios__label" for="date_range-4">
+                      Custom date range
+                    </label>
+                  </div>
+                  <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional-2">
+                    <div class="govuk-grid-row">
+
+                      <div class="govuk-form-group">
+                        <fieldset class="govuk-fieldset" role="group" aria-describedby="passport-issued-hint">
+                          <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                            <h1 class="govuk-fieldset__heading">
+                              From
+                            </h1>
+                          </legend>
+                          <span id="passport-issued-hint" class="govuk-hint">
+                          </span>
+                          <div class="govuk-date-input" id="passport-issued">
+                            <div class="govuk-date-input__item">
+                              <div class="govuk-form-group">
+                                <label class="govuk-label govuk-date-input__label" for="export_form_day">
+                                  Day
+                                </label>
+                                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="export_form_day" name="export_form_day" type="text" pattern="[0-9]*" inputmode="numeric">
+                              </div>
+                            </div>
+                            <div class="govuk-date-input__item">
+                              <div class="govuk-form-group">
+                                <label class="govuk-label govuk-date-input__label" for="export_form_month">
+                                  Month
+                                </label>
+                                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="export_form_month" name="export_form_month" type="text" pattern="[0-9]*" inputmode="numeric">
+                              </div>
+                            </div>
+                            <div class="govuk-date-input__item">
+                              <div class="govuk-form-group">
+                                <label class="govuk-label govuk-date-input__label" for="passport-issued-year">
+                                  Year
+                                </label>
+                                <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="export_form_year" name="export_form_year" type="text" pattern="[0-9]*" inputmode="numeric">
+                              </div>
+                            </div>
+                          </div>
+                        </fieldset>
+                      </div>
+                      <div class="govuk-form-group">
+                        <fieldset class="govuk-fieldset" role="group" aria-describedby="passport-issued-hint">
+                          <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                            <h1 class="govuk-fieldset__heading">
+                              to
+                            </h1>
+                          </legend>
+                          <span id="passport-issued-hint" class="govuk-hint">
+                          </span>
+                          <div class="govuk-date-input" id="passport-issued">
+                            <div class="govuk-date-input__item">
+                              <div class="govuk-form-group">
+                                <label class="govuk-label govuk-date-input__label" for="export_to_day">
+                                  Day
+                                </label>
+                                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="export_to_day" name="export_to_day" type="text" pattern="[0-9]*" inputmode="numeric">
+                              </div>
+                            </div>
+                            <div class="govuk-date-input__item">
+                              <div class="govuk-form-group">
+                                <label class="govuk-label govuk-date-input__label" for="export_to_month">
+                                  Month
+                                </label>
+                                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="export_to_month" name="export_to_month" type="text" pattern="[0-9]*" inputmode="numeric">
+                              </div>
+                            </div>
+                            <div class="govuk-date-input__item">
+                              <div class="govuk-form-group">
+                                <label class="govuk-label govuk-date-input__label" for="export_to_year">
+                                  Year
+                                </label>
+                                <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="export_to_year" name="export_to_year" type="text" pattern="[0-9]*" inputmode="numeric">
+                              </div>
+                            </div>
+                          </div>
+                        </fieldset>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+
+          <div class="govuk-grid-column-one-third">
+
+            <div class="govuk-form-group">
+              <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                  Filter by user
+                </legend>
+                <p class="govuk-body">Show applications created by:</p>
+                <div class="govuk-radios govuk-radios--small govuk-radios--conditional" data-module="govuk-radios">
+                  <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="show_applications_by_me" name="show_applications_by" type="radio" value="me" {%if (data.show_applications_by and data.show_applications_by=="me" ) or not data.show_applications_by %}checked="checked"
+                      {%endif%}>
+                    <label class="govuk-label govuk-radios__label" for="show_applications_by_me">
+                      Me
+                    </label>
+                  </div>
+                  <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="show_applications_by_everyone" name="show_applications_by" type="radio" value="everyone" {%if data.show_applications_by and data.show_applications_by=="everyone" %}checked="checked"
+                      {%endif%} data-aria-controls="conditional-how-contacted-conditional-3">
+                    <label class="govuk-label govuk-radios__label" for="show_applications_by_everyone">
+                      Someone else
+                    </label>
+                  </div>
+
+                  <div class=" govuk-form-group govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional-3">
+
+                    <!-- <label class="govuk-label" for="filter_name">
+                  Filter by user name
+                </label> -->
+                    {% set logged_in_as = "Ann Cooper" %}
+                    <select class="govuk-select govuk-!-width-full" id="filter_name" name="filter_name">
+                      <option value="All users" {% if not data.filter_name or data.filter_name=="All users" %}selected{%endif%}>All users</option>
+                      {% set list = []%}
+                      {% for cert in data.applications %}
+                      {% if not cert.name in list %}
+                      <option value="{{cert.name}}" {% if cert.name==data.filter_name %}selected{%endif%}>{{cert.name}}{% if logged_in_as == cert.name %} <strong>(you)</strong>{%endif%}</option>
+                      {{list.push(cert.name)}}
+                      {% endif %}
+
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+            </div>
+          </div>
+
+          <div class="govuk-grid-column-full">
+            <button type="submit" class="govuk-button govuk-!-margin-bottom-0" data-module="govuk-button" name="has_filter" value="yes">
+              Apply filter
+            </button>
+            {% if data.has_filter %}
+            <a href="?filter_status=&has_filter=&date_range=&filter_name=&show_applications_by=me" class="defra-link-button defra-link-button--inline" data-module="govuk-button">
+              Clear filters
+            </a>
+            {% endif %}
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="govuk-grid-column-full">
+
+    <div class="filter-tag--wrapper govuk-!-margin-bottom-6" data-module="track-click">
+      <p class="govuk-body govuk-!-margin-bottom-2">
+        <span id="js-case-count"></span> applications {% if data.show_applications_by == "everyone" %}created by <strong>{% if data.filter_name == logged_in_as %}you{% else %}{{data.filter_name}}{% endif %} {% endif %}</strong>{% if
+        query.search %} matching <strong>‘{{query.search}}’</strong>{% endif %}
+        {% if data.has_filter == "yes" and data.filter_status != 'any'%}
+        with status <strong>{{data.filter_status | capitalize}}</strong>
+        {% endif %}
+        {% if data.date_range and data.date_range != "any"%} exporting {% if data.date_range == "custom" %}from <strong>2 Jan 2020 </strong> to <strong>30 Jan 2020 </strong> {% else %}<strong>{{data.date_range}}</strong>{% endif %}{% endif %}
+        <!-- {% if data.date_range and data.date_range != "any"%} exporting within <strong>{{data.date_range}}</strong>{% endif %} -->
+      </p>
+      {% if (data.has_filter == "yes" and data.filter_status != 'any') or query.search or (data.date_range and data.date_range != "any") or (data.filter_name and data.filter_name != "any")%}
+      <p class="govuk-body">
+        <a href="?filter_status=&has_filter=&date_range=&filter_name=&show_applications_by=me" class="govuk-link govuk-link--no-visited-state govuk-!-font-size-19" data-module="govuk-button">
+          Clear
+          {% if data.filter_status and query.search %}
+          search and filter
+          {% elseif data.filter_status %}
+          filter
+          {% else %}
+          search
+          {% endif %}
+        </a>
+      </p>
+      <!-- {% for filter in data.filter_status %}
+        <div class="filter-tag">
+          <p class="filter-tag--text">{{filter | capitalize}}</p> <button type="button" class="filter-tag--remove" aria-label="Remove filter australia" data-module="remove-filter-link" data-track-label="australia" data-facet="keywords" data-value="australia"
+            data-name="keywords">✕</button>
+        </div>
+        {% endfor %} -->
+      {% endif %}
+    </div>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <table class="govuk-table responsive-table">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header">
+                <div class="applicationRef-column" style="width:15%">Application reference</div>
+              </th>
+              <th class="govuk-table__header" style="width:5%!important">Destination</th>
+              <th class="govuk-table__header">Submitted</th>
+              <th class="govuk-table__header">Status</th>
+              <th class="govuk-table__header"></th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr class="govuk-table__row result">
+              <th id="1721147986456-appRef" class="govuk-table__cell applicationRef-column table-header" scope="row">
+                <a href="application?id=0" class="govuk-link govuk-link--no-visited-state"> <span class="table-heading table-heading-full" aria-hidden="true">Case ID </span> {{data.reference_num or 'PO823942AUS'}}</a><br>
+              </th>
+              <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
+                <span class="table-heading" aria-hidden="true">Destination </span>
+                {{data.countrySelect[0] or 'Australia'}}
+              </td>
+              <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
+                <span class="table-heading" aria-hidden="true">Submitted</span>
+                15 May 2020
+              </td>
+
+              <td id="1721147986456-status" class="govuk-table__cell" scope="row">
+                <span class="table-heading" aria-hidden="true">Status</span>
+                <div class="app-status-tag app-status-tag--blue">
+                  processing
+                </div>
+              </td>
+              <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
+                <a href="clone?id=0" class="govuk-link govuk-link--no-visited-state">Clone</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="app-example-page">
+          <nav class="defra-pagination" id="pagination-label">
+            <p class="govuk-visually-hidden" aria-labelledby="pagination-label">Pagination navigation</p>
+            <ul class="defra-pagination__list">
+              <li class="defra-pagination__item  defra-pagination__item--prev">
+                <a class="defra-pagination__link" href="">Previous<span class="govuk-visually-hidden"> set of pages</span></a>
+              </li>
+              <li class="defra-pagination__item defra-pagination__item--active"><a class="defra-pagination__link" href="#" style="color: black!important;font-weight: 700">1</a></li>
+              <li class="defra-pagination__item"><a class="defra-pagination__link" href="#">2</a></li>
+              <li class="defra-pagination__item"><a class="defra-pagination__link" href="#">3</a></li>
+              <li class="defra-pagination__item  defra-pagination__item--next">
+                <a class="defra-pagination__link" href="">Next<span class="govuk-visually-hidden"> set of pages</span></a>
+              </li>
+            </ul>
+            <p class="defra-pagination__results">Showing <b>1</b> to <b>30</b> of <b>90</b> results</p>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    window.addEventListener('load', function() {
+      $(".clear-search-holder").hide()
+      $(".search-what-cont").hide()
+      $("#search").click(function(e) {
+        $(".search-what-text").text($("#search-input").val());
+        $(".search-what-cont").show();
+        $(".result").each(function(e) {
+          var text = $(this).text().toLowerCase();
+          if (text.indexOf($("#search-input").val().toLowerCase()) > -1) {
+            $(this).show();
+          } else {
+            $(this).hide();
+          }
+        });
+      });
+      $("#clear-search, .search-what-close").click(function(e) {
+        $(".clear-search-holder").show()
+        $(".search-what-text").text($("#search-input").val());
+        $(".search-what-cont").show()
+        clear - search - holder
+        $(".search-what-cont").hide();
+        $("#search-input").val("");
+        $(".result").each(function(e) {
+          $(this).show();
+        });
+        $(this).blur();
+      });
+    });
+  </script>
+  <script type="text/javascript">
+    window.addEventListener('load', function() {
+      var count = $('.govuk-table__row').length - 1
+      // show hide content
+      $('.derfa-filter--content').hide()
+      $('.defra-filter--action').show()
+      $('#js-case-count').text(count);
+      if (count == 0) {
+        $('.govuk-table').hide()
+      }
+      $('.derfa-filter--content').hide()
+      $('#defra-filter--button').on("click", function() {
+        if (!$('.defra-filter--action').hasClass('defra-filter--open')) {
+          $('.derfa-filter--content').show().focus()
+          $('.defra-filter--action').addClass('defra-filter--open')
+          $('#defra-filter--button').attr('aria-expanded', 'true');
+          $(".defra-filter--button-content").text('Hide filters')
+
+        } else {
+          $('.derfa-filter--content').hide()
+          $('.defra-filter--action').removeClass('defra-filter--open')
+          $('#defra-filter--button').attr('aria-expanded', 'false');
+          $(".defra-filter--button-content").text('Show filters')
+        }
+      })
+    })
+  </script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+      if (document.querySelectorAll('.sm-daterange-component').length) {
+        SmDateRangePicker('#from', '#to').init();
+      }
+    });
+  </script>
+  <script type="text/javascript" src="/public/javascripts/accessible-autocomplete.min.js"></script>
+  <script type="text/javascript">
+    // dropdownArrow: function (config) {
+    //   return '<svg class="' + config.className + '" style="top: 8px;" viewBox="0 0 512 512" ><path d="M256,298.3L256,298.3L256,298.3l174.2-167.2c4.3-4.2,11.4-4.1,15.8,0.2l30.6,29.9c4.4,4.3,4.5,11.3,0.2,15.5L264.1,380.9  c-2.2,2.2-5.2,3.2-8.1,3c-3,0.1-5.9-0.9-8.1-3L35.2,176.7c-4.3-4.2-4.2-11.2,0.2-15.5L66,131.3c4.4-4.3,11.5-4.4,15.8-0.2L256,298.3  z"/></svg>'
+    // },
+    selectEl = document.querySelector('#passport-location')
+    accessibleAutocomplete.enhanceSelectElement({
+      autoselect: false,
+      placeholder: "Select name",
+      showAllValues: true,
+      selectElement: selectEl,
+      defaultValue: '',
+      dropdownArrow: function(config) {
+        return '<svg class="' + config.className +
+          '" style="top: 8px; z-index:1" viewBox="0 0 512 512" ><path d="M256,298.3L256,298.3L256,298.3l174.2-167.2c4.3-4.2,11.4-4.1,15.8,0.2l30.6,29.9c4.4,4.3,4.5,11.3,0.2,15.5L264.1,380.9  c-2.2,2.2-5.2,3.2-8.1,3c-3,0.1-5.9-0.9-8.1-3L35.2,176.7c-4.3-4.2-4.2-11.2,0.2-15.5L66,131.3c4.4-4.3,11.5-4.4,15.8-0.2L256,298.3  z"/></svg>'
+      },
+    })
+
+    // var queryStringParameters = window.location.search
+    // var previouslySubmitted = queryStringParameters.length > 0
+  </script>
+  {% endblock %}
