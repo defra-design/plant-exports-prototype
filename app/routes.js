@@ -7,6 +7,7 @@ const radioButtonRedirect = require('radio-button-redirect')
 router.use(radioButtonRedirect)
 
 router.use('/', (req, res, next) => {
+  req.session.data.version = "1-1"
   res.locals.currentURL = req.originalUrl; //current screen
   res.locals.prevURL = req.get('Referrer'); // previous screen
   console.log('previous page is: ' + res.locals.prevURL + " and current page is " + req.url + " " + res.locals.currentURL );
