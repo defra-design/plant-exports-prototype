@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+GOV.UK Prototype Kit
+{% endblock %}
+{% block beforeContent%}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
+          Upload a copy of the permit
+        </h1>
+      <p class="govuk-body">You will need to upload a copy of the permit <strong>{{data.import_permit}}</strong> before submitting this application</p>
+      <form  action="{{query.return_url or '../create/task-list'}}" method="POST">
+        <fieldset class="govuk-fieldset" aria-describedby="applicant-conditional-hint">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-!-margin-bottom-6">
+                Do you want to upload a copy now?
+          </legend>
+
+          <div class="govuk-form-group">
+          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="applicant-conditional" name="permit_uploaded" type="radio" value="yes~attachments" data-aria-controls="has-permit-conditional">
+              <label class="govuk-label govuk-radios__label" for="applicant-conditional">
+                Yes, upload the permit now
+              </label>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="applicant-conditional-2" name="permit_uploaded" type="radio" value="no~task-list" data-aria-controls="conditional-applicant-conditional-2">
+              <label class="govuk-label govuk-radios__label" for="applicant-conditional-2">
+                No, I will supply it later
+              </label>
+            </div>
+
+
+          </div>
+          </div>
+        </fieldset>
+
+        <div class="govuk-form-group">
+          <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+        </div>
+      </form>
+      {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+    </div>
+  </div>
+{% endblock %}
