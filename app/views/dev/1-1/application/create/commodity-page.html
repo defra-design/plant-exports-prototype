@@ -40,6 +40,17 @@ GOV.UK Prototype Kit
                   </label>
                   <input class="govuk-input govuk-input--width-20" id="commodity_host_species" name="commodity_host_species" type="text" aria-describedby="passport-number-hint">
                 </div>
+
+                {% if data.commodity == "plants" %}
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="commodity_host_species">
+                    Variety
+                  </label>
+
+                  <input class="govuk-input" id="commodity_host_species" name="commodity_host_species" type="text" aria-describedby="passport-number-hint">
+                </div>
+                {% endif %}
+
               </div>
               <div class="govuk-radios__item">
                 <input class="govuk-radios__input" id="how-contacted-conditional-2" name="has_botanicial_name" type="radio" value="no" data-aria-controls="conditional-how-contacted-conditional-2">
@@ -61,6 +72,39 @@ GOV.UK Prototype Kit
 
             </div>
           </div>
+          {% if data.commodity == "plants" %}
+          {% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{{ govukRadios({
+  idPrefix: "commodity_group",
+  name: "commodity_group",
+  fieldset: {
+    legend: {
+      text: "Commodity group",
+      isPageHeading: true,
+      classes: "govuk-fieldset__legend--s"
+    }
+  },
+  items: [
+    {
+      value: "micropropagated material",
+      text: "Micropropagated material"
+    },
+    {
+      value: "plant products",
+      text: "Plant products"
+    },
+    {
+      value: "plants",
+      text: "Plants"
+    },
+    {
+      value: "Produce",
+      text: "Produce (fruit, flowers or veg)"
+    }
+  ]
+}) }}
+          {% endif %}
 
 
         </fieldset>
@@ -95,7 +139,7 @@ GOV.UK Prototype Kit
           <label class="govuk-label" for="packing-material">
             Packing material used (optional)
           </label>
-          <input class="govuk-input govuk-input--width-10" id="packing-material" name="packing-material" type="text" >
+          <input class="govuk-input govuk-input--width-10" id="packing-material" name="packing-material" type="text">
         </div>
         {% endif %}
 
@@ -108,34 +152,34 @@ GOV.UK Prototype Kit
         </div>
 
 
-      {% if data.commodity == "grain"%}
-      <div class="govuk-form-group">
-        <label class="govuk-label" for="passport-number">
-          Provisional quantity
-        </label>
-        <!-- <span id="passport-number-hint" class="govuk-hint">
+        {% if data.commodity == "grain"%}
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="passport-number">
+            Provisional quantity
+          </label>
+          <!-- <span id="passport-number-hint" class="govuk-hint">
           example, Crates, boxes etc
         </span> -->
-        <input class="govuk-input govuk-input--width-10" id="passport-number" name="passport-number" type="text" aria-describedby="passport-number-hint">
-      </div>
-      <div class="govuk-form-group">
+          <input class="govuk-input govuk-input--width-10" id="passport-number" name="passport-number" type="text" aria-describedby="passport-number-hint">
+        </div>
+        <div class="govuk-form-group">
 
-        <label class="govuk-label" for="passport-number">
-          Final quantity
-        </label>
-        <input class="govuk-input govuk-input--width-10" id="passport-number" name="passport-number" type="text" aria-describedby="passport-number-hint">
-      </div>
-      {% else %}
-      <div class="govuk-form-group">
+          <label class="govuk-label" for="passport-number">
+            Final quantity
+          </label>
+          <input class="govuk-input govuk-input--width-10" id="passport-number" name="passport-number" type="text" aria-describedby="passport-number-hint">
+        </div>
+        {% else %}
+        <div class="govuk-form-group">
 
-        <label class="govuk-label " for="quantity-number">
-          Quantity
-        </label>
+          <label class="govuk-label " for="quantity-number">
+            Quantity
+          </label>
 
 
-      <input class="govuk-input govuk-input--width-10" id="quantity-number" name="quantity" type="text" aria-describedby="passport-number-hint">
-    </div>
-      {% endif %}
+          <input class="govuk-input govuk-input--width-10" id="quantity-number" name="quantity" type="text" aria-describedby="passport-number-hint">
+        </div>
+        {% endif %}
 
       </fieldset>
       <fieldset class="govuk-fieldset" role="group">
