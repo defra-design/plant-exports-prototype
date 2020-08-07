@@ -212,12 +212,14 @@ if (useAutoStoreData === 'true') {
     const all = (useLogging === 'true')
     const post = (useLogging === 'post' && req.method === 'POST')
     const get = (useLogging === 'get' && req.method === 'GET')
+    const d = req.session.data
     if (all || post || get) {
       const log = {
         method: req.method,
         url: req.originalUrl,
-        data: req.session.data
+        data: d
       }
+      log.data.applications = {}
       console.log(JSON.stringify(log, null, 2))
     }
     next()

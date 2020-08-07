@@ -1,12 +1,12 @@
-<h2 class="govuk-heading-m">Your commodities</h2>
+
 <div class="app-summary-card ">
-  {% if data.has_botanicial_name == "yes" %}
-  {% set commodity_id_name = data.genus %}
+  {% if commodity.has_botanicial_name == "yes" %}
+  {% set commodity_id_name = commodity.genus %}
   {% else %}
-  {% set commodity_id_name = data.commodity_common_name %}
+  {% set commodity_id_name = commodity.commodity_common_name %}
   {% endif %}
   <header class="app-summary-card--header">
-    <h3 class="app-summary-card--title">1. {{commodity_id_name or 'Lepanthes'}}</h3>
+    <h3 class="app-summary-card--title">{{loop.index or "1"}}. {{commodity_id_name or 'Lepanthes'}}</h3>
     <div class="app-summary-card__actions">
       <ul class="app-summary-card__actions-list">
         <li class="app-summary-card__actions-list-item">
@@ -24,7 +24,7 @@
   </header>
   <div class="app-summary-card--content">
     <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-      {% if data.has_botanicial_name == "yes" %}
+      {% if commodity.has_botanicial_name == "yes" %}
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Genus
@@ -43,7 +43,7 @@
 
         </dd>
       </div>
-      {% if data.commodity == "plants" %}
+      {% if commodity.commodity == "plants" %}
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Variety
@@ -66,7 +66,7 @@
         </dd>
       </div>
       {% endif%}
-      {% if data.commodity == "plants" %}
+      {% if commodity.commodity == "plants" %}
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Commodity group
@@ -125,4 +125,3 @@
     </dl>
   </div>
 </div>
-<p class="govuk-body"><a href="commodity-page?return_url=check-your-answers">Add more</a></p>

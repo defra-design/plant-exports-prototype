@@ -15,6 +15,22 @@ module.exports = function(router) {
   // Load any certificate within "app/data/certificates" folder
   const db = []
 
+  function addCommodity(data,list){
+    console.log("adding commodity")
+    var newCommodity = {}
+    for (var k in data) {
+      var o = {}
+      var name = ""
+      console.log(k)
+        if (data.hasOwnProperty(k)) {
+           var name = k;
+
+        }
+
+         newCommodity[name] = data[k]
+    }
+    list.push(newCommodity)
+  }
 
   // MIDDLEWARE: Called every time a page is rendered
   router.use(function(req, res, next) {
@@ -69,6 +85,14 @@ module.exports = function(router) {
   //     res.send(html);
   //   })
   // });
+
+  // **** POST TEMPLATE ***
+  router.post('/'+base_url+'*/application/create/commodity-page*', function(req, res) {
+      var page = req.query.return_url  || '/' + base_url +req.params[0]+'/application/create/commodity-list'
+      addCommodity(req.body,req.session.data.commodities)
+      res.redirect(301, page);
+  })
+
 
   // *******************************
   // Global page GET router

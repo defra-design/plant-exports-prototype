@@ -19,6 +19,8 @@ Example usage:
 var applications = require('./applications.json')
 module.exports = {
   "applications" : applications,
+  "commodities" : [],
+  "id_count" : 1,
   // Insert values here
 
 }
