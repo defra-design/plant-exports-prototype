@@ -5,20 +5,108 @@ GOV.UK Prototype Kit
 {% block beforeContent%}
 <a href="javascript:history.back()" class="govuk-back-link">Back</a>
 {% endblock %}
+
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">
       What is your commodity?
     </h1>
-    <form action="find-genus">
-      <div class="govuk-form-group">
-        <label class="govuk-label" for="passport-number">
-          Botanical name (genus or species)
-        </label>
-        <input class="govuk-input govuk-input--width-20" id="passport-number" name="botanical_name_search" type="text" aria-describedby="passport-number-hint">
-      </div>
-      <button type="submit" class="govuk-button govuk-button--secondary">Look up plant</button>
-    </form>
 
+    <form action="{{query.return_url or '../create/commodity-list-1'}}" method="POST">
+      <fieldset class="govuk-fieldset" role="group">
+        {% set country_module_lable = "Primary country where grown"%}
+        {% set module_name = "cournty_origin"%}
+
+        {% block country %}{% include "../modules/_country-select.html" %}{% endblock %}
+      </fieldset>
+      <fieldset class="govuk-fieldset" role="group">
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="passport-number">
+            Packaging type
+          </label>
+          <span id="packaging_type-hint" class="govuk-hint">
+            For example, crates, boxes
+          </span>
+          <input class="govuk-input govuk-input--width-20" id="packing-type" name="packaging_type" type="text" aria-describedby="packaging-type-hint">
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="distinguishing-marks">
+            Distinguishing marks (optional)
+          </label>
+          <span id="distinguishing-mark-hint" class="govuk-hint">
+            For container numbers or lot numbers
+          </span>
+          <input class="govuk-input govuk-input--width-20" id="distinguishing-marks" name="distinguishing_marks" type="text" aria-describedby="distinguishing-mark-hint">
+        </div>
+        {% if data.commodity == 'grain'%}
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="packing-material">
+            Packing material used (optional)
+          </label>
+          <input class="govuk-input govuk-input--width-10" id="packing-material" name="packing-material" type="text">
+        </div>
+        {% endif %}
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="passport-number">
+            Number of packages
+          </label>
+
+          <input class="govuk-input govuk-input--width-10" id="passport-number" name="passport-number" type="packaging_type" aria-describedby="passport-number-hint">
+        </div>
+
+
+        {% if data.commodity == "grain"%}
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="passport-number">
+            Provisional quantity
+          </label>
+          <!-- <span id="passport-number-hint" class="govuk-hint">
+          example, Crates, boxes etc
+        </span> -->
+          <input class="govuk-input govuk-input--width-10" id="passport-number" name="passport-number" type="text" aria-describedby="passport-number-hint">
+        </div>
+        <div class="govuk-form-group">
+
+          <label class="govuk-label" for="passport-number">
+            Final quantity
+          </label>
+          <input class="govuk-input govuk-input--width-10" id="passport-number" name="passport-number" type="text" aria-describedby="passport-number-hint">
+        </div>
+        {% else %}
+        <div class="govuk-form-group">
+
+          <label class="govuk-label " for="quantity-number">
+            Quantity
+          </label>
+
+
+          <input class="govuk-input govuk-input--width-10" id="quantity-number" name="quantity" type="text" aria-describedby="passport-number-hint">
+        </div>
+        {% endif %}
+
+      </fieldset>
+      <fieldset class="govuk-fieldset" role="group">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-label--s" for="more-detail">
+            Further information (optional)
+          </label>
+          <span id="more-detail-hint" class="govuk-hint">
+            Enter any extra information that you would like to appear on the certificate
+          </span>
+          <textarea class="govuk-textarea" id="more-detail" name="more_detail" rows="5" aria-describedby="more-detail-hint"></textarea>
+        </div>
+      </fieldset>
+      <div class="govuk-form-group">
+        <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+      </div>
+    </form>
+    {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+
+
+  </div>
+</div>
 {% endblock %}
