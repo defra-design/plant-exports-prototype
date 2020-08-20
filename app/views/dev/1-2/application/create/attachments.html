@@ -1,0 +1,111 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Check your answers
+{% endblock %}
+
+{% block beforeContent %}
+<!-- call the same block in the main layout file -->
+{{super()}}
+<!-- add admin navbar from includes folder -->
+<!-- back button -->
+<div>
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+    {% if query.delete_file == 'yes'%}
+    <div class="defra-alert defra-alert--success"><p class="govuk-body govuk-!-margin-bottom-0">Succesfully deleted file {{data.file}}</p></div>
+    {% endif %}
+    <h1 id="supplementary-documents" class="govuk-heading-xl">Attachments</h1>
+    <p class="govuk-body">Upload a file for APHA to authenticate and include with your certificate, such as a packing list or import permit.</p>
+
+    </div>
+    </div>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+          <h3 class="govuk-heading-m"><span class="file_count">0</span> file{% if not data.file %}s{%endif%} uploaded</h3>
+
+          <table class="govuk-table">
+            {% if data.file and query.delete_file != 'yes'%}
+            <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header app-custom-class govuk-!-width-one-half">File name</th>
+                <th scope="col" class="govuk-table__header app-custom-class ">File description</th>
+                <th scope="col" class="govuk-table__header app-custom-class govuk-!-width-one-quarter">Actions</th>
+              </tr>
+            </thead>
+            {% endif %}
+            <tbody class="govuk-table__body">
+
+              {% if data.file and query.delete_file != 'yes'%}
+              <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header"><a href="#"><span class="govuk-visually-hidden" >view</span>{{data.file}}</a></th>
+                <td class="govuk-table__cell">{{data.description}}</td>
+                <td class="govuk-table__cell">
+                  <a id="view_link_test_support.docx" href="/protected/form/8270EHC/application/1721147992687/supplementary-documents/10977038-996d-492d-be43-8e1988e5667a/view" rel="noreferrer noopener" target="_blank" class="govuk-link">Download</a>
+                  &nbsp;
+                  <a id="view_link_test_support.docx" href="confirm_file_delete" rel="noreferrer noopener"
+                        class="govuk-link">Delete</a></td>
+              </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+</div>
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+          <form action="" method="get">
+
+            <fieldset class="govuk-fieldset">
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                <h3 class="govuk-fieldset__heading">
+                  Upload a file
+                </h3>
+              </legend>
+
+              <p class="govuk-hint">Files must have a unique name, be PDF, Word, Excel or JPEG and be less than 10 megabytes (10 MB).</p>
+              <div class="govuk-form-group">
+                <input class="inputfile govuk-file-upload" id="file" name="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg" type="file">
+              </div>
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="description">
+                  File description
+                </label>
+                <textarea rows="2" id="description" name="description" class="govuk-textarea margin-bottom-0" maxlength="100"></textarea>
+              </div>
+              <div class="govuk-form-group">
+                <input class="govuk-button govuk-button--secondary" type="submit" name="upload" value="Upload file" id="Upload" data-qa-id="Button-Upload">
+              </div>
+            </fieldset>
+          </form>
+          <!-- <fieldset class="govuk-fieldset" role="group">
+            <div class="govuk-form-group">
+              <label class="govuk-label govuk-label--s" for="more-detail">
+                Information for APHA
+              </label>
+              <span id="more-detail-hint" class="govuk-hint">
+                Enter anything else about this application you want APHA to know. This will not appear on your certificate.
+              </span>
+              <textarea class="govuk-textarea" id="more-detail" name="more-detail" rows="5" aria-describedby="more-detail-hint"></textarea>
+            </div>
+          </fieldset> -->
+
+          <form method="post" action="{{query.return_url or 'task-list'}}">
+            <input class="govuk-button" type="submit" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+          </form>
+          {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+        </div>
+      </div>
+<script type="text/javascript">
+  window.addEventListener('load', function() {
+
+      $('.file_count').text($('tbody .govuk-table__row').length)
+  })
+</script>
+
+{% endblock %}

@@ -1,75 +1,89 @@
-
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  GOV.UK Prototype Kit
+GOV.UK Prototype Kit
 {% endblock %}
 
 {% block content %}
 <h1 class="govuk-heading-xl">
   Page index for version {{data.version}}
 </h1>
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-half">
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-half">
+    <form id="version-update" method="get">
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="sort">
+          Version
+        </label>
+        <select class="govuk-select" id="sort" name="version" onchange="updateversion()">
+          {% for v in data.version_list %}
+          <option value="{{v}}" {% if data.version==v %}selected{%endif%}>Version {{v}} {% if data.version == v %}{% endif%}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </form>
+    <p class="govuk-body"><strong>Current commodity:</strong> {{data.commodity or "None"}} <a class="govuk-footer__link" href="/dev/{{data.version}}/application/setup/what-export?change=yes&return_url={{data.currentURL}}">Change</a></p>
+    <h2 class="govuk-heading-m">Sign in and sign up</h2>
+    <ul class="govuk-list">
+      <li><a href="dev/{{data.version}}/start-page">Start page</a></li>
+      <li><a href="dev/{{data.version}}/gateway/gov-sign-in">Gov gateway sign in</a></li>
+    </ul>
+    <h2 class="govuk-heading-m">Dashboards and application details</h2>
+    <ul class="govuk-list">
+      <li><a href="dev/{{data.version}}/dashboard">Dashboard multiple</a></li>
+      <li><a href="dev/{{data.version}}/dashboard-one">Dashboard one application</a></li>
+      <li><a href="dev/{{data.version}}/application?id=4&commodity=plant products">Summary page</a></li>
+      <li><a href="dev/{{data.version}}/clone?id=4&commodity=plant products">Clone page</a></li>
+    </ul>
 
-      <p class="govuk-body"><strong>Current commodity:</strong>  {{data.commodity or "None"}} <a class="govuk-footer__link" href="/dev/{{data.version}}/application/setup/what-export?change=yes&return_url={{data.currentURL}}">Change</a></p>
-      <h2 class="govuk-heading-m">Sign in and sign up</h2>
-      <ul class="govuk-list">
-        <li><a href="dev/{{data.version}}/start-page">Start page</a></li>
-        <li><a href="dev/{{data.version}}/gateway/gov-sign-in">Gov gateway sign in</a></li>
-      </ul>
-      <h2 class="govuk-heading-m">Dashboards and application details</h2>
-      <ul class="govuk-list">
-        <li><a href="dev/{{data.version}}/dashboard">Dashboard multiple</a></li>
-        <li><a href="dev/{{data.version}}/dashboard-one">Dashboard one application</a></li>
-        <li><a href="dev/{{data.version}}/application?id=4&commodity=plant products">Summary page</a></li>
-        <li><a href="dev/{{data.version}}/clone?id=4&commodity=plant products">Clone page</a></li>
-      </ul>
 
+    <h2 class="govuk-heading-m">Application</h2>
+    <ul class="govuk-list">
+      <li>Set up</li>
+      <li><a href="dev/{{data.version}}/application/setup/what-export">What are you exporting?</a></li>
+      <li><a href="dev/{{data.version}}/application/setup/what-country">What country are you exporting to?</a></li>
+      <li><a href="dev/{{data.version}}/application/setup/declaration">Confirm you have checked regulations</a></li>
+      <li><a href="dev/{{data.version}}/application/setup/reference">Add a reference</a></li>
+      <li><br>Task list</li>
+      <li><a href="dev/{{data.version}}/application/create/task-list">Task list </a></li>
+      <li><a href="/dev/{{data.version}}/application/create/exporter">Who is the exporter</a></li>
+      <li><a href="/dev/{{data.version}}/application/create/inspection">Inspection details</a> <strong class="govuk-tag govuk-tag--turquoise">Plants</strong> <strong class="govuk-tag govuk-tag--orange">bulbs</strong></li>
 
-      <h2 class="govuk-heading-m">Application</h2>
-      <ul class="govuk-list">
-        <li>Set up</li>
-        <li><a href="dev/{{data.version}}/application/setup/what-export">What are you exporting?</a></li>
-        <li><a href="dev/{{data.version}}/application/setup/what-country">What country are you exporting to?</a></li>
-        <li><a href="dev/{{data.version}}/application/setup/declaration">Confirm you have checked regulations</a></li>
-        <li><a href="dev/{{data.version}}/application/setup/reference">Add a reference</a></li>
-        <li><br>Task list</li>
-        <li><a href="dev/{{data.version}}/application/create/task-list">Task list </a></li>
-        <li><a href="/dev/{{data.version}}/application/create/exporter">Who is the exporter</a></li>
-        <li><a href="/dev/{{data.version}}/application/create/inspection">Inspection details</a> <strong class="govuk-tag govuk-tag--turquoise">Plants</strong> <strong class="govuk-tag govuk-tag--orange">bulbs</strong></li>
+      <li><a href="/dev/1-1/application/create/agent?commodity=grain">Who is the agent?</a> <strong class="govuk-tag govuk-tag--yellow">Grain</strong> </li>
+      <li> <a href="/dev/{{data.version}}/application/create/commodity-page">Whats your commodity?</a> </li>
+      <li><a href="/dev/{{data.version}}/application/create/commodity-list-1">Your commodities (list)</a></li>
+      <li><a href="/dev/{{data.version}}/application/create/commodity-page-bulbs">Bulb stock numbers</a> <strong class="govuk-tag govuk-tag--orange">bulbs</strong></li>
+      <li><a href="/dev/{{data.version}}/application/create/commodity-list-bulb">Your Bulb stock numbers (list)</a> <strong class="govuk-tag govuk-tag--orange">bulbs</strong></li>
+      <li><a href="/dev/{{data.version}}/application/create/destination-consignee">Consignee</a></li>
+      <li><a href="/dev/{{data.version}}/application/create/destination-permit">Do you have inport permit?</a></li>
+      <li><a href="/dev/{{data.version}}/application/create/upload-permit">Do you want to upload a permit?</a></li>
+      <li><a href="/dev/{{data.version}}/application/create/attachments">Attachments</a></li>
+      <li><br>Submit</li>
+      <li><a href="dev/{{data.version}}/application/create/check-your-answers">Check your answers</a></li>
+      <li><a href="dev/{{data.version}}/application/submit/submit-date">When do you need the certificate?</a></li>
+      <li><a href="dev/{{data.version}}/application/submit/declaration">Final declaration</a></li>
+      <li><br>Confirmation page</li>
+      <li><a href="dev/{{data.version}}/application/submit/confirmation-plant-products-hh91">Plant products - confirmation</a></li>
+      <li><a href="dev/{{data.version}}/application/submit/confirmation-bulbs-ko1">Bulbs - confirmation</a></li>
+      <li><a href="dev/{{data.version}}/application/submit/confirmation-grain-hh93">Grain - confirmation</a></li>
+      <li><a href="dev/{{data.version}}/application/submit/confirmation-plants-phe36">Plants - confirmation</a></li>
+      <li><a href="dev/{{data.version}}/application/submit/confirmation-potatoes-phe60">Potatoes - confirmation</a></li>
+      <li><a href="dev/{{data.version}}/application/submit/confirmation-seeds-phe90">Seeds - confirmation</a></li>
+    </ul>
 
-        <li><a href="/dev/1-1/application/create/agent?commodity=grain">Who is the agent?</a> <strong class="govuk-tag govuk-tag--yellow">Grain</strong> </li>
-        <li> <a href="/dev/{{data.version}}/application/create/commodity-page">Whats your commodity?</a> </li>
-        <li><a href="/dev/{{data.version}}/application/create/commodity-list-1">Your commodities (list)</a></li>
-        <li><a href="/dev/{{data.version}}/application/create/commodity-page-bulbs">Bulb stock numbers</a> <strong class="govuk-tag govuk-tag--orange">bulbs</strong></li>
-        <li><a href="/dev/{{data.version}}/application/create/commodity-list-bulb">Your Bulb stock numbers (list)</a> <strong class="govuk-tag govuk-tag--orange">bulbs</strong></li>
-        <li><a href="/dev/{{data.version}}/application/create/destination-consignee">Consignee</a></li>
-        <li><a href="/dev/{{data.version}}/application/create/destination-permit">Do you have inport permit?</a></li>
-        <li><a href="/dev/{{data.version}}/application/create/upload-permit">Do you want to upload a permit?</a></li>
-        <li><a href="/dev/{{data.version}}/application/create/attachments">Attachments</a></li>
-        <li><br>Submit</li>
-        <li><a href="dev/{{data.version}}/application/create/check-your-answers">Check your answers</a></li>
-        <li><a href="dev/{{data.version}}/application/submit/submit-date">When do you need the certificate?</a></li>
-        <li><a href="dev/{{data.version}}/application/submit/declaration">Final declaration</a></li>
-        <li><br>Confirmation page</li>
-        <li><a href="dev/{{data.version}}/application/submit/confirmation-plant-products-hh91">Plant products - confirmation</a></li>
-        <li><a href="dev/{{data.version}}/application/submit/confirmation-bulbs-ko1">Bulbs - confirmation</a></li>
-        <li><a href="dev/{{data.version}}/application/submit/confirmation-grain-hh93">Grain - confirmation</a></li>
-        <li><a href="dev/{{data.version}}/application/submit/confirmation-plants-phe36">Plants - confirmation</a></li>
-        <li><a href="dev/{{data.version}}/application/submit/confirmation-potatoes-phe60">Potatoes - confirmation</a></li>
-        <li><a href="dev/{{data.version}}/application/submit/confirmation-seeds-phe90">Seeds - confirmation</a></li>
-      </ul>
+    <h2 class="govuk-heading-m">Other pages</h2>
+    <ul class="govuk-list">
+      <li><a href="dev/{{data.version}}/application/setup/pre-application-test">Have you completed GSI? <strong class="govuk-tag govuk-tag--grey">exprimental</strong></a></li>
+      <li><a href="dev/{{data.version}}/application/setup/what-inspection">What are you applying for? <strong class="govuk-tag govuk-tag--grey">exprimental</strong></a></li>
+      <li><a href="dev/0-5/application/create/plant-lookup">Plant look-up (version 0-5) <strong class="govuk-tag govuk-tag--grey">exprimental</strong></a></li>
+      <li><a href="dev/0-5/application/create/exporter">Address look-up (version 0-5) <strong class="govuk-tag govuk-tag--grey">exprimental</strong></a></li>
+    </ul>
 
-      <h2 class="govuk-heading-m">Other pages</h2>
-      <ul class="govuk-list">
-        <li><a href="dev/{{data.version}}/application/setup/pre-application-test">Have you completed GSI? <strong class="govuk-tag govuk-tag--grey">exprimental</strong></a></li>
-        <li><a href="dev/{{data.version}}/application/setup/what-inspection">What are you applying for? <strong class="govuk-tag govuk-tag--grey">exprimental</strong></a></li>
-        <li><a href="dev/0-5/application/create/plant-lookup">Plant look-up (version 0-5) <strong class="govuk-tag govuk-tag--grey">exprimental</strong></a></li>
-        <li><a href="dev/0-5/application/create/exporter">Address look-up (version 0-5) <strong class="govuk-tag govuk-tag--grey">exprimental</strong></a></li>
-      </ul>
-
-    </div>
+  </div>
 </div>
-
+<script type="text/javascript">
+  function updateversion(){
+    document.getElementById("version-update").submit();
+  }
+</script>
 {% endblock %}

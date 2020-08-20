@@ -1,0 +1,127 @@
+
+<div class="app-summary-card ">
+  {% if commodity.has_botanicial_name == "yes" %}
+  {% set commodity_id_name = commodity.genus %}
+  {% else %}
+  {% set commodity_id_name = commodity.commodity_common_name %}
+  {% endif %}
+  <header class="app-summary-card--header">
+    <h3 class="app-summary-card--title">{{loop.index or "1"}}. {{commodity_id_name or 'Lepanthes'}}</h3>
+    <div class="app-summary-card__actions">
+      <ul class="app-summary-card__actions-list">
+        <li class="app-summary-card__actions-list-item">
+          <a class="govuk-link" href="#">
+            Delete<span class="govuk-visually-hidden"></span>
+          </a>
+        </li>
+        <li class="app-summary-card__actions-list-item">
+          <a class="govuk-link" href="commodity-page?change=yes">
+            Change<span class="govuk-visually-hidden"></span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </header>
+  <div class="app-summary-card--content">
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+      {% if commodity.has_botanicial_name == "yes" %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Genus
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{commodity_id_name or 'Lepanthes'}}
+          <!-- <span class="govuk-hint">You skipped this question</span> -->
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Species
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{data.commodity_host_species or ('<span class="govuk-hint">Left blank</span>' | safe)}}
+
+        </dd>
+      </div>
+      {% if commodity.commodity == "plants" %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Variety
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{data.commodity_variety or ('<span class="govuk-hint">Left blank</span>' | safe)}}
+
+        </dd>
+      </div>
+
+      {% endif %}
+      {% else%}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Common name
+        </dt>
+        <dd class="govuk-summary-list__value">
+          Babyboot orchid
+          <!-- <span class="govuk-hint">You skipped this question</span> -->
+        </dd>
+      </div>
+      {% endif%}
+      {% if commodity.commodity == "plants" %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Commodity group
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{data.commodity_group or ('<span class="govuk-hint">Left blank</span>' | safe)}}
+
+        </dd>
+      </div>
+
+      {% endif %}
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Primary country where grown
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{data.cournty_origin[0] or "United Kingdom"}}
+
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Packaging type
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{data.packaging_type or "Crate"}}
+          <!-- <span class="govuk-hint">You skipped this question</span> -->
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Number of packages
+        </dt>
+        <dd class="govuk-summary-list__value">
+          15
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Quality
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{data.quantity or '10KG'}}
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Further information (optional)
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{data.more_detail or ('<span class="govuk-hint">	Left blank</span>' | safe)}}
+
+        </dd>
+      </div>
+    </dl>
+  </div>
+</div>

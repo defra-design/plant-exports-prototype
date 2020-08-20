@@ -1,0 +1,94 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Check your answers
+{% endblock %}
+
+{% block beforeContent %}
+<!-- call the same block in the main layout file -->
+{{super()}}
+<!-- add admin navbar from includes folder -->
+<!-- back button -->
+<div>
+  <a class="govuk-back-link" id="link-back" href="../certifier-{{data.orgs or 'single'}}-org-dashboard">Back</a>
+</div>
+<style media="screen">
+  .app-add-another--item {position:relative;}
+  .app-add-another__remove-button {
+    margin:0 0 0 20px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+    {% if query.delete_file == 'yes'%}
+    <div class="defra-alert defra-alert--success">
+      <p class="govuk-body govuk-!-margin-bottom-0">Succesfully deleted file {{data.file}}</p>
+    </div>
+    {% endif %}
+    <h1 id="supplementary-documents" class="govuk-heading-xl">Your samples</h1>
+    <p class="govuk-body">Before applying you need to have submitted samples of your commodity for laboratory testing.</p>
+
+      <form  method="post" action="{{query.return_to or 'task-list'}}">
+
+        <fieldset class="govuk-fieldset app-repeatable--wrapper">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+            <h3 class="govuk-fieldset__heading">
+              Add your sample references
+            </h3>
+          </legend>
+          <div class="app-add-another--content">
+          <div class="app-add-another--item govuk-form-group">
+            <label class="govuk-label" for="event-name">
+              Laboratory reference number
+            </label>
+
+            <input class="govuk-input govuk-input--width-20" id="event-name" name="sample_ref" type="text">
+            <button type="button" class="govuk-button govuk-button--secondary app-add-another__remove-button">Remove</button>
+          </div>
+          </div>
+          <div class="govuk-form-group">
+            <input class="govuk-button govuk-button--secondary app-add-another--button" type="submit" name="upload" value="Add another reference" id="Upload" data-qa-id="Button-Upload">
+          </div>
+
+            <input class="govuk-button" type="submit" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+          </form>
+    </div>
+  </div>
+
+
+
+</div>
+<script type="text/javascript">
+  window.addEventListener('load', function() {
+    function checkItemCount(){
+      console.log($('.app-add-another--item').length)
+      if($('.app-add-another--item').length > 1 ){
+        $('.app-add-another__remove-button').show()
+      }else{
+        $('.app-add-another__remove-button').hide()
+      }
+    }
+
+    $('.app-add-another--button').on("click",function(){
+
+
+      $('.app-add-another--content').append('<div id="app-repeatable-'+$('.app-add-another').length+'" class="app-add-another--item govuk-form-group"><label class="govuk-label" for="event-name">Laboratory reference number</label><input class="govuk-input govuk-input--width-20" id="event-name" name="sample_ref" type="text"><button type="button" class="govuk-button govuk-button--secondary app-add-another__remove-button">Remove</button></div>')
+      checkItemCount()
+      $('.app-add-another__remove-button').on("click",function(){
+
+        $(this).parent().remove();
+        checkItemCount()
+      })
+        return false;
+    })
+
+    $('.file_count').text($('tbody .govuk-table__row').length)
+
+    checkItemCount()
+  })
+</script>
+{% endblock %}
