@@ -15,7 +15,7 @@ GOV.UK Prototype Kit
     <form  method="POST">
       <fieldset class="govuk-fieldset" role="group">
         <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
             <h1 class="govuk-fieldset__heading">
               How do you want to identify the plants in your commodity?
             </h1>
@@ -23,6 +23,7 @@ GOV.UK Prototype Kit
               Enter the genus or species, or an agreed common name if your commodity is made up of many different species of plant.
             </span>
           </legend>
+
           <div class="govuk-form-group">
             <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
               <div class="govuk-radios__item">
@@ -71,38 +72,39 @@ GOV.UK Prototype Kit
 
             </div>
           </div>
+
           {% if data.commodity == "plants" %}
           {% from "govuk/components/radios/macro.njk" import govukRadios %}
 
-{{ govukRadios({
-  idPrefix: "commodity_group",
-  name: "commodity_group",
-  fieldset: {
-    legend: {
-      text: "Commodity group",
-      isPageHeading: true,
-      classes: "govuk-fieldset__legend--s"
-    }
-  },
-  items: [
-    {
-      value: "micropropagated material",
-      text: "Micropropagated material"
-    },
-    {
-      value: "plant products",
-      text: "Plant products"
-    },
-    {
-      value: "plants",
-      text: "Plants"
-    },
-    {
-      value: "Produce",
-      text: "Produce (fruit, flowers or veg)"
-    }
-  ]
-}) }}
+          {{ govukRadios({
+            idPrefix: "commodity_group",
+            name: "commodity_group",
+            fieldset: {
+              legend: {
+                text: "Commodity group",
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--s"
+              }
+            },
+            items: [
+              {
+                value: "micropropagated material",
+                text: "Micropropagated material"
+              },
+              {
+                value: "plant products",
+                text: "Plant products"
+              },
+              {
+                value: "plants",
+                text: "Plants"
+              },
+              {
+                value: "Produce",
+                text: "Produce (fruit, flowers or veg)"
+              }
+            ]
+          }) }}
           {% endif %}
 
 
@@ -114,12 +116,33 @@ GOV.UK Prototype Kit
         {% endif %}
         {% set module_name = "cournty_origin"%}
 
+
         {% block country %}{% include "../modules/_country-select.html" %}{% endblock %}
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="origin_other">
+            Other country details (optional)
+          </label>
+          <span id="distinguishing-mark-hint" class="govuk-hint">
+            You can add multiple countries other countries of origin
+          </span>
+          <input class="govuk-input govuk-input--width-20" id="origin_other" name="distinguishing_marks" type="text" aria-describedby="distinguishing-mark-hint">
+        </div>
+
       </fieldset>
       <fieldset class="govuk-fieldset" role="group">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+          Shipping information
+          </legend>
         {% set country_module_label = "Packaging type"%}
         {% block packing %}{% include "../modules/_packaging.html" %}{% endblock %}
-
+        {% if data.commodity == 'grain'%}
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="packing-material">
+            Packing material used (optional)
+          </label>
+          <input class="govuk-input govuk-input--width-20" id="packing-material" name="packing_material_used" type="text">
+        </div>
+        {% endif %}
         <div class="govuk-form-group">
           <label class="govuk-label" for="distinguishing-marks">
             Distinguishing marks (optional)
@@ -129,14 +152,7 @@ GOV.UK Prototype Kit
           </span>
           <input class="govuk-input govuk-input--width-20" id="distinguishing-marks" name="distinguishing_marks" type="text" aria-describedby="distinguishing-mark-hint">
         </div>
-        {% if data.commodity == 'grain'%}
-        <div class="govuk-form-group">
-          <label class="govuk-label" for="packing-material">
-            Packing material used (optional)
-          </label>
-          <input class="govuk-input govuk-input--width-10" id="packing-material" name="packing-material" type="text">
-        </div>
-        {% endif %}
+
 
         <div class="govuk-form-group">
           <label class="govuk-label" for="passport-number">
@@ -175,11 +191,21 @@ GOV.UK Prototype Kit
           <input class="govuk-input govuk-input--width-10" id="quantity-number" name="quantity" type="text" aria-describedby="passport-number-hint">
         </div>
         {% endif %}
+        <div class="govuk-form-group">
 
+          <label class="govuk-label" for="consignment-value">
+            Value of consigment (optional)
+          </label>
+          <span id="consignment-value-hint" class="govuk-hint">
+          example, Crates, boxes etc
+        </span>
+
+          <input class="govuk-input govuk-input--width-10" id="consignment-value" name="consignment_value" type="text" aria-describedby="passport-number-hint">
+        </div>
       </fieldset>
       <fieldset class="govuk-fieldset" role="group">
         <div class="govuk-form-group">
-          <label class="govuk-label govuk-label--s" for="more-detail">
+          <label class="govuk-label govuk-label--m" for="more-detail">
             Further information (optional)
           </label>
           <span id="more-detail-hint" class="govuk-hint">

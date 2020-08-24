@@ -94,15 +94,17 @@ GOV.UK Prototype Kit
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl govuk-!-margin-top-8">Your applications</h1>
-    <a class="govuk-heading-m govuk-link--no-visited-state govuk-!-margin-bottom-6" href="application/setup/what-export" style="display: inline-block;">Start a new application</a>
+    {% if data.route == "new" %}<p class="govuk-body">You dont have any applications yet, create your first application.</p>{% endif %}
+    <a class="govuk-button" href="application/setup/what-export" >Start a new application</a>
   </div>
 </div>
+{% if data.route != "new" %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <form method="GET">
       <div class="search-wrapper govuk-form-group">
         <label for="search-reservations" class="govuk-label">
-          Search by reference, destination, certificate or application number
+          Search your applications
         </label>
         <div class="search-input-wrapper">
           <input type="search" value="{{query.search or ''}}" id="search-reservations" name="search" title="Search" class="govuk-input">
@@ -622,4 +624,5 @@ GOV.UK Prototype Kit
     // var queryStringParameters = window.location.search
     // var previouslySubmitted = queryStringParameters.length > 0
   </script>
+{% endif %}
   {% endblock %}

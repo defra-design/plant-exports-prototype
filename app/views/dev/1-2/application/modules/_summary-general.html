@@ -81,22 +81,51 @@
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
+          {% if commodity == "plant products"%}
           Primary country where grown
+          {% else %}
+          Country of origin
+          {% endif %}
+
         </dt>
         <dd class="govuk-summary-list__value">
           {{data.cournty_origin[0] or "United Kingdom"}}
 
         </dd>
       </div>
+      {% if data.origin_other %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Other country details (optional)
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{data.other or "Holland"}}
+          <!-- <span class="govuk-hint">You skipped this question</span> -->
+        </dd>
+      </div>
+      {% endif %}
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Packaging type
         </dt>
         <dd class="govuk-summary-list__value">
-          {{data.packaging_type or "Crate"}}
+          {{data.packaging_type[0] or "Crate"}}
           <!-- <span class="govuk-hint">You skipped this question</span> -->
         </dd>
       </div>
+      {% if data.packing_material_used %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Packaging material used
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{data.packing_material_used or "Plastic"}}
+          <!-- <span class="govuk-hint">You skipped this question</span> -->
+        </dd>
+      </div>
+      {% endif %}
+
+
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Number of packages
