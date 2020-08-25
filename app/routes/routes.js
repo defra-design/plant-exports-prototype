@@ -78,32 +78,9 @@ module.exports = function(router) {
   // this adds query to all pages and will be used if no other get routing exists to override this.
   router.get('/' + base_url + '*', function(req, res) {
     console.log("default get routing page for: " + base_url + req.params[0])
-    var dir = req.params[0].split(/\/+/g);
-    // Remove the main folder from URL
-    dir.shift()
-    var baseDir = ""
-    dir.forEach(function(element) {
-      var path = "/" + element
-      baseDir += path
-
-    })
     // Attempt to render a page in the current folder
     res.render(base_url + req.params[0], {
       "query": req.query,
-    }, function(err, html) {
-      // If the page doesnt exist in current folder, attempt to render a page from the "core folder"
-      // This reduces space of duplicating the whole folder
-      if (err) {
-        if (err.message.indexOf('template not found') !== -1) {
-          console.log("No page in directory.attempting to load from core")
-          return res.render(file_url + baseDir, {
-            "query": req.query,
-            // and more data to push to every page
-          });
-        }
-        throw err;
-      }
-      res.send(html);
     });
   })
 
