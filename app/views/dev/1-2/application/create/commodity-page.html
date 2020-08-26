@@ -6,6 +6,9 @@ GOV.UK Prototype Kit
 <a href="javascript:history.back()" class="govuk-back-link">Back</a>
 {% endblock %}
 {% block content %}
+
+  {% from "govuk/components/radios/macro.njk" import govukRadios %}
+  
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">
@@ -77,31 +80,30 @@ GOV.UK Prototype Kit
           </label>
           <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety" type="text">
         </div>
-        <div class="govuk-form-group">
-          <label class="govuk-label" for="sort">
-            Type
-          </label>
-          <select class="govuk-select" id="sort" name="commodity_type">
-            <option disabled selected value> </option>
-            <option value="Anya">Anya</option>
-            <option value="Apache">Apache</option>
-            <option value="Ayrshire">Ayrshire</option>
-            <option value="Charlotte">Charlotte</option>
-            <option value="Cornish Kings">Cornish kings</option>
-            <option value="Desiree">Desiree</option>
-            <option value="Elfe">Elfe</option>
-            <option value="Jersey royals">Jersey royals</option>
-            <option value="Kestrel">Kestrel</option>
-            <option value="King Edward">King Edward</option>
-            <option value="Charlotte">Marabel</option>
-            <option value="Maris Piper">Maris Piper</option>
-            <option value="Osprey">Osprey</option>
-            <option value="Charlotte">Purple Majesty</option>
-            <option value="Rooster">Rooster</option>
-            <option value="Russett">Russett</option>
-            <option value="Russett">Vivaldi</option>
-          </select>
-        </div>
+
+        {{ govukRadios({
+            idPrefix: "Type",
+            name: "commodity_type",
+            fieldset: {
+              legend: {
+                text: "Type",
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--s"
+              }
+            },
+            items: [
+              {
+                value: "Seed potatoes",
+                text: "Seed potatoes"
+              },
+              {
+                value: "Ware potatoes",
+                text: "Ware potatoes"
+              }
+            ]
+          }) }}
+
+
         <div class="govuk-form-group govuk-!-margin-top-4">
           <label class="govuk-label" for="commodity_variety">
             Lot reference (optional)
@@ -116,7 +118,6 @@ GOV.UK Prototype Kit
         </div>
         {% endif %}
         {% if data.commodity == "plants" %}
-        {% from "govuk/components/radios/macro.njk" import govukRadios %}
         {{ govukRadios({
             idPrefix: "commodity_group",
             name: "commodity_group",
