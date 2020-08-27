@@ -30,9 +30,8 @@ GOV.UK Prototype Kit
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">
-      Find your commodity
+      What is your commodity?
     </h1>
-
     <form method="get">
       <div class="search-wrapper govuk-form-group">
         <label for="search-reservations" class="govuk-label">
@@ -45,14 +44,11 @@ GOV.UK Prototype Kit
             <button type="submit" class="search-submit" name="submit" value="searchs">Search</button>
           </div>
         </div>
-
       </div>
-
       {% if query.keyword %}
       <p class="govuk-body"><a href="search-commodity?keywords=">Clear search</a></p>
       {% endif %}
       <p class="govuk-body"><span class="result_count">1</span> results matching <span class="govuk-!-font-weight-bold">"{{query.keyword}}"</span></p>
-
     </form>
       <h2 class="govuk-heading-m"></h2>
       <ul class="govuk-list app-result-list">
@@ -62,6 +58,21 @@ GOV.UK Prototype Kit
         {% if result.lang =="en" or result.lang =="uk" or result.ispreferred %}
         <li class="result">
           <dl class="govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-0">
+            {% set len = (taxonomy | length)-1 %}
+            {% set len2 = (taxonomy | length)-1 %}
+            {% if toplevel == "species" %}
+              {% set len2 = (taxonomy | length)-2 %}
+            {% endif %}
+
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Genus
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{taxonomy[len2].prefname}}
+              </dd>
+            </div>
             {% if toplevel == "species" %}
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">
@@ -71,16 +82,7 @@ GOV.UK Prototype Kit
                 {{taxonomy[len].prefname}}
               </dd>
             </div>
-            {% set len = (taxonomy | length)-2 %}
             {% endif %}
-            <div class="govuk-summary-list__row">
-              <dt class="govuk-summary-list__key">
-                Genus
-              </dt>
-              <dd class="govuk-summary-list__value">
-                {{taxonomy[len].prefname}}
-              </dd>
-            </div>
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">
                 Common name
@@ -98,7 +100,7 @@ GOV.UK Prototype Kit
               </dd>
             </div> -->
           </dl>
-          <a href="commodity-page?has_commodity=yes&eppocode={{result.eppocode}}&common={{result.fullname}}&genus={{taxonomy[len].prefname}}&species={{taxonomy[len].prefname or 'none'}}" type="submit" class="govuk-button govuk-button--secondary" value="select">Select</a>
+          <a href="commodity-page?has_commodity=yes&eppocode={{result.eppocode}}&common={{result.fullname}}&genus={{taxonomy[len2].prefname}}&species={{taxonomy[len].prefname or 'none'}}" type="submit" class="govuk-button govuk-button--secondary" value="select">Select</a>
         </li>
         {% endif %}
         {% endfor%}
