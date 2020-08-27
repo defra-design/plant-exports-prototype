@@ -105,7 +105,7 @@ module.exports = function(router) {
         })
       }else{
         client2.get("https://data.eppo.int/api/rest/1.0/taxon/" + data[0].eppocode + "/taxonomy?authtoken=33b6eb122ffb617bd80ff8f33e191e3c", function(taxdata, response) {
-          console.log(taxdata[taxdata.length - 1]);
+          console.log(taxdata);
           var toplevel = "species"
           if (taxdata.length != 0) {
 
