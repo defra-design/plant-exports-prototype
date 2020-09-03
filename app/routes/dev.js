@@ -3,8 +3,8 @@ module.exports = function(router) {
   var RestClient = require('node-rest-client').Client;
 
   var client = new RestClient();
-  var client2 = new RestClient();
-
+  var client2 = new RestClient()
+  var client3 = new RestClient()
 
   // ADD extra routing here if needed.
   // require('./start-page.js')(router)
@@ -19,19 +19,19 @@ module.exports = function(router) {
   // Load any certificate within "app/data/certificates" folder
   const db = []
 
-  function addCommodity(data,list){
+  function addCommodity(data, list) {
     console.log("adding commodity")
     var newCommodity = {}
     for (var k in data) {
       var o = {}
       var name = ""
       console.log(k)
-        if (data.hasOwnProperty(k)) {
-           var name = k;
+      if (data.hasOwnProperty(k)) {
+        var name = k;
 
-        }
+      }
 
-         newCommodity[name] = data[k]
+      newCommodity[name] = data[k]
     }
     list.push(newCommodity)
   }
@@ -89,49 +89,85 @@ module.exports = function(router) {
   //     res.send(html);
   //   })
   // });
+  function filterResults(r,q) {
+    var list = []
+    for (var i = 0; i < r.length; i++) {
+      console.log("checking: "+r[i].lang)
+      if(r[i].lang=='en'){
+        console.log('pushing '+r[i].fullname.toUpperCase())
+        list.push(r[i])
+      }
+      if((r[i].fullname.toUpperCase() == q.toUpperCase()) && r[i].lang == "en"){
+        list = []
+        list.push(r[i])
+        console.log('found match '+r[i].fullname.toUpperCase())
+        console.log('returning the one result')
+        return list
 
+      }
+    }
+    console.log('returning the full list')
+    return list
+
+  }
   router.get('/' + base_url + '*' + 'application/create/plant-lookup', function(req, res) {
-    console.log("working")
     var q = req.query.keyword || "Rosa";
+    var eppocode
+    var results
+    // First get any code for the search
     client.get("https://data.eppo.int/api/rest/1.0/tools/search?kw=" + q + "&searchfor=1searchmode=3typeorg=1&authtoken=33b6eb122ffb617bd80ff8f33e191e3c", function(data, response) {
       // parsed response body as js object
-      console.log(data)
-      if(data.length == 0){
+      // console.log(data)
+      if (data.length == 0) {
         res.render(base_url + req.params[0] + 'application/create/plant-lookup', {
           "query": req.query,
-          "search_data": data,
+          "search_data": "none",
           "toplevel": "none",
           "taxonomy": "none"
         })
-      }else{
-        client2.get("https://data.eppo.int/api/rest/1.0/taxon/" + data[0].eppocode + "/taxonomy?authtoken=33b6eb122ffb617bd80ff8f33e191e3c", function(taxdata, response) {
-          console.log(taxdata);
-          var toplevel = "species"
-          if (taxdata.length != 0) {
+      } else {
+        client3.get("https://data.eppo.int/api/rest/1.0/tools/search?kw=" + data[0].eppocode + "&searchfor=1searchmode=3typeorg=1&authtoken=33b6eb122ffb617bd80ff8f33e191e3c", function(newdata, response) {
+          if (newdata.length == 0) {
+            res.render(base_url + req.params[0] + 'application/create/plant-lookup', {
+              "query": req.query,
+              "search_data": newdata,
+              "toplevel": "none",
+              "taxonomy": "none"
+            })
+          } else {
+            eppocode = newdata[0].eppocode
+            results = filterResults(newdata,q)
+            console.log(newdata)
+            client2.get("https://data.eppo.int/api/rest/1.0/taxon/" + eppocode + "/taxonomy?authtoken=33b6eb122ffb617bd80ff8f33e191e3c", function(taxdata, response) {
+              // console.log(taxdata);
+              var toplevel = "species"
+              if (taxdata.length != 0) {
+                if (taxdata[taxdata.length - 1].eppocode.includes("1")) {
+                  toplevel = "Genus"
+                }
+              }
+              res.render(base_url + req.params[0] + 'application/create/plant-lookup', {
+                "query": req.query,
+                "search_data": results,
+                "toplevel": toplevel,
+                "taxonomy": taxdata
+              })
+            })
 
-
-            if (taxdata[taxdata.length - 1].eppocode.includes("1")) {
-              toplevel = "Genus"
-            }
           }
-          res.render(base_url + req.params[0] + 'application/create/plant-lookup', {
-            "query": req.query,
-            "search_data": data,
-            "toplevel": toplevel,
-            "taxonomy": taxdata
-          })
+
         })
       }
+    })
 
 
-    });
 
   });
   // **** POST TEMPLATE ***
-  router.post('/'+base_url+'*/application/create/commodity-page*', function(req, res) {
-      var page = req.query.return_url  || '/' + base_url +req.params[0]+'/application/create/commodity-list'
-      addCommodity(req.body,req.session.data.commodities)
-      res.redirect(301, page);
+  router.post('/' + base_url + '*/application/create/commodity-page*', function(req, res) {
+    var page = req.query.return_url || '/' + base_url + req.params[0] + '/application/create/commodity-list'
+    addCommodity(req.body, req.session.data.commodities)
+    res.redirect(301, page);
   })
 
 
