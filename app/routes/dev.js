@@ -108,7 +108,6 @@ module.exports = function(router) {
     }
     console.log('returning the full list')
     return list
-
   }
   router.get('/' + base_url + '*' + 'application/create/plant-lookup', function(req, res) {
     var q = req.query.keyword || "Rosa";
