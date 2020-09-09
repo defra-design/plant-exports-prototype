@@ -36,7 +36,7 @@ GOV.UK Prototype Kit
             </div>
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">
-                Speicies
+                Species
               </dt>
               <dd class="govuk-summary-list__value">
                 {{query.species or "Rosa rugosa"}}
@@ -183,23 +183,29 @@ GOV.UK Prototype Kit
           }) }}
           {% endif %}
       </fieldset>
-      {% if commodity == "plant products"%}
+      {% if data.commodity == "plant products"%}
       {% set country_module_label = "Primary country of origin"%}
       {% else %}
       {% set country_module_label = "Country of origin"%}
       {% endif %}
       {% set module_name = "cournty_origin"%}
+
+      {% if data.commodity != "seeds"%}
       {% block country %}{% include "../modules/_country-select.html" %}{% endblock %}
+      {% endif %}
+
+      {% if data.commodity == "plant products"%}
       <div class="govuk-form-group">
         <label class="govuk-label" for="origin_other">
           Additional countries of origin (optional)
         </label>
         <input class="govuk-input govuk-input--width-20" id="origin_other" name="distinguishing_marks" type="text" aria-describedby="distinguishing-mark-hint">
       </div>
+      {% endif %}
 
       <fieldset class="govuk-fieldset" role="group">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-          Packing information
+          Shipping information
         </legend>
         <div class="govuk-form-group">
           <label class="govuk-label" for="passport-number">

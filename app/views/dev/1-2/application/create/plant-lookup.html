@@ -48,13 +48,13 @@ GOV.UK Prototype Kit
       {% if query.keyword %}
       <p class="govuk-body"><a href="search-commodity?keywords=">Clear search</a></p>
       {% endif %}
-      <p class="govuk-body"><span class="result_count">1</span> results matching <span class="govuk-!-font-weight-bold">"{{query.keyword}}"</span></p>
+      <p class="govuk-body"><span class="result_count">{% if search_data == 'none'%}0{% else %}{{search_data | length}}{% endif %}</span> results matching <span class="govuk-!-font-weight-bold">"{{query.keyword}}"</span></p>
     </form>
       <h2 class="govuk-heading-m"></h2>
       <ul class="govuk-list app-result-list">
         {% for result in search_data %}
         {% set len = (taxonomy | length)-1 %}
-        {% if result.lang =="en" or result.lang =="uk" or result.ispreferred %}
+        {% if result.lang =="en" or (result.ispreferred and result.lang != "la") %}
         <li class="result">
           <dl class="govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-0">
             {% set len = (taxonomy | length)-1 %}
@@ -62,8 +62,6 @@ GOV.UK Prototype Kit
             {% if toplevel == "species" %}
               {% set len2 = (taxonomy | length)-2 %}
             {% endif %}
-
-
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">
                 Genus
@@ -75,7 +73,7 @@ GOV.UK Prototype Kit
             {% if toplevel == "species" %}
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">
-                Speicies
+                Species
               </dt>
               <dd class="govuk-summary-list__value">
                 {{taxonomy[len].prefname}}
@@ -87,7 +85,7 @@ GOV.UK Prototype Kit
                 Common name
               </dt>
               <dd class="govuk-summary-list__value">
-                {{result.fullname}}
+                {{result.fullname | capitalize}}
               </dd>
             </div>
             <!-- <div class="govuk-summary-list__row">
@@ -99,7 +97,7 @@ GOV.UK Prototype Kit
               </dd>
             </div> -->
           </dl>
-          <a href="commodity-page?has_commodity=yes&eppocode={{result.eppocode}}&common={{result.fullname}}&genus={{taxonomy[len2].prefname}}&species={{taxonomy[len].prefname or 'none'}}" type="submit" class="govuk-button govuk-button--secondary" value="select">Select</a>
+          <a href="commodity-page?has_commodity=yes&eppocode={{result.eppocode}}&common={{result.fullname | capitalize}}&genus={{taxonomy[len2].prefname}}&species={{taxonomy[len].prefname or 'none'}}" type="submit" class="govuk-button govuk-button--secondary" value="select">Select</a>
         </li>
         {% endif %}
         {% endfor%}

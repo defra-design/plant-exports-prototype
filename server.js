@@ -219,7 +219,7 @@ if (useAutoStoreData === 'true') {
         url: req.originalUrl,
         data: d
       }
-      // log.data.applications = {}
+      log.data.applications = {}
       console.log(JSON.stringify(log, null, 2))
     }
     next()
