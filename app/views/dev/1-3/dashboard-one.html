@@ -94,11 +94,10 @@ GOV.UK Prototype Kit
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl govuk-!-margin-top-8">Your applications</h1>
-    {% if data.route == "new" %}<p class="govuk-body">You dont have any applications yet, create your first application.</p>{% endif %}
     <a class="govuk-button" href="application/setup/what-export" >Start a new application</a>
   </div>
 </div>
-{% if data.route != "new" %}
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <form method="GET">
@@ -437,7 +436,6 @@ GOV.UK Prototype Kit
               <th class="govuk-table__header">
                 <div class="applicationRef-column" style="width:15%">Application reference</div>
               </th>
-              <th class="govuk-table__header" style="width:5%!important">Customer</th>
               <th class="govuk-table__header" style="width:5%!important">Destination</th>
               <th class="govuk-table__header">Submitted</th>
               <th class="govuk-table__header">Status</th>
@@ -446,86 +444,29 @@ GOV.UK Prototype Kit
           </thead>
           <tbody>
 
-            {% for app in data.applications %}
-
-            {% if (data.show_applications_by == "me" and app.name==logged_in_as) or (data.show_applications_by=="me" or not data.show_applications_by) or ((app.name | upper) in (data.filter_name | upper) or data.filter_name == "All users") %}
-            {% if (data.has_filter != "yes" or data.filter_status == "any") or app.status in data.filter_status %}
-
-            {%
-            if not query.search
-            or (query.search and (query.search) == (app.applicationID))
-            or (query.search and (query.search) == (app.destination))
-            or (query.search and (query.search) == (app.reference))
-            or (query.search and (query.search) == (app.EHC))
-            or (query.search and (query.search) == (app.certificate))
-            %}
-            {% if data.show_applications_by == "me"%}
-            {% if app.name==logged_in_as %}
             <tr class="govuk-table__row result">
               <th id="1721147986456-appRef" class="govuk-table__cell applicationRef-column table-header" scope="row">
-                <a href="application?id={{app.index}}" class="govuk-link govuk-link--no-visited-state"> <span class="table-heading table-heading-full" aria-hidden="true">Case ID </span> {% if app.reference %}{{app.reference}}{%else%}{{app.applicationID}}{%endif%}</a>
-                {% if app.is_block =="yes" %}<br>
-                <div class=" govuk-!-margin-top-1 govuk-!-font-weight-regular">Block of {{data.certificate_request_amount or "50"}} certificataes</div>{% endif %}
+                <a href="application?id=0" class="govuk-link govuk-link--no-visited-state"> <span class="table-heading table-heading-full" aria-hidden="true">Case ID </span> {{data.reference_num or 'PO823942AUS'}}</a><br>
               </th>
               <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
-                <span class="table-heading" aria-hidden="true">Customer</span>
-                {{app.importer}} lkjfioj
-              </td>
-              <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
                 <span class="table-heading" aria-hidden="true">Destination </span>
-                {{app.destination}}
+                {{data.countrySelect[0] or 'Australia'}}
               </td>
               <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
                 <span class="table-heading" aria-hidden="true">Submitted</span>
-                {{app.date}}
+                15 May 2020
               </td>
 
               <td id="1721147986456-status" class="govuk-table__cell" scope="row">
                 <span class="table-heading" aria-hidden="true">Status</span>
-                <div class="app-status-tag app-status-tag--{{app.tag | lower}}">
-                  {%if app.status=="certifier action" %}needs pre-check{%else%}{{app.status}}{%endif%}
+                <div class="app-status-tag app-status-tag--{%if query.current_status=='draft' %}grey{%else%}{%endif%}">
+                  {{query.current_status or 'processing'}}
                 </div>
               </td>
               <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
-                <a href="clone?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">Clone</a>
+                <a href="clone?id=0" class="govuk-link govuk-link--no-visited-state">Clone</a>
               </td>
             </tr>
-            {% endif %}
-            {% else %}
-
-            <tr class="govuk-table__row result">
-              <th id="1721147986456-appRef" class="govuk-table__cell applicationRef-column table-header" scope="row">
-                <a href="application?id={{app.index}}" class="govuk-link govuk-link--no-visited-state"> <span class="table-heading table-heading-full" aria-hidden="true">Case ID </span> {% if app.reference %}{{app.reference}}{%else%}{{app.applicationID}}{%endif%}</a><br>
-              </th>
-              <td id="1721147986456-submitted" class="govuk-table__cell govuk-!-width-one-quarter" scope="row">
-                <span class="table-heading" aria-hidden="true">Customer</span>
-                {{app.importer}}
-              </td>
-              <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
-                <span class="table-heading" aria-hidden="true">Destination </span>
-                {{app.destination}}
-              </td>
-              <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
-                <span class="table-heading" aria-hidden="true">Submitted</span>
-                {{app.date}}
-              </td>
-
-              <td id="1721147986456-status" class="govuk-table__cell" scope="row">
-                <span class="table-heading" aria-hidden="true">Status</span>
-                <div class="app-status-tag app-status-tag--{{app.tag | lower}}">
-                  {%if app.status=="certifier action" %}needs pre-check{%else%}{{app.status}}{%endif%}
-                </div>
-              </td>
-              <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
-                <a href="clone?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">Clone</a>
-              </td>
-            </tr>
-            {% endif %}
-            {% endif %}
-            {% endif %}
-            {% endif %}
-            {% endfor %}
-
           </tbody>
         </table>
         <div class="app-example-page">
@@ -633,5 +574,4 @@ GOV.UK Prototype Kit
     // var queryStringParameters = window.location.search
     // var previouslySubmitted = queryStringParameters.length > 0
   </script>
-{% endif %}
   {% endblock %}

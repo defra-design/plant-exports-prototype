@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Add commodities by uploading a file - GOV UK
+{% endblock %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-width-container">
+
+  <main class="govuk-main-wrapper" id="main-content" role="main">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <form action="/form-handler" method="post" novalidate>
+
+          <div class="govuk-form-group  govuk-!-margin-bottom-9">
+            <fieldset class="govuk-fieldset">
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">
+                  Add commodities by uploading a file
+                </h1>
+              </legend>
+            </fieldset>
+
+            <p class="govuk-body">
+              Use our <a href="#" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a> to upload details for multiple commodities at the same time.
+              <ul class="govuk-list govuk-list--bullet  govuk-!-margin-bottom-9">
+                  <li>The file must have this in it</li>
+                  <li>The file can't contain these</li>
+                  <li>The file can't be bigger than this</li>
+                </ul>
+            </p>
+
+            {{ govukFileUpload({
+              id: "file-upload-1",
+              name: "file-upload-1",
+              errorMessage: {
+              text: "The selected file could not be uploaded – try again"
+              }
+            }) }}
+
+          </div>
+
+          {{ govukButton({
+            text: "Upload",
+            href: "upload-in-progress"
+          }) }}
+
+        </form>
+      </div>
+    </div>
+  </main>
+</div>
+{% endblock %}
