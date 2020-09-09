@@ -114,9 +114,9 @@ module.exports = function(router) {
     var eppocode
     var results
     // First get any code for the search
-    client.get("https://data.eppo.int/api/rest/1.0/tools/search?kw=" + q + "&searchfor=1searchmode=3typeorg=1&authtoken=33b6eb122ffb617bd80ff8f33e191e3c", function(data, response) {
+      client.get("https://data.eppo.int/api/rest/1.0/tools/search?kw=" + q + "&searchfor=1&searchmode=3&typeorg=1&authtoken=33b6eb122ffb617bd80ff8f33e191e3c", function(data, response) {
       // parsed response body as js object
-      // console.log(data)
+
       if (data.length == 0) {
         res.render(base_url + req.params[0] + 'application/create/plant-lookup', {
           "query": req.query,
