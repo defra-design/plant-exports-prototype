@@ -23,7 +23,7 @@ GOV.UK Prototype Kit
 </style>
 {% endblock%}
 {% block content %}
-<div class="govuk-grid-row">
+<div class="govuk-grid-row govuk-!-margin-bottom-6">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">Manage {% if query.is_block == "yes" %}block appication{%elseif query.is_group == "yes" %}group application{%else%}application{%endif%} <span style="white-space: nowrap;">{{query.id | appInfo('reference')}}</span>
     </h1>
@@ -50,7 +50,7 @@ GOV.UK Prototype Kit
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Application id
+          APHA reference
         </dt>
         <dd class="govuk-summary-list__value">
           {{(query.id | appInfo('applicationID'))}}
@@ -64,15 +64,12 @@ GOV.UK Prototype Kit
           {% if (query.id | appInfo('reference')) == ""%}<span class="govuk-hint">Not set</span>{%else%}{{query.id | appInfo('reference')}}{%endif%}
         </dd>
       </div>
-
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          EHC
+          Commodity
         </dt>
         <dd class="govuk-summary-list__value">
-          {{query.id | appInfo('EHC')}} (version 2)
-          <br>
-          {{query.id | appInfo('cert_info')}}
+          <!--{{query.id | appInfo('commodity_plants')}}-->
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -97,13 +94,21 @@ GOV.UK Prototype Kit
         </dd>
       </div>
       <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key govuk-summary-list__40">
+          Loading date
+        </dt>
+        <dd class="govuk-summary-list__value govuk-summary-list__40">
+          6 Sep 2020
+        </dd>
+      </div>
+      <!--<div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Certifier
         </dt>
         <dd class="govuk-summary-list__value">
           ABC Vets LTD
         </dd>
-      </div>
+      </div>-->
       <!-- <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key govuk-summary-list__40">
             Proposed export date
@@ -114,16 +119,7 @@ GOV.UK Prototype Kit
         </div> -->
     </dl>
 
-    <!-- <p class="govuk-body">
-      {% if query.application_status == 'draft' %}
-      <a class="govuk-button govuk-!-margin-right-4" href="certificate/check-your-progress">Edit and submit</a>
-      {% endif%}
-      <a class="govuk-button govuk-button--secondary " href="clone">Clone as new application</a>
-      {% if query.application_status == 'draft' %}
-      <a class="govuk-link govuk-link--no-visited-state" href="delete">Delete application</a>
-      {% endif%}
-    </p> -->
-    <ul class="govuk-list  govuk-!-margin-bottom-6">
+    <ul class="govuk-list govuk-!-margin-top-6 govuk-!-margin-bottom-6 noprint">
       {% if (query.id | appInfo('status')) == 'draft' %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="certificate/check-your-progress?certificate=ehc2849">Edit and submit this application</a></li>
       {% endif%}
@@ -132,6 +128,60 @@ GOV.UK Prototype Kit
       <li><a class="govuk-link govuk-link--no-visited-state" href="delete">Delete this application</a></li>
       {% endif%}
     </ul>
+
+    {% if (query.id == 10) %}
+    <h2 class="govuk-heading-l govuk-!-margin-top-9">
+      Samples for inspection
+    </h2>
+
+    <table class='govuk-table govuk-!-margin-bottom-9'>
+      <thead class='govuk-table__head'>
+        <tr class='govuk-table__row'>
+          <th scope='col' class='govuk-table__header'>Commodity</th>
+          <th scope='col' class='govuk-table__header'>Sample reference</th>
+        </tr>
+      </thead>
+      <tbody class='govuk-table__body'>
+        <tr class='govuk-table__row'>
+          <td scope='row' class='govuk-table__cell'>Quercus acuta</td>
+          <td class='govuk-table__cell'>590347</td>
+        </tr>
+        <tr class='govuk-table__row'>
+          <td scope='row' class='govuk-table__cell'>Pinus albicaulis</td>
+          <td class='govuk-table__cell'>590348</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="govuk-body govuk-!-margin-bottom-9"><a href="print-label?id=10" class="govuk-link govuk-link-no-visited-state">View and print the information</a> you'll need to send along with your samples.</p>
+    {% endif %}
+
+    <!--<p class="govuk-body">Plant Clinic<br>
+      Block 4<br>
+      National Agri-Food Campus<br>
+      Sand Hutton<br>
+      York<br>
+      YO41 1LZ<br>-->
+
+    <!--<p class="govuk-body">
+      {% if query.application_status == 'draft' %}
+      <a class="govuk-button govuk-!-margin-right-4" href="certificate/check-your-progress">Edit and submit</a>
+      {% endif%}
+      <a class="govuk-button govuk-button--secondary " href="clone">Clone as new application</a>
+      {% if query.application_status == 'draft' %}
+      <a class="govuk-link govuk-link--no-visited-state" href="delete">Delete application</a>
+      {% endif%}
+    </p>-->
+
+    <!--<ul class="govuk-list  govuk-!-margin-bottom-6">
+      {% if (query.id | appInfo('status')) == 'draft' %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="certificate/check-your-progress?certificate=ehc2849">Edit and submit this application</a></li>
+      {% endif%}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{ query.is_group }}">Clone as new application</a></li>
+      {% if (query.id | appInfo('status')) == 'draft' %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="delete">Delete this application</a></li>
+      {% endif%}
+    </ul>-->
 
   </div>
 </div>
@@ -249,6 +299,7 @@ GOV.UK Prototype Kit
   <div class="govuk-grid-column-two-thirds">
       <p class="govuk-body govuk-hint">{% if query.application_status=="completed" or query.is_block == 'yes' %}If you need to cancel and replace a certificate, contact your certifier to make the request.{% endif %}</p>
     </div>
+
 </div>
 {% endif %}
 {% endblock %}
