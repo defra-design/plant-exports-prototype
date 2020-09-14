@@ -7,16 +7,14 @@ module.exports = function(router) {
   var client3 = new RestClient()
 
   // ADD extra routing here if needed.
-  require('./dev_v3.js')(router)
+  // require('./start-page.js')(router)
 
 
 
   // CHANGE VERSION each time you create a new version
-  const version = 'dev'
+  const version = 'dev/v3'
   const base_url = version + "/"
   const file_url = version + "/dev"
-
-
 
   // Load any certificate within "app/data/certificates" folder
   const db = []
