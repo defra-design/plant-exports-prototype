@@ -22,79 +22,80 @@ GOV.UK Prototype Kit
             Commodity details
           </h2>
         </legend>
-        {% if query.has_commodity %}
         <div class="govuk-body" style="padding:15px 20px;background:#f3f2f1;">
           <dl class="govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-2">
-            <div class="govuk-summary-list__row">
-              <dt class="govuk-summary-list__key">
-                Genus
-              </dt>
-              <dd class="govuk-summary-list__value">
-                {{query.genus or "Rosa"}}
-                <input type="hidden" name="genus" value="{{query.genus}}">
-              </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-              <dt class="govuk-summary-list__key">
-                Species
-              </dt>
-              <dd class="govuk-summary-list__value">
-                {{query.species or "Rosa rugosa"}}
-                <input type="hidden" name="commodity_host_species" value="{{query.species}}">
-              </dd>
-            </div>
+            {% if data.has_botanicial_name == "yes" %}
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  Genus
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{(data.botanical_name | getCommodity("genus")) or "Rosa"}}
+                  <input type="hidden" name="genus" value="{{( data.botanical_name | getCommodity("genus")) or "Rosa"}}">
+                </dd>
+              </div>
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  Species
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{( data.botanical_name | getCommodity("fullname")) or "Rosa rugosa"}}
+                  <input type="hidden" name="genus" value="{{(data.botanical_name | getCommodity("fullname")) or "Rosa "}}">
+                </dd>
+              </div>
 
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  EPPO code
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{( data.botanical_name | getCommodity("eppocode")) or "CYLAM"}}
+                    <input type="hidden" name="genus" value="{{( data.botanical_name | getCommodity("eppocode")) or "CYLAM"}}">
+                </dd>
+              </div>
+              {% if data.commodity == "plants"%}
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  Variety
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{data.commodity_variety or ('<span class="govuk-hint">Left blank</span>' | safe)}}
+                </dd>
+              </div>
+              {% endif %}
+            {% elseif data.has_botanicial_name=="use_common_name" %}
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">
-                Common name
+                Agreed common name
               </dt>
               <dd class="govuk-summary-list__value">
-                {{query.common or "hedgerow rose"}}
+                {{data.commodity_common_name or "Japanese mooli"}}
                 <input type="hidden" name="commodity_common_name" value="{{query.common}}">
               </dd>
             </div>
+            {% elseif  data.has_botanicial_name=="use_description" %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                 Description of {{data.commodity_description or "Plant"}}
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{data.commodity_description or "A mixture of things"}}
+                <input type="hidden" name="commodity_common_name" value="{{query.common}}">
+              </dd>
+            </div>
+            {% endif %}
+
+
+
 
           </dl>
-          <p class="govuk-body"><a href="plant-lookup?keyword=hedgerow rose">Search for a different commodity</a><br></p>
-        </div>
-        {% else %}
-        <span id="passport-number-hint" class="govuk-hint">
-          Enter the genus or species and an agreed common name or <a href="search-commodity" class="govuk-link">search for a commodity</a>.
-        </span>
-        <div class="govuk-form-group">
-          <div class="govuk-form-group">
-            <label class="govuk-label" for="commodity_host_species">
-              Genus
-            </label>
-            <input class="govuk-input govuk-input--width-20" id="commodity_genus" name="genus" type="text" value="{% if query.has_commodity %}{{query.genus}}{%endif%}">
-          </div>
-          <div class="govuk-form-group">
-            <label class="govuk-label" for="commodity_host_species">
-              Species
-            </label>
-            <input class="govuk-input govuk-input--width-20" id="commodity_host_species" name="commodity_host_species" type="text" value="{% if query.has_commodity %}{{query.species}}{%endif%}">
-          </div>
-          <div class="govuk-form-group">
-            <label class="govuk-label" for="passport-number">
-              Common name
-            </label>
-            <input class="govuk-input govuk-input--width-20" id="passport-number" name="commodity_common_name" type="text" value="{% if query.has_commodity %}{{query.common}}{%endif%}">
-          </div>
+          <p class="govuk-body govuk-!-margin-bottom-0"><a href="how-to-identify">Change</a><br></p>
         </div>
 
-        <p class="govuk-body">
-          {% endif %}
 
-          {% if data.commodity == "plants" or data.commodity == "seeds" %}
-          <div class="govuk-form-group govuk-!-margin-top-4">
-            <label class="govuk-label" for="commodity_variety">
-              Variety (optional)
-            </label>
-            <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety" type="text">
-          </div>
-          {% endif %}
 
-          {% if data.commodity == "seeds" %}
+
+        {% if data.commodity == "seeds" %}
           <div class="govuk-form-group govuk-!-margin-top-4">
             <label class="govuk-label" for="commodity_lot">
               Lot reference (optional)

@@ -17,10 +17,13 @@ Example usage:
 
 */
 var applications = require('./applications.json')
+var sample = require('./sample.json')
 module.exports = {
   "applications" : applications,
   "commodities" : [],
   "id_count" : 1,
+  "sample": sample,
+  "plants" : []
   // Insert values here
 
 }

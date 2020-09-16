@@ -1,6 +1,6 @@
 // There might be a better way to use this data.
 var applications = require('./data/applications.json')
-
+var sample = require('./data/sample.json')
 module.exports = function(env) {
   /**
    * Instantiate object used to store the methods registered as a
@@ -53,6 +53,20 @@ module.exports = function(env) {
   filters.toMoney = function(x) {
     return ("£" + x);
     //TO ADD - case to handle nothing being there
+  }
+  filters.getCommodity =function(str,val){
+    console.log("looking up commodity: "+val)
+    var regExp = /\(([^)]+)\)/;
+    var matches = regExp.exec(str);
+
+//matches[1] contains the value between the parentheses
+console.log(matches[1]);
+for(key in sample){
+ console.log("found "+sample[key].eppocode);
+  if(sample[key].eppocode==matches[1]){
+    return sample[key][val];
+  }
+}
   }
 
   /* ------------------------------------------------------------------

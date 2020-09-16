@@ -207,25 +207,25 @@ if (useAutoStoreData === 'true') {
 }
 
 // Logging session data
- if (useLogging !== 'false') {
-  app.use((req, res, next) => {
-    const all = (useLogging === 'true')
-    const post = (useLogging === 'post' && req.method === 'POST')
-    const get = (useLogging === 'get' && req.method === 'GET')
-    const d = req.session.data
-    
-    if (all || post || get) {
-      const log = {
-        method: req.method,
-        url: req.originalUrl,
-        data: d
-      }
-
-      console.log(JSON.stringify(log, null, 2))
-    }
-    next()
-  })
-}
+//  if (useLogging !== 'false') {
+//   app.use((req, res, next) => {
+//     const all = (useLogging === 'true')
+//     const post = (useLogging === 'post' && req.method === 'POST')
+//     const get = (useLogging === 'get' && req.method === 'GET')
+//     const d = req.session.data
+//
+//     if (all || post || get) {
+//       const log = {
+//         method: req.method,
+//         url: req.originalUrl,
+//         data: d
+//       }
+//
+//       console.log(JSON.stringify(log, null, 2))
+//     }
+//     next()
+//   })
+// }
 
 // Clear all data in session if you open /prototype-admin/clear-data
 app.post('/prototype-admin/clear-data', function (req, res) {
