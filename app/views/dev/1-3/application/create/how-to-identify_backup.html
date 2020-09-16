@@ -27,12 +27,16 @@ GOV.UK Prototype Kit
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">Your commodity</h1>
+
+    <span class="govuk-caption-xl">Your commodity</span>
     <form method="get" action="commodity-page">
       <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+          <h1 class="govuk-fieldset__heading">
             How do you want to identify the {{data.commodity or 'plant'}}?
+          </h1>
         </legend>
+
         <p id="passport-number-hint" class="govuk-body">
           This will appear on the certificate. Where possible this should include the genus and species.
         </p>
@@ -95,7 +99,6 @@ GOV.UK Prototype Kit
 
 
             </div>
-
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="how-contacted-conditional-2" name="has_botanicial_name" type="radio" value="use_common_name" data-aria-controls="conditional-how-contacted-conditional-2">
               <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-2">
@@ -113,7 +116,7 @@ GOV.UK Prototype Kit
 
             </div>
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="how-contacted-conditional-3" name="has_botanicial_name" type="radio" value="use_description" data-aria-controls="conditional-how-contacted-conditional-3" {% if data.has_botanicial_name == "use_description"%}checkjed{%endif%}>
+              <input class="govuk-radios__input" id="how-contacted-conditional-3" name="has_botanicial_name" type="radio" value="use_description" data-aria-controls="conditional-how-contacted-conditional-3" {% if data.has_botanicial_name == "use_description"%}checked{%endif%}>
               <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-3">
                 Description of the {{data.commodity or "plant"}}
               </label>
@@ -129,11 +132,8 @@ GOV.UK Prototype Kit
             </div>
           </div>
         </div>
+      </fieldset>
 
-      <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            Other commodity information
-        </legend>
       {% if data.commodity == "plants" or data.commodity == "seeds" %}
       <div class="govuk-form-group">
         <label class="govuk-label" for="commodity_variety">
@@ -142,56 +142,6 @@ GOV.UK Prototype Kit
         <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety" type="text">
       </div>
       {% endif %}
-      {% if data.commodity == "plants" %}
-      {{ govukRadios({
-        idPrefix: "commodity_group",
-        name: "commodity_group",
-        fieldset: {
-          legend: {
-            text: "Commodity group",
-            isPageHeading: true,
-            classes: "govuk-fieldset__legend--s"
-          }
-        },
-        items: [
-          {
-            value: "micropropagated material",
-            text: "Micropropagated material"
-          },
-          {
-            value: "plant products",
-            text: "Plant products"
-          },
-          {
-            value: "plants",
-            text: "Plants"
-          },
-          {
-            value: "Produce",
-            text: "Produce (fruit, flowers or veg)"
-          }
-        ]
-      }) }}
-      {% endif %}
-      {% if data.commodity == "plant products"%}
-      {% set country_module_label = "Primary country of origin"%}
-      {% else %}
-      {% set country_module_label = "Country of origin"%}
-      {% endif %}
-      {% set module_name = "cournty_origin"%}
-
-      {% if data.commodity != "seeds"%}
-      {% block country %}{% include "../modules/_country-select.html" %}{% endblock %}
-      {% endif %}
-      {% if data.commodity == "plant products"%}
-      <div class="govuk-form-group">
-        <label class="govuk-label" for="origin_other">
-          Additional countries of origin (optional)
-        </label>
-        <input class="govuk-input govuk-input--width-20" id="origin_other" name="distinguishing_marks" type="text" aria-describedby="distinguishing-mark-hint">
-      </div>
-      {% endif %}
-        </fieldset>
       <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
 
     </form>
