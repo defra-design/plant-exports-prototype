@@ -15,10 +15,31 @@ Upload completed - GOV UK
 <div class="govuk-width-container">
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
-        <div class="app-alert app-alert--success"><p class="govuk-body">5 {{data.commodity or "plant products"}} records uploaded successfully</p></div>
+        <!--<div class="app-alert--error"><p class="govuk-body">There are some problems with your file upload</p></div>-->
+        <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+          <h2 class="govuk-error-summary__title" id="error-summary-title">
+            There are problems with your file upload
+          </h2>
+          <div class="govuk-_body">
+            <ul class="govuk-list govuk-list--bullet">
+              <li>
+                Line 2: Common name is missing
+              </li>
+              <li>
+                Line 4: Common name is missing
+              </li>
+            </ul>
+          </div>
+        </div>
         <form method="post">
-          <h1 class="govuk-heading-xl govuk-!-margin-top-9">File uploaded</h1>
-          <table class="govuk-table govuk-!-margin-bottom-9">
+
+          {{ govukButton({
+            href: "upload",
+            text: "Re-upload your file"
+          }) }}
+
+          <!--<h1 class="govuk-heading-xl govuk-!-margin-top-9">File uploaded</h1>-->
+          <table class="govuk-table  govuk-!-margin-top-9 govuk-!-margin-bottom-9">
             <thead class="govuk-table__head">
               <tr class="govuk-table__row">
                 <th class="govuk-table__header" scope="col">
@@ -53,7 +74,7 @@ Upload completed - GOV UK
             <tbody class="govuk-table__body">
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  2
+                  <span style="padding-left: 15px; border-left: 5px solid #d4351c;">2</span>
                 </td>
                 <td class="govuk-table__cell">
                   Corylus
@@ -61,11 +82,11 @@ Upload completed - GOV UK
                 <td class="govuk-table__cell">
                   Corylus avellana
                 </td>
-                <td class="govuk-table__cell">
-                  Hazelnut
+                <td class="govuk-table__cell" style="color:#D4351C; font-weight:bold;">
+                  Missing
                 </td>
                 <td class="govuk-table__cell">
-                  Bolivia, Plurinational state of
+                  Bolivia
                 </td>
                 <td class="govuk-table__cell">
                   Natural wood box with sift proof walls
@@ -85,7 +106,7 @@ Upload completed - GOV UK
                   </a>
                 </td>-->
               </tr>
-              <tr class="govuk-table__row">
+              <!--<tr class="govuk-table__row">
                 <td class="govuk-table__cell">
                   3
                 </td>
@@ -113,15 +134,15 @@ Upload completed - GOV UK
                 <td class="govuk-table__cell">
                   Left blank
                 </td>
-                <!--<td class="govuk-table__cell">
+                <td class="govuk-table__cell">
                   <a href="review-an-apprentice" class="govuk-body-s">
                     Edit
                   </a>
-                </td>-->
-              </tr>
+                </td>
+              </tr>-->
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  4
+                  <span style="padding-left: 15px; border-left: 5px solid #d4351c;">4</span>
                 </td>
                 <td class="govuk-table__cell">
                   Dianthus
@@ -129,8 +150,9 @@ Upload completed - GOV UK
                 <td class="govuk-table__cell">
                   Dianthus repens
                 </td>
-                <td class="govuk-table__cell">
-                  Boreal carnation
+                <td class="govuk-table__cell" style="color:#D4351C; font-weight:bold;">
+                  <!--Boreal carnation-->
+                  Missing
                 </td>
                 <td class="govuk-table__cell">
                   United Kingdom
@@ -154,6 +176,11 @@ Upload completed - GOV UK
                 </td>-->
               </tr>
               <tr class="govuk-table__row">
+                <td class="govuk-table__cell" colspan="9" style="text-align: center; color:grey;">
+                  <span>Only showing rows with errors</span>
+                </td>
+              </tr>
+              <!--<tr class="govuk-table__row">
                 <td class="govuk-table__cell">
                   5
                 </td>
@@ -181,11 +208,11 @@ Upload completed - GOV UK
                 <td class="govuk-table__cell">
                   Left blank
                 </td>
-                <!--<td class="govuk-table__cell">
+                <td class="govuk-table__cell">
                   <a href="review-an-apprentice" class="govuk-body-s">
                     Edit
                   </a>
-                </td>-->
+                </td>
               </tr>
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
@@ -215,51 +242,15 @@ Upload completed - GOV UK
                 <td class="govuk-table__cell">
                   Left blank
                 </td>
-                <!--<td class="govuk-table__cell">
+                <td class="govuk-table__cell">
                   <a href="review-an-apprentice" class="govuk-body-s">
                     Edit
                   </a>
-                </td>-->
-              </tr>
+                </td>
+              </tr>-->
             </tbody>
           </table>
-
-        {{ govukRadios({
-          idPrefix: "next",
-          name: "next",
-          fieldset:
-          {
-            legend:
-            {
-              text: "Do you want to add more commodities?",
-              isPageHeading: true,
-              classes: "govuk-fieldset__legend--m govuk-!-margin-top-4"
-            }
-          },
-          items: [
-          {
-            value: "upload~upload",
-            text: "Yes, upload another file"
-          },
-          {
-            value: "confirm~task-list",
-            text: "No, I have finished adding commodities"
-          }
-          ]
-        }) }}
-
-
-          {{ govukButton({
-            text: "Save and continue"
-          }) }}
-
         </form>
-
-        <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-        <p class="govuk-body govuk-!-margin-top-9">
-          <a href="upload-completed-with-errors" class="govuk-link govuk-link-no-visited-state">View Upload completed screen with errors</a>
-        </p>
-
       </div>
     </div>
 </div>

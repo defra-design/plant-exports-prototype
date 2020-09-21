@@ -44,7 +44,6 @@ GOV.UK Prototype Kit
           </li>
           {% endif %} -->
 
-
           <li class="app-task-list__item">
             <span class="app-task-list__task-name">
               <a href="exporter" aria-describedby="company-information-status">
@@ -83,26 +82,23 @@ GOV.UK Prototype Kit
           <li class="app-task-list__item">
             <span class="app-task-list__task-name">
               {% if data.commodity == "bulbs" %}
-              <a href="  commodity-page-bulbs" aria-describedby="contact-details-status">
+              <a href="{%if data.commodities and ( data.commodities | length ) > 0 %}commodity-list{% else %}input-method{% endif %}" aria-describedby="contact-details-status">
                 Bulb stock details
               </a>
-              {% elseif data.commodity == "potatoes"%}
-              <a href="{%if data.commodities and ( data.commodities | length ) > 0 %}commodity-list{% else %}commodity-page{% endif %}" aria-describedby="contact-details-status">
-                Your commodity
-              </a>
-              {% elseif data.commodity == "farm machinery"%}
-              <a href="{%if data.commodities and ( data.commodities | length ) > 0 %}commodity-list{% else %}commodity-page-machinery{% endif %}" aria-describedby="contact-details-status">
+              {% elseif data.commodity == "farm machinery" %}
+              <a href="{%if data.commodities and ( data.commodities | length ) > 0 %}commodity-list{% else %}input-method{% endif %}" aria-describedby="contact-details-status">
                 Your farm machinery details
               </a>
               {% else %}
-              <a href="{%if data.commodities and ( data.commodities | length ) > 0 %}commodity-list{% else %}how-to-identify{% endif %}" aria-describedby="contact-details-status">
+              <!--<a href="{%if data.commodities and ( data.commodities | length ) > 0 %}commodity-list{% else %}input-method{% endif %}" aria-describedby="contact-details-status">-->
+              <a href="{%if data.upload %}upload-completed{% elseif data.commodities and ( data.commodities | length ) > 0 %}commodity-list{% else %}input-method{% endif %}" aria-describedby="contact-details-status">
                 Your commodity
               </a>
               {% endif %}
             </span>
-            {% if data.commodities and ( data.commodities | length ) > 0  or data.stock_number %}
+            {% if data.commodities and ( data.commodities | length ) > 0  or data.stock_number or data.upload %}
             <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Completed</strong>
-            {% else%}
+            {% else %}
             <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="list-convictions-status">Not started</strong>
             {% endif %}
 
