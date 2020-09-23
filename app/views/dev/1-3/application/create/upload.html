@@ -17,17 +17,29 @@ Add commodities by uploading a file - GOV UK
       <div class="govuk-grid-column-two-thirds">
         <form action="/form-handler" method="post" novalidate>
 
+          {% set commodity = data.commodity or "products" %}
+
+          {% if data.commodity == "plant products" %}
+
+          {% set commodity = "products" %}
+
+          {% elseif data.commodity == "farm machinery" %}
+
+          {% set commodity = "farm machines" %}
+
+          {% endif %}
+
           <div class="govuk-form-group  govuk-!-margin-bottom-9">
             <fieldset class="govuk-fieldset">
               <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
                 <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">
-                    Add products in bulk by uploading a file
+                    Add {{commodity or "products"}} in bulk by uploading a file
                 </h1>
               </legend>
             </fieldset>
 
             <p class="govuk-body">
-                Use our <a href="/public/images/plant-product-commodity-template.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a> to upload details for multiple {{data.commodity or " products"}} at the same time.
+                Use our <a href="/public/images/plant-product-commodity-template.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a> to upload details for multiple {{commodity or " products"}} at the same time.
             </p>
             <!--<ul class="govuk-list govuk-list--bullet  govuk-!-margin-bottom-9">
                 <li>The file must be </li>
@@ -55,6 +67,12 @@ Add commodities by uploading a file - GOV UK
             text: "Upload",
             href: "upload-in-progress"
           }) }}
+
+
+          <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+          <p class="govuk-body govuk-!-margin-top-9">
+            <a href="upload-error" class="govuk-link govuk-link-no-visited-state">View Upload screen with file type error</a>
+          </p>
 
         </form>
       </div>

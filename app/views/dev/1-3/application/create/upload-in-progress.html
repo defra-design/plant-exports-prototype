@@ -16,17 +16,30 @@ Add commodities by uploading a file - GOV UK
       <div class="govuk-grid-column-two-thirds">
         <div class="app-alert app-alert--info"><p class="govuk-body">Upload in progress...</p></div>
         <form action="/form-handler" method="post" novalidate>
+
+          {% set commodity = data.commodity or "products" %}
+
+          {% if data.commodity == "plant products" %}
+
+          {% set commodity = "products" %}
+
+          {% elseif data.commodity == "farm machinery" %}
+
+          {% set commodity = "farm machines" %}
+
+          {% endif %}
+
           <div class="govuk-form-group  govuk-!-margin-bottom-9">
             <fieldset class="govuk-fieldset">
               <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
                 <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">
-                    Add {{data.commodity or "plant products"}} by uploading a file
+                    Add {{commodity or "products"}} by uploading a file
                 </h1>
               </legend>
             </fieldset>
 
             <p class="govuk-body">
-                Use our <a href="/public/images/plant-product-commodity-template.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a> to upload details for multiple commodities at the same time.
+                Use our <a href="/public/images/plant-product-commodity-template.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a> to upload details for multiple {{commodity or " products"}} at the same time.
             </p>
             <p class="govuk-body">
                 The file must contain mandatory information in a specific format.
