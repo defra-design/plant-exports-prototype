@@ -1,0 +1,211 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+ - GOV UK
+{% endblock %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-width-container">
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <form method="post" class="form">
+
+          {% set commodity = data.commodity or "products" %}
+
+          <!--{% if data.commodity == "bulbs" %}
+
+          {% set url = "commodity-page-bulbs" %}
+
+          {% elseif data.commodity == "plant products" %}
+
+          {% set url = "how-to-identify" %}
+
+          {% set commodity = "products" %}
+
+          {% elseif data.commodity == "potatoes" %}
+
+          {% set url = "commodity-page" %}
+
+          {% elseif data.commodity == "farm machinery" %}
+
+          {% set url = "commodity-page-machinery" %}
+
+          {% set commodity = "farm machines" %}
+
+          {% else %}
+
+          {% set url = "how-to-identify" %}
+
+          {% endif %}-->
+
+          {% set iacsHtml %}
+          {{ govukInput({
+            id: "iacs-number-1",
+            name: "iacs-number-1",
+            type: "text",
+            spellcheck: false,
+            classes: "govuk-!-width-one-third",
+            label: {
+              text: "Enter the 10 character IACS number eg NF 1234 1234"
+            }
+          }) }}
+          <!--{{ govukInput({
+            id: "iacs-number-2",
+            name: "iacs-number-2",
+            type: "text",
+            spellcheck: false,
+            classes: "govuk-input--width-4"
+          }) }}
+          {{ govukInput({
+            id: "iacs-number-3",
+            name: "iacs-number-3",
+            type: "text",
+            spellcheck: false,
+            classes: "govuk-input--width-4"
+          }) }}-->
+          {% endset -%}
+
+          {% set gridHtml %}
+          {{ govukInput({
+            id: "iacs-number-1",
+            name: "iacs-number-1",
+            type: "text",
+            spellcheck: false,
+            classes: "govuk-!-width-one-third",
+            label: {
+              text: "Enter the Grid reference or GPS reading"
+            }
+          }) }}
+          {% endset -%}
+
+          {{ govukRadios({
+            idPrefix: "add-field-details",
+            name: "add-field-details",
+            fieldset: {
+              legend: {
+                text: "How do you want to add your field details?",
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--xl govuk-!-margin-bottom-6"
+              }
+            },
+            items: [
+              {
+                value: "iacs",
+                text: "IACS Number",
+                conditional: {
+                  html: iacsHtml
+                }
+              },
+              {
+                divider: "or"
+              },
+              {
+                value: "grid-ref",
+                text: "Grid reference / GPS reading",
+                conditional: {
+                  html: gridHtml
+                }
+              }
+            ]
+          }) }}
+
+          {{ govukInput({
+            label: {
+              text: "What is the name of the parish?",
+              classes: "govuk-label--s",
+              isPageHeading: false
+            },
+            id: "parish",
+            name: "parish",
+            classes: "govuk-input--width-20"
+          }) }}
+
+          {{ govukInput({
+            label: {
+              text: "Nursery plot number (optional)",
+              classes: "govuk-label--s",
+              isPageHeading: false
+            },
+            id: "nursery-plot-no",
+            name: "nursery-plot-no",
+            classes: "govuk-input--width-20"
+          }) }}
+
+          {{ govukInput({
+            label: {
+              text: "Area of whole field in hectares",
+              classes: "govuk-label--s",
+              isPageHeading: false
+            },
+            id: "area-of-field",
+            name: "area-of-field",
+            classes: "govuk-input--width-4"
+          }) }}
+
+          <!--Attach an OS field map of crops to be inspected (optional)
+
+          {{ govukFileUpload({
+            id: "file-upload-1",
+            name: "file-upload-1",
+            label: {
+              text: "Upload a map"
+            }
+          }) }}-->
+
+
+          <!--<div class="govuk-form-group">
+            <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
+                <h1 class="govuk-fieldset__heading">
+                  How do you want to add your field details?
+                </h1>
+              </legend>
+              <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="how-contacted-conditional" name="how-contacted" type="radio" value="iacs~{{url}}" data-aria-controls="conditional-how-contacted-conditional">
+                  <label class="govuk-label govuk-radios__label" for="one-at-a-time">
+                    IACS
+                  </label>
+                </div>
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="how-contacted-conditional" name="how-contacted" type="radio" value="grid-ref?{{url}}" data-aria-controls="conditional-how-contacted-conditional">
+                  <label class="govuk-label govuk-radios__label" for="upload-a-file">
+                    Grid reference
+                  </label>
+                </div>
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="how-contacted-conditional" name="how-contacted" type="radio" value="what3words~{{url}}" data-aria-controls="conditional-how-contacted-conditional">
+                  <label class="govuk-label govuk-radios__label" for="one-at-a-time">
+                    Parish
+                  </label>
+                </div>
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="how-contacted-conditional" name="how-contacted" type="radio" value="desc?{{url}}" data-aria-controls="conditional-how-contacted-conditional">
+                  <label class="govuk-label govuk-radios__label" for="upload-a-file">
+                    Description
+                  </label>
+                </div>
+              </div>
+            </fieldset>
+          </div>-->
+
+          {{ govukButton({
+            classes: "govuk-!-margin-top-4",
+            text: "Continue",
+            href: "task-list?field=1"
+          }) }}
+
+        </form>
+      </div>
+    </div>
+
+</div>
+{% endblock %}
