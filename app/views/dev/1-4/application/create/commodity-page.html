@@ -1,0 +1,143 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+GOV.UK Prototype Kit
+{% endblock %}
+{% block beforeContent%}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+{% block content %}
+
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    {% if data.commodity != "potatoes"%}
+    <h1 class="govuk-heading-xl">
+    How are you sending the {{data.commodity or "plants" }}?
+    </h1>
+    {% else %}
+    <h1 class="govuk-heading-xl">
+      What is your commodity?
+    </h1>
+    {% endif %}
+    <form method="POST">
+
+
+          {% if data.commodity == "potatoes"%}
+          <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+            <h2 class="govuk-fieldset__heading">
+              Commodity details
+            </h2>
+          </legend>
+          <div class="govuk-form-group govuk-!-margin-top-4">
+            <label class="govuk-label" for="commodity_variety">
+              Variety (optional)
+            </label>
+            <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety" type="text">
+          </div>
+          {{ govukRadios({
+            idPrefix: "Type",
+            name: "commodity_type",
+            fieldset: {
+              legend: {
+                text: "Type",
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--s"
+              }
+            },
+            items: [
+              {
+                value: "Seed potatoes",
+                text: "Seed potatoes"
+              },
+              {
+                value: "Ware potatoes",
+                text: "Ware potatoes"
+              }
+            ]
+          }) }}
+
+
+          <div class="govuk-form-group govuk-!-margin-top-4">
+            <label class="govuk-label" for="commodity_lot">
+              Lot reference (optional)
+            </label>
+            <input class="govuk-input govuk-input--width-20" id="commodity_lot" name="commodity_lot" type="text">
+          </div>
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="chemicals_used">
+              Chemical used on tubers (optional)
+            </label>
+            <input class="govuk-input govuk-input--width-30" id="chemicals_used" name="chemicals_used" type="text">
+          </div>
+              </fieldset>
+          {% endif %}
+
+
+
+
+
+
+      <fieldset class="govuk-fieldset" role="group">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+          Shipping information
+        </legend>
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="passport-number">
+            Number of packages
+          </label>
+          <input class="govuk-input govuk-input--width-10" id="passport-number" name="passport-number" type="packaging_type" aria-describedby="passport-number-hint">
+        </div>
+        {% set country_module_label = "Packaging type"%}
+        {% block packing %}{% include "../modules/_packaging.html" %}{% endblock %}
+        {% if data.commodity != 'grain'%}
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="packing-material">
+            Packing material used (optional)
+          </label>
+          <input class="govuk-input govuk-input--width-20" id="packing-material" name="packing_material_used" type="text">
+        </div>
+        {% endif %}
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="distinguishing-marks">
+            Distinguishing marks (optional)
+          </label>
+          <span id="distinguishing-mark-hint" class="govuk-hint">
+            For example, container numbers, lot numbers
+          </span>
+          <input class="govuk-input govuk-input--width-20" id="distinguishing-marks" name="distinguishing_marks" type="text" aria-describedby="distinguishing-mark-hint">
+        </div>
+
+      
+        {% if data.commodity != "grain"%}
+        <div class="govuk-form-group">
+          <label class="govuk-label " for="quantity-number">
+            Quantity
+          </label>
+          <span id="quantity-number-hint" class="govuk-hint">
+            Enter a number and a unit of measurement, for example 500kg
+          </span>
+          <input class="govuk-input govuk-input--width-10" id="quantity-number" name="quantity" type="text" aria-describedby="passport-number-hint">
+        </div>
+        {% endif %}
+      </fieldset>
+      <fieldset class="govuk-fieldset" role="group">
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-label--m" for="more-detail">
+            Further information (optional)
+          </label>
+          <span id="more-detail-hint" class="govuk-hint">
+            Enter any extra information that needs to be on the certificate
+          </span>
+          <textarea class="govuk-textarea" id="more-detail" name="more_detail" rows="5" aria-describedby="more-detail-hint"></textarea>
+        </div>
+      </fieldset>
+      <div class="govuk-form-group">
+        <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+      </div>
+    </form>
+    {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+  </div>
+</div>
+{% endblock %}
