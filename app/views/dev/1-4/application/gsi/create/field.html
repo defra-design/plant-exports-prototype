@@ -85,6 +85,19 @@
             }
           }) }}
           {% endset -%}
+          {% set what3wordsHtml %}
+          {{ govukInput({
+            id: "iacs-number-1",
+            name: "iacs-number-1",
+            type: "text",
+            spellcheck: false,
+            classes: "govuk-!-width-one-third",
+            label: {
+              text: "Enter the what3words address "
+            }
+          }) }}
+          {% endset -%}
+
 
           {{ govukRadios({
             idPrefix: "add-field-details",
@@ -97,40 +110,35 @@
               }
             },
             items: [
+                {
+                  value: "grid-ref",
+                  text: "Grid reference or GPS reading",
+                  conditional: {
+                    html: gridHtml
+                  }
+              },
               {
                 value: "iacs",
-                text: "IACS Number",
+                text: "IACS number",
                 conditional: {
                   html: iacsHtml
                 }
               },
-              {
-                divider: "or"
-              },
-              {
-                value: "grid-ref",
-                text: "Grid reference / GPS reading",
-                conditional: {
-                  html: gridHtml
-                }
+                {
+                  value: "what3words",
+                  text: "what3words",
+                  conditional: {
+                    html: what3wordsHtml
+                  }
+
               }
             ]
           }) }}
 
-          {{ govukInput({
-            label: {
-              text: "What is the name of the parish?",
-              classes: "govuk-label--s",
-              isPageHeading: false
-            },
-            id: "parish",
-            name: "parish",
-            classes: "govuk-input--width-20"
-          }) }}
 
           {{ govukInput({
             label: {
-              text: "Nursery plot number (optional)",
+              text: "Nursery plot number or field name",
               classes: "govuk-label--s",
               isPageHeading: false
             },
