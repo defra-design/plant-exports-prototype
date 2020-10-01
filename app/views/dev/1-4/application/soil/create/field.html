@@ -54,7 +54,7 @@
             spellcheck: false,
             classes: "govuk-!-width-one-third",
             label: {
-              text: "Enter the 10 character IACS number eg NF 1234 1234"
+              text: "Enter the 10 character IACS number, for example NF 1234 1234"
             }
           }) }}
           <!--{{ govukInput({
@@ -81,41 +81,60 @@
             spellcheck: false,
             classes: "govuk-!-width-one-third",
             label: {
-              text: "Enter the Grid reference or GPS reading"
+              text: "Enter the grid reference or GPS reading"
             }
           }) }}
           {% endset -%}
+          {% set what3wordsHtml %}
+          {{ govukInput({
+            id: "iacs-number-1",
+            name: "iacs-number-1",
+            type: "text",
+            spellcheck: false,
+            classes: "govuk-!-width-one-third",
+            label: {
+              text: "Enter the what3words address "
+            }
+          }) }}
+          {% endset -%}
+
 
           {{ govukRadios({
             idPrefix: "add-field-details",
             name: "add-field-details",
             fieldset: {
               legend: {
-                text: "How do you want to add your field details?",
+                text: "Field details",
                 isPageHeading: true,
                 classes: "govuk-fieldset__legend--xl govuk-!-margin-bottom-6"
               }
             },
             items: [
+                {
+                  value: "grid-ref",
+                  text: "Grid reference or GPS reading",
+                  conditional: {
+                    html: gridHtml
+                  }
+              },
               {
                 value: "iacs",
-                text: "IACS/RLR Number",
+                text: "IACS number",
                 conditional: {
                   html: iacsHtml
                 }
               },
-              {
-                divider: "or"
-              },
-              {
-                value: "grid-ref",
-                text: "Grid reference / GPS reading",
-                conditional: {
-                  html: gridHtml
-                }
+                {
+                  value: "what3words",
+                  text: "what3words",
+                  conditional: {
+                    html: what3wordsHtml
+                  }
+
               }
             ]
           }) }}
+
 
           {{ govukInput({
             label: {
@@ -141,26 +160,14 @@
             name: "one-half"
           }) }}
 
-          {{ govukInput({
-            label: {
-              text: "What is the name of the parish?",
-              classes: "govuk-label--s",
-              isPageHeading: false
-            },
-            id: "parish",
-            name: "parish",
-            classes: "govuk-input--width-20"
-          }) }}
-
-          <!--Attach an OS field map of crops to be inspected (optional)
-
           {{ govukFileUpload({
             id: "file-upload-1",
             name: "file-upload-1",
             label: {
-              text: "Upload a map"
+              text: "Upload an OS map showing soil to be sampled ",
+              classes: "govuk-!-font-weight-bold govuk-!-margin-top-9"
             }
-          }) }}-->
+          }) }}
 
 
           <!--<div class="govuk-form-group">
