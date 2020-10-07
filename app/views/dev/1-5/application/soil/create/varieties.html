@@ -1,0 +1,106 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+ - GOV UK
+{% endblock %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-width-container">
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <form method="post" class="form">
+          <h1 class="govuk-heading-xl">
+            Variety details
+          </h1>
+
+          {% set commodity = data.commodity or "products" %}
+
+          {{ govukInput({
+            label: {
+              text: "Area to be sampled in hectares",
+              classes: "govuk-label--s",
+              isPageHeading: false
+            },
+            id: "area-to-sample",
+            name: "area-to-sample",
+            classes: "govuk-input--width-4"
+          }) }}
+
+          {{ govukInput({
+            label: {
+              text: "Variety",
+              classes: "govuk-label--s",
+              isPageHeading: false
+            },
+            id: "variety",
+            name: "variety",
+            classes: "govuk-!-width-two-thirds"
+          }) }}
+
+          <!--Attach an OS field map of crops to be inspected (optional)
+
+          {{ govukFileUpload({
+            id: "file-upload-1",
+            name: "file-upload-1",
+            label: {
+              text: "Upload a map"
+            }
+          }) }}-->
+
+
+          <!--<div class="govuk-form-group">
+            <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
+                <h1 class="govuk-fieldset__heading">
+                  How do you want to add your field details?
+                </h1>
+              </legend>
+              <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="how-contacted-conditional" name="how-contacted" type="radio" value="iacs~{{url}}" data-aria-controls="conditional-how-contacted-conditional">
+                  <label class="govuk-label govuk-radios__label" for="one-at-a-time">
+                    IACS
+                  </label>
+                </div>
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="how-contacted-conditional" name="how-contacted" type="radio" value="grid-ref?{{url}}" data-aria-controls="conditional-how-contacted-conditional">
+                  <label class="govuk-label govuk-radios__label" for="upload-a-file">
+                    Grid reference
+                  </label>
+                </div>
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="how-contacted-conditional" name="how-contacted" type="radio" value="what3words~{{url}}" data-aria-controls="conditional-how-contacted-conditional">
+                  <label class="govuk-label govuk-radios__label" for="one-at-a-time">
+                    Parish
+                  </label>
+                </div>
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="how-contacted-conditional" name="how-contacted" type="radio" value="desc?{{url}}" data-aria-controls="conditional-how-contacted-conditional">
+                  <label class="govuk-label govuk-radios__label" for="upload-a-file">
+                    Description
+                  </label>
+                </div>
+              </div>
+            </fieldset>
+          </div>-->
+
+          {{ govukButton({
+            classes: "govuk-!-margin-top-4",
+            text: "Continue",
+            href: "task-list?varieties=1"
+          }) }}
+
+        </form>
+      </div>
+    </div>
+
+</div>
+{% endblock %}
