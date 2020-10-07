@@ -107,7 +107,7 @@ GOV.UK Prototype Kit
       <p class="govuk-body"><a href="commodity-page-bulbs" class="govuk-link govuk-link-no-visited-state">Add another bulb</a></p>
     {%else%}
       <h2 class="govuk-heading-m">Field and crop details</h2>
-      <h3 class="govuk-heading-s">Field 1</h3>
+      <h3 class="govuk-heading-s">Field {{loop.index or "1"}}</h3>
 
       <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
         {% if data.addfielddetails == "w3w" %}
@@ -116,7 +116,7 @@ GOV.UK Prototype Kit
             what3words address
           </dt>
           <dd class="govuk-summary-list__value">
-            {{data.w3w or "horse.canal.wander"}}
+            horse.canal.wander
           </dd>
           <dd class="govuk-summary-list__actions">
             <a class="govuk-link" href="field?change=yes">
@@ -326,6 +326,228 @@ GOV.UK Prototype Kit
         </tbody>
       </table>
       <!-- multiple commodity table ends -->
+
+      <!--Field 2 starts-->
+      <h3 class="govuk-heading-s govuk-!-margin-top-9">Field {{loop.index or "2"}}</h3>
+
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+        {% if data.addfielddetails == "w3w" %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            what3words address
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{data.w3w or "thing.house.under"}}
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="field?change=yes">
+              Change<span class="govuk-visually-hidden">
+                what3words address</span>
+            </a>
+          </dd>
+        </div>
+        {% elseif data.addfielddetails == "iacs" %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            IACS/RLR number
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{data.iacs or "NF 1234 2345"}}
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="field?change=yes">
+              Change<span class="govuk-visually-hidden">
+                IACS/RLR number</span>
+            </a>
+          </dd>
+        </div>
+        {% else %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Grid reference or GPS reading
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{data.gridgps or "NF12342345"}}
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="field?change=yes">
+              Change<span class="govuk-visually-hidden">
+                Grid reference or GPS reading</span>
+            </a>
+          </dd>
+        </div>
+        {% endif %}
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Nursery plot number/Field name
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{data.nurseryplotno or "Top field"}}
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="field?change=yes">
+              Change<span class="govuk-visually-hidden">
+                field details</span>
+            </a>
+          </dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Area of whole field in hectares
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{data.areaoffield or "15"}}
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="field?change=yes">
+              Change<span class="govuk-visually-hidden">
+                area of whole field</span>
+            </a>
+          </dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Field map
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <a href="field" class="govuk-link govuk-link-no-visited-state">bottom-field.jpg</a>
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="field?change=yes">
+              Change<span class="govuk-visually-hidden">
+                field map</span>
+            </a>
+          </dd>
+        </div>
+
+      </dl>
+
+      <!-- multiple commodity table starts -->
+      {% if commodity.has_botanicial_name == "yes" %}
+      {% set commodity_id_name = commodity.genus %}
+      {% else %}
+      {% set commodity_id_name = commodity.commodity_common_name %}
+      {% endif %}
+
+      <h2 class="govuk-heading-s govuk-!-margin-top-6">5 crops added to Field {{loop.index or "2"}}</h2>
+      <table class="govuk-table govuk-!-margin-bottom-4">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">
+              Description
+            </th>
+            <th class="govuk-table__header" scope="col">
+              Destination countries
+            </th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">
+              Number of items
+            </th>
+            <th class="govuk-table__header" scope="col"></th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Corylus avellana'}}
+            </td>
+            <td class="govuk-table__cell">
+              Bolivia
+            </td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              1000
+            </td>
+            <td class="govuk-table__cell">
+              <a href="commodity-list" class="govuk-link govuk-link--no-visited-state">
+                Change
+              </a><br>
+              <a href="#" class="govuk-link govuk-link--no-visited-state">
+                Delete
+              </a>
+            </td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Rosa rugosa'}}
+            </td>
+            <td class="govuk-table__cell">
+              United Kingdom
+            </td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              150
+            </td>
+            <td class="govuk-table__cell">
+              <a href="commodity-list" class="govuk-link govuk--link-no-visited-state">
+                Change
+              </a><br>
+              <a href="#" class="govuk-link govuk-link--no-visited-state">
+                Delete
+              </a>
+            </td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Dianthus repens'}}
+            </td>
+            <td class="govuk-table__cell">
+              United Kingdom
+            </td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              25
+            </td>
+            <td class="govuk-table__cell">
+              <a href="commodity-list" class="govuk-link govuk-link--no-visited-state">
+                Change
+              </a><br>
+              <a href="#" class="govuk-link govuk-link--no-visited-state">
+                Delete
+              </a>
+            </td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Papaver alpinum'}}
+            </td>
+            <td class="govuk-table__cell">
+              France
+            </td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              150
+            </td>
+            <td class="govuk-table__cell">
+              <a href="commodity-list" class="govuk-link govuk-link--no-visited-state">
+                Change
+              </a><br>
+              <a href="#" class="govuk-link govuk-link--no-visited-state">
+                Delete
+              </a>
+            </td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Agapanthus africanus'}}
+            </td>
+            <td class="govuk-table__cell">
+              United Kingdom
+            </td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              50
+            </td>
+            <td class="govuk-table__cell">
+              <a href="commodity-list" class="govuk-link govuk-link--no-visited-state">
+                Change
+              </a><br>
+              <a href="#" class="govuk-link govuk-link--no-visited-state">
+                Delete
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!--Field 2 ends-->
+
       <p class="govuk-body"><a href="how-to-identify?return_url=check-your-answers" class="govuk-link govuk-link--no-visited-state">Add more</a></p>
     {%endif%}
       <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">

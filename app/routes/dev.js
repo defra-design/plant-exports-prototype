@@ -164,6 +164,7 @@ module.exports = function(router) {
 
 
   });
+
   // **** POST TEMPLATE ***
   router.post('/' + base_url + '*/application/create/commodity-page*', function(req, res) {
     var page = req.query.return_url || '/' + base_url + req.params[0] + '/application/create/commodity-list'
@@ -177,7 +178,6 @@ module.exports = function(router) {
     addCommodity(req.body, req.session.data.commodities)
     res.redirect(301, page);
   })
-
 
   // *******************************
   // Global page GET router

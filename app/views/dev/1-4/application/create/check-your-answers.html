@@ -83,12 +83,61 @@ GOV.UK Prototype Kit
           {% block summaryBulb %}{% include "../modules/_summary-bulb.html" %}{% endblock %}
         {% endfor %}
         <p class="govuk-body"><a href="commodity-page-bulbs" class="govuk-link">Add another bulb</a></p>
+      {% elseif data.commodity == "farm machinery" %}
+        <h2 class="govuk-heading-m">Your farm machinery</h2>
+        <table class="govuk-table govuk-!-margin-bottom-4">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header" scope="col">
+                Description
+              </th>
+              <th class="govuk-table__header" scope="col">
+                Country of origin
+              </th>
+              <th class="govuk-table__header govuk-table__header" scope="col">
+                Unique ID
+              </th>
+              <th class="govuk-table__header" scope="col"></th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+        {% for commodity in data.commodities %}
+          {% block summaryMachinery %}{% include "../modules/_summary-machinery.html" %}{% endblock %}
+        {% endfor %}
+        </tbody>
+      </table>
+      <p class="govuk-body"><a href="commodity-page-machinery" class="govuk-link">Add another machine</a></p>
       {%else%}
         <h2 class="govuk-heading-m">Your commodities</h2>
-        {% for commodity in data.commodities %}
-        {% block summaryGeneral %}{% include "../modules/_summary-general.html" %}{% endblock %}
-        {% endfor %}
-        <p class="govuk-body"><a href="commodity-page?return_url=check-your-answers">Add more</a></p>
+        <table class="govuk-table govuk-!-margin-bottom-4">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header" scope="col">
+                Description
+              </th>
+              {% if data.commodity != "seeds" %}
+              <th class="govuk-table__header" scope="col">
+                {% if data.commodity == "plant products"%}
+                Primary country where grown
+                {% else %}
+                Country of origin
+                {% endif %}
+              </th>
+              {% endif %}
+              <th class="govuk-table__header govuk-table__header--numeric" scope="col">
+                Amount
+              </th>
+              <th class="govuk-table__header" scope="col"></th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            {% for commodity in data.commodities %}
+            {% block summaryGeneral %}{% include "../modules/_summary-general-check-answers.html" %}{% endblock %}
+            {% endfor %}
+          </tbody>
+        </table>
+        <!--<p class="govuk-body"><a href="commodity-page?return_url=check-your-answers">Add more</a></p>-->
+        <p class="govuk-body"><a href="how-to-identify?return_url=check-your-answers">Add more</a></p>
       {%endif%}
     {% if data.commodity != "bulbs" or  (data.countrySelect[0] == "United States" and data.commodity == "bulbs")%}
     <h2 class="govuk-heading-m">Transportation</h2>
