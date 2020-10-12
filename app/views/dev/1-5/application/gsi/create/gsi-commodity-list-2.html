@@ -12,152 +12,135 @@
     <h1 class="govuk-heading-xl">
       Your crops for inspection
     </h1>
-    <div class="app-summary-card ">
+
+    <h2 class="govuk-heading-m">{{data.nurseryplotno or "Top field"}}</h2>
+    <table class="govuk-table govuk-!-margin-bottom-4">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          {% if data.addfielddetails == "w3w" %}
+          <th class="govuk-table__header" scope="col">
+            what3words address
+          </th>
+          {% elseif data.addfielddetails == "gridgps" %}
+          <th class="govuk-table__header" scope="col">
+            Grid reference or GPS reading
+          </th>
+          {% else %}
+          <th class="govuk-table__header" scope="col">
+            IACS/RLR number
+          </th>
+          {% endif %}
+          <th class="govuk-table__header govuk-table__header--numeric" scope="col">
+            Area of whole field in hectares
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Field map
+          </th>
+          <th class="govuk-table__header" scope="col"></th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          {% if data.addfielddetails == "iacs" %}
+          <td class="govuk-table__cell">
+            {{data.iacs or "NF24681358"}}
+          </td>
+          {% elseif data.addfielddetails == "w3w" %}
+          <td class="govuk-table__cell">
+            {{data.w3w or "horse.door.exit"}}
+          </td>
+          {% else %}
+          <td class="govuk-table__cell">
+            {{data.gridgps or "NF 2468 1358"}}
+          </td>
+          {% endif %}
+          <td class="govuk-table__cell govuk-table__cell--numeric">
+            {{ data.areaoffield or "3.5" }}
+          </td>
+          <td class="govuk-table__cell govuk-table__cell">
+            <a class="govuk-link govuk-link--no-visited-state" href="#">{{ data.description or "Filename.jpg" }}</a>
+          </td>
+          <td class="govuk-table__cell">
+            <a href="field" class="govuk-link govuk-link--no-visited-state">
+              Change
+            </a><br>
+            <a href="#" class="govuk-link govuk-link--no-visited-state">
+              Delete
+            </a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
       {% if commodity.has_botanicial_name == "yes" %}
       {% set commodity_id_name = commodity.genus %}
       {% else %}
       {% set commodity_id_name = commodity.commodity_common_name %}
       {% endif %}
-      <header class="app-summary-card--header">
-        <h3 class="app-summary-card--title">{{loop.index or "1"}}. {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Lepanthes'}}</h3>
-        <div class="app-summary-card__actions">
-          <ul class="app-summary-card__actions-list">
-            <li class="app-summary-card__actions-list-item">
-              <a class="govuk-link" href="#">
-                Delete<span class="govuk-visually-hidden"></span>
+
+      <h2 class="govuk-heading-s govuk-!-margin-top-9">2 crops added to {{data.nurseryplotno or "Top field"}}</h2>
+      <table class="govuk-table govuk-!-margin-bottom-4">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">
+              Description
+            </th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">
+              Approximate hectarage of plot
+            </th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">
+              Desination countries
+            </th>
+            <th class="govuk-table__header" scope="col"></th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Corylus avellana'}}
+            </td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              2
+            </td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              Belize
+            </td>
+            <td class="govuk-table__cell">
+              <a href="varieties-2" class="govuk-link govuk-link--no-visited-state">
+                Change
+              </a><br>
+              <a href="#" class="govuk-link govuk-link--no-visited-state">
+                Delete
               </a>
-            </li>
-            <li class="app-summary-card__actions-list-item">
-              <a class="govuk-link" href="commodity-page?change=yes">
-                Change<span class="govuk-visually-hidden"></span>
+            </td>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">
+                {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Corylus colurna'}}
+              </td>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                1.5
+              </td>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                Norway
+              </td>
+            <td class="govuk-table__cell">
+              <a href="varieties-2" class="govuk-link govuk-link--no-visited-state">
+                Change
+              </a><br>
+              <a href="#" class="govuk-link govuk-link--no-visited-state">
+                Delete
               </a>
-            </li>
-          </ul>
-        </div>
-      </header>
-      <div class="app-summary-card--content">
-        <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-              Genus
-            </dt>
-            <dd class="govuk-summary-list__value">
-              {{commodity_id_name or 'Lepanthes'}}
-              <!-- <span class="govuk-hint">You skipped this question</span> -->
-            </dd>
-          </div>
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-              Species
-            </dt>
-            <dd class="govuk-summary-list__value">
-              {{data.commodity_host_species or ('<span class="govuk-hint">Left blank</span>' | safe)}}
-
-            </dd>
-          </div>
-
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-              Common name
-            </dt>
-            <dd class="govuk-summary-list__value">
-              Babyboot orchid
-              <!-- <span class="govuk-hint">You skipped this question</span> -->
-            </dd>
-          </div>
-          {% if commodity.commodity == "plants" or data.commodity == "potatoes" %}
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-              Variety
-            </dt>
-            <dd class="govuk-summary-list__value">
-              {{data.commodity_variety or ('<span class="govuk-hint">Left blank</span>' | safe)}}
-
-            </dd>
-          </div>
-          {% endif %}
-
-
-          {% if data.commodity == "potatoes" %}
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-              Type
-            </dt>
-            <dd class="govuk-summary-list__value">
-              {{data.commodity_type or 'Purple majesty'}}
-
-            </dd>
-          </div>
-          {% endif %}
-          {% if data.commodity_lot %}
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-              Commodity lot
-            </dt>
-            <dd class="govuk-summary-list__value">
-              {{data.commodity_lot or ('<span class="govuk-hint">Left blank</span>' | safe)}}
-
-            </dd>
-          </div>
-          {% endif %}
-
-          {% if data.chemicals_used %}
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-              Chemical used on tubers (optional)
-            </dt>
-            <dd class="govuk-summary-list__value">
-              {{data.chemicals_used or ('<span class="govuk-hint">Left blank</span>' | safe)}}
-
-            </dd>
-          </div>
-          {% endif %}
-
-          {% if commodity.commodity == "plants" %}
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-              Commodity group
-            </dt>
-            <dd class="govuk-summary-list__value">
-              {{data.commodity_group or ('<span class="govuk-hint">Left blank</span>' | safe)}}
-
-            </dd>
-          </div>
-
-          {% endif %}
-
-          {% if data.commodity != "seeds" %}
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-              Destination countries
-            </dt>
-            <dd class="govuk-summary-list__value">
-              {{data.destinationcountries or ('<span class="govuk-hint">Left blank</span>' | safe)}}
-            </dd>
-          </div>
-          {% endif %}
-
-          {% if data.origin_other %}
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-              Other country details (optional)
-            </dt>
-            <dd class="govuk-summary-list__value">
-              {{data.other or "Holland"}}
-              <!-- <span class="govuk-hint">You skipped this question</span> -->
-            </dd>
-          </div>
-          {% endif %}
-
-
-        </dl>
+            </td>
+          </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
 
     <form  method="POST">
       <fieldset class="govuk-fieldset" aria-describedby="applicant-conditional-hint">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-!-margin-bottom-6">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-!-margin-top-9 govuk-!-margin-bottom-6">
           <h3 class="govuk-fieldset__heading">
             Do you want to add another crop or field?
           </h3>
@@ -187,7 +170,7 @@
           </div>
         </div>
       </fieldset>
-      <div class="govuk-!-margin-left-0 govuk-grid-column-one-quarter govuk-!-padding-0">
+      <div class="govuk-!-margin-left-0 govuk-!-margin-top-6 govuk-grid-column-one-quarter govuk-!-padding-0">
         <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
       </div>
       <div class="govuk-grid-row">
