@@ -28,8 +28,7 @@ GOV.UK Prototype Kit
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">Your commodity</h1>
-    <!--<form method="get" action="commodity-page">-->
-    <form method="get" action="commodity-list">
+    <form method="get" action="commodity-page">
       <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
             How do you want to identify the {{data.commodity or 'plant'}}?
@@ -40,7 +39,7 @@ GOV.UK Prototype Kit
         <div class="govuk-form-group">
           <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="how-contacted-conditional" name="has_botanicial_name" type="radio" value="yes~commodity-list" data-aria-controls="conditional-how-contacted-conditional" {% if data.has_botanicial_name=="yes"
+              <input class="govuk-radios__input" id="how-contacted-conditional" name="has_botanicial_name" type="radio" value="yes~commodity-page" data-aria-controls="conditional-how-contacted-conditional" {% if data.has_botanicial_name=="yes"
                 %}checked{% endif %}>
               <label class="govuk-label govuk-radios__label" for="how-contacted-conditional">
                 Botanical name (genus and species)
@@ -88,11 +87,12 @@ GOV.UK Prototype Kit
               </div>
               {% if data.show_manual_input == "yes"%}
 
-              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display:none">The botanical name needs to be spelled correctly, if you are not sure you can <a href="?show_manual_input=no&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">search for a botanical name</a></p>
+              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display:none">The botancial name needs to be spelled correctly, if you are not sure you can <a href="?show_manual_input=no&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">search for a botanical name</a></p>
 
               {% else %}
-              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display:none">If you cannot find your {{data.commodity or "plant"}}, but you know the botanical name you can <a href="?show_manual_input=yes&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">enter the botanical name manually</a></p>
+              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display:none">If you cannot find your {{data.commodity or "plant"}}, but you know the botanical name you can <a href="?show_manual_input=yes&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">enter botanical the name manually</a></p>
               {% endif %}
+
 
             </div>
 
@@ -130,10 +130,10 @@ GOV.UK Prototype Kit
           </div>
         </div>
 
-      <!--<fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
+      <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
             Other commodity information
-        </legend>-->
+        </legend>
       {% if data.commodity == "plants" or data.commodity == "seeds" %}
       <div class="govuk-form-group">
         <label class="govuk-label" for="commodity_variety">
@@ -149,6 +149,7 @@ GOV.UK Prototype Kit
         fieldset: {
           legend: {
             text: "Commodity group",
+            isPageHeading: true,
             classes: "govuk-fieldset__legend--s"
           }
         },
@@ -190,66 +191,10 @@ GOV.UK Prototype Kit
         <input class="govuk-input govuk-input--width-20" id="origin_other" name="distinguishing_marks" type="text" aria-describedby="distinguishing-mark-hint">
       </div>
       {% endif %}
-    <!--</fieldset>-->
-
-      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-
-      <fieldset class="govuk-fieldset" role="group">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-          Shipping information
-        </legend>
-        <div class="govuk-form-group">
-          <label class="govuk-label" for="passport-number">
-            Number of packages
-          </label>
-          <input class="govuk-input govuk-input--width-10" id="passport-number" name="passport-number" type="packaging_type" aria-describedby="passport-number-hint">
-        </div>
-        {% set country_module_label = "Packaging type"%}
-        {% block packing %}{% include "../modules/_packaging.html" %}{% endblock %}
-        {% if data.commodity != 'grain'%}
-        <div class="govuk-form-group">
-          <label class="govuk-label" for="packing-material">
-            Packing material used (optional)
-          </label>
-          <input class="govuk-input govuk-input--width-20" id="packing-material" name="packing_material_used" type="text">
-        </div>
-        {% endif %}
-
-        {% if data.commodity != "grain"%}
-        <div class="govuk-form-group">
-          <label class="govuk-label" for="distinguishing-marks">
-            Distinguishing marks (optional)
-          </label>
-          <span id="distinguishing-mark-hint" class="govuk-hint">
-            For example, container numbers, lot numbers
-          </span>
-          <input class="govuk-input govuk-input--width-20" id="distinguishing-marks" name="distinguishing_marks" type="text" aria-describedby="distinguishing-mark-hint">
-        </div>
-        {% endif %}
-
-        <div class="govuk-form-group">
-          <label class="govuk-label " for="quantity-number">
-            Quantity
-          </label>
-          <span id="quantity-number-hint" class="govuk-hint">
-            Enter a number and a unit of measurement, for example 500kg
-          </span>
-          <input class="govuk-input govuk-input--width-10" id="quantity-number" name="quantity" type="text" aria-describedby="passport-number-hint">
-        </div>
-      </fieldset>
-      <fieldset class="govuk-fieldset" role="group">
-        <div class="govuk-form-group">
-          <label class="govuk-label govuk-label--m" for="more-detail">
-            Further information (optional)
-          </label>
-          <span id="more-detail-hint" class="govuk-hint">
-            Enter any extra information that needs to be on the certificate
-          </span>
-          <textarea class="govuk-textarea" id="more-detail" name="more_detail" rows="5" aria-describedby="more-detail-hint"></textarea>
-        </div>
-      </fieldset>
-
+        </fieldset>
+  
       <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+
     </form>
 
 

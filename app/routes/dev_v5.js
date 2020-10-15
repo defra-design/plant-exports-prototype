@@ -208,6 +208,7 @@ module.exports = function(router) {
 
 
       });
+
       // **** POST TEMPLATE ***
       router.post('/' + base_url + '*/application/create/commodity-page*', function(req, res) {
         var page = req.query.return_url || '/' + base_url + req.params[0] + '/application/create/commodity-list'
