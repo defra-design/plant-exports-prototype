@@ -27,28 +27,33 @@ GOV.UK Prototype Kit
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">Your commodity</h1>
-    <!--<form method="get" action="commodity-page">-->
+    <!--<h1 class="govuk-heading-xl">Your commodity</h1>-->
     <form method="post">
       <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            How do you want to identify the {{data.commodity or 'plant'}}?
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+          Your {{data.commodity or 'plants'}}
         </legend>
-        <p id="passport-number-hint" class="govuk-body">
+        <div class="govuk-inset-text">
+          If possible, enter the botanical name. This name will appear on the certificate.
+        </div>
+        <!--<p id="passport-number-hint" class="govuk-body">
           This will appear on the certificate. If possible, use the botanical name.
-        </p>
+        </p>-->
         <div class="govuk-form-group">
           <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="how-contacted-conditional" name="has_botanicial_name" type="radio" value="yes" data-aria-controls="conditional-how-contacted-conditional" {% if data.has_botanicial_name=="yes"
                 %}checked{% endif %}>
               <label class="govuk-label govuk-radios__label" for="how-contacted-conditional">
-                Botanical name (genus and species)
+                Botanical name
               </label>
+              <div id="how-contacted-conditional-hint" class="govuk-hint govuk-radios__hint">
+                This is made up of the genus and species, and provide the most accurate information.
+              </div>
             </div>
             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional">
               {% if data.show_manual_input != "yes"%}
-              {% block genus %}{% include "../modules/_genus.html" %}{% endblock %}
+              {% block genus %}{% include "../modules/_genus-opt1.html" %}{% endblock %}
               {% else %}
                 <div class="govuk-form-group">
                   <label class="govuk-label" for="commodity_host_species">
@@ -117,13 +122,16 @@ GOV.UK Prototype Kit
               <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-3">
                 Description of the {{data.commodity or "plant"}}
               </label>
+              <div id="how-contacted-conditional-hint" class="govuk-hint govuk-radios__hint">
+                Only use this if you cannot enter the botanical name.
+              </div>
             </div>
             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional-3">
               <div class="govuk-form-group">
                 <label class="govuk-visually-hidden" for="passport-number">
-                  Description of the commodity
+                  Description of the {{data.commodity or "plant"}}
                 </label>
-                <span class="govuk-hint">Only use this if you cannot enter the botanical name and you do not have an agreed common name</span>
+                <!--<span class="govuk-hint">Only use this if you cannot enter the botanical name and you do not have an agreed common name</span>-->
                 <textarea class="govuk-textarea" id="plant-identify--description" name="commodity_description" rows="4" aria-describedby="more-detail-hint"></textarea>
               </div>
             </div>
