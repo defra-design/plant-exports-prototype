@@ -3,7 +3,7 @@
 GOV.UK Prototype Kit
 {% endblock %}
 {% block beforeContent %}
-<a href="javascript:history.back()" class="govuk-back-link">Return to your applications</a>
+<a href="dashboard-cancelled?id=2" class="govuk-back-link">Return to your applications</a>
 <style media="screen">
   .govuk-status--warning {
     width: auto !important;
@@ -53,8 +53,8 @@ GOV.UK Prototype Kit
           Application status
         </dt>
         <dd class="govuk-summary-list__value">
-          <div class="app-status-tag app-status-tag--{{query.id | appInfo('tag')}}">
-            {{query.id | appInfo('status')}}
+          <div class="app-status-tag app-status-tag--yellow">
+            cancelled
           </div>
         </dd>
       </div>
@@ -63,7 +63,7 @@ GOV.UK Prototype Kit
           APHA reference
         </dt>
         <dd class="govuk-summary-list__value">
-          {{(query.id | appInfo('applicationID'))}}
+          246215835711
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -71,7 +71,7 @@ GOV.UK Prototype Kit
           Your reference
         </dt>
         <dd class="govuk-summary-list__value">
-          {% if (query.id | appInfo('reference')) == ""%}<span class="govuk-hint">Not set</span>{%else%}{{query.id | appInfo('reference')}}{%endif%}
+          PO 24477 UAE
         </dd>
       </div>
       <!--<div class="govuk-summary-list__row">
@@ -87,7 +87,7 @@ GOV.UK Prototype Kit
           Destination
         </dt>
         <dd class="govuk-summary-list__value">
-          {{query.id | appInfo('destination')}}
+          UAE
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -95,12 +95,7 @@ GOV.UK Prototype Kit
           Exporter
         </dt>
         <dd class="govuk-summary-list__value">
-          {% set exporter = query.id | appInfo('exporter')%}
-          {% if exporter %}
-          {{exporter}}
-          {% else %}
-          <span class="govuk-hint">Not entered</span>
-          {% endif%}
+          GLUKGLUK LTD
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -134,9 +129,6 @@ GOV.UK Prototype Kit
       <li><a class="govuk-link govuk-link--no-visited-state" href="certificate/check-your-progress?certificate=ehc2849">Edit and submit this application</a></li>
       {% endif%}
       <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{ query.is_group }}">Make a copy of this application</a></li>
-      {% if (query.id | appInfo('status')) == 'submitted' or (query.id | appInfo('status')) == 'processing' or (query.id | appInfo('status')) == 'with inspector' or (query.id | appInfo('status')) == 'scheduled' or (query.id | appInfo('status')) == 'exporter action' or (query.id | appInfo('status')) == 'preparing phyto' or (query.id | appInfo('status')) == 'returned' %}
-      <li><a class="govuk-link govuk-link--no-visited-state" href="cancel">Cancel this application</a></li>
-      {% endif%}
       {% if (query.id | appInfo('status')) == 'draft' %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="delete">Delete this application</a></li>
       {% endif%}
@@ -308,11 +300,11 @@ GOV.UK Prototype Kit
           {% endif %}
         </tbody>
       </table>
+
   </div>
   <div class="govuk-grid-column-two-thirds">
       <p class="govuk-body govuk-hint">{% if query.application_status=="completed" or query.is_block == 'yes' %}If you need to cancel and replace a certificate, contact your certifier to make the request.{% endif %}</p>
-    </div>
-
+  </div>
 </div>
 {% endif %}
 {% endblock %}
