@@ -31,14 +31,19 @@ GOV.UK Prototype Kit
     <form method="post">
       <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-          Identify your {{data.commodity or 'plants'}}
+          Your consignment
         </legend>
+
         <div class="govuk-inset-text">
-          If possible, enter the botanical name. This name will appear on the certificate.
+          If you can, use the botanical name to describe your consignment as it provides the most accurate information. This information will appear on the certificate.
         </div>
         <!--<p id="passport-number-hint" class="govuk-body">
           This will appear on the certificate. If possible, use the botanical name.
         </p>-->
+        <label class="govuk-label" for="how-contacted-conditional">
+          How will you describe your consignment?
+        </label>
+
         <div class="govuk-form-group">
           <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
             <div class="govuk-radios__item">
@@ -48,7 +53,7 @@ GOV.UK Prototype Kit
                 Botanical name
               </label>
               <div id="how-contacted-conditional-hint" class="govuk-hint govuk-radios__hint">
-                This is made up of the genus and species, and provide the most accurate information.
+                This is the species and genus
               </div>
             </div>
             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional">
@@ -93,10 +98,10 @@ GOV.UK Prototype Kit
               </div>
               {% if data.show_manual_input == "yes"%}
 
-              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display:none">The botanical name needs to be spelled correctly, if you are not sure you can <a href="?show_manual_input=no&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">search for a botanical name</a></p>
+              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display:none">The botanical name needs to be spelled correctly, if you are not sure <a href="?show_manual_input=no&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">search for a botanical name</a></p>
 
               {% else %}
-              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display:none">If you cannot find your {{data.commodity or "plant"}}, but you know the botanical name you can <a href="?show_manual_input=yes&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">enter the botanical name manually</a></p>
+              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display:none">If you cannot find your {{data.commodity or "plant"}}, but you know the botanical name, <a href="?show_manual_input=yes&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">enter the botanical name manually</a></p>
               {% endif %}
 
             </div>
@@ -120,10 +125,10 @@ GOV.UK Prototype Kit
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="how-contacted-conditional-3" name="has_botanicial_name" type="radio" value="use_description" data-aria-controls="conditional-how-contacted-conditional-3" {% if data.has_botanicial_name == "use_description"%}checkjed{%endif%}>
               <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-3">
-                Description of the {{data.commodity or "plant"}}
+                Description
               </label>
               <div id="how-contacted-conditional-hint" class="govuk-hint govuk-radios__hint">
-                Only use this if you cannot enter the botanical name.
+                Enter a description if you cannot enter a botanical name, for example for products made of many species
               </div>
             </div>
             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional-3">
@@ -200,12 +205,6 @@ GOV.UK Prototype Kit
       {% endif %}
     <!--</fieldset>-->
 
-      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-
-      <fieldset class="govuk-fieldset" role="group">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-          Packing information
-        </legend>
         <div class="govuk-form-group">
           <label class="govuk-label" for="number_of_packages">
             Number of packages
