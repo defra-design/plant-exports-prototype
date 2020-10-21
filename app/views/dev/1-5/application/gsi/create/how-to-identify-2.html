@@ -30,14 +30,16 @@ GOV.UK Prototype Kit
     <h1 class="govuk-heading-xl">Your crops for inspection</h1>
     <!--<form method="get" action="commodity-page">-->
     <form method="get" action="gsi-commodity-list-2">
+
       {% if data.commodity != "potatoes" %}
+
       <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
             How do you want to identify the {{data.commodity or 'crops'}}?
         </legend>
-        <p id="passport-number-hint" class="govuk-body">
+        <!--<p id="passport-number-hint" class="govuk-body">
           This will appear on the certificate. If possible, use the botanical name.
-        </p>
+        </p>-->
         <div class="govuk-form-group">
           <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
             <div class="govuk-radios__item">
@@ -64,7 +66,6 @@ GOV.UK Prototype Kit
                   <input class="govuk-input govuk-input--width-20" id="commodity_host_species" name="commodity_host_species" type="text" value="{% if query.has_commodity %}{{query.species}}{%endif%}">
                 </div>
               {% endif %}
-
 
               <!-- This will only show if there is no javascript loaded -->
               <div id="commodity-botanical_name">
@@ -107,169 +108,112 @@ GOV.UK Prototype Kit
             </div>
           </div>
         </div>
+        {% endif %}
 
         <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
-        <!--<legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-          <h2 class="govuk-fieldset__heading">
-            Commodity details
-          </h2>
-        </legend>-->
-        <div class="govuk-form-group govuk-!-margin-top-4">
-          <label class="govuk-label" for="commodity_variety">
-            Variety (optional)
-          </label>
-          <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety" type="text">
-        </div>
-        {{ govukRadios({
-          idPrefix: "Type",
-          name: "commodity_type",
-          fieldset: {
-            legend: {
-              text: "Type",
-              isPageHeading: true,
-              classes: "govuk-fieldset__legend--s"
-            }
-          },
-          items: [
-            {
-              value: "Seed potatoes",
-              text: "Seed potatoes"
+          <div class="govuk-form-group govuk-!-margin-top-4">
+            <label class="govuk-label govuk-!-font-weight-bold" for="commodity_variety">
+              Variety (optional)
+            </label>
+            <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety" type="text">
+          </div>
+
+        {% if data.commodity == "plants" %}
+
+          {{ govukRadios({
+            idPrefix: "commodity_group",
+            name: "commodity_group",
+            fieldset: {
+              legend: {
+                text: "Commodity group",
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--s"
+              }
             },
-            {
-              value: "Ware potatoes",
-              text: "Ware potatoes"
-            }
-          ]
-        }) }}
+            items: [
+              {
+                value: "micropropagated material",
+                text: "Micropropagated material"
+              },
+              {
+                value: "plant products",
+                text: "Plant products"
+              },
+              {
+                value: "plants",
+                text: "Plants"
+              },
+              {
+                value: "Produce",
+                text: "Produce (fruit, flowers or veg)"
+              }
+            ]
+          }) }}
 
+        {% endif %}
 
-        <div class="govuk-form-group govuk-!-margin-top-4">
-          <label class="govuk-label" for="commodity_lot">
-            Lot reference (optional)
-          </label>
-          <input class="govuk-input govuk-input--width-20" id="commodity_lot" name="commodity_lot" type="text">
-        </div>
-        <div class="govuk-form-group">
-          <label class="govuk-label" for="chemicals_used">
-            Chemical used on tubers (optional)
-          </label>
-          <input class="govuk-input govuk-input--width-30" id="chemicals_used" name="chemicals_used" type="text">
-        </div>
-            </fieldset>
-      {% endif %}
-      <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
-        <!--<legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            Other commodity information
-        </legend>-->
-      {% if data.commodity == "plants" or data.commodity == "seeds" %}
-      <div class="govuk-form-group">
-        <label class="govuk-label govuk-!-font-weight-bold" for="commodity_variety">
-          Variety (optional)
-        </label>
-        <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety" type="text">
-      </div>
-      {% endif %}
+        {% if data.commodity == "potatoes" %}
 
-      {% if data.commodity == "plants" %}
-      {{ govukRadios({
-        idPrefix: "commodity_group",
-        name: "commodity_group",
-        fieldset: {
-          legend: {
-            text: "Commodity group",
-            isPageHeading: true,
-            classes: "govuk-fieldset__legend--s"
-          }
-        },
-        items: [
-          {
-            value: "micropropagated material",
-            text: "Micropropagated material"
-          },
-          {
-            value: "plant products",
-            text: "Plant products"
-          },
-          {
-            value: "plants",
-            text: "Plants"
-          },
-          {
-            value: "Produce",
-            text: "Produce (fruit, flowers or veg)"
-          }
-        ]
-      }) }}
-      {% endif %}
-
-      {% if data.commodity == "potatoes" %}
-      <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
-        <div class="govuk-form-group govuk-!-margin-top-4">
-          <label class="govuk-label govuk-!-font-weight-bold" for="commodity_variety">
-            Variety (optional)
-          </label>
-          <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety" type="text">
-        </div>
-
-        {{ govukRadios({
-          idPrefix: "Type",
-          name: "commodity_type",
-          fieldset: {
-            legend: {
-              text: "Type",
-              isPageHeading: true,
-              classes: "govuk-fieldset__legend--s"
-            }
-          },
-          items: [
-            {
-              value: "Seed potatoes",
-              text: "Seed potatoes"
+          {{ govukRadios({
+            idPrefix: "Type",
+            name: "commodity_type",
+            fieldset: {
+              legend: {
+                text: "Type",
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--s"
+              }
             },
-            {
-              value: "Ware potatoes",
-              text: "Ware potatoes"
-            }
-          ]
-        }) }}
+            items: [
+              {
+                value: "Seed potatoes",
+                text: "Seed potatoes"
+              },
+              {
+                value: "Ware potatoes",
+                text: "Ware potatoes"
+              }
+            ]
+          }) }}
 
-        <div class="govuk-form-group govuk-!-margin-top-4">
-          <label class="govuk-label govuk-!-font-weight-bold" for="commodity_lot">
-            Lot reference (optional)
-          </label>
-          <input class="govuk-input govuk-input--width-20" id="commodity_lot" name="commodity_lot" type="text">
-        </div>
-        <div class="govuk-form-group">
-          <label class="govuk-label govuk-!-font-weight-bold" for="chemicals_used">
-            Chemical used on tubers (optional)
-          </label>
-          <input class="govuk-input govuk-input--width-30" id="chemicals_used" name="chemicals_used" type="text">
-        </div>
-      </fieldset>
+          <div class="govuk-form-group govuk-!-margin-top-4">
+            <label class="govuk-label govuk-!-font-weight-bold" for="commodity_lot">
+              Lot reference (optional)
+            </label>
+            <input class="govuk-input govuk-input--width-20" id="commodity_lot" name="commodity_lot" type="text">
+          </div>
+          <div class="govuk-form-group">
+            <label class="govuk-label govuk-!-font-weight-bold" for="chemicals_used">
+              Chemical used on tubers (optional)
+            </label>
+            <input class="govuk-input govuk-input--width-30" id="chemicals_used" name="chemicals_used" type="text">
+          </div>
+        </fieldset>
+
       {% endif %}
 
-      <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
-        <div class="govuk-form-group">
-          <label class="govuk-label govuk-!-font-weight-bold" for="aproxhectofplot">
-            Approximate hectarage of plot
-          </label>
-          <input class="govuk-input govuk-input--width-20" id="aproxhectofplot" name="aproxhectofplot" type="text">
-        </div>
+        <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
+          <div class="govuk-form-group">
+            <label class="govuk-label govuk-!-font-weight-bold" for="aproxhectofplot">
+              Approximate hectarage of plot
+            </label>
+            <input class="govuk-input govuk-input--width-20" id="aproxhectofplot" name="aproxhectofplot" type="text">
+          </div>
+
+          <div class="govuk-form-group">
+            <label class="govuk-label govuk-!-font-weight-bold" for="destinationcountries">
+              Destination countries
+            </label>
+            <input class="govuk-input govuk-!-width-full" id="destinationcountries" name="destinationcountries" type="text">
+          </div>
+        </fieldset>
 
         <div class="govuk-form-group">
-          <label class="govuk-label govuk-!-font-weight-bold" for="destinationcountries">
-            Destination countries
-          </label>
-          <input class="govuk-input govuk-!-width-full" id="destinationcountries" name="destinationcountries" type="text">
+          <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
         </div>
-      </fieldset>
-
-      <div class="govuk-form-group">
-        <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
-</div>
 
 <script type="text/javascript">
   window.addEventListener('load', function() {
