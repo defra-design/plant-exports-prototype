@@ -52,11 +52,15 @@ GOV.UK Prototype Kit
         <ul class="app-task-list__items">
           <li class="app-task-list__item">
             <span class="app-task-list__task-name">
-              <a href="field" aria-describedby="contact-details-status">
+              <a href="{%if data.upload %}upload-completed{% elseif data.commodities and ( data.commodities | length ) > 0 %}commodity-list{% else %}field{% endif %}" aria-describedby="contact-details-status">
                 Your fields and crops
               </a>
             </span>
+            {% if data.commodities and ( data.commodities | length ) > 0  or data.stock_number or data.destinationcountries %}
+            <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Completed</strong>
+            {% else %}
             <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="list-convictions-status">Not started</strong>
+            {% endif %}
           </li>
 
           {% if data.commodities and ( data.commodities | length ) > 0  or data.stock_number or data.destinationcountries %}
