@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+GOV.UK Prototype Kit
+{% endblock %}
+{% block beforeContent%}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
+        Your commodity
+      </h1>
+      <div class="govuk-body" style="padding:15px;background:#f3f2f1;">
+        <dl class="govuk-summary-list govuk-summary-list--no-border">
+
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+        Species
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{query.species or "Rosa rugosa"}}
+    </dd>
+  </div>
+
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Genus
+    </dt>
+    <dd class="govuk-summary-list__value">
+      Rosa
+      {{query.genus or "Rosa"}}
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Common name
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{query.common or "hedgerow rose"}}
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      EPPO code
+    </dt>
+    <dd class="govuk-summary-list__value">
+      {{query.eppocode or "ROSRG"}}
+
+    </dd>
+  </div>
+</dl>
+<p class="govuk-body"><a href="plant-lookup?keywords=hedgerow rose">Change</a></p>
+      </div>
+      <form  action="commodity-page" method="POST">
+        <div class="govuk-form-group">
+          <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+        </div>
+      </form>
+      {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+
+    </div>
+  </div>
+{% endblock %}

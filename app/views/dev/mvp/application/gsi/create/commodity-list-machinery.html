@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+{{page.title}} - GOV.UK
+{% endblock %}
+{% block beforeContent%}
+{{super()}}
+<a href="{{page.content.prev or 'javascript:history.back()'}}" class="govuk-back-link">Back</a>
+{% endblock %}
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <h1 class="govuk-heading-xl">
+      Your bulb stock numbers
+    </h1>
+    <!-- <p class="govuk-body">{{ data.products | length }} product{% if (data.products | length )!=1%}s{%endif%} added</p> -->
+    <div class="app-summary-card ">
+      <header class="app-summary-card--header">
+        <h3 class="app-summary-card--title">1. {{data.stock_number or '23908423'}}</h3>
+        <div class="app-summary-card__actions">
+          <ul class="app-summary-card__actions-list">
+            <li class="app-summary-card__actions-list-item">
+              <a class="govuk-link" href="#">
+                Delete<span class="govuk-visually-hidden"></span>
+              </a>
+            </li>
+            <li class="app-summary-card__actions-list-item">
+              <a class="govuk-link" href="commodity-page?change=yes">
+                Change<span class="govuk-visually-hidden"></span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </header>
+      <div class="app-summary-card--content">
+        <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Stock number
+            </dt>
+            <dd class="govuk-summary-list__value">
+              {{data.stock_number or '23908423'}}
+              <!-- <span class="govuk-hint">You skipped this question</span> -->
+            </dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Variety
+            </dt>
+            <dd class="govuk-summary-list__value">
+              {{data.stock_variety or 'Tubers'}}
+            </dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Weight in kilograms
+            </dt>
+            <dd class="govuk-summary-list__value">
+              {{data.stock_weight or "10"}}
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+    <p class="govuk-body"><a href="commodity-page-bulbs" class="govuk-button govuk-button--secondary">Add another stock number</a></p>
+    <form  method="POST" action="task-list">
+
+      <div class="govuk-!-margin-left-0 govuk-grid-column-one-quarter govuk-!-padding-0">
+        <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+      </div>
+      <div class="govuk-grid-row">
+        <!-- <div class="govuk-grid-column-full govuk-body">
+          <input class="link-button" type="submit" value="Save and continue later" name="saveAndResumeLater" data-qa-id="Button-SaveAndResumeLater" id="Button-SaveAndResumeLater">
+        </div> -->
+      </div>
+    </form>
+    {% endblock %}

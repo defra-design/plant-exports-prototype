@@ -1,0 +1,117 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+GOV.UK Prototype Kit
+{% endblock %}
+{% block beforeContent%}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+<style media="screen">
+  .app-result-list li{
+    padding: 15px 0;
+    border-top:1px solid #b1b4b6;
+    position:relative;
+
+  }
+  .app-result-list{
+    padding-bottom: 0;
+    border-bottom:1px solid #b1b4b6;
+  }
+@media (min-width: 40.0625em){
+  .app-result-list li .govuk-button--secondary{
+    position:absolute;
+    right:0;
+    top:20px;
+  }
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      What is your commodity?
+    </h1>
+    <form method="get">
+      <div class="search-wrapper govuk-form-group">
+        <label for="search-reservations" class="govuk-label">
+          Find your commodity
+        </label>
+        <span class="govuk-hint">Search by common name, species, genus</span>
+        <div class="search-input-wrapper">
+          <input type="search" id="search-reservations" name="keyword" title="Search" class="govuk-input" {% if query.keyword %}value="{{query.keyword}}" {% endif %}>
+          <div class="search-input-submit-wrapper">
+            <button type="submit" class="search-submit" name="submit" value="searchs">Search</button>
+          </div>
+        </div>
+      </div>
+      {% if query.keyword %}
+      <p class="govuk-body"><a href="search-commodity?keywords=">Clear search</a></p>
+      {% endif %}
+      <p class="govuk-body"><span class="result_count">{% if search_data == 'none'%}0{% else %}{{search_data | length}}{% endif %}</span> results matching <span class="govuk-!-font-weight-bold">"{{query.keyword}}"</span></p>
+    </form>
+      <h2 class="govuk-heading-m"></h2>
+
+      <ul class="govuk-list app-result-list">
+        {% for result in data.sample %}
+        {% if
+          (query.keyword | upper) in (result.genus | upper) or
+          (query.keyword | upper) in (result.fullname | upper) or
+          (result.species and (query.keyword | upper) in (result.species | upper)) or
+          (query.keyword | upper) in result.eppocode or
+          (result.common_names and (query.keyword | lower) in result.common_names )
+        %}
+        <li class="result">
+          <dl class="govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-0">
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Genus
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{result.fullname}}
+              </dd>
+            </div>
+            {% if result.species %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Species
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{result.fullname}}
+              </dd>
+            </div>
+            {% endif %}
+            <!-- <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                EPPO code
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{result.eppocode | capitalize}}
+              </dd>
+            </div> -->
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                EPPO code
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{result.eppocode}}
+              </dd>
+            </div>
+          </dl>
+          <a href="commodity-page?has_commodity=yes&eppocode={{result.eppocode}}&common={{result.fullname | capitalize}}&genus={{taxonomy[len2].prefname}}&species={{taxonomy[len].prefname or 'none'}}" type="submit" class="govuk-button govuk-button--secondary" value="select">Select</a>
+        </li>
+        {% endif %}
+        {% endfor%}
+
+      </ul>
+      <p class="govuk-body">If you cannot see find your commodity on this list, <a href="commodity-page" class="govuk-link">Enter a commodity manually</a></p>
+  </div>
+</div>
+<script type="text/javascript">
+  alert("skdjfj")
+  window.addEventListener('load', function() {
+        $('.result_count').text($('.result').length)
+      }
+</script>
+{% endblock %}
