@@ -31,29 +31,29 @@ GOV.UK Prototype Kit
     <form method="post">
       <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-          Your consignment
+          Your commodity
         </legend>
 
-        <div class="govuk-inset-text">
+        <!--<div class="govuk-inset-text">
           If you can, use the botanical name to describe your consignment as it provides the most accurate information. This information will appear on the certificate.
         </div>
-        <!--<p id="passport-number-hint" class="govuk-body">
+        <p id="passport-number-hint" class="govuk-body">
           This will appear on the certificate. If possible, use the botanical name.
         </p>-->
-        <label class="govuk-label" for="how-contacted-conditional">
-          How will you describe your consignment?
+        <label class="govuk-label govuk-!-margin-top-6 govuk-!-margin-bottom-4" for="how-contacted-conditional">
+          How do you want to describe your commodity?
         </label>
 
         <div class="govuk-form-group">
           <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="how-contacted-conditional" name="has_botanicial_name" type="radio" value="yes" data-aria-controls="conditional-how-contacted-conditional" {% if data.has_botanicial_name=="yes"
-                %}checked{% endif %}>
+              <input class="govuk-radios__input" id="how-contacted-conditional" name="has_botanicial_name" type="radio" value="yes" data-aria-controls="conditional-how-contacted-conditional" {% if data.has_botanicial_name=="yes"%}checked{% endif %}>
               <label class="govuk-label govuk-radios__label" for="how-contacted-conditional">
                 Botanical name
               </label>
               <div id="how-contacted-conditional-hint" class="govuk-hint govuk-radios__hint">
-                This is the species and genus
+                <!--This is the species and genus-->
+                Search for genus, species or common name
               </div>
             </div>
             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional">
@@ -104,6 +104,15 @@ GOV.UK Prototype Kit
               <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display:none">If you cannot find your {{data.commodity or "plant"}}, but you know the botanical name, <a href="?show_manual_input=yes&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">enter the botanical name manually</a></p>
               {% endif %}
 
+              {% if data.commodity == "plants" or data.commodity == "seeds" %}
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="commodity_variety">
+                  Variety (optional)
+                </label>
+                <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety" type="text">
+              </div>
+              {% endif %}
+
             </div>
 
             <!--<div class="govuk-radios__item">
@@ -121,14 +130,14 @@ GOV.UK Prototype Kit
                 <input class="govuk-input govuk-input--width-20" id="passport-number" name="commodity_common_name" type="text" aria-describedby="passport-number-hint">
               </div>
             </div>-->
-
+            <div class="govuk-radios__divider">or</div>
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="how-contacted-conditional-3" name="has_botanicial_name" type="radio" value="use_description" data-aria-controls="conditional-how-contacted-conditional-3" {% if data.has_botanicial_name == "use_description"%}checkjed{%endif%}>
               <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-3">
                 Description
               </label>
               <div id="how-contacted-conditional-hint" class="govuk-hint govuk-radios__hint">
-                Enter a description or common name if you cannot enter a botanical name, for example for products made of many species
+                If you cannot find the botanical name, or your product is made of many species, enter a description instead
               </div>
             </div>
             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional-3">
@@ -146,7 +155,7 @@ GOV.UK Prototype Kit
       <!--<fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
             Other commodity information
-        </legend>-->
+        </legend>
       {% if data.commodity == "plants" or data.commodity == "seeds" %}
       <div class="govuk-form-group">
         <label class="govuk-label" for="commodity_variety">
@@ -154,7 +163,7 @@ GOV.UK Prototype Kit
         </label>
         <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety" type="text">
       </div>
-      {% endif %}
+      {% endif %}-->
       {% if data.commodity == "plants" %}
       {{ govukRadios({
         idPrefix: "commodity_group",
@@ -205,18 +214,74 @@ GOV.UK Prototype Kit
       {% endif %}
     <!--</fieldset>-->
 
+    <div class="govuk-form-group">
+      <fieldset class="govuk-fieldset" aria-describedby="contact-hint">
+      <label class="govuk-label" for="quantity">
+        Quantity and unit of measurement
+      </label>
+      <span id="quantity-hint" class="govuk-hint">
+        <!--Enter a number and a unit of measurement, for example 500kg-->
+        <!--Enter a number and select a unit of measurement, for example 50 kilograms-->
+        For example 50 kilograms
+      </span>
+      <input class="govuk-input govuk-input--width-5" id="quantity" name="quantity" type="text" aria-describedby="quantity">
+      <select name="unit" id="unit" class="govuk-select govuk-!-margin-left-1">
+          <option value="" selected="selected">-</option>
+          <option value="Grams">Grams</option>
+          <option value="Kilograms">Kilograms</option>
+          <option value="Litres">Litres</option>
+          <option value="Tonnes">Tonnes</option>
+          <option value="Units">Units</option>
+      </select>
+    </div>
+
+    <!--  <div class="govuk-radios govuk-radios--conditional govuk-!-margin-top-6" data-module="govuk-radios">
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="contact" name="contact" type="radio" value="email" data-aria-controls="conditional-contact">
+          <label class="govuk-label govuk-radios__label" for="contact">
+            Grams
+          </label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="contact" name="contact" type="radio" value="email" data-aria-controls="conditional-contact">
+          <label class="govuk-label govuk-radios__label" for="contact">
+            Kilograms
+          </label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="contact-2" name="contact" type="radio" value="phone" data-aria-controls="conditional-contact-2">
+          <label class="govuk-label govuk-radios__label" for="contact-2">
+            Litres
+          </label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="contact" name="contact" type="radio" value="email" data-aria-controls="conditional-contact">
+          <label class="govuk-label govuk-radios__label" for="contact">
+            Tonnes
+          </label>
+        </div>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input" id="contact-3" name="contact" type="radio" value="text" data-aria-controls="conditional-contact-3">
+          <label class="govuk-label govuk-radios__label" for="contact-3">
+            Units
+          </label>
+        </div>
+      </div>
+    </fieldset>
+  </div>-->
+
         <div class="govuk-form-group">
           <label class="govuk-label" for="number_of_packages">
             Number of packages
           </label>
-          <input class="govuk-input govuk-input--width-10" id="number_of_packages" name="number_of_packages" type="packaging_type" aria-describedby="passport-number-hint">
+          <input class="govuk-input govuk-input--width-5" id="number_of_packages" name="number_of_packages" type="packaging_type" aria-describedby="passport-number-hint">
         </div>
         {% set country_module_label = "Packaging type"%}
         {% block packing %}{% include "../modules/_packaging.html" %}{% endblock %}
         {% if data.commodity != 'grain'%}
         <div class="govuk-form-group">
           <label class="govuk-label" for="packing_material_used">
-            Packing material used (optional)
+            Packing material (optional)
           </label>
           <input class="govuk-input govuk-input--width-20" id="packing_material_used" name="packing_material_used" type="text">
         </div>
@@ -233,25 +298,6 @@ GOV.UK Prototype Kit
           <input class="govuk-input govuk-input--width-20" id="distinguishing-marks" name="distinguishing_marks" type="text" aria-describedby="distinguishing-mark-hint">
         </div>
         {% endif %}
-
-        <div class="govuk-form-group govuk-!-margin-bottom-9">
-          <label class="govuk-label" for="quantity">
-            Amount
-          </label>
-          <span id="quantity-hint" class="govuk-hint">
-            <!--Enter a number and a unit of measurement, for example 500kg-->
-            Enter a number and select a unit of measurement, for example 50 kilograms
-          </span>
-          <input class="govuk-input govuk-input--width-10" id="quantity" name="quantity" type="text" aria-describedby="quantity">
-          <select name="unit" id="unit" class="govuk-select govuk-!-margin-left-1">
-              <option value="" selected="selected">-</option>
-              <option value="Grams">Grams</option>
-              <option value="Kilograms">Kilograms</option>
-              <option value="Litres">Litres</option>
-              <option value="Tonnes">Tonnes</option>
-              <option value="Units">Units</option>
-          </select>
-        </div>
 
         <!--<div class="govuk-form-group">
           <label class="govuk-label " for="quantity-number">
