@@ -27,38 +27,28 @@ GOV.UK Prototype Kit
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <!--<h1 class="govuk-heading-xl">Your commodity</h1>-->
+    <h1 class="govuk-heading-xl">Your commodity</h1>
+    <!--<form method="get" action="commodity-page">-->
     <form method="post">
       <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-          Your consignment
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+            How do you want to identify the {{data.commodity or 'plant'}}?
         </legend>
-
-        <!--<div class="govuk-inset-text">
-          If you can, use the botanical name to describe your consignment as it provides the most accurate information. This information will appear on the certificate.
-        </div>-->
-        <!--<p id="passport-number-hint" class="govuk-body">
+        <p id="passport-number-hint" class="govuk-body">
           This will appear on the certificate. If possible, use the botanical name.
-        </p>-->
-        <label class="govuk-label govuk-!-margin-top-9" for="how-contacted-conditional">
-          How will you describe your consignment?
-        </label>
-
+        </p>
         <div class="govuk-form-group">
           <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="how-contacted-conditional" name="has_botanicial_name" type="radio" value="yes" data-aria-controls="conditional-how-contacted-conditional" {% if data.has_botanicial_name=="yes"
                 %}checked{% endif %}>
               <label class="govuk-label govuk-radios__label" for="how-contacted-conditional">
-                Botanical name
+                Botanical name (genus and species)
               </label>
-              <div id="how-contacted-conditional-hint" class="govuk-hint govuk-radios__hint">
-                This is the species and genus
-              </div>
             </div>
             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional">
               {% if data.show_manual_input != "yes"%}
-              {% block genus %}{% include "../modules/_genus-opt1.html" %}{% endblock %}
+              {% block genus %}{% include "../modules/_genus.html" %}{% endblock %}
               {% else %}
                 <div class="govuk-form-group">
                   <label class="govuk-label" for="commodity_host_species">
@@ -98,10 +88,10 @@ GOV.UK Prototype Kit
               </div>
               {% if data.show_manual_input == "yes"%}
 
-              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display:none">The botanical name needs to be spelled correctly, if you are not sure <a href="?show_manual_input=no&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">search for a botanical name</a></p>
+              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display:none">The botanical name needs to be spelled correctly, if you are not sure you can <a href="?show_manual_input=no&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">search for a botanical name</a></p>
 
               {% else %}
-              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display:none">If you cannot find your {{data.commodity or "plant"}}, but you know the botanical name, <a href="?show_manual_input=yes&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">enter the botanical name manually</a></p>
+              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display:none">If you cannot find your {{data.commodity or "plant"}}, but you know the botanical name you can <a href="?show_manual_input=yes&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">enter the botanical name manually</a></p>
               {% endif %}
 
             </div>
@@ -125,18 +115,16 @@ GOV.UK Prototype Kit
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="how-contacted-conditional-3" name="has_botanicial_name" type="radio" value="use_description" data-aria-controls="conditional-how-contacted-conditional-3" {% if data.has_botanicial_name == "use_description"%}checkjed{%endif%}>
               <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-3">
-                Description
+                Description of the {{data.commodity or "plant"}}
               </label>
-              <div id="how-contacted-conditional-hint" class="govuk-hint govuk-radios__hint">
-                Enter a description or common name if you cannot enter a botanical name, for example for products made of many species
-              </div>
             </div>
             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional-3">
               <div class="govuk-form-group">
                 <label class="govuk-visually-hidden" for="passport-number">
-                  Description of the {{data.commodity or "plant"}}
+                  Description of the commodity
                 </label>
                 <!--<span class="govuk-hint">Only use this if you cannot enter the botanical name and you do not have an agreed common name</span>-->
+                <span class="govuk-hint">Only use this if you cannot enter the botanical name</span>
                 <textarea class="govuk-textarea" id="plant-identify--description" name="commodity_description" rows="4" aria-describedby="more-detail-hint"></textarea>
               </div>
             </div>
@@ -205,6 +193,12 @@ GOV.UK Prototype Kit
       {% endif %}
     <!--</fieldset>-->
 
+      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+
+      <fieldset class="govuk-fieldset" role="group">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+          Packing information
+        </legend>
         <div class="govuk-form-group">
           <label class="govuk-label" for="number_of_packages">
             Number of packages
