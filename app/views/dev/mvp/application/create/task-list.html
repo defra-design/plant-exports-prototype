@@ -3,47 +3,54 @@
 GOV.UK Prototype Kit
 {% endblock %}
 {% block beforeContent%}
-<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+<a href="dashboard.html" class="govuk-back-link">Return to your applications</a>
 {% endblock %}
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     {% if data.reference_num %}<span class="govuk-caption-xl">{{data.reference_num}}</span>{% endif%}
     <h1 class="govuk-heading-xl">
-      Apply to export {{data.commodity or 'plant products'}} to {{data.countrySelect[0] or 'China'}}
+      Apply for {{data.commodity or 'plant products'}} <!--to {{data.countrySelect[0] or 'China'}}-->
     </h1>
-    <!-- <h2 class="govuk-heading-s govuk-!-margin-bottom-2">Application incomplete</h2> -->
-    <p class="govuk-body govuk-!-margin-bottom-7">You have completed <span class="task-list-completed">1</span> of <span class="task-list-max">8</span> required sections</p>
+    <h2 class="govuk-heading-m govuk-!-margin-bottom-6" style="color:grey; font-weight:normal;">Such as tractors, combine harvesters</h2>
+    <!--<p class="govuk-body govuk-!-margin-bottom-7">You have completed <span class="task-list-completed">1</span> of <span class="task-list-max">8</span> required sections</p>-->
     <ol class="app-task-list">
       <li>
         <h2 class="app-task-list__section">
-          <span class="app-task-list__section-number">1. </span> Application details
+          <span class="app-task-list__section-number">1. </span> About your application
         </h2>
         <ul class="app-task-list__items">
           <li class="app-task-list__item">
             <span class="app-task-list__task-name">
               <a href="../setup/reference?return_url=../create/task-list" aria-describedby="eligibility-status">
-                Your application reference
+                Create a reference number
               </a>
             </span>
             <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Completed</strong>
-
           </li>
-          <!-- {% if data.commodity == "grain"%}
           <li class="app-task-list__item">
             <span class="app-task-list__task-name">
-              <a href="agent" aria-describedby="eligibility-status">
-                Agent details
+              {% if data.commodity == "bulbs" %}
+              <a href="{%if data.commodities and ( data.commodities | length ) > 0 %}commodity-list{% else %}input-method{% endif %}" aria-describedby="contact-details-status">
+                Bulb stock details
               </a>
+              {% elseif data.commodity == "Used farm machinery" %}
+              <a href="{%if data.commodities and ( data.commodities | length ) > 0 %}commodity-list{% else %}input-method{% endif %}" aria-describedby="contact-details-status">
+                Your commodity
+              </a>
+              {% else %}
+              <!--<a href="{%if data.commodities and ( data.commodities | length ) > 0 %}commodity-list{% else %}input-method{% endif %}" aria-describedby="contact-details-status">-->
+              <a href="{%if data.upload %}upload-completed{% elseif data.commodities and ( data.commodities | length ) > 0 %}commodity-list{% else %}input-method{% endif %}" aria-describedby="contact-details-status">
+                Your commodity
+              </a>
+              {% endif %}
             </span>
-            {% if data.has_agent %}
+            {% if data.commodities and ( data.commodities | length ) > 0  or data.stock_number or data.upload %}
             <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Completed</strong>
             {% else %}
             <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="list-convictions-status">Not started</strong>
             {% endif %}
           </li>
-          {% endif %} -->
-
           <li class="app-task-list__item">
             <span class="app-task-list__task-name">
               <a href="exporter" aria-describedby="company-information-status">
@@ -58,7 +65,7 @@ GOV.UK Prototype Kit
             <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="list-convictions-status">Not started</strong>
             {% endif %}
           </li>
-          {% if data.commodity == "plants" or data.commodity == "bulbs" or data.commodity == "potatoes" or  data.commodity == "seeds" or  data.commodity == "farm machinery" %}
+          {% if data.commodity == "plants" or data.commodity == "bulbs" or data.commodity == "potatoes" or  data.commodity == "seeds" or  data.commodity == "Used farm machinery" %}
           <li class="app-task-list__item">
             <span class="app-task-list__task-name">
               <a href="inspection" aria-describedby="eligibility-status">
@@ -72,37 +79,6 @@ GOV.UK Prototype Kit
             {% endif %}
           </li>
           {% endif %}
-        </ul>
-      </li>
-      <li>
-        <h2 class="app-task-list__section">
-          <span class="app-task-list__section-number">2. </span> Consignment details
-        </h2>
-        <ul class="app-task-list__items">
-          <li class="app-task-list__item">
-            <span class="app-task-list__task-name">
-              {% if data.commodity == "bulbs" %}
-              <a href="{%if data.commodities and ( data.commodities | length ) > 0 %}commodity-list{% else %}input-method{% endif %}" aria-describedby="contact-details-status">
-                Bulb stock details
-              </a>
-              {% elseif data.commodity == "farm machinery" %}
-              <a href="{%if data.commodities and ( data.commodities | length ) > 0 %}commodity-list{% else %}input-method{% endif %}" aria-describedby="contact-details-status">
-                Your farm machinery details
-              </a>
-              {% else %}
-              <!--<a href="{%if data.commodities and ( data.commodities | length ) > 0 %}commodity-list{% else %}input-method{% endif %}" aria-describedby="contact-details-status">-->
-              <a href="{%if data.upload %}upload-completed{% elseif data.commodities and ( data.commodities | length ) > 0 %}commodity-list{% else %}input-method{% endif %}" aria-describedby="contact-details-status">
-                Your consignment
-              </a>
-              {% endif %}
-            </span>            
-            {% if data.commodities and ( data.commodities | length ) > 0  or data.stock_number or data.upload %}
-            <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Completed</strong>
-            {% else %}
-            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="list-convictions-status">Not started</strong>
-            {% endif %}
-
-          </li>
           {% if data.commodity != "bulbs" or  (data.countrySelect[0] == "United States" and data.commodity == "bulbs")%}
           <li class="app-task-list__item">
             <span class="app-task-list__task-name">
@@ -119,7 +95,7 @@ GOV.UK Prototype Kit
           <li class="app-task-list__item">
             <span class="app-task-list__task-name">
               <a href="destination-consignee" aria-describedby="contact-details-status">
-                Consignee
+                Who will receive this consignment?
               </a>
             </span>
             {% if data.consignee %}
@@ -128,60 +104,50 @@ GOV.UK Prototype Kit
             <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="list-convictions-status">Not started</strong>
             {% endif %}
           </li>
-          <li class="app-task-list__item">
-            <span class="app-task-list__task-name">
-              <a href="destination-permit{% if data.import_permit and data.permit_uploaded == 'no'%}?change=yes{%endif%}" aria-describedby="list-convictions-status">
-                Import permit
-              </a>
-            </span>
-            {% if data.import_permit and (data.permit_uploaded =="yes" or data.import_permit =="no" or data.permit_uploaded =="uploaded")%}
-            <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Completed</strong>
-            {% elseif data.import_permit and data.permit_uploaded == "no"%}
-            <strong class="govuk-tag govuk-tag--blue app-task-list__tag" id="contact-details-status">In progress</strong>
-            {% else%}
-
-            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="list-convictions-status">Not started</strong>
-            {% endif %}
-          </li>
-          {% endif %}
         </ul>
       </li>
+
+
+      {% endif %}
+
       <li>
         <h2 class="app-task-list__section">
-          <span class="app-task-list__section-number">3. </span> Upload attachments (optional)
+          <span class="app-task-list__section-number">2. </span> Additional documents (optional)
         </h2>
-
         <ul class="app-task-list__items">
+          <li class="app-task-list__item" style="border-top:none;">
+            Upload packing lists, schedules and other supporting documents to attach to your application
+          </li>
           <li class="app-task-list__item">
             <span class="app-task-list__task-name">
               <a href="attachments" aria-describedby="list-convictions-status">
-                Upload attachments
+                Supporting documents
               </a>
             </span>
             {% if data.file %}
             <strong class="govuk-tag app-task-list__tag" id="medical-information-status">1 file attached</strong>
             {% else %}
-            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="medical-information-status">0 files attached</strong>
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="medical-information-status">None added</strong>
             {% endif %}
           </li>
         </ul>
       </li>
       <li>
         <h2 class="app-task-list__section">
-          <span class="app-task-list__section-number">4. </span> Submit
+          <span class="app-task-list__section-number">3. </span> Check and submit your application
         </h2>
         <ul class="app-task-list__items">
           <li class="app-task-list__item">
             <span class="task-list-submit-disabled">
               <span class="app-task-list__task-name">
-                Check and submit your application
+                Check your answers and submit your application
               </span>
               <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="submit-pay-status">Cannot start yet</strong>
             </span>
             <span class="task-list-submit-enabled" style="display:none">
               <span class="app-task-list__task-name">
                 <a href="check-your-answers" aria-describedby="list-convictions-status">
-                  Check and submit your application
+                  Check your answers and submit your application
                 </a>
               </span>
               <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="submit-pay-status">Not started</strong>
