@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+- GOV.UK
+{% endblock %}
+{% block beforeContent%}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <form action="{{query.return_url or '../create/task-list'}}" method="POST">
+      {{ govukInput({
+        label: {
+          text: "Which countries do you plan to export to?",
+          classes: "govuk-label--xl",
+          isPageHeading: true
+        },
+        hint: {
+          text: "Enter all the countries you plan to export this crop to. Some countries will need you to arrange additional inspections."
+        },
+        id: "intended_countries",
+        name: "intended_countries"
+      }) }}
+      <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+    </form>
+  </div>
+</div>
+
+{% endblock %}

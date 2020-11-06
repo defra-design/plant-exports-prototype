@@ -1,0 +1,399 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+GOV.UK Prototype Kit
+{% endblock %}
+{% block beforeContent%}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <h1 class="govuk-heading-xl">
+      Check your answers before sending your application
+    </h1>
+
+    {% set commodity = data.commodity or "plants" %}
+
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Your reference
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{data.reference_num}}
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="setup/reference?change=yes&return_url=../create/check-your-answers" data-qa-id="Link-ChangeAnswer" id="Link-ChangeAnswer-0">Change</a>
+        </dd>
+      </div>
+    </dl>
+    <h2 class="govuk-heading-m">Applicant details</h2>
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Who is the applicant?
+        </dt>
+        <dd class="govuk-summary-list__value">
+          ABC LIMITED, 27 The Crescent, NORTH WEST LONDON, NW7 0HX
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="exporter?change=yes">
+            Change<span class="govuk-visually-hidden">
+              Certification region</span>
+          </a>
+        </dd>
+      </div>
+    </dl>
+
+    <h2 class="govuk-heading-m">Inspection details</h2>
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Where will the inspection take place?
+        </dt>
+        <dd class="govuk-summary-list__value">
+          ABC LIMITED, 27 The Crescent, NORTH WEST LONDON, NW7 0HX
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="exporter?change=yes">
+            Change<span class="govuk-visually-hidden">
+              Certification region</span>
+          </a>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          When will the field be ready for inspection?
+        </dt>
+        <dd class="govuk-summary-list__value">
+            {{data.inpection_date_day or "3"}} {{data.inpection_date_month or "October"}} {{data.inpection_date_year or "2020"}}
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="exporter?change=yes">
+            Change<span class="govuk-visually-hidden">
+              Certification region</span>
+          </a>
+        </dd>
+      </div>
+    </dl>
+
+    <h2 class="govuk-heading-m">Destination countries</h2>
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Which countries will you be exporting to?
+        </dt>
+        <dd class="govuk-summary-list__value">
+          Norway, Kenya, Israel, EU
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="exporter?change=yes">
+            Change<span class="govuk-visually-hidden">
+              Certification region</span>
+          </a>
+        </dd>
+      </div>
+    </dl>
+
+    <!--Your fields and crops-->
+    {% if data.commodity == "bulbs" %}
+      <h2 class="govuk-heading-m">Your bulb stock numbers</h2>
+      {% for commodity in data.commodities %}
+        {% block summaryBulb %}{% include "../modules/_summary-bulb.html" %}{% endblock %}
+      {% endfor %}
+      <p class="govuk-body"><a href="commodity-page-bulbs" class="govuk-link">Add another bulb</a></p>
+    {%else%}
+      <h2 class="govuk-heading-m">Fields and crop details</h2>
+      <h3 class="govuk-heading-s">Field 1</h3>
+
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            IACS Number
+          </dt>
+          <dd class="govuk-summary-list__value">
+            NF 1234 1234
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="exporter?change=yes">
+              Change<span class="govuk-visually-hidden">
+                Certification region</span>
+            </a>
+          </dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Parish
+          </dt>
+          <dd class="govuk-summary-list__value">
+            Left blank
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="exporter?change=yes">
+              Change<span class="govuk-visually-hidden">
+                Certification region</span>
+            </a>
+          </dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Nursery plot number
+          </dt>
+          <dd class="govuk-summary-list__value">
+            Left blank
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="exporter?change=yes">
+              Change<span class="govuk-visually-hidden">
+                Certification region</span>
+            </a>
+          </dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Area of whole field in hectares
+          </dt>
+          <dd class="govuk-summary-list__value">
+            15
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="exporter?change=yes">
+              Change<span class="govuk-visually-hidden">
+                Certification region</span>
+            </a>
+          </dd>
+        </div>
+
+      </dl>
+
+
+
+      <div class="app-summary-card ">
+        {% if commodity.has_botanicial_name == "yes" %}
+        {% set commodity_id_name = commodity.genus %}
+        {% else %}
+        {% set commodity_id_name = commodity.commodity_common_name %}
+        {% endif %}
+        <header class="app-summary-card--header">
+          <h3 class="app-summary-card--title">{{loop.index or "1"}}. {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Lepanthes'}}</h3>
+          <div class="app-summary-card__actions">
+            <ul class="app-summary-card__actions-list">
+              <li class="app-summary-card__actions-list-item">
+                <a class="govuk-link" href="#">
+                  Delete<span class="govuk-visually-hidden"></span>
+                </a>
+              </li>
+              <li class="app-summary-card__actions-list-item">
+                <a class="govuk-link" href="commodity-page?change=yes">
+                  Change<span class="govuk-visually-hidden"></span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </header>
+        <div class="app-summary-card--content">
+          <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Genus
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{commodity_id_name or 'Lepanthes'}}
+                <!-- <span class="govuk-hint">You skipped this question</span> -->
+              </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Species
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{data.commodity_host_species or ('<span class="govuk-hint">Left blank</span>' | safe)}}
+
+              </dd>
+            </div>
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Common name
+              </dt>
+              <dd class="govuk-summary-list__value">
+                Babyboot orchid
+                <!-- <span class="govuk-hint">You skipped this question</span> -->
+              </dd>
+            </div>
+            {% if commodity.commodity == "plants" or data.commodity == "potatoes" %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Variety
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{data.commodity_variety or ('<span class="govuk-hint">Left blank</span>' | safe)}}
+
+              </dd>
+            </div>
+            {% endif %}
+
+
+            {% if data.commodity == "potatoes" %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Type
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{data.commodity_type or 'Purple majesty'}}
+
+              </dd>
+            </div>
+            {% endif %}
+            {% if data.commodity_lot %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Commodity lot
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{data.commodity_lot or ('<span class="govuk-hint">Left blank</span>' | safe)}}
+
+              </dd>
+            </div>
+            {% endif %}
+
+            {% if data.chemicals_used %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Chemical used on tubers (optional)
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{data.chemicals_used or ('<span class="govuk-hint">Left blank</span>' | safe)}}
+
+              </dd>
+            </div>
+            {% endif %}
+
+            {% if commodity.commodity == "plants" %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Commodity group
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{data.commodity_group or ('<span class="govuk-hint">Left blank</span>' | safe)}}
+
+              </dd>
+            </div>
+
+            {% endif %}
+
+            {% if data.commodity != "seeds" %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                {% if data.commodity == "plant products"%}
+                Primary country where grown
+                {% else %}
+                Country of origin
+                {% endif %}
+
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{commodity.countrySelect[0] or "United Kingdom"}}
+
+              </dd>
+            </div>
+            {% endif %}
+
+            {% if data.origin_other %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Other country details (optional)
+              </dt>
+              <dd class="govuk-summary-list__value">
+                {{data.other or "Holland"}}
+                <!-- <span class="govuk-hint">You skipped this question</span> -->
+              </dd>
+            </div>
+            {% endif %}
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Packaging type
+              </dt>
+              <dd class="govuk-summary-list__value">
+                Crate
+                <!-- <span class="govuk-hint">You skipped this question</span> -->
+              </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Number of packages
+              </dt>
+              <dd class="govuk-summary-list__value">
+                15
+                <!-- <span class="govuk-hint">You skipped this question</span> -->
+              </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Quality
+              </dt>
+              <dd class="govuk-summary-list__value">
+                10KG
+                <!-- <span class="govuk-hint">You skipped this question</span> -->
+              </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Further information (optional)
+              </dt>
+              <dd class="govuk-summary-list__value">
+
+                <span class="govuk-hint">You skipped this question</span>
+              </dd>
+            </div>
+
+          </dl>
+        </div>
+      </div>
+      
+      <p class="govuk-body"><a href="commodity-page?return_url=check-your-answers">Add another field</a></p>
+    {%endif%}
+
+    <h3 class="govuk-heading-m">Upload field map (optional)</h3>
+    {% if data.file %}
+    <p class="govuk-body">1 file{% if (data.uploaded_files | length) > 1 %}s{% endif %} attached</p>
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9 ">
+      {% if data.file and query.delete_file != 'yes'%}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          File 1
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <a href="#"><strong>{{data.file}}</strong></a><br>
+          <a href="#"><strong>{{data.description}}</strong></a>
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a id="view_link_test_support.docx" href="/protected/form/8270EHC/application/1721147992687/supplementary-documents/10977038-996d-492d-be43-8e1988e5667a/view" rel="noreferrer noopener" target="_blank" class="govuk-link">Download</a>
+          <br>
+          <a id="view_link_test_support.docx" href="confirm_file_delete" rel="noreferrer noopener"
+                class="govuk-link">Delete</a>
+        </dd>
+      </div>
+      {% endif %}
+      <p class="govuk-body govuk-!-margin-top-6"><a href="attachments?change=yes&return_url=check-your-answers" class="govuk-link">Add more attachments</a></p>
+      {% else %}
+      <p class="govuk-body">You have uploaded no attachments</p>
+      <p class="govuk-body"><a href="attachments?change=yes&return_url=check-your-answers" class="govuk-link">Add attachments</a></p>
+      {% endif %}
+      <dl>
+  </div>
+    <div class="govuk-grid-column-three-quarters">
+      <p class="govuk-body">By submitting this application form, you are agreeing that to the best of your knowledge and belief the statements made in this document are true and complete.</p>
+      <p class="govuk-body govuk-!-margin-top-6">
+        <a href="../submit/confirmation" class="govuk-button">Submit</a>
+      </p>
+    </div>
+</div>
+{% endblock %}

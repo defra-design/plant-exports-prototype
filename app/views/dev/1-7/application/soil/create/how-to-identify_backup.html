@@ -1,0 +1,161 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+GOV.UK Prototype Kit
+{% endblock %}
+{% block beforeContent%}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+<style media="screen">
+  .app-result-list li{
+    padding: 15px 0;
+    border-top:1px solid #b1b4b6;
+    position:relative;
+
+  }
+  .app-result-list{
+    padding-bottom: 0;
+    border-bottom:1px solid #b1b4b6;
+  }
+  .app-result-list li .govuk-button--secondary{
+    position:absolute;
+    right:0;
+    top:20px;
+
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <span class="govuk-caption-xl">Your commodity</span>
+    <form method="get" action="commodity-page">
+      <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+          <h1 class="govuk-fieldset__heading">
+            How do you want to identify the {{data.commodity or 'plant'}}?
+          </h1>
+        </legend>
+
+        <p id="passport-number-hint" class="govuk-body">
+          This will appear on the certificate. Where possible this should include the genus and species.
+        </p>
+        <div class="govuk-form-group">
+          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="how-contacted-conditional" name="has_botanicial_name" type="radio" value="yes~commodity-page" data-aria-controls="conditional-how-contacted-conditional" {% if data.has_botanicial_name=="yes"
+                %}checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional">
+                Botanical name (genus and species)
+              </label>
+            </div>
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional">
+              {% if data.show_manual_input != "yes"%}
+              {% block genus %}{% include "../modules/_genus.html" %}{% endblock %}
+              {% else %}
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="commodity_host_species">
+                    Genus
+                  </label>
+                  <input class="govuk-input govuk-input--width-20" id="commodity_genus" name="genus" type="text" value="{% if query.has_commodity %}{{query.genus}}{%endif%}">
+                </div>
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="commodity_host_species">
+                    Species
+                  </label>
+                  <input class="govuk-input govuk-input--width-20" id="commodity_host_species" name="commodity_host_species" type="text" value="{% if query.has_commodity %}{{query.species}}{%endif%}">
+                </div>
+              {% endif %}
+
+
+              <!-- This will only show if there is no javascript loaded -->
+              <div id="commodity-botanical_name">
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="commodity_host_species">
+                    Genus
+                  </label>
+                  <input class="govuk-input govuk-input--width-20" id="commodity_genus" name="genus" type="text" value="{% if query.has_commodity %}{{query.genus}}{%endif%}">
+                </div>
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="commodity_host_species">
+                    Species
+                  </label>
+                  <input class="govuk-input govuk-input--width-20" id="commodity_host_species" name="commodity_host_species" type="text" value="{% if query.has_commodity %}{{query.species}}{%endif%}">
+                </div>
+                <!-- <div class="govuk-form-group">
+                    <label class="govuk-label" for="passport-number">
+                      Common name optional
+                    </label>
+                    <input class="govuk-input govuk-input--width-20" id="passport-number" name="commodity_common_name" type="text" value="{% if query.has_commodity %}{{query.common}}{%endif%}">
+                  </div> -->
+              </div>
+              {% if data.show_manual_input == "yes"%}
+
+              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display:none">The botancial name needs to be spelt correctly, if you are unsure you can <a href="?show_manual_input=no&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">Search for a botanical name</a></p>
+
+              {% else %}
+              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display:none">If you cannot find your {{data.commodity or "plant"}}, but you know the botanical name you can <a href="?show_manual_input=yes&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">Enter botanical the name manually</a></p>
+              {% endif %}
+
+
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="how-contacted-conditional-2" name="has_botanicial_name" type="radio" value="use_common_name" data-aria-controls="conditional-how-contacted-conditional-2">
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-2">
+                Agreed common name
+              </label>
+            </div>
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional-2">
+              <div class="govuk-form-group">
+                <label class="govuk-visually-hidden" for="passport-number">
+                  Common name
+                </label>
+                <span class="govuk-hint">Use this if you are undable to find a genus or species for your {{data.commodity}} and have an agreed a name with the importing country</span>
+                <input class="govuk-input govuk-input--width-20" id="passport-number" name="commodity_common_name" type="text" aria-describedby="passport-number-hint">
+              </div>
+
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="how-contacted-conditional-3" name="has_botanicial_name" type="radio" value="use_description" data-aria-controls="conditional-how-contacted-conditional-3" {% if data.has_botanicial_name == "use_description"%}checked{%endif%}>
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-3">
+                Description of the {{data.commodity or "plant"}}
+              </label>
+            </div>
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional-3">
+              <div class="govuk-form-group">
+                <label class="govuk-visually-hidden" for="passport-number">
+                  Description of the commodity
+                </label>
+                <span class="govuk-hint">Only use this if you cannot enter the botanical name and you do not have an agreed common names</span>
+                <textarea class="govuk-textarea" id="plant-identify--description" name="commodity_description" rows="4" aria-describedby="more-detail-hint"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      {% if data.commodity == "plants" or data.commodity == "seeds" %}
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="commodity_variety">
+          Variety (optional)
+        </label>
+        <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety" type="text">
+      </div>
+      {% endif %}
+      <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+
+    </form>
+
+
+  </div>
+</div>
+
+<script type="text/javascript">
+  window.addEventListener('load', function() {
+    $("#commodity-botanical_name").hide()
+    $("#commoditiy-botanical-lookup").show()
+    $("#commodity-lookup--manual").show()
+  })
+</script>
+
+{% endblock %}
