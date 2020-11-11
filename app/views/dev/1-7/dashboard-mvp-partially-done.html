@@ -1,16 +1,16 @@
 {% extends "layout.html" %}
 {% block pageTitle %}
-GOV.UK Prototype Kit
+Your applications - Apply for a phytosanitary certificate - GOV.UK Prototype Kit
 {% endblock %}
 {% block beforeContent %}
-<!-- <div class="login-nav login-border">
+<!--<div class="login-nav login-border">
   <ul class="login-nav__list">
     <li class="login-nav__list-item" id="Nav-DisplayName">Ann Cooper</li>
     <li class="login-nav__list-item"> | <a href="https://identity-management-app.herokuapp.com/manage/team-members/services-on-team-member-admin-account_company-exports?serviceLine=Exporter%20Service&serviceRole=Exporter&numUsers=1&numAgents=0&numServices=1&multiOrg=no&parentChild=parent"
         class="govuk-link login-nav__link govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a>|</li>
     <li class="login-nav__list-item"><a href="#ß" class="govuk-link login-nav__link govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
   </ul>
-</div> -->
+</div>-->
 {% endblock%}
 {% block content %}
 <style>
@@ -104,11 +104,10 @@ GOV.UK Prototype Kit
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl govuk-!-margin-top-8">Your applications</h1>
-    {% if data.route == "new" %}<p class="govuk-body">You do not have any applications yet, create your first application.</p>{% endif %}
-    <a class="govuk-button" href="application/setup/what-export" >Start a new application</a>
+      <a class="govuk-button" href="application/setup/what-export" >Start a new application</a>
   </div>
 </div>
-{% if data.route != "new" %}
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <form method="GET">
@@ -386,7 +385,7 @@ GOV.UK Prototype Kit
 
     <div class="filter-tag--wrapper govuk-!-margin-bottom-6" data-module="track-click">
       <p class="govuk-body govuk-!-margin-bottom-2">
-        <span id="js-case-count"></span> applications
+        Showing <span id="js-case-count"></span> applications
         {% if data.has_filter == "yes" and data.filter_status != 'any'%}
         with status <strong>{{data.filter_status | capitalize or "Any"}}</strong>
         {% endif %}
@@ -471,6 +470,7 @@ GOV.UK Prototype Kit
             {% endif %}
             {% else %}
 
+            {% if data.route == "new" %}
             <tr class="govuk-table__row result">
               <th id="1721147986456-appRef" class="govuk-table__cell applicationRef-column table-header" scope="row">
                 <a href="application?id={{app.index}}" class="govuk-link govuk-link--no-visited-state"> <span class="table-heading table-heading-full" aria-hidden="true">Application reference</span> {% if app.reference %}{{app.reference}}{%else%}{{app.applicationID}}{%endif%}</a><br>
@@ -497,6 +497,7 @@ GOV.UK Prototype Kit
             {% endif %}
             {% endif %}
             {% endif %}
+            {% endif %}
             {% endfor %}
           </tbody>
         </table>
@@ -513,10 +514,11 @@ GOV.UK Prototype Kit
               <li class="defra-pagination__item  defra-pagination__item--next">
                 <a class="defra-pagination__link" href="">Next<span class="govuk-visually-hidden"> set of pages</span></a>
               </li>
-            </ul>
-            <p class="defra-pagination__results">Showing <b>1</b> to <b>30</b> of <b>90</b> results</p>-->
+            </ul>-->
+
+            <p class="defra-pagination__results" style="float:right;">Showing <b>1</b> to <b>0</b> of <b>0</b> results</p>
             <p class="defra-pagination__results" style="float:left;"><a href="#" style=" text-decoration:none;"><b>1</b></a></p>
-            <p class="defra-pagination__results" style="float:right;">Showing <b>0</b> results</p>
+            <!--<p class="defra-pagination__results" style="float:right;">Showing <b>0</b> results</p>-->
           </nav>
         </div>
       </div>
@@ -607,5 +609,5 @@ GOV.UK Prototype Kit
     // var queryStringParameters = window.location.search
     // var previouslySubmitted = queryStringParameters.length > 0
   </script>
-  {% endif %}
+
   {% endblock %}

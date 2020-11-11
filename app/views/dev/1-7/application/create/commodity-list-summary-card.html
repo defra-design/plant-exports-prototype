@@ -12,39 +12,21 @@
     <h1 class="govuk-heading-xl">
       Your commodity
     </h1>
-    <table class="govuk-table govuk-!-margin-bottom-9">
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th class="govuk-table__header" scope="col">
-            Description
-          </th>
-          <th class="govuk-table__header" scope="col">
-            Country of origin
-          </th>
-          <th class="govuk-table__header" scope="col">
-            {% if data.commodity == "Used farm machinery" %}Unique ID{% else %}Quantity{% endif %}
-          </th>
-          <th class="govuk-table__header" scope="col"></th>
-        </tr>
-      </thead>
-      <tbody class="govuk-table__body">
-        {% for commodity in data.commodities %}
-        {% set commodity_page = "bulbs" %}
-        {% if data.commodity == "commodity-page-bulbs" %}
-        <!-- BULBS -->
-        {% block summaryBulb %}{% include "../modules/_summary-bulb.html" %}{% endblock %}
-        {% elseif data.commodity == "Used farm machinery" %}
-        <!-- USED FARM MACHINERY -->
-        {% set commodity_page = "commodity-page-machinery" %}
-        {% block summaryMachinery %}{% include "../modules/_summary-machinery-check-answers.html" %}{% endblock %}
-        {%else%}
-        <!-- OTHER COMMODITES -->
-        {% set commodity_page = "commodity-page" %}
-        {% block summaryGeneral %}{% include "../modules/_summary-general-check-answers.html" %}{% endblock %}
-        {%endif%}
-        {% endfor %}
-      </tbody>
-    </table>
+    {% for commodity in data.commodities %}
+    {% set commodity_page = "bulbs" %}
+    {% if data.commodity == "commodity-page-bulbs" %}
+    <!-- BULBS -->
+    {% block summaryBulb %}{% include "../modules/_summary-bulb.html" %}{% endblock %}
+    {% elseif data.commodity == "Used farm machinery" %}
+    <!-- Machinery -->
+    {% set commodity_page = "commodity-page-machinery" %}
+    {% block summaryMachinery %}{% include "../modules/_summary-machinery.html" %}{% endblock %}
+    {%else%}
+    <!-- OTHER COMMODITES -->
+    {% set commodity_page = "commodity-page" %}
+    {% block summaryGeneral %}{% include "../modules/_summary-general.html" %}{% endblock %}
+    {%endif%}
+    {% endfor %}
 
     <form  method="POST">
       <fieldset class="govuk-fieldset" aria-describedby="applicant-conditional-hint">
