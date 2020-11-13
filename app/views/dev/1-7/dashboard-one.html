@@ -3,6 +3,7 @@
 GOV.UK Prototype Kit
 {% endblock %}
 {% block beforeContent %}
+{{super()}}
 <!-- <div class="login-nav login-border">
   <ul class="login-nav__list">
     <li class="login-nav__list-item" id="Nav-DisplayName">Ann Cooper</li>
@@ -398,7 +399,7 @@ GOV.UK Prototype Kit
 
     <div class="filter-tag--wrapper govuk-!-margin-bottom-6" data-module="track-click">
       <p class="govuk-body govuk-!-margin-bottom-2">
-        <span id="js-case-count"></span> applications {% if data.show_applications_by == "everyone" %}created by <strong>{% if data.filter_name == logged_in_as %}you{% else %}{{data.filter_name}}{% endif %} {% endif %}</strong>{% if
+        <span id="js-case-count"></span> application {% if data.show_applications_by == "everyone" %}created by <strong>{% if data.filter_name == logged_in_as %}you{% else %}{{data.filter_name}}{% endif %} {% endif %}</strong>{% if
         query.search %} matching <strong>‘{{query.search}}’</strong>{% endif %}
         {% if data.has_filter == "yes" and data.filter_status != 'any'%}
         with status <strong>{{data.filter_status | capitalize}}</strong>
@@ -433,10 +434,8 @@ GOV.UK Prototype Kit
         <table class="govuk-table responsive-table">
           <thead class="govuk-table__head">
             <tr class="govuk-table__row">
-              <th class="govuk-table__header">
-                <div class="applicationRef-column" style="width:15%">Application reference</div>
-              </th>
-              <th class="govuk-table__header" style="width:5%!important">Destination</th>
+              <th class="govuk-table__header">Application reference</th>
+              <th class="govuk-table__header">Destination</th>
               <th class="govuk-table__header">Submitted</th>
               <th class="govuk-table__header">Status</th>
               <th class="govuk-table__header"></th>
@@ -446,7 +445,7 @@ GOV.UK Prototype Kit
 
             <tr class="govuk-table__row result">
               <th id="1721147986456-appRef" class="govuk-table__cell applicationRef-column table-header" scope="row">
-                <a href="application?id=0" class="govuk-link govuk-link--no-visited-state"> <span class="table-heading table-heading-full" aria-hidden="true">Case ID </span> {{data.reference_num or 'PO823942AUS'}}</a><br>
+                <a href="application?id=0" class="govuk-link govuk-link--no-visited-state">{{data.reference_num or 'PO823942AUS'}}</a><br>
               </th>
               <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
                 <span class="table-heading" aria-hidden="true">Destination </span>
@@ -454,12 +453,12 @@ GOV.UK Prototype Kit
               </td>
               <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
                 <span class="table-heading" aria-hidden="true">Submitted</span>
-                15 May 2020
+                15 Nov 2020
               </td>
 
               <td id="1721147986456-status" class="govuk-table__cell" scope="row">
                 <span class="table-heading" aria-hidden="true">Status</span>
-                <div class="app-status-tag app-status-tag--{%if query.current_status=='draft' %}grey{%else%}{%endif%}">
+                <div class="app-status-tag app-status-tag--blue">
                   {{query.current_status or 'processing'}}
                 </div>
               </td>
@@ -472,7 +471,9 @@ GOV.UK Prototype Kit
         <div class="app-example-page">
           <nav class="defra-pagination" id="pagination-label">
             <p class="govuk-visually-hidden" aria-labelledby="pagination-label">Pagination navigation</p>
-            <ul class="defra-pagination__list">
+            <p class="defra-pagination__results" style="float:left;"><a href="#" style=" text-decoration:none;"><b>1</b></a></p>
+            <p class="defra-pagination__results" style="float:right;">Showing <b>1</b> to <b>1</b> of <b>1</b> result</p>
+            <!--<ul class="defra-pagination__list">
               <li class="defra-pagination__item  defra-pagination__item--prev">
                 <a class="defra-pagination__link" href="">Previous<span class="govuk-visually-hidden"> set of pages</span></a>
               </li>
@@ -482,8 +483,7 @@ GOV.UK Prototype Kit
               <li class="defra-pagination__item  defra-pagination__item--next">
                 <a class="defra-pagination__link" href="">Next<span class="govuk-visually-hidden"> set of pages</span></a>
               </li>
-            </ul>
-            <p class="defra-pagination__results">Showing <b>1</b> to <b>30</b> of <b>90</b> results</p>
+            </ul>-->
           </nav>
         </div>
       </div>
