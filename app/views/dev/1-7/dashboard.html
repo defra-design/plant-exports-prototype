@@ -1,17 +1,21 @@
 {% extends "layout.html" %}
+
 {% block pageTitle %}
-GOV.UK Prototype Kit
+Your applications - {{serviceName}} - GOV.UK Prototype Kit
 {% endblock %}
+
 {% block beforeContent %}
-<!-- <div class="login-nav login-border">
+{{super()}}
+<!--<div class="login-nav login-border">
   <ul class="login-nav__list">
     <li class="login-nav__list-item" id="Nav-DisplayName">Ann Cooper</li>
     <li class="login-nav__list-item"> | <a href="https://identity-management-app.herokuapp.com/manage/team-members/services-on-team-member-admin-account_company-exports?serviceLine=Exporter%20Service&serviceRole=Exporter&numUsers=1&numAgents=0&numServices=1&multiOrg=no&parentChild=parent"
         class="govuk-link login-nav__link govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a>|</li>
     <li class="login-nav__list-item"><a href="#ß" class="govuk-link login-nav__link govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
   </ul>
-</div> -->
+</div>-->
 {% endblock%}
+
 {% block content %}
 <style>
   main{padding-top: 0px!important;}
@@ -91,6 +95,8 @@ GOV.UK Prototype Kit
     }/*#filter-input:before*/
     .govuk-details__summary:before{display: none}
 
+    .app-status-tag--indigo { color: #1a237e; background: #e7b9ff;}
+
     .app-status-tag--white-tag-blue-border-and-text {
         background-color: #ffffff;
         width: 90px;
@@ -101,20 +107,20 @@ GOV.UK Prototype Kit
         color: #1d70b8;
     }
 </style>
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl govuk-!-margin-top-8">Your applications</h1>
-    {% if data.route == "new" %}<p class="govuk-body">You do not have any applications yet, create your first application.</p>{% endif %}
-    <a class="govuk-button" href="application/setup/what-export" >Start a new application</a>
+    <h1 class="govuk-heading-xl govuk-!-margin-top-9">Your applications</h1>
+      <a class="govuk-button" href="application/setup/what-export" >Start a new application</a>
   </div>
 </div>
-{% if data.route != "new" %}
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <form method="GET">
       <div class="search-wrapper govuk-form-group">
         <label for="search-reservations" class="govuk-label">
-          Search your applications
+          Search by application ID, destination, submission date or reference number
         </label>
         <div class="search-input-wrapper">
           <input type="search" value="{{query.search or ''}}" id="search-reservations" name="search" title="Search" class="govuk-input">
@@ -126,9 +132,11 @@ GOV.UK Prototype Kit
     </form>
   </div>
   <div class="govuk-grid-column-one-third">
-    <div class="defra-filter--action" style="display:none">
-      <button id="defra-filter--button" class="govuk-button govuk-button--secondary govuk-!-margin-top-6 {% if (data.has_filter == 'yes' and data.filter_status != 'any') or (data.filter_name and data.filter_name != 'any')%}defra-filter-button--active{% endif%}"
-        type="button" aria-expanded="false"><span class="defra-filter--button-content">Show filters</span><span class="defra-filter__icon"></span></button>
+    <div class="defra-filter--action" style="display:none;">
+      <button id="defra-filter-button" class="govuk-button govuk-button--secondary govuk-!-margin-top-6 defra-filter-button--active" type="button" aria-expanded="false">
+        <span class="defra-filter-button">Show filters</span>
+        <span class="defra-filter__icon"></span>
+      </button>
     </div>
   </div>
 </div>
@@ -137,24 +145,6 @@ GOV.UK Prototype Kit
     <div class="derfa-filter--content">
       <form method="get">
         <div class="govuk-grid-row">
-          <!-- <div class="govuk-grid-column-one-third ">
-              <div class="govuk-form-group">
-                <label class="govuk-label" for="filter-status">
-                  Filter by status
-                </label>
-                <select class="govuk-select govuk-!-width-full" id="filter-status" name="filter_status">
-                  <option value="any" {% if (data.filter_status and data.filter_status=='any' ) or not data.filter_status %}selected="selected" {% endif %}>Any status</option>
-                  <option value="draft" {% if (data.filter_status and data.filter_status=='draft' ) %}selected="selected" {% endif %}>Draft</option>
-                  <option value="processing" {% if (data.filter_status and data.filter_status=='processing' )  %}selected="selected" {% endif %}>Processing</option>
-                  <option value="dispatched" {% if (data.filter_status and data.filter_status=='dispatched' )  %}selected="selected" {% endif %}>Dispatched</option>
-                  <option value="certifier action" {% if (data.filter_status and data.filter_status=='certifier action' ) %}selected="selected" {% endif %}>Certifier action</option>
-                  <option value="completed" {% if (data.filter_status and data.filter_status=='completed' )  %}selected="selected" {% endif %}>Completed</option>
-                  <option value="cancelled" {% if (data.filter_status and data.filter_status=='cancelled' ) %}selected="selected" {% endif %}>Cancelled</option>
-                  <option value="rejected" {% if (data.filter_status and data.filter_status=='rejected' )  %}selected="selected" {% endif %}>Rejected</option>
-
-                </select>
-              </div>
-            </div> -->
           <div class="govuk-grid-column-one-third">
             <div class="govuk-form-group">
               <fieldset class="govuk-fieldset">
@@ -206,18 +196,13 @@ GOV.UK Prototype Kit
                       Cancelled
                     </label>
                   </div>
-
                   <div class="govuk-radios__item">
                     <input class="govuk-radios__input" id="type-6" name="filter_status" type="radio" value="rejected" {% if data.filter_status and data.filter_status=='rejected' %}checked="checked" {% endif %}>
                     <label class="govuk-label govuk-radios__label" for="type-6">
                       Rejected
                     </label>
                   </div>
-
-
-
                 </div>
-
               </fieldset>
             </div>
           </div>
@@ -337,7 +322,6 @@ GOV.UK Prototype Kit
                           </div>
                         </fieldset>
                       </div>
-
                     </div>
                   </div>
                 </div>
@@ -346,7 +330,6 @@ GOV.UK Prototype Kit
           </div>
 
           <div class="govuk-grid-column-one-third">
-
             <div class="govuk-form-group">
               <fieldset class="govuk-fieldset">
                 <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
@@ -368,16 +351,12 @@ GOV.UK Prototype Kit
                       Someone else
                     </label>
                   </div>
-
                   <div class=" govuk-form-group govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional-3">
-
-                    <!-- <label class="govuk-label" for="filter_name">
-                  Filter by user name
-                </label> -->
+                    <!-- <label class="govuk-label" for="filter_name">Filter by user name</label> -->
                     {% set logged_in_as = "Ann Cooper" %}
                     <select class="govuk-select govuk-!-width-full" id="filter_name" name="filter_name">
                       <option value="All users" {% if not data.filter_name or data.filter_name=="All users" %}selected{%endif%}>All users</option>
-                      {% set list = []%}
+                      {% set list = [] %}
                       {% for cert in data.applications %}
                       {% if not cert.name in list %}
                       <option value="{{cert.name}}" {% if cert.name==data.filter_name %}selected{%endif%}>{{cert.name}}{% if logged_in_as == cert.name %} <strong>(you)</strong>{%endif%}</option>
@@ -406,36 +385,40 @@ GOV.UK Prototype Kit
     </div>
   </div>
   <div class="govuk-grid-column-full">
-
     <div class="filter-tag--wrapper govuk-!-margin-bottom-6" data-module="track-click">
       <p class="govuk-body govuk-!-margin-bottom-2">
-        <span id="js-case-count"></span> applications {% if data.show_applications_by == "everyone" %}created by <strong>{% if data.filter_name == logged_in_as %}you{% else %}{{data.filter_name}}{% endif %} {% endif %}</strong>{% if
-        query.search %} matching <strong>‘{{query.search}}’</strong>{% endif %}
+        Showing <span id="js-case-count"></span> applications
         {% if data.has_filter == "yes" and data.filter_status != 'any'%}
-        with status <strong>{{data.filter_status | capitalize}}</strong>
+        with status <strong>{{data.filter_status | capitalize or "Any"}}</strong>
         {% endif %}
+
         {% if data.date_range and data.date_range != "any"%} exporting {% if data.date_range == "custom" %}from <strong>2 Jan 2020 </strong> to <strong>30 Jan 2020 </strong> {% else %}<strong>{{data.date_range}}</strong>{% endif %}{% endif %}
         <!-- {% if data.date_range and data.date_range != "any"%} exporting within <strong>{{data.date_range}}</strong>{% endif %} -->
       </p>
-      {% if (data.has_filter == "yes" and data.filter_status != 'any') or query.search or (data.date_range and data.date_range != "any") or (data.filter_name and data.filter_name != "any")%}
       <p class="govuk-body">
         <a href="?filter_status=&has_filter=&date_range=&filter_name=&show_applications_by=me" class="govuk-link govuk-link--no-visited-state govuk-!-font-size-19" data-module="govuk-button">
-          Clear
-          {% if data.filter_status and query.search %}
-          search and filter
-          {% elseif data.filter_status %}
-          filter
-          {% else %}
-          search
-          {% endif %}
+          Clear filter
         </a>
       </p>
-      <!-- {% for filter in data.filter_status %}
-        <div class="filter-tag">
-          <p class="filter-tag--text">{{filter | capitalize}}</p> <button type="button" class="filter-tag--remove" aria-label="Remove filter australia" data-module="remove-filter-link" data-track-label="australia" data-facet="keywords" data-value="australia"
-            data-name="keywords">✕</button>
-        </div>
-        {% endfor %} -->
+      {% if (data.has_filter == "yes" and data.filter_status != 'any') or query.search or (data.date_range and data.date_range != "any") or (data.filter_name and data.filter_name != "any")%}
+        <p class="govuk-body">
+          <a href="?filter_status=&has_filter=&date_range=&filter_name=&show_applications_by=me" class="govuk-link govuk-link--no-visited-state govuk-!-font-size-19" data-module="govuk-button">
+            Clear
+            {% if data.filter_status and query.search %}
+            search and filter
+            {% elseif data.filter_status %}
+            filter
+            {% else %}
+            search
+            {% endif %}
+          </a>
+        </p>
+        <!-- {% for filter in data.filter_status %}
+          <div class="filter-tag">
+            <p class="filter-tag--text">{{filter | capitalize}}</p> <button type="button" class="filter-tag--remove" aria-label="Remove filter australia" data-module="remove-filter-link" data-track-label="australia" data-facet="keywords" data-value="australia"
+              data-name="keywords">✕</button>
+          </div>
+          {% endfor %} -->
       {% endif %}
     </div>
 
@@ -444,104 +427,92 @@ GOV.UK Prototype Kit
         <table class="govuk-table responsive-table">
           <thead class="govuk-table__head">
             <tr class="govuk-table__row">
-              <th class="govuk-table__header">
-                <div class="applicationRef-column" style="width:15%">Application reference</div>
-              </th>
-              <th class="govuk-table__header" style="width:5%!important">Customer</th>
-              <th class="govuk-table__header" style="width:5%!important">Destination</th>
+              <th scope="col" class="govuk-table__header">Application reference</th>
+              <th class="govuk-table__header">Destination</th>
               <th class="govuk-table__header">Submitted</th>
               <th class="govuk-table__header">Status</th>
               <th class="govuk-table__header"></th>
             </tr>
           </thead>
+          {% if data.route != "new" %}
           <tbody>
-
             {% for app in data.applications %}
-
-            {% if (data.show_applications_by == "me" and app.name==logged_in_as) or (data.show_applications_by=="me" or not data.show_applications_by) or ((app.name | upper) in (data.filter_name | upper) or data.filter_name == "All users") %}
-            {% if (data.has_filter != "yes" or data.filter_status == "any") or app.status in data.filter_status %}
-
-            {%
-            if not query.search
-            or (query.search and (query.search) == (app.applicationID))
-            or (query.search and (query.search) == (app.destination))
-            or (query.search and (query.search) == (app.reference))
-            or (query.search and (query.search) == (app.EHC))
-            or (query.search and (query.search) == (app.certificate))
-            %}
-            {% if data.show_applications_by == "me"%}
-            {% if app.name==logged_in_as %}
-            <tr class="govuk-table__row result">
-              <th id="1721147986456-appRef" class="govuk-table__cell applicationRef-column table-header" scope="row">
-                <a href="application?id={{app.index}}" class="govuk-link govuk-link--no-visited-state"> <span class="table-heading table-heading-full" aria-hidden="true">Case ID </span> {% if app.reference %}{{app.reference}}{%else%}{{app.applicationID}}{%endif%}</a>
-                {% if app.is_block =="yes" %}<br>
-                <div class=" govuk-!-margin-top-1 govuk-!-font-weight-regular">Block of {{data.certificate_request_amount or "50"}} certificataes</div>{% endif %}
-              </th>
-              <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
-                <span class="table-heading" aria-hidden="true">Customer</span>
-                {{app.importer}}
-              </td>
-              <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
-                <span class="table-heading" aria-hidden="true">Destination </span>
-                {{app.destination}}
-              </td>
-              <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
-                <span class="table-heading" aria-hidden="true">Submitted</span>
-                {{app.date}}
-              </td>
-
-              <td id="1721147986456-status" class="govuk-table__cell" scope="row">
-                <span class="table-heading" aria-hidden="true">Status</span>
-                <div class="app-status-tag app-status-tag--{{app.tag | lower}}">
-                  {%if app.status=="certifier action" %}needs pre-check{%else%}{{app.status}}{%endif%}
-                </div>
-              </td>
-              <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
-                <a href="clone?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">Copy</a>
-              </td>
-            </tr>
-            {% endif %}
-            {% else %}
-
-            <tr class="govuk-table__row result">
-              <th id="1721147986456-appRef" class="govuk-table__cell applicationRef-column table-header" scope="row">
-                <a href="application?id={{app.index}}" class="govuk-link govuk-link--no-visited-state"> <span class="table-heading table-heading-full" aria-hidden="true">Case ID </span> {% if app.reference %}{{app.reference}}{%else%}{{app.applicationID}}{%endif%}</a><br>
-              </th>
-              <td id="1721147986456-submitted" class="govuk-table__cell govuk-!-width-one-quarter" scope="row">
-                <span class="table-heading" aria-hidden="true">Customer</span>
-                {{app.importer}}
-              </td>
-              <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
-                <span class="table-heading" aria-hidden="true">Destination </span>
-                {{app.destination}}
-              </td>
-              <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
-                <span class="table-heading" aria-hidden="true">Submitted</span>
-                {{app.date}}
-              </td>
-
-              <td id="1721147986456-status" class="govuk-table__cell" scope="row">
-                <span class="table-heading" aria-hidden="true">Status</span>
-                <div class="app-status-tag app-status-tag--{{app.tag | lower}}">
-                  {%if app.status=="certifier action" %}needs pre-check{%else%}{{app.status}}{%endif%}
-                </div>
-              </td>
-              <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
-                <a href="clone?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">Copy</a>
-              </td>
-            </tr>
-            {% endif %}
-            {% endif %}
-            {% endif %}
-            {% endif %}
+              {% if (data.show_applications_by == "me" and app.name==logged_in_as) or (data.show_applications_by=="me" or not data.show_applications_by) or ((app.name | upper) in (data.filter_name | upper) or data.filter_name == "All users") %}
+                {% if (data.has_filter != "yes" or data.filter_status == "any") or app.status in data.filter_status %}
+                  {%
+                    if not query.search
+                    or (query.search and (query.search) == (app.applicationID))
+                    or (query.search and (query.search) == (app.destination))
+                    or (query.search and (query.search) == (app.reference))
+                    or (query.search and (query.search) == (app.EHC))
+                    or (query.search and (query.search) == (app.certificate))
+                  %}
+                    {% if data.show_applications_by == "me"%}
+                      {% if app.name == logged_in_as %}
+                        <tr class="govuk-table__row result">
+                          <th id="1721147986456-appRef" class="govuk-table__cell applicationRef-column table-header" scope="row">
+                            <a href="application?id=0" class="govuk-link govuk-link--no-visited-state"> <span class="table-heading table-heading-full" aria-hidden="true">Application reference</span></a><br>
+                          </th>
+                          <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
+                            <span class="table-heading" aria-hidden="true">Destination</span>
+                          </td>
+                          <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
+                            <span class="table-heading" aria-hidden="true">Submitted</span>
+                          </td>
+                          <td id="1721147986456-status" class="govuk-table__cell" scope="row">
+                            <span class="table-heading" aria-hidden="true">Status</span>
+                            <div>
+                            </div>
+                          </td>
+                          <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
+                            <a href="clone?id=0" class="govuk-link govuk-link--no-visited-state">Copy</a>
+                          </td>
+                        </tr>
+                      {% endif %}
+                    {% else %}
+                        <tr class="govuk-table__row result">
+                          <th id="1721147986456-appRef" class="govuk-table__cell applicationRef-column table-header" scope="row">
+                            <a href="application?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                              <span class="table-heading table-heading-full" aria-hidden="true">Application reference</span> {% if app.reference %}{{app.reference}}{%else%}{{app.applicationID}}{%endif%}
+                            </a>
+                            <br>
+                          </th>
+                          <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
+                            <span class="table-heading" aria-hidden="true">Destination </span>
+                            {{app.destination}}
+                          </td>
+                          <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
+                            <span class="table-heading" aria-hidden="true">Submitted</span>
+                            {{app.date}}
+                          </td>
+                          <td id="1721147986456-status" class="govuk-table__cell" scope="row">
+                            <span class="table-heading" aria-hidden="true">Status</span>
+                            <div class="app-status-tag app-status-tag--{{app.tag | lower}}">
+                              {{app.status}}
+                            </div>
+                          </td>
+                          <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
+                            <a href="clone?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">Copy</a>
+                          </td>
+                        </tr>
+                    {% endif %}
+                  {% endif %}
+                {% endif %}
+              {% endif %}
             {% endfor %}
-
           </tbody>
+          {% endif %}
         </table>
         <div class="app-example-page">
           <nav class="defra-pagination" id="pagination-label">
             <p class="govuk-visually-hidden" aria-labelledby="pagination-label">Pagination navigation</p>
-            <ul class="defra-pagination__list">
+            <p class="defra-pagination__results" style="float:left;"><a href="#" style=" text-decoration:none;"><b>1</b></a></p>
+            {% if data.route == "new" %}
+            <p class="defra-pagination__results" style="float:right;">Showing <b>0</b> to <b>0</b> of <b>0</b> results</p>
+            {% else %}
+            <p class="defra-pagination__results" style="float:right;">Showing <b>1</b> to <b>18</b> of <b>18</b> results</p>
+            {% endif %}
+            <!--<ul class="defra-pagination__list">
               <li class="defra-pagination__item  defra-pagination__item--prev">
                 <a class="defra-pagination__link" href="">Previous<span class="govuk-visually-hidden"> set of pages</span></a>
               </li>
@@ -551,8 +522,7 @@ GOV.UK Prototype Kit
               <li class="defra-pagination__item  defra-pagination__item--next">
                 <a class="defra-pagination__link" href="">Next<span class="govuk-visually-hidden"> set of pages</span></a>
               </li>
-            </ul>
-            <p class="defra-pagination__results">Showing <b>1</b> to <b>30</b> of <b>90</b> results</p>
+            </ul>-->
           </nav>
         </div>
       </div>
@@ -596,7 +566,7 @@ GOV.UK Prototype Kit
       $('.defra-filter--action').show()
       $('#js-case-count').text(count);
       if (count == 0) {
-        $('.govuk-table').hide()
+        $('.govuk-tbody').hide()
       }
       $('.derfa-filter--content').hide()
       $('#defra-filter--button').on("click", function() {
@@ -643,5 +613,5 @@ GOV.UK Prototype Kit
     // var queryStringParameters = window.location.search
     // var previouslySubmitted = queryStringParameters.length > 0
   </script>
-{% endif %}
-  {% endblock %}
+
+{% endblock %}
