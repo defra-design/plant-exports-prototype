@@ -7,8 +7,8 @@ const radioButtonRedirect = require('radio-button-redirect')
 router.use(radioButtonRedirect)
 
 router.use('/', (req, res, next) => {
-  req.session.data.version = req.session.data.version  || "1-7"
-  req.session.data.version_list= req.session.data.version_list || ["1-7","1-6","1-5","1-4","1-3","1-2","1-1","1-0"]
+  req.session.data.version = req.session.data.version  || "1-8"
+  req.session.data.version_list= req.session.data.version_list || ["1-8","1-7","1-6","1-5","1-4","1-3","1-2","1-1","1-0"]
   res.locals.currentURL = req.originalUrl; //current screen
   req.session.data.currentURL = req.path
   res.locals.prevURL = req.get('Referrer'); // previous screen
@@ -37,5 +37,5 @@ fs.readdirSync(normalizedPath).forEach(function(file) {
 const tools = require('./routes/tools.js')
 require('./routes/routes.js')(router);
 require('./routes/dev.js')(router);
-require('./routes/dev_v7.js')(router);
+require('./routes/dev_v8.js')(router);
 module.exports = router

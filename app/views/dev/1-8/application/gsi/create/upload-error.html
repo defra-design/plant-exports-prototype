@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Add commodities by uploading a file - GOV UK
+{% endblock %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-width-container">
+
+  <main class="govuk-main-wrapper" id="main-content" role="main">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <form action="/form-handler" method="post" novalidate>
+
+          {% set commodity = data.commodity or "crops" %}
+
+          {% if data.commodity == "plant products" %}
+
+          {% set commodity = "products" %}
+
+          {% elseif data.commodity == "farm machinery" %}
+
+          {% set commodity = "farm machines" %}
+
+          {% endif %}
+
+          <div class="govuk-form-group  govuk-!-margin-bottom-9">
+            <fieldset class="govuk-fieldset">
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">
+                  Add {{commodity or "products"}} by uploading a file
+                </h1>
+              </legend>
+            </fieldset>
+
+            <p class="govuk-body">
+              Use our <a href="/public/images/plant-product-commodity-template.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a> to upload details for multiple {{commodity or "products"}} at the same time.
+            </p>
+            <p class="govuk-body">
+                The csv template shows you what details you will need to include.
+            </p>
+            <p class="govuk-body">
+                Find out more about <a href="#" class="govuk-link govuk-link--no-visited-state" title="Bulk upload specification document">uploading a csv file</a>.
+            </p>
+
+            {{ govukFileUpload({
+              id: "file-upload-1",
+              name: "file-upload-1",
+              errorMessage: {
+              text: "The selected file must be a CSV"
+              }
+            }) }}
+
+          </div>
+
+          {{ govukButton({
+            text: "Upload",
+            href: "upload-in-progress"
+          }) }}
+
+        </form>
+      </div>
+    </div>
+  </main>
+</div>
+{% endblock %}
