@@ -50,7 +50,7 @@ GOV.UK Prototype Kit
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Application id
+          Application reference
         </dt>
         <dd class="govuk-summary-list__value">
           {{(query.id | appInfo('applicationID'))}}
@@ -65,7 +65,7 @@ GOV.UK Prototype Kit
         </dd>
       </div>
 
-      <div class="govuk-summary-list__row">
+      <!--<div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           EHC
         </dt>
@@ -74,13 +74,13 @@ GOV.UK Prototype Kit
           <br>
           {{query.id | appInfo('cert_info')}}
         </dd>
-      </div>
+      </div>-->
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Destination
         </dt>
         <dd class="govuk-summary-list__value">
-          {{query.id | appInfo('destination')}}
+          China
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -88,22 +88,17 @@ GOV.UK Prototype Kit
           Exporter
         </dt>
         <dd class="govuk-summary-list__value">
-          {% set exporter = query.id | appInfo('exporter')%}
-          {% if exporter %}
-          {{exporter}}
-          {% else %}
-          <span class="govuk-hint">Not entered</span>
-          {% endif%}
+          ABC Trading Ltd
         </dd>
       </div>
-      <div class="govuk-summary-list__row">
+      <!--<div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Certifier
         </dt>
         <dd class="govuk-summary-list__value">
           ABC Vets LTD
         </dd>
-      </div>
+      </div>-->
       <!-- <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key govuk-summary-list__40">
             Proposed export date
@@ -127,7 +122,7 @@ GOV.UK Prototype Kit
       {% if (query.id | appInfo('status')) == 'exporter action' %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-amend">Update the final weight and shipping information</a></li>
       {% endif%}
-      <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{ query.is_group }}">Clone as new application</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{ query.is_group }}">Copy as new application</a></li>
       {% if (query.id | appInfo('status')) == 'draft' %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="delete">Delete this application</a></li>
       {% endif%}
@@ -135,7 +130,7 @@ GOV.UK Prototype Kit
 
   </div>
 </div>
-{% if (query.id | appInfo('status')) != 'draft' %}
+{% if (query.id | appInfo('status')) == 'draft' %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <h2 class="govuk-heading-l">{% if (query.id | appInfo('is_block')) == 'yes' or query.is_group == "yes"   %}5 certificates{% else %}Certificate{% endif %} </h2>
