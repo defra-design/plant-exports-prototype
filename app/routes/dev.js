@@ -193,6 +193,13 @@ module.exports = function(router) {
     res.redirect(301, page);
   })
 
+  // **** Soil specific ***
+  router.post('/' + base_url + '*/application/seeds/create/how-to-identify*', function(req, res) {
+    var page = req.query.return_url || '/' + base_url + req.params[0] + '/application/seeds/create/commodity-list'
+    addCommodity(req.body, req.session.data.commodities)
+    res.redirect(301, page);
+  })
+
   // *******************************
   // Global page GET router
   // *******************************
