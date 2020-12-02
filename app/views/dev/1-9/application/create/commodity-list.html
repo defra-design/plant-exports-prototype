@@ -14,6 +14,7 @@
     </h1>
     <table class="govuk-table govuk-!-margin-bottom-9">
       <thead class="govuk-table__head">
+        {% if data.commodity != "potatoes" %}
         <tr class="govuk-table__row">
           <th class="govuk-table__header" scope="col">
             Description
@@ -26,22 +27,40 @@
           </th>
           <th class="govuk-table__header" scope="col"></th>
         </tr>
+        {% else %}
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">
+            Variety
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Stock number
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Weight
+          </th>
+          <th class="govuk-table__header" scope="col"></th>
+        </tr>
+        {% endif %}
       </thead>
       <tbody class="govuk-table__body">
         {% for commodity in data.commodities %}
-        {% set commodity_page = "bulbs" %}
-        {% if data.commodity == "commodity-page-bulbs" %}
-        <!-- BULBS -->
-        {% block summaryBulb %}{% include "../modules/_summary-bulb.html" %}{% endblock %}
-        {% elseif data.commodity == "Used farm machinery" %}
-        <!-- USED FARM MACHINERY -->
-        {% set commodity_page = "commodity-page-machinery" %}
-        {% block summaryMachinery %}{% include "../modules/_summary-machinery-check-answers.html" %}{% endblock %}
-        {%else%}
-        <!-- OTHER COMMODITES -->
-        {% set commodity_page = "commodity-page" %}
-        {% block summaryGeneral %}{% include "../modules/_summary-general-check-answers.html" %}{% endblock %}
-        {%endif%}
+          {% set commodity_page = "bulbs" %}
+          {% if data.commodity == "commodity-page-bulbs" %}
+            <!-- BULBS -->
+            {% block summaryBulb %}{% include "../modules/_summary-bulb.html" %}{% endblock %}
+          {% elseif data.commodity == "Used farm machinery" %}
+            <!-- USED FARM MACHINERY -->
+            {% set commodity_page = "commodity-page-machinery" %}
+            {% block summaryMachinery %}{% include "../modules/_summary-machinery-check-answers.html" %}{% endblock %}
+          {% elseif data.commodity == "potatoes" %}
+            <!-- POTATOES -->
+            {% set commodity_page = "commodity-page" %}
+            {% block summaryPotatoes %}{% include "../modules/_summary-potatoes.html" %}{% endblock %}
+          {% else %}
+            <!-- OTHER COMMODITES -->
+            {% set commodity_page = "commodity-page" %}
+            {% block summaryGeneral %}{% include "../modules/_summary-general-check-answers.html" %}{% endblock %}
+          {% endif %}
         {% endfor %}
       </tbody>
     </table>
