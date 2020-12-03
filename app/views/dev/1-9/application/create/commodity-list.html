@@ -14,7 +14,20 @@
     </h1>
     <table class="govuk-table govuk-!-margin-bottom-9">
       <thead class="govuk-table__head">
-        {% if data.commodity != "potatoes" %}
+        {% if data.commodity == "potatoes" or data.commodity == "bulbs" %}
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">
+            Stock number
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Variety
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Weight
+          </th>
+          <th class="govuk-table__header" scope="col"></th>
+        </tr>
+        {% else %}
         <tr class="govuk-table__row">
           <th class="govuk-table__header" scope="col">
             Description
@@ -27,27 +40,14 @@
           </th>
           <th class="govuk-table__header" scope="col"></th>
         </tr>
-        {% else %}
-        <tr class="govuk-table__row">
-          <th class="govuk-table__header" scope="col">
-            Variety
-          </th>
-          <th class="govuk-table__header" scope="col">
-            Stock number
-          </th>
-          <th class="govuk-table__header" scope="col">
-            Weight
-          </th>
-          <th class="govuk-table__header" scope="col"></th>
-        </tr>
         {% endif %}
       </thead>
       <tbody class="govuk-table__body">
         {% for commodity in data.commodities %}
           {% set commodity_page = "bulbs" %}
-          {% if data.commodity == "commodity-page-bulbs" %}
+          {% if data.commodity == "bulbs" %}
             <!-- BULBS -->
-            {% block summaryBulb %}{% include "../modules/_summary-bulb.html" %}{% endblock %}
+            {% block summaryBulb %}{% include "../modules/_summary-bulbs.html" %}{% endblock %}
           {% elseif data.commodity == "Used farm machinery" %}
             <!-- USED FARM MACHINERY -->
             {% set commodity_page = "commodity-page-machinery" %}
