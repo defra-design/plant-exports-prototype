@@ -10,11 +10,8 @@ GOV.UK Prototype Kit
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-three-quarters">
     <h1 class="govuk-heading-xl">
-      Amend your answers before sending your application
+      Amend your answers before resubmitting your application
     </h1>
-    {{ govukInsetText({
-      text: "There may be a charge for amending this application"
-    }) }}
     <h2 class="govuk-heading-m">Your reference</h2>
     <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
       <div class="govuk-summary-list__row">
@@ -22,7 +19,7 @@ GOV.UK Prototype Kit
           Your reference for this application
         </dt>
         <dd class="govuk-summary-list__value">
-          {{data.reference_num or "PO 88751 China"}}
+          {{data.reference_num or "PO 24477 Canaries"}}
         </dd>
         <dd class="govuk-summary-list__actions">
           <!--<a class="govuk-link" href="setup/reference?change=yes&return_url=../create/check-your-answers" data-qa-id="Link-ChangeAnswer" id="Link-ChangeAnswer-0">Change</a>-->
@@ -142,7 +139,7 @@ GOV.UK Prototype Kit
           Town or city
         </dt>
         <dd class="govuk-summary-list__value">
-          Townsville
+          Tardebigge
         </dd>
         <dd class="govuk-summary-list__actions">
           <!--<a class="govuk-link" href="exporter?change=yes">
@@ -196,61 +193,18 @@ GOV.UK Prototype Kit
     </dl>
 
     <!--Your commodities-->
-      {% if data.commodity == "bulbs" %}
-        <!--<h2 class="govuk-heading-m">Your bulb stock numbers</h2>-->
-        <h2 class="govuk-heading-m">Consignment Details</h2>
-        {% for commodity in data.commodities %}
-          {% block summaryBulb %}{% include "../modules/_summary-bulb.html" %}{% endblock %}
-        {% endfor %}
-        <p class="govuk-body"><a href="commodity-page-bulbs" class="govuk-link">Add another bulb</a></p>
-      {% elseif data.commodity == "farm machinery" %}
-        <!--<h2 class="govuk-heading-m">Your farm machinery</h2>-->
-        <h2 class="govuk-heading-m">Consignment Details</h2>
-        <table class="govuk-table govuk-!-margin-bottom-4">
-          <thead class="govuk-table__head">
-            <tr class="govuk-table__row">
-              <th class="govuk-table__header" scope="col">
-                Description
-              </th>
-              <th class="govuk-table__header" scope="col">
-                Country of origin
-              </th>
-              <th class="govuk-table__header govuk-table__header" scope="col">
-                Unique ID
-              </th>
-              <th class="govuk-table__header" scope="col"></th>
-            </tr>
-          </thead>
-          <tbody class="govuk-table__body">
-        {% for commodity in data.commodities %}
-          {% block summaryMachinery %}{% include "../modules/_summary-machinery-check-answers.html" %}{% endblock %}
-        {% endfor %}
-        </tbody>
-      </table>
-      <p class="govuk-body"><a href="commodity-page-machinery" class="govuk-link">Add another machine</a></p>
-      {%else%}
         <h2 class="govuk-heading-m">Your commodities</h2>
         <table class="govuk-table govuk-!-margin-bottom-4">
           <thead class="govuk-table__head">
             <tr class="govuk-table__row">
               <th class="govuk-table__header" scope="col">
-                Description
+                Stock number
               </th>
-              {% if data.commodity != "seeds" %}
               <th class="govuk-table__header" scope="col">
-                {% if data.commodity == "plant products"%}
-                Primary country where grown
-                {% else %}
-                Country of origin
-                {% endif %}
+                Variety
               </th>
-              {% endif %}
-              <th class="govuk-table__header govuk-table__header" scope="col">
-                {% if data.commodity == "potatoes"%}
-                Total weight
-                {% else %}
-                Quantity
-                {% endif %}
+              <th class="govuk-table__header" scope="col">
+                Weight
               </th>
               <th class="govuk-table__header" scope="col"></th>
             </tr>
@@ -258,13 +212,13 @@ GOV.UK Prototype Kit
           <tbody class="govuk-table__body">
             <tr class="govuk-table__row">
               <td class="govuk-table__cell">
-                Maris piper
+                98765
               </td>
               <td class="govuk-table__cell">
-                United Kingdom
+                Maris piper
               </td>
               <td class="govuk-table__cell govuk-table__cell">
-                {{ data.quantity or "1000" }} Kilograms
+                {{data.quantity or '1000'}} Kilograms
               </td>
               <td class="govuk-table__cell" style="text-align:right;">
                 <a href="commodity-page-amend-pots?change=yes" class="govuk-link govuk-link--no-visited-state">
@@ -277,10 +231,10 @@ GOV.UK Prototype Kit
             </tr>
             <tr class="govuk-table__row">
               <td class="govuk-table__cell">
-                King Edwards
+                91239
               </td>
               <td class="govuk-table__cell">
-                United Kingdom
+                Pink fir apple
               </td>
               <td class="govuk-table__cell govuk-table__cell">
                 500 Kilograms
@@ -298,7 +252,6 @@ GOV.UK Prototype Kit
         </table>
         <!--<p class="govuk-body"><a href="commodity-page?return_url=check-your-answers">Add more</a></p>-->
         <p class="govuk-body"><a href="how-to-identify?return_url=check-your-answers">Add more</a></p>
-      {%endif%}
 
       <!--Inspection details-->
       {% if data.commodity == "plants" or data.commodity == "bulbs"%}
@@ -351,7 +304,7 @@ GOV.UK Prototype Kit
             Town or city
           </dt>
           <dd class="govuk-summary-list__value">
-            Townsville
+            Tardebigge
           </dd>
           <dd class="govuk-summary-list__actions">
             <!--<a class="govuk-link" href="exporter?change=yes">
@@ -443,10 +396,10 @@ GOV.UK Prototype Kit
           Point of entry into the destination country
         </dt>
         <dd class="govuk-summary-list__value">
-          {{data.point_of_entry or "Shanghai"}}
+          {{data.point_of_entry or "Las Palmas"}}
         </dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="shipping?change=yes&return_url=check-your-answers-amend">
+          <a class="govuk-link" href="shipping-amend?change=yes&return_url=check-your-answers-amend">
             Change <span class="govuk-visually-hidden">How will the consignment be transported?</span>
           </a>
         </dd>
@@ -472,7 +425,7 @@ GOV.UK Prototype Kit
           {{data.transport_id or ""}}
         </dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="shipping?change=yes&return_url=check-your-answers-amend">
+          <a class="govuk-link" href="shipping-amend?change=yes&return_url=check-your-answers-amend">
             Change <span class="govuk-visually-hidden">How will the consignment be transported?</span>
           </a>
         </dd>
@@ -482,10 +435,10 @@ GOV.UK Prototype Kit
           Container number
         </dt>
         <dd class="govuk-summary-list__value">
-          {{data.container_num or "456"}}
+          {{data.container_num or ""}}
         </dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="shipping?change=yes&return_url=check-your-answers-amend">
+          <a class="govuk-link" href="shipping-amend?change=yes&return_url=check-your-answers-amend">
             Change <span class="govuk-visually-hidden">How will the consignment be transported?</span>
           </a>
         </dd>
@@ -500,7 +453,7 @@ GOV.UK Prototype Kit
           Name of Consignee
         </dt>
         <dd class="govuk-summary-list__value">
-          {{data.consignee or 'Consignee name'}}
+          {{data.consignee or 'Luis Fernandes'}}
         </dd>
         <dd class="govuk-summary-list__actions">
           <a class="govuk-link" href="destination-consignee?change=yes&return_url=check-your-answers">
@@ -513,7 +466,7 @@ GOV.UK Prototype Kit
             Address of the consignee
         </dt>
         <dd class="govuk-summary-list__value">
-            {{ data.consignee_address or 'XYZ China Imports Ltd, Kaiser Centre, Phase III, 9-11 Hok Yuen St., Kowloon, China'}}
+            {{ data.consignee_address or 'Las Patatas Imports, c/ Avenidos de los Gatos, Las Palmas, Canary Islands, Spain'}}
         </dd>
         <dd class="govuk-summary-list__actions">
           <a class="govuk-link" href="destination-consignee?change=yes&return_url=check-your-answers">
@@ -598,7 +551,7 @@ GOV.UK Prototype Kit
       <p class="govuk-body"><a href="attachments?change=yes&return_url=check-your-answers" class="govuk-link">Add attachments</a></p>
       <dl>-->
         <p class="govuk-body govuk-!-margin-top-6">
-          <a href="../submit/declaration" class="govuk-button">Continue</a>
+          <a href="../submit/declaration-amend" class="govuk-button">Continue</a>
         </p>
 
         <p class="govuk-body govuk-!-margin-top-6">
