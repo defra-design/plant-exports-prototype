@@ -17,12 +17,38 @@ What type of business activity happens here? - Manage account - {{serviceName}} 
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">
+    <!--<h1 class="govuk-heading-xl">
       What type of business activity happens here?
-    </h1>
-    <form action="" method="POST">
-
-      {% block busactSelect %}{% include "../application/modules/_business-activity.html" %}{% endblock %}
+    </h1>-->
+    <form action="add-contact-details" method="POST">
+      {{ govukCheckboxes({
+        idPrefix: "business_activity",
+        name: "business_activity",
+        fieldset: {
+          legend: {
+            text: "What type of business activity happens here?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--xl"
+          }
+        },
+        hint: {
+          text: "Select all that apply."
+        },
+        items: [
+          {
+            value: "disposing",
+            text: "Disposing"
+          },
+          {
+            value: "distributing",
+            text: "Distributing"
+          },
+          {
+            value: "exporting",
+            text: "Exporting"
+          }
+        ]
+      }) }}
       <input class="govuk-button" type="submit" name="saveAndContinue" value="Continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
     </form>
   </div>

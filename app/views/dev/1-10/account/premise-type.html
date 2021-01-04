@@ -17,11 +17,38 @@ What type of premises is this? - Manage account - {{serviceName}} - GOV.UK
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">
+    <!--<h1 class="govuk-heading-xl">
       What type of premises is this?
-    </h1>
+    </h1>-->
     <form action="business-activity" method="POST">
-      {% block premiseSelect %}{% include "../application/modules/_premise-type.html" %}{% endblock %}
+      {{ govukCheckboxes({
+        idPrefix: "premise_type",
+        name: "premise_type",
+        fieldset: {
+          legend: {
+            text: "What's the primary premise type?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--xl"
+          }
+        },
+        hint: {
+          text: "Select all that apply."
+        },
+        items: [
+          {
+            value: "airport",
+            text: "Airport"
+          },
+          {
+            value: "allotment",
+            text: "Allotment"
+          },
+          {
+            value: "distribution_centre",
+            text: "Distribution centre"
+          }
+        ]
+      }) }}
       <input class="govuk-button" type="submit" name="saveAndContinue" value="Continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
     </form>
   </div>
