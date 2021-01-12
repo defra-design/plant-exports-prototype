@@ -63,12 +63,13 @@ GOV.UK Prototype Kit
           </a>
         </dd>
       </div>
+
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Type of application
         </dt>
         <dd class="govuk-summary-list__value">
-          Potato exports {{data.apptype or "field grown"}}
+          {{data.apptype or "Field grown"}}
         </dd>
         <dd class="govuk-summary-list__actions">
           <a class="govuk-link" href="exporter?change=yes">
@@ -77,6 +78,7 @@ GOV.UK Prototype Kit
           </a>
         </dd>
       </div>
+
 
     </dl>
 
@@ -99,26 +101,13 @@ GOV.UK Prototype Kit
       </div>
     </dl>-->
 
-    <!--Your fields and crops-->
-    {% if data.commodity == "bulbs" %}
-      <h2 class="govuk-heading-m">Your bulb stock numbers</h2>
-      {% for commodity in data.commodities %}
-        {% block summaryBulb %}{% include "../modules/_summary-bulb.html" %}{% endblock %}
-      {% endfor %}
-      <p class="govuk-body"><a href="commodity-page-bulbs" class="govuk-link">Add another bulb</a></p>
-    {%else%}
-
-      <h2 class="govuk-heading-m">Field and variety details</h2>
-
+    <!--Your fields and varieties-->
+    <h2 class="govuk-heading-m">Field and variety details</h2>
       <h3 class="govuk-heading-s">Field {{loop.index or "1"}}</h3>
       <table class="govuk-table govuk-!-margin-bottom-4 govuk-!-margin-bottom-4">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
-            {% if data.addfielddetails == "w3w" %}
-            <th class="govuk-table__header" scope="col">
-              what3words address
-            </th>
-            {% elseif data.addfielddetails == "gridgps" %}
+            {% if data.addfielddetails == "gridgps" %}
             <th class="govuk-table__header" scope="col">
               Grid reference or GPS reading
             </th>
@@ -142,10 +131,6 @@ GOV.UK Prototype Kit
             <td class="govuk-table__cell">
               {{data.iacs or "NF24681357"}}
             </td>
-            {% elseif data.addfielddetails == "w3w" %}
-            <td class="govuk-table__cell">
-              {{data.w3w or "horse.door.exit"}}
-            </td>
             {% else %}
             <td class="govuk-table__cell">
               {{data.gridgps or "NF 2468 1357"}}
@@ -168,8 +153,10 @@ GOV.UK Prototype Kit
           </tr>
           </tbody>
         </table>
+        <!--<p class="govuk-body govuk-!-margin-top-6"><a href="field-2?return_url=check-your-answers">Add another field</a></p>-->
 
-        <h3 class="govuk-heading-s govuk-!-margin-top-9">2 varieties added to Field {{loop.index or "1"}}</h3>
+        <h3 class="govuk-heading-s govuk-!-margin-top-9">1 variety added to Field {{loop.index or "1"}}</h3>
+        {% if data.commodity == "potatoes" %}
         <table class="govuk-table govuk-!-margin-bottom-4">
           <thead class="govuk-table__head">
             <tr class="govuk-table__row">
@@ -199,77 +186,34 @@ GOV.UK Prototype Kit
                 </a>
               </td>
             </tr>
-            <tr class="govuk-table__row">
-              <td class="govuk-table__cell">
-                {{data.variety or 'King Edwards'}}
-              </td>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                3.5
-              </td>
-              <td class="govuk-table__cell">
-                <a href="varieties" class="govuk-link govuk-link--no-visited-state">
-                  Change
-                </a><br>
-                <a href="#" class="govuk-link govuk-link--no-visited-state">
-                  Delete
-                </a>
-              </td>
-            </tr>
             </tbody>
           </table>
-          <p class="govuk-body govuk-!-margin-top-6"><a href="varieties-2?return_url=check-your-answers">Add another variety</a></p>
-
-          <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-
-          <h3 class="govuk-heading-s">Field {{loop.index or "2"}}</h3>
-          <table class="govuk-table govuk-!-margin-bottom-4 govuk-!-margin-bottom-4">
+          {% else %}
+          <table class="govuk-table govuk-!-margin-bottom-4">
             <thead class="govuk-table__head">
               <tr class="govuk-table__row">
-                {% if data.addfielddetails == "w3w" %}
                 <th class="govuk-table__header" scope="col">
-                  what3words address
+                  Area to be sampled
                 </th>
-                {% elseif data.addfielddetails == "gridgps" %}
+                <!--<th class="govuk-table__header" scope="col">
+                  Stock number
+                </th>
                 <th class="govuk-table__header" scope="col">
-                  Grid reference or GPS reading
+                  Variety
                 </th>
-                {% else %}
-                <th class="govuk-table__header" scope="col">
-                  IACS/RLR number
-                </th>
-                {% endif %}
                 <th class="govuk-table__header govuk-table__header--numeric" scope="col">
-                  Area of whole field in hectares
-                </th>
-                <th class="govuk-table__header" scope="col">
-                  Field map
-                </th>
+                  Weight (in Kilograms)
+                </th>-->
                 <th class="govuk-table__header" scope="col"></th>
               </tr>
             </thead>
             <tbody class="govuk-table__body">
               <tr class="govuk-table__row">
-                {% if data.addfielddetails == "iacs" %}
                 <td class="govuk-table__cell">
-                  {{data.iacs or "NF24681358"}}
-                </td>
-                {% elseif data.addfielddetails == "w3w" %}
-                <td class="govuk-table__cell">
-                  {{data.w3w or "barn.gander.closet"}}
-                </td>
-                {% else %}
-                <td class="govuk-table__cell">
-                  {{data.gridgps or "NF 2468 1358"}}
-                </td>
-                {% endif %}
-                <td class="govuk-table__cell govuk-table__cell--numeric">
-                  {{ data.areaoffield or "8" }}
-                </td>
-                <td class="govuk-table__cell govuk-table__cell">
-                  <a class="govuk-link govuk-link--no-visited-state" href="#">{{ data.description or "Filename-2.jpg" }}</a>
+                  2 hectares
                 </td>
                 <td class="govuk-table__cell">
-                  <a href="field" class="govuk-link govuk-link--no-visited-state">
+                  <a href="varieties" class="govuk-link govuk-link--no-visited-state">
                     Change
                   </a><br>
                   <a href="#" class="govuk-link govuk-link--no-visited-state">
@@ -277,53 +221,33 @@ GOV.UK Prototype Kit
                   </a>
                 </td>
               </tr>
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">
+                  3.5 hectares
+                </td>
+                <td class="govuk-table__cell">
+                  <a href="varieties-2" class="govuk-link govuk-link--no-visited-state">
+                    Change
+                  </a><br>
+                  <a href="#" class="govuk-link govuk-link--no-visited-state">
+                    Delete
+                  </a>
+                </td>
+              </tr>              
               </tbody>
             </table>
+          {% endif %}
 
-            <h3 class="govuk-heading-s govuk-!-margin-top-9">1 variety added to Field {{loop.index or "2"}}</h3>
-            <table class="govuk-table govuk-!-margin-bottom-4">
-              <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
-                  <th class="govuk-table__header" scope="col">
-                    Variety
-                  </th>
-                  <th class="govuk-table__header govuk-table__header--numeric" scope="col">
-                    Area to be sampled in hectares
-                  </th>
-                  <th class="govuk-table__header" scope="col"></th>
-                </tr>
-              </thead>
-              <tbody class="govuk-table__body">
-                <tr class="govuk-table__row">
-                  <td class="govuk-table__cell">
-                    {{data.variety or 'King Edwards'}}
-                  </td>
-                  <td class="govuk-table__cell govuk-table__cell--numeric">
-                    5.5
-                  </td>
-                  <td class="govuk-table__cell">
-                    <a href="varieties" class="govuk-link govuk-link--no-visited-state">
-                      Change
-                    </a><br>
-                    <a href="#" class="govuk-link govuk-link--no-visited-state">
-                      Delete
-                    </a>
-                  </td>
-                </tr>
-                </tbody>
-              </table>
-              <p class="govuk-body govuk-!-margin-top-6 govuk-!-margin-bottom-9"><a href="varieties-2?return_url=check-your-answers">Add another variety</a></p>
-
-
-              <p class="govuk-body"><a href="field-2?return_url=check-your-answers">Add another field</a></p>
+          <p class="govuk-body govuk-!-margin-bottom-9"><a href="varieties-2?return_url=check-your-answers">Add another variety</a></p>
+          <p class="govuk-body"><a href="field-2?return_url=check-your-answers">Add another field</a></p>
 
       {% for commodity in data.commodities %}
       {% block summaryGeneral %}{% include "../modules/_summary-general.html" %}{% endblock %}
       {% endfor %}
 
-    {%endif%}
+
   </div>
-    <div class="govuk-grid-column-three-quarters govuk-!-margin-top-6">
+    <div class="govuk-grid-column-three-quarters govuk-!-margin-top-9">
       <p class="govuk-body">By submitting this application form, you are agreeing that to the best of your knowledge and belief the statements made in this document are true and complete.</p>
       <p class="govuk-body govuk-!-margin-top-6">
         <a href="../submit/confirmation" class="govuk-button">Submit</a>

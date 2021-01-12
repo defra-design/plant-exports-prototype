@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-Field details - GOV UK
+Field details - {{serviceName}} - GOV UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -20,32 +20,6 @@ Field details - GOV UK
 
           {% set commodity = data.commodity or "products" %}
 
-          <!--{% if data.commodity == "bulbs" %}
-
-          {% set url = "commodity-page-bulbs" %}
-
-          {% elseif data.commodity == "plant products" %}
-
-          {% set url = "how-to-identify" %}
-
-          {% set commodity = "products" %}
-
-          {% elseif data.commodity == "potatoes" %}
-
-          {% set url = "commodity-page" %}
-
-          {% elseif data.commodity == "farm machinery" %}
-
-          {% set url = "commodity-page-machinery" %}
-
-          {% set commodity = "farm machines" %}
-
-          {% else %}
-
-          {% set url = "how-to-identify" %}
-
-          {% endif %}-->
-
           {% set iacsHtml %}
           {{ govukInput({
             id: "iacs",
@@ -57,20 +31,6 @@ Field details - GOV UK
               text: "Enter the 10 character IACS or RLR number eg NF 1234 1234"
             }
           }) }}
-          <!--{{ govukInput({
-            id: "iacs-number-2",
-            name: "iacs-number-2",
-            type: "text",
-            spellcheck: false,
-            classes: "govuk-input--width-4"
-          }) }}
-          {{ govukInput({
-            id: "iacs-number-3",
-            name: "iacs-number-3",
-            type: "text",
-            spellcheck: false,
-            classes: "govuk-input--width-4"
-          }) }}-->
           {% endset -%}
 
           {% set gridHtml %}
@@ -82,18 +42,6 @@ Field details - GOV UK
             classes: "govuk-!-width-one-third",
             label: {
               text: "Enter the Grid reference or GPS reading"
-            }
-          }) }}
-          {% endset -%}
-          {% set what3wordsHtml %}
-          {{ govukInput({
-            id: "w3w",
-            name: "navigation",
-            type: "text",
-            spellcheck: false,
-            classes: "govuk-!-width-one-half",
-            label: {
-              text: "Enter the what3words address"
             }
           }) }}
           {% endset -%}
@@ -122,40 +70,36 @@ Field details - GOV UK
                 conditional: {
                   html: iacsHtml
                 }
-              },
-                {
-                  value: "w3w",
-                  text: "what3words",
-                  conditional: {
-                    html: what3wordsHtml
-                  }
               }
             ]
           }) }}
 
+          {% if datacommodity != "potatoes" and data.commodity != "bulbs" %}
           {{ govukInput({
             label: {
-              text: "Nursery plot number or Field name",
+              text: "Where will the sample be taken from?",
               classes: "govuk-label--s",
               isPageHeading: false
             },
-            id: "nurseryplotno",
-            name: "nurseryplotno",
+            hint: {
+              text: "For example, plot 1, loam 2 or bay 3"
+            },
+            id: "sample_location",
+            name: "sample_location",
             classes: "govuk-input--width-20"
           }) }}
+          {% endif %}
 
           {{ govukInput({
             label: {
-              text: "Area of whole field in hectares",
+              text: "Area of field in hectares",
               classes: "govuk-label--s",
               isPageHeading: false
             },
             id: "areaoffield",
             name: "areaoffield",
-            classes: "govuk-input--width-4"
+            classes: "govuk-input--width-10"
           }) }}
-
-
 
           <div class="govuk-grid-row">
 
@@ -228,52 +172,7 @@ Field details - GOV UK
                   </div>
                 </fieldset>
 
-
-          <!--<div class="govuk-form-group">
-            <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
-              <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
-                <h1 class="govuk-fieldset__heading">
-                  How do you want to add your field details?
-                </h1>
-              </legend>
-              <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
-                <div class="govuk-radios__item">
-                  <input class="govuk-radios__input" id="how-contacted-conditional" name="how-contacted" type="radio" value="iacs~{{url}}" data-aria-controls="conditional-how-contacted-conditional">
-                  <label class="govuk-label govuk-radios__label" for="one-at-a-time">
-                    IACS
-                  </label>
-                </div>
-                <div class="govuk-radios__item">
-                  <input class="govuk-radios__input" id="how-contacted-conditional" name="how-contacted" type="radio" value="grid-ref?{{url}}" data-aria-controls="conditional-how-contacted-conditional">
-                  <label class="govuk-label govuk-radios__label" for="upload-a-file">
-                    Grid reference
-                  </label>
-                </div>
-                <div class="govuk-radios__item">
-                  <input class="govuk-radios__input" id="how-contacted-conditional" name="how-contacted" type="radio" value="what3words~{{url}}" data-aria-controls="conditional-how-contacted-conditional">
-                  <label class="govuk-label govuk-radios__label" for="one-at-a-time">
-                    Parish
-                  </label>
-                </div>
-                <div class="govuk-radios__item">
-                  <input class="govuk-radios__input" id="how-contacted-conditional" name="how-contacted" type="radio" value="desc?{{url}}" data-aria-controls="conditional-how-contacted-conditional">
-                  <label class="govuk-label govuk-radios__label" for="upload-a-file">
-                    Description
-                  </label>
-                </div>
-              </div>
-            </fieldset>
-          </div>-->
-
-          {% if data.commodity == "bulbs" %}
-
-            {%if data.commodities and ( data.commodities | length ) > 0 %}
-            {% set url = "soil-commodity-list-2" %}
-            {% else %}
-            {% set url = "commodity-page-bulbs" %}
-            {% endif %}
-
-          {% elseif data.commodity == "seeds" %}
+          {% if data.commodity == "seeds" %}
 
             {%if data.commodities and ( data.commodities | length ) > 0 %}
             {% set url = "soil-commodity-list-2" %}
@@ -281,19 +180,19 @@ Field details - GOV UK
             {% set url = "commodity-page" %}
             {% endif %}
 
-          {% set url = "commodity-page" %}
-
           {% else %}
 
+            {%if data.commodities and ( data.commodities | length ) > 0 %}
+            {% set url = "soil-commodity-list-2" %}
+            {% else %}
             {% set url = "varieties-2" %}
+            {% endif %}
 
           {% endif %}
 
           <p class="govuk-body govuk-!-margin-top-4">
             <a href="{{url}}" class="govuk-button">Save and continue</a>
           </p>
-
-          <!--href: "task-list?field=1"-->
 
         </form>
       </div>

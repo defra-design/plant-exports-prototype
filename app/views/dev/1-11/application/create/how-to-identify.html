@@ -41,9 +41,9 @@ GOV.UK Prototype Kit
         <p id="passport-number-hint" class="govuk-body">
           This will appear on the certificate. If possible, use the botanical name.
         </p>-->
-        <label class="govuk-label govuk-!-margin-top-6 govuk-!-margin-bottom-4" for="how-contacted-conditional">
+        <p class="govuk-body govuk-!-margin-top-6" for="how-contacted-conditional">
           How do you want to describe your {{data.commodity}}?
-        </label>
+        </p>
 
         <div class="govuk-form-group">
           <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
@@ -75,7 +75,6 @@ GOV.UK Prototype Kit
                 </div>
               {% endif %}
 
-
               <!-- This will only show if there is no javascript loaded -->
               <div id="commodity-botanical_name">
                 <div class="govuk-form-group">
@@ -98,14 +97,12 @@ GOV.UK Prototype Kit
                   </div> -->
               </div>
               {% if data.show_manual_input == "yes"%}
-
               <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display:none">The botanical name needs to be spelled correctly, if you are not sure <a href="?show_manual_input=no&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">search for a botanical name</a></p>
-
               {% else %}
               <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display:none">If you cannot find your {{data.commodity or "plant"}}, but you know the botanical name, <a href="?show_manual_input=yes&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">enter the botanical name manually</a></p>
               {% endif %}
 
-              {% if data.commodity == "plants" or data.commodity == "seeds" %}
+              {% if data.commodity == "plants" or data.commodity == "seeds" or data.commodity == "bulbs" %}
               <div class="govuk-form-group">
                 <label class="govuk-label" for="commodity_variety">
                   Variety (optional)
@@ -152,6 +149,23 @@ GOV.UK Prototype Kit
             </div>
           </div>
         </div>
+
+        {% if data.commodity == "bulbs" and data.countrySelect[0] == "United States" %}
+        <div class="govuk-form-group govuk-!-margin-top-6">
+          <label class="govuk-label" for="stock_number">
+            Stock number
+          </label>
+          <span id="quantity-hint" class="govuk-hint"></span>
+          <input class="govuk-input govuk-!-width-one-half" id="stock_number" name="stock_number" type="text" spellcheck="false">
+        </div>
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="lot_no">
+            Lot number
+          </label>
+          <span id="quantity-hint" class="govuk-hint"></span>
+          <input class="govuk-input govuk-!-width-one-half" id="lot_no" name="lot_no" type="text" spellcheck="false">
+        </div>
+        {% endif %}
 
       <!--<fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
@@ -214,7 +228,7 @@ GOV.UK Prototype Kit
       </div>
       {% endif %}
     <!--</fieldset>-->
-    {% if data.commodity == "seeds" %}
+    {% if data.commodity == "seeds" or data.commodity == "plants" or data.commodity =="bulbs" %}
     <div class="govuk-form-group govuk-!-margin-top-4">
       <label class="govuk-label" for="commodity_lot">
         Lot reference

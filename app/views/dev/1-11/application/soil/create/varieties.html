@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
- - GOV UK
+Soil sampling - {{serviceName}} - GOV UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -17,6 +17,7 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
         <form method="post" class="form">
+          {% if data.commodity == "potatoes" %}
           <h1 class="govuk-heading-xl">
             Variety details
           </h1>
@@ -29,7 +30,7 @@
             },
             id: "variety",
             name: "variety",
-            classes: "govuk-!-width-two-thirds"
+            classes: "govuk-input--width-10"
           }) }}
 
           {{ govukInput({
@@ -40,8 +41,21 @@
             },
             id: "areatosample",
             name: "areatosample",
-            classes: "govuk-input--width-4"
+            classes: "govuk-input--width-10"
           }) }}
+
+          {% else %}
+          {{ govukInput({
+            label: {
+              text: "Area to be sampled in hectares",
+              classes: "govuk-label--xl govuk-!-margin-bottom-6",
+              isPageHeading: true
+            },
+            id: "areatosample",
+            name: "areatosample",
+            classes: "govuk-input--width-10"
+          }) }}
+          {% endif %}
 
           {{ govukButton({
             classes: "govuk-!-margin-top-4",
