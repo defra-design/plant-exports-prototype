@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+GOV.UK Prototype Kit
+{% endblock %}
+{% block beforeContent%}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <form action="{{query.return_url or '../create/task-list'}}" method="POST">
+      <fieldset class="govuk-fieldset" aria-describedby="applicant-conditional-hint">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-6">
+          <h1 class="govuk-fieldset__heading">
+            Who will receive this consignment?
+          </h1>
+        </legend>
+        <p class="govuk-body">This is the consignee - the importer or customer who receives your consignment when it arrives in the importing country </p>
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="more-detail">
+            Name of the consignee
+          </label>
+          <input class="govuk-input" id="more-detail" name="consignee" type="text" aria-describedby="more-detail-hint">
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="more-detail">
+            Address of the consignee
+          </label>
+
+
+          <textarea class="govuk-textarea" id="more-detail" name="consignee_address" rows="5" aria-describedby="more-detail-hint"></textarea>
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="more-detail">
+            Further information (optional)
+          </label>
+          <span id="more-detail-hint" class="govuk-hint">
+            This will be added to your certificate on an extra page
+          </span>
+          <textarea class="govuk-textarea" id="more-detail" name="more_detail" rows="5" aria-describedby="more-detail-hint"></textarea>
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="import-permit">
+            Import permit number
+          </label>
+          <span class="govuk-hint">If you have been given an import permit by the destination country, enter the number here</span>
+          <input class="govuk-input" id="import-permit" name="import-permit" type="text" aria-describedby="more-detail-hint">
+        </div>
+
+      </fieldset>
+      <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+
+    </form>
+    {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+
+  </div>
+</div>
+
+{% endblock %}
