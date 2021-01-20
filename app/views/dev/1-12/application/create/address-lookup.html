@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Add a new inspection address - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock%}
+
+{% block content %}
+<div class="govuk-grid-row govuk-!-margin-bottom-6">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">Add a new inspection address</h1>
+    <p class="govuk-body">
+      You need to add the UK address where the inspector will check your consignment.
+    </p>
+    <form action="{{query.return_url or 'address-lookup-2'}}" method="POST">
+
+    {{ govukInput({
+      label: {
+        text: "Postcode",
+        classes: "govuk-label--m",
+        isPageHeading: true
+      },
+      id: "postcode",
+      name: "postcode",
+      classes: "govuk-input--width-10"
+    }) }}
+
+    {{ govukButton({
+      text: "Find address"
+    }) }}
+
+    </form>
+
+    <p class="govuk-body"><a href="#" class="govuk-link">Add an address manually</a></p>
+  </div>
+</div>
+
+{% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+{% endblock %}
