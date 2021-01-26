@@ -11,10 +11,14 @@ Your application - {{serviceName}} - GOV.UK
   <div class="govuk-grid-column-two-thirds">
     {% if data.reference_num %}<span class="govuk-caption-xl">{{data.reference_num}}</span>{% endif%}
     <h1 class="govuk-heading-xl">
-      Your application
+      Your {% if data.reforwarding == 1 %}re-forwarding{% endif %} application
     </h1>
     <!--<h2 class="govuk-heading-m govuk-!-margin-bottom-6" style="color:grey; font-weight:normal;">Such as tractors, combine harvesters</h2>-->
+    {% if data.reforwarding == 1 %}
+    <p class="govuk-body govuk-!-margin-bottom-7">Enter the details about your consignment to complete your application for certification of plant material for re-forwarding</p>
+    {% else %}
     <p class="govuk-body govuk-!-margin-bottom-7">Enter the details about your consignment to complete your application for a phytosanitary certificate</p>
+    {% endif %}
     <ol class="app-task-list">
       <li>
         <h2 class="app-task-list__section">
@@ -29,6 +33,20 @@ Your application - {{serviceName}} - GOV.UK
             </span>
             <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Completed</strong>
           </li>
+          {% if data.reforwarding == 1 %}
+          <li class="app-task-list__item">
+            <span class="app-task-list__task-name">
+              <a href="import-details?return_url=../create/task-list" aria-describedby="eligibility-status">
+                What are the import details?
+              </a>
+            </span>
+            {% if data.import-no != "" %}
+            <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Completed</strong>
+            {% else %}
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="list-convictions-status">Not started</strong>
+            {% endif %}
+          </li>
+          {% endif %}
           <li class="app-task-list__item">
             <span class="app-task-list__task-name">
               {% if data.commodity == "Used farm machinery" %}
