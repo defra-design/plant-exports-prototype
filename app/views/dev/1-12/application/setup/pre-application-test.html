@@ -41,12 +41,14 @@ GOV.UK Prototype Kit
                 Apply for certification of plant material for re-forwarding
               </label>
             </div>
+            {% if data.commodity != "grain" and data.commodity != "plant products" and data.commodity != "used farm machinery" %}
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="how-contacted-conditional-2" name="has_reference" type="radio" value="yes~{{query.return_url or '../gsi/create/reference'}}" data-aria-controls="conditional-how-contacted-conditional-2">
               <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-2">
                 Arrange a growing season inspection
               </label>
             </div>
+            {% endif %}
             {% if data.commodity == "seeds" %}
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="how-contacted-conditional-3" name="has_reference" type="radio" value="no~{{query.return_url or '../seeds/create/reference'}}" data-aria-controls="conditional-how-contacted-conditional-2">
@@ -61,7 +63,7 @@ GOV.UK Prototype Kit
                 Arrange soil sampling
               </label>
             </div>
-            {% else %}
+            {% elseif data.commodity != "grain" and data.commodity != "plant products" and data.commodity != "used farm machinery" %}
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="how-contacted-conditional-3" name="has_reference" type="radio" value="no~{{query.return_url or '../soil/create/reference'}}" data-aria-controls="conditional-how-contacted-conditional-3">
               <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-3">
