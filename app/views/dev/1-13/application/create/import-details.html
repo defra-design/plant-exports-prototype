@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+What are the import details? - {{serviceName}} - GOV UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-width-container">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
+        What are the import details of this consignment?
+      </h1>
+      <form method="post" action="{{query.return_url or '../create/reforwarding-details'}}">
+        {{ govukDateInput({
+          id: "date-landed",
+          namePrefix: "date-landed",
+          fieldset: {
+            legend: {
+              text: "When did the commodity land in the UK?",
+              isPageHeading: false,
+              classes: "govuk-fieldset__legend--s"
+            }
+          },
+          hint: {
+            text: "For example, 22 1 2021"
+          }
+        }) }}
+
+        {% set country_module_label = "Country of origin"%}
+        {% set module_name = "country_origin"%}
+        {% block country %}{% include "../modules/_country-select-bold.html" %}{% endblock %}
+
+        {{ govukInput({
+          label: {
+            text: "What's the Import phyto number?",
+            classes: "govuk-!-font-weight-bold"
+          },
+          hint: {
+            text: "You can upload certificates later in this application"
+          },
+          classes: "govuk-input--width-20",
+          id: "import_no",
+          name: "import_no"
+        }) }}
+
+        {{ govukInput({
+          label: {
+            text: "What's the vessel or flight number?",
+            classes: "govuk-!-font-weight-bold"
+          },
+          classes: "govuk-input--width-10",
+          id: "transport-no",
+          name: "transport-no"
+        }) }}
+
+        {{ govukButton({
+          classes: "govuk-!-margin-top-4",
+          text: "Continue"
+        }) }}
+      </form>
+    </div>
+  </div>
+  {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+</div>
+{% endblock %}
