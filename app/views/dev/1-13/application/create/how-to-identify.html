@@ -32,7 +32,7 @@ GOV.UK Prototype Kit
     <form method="post">
       <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-          Add {{data.commodity}} to your consignment
+          Add {% if data.pheats != 1 %}{{data.commodity}}{% endif %} to your consignment
         </legend>
 
         <!--<div class="govuk-inset-text">
@@ -179,7 +179,8 @@ GOV.UK Prototype Kit
         <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety" type="text">
       </div>
       {% endif %}-->
-      {% if data.commodity == "plants" %}
+
+      {% if data.commodity == "plants" and data.pheats != 1 %}
       {{ govukRadios({
         idPrefix: "commodity_type",
         name: "commodity_type",
@@ -193,7 +194,7 @@ GOV.UK Prototype Kit
           {
             value: "micropropagated material",
             text: "Micropropagated material"
-          },          
+          },
           {
             value: "plants",
             text: "Plants"
@@ -205,6 +206,7 @@ GOV.UK Prototype Kit
         ]
       }) }}
       {% endif %}
+
       {% if data.commodity == "plant products"%}
       {% set country_module_label = "Primary country of origin"%}
       {% else %}
@@ -225,6 +227,7 @@ GOV.UK Prototype Kit
       {% endif %}
     <!--</fieldset>-->
     {% if data.commodity == "seeds" or data.commodity == "plants" or data.commodity =="bulbs" %}
+      {% if data.pheats != 1 %}
     <div class="govuk-form-group govuk-!-margin-top-4">
       <label class="govuk-label" for="commodity_lot">
         Lot reference
@@ -234,6 +237,7 @@ GOV.UK Prototype Kit
       </span>
       <input class="govuk-input govuk-input--width-20" id="commodity_lot" name="commodity_lot" type="text">
     </div>
+        {% endif %}
     {% endif %}
 
     <div class="govuk-form-group">

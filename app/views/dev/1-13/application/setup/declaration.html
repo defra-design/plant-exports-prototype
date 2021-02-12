@@ -19,13 +19,21 @@ GOV.UK Prototype Kit
         {{data.countrySelect[0] or 'China'}}
       </li>
       {% if data.commodity == "plants" or data.commodity == "bulbs" or data.commodity == "potatoes" %}
-      <li>you need to arrange an inspection of your commodity, or the soil it was grown in{% endif %}
-      </li>
+        {% if data.pheats == 1 %}
+        <li>you need to inspect your commodity, or the soil it was grown in</li>
+        {% else %}
+        <li>you need to arrange an inspection of your commodity, or the soil it was grown in</li>
+        {% endif %}
+      {% endif %}
       <li>you need to describe your consignment using the botanical name (genus and species)
       </li>
     </ul>
     {% if data.commodity == "plant products" %}
-    <p class="govuk-body" lang="en">You’ll need to send a sample of your commodity for inspection before we can issue a phytosanitary certificate. You’ll see the address of where to send your sample at the end of this application.</p>
+      {% if data.pheats == 1 %}
+      <p class="govuk-body" lang="en">You’ll need to do something Pheats-specific around inspecting your commodity before we can issue a phytosanitary certificate. You’ll see the address of where to send your sample at the end of this application.</p>
+      {% else %}
+      <p class="govuk-body" lang="en">You’ll need to send a sample of your commodity for inspection before we can issue a phytosanitary certificate. You’ll see the address of where to send your sample at the end of this application.</p>
+      {% endif %}
     {% endif %}
     {% if data.commodity == "plants" or data.commodity == "bulbs" or data.commodity == "potatoes" or data.commodity == "seeds" %}
     <details class="govuk-details" data-module="govuk-details">

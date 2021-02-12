@@ -422,6 +422,7 @@ GOV.UK Prototype Kit
             </a>
           </dd>
         </div>-->
+        {% if data.pheats != 1 %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
             Contact name
@@ -479,21 +480,22 @@ GOV.UK Prototype Kit
           </dd>
         </div>
         {% if data.commodity == "potatoes" %}
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Time when your consignment will be ready for inspection
-          </dt>
-          <dd class="govuk-summary-list__value">
-              9:{{data.inpection_time_minute or "00"}}{{data.inspection_time_period or "am"}}
-          </dd>
-          <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="exporter?change=yes">
-              Change<span class="govuk-visually-hidden">
-                Certification region</span>
-            </a>
-          </dd>
-        </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Time when your consignment will be ready for inspection
+            </dt>
+            <dd class="govuk-summary-list__value">
+                9:{{data.inpection_time_minute or "00"}}{{data.inspection_time_period or "am"}}
+            </dd>
+            <dd class="govuk-summary-list__actions">
+              <a class="govuk-link" href="exporter?change=yes">
+                Change<span class="govuk-visually-hidden">
+                  Certification region</span>
+              </a>
+            </dd>
+          </div>
         {% endif %}
+      {% endif %}
       </dl>
       {% endif %}
 
@@ -675,7 +677,11 @@ GOV.UK Prototype Kit
       <p class="govuk-body"><a href="attachments?change=yes&return_url=check-your-answers" class="govuk-link">Add attachments</a></p>
       <dl>-->
         <p class="govuk-body govuk-!-margin-top-6">
-          <a href="../submit/submit-date" class="govuk-button">Continue</a>
+          {% if data.pheats == 1 %}
+            <a href="../submit/declaration" class="govuk-button">Continue</a>
+          {% else %}
+            <a href="../submit/submit-date" class="govuk-button">Continue</a>
+          {% endif %}
         </p>
   </div>
 </div>
