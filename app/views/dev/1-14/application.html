@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block pageTitle %}
-GOV.UK Prototype Kit
+Manage application - {{serviceName}} - GOV.UK
 {% endblock %}
 {% block beforeContent %}
 <a href="javascript:history.back()" class="govuk-back-link">Return to your applications</a>
@@ -60,28 +60,20 @@ GOV.UK Prototype Kit
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          APHA reference
+          Your reference
         </dt>
         <dd class="govuk-summary-list__value">
-          {{(query.id | appInfo('applicationID'))}}
+          {% if (query.id | appInfo('reference')) == ""%}<span class="govuk-hint">Not set</span>{%else%}{{query.id | appInfo('applicationID')}}{%endif%}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Your reference
+          Certificate
         </dt>
         <dd class="govuk-summary-list__value">
-          {% if (query.id | appInfo('reference')) == ""%}<span class="govuk-hint">Not set</span>{%else%}{{query.id | appInfo('reference')}}{%endif%}
+          Commodity (version 1)
         </dd>
       </div>
-      <!--<div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Commodity
-        </dt>
-        <dd class="govuk-summary-list__value">
-          {{query.id | appInfo('commodity_plants')}}
-        </dd>
-      </div>-->
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Destination
@@ -92,44 +84,16 @@ GOV.UK Prototype Kit
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Exporter
+          Customer
         </dt>
         <dd class="govuk-summary-list__value">
-          {% set exporter = query.id | appInfo('exporter')%}
-          {% if exporter %}
-          {{exporter}}
-          {% else %}
-          <span class="govuk-hint">Not entered</span>
-          {% endif%}
+          {{query.id | appInfo('consignee') or "Consignee name"}}
         </dd>
       </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key govuk-summary-list__40">
-          Loading date
-        </dt>
-        <dd class="govuk-summary-list__value govuk-summary-list__40">
-          6 Sep 2020
-        </dd>
-      </div>
-      <!--<div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Certifier
-        </dt>
-        <dd class="govuk-summary-list__value">
-          ABC Vets LTD
-        </dd>
-      </div>-->
-      <!-- <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key govuk-summary-list__40">
-            Proposed export date
-          </dt>
-          <dd class="govuk-summary-list__value govuk-summary-list__40">
-            02 Jan 2019
-          </dd>
-        </div> -->
     </dl>
 
     <ul class="govuk-list govuk-!-margin-top-6 govuk-!-margin-bottom-6 noprint">
+      <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-viewonly">View this application</a></li>
       {% if (query.id | appInfo('status')) == 'draft' %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="certificate/check-your-progress?certificate=ehc2849">Edit and submit this application</a></li>
       {% endif%}
