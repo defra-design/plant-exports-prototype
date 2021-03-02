@@ -1,0 +1,104 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+GOV.UK Prototype Kit
+{% endblock %}
+{% block beforeContent%}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <!--<h1 class="govuk-heading-xl">
+      Do you need to apply for a Growing Season Inspection (GSI)?
+    </h1>
+    <p class="govuk-body">
+      {{data.countrySelect[0]}} may need you to have an inspection carried out on the crop that the plants or seeds were taken from
+    </p>
+    <form action="{{query.return_url or '../create/task-list'}}" method="POST">-->
+    <form method="post" class="form">
+      <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+          <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">
+            What do you need to do?
+          </h1>
+        </legend>
+        <div id="countries-hint" class="govuk-hint govuk-!-margin-bottom-6">
+          Select what you need to export {{data.commodity or 'plant products'}}
+        </div>
+        <div class="govuk-form-group">
+          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              {% if data.pheats == 1 %}
+              <input class="govuk-radios__input" id="how-contacted-conditional-1" name="has_reference" type="radio" value="donotneed~{{query.return_url or 'pheats'}}" data-aria-controls="conditional-how-contacted-conditional-1">
+              {% else %}
+              <!--<input class="govuk-radios__input" id="how-contacted-conditional-1" name="has_reference" type="radio" value="donotneed~{{query.return_url or 'what-country'}}" data-aria-controls="conditional-how-contacted-conditional-1">-->
+              <input class="govuk-radios__input" id="how-contacted-conditional-1" name="has_reference" type="radio" value="donotneed~{{query.return_url or '../create/task-list'}}" data-aria-controls="conditional-how-contacted-conditional-1">
+              {% endif %}
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-1">
+                Apply for a phytosanitary certificate
+              </label>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="how-contacted-conditional-2" name="has_reference" type="radio" value="donotneed~{{query.return_url or 'what-country'}}?reforwarding=1" data-aria-controls="conditional-how-contacted-conditional-1">
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-2">
+                Apply for a re-forwarding certificate
+              </label>
+            </div>
+
+            {% if data.pheats != 1 %}
+
+              {% if data.commodity != "grain" and data.commodity != "plant products" and data.commodity != "used farm machinery" %}
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="how-contacted-conditional-3" name="has_reference" type="radio" value="yes~{{query.return_url or '../gsi/create/reference'}}" data-aria-controls="conditional-how-contacted-conditional-2">
+                <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-3">
+                  Arrange a growing season inspection
+                </label>
+              </div>
+              {% endif %}
+              {% if data.commodity == "seeds" %}
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="how-contacted-conditional-4" name="has_reference" type="radio" value="no~{{query.return_url or '../seeds/create/reference'}}" data-aria-controls="conditional-how-contacted-conditional-2">
+                <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-4">
+                  Arrange seed sampling
+                </label>
+              </div>
+              {% elseif data.commodity == "potatoes" %}
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="how-contacted-conditional-5" name="has_reference" type="radio" value="no~{{query.return_url or '../soil/setup/potato-type'}}" data-aria-controls="conditional-how-contacted-conditional-3">
+                <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-5">
+                  Arrange soil sampling
+                </label>
+              </div>
+              {% elseif data.commodity != "grain" and data.commodity != "plant products" and data.commodity != "used farm machinery" %}
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="how-contacted-conditional-6" name="has_reference" type="radio" value="no~{{query.return_url or '../soil/create/reference'}}" data-aria-controls="conditional-how-contacted-conditional-3">
+                <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-6">
+                  Arrange soil sampling
+                </label>
+              </div>
+              {% endif %}
+              {% if data.commodity == "bulbs" %}
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="how-contacted-conditional-7" name="has_reference" type="radio" value="dry-bulb~{{query.return_url or '../dry-bulb/create/reference'}}" data-aria-controls="conditional-how-contacted-conditional-1">
+                <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-7">
+                  Apply for a dry bulb inspection for exports to the United States
+                </label>
+              </div>
+              {% endif %}
+
+            {% endif %}
+          </div>
+        </div>
+      </fieldset>
+
+      <div class="govuk-form-group">
+        <input class="govuk-button" type="submit" name="saveAndContinue" value="Continue" id="Button-saveAndContinue" data-qa-id="Button-saveAndContinue"> <a class="govuk-link app-button--link govuk-!-margin-left-2" href="../../dashboard">
+          Cancel </a>
+      </div>
+    </form>
+
+  </div>
+</div>
+{% endblock %}
