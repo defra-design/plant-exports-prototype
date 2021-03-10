@@ -52,21 +52,25 @@ GOV.UK Prototype Kit
           {{query.id | appInfo('destination')}}
         </dd>
       </div>
-      <div class="govuk-summary-list__row">
+      <!--<div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Exporter
         </dt>
         <dd class="govuk-summary-list__value">
           {{query.id | appInfo('exporter')}}
         </dd>
-      </div>
+      </div>-->
     </dl>
     <form method="post" novalidate>
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">
           <div class="govuk-radios" data-module="govuk-radios">
-            <div class="govuk-radios__item">
+            <div class="govuk-radios__item">              
+              {% if (query.id | appInfo('reference')) != "" %}
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~reuse-ref">
+              {% else %}
               <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/create/check-your-answers-copy">
+              {% endif %}
               <label class="govuk-label govuk-radios__label" for="application_type_clone">
                 Yes, copy this application
               </label>
