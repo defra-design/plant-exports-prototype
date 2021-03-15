@@ -19,47 +19,64 @@ What are the import details? - {{serviceName}} - GOV UK
       <h1 class="govuk-heading-xl">
         What are the import details of this consignment?
       </h1>
-      <form method="post" action="{{query.return_url or '../create/reforwarding-details'}}">
-        {{ govukDateInput({
-          id: "date-landed",
-          namePrefix: "date-landed",
-          fieldset: {
-            legend: {
-              text: "When did the commodity arrive in the UK?",
-              isPageHeading: false,
-              classes: "govuk-fieldset__legend--s"
-            }
-          },
-          hint: {
-            text: "For example, 22 1 2021"
-          }
-        }) }}
-
-        {% set country_module_label = "Country of origin"%}
-        {% set module_name = "country_origin"%}
-        {% block country %}{% include "../modules/_country-select-bold.html" %}{% endblock %}
-
+      <form method="post" action="{{query.return_url or 'task-list'}}">
         {{ govukInput({
           label: {
-            text: "What was the vessel or flight number?",
+            text: "What's the Import notification number? (optional)",
             classes: "govuk-!-font-weight-bold"
-          },
-          classes: "govuk-input--width-10",
-          id: "transport-no",
-          name: "transport-no"
-        }) }}
-
-        {{ govukInput({
-          label: {
-            text: "What's the import phyto number?",
-            classes: "govuk-!-font-weight-bold"
-          },
-          hint: {
-            text: "You can upload import certificates later in this application"
           },
           classes: "govuk-input--width-20",
           id: "import_no",
           name: "import_no"
+        }) }}
+
+        {{ govukInput({
+          label: {
+            text: "Where has the consignment been kept in the UK?",
+            classes: "govuk-!-font-weight-bold"
+          },
+          classes: "govuk-input--width-20",
+          id: "where-kept",
+          name: "where-kept"
+        }) }}
+
+        {{ govukInput({
+          label: {
+            text: "How long has the consignment been kept there?",
+            classes: "govuk-!-font-weight-bold"
+          },
+          hint: {
+            text: "It must have been kept without deteriorating or any change in state, such as being grown."
+          },
+          classes: "govuk-input--width-20",
+          id: "how-long",
+          name: "how-long"
+        }) }}
+
+        {{ govukRadios({
+          idPrefix: "repacked",
+          name: "repacked",
+          fieldset: {
+            legend: {
+              text: "If the consignment was repacked, what type of container did you use?",
+              isPageHeading: false,
+              classes: "govuk-fieldset__legend--s"
+            }
+          },
+          items: [
+            {
+              value: "New packaging",
+              text: "New packaging"
+            },
+            {
+              value: "Original packaging",
+              text: "Original packaging"
+            },
+            {
+              value: "The consignment has not been repacked",
+              text: "The consignment has not been repacked"
+            }
+          ]
         }) }}
 
         {{ govukButton({

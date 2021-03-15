@@ -7,7 +7,7 @@ GOV.UK Prototype Kit
       <div class="govuk-grid-column-three-quarters">
         <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-6">
           <h1 class="govuk-panel__title">
-            You have successfully submitted your application
+            You have successfully submitted your application {% if data.reforwarding %}for a re-forwarding certificate{% endif %}
           </h1>
 
           <div class="govuk-panel__body">
@@ -20,11 +20,15 @@ GOV.UK Prototype Kit
         <p class="govuk-body">
         </p>
         <ol class="govuk-list govuk-list--number">
-          <li>We will check and process your application.</li>
+          <li>We will check and process your application{% if data.reforwarding %} and decide if an inspection is necessary{% endif %}.</li>
           {% if data.pheats != 1 %}
-          <li>We will arrange an inspection of your consignment within 7 working days.</li>
+            {% if data.reforwarding %}
+              <li>If an inspection is necessary, we will arrange it within 7 working days.</li>
+            {% else %}
+              <li>We will arrange an inspection of your consignment within 7 working days.</li>
+            {% endif %}
           {% endif %}
-          <li>If there are no problems, we will issue your certificate.</li>
+          <li>If there are no problems, we will issue your {% if data.reforwarding %}re-forwarding{% endif %} certificate.</li>
           {% if data.pheats == 1 %}
           <li>We will then send you an invoice for your application.</li>
           {% else %}
