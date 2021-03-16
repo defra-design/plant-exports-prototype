@@ -1,0 +1,113 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+GOV.UK Prototype Kit
+{% endblock %}
+{% block beforeContent%}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
+        When do you need the <br>{% if data.reforwarding %}re-forwarding{% endif %} certificate?
+      </h1>
+      {% if data.commodity != "grain" %}
+      <p class="govuk-body">This might be the date you are loading your consignment, or the date it will be dispatched.</p>
+      {% endif %}
+      {% if data.commodity == "grain" %}
+      <p class="govuk-body">Enter a date before your consignment is due to arrive at the destination country.</p>
+      {% endif %}
+
+
+      <!--<form  action="{{query.return_url or '../submit/declaration'}}" method="POST">-->
+      <form  action="{{query.return_url or 'declaration'}}" method="POST">
+
+        <fieldset class="govuk-fieldset" aria-describedby="applicant-conditional-hint">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+            <h1 class="govuk-fieldset__heading">
+              Date needed
+            </h1>
+          </legend>
+           <span id="submit-date-hint" class="govuk-hint">
+             For example, 27 11 2020
+           </span>
+           <div class="govuk-date-input" id="submit-date">
+         <div class="govuk-date-input__item">
+           <div class="govuk-form-group">
+             <label class="govuk-label govuk-date-input__label" for="submit-date-day">
+               Day
+             </label>
+             <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="submit-date-day" name="submit_date_day" type="text" pattern="[0-9]*" inputmode="numeric">
+           </div>
+         </div>
+         <div class="govuk-date-input__item">
+           <div class="govuk-form-group">
+             <label class="govuk-label govuk-date-input__label" for="submit-date-month">
+               Month
+             </label>
+             <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="submit-date-month" name="submit-date-month" type="text" pattern="[0-9]*" inputmode="numeric">
+           </div>
+         </div>
+         <div class="govuk-date-input__item">
+           <div class="govuk-form-group">
+             <label class="govuk-label govuk-date-input__label" for="submit-date-year">
+               Year
+             </label>
+             <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="submit-date-year" name="submit-date-year" type="text" pattern="[0-9]*" inputmode="numeric">
+           </div>
+         </div>
+       </div>
+        </fieldset>
+        {% if data.commodity == "potatoes" or data.pheats == 1 %}
+        <fieldset class="govuk-fieldset" aria-describedby="applicant-conditional-hint">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+            <h1 class="govuk-fieldset__heading">
+              Expected time of load collection
+            </h1>
+          </legend>
+          <span id="submit-date-hint" class="govuk-hint">
+            For example, 9:30am or 2:50pm
+          </span>
+          <div class="govuk-date-input" id="submit-date">
+            <div class="govuk-date-input__item">
+              <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" for="submit-date-day">
+                  Hour
+                </label>
+                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="submit-date-day" name="export_time_hour" type="text" pattern="[0-9]*" inputmode="numeric">
+              </div>
+            </div>
+
+            <div class="govuk-date-input__item">
+              <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" for="submit-date-month">
+                  Minute
+                </label>
+                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="submit-date-month" name="export_time_minute" type="text" pattern="[0-9]*" inputmode="numeric">
+              </div>
+            </div>
+            <div class="govuk-date-input__item">
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="sort">
+                  am or pm
+                </label>
+                <select class="govuk-select govuk-input--width-" id="sort" name="export_time_period">
+                  <option value="empty"></option>
+                  <option value="am">am</option>
+                  <option value="pm">pm</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+        {% endif %}
+        <div class="govuk-form-group">
+          <input class="govuk-button" type="submit" name="saveAndContinue" value="Continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+        </div>
+      </form>
+
+    </div>
+  </div>
+{% endblock %}
