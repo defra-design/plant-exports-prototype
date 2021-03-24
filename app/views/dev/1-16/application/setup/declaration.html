@@ -12,64 +12,67 @@ GOV.UK Prototype Kit
     <div>
       <h1 class="govuk-heading-xl">Regulations for {%if data.reforwarding == 1%}re-{%endif%}exporting {{data.commodity or 'plant products'}} to {{data.countrySelect[0] or 'China'}}</h1>
     </div>
-    <p class="govuk-body" lang="en">Before you start this application, check if:</p>
-    <ul class="govuk-list govuk-list--bullet">
-
-      <li>the <a href="https://www.ippc.int/en/countries/all/list-countries/">competent authority in {{data.countrySelect[0] or 'China'}}</a> (the equivalent of Defra) needs you to have a phytosanitary certificate to export {{data.commodity or 'plant products'}} to
-        {{data.countrySelect[0] or 'China'}}
-      </li>
-      {% if data.commodity == "plants" or data.commodity == "bulbs" or data.commodity == "potatoes" %}
+    {% if data.reforwarding %}
+      <p class="govuk-body" lang="en">Before you start this application, check if the <a href="https://www.ippc.int/en/countries/all/list-countries/">competent authority in {{data.countrySelect[0] or 'China'}}</a> (the equivalent of Defra):</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>needs you to have a phytosanitary certificate to export {{data.commodity or 'plant products'}} to {{data.countrySelect[0] or 'China'}}</li>
+        <li>allows you to re-export this commodity</li>
+      </ul>
+      <p class="govuk-body" lang="en">You should also check if you need to describe your consignment using the botanical name (genus and species)</p>
+    {% else %}
+      <p class="govuk-body" lang="en">Before you start this application, check if:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>the <a href="https://www.ippc.int/en/countries/all/list-countries/">competent authority in {{data.countrySelect[0] or 'China'}}</a> (the equivalent of Defra) needs you to have a phytosanitary certificate to export {{data.commodity or 'plant products'}} to
+          {{data.countrySelect[0] or 'China'}}
+        </li>
+        {% if data.commodity == "plants" or data.commodity == "bulbs" or data.commodity == "potatoes" %}
+          {% if data.pheats == 1 %}
+          <li>you need to inspect your commodity, or the soil it was grown in</li>
+          {% else %}
+          <li>you need to arrange an inspection of your commodity, or the soil it was grown in</li>
+          {% endif %}
+        {% endif %}
+        <li>you need to describe your consignment using the botanical name (genus and species)
+        </li>
+      </ul>
+      {% if data.commodity == "plant products" %}
         {% if data.pheats == 1 %}
-        <li>you need to inspect your commodity, or the soil it was grown in</li>
-        {% elseif data.reforwarding == 1%}
-        <li>the <a href="https://www.ippc.int/en/countries/all/list-countries/">competent authority in {{data.countrySelect[0] or 'China'}}</a> (the equivalent of Defra) allows you to re-export this commodity</li>
+        <p class="govuk-body" lang="en">You'll need to do your own phytosanitary inspection. You'll be told where to send any samples at the end of this application.</p>
         {% else %}
-        <li>you need to arrange an inspection of your commodity, or the soil it was grown in</li>
+        <p class="govuk-body" lang="en">You’ll need to send a sample of your commodity for inspection before we can issue a phytosanitary certificate. You’ll see the address of where to send your sample at the end of this application.</p>
         {% endif %}
       {% endif %}
-      <li>you need to describe your consignment using the botanical name (genus and species)
-      </li>
-    </ul>
-    {% if data.commodity == "plant products" %}
-      {% if data.pheats == 1 %}
-      <p class="govuk-body" lang="en">You'll need to do your own phytosanitary inspection. You'll be told where to send any samples at the end of this application.</p>
-      {% else %}
-      <p class="govuk-body" lang="en">You’ll need to send a sample of your commodity for inspection before we can issue a phytosanitary certificate. You’ll see the address of where to send your sample at the end of this application.</p>
-      {% endif %}
-    {% endif %}
-    {% if data.commodity == "plants" or data.commodity == "bulbs" or data.commodity == "potatoes" or data.commodity == "seeds" %}
-      {% if data.reforwarding %}
-      <p class="govuk-body">The inspector may still decide your consignment needs a further inspection.</p>
-      {% endif %}
-    <details class="govuk-details" data-module="govuk-details">
-      <summary class="govuk-details__summary">
-        <span class="govuk-details__summary-text">
-          Inspections you might need
-        </span>
-      </summary>
-      <div class="govuk-details__text">
-        <ul class="govuk-list govuk-list--bullet">
+      {% if data.commodity == "plants" or data.commodity == "bulbs" or data.commodity == "potatoes" or data.commodity == "seeds" %}
+      <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+          <span class="govuk-details__summary-text">
+            Inspections you might need
+          </span>
+        </summary>
+        <div class="govuk-details__text">
+          <ul class="govuk-list govuk-list--bullet">
 
-          <li>
-            a growing season inspection (GSI) on the crop that the plants or seeds were taken from
-          </li>
-          {% if data.commodity != "seeds" %}
-          <li>
-            soil sampling of the soil your plants are growing in or will grow in
-          </li>
-          {% else %}
-          <li>
-            sampling of your seeds
-          </li>
-          {% endif %}
-          {% if data.commodity == "bulbs" and data.countrySelect[0] == "United States" %}
-          <li>
-            a dry bulb inspection
-          </li>
-          {% endif %}
-        </ul>
-      </div>
-    </details>
+            <li>
+              a growing season inspection (GSI) on the crop that the plants or seeds were taken from
+            </li>
+            {% if data.commodity != "seeds" %}
+            <li>
+              soil sampling of the soil your plants are growing in or will grow in
+            </li>
+            {% else %}
+            <li>
+              sampling of your seeds
+            </li>
+            {% endif %}
+            {% if data.commodity == "bulbs" and data.countrySelect[0] == "United States" %}
+            <li>
+              a dry bulb inspection
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </details>
+      {% endif %}
     {% endif %}
     <p class="govuk-body">Date of declaration: <span data-qa-id="TextDisplay-DateOfDeclaration">15 March 2021</span></p>
     <form class="review-form" action="../setup/reference" method="POST">
