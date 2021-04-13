@@ -1,0 +1,104 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+What are the import details of this consignment? - {{serviceName}} - GOV UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-width-container">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
+        What are the import details of this consignment?
+      </h1>
+      <!--<form method="post" action="{{query.return_url or 'task-list'}}">-->
+      <form method="post" action="{{query.return_url or 'import-phyto-upload'}}">
+        {{ govukInput({
+          label: {
+            text: "Import phytosanitary certificate number",
+            classes: "govuk-!-font-weight-bold"
+          },
+          hint: {
+            text: "Enter the number of the import phytosanitary certificate.  You will upload the import phytosanitary certificate later."
+          },
+          classes: "govuk-input--width-20",
+          id: "import_no",
+          name: "import_no"
+        }) }}
+
+        <br>
+        {% set country_module_label = "Country of origin"%}
+        {% set module_name = "country_origin"%}
+        {% block country %}{% include "../modules/_country-select-bold.html" %}{% endblock %}
+        <br>
+
+        <!--{{ govukInput({
+          label: {
+            text: "Where has the consignment been kept in the UK?",
+            classes: "govuk-!-font-weight-bold"
+          },
+          classes: "govuk-input--width-20",
+          id: "where-kept",
+          name: "where-kept"
+        }) }}
+
+        {{ govukInput({
+          label: {
+            text: "How long has the consignment been kept there?",
+            classes: "govuk-!-font-weight-bold"
+          },
+          hint: {
+            text: "It must have been kept without deteriorating or any change in state, such as being grown."
+          },
+          classes: "govuk-input--width-20",
+          id: "how-long",
+          name: "how-long"
+        }) }}-->
+
+        {{ govukRadios({
+          idPrefix: "repacked",
+          name: "repacked",
+          fieldset: {
+            legend: {
+              text: "If the consignment was repacked, what type of packaging did you use?",
+              isPageHeading: false,
+              classes: "govuk-fieldset__legend--s"
+            }
+          },
+          items: [
+            {
+              value: "New packaging",
+              text: "New packaging"
+            },
+            {
+              value: "Original packaging",
+              text: "Original packaging"
+            },
+            {
+            divider: "or"
+            },
+            {
+              value: "The consignment has not been repacked",
+              text: "The consignment has not been repacked"
+            }
+          ]
+        }) }}
+
+        {{ govukButton({
+          classes: "govuk-!-margin-top-4",
+          text: "Save and continue"
+        }) }}
+      </form>
+    </div>
+  </div>
+  {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+</div>
+{% endblock %}

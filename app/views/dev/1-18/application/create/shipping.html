@@ -1,0 +1,98 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+GOV.UK Prototype Kit
+{% endblock %}
+{% block beforeContent%}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      How will this {% if data.reforwarding %}re-forwarding{% endif %} consignment be transported?
+    </h1>
+    <form action="{{query.return_url or '../create/task-list'}}" method="POST">
+      <fieldset class="govuk-fieldset" role="group">
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="consignment-value">
+            Value of your consignment <!--(optional)-->
+          </label>
+          <input class="govuk-input govuk-input--width-10" id="consignment-value" name="consignment_value" type="text" aria-describedby="passport-number-hint">
+        </div>
+
+        {% if data.commodity == "grain"%}
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="passport-number">
+            Port of export from the UK
+          </label>
+          <input class="govuk-input govuk-input--width-20" id="passport-number" name="port_export" type="text" aria-describedby="passport-number-hint">
+        </div>
+        {% endif %}
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="reference_num">Point of entry into the destination country</label>
+          <span id="waste-hint" class="govuk-hint">
+            Enter the port or airport where the consignment will arrive
+          </span>
+          <input class="govuk-input govuk-input--width-20" id="reference_num" name="port_entry" value="{% if query.change=='yes'%}{{ data.point_of_entry }}{%endif%}" type="text" data-qa-id="Question-7006EHC-1">
+        </div>
+
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend">
+              How will the consignment be transported?
+            </legend>
+            <div class="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="Air" name="transport_method" type="radio" value="Air">
+                <label class="govuk-label govuk-radios__label" for="Air">
+                  Air
+                </label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="Maritime" name="transport_method" type="radio" value="Maritime">
+                <label class="govuk-label govuk-radios__label" for="Maritime">
+                  Maritime
+                </label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="Rail" name="transport_method" type="radio" value="Rail">
+                <label class="govuk-label govuk-radios__label" for="Rail">
+                  Rail
+                </label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="Road" name="transport_method" type="radio" value="Road">
+                <label class="govuk-label govuk-radios__label" for="Road">
+                  Road
+                </label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <!--<div class="govuk-form-group">
+          <label class="govuk-label" for="transport_id">Transportation identification</label>
+          <span id="waste-hint" class="govuk-hint">
+            For example, ship name, flight number
+          </span>
+          <input class="govuk-input govuk-input-width-full" id="transport_id" name="transport_id" value="{% if query.change=='yes'%}{{ data.transport_id }}{%endif%}" type="text" data-qa-id="Question-7006EHC-1">
+        </div>-->
+
+        {% if data.commodity == "potatoes" %}
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="container_num">Container number</label>
+          <input class="govuk-input govuk-input--width-20" id="container_num" name="container_num" value="{% if query.change=='yes'%}{{ data.container_num }}{%endif%}" type="text" data-qa-id="Question-7006EHC-1">
+        </div>
+        {% endif %}
+
+      </fieldset>
+      <input class="govuk-button govuk-!-margin-top-6" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+    </form>
+  {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+  </div>
+</div>
+{% endblock %}
