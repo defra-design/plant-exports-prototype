@@ -18,6 +18,7 @@ Example usage:
 */
 var applications = require('./applications.json')
 var sample = require('./sample.json')
+
 module.exports = {
   "applications" : applications,
   "commodities" : [],
@@ -25,5 +26,4 @@ module.exports = {
   "sample": sample,
   "plants" : []
   // Insert values here
-
 }
