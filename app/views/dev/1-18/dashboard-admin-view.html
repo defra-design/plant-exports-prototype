@@ -4,14 +4,14 @@ GOV.UK Prototype Kit
 {% endblock %}
 {% block beforeContent %}
 {{super()}}
-<!-- <div class="login-nav login-border">
+<div class="login-nav login-border">
   <ul class="login-nav__list">
-    <li class="login-nav__list-item" id="Nav-DisplayName">Ann Cooper</li>
-    <li class="login-nav__list-item"> | <a href="https://identity-management-app.herokuapp.com/manage/team-members/services-on-team-member-admin-account_company-exports?serviceLine=Exporter%20Service&serviceRole=Exporter&numUsers=1&numAgents=0&numServices=1&multiOrg=no&parentChild=parent"
-        class="govuk-link login-nav__link govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a>|</li>
-    <li class="login-nav__list-item"><a href="#ß" class="govuk-link login-nav__link govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
+    <li class="login-nav__list-item" id="Nav-DisplayName">Prototype user</li>
+    <li class="login-nav__list-item"> | <a href="account" class="govuk-link login-nav__link govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a>|</li>
+    <li class="login-nav__list-item"><a href="#" class="govuk-link login-nav__link govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
   </ul>
-</div> -->
+</div>
+<hr class="govuk-section-break govuk-section-break--s govuk-section-break--visible">
 {% endblock%}
 {% block content %}
 <style>
@@ -114,7 +114,7 @@ GOV.UK Prototype Kit
     <form method="GET">
       <div class="search-wrapper govuk-form-group">
         <label for="search-reservations" class="govuk-label">
-          Search your applications
+          Search by application ID, destination, submission date or reference number
         </label>
         <div class="search-input-wrapper">
           <input type="search" value="{{query.search or ''}}" id="search-reservations" name="search" title="Search" class="govuk-input">
@@ -415,10 +415,10 @@ GOV.UK Prototype Kit
 
     <div class="filter-tag--wrapper govuk-!-margin-bottom-6" data-module="track-click">
       <p class="govuk-body govuk-!-margin-bottom-2">
-        <span id="js-case-count"></span> application {% if data.show_applications_by == "everyone" %}created by <strong>{% if data.filter_name == logged_in_as %}you{% else %}{{data.filter_name}}{% endif %} {% endif %}</strong>{% if
+        Showing <span id="js-case-count"></span> application {% if data.show_applications_by == "everyone" %}created by <strong>{% if data.filter_name == logged_in_as %}you{% else %}{{data.filter_name}}{% endif %} {% endif %}</strong>{% if
         query.search %} matching <strong>‘{{query.search}}’</strong>{% endif %}
         {% if data.has_filter == "yes" and data.filter_status != 'any'%}
-        with status <strong>{{data.filter_status | capitalize}}</strong>
+        with status <strong>{{data.filter_status | capitalize}}</strong> (includes agency applications)
         {% endif %}
         {% if data.date_range and data.date_range != "any"%} exporting {% if data.date_range == "custom" %}from <strong>2 Jan 2020 </strong> to <strong>30 Jan 2020 </strong> {% else %}<strong>{{data.date_range}}</strong>{% endif %}{% endif %}
         <!-- {% if data.date_range and data.date_range != "any"%} exporting within <strong>{{data.date_range}}</strong>{% endif %} -->
