@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Soil sampling - {{serviceName}} - GOV UK
+{% endblock %}
+
+{% block beforeContent %}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-width-container">
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <form method="post" class="form">
+          {% if data.commodity == "potatoes" %}
+          <h1 class="govuk-heading-xl">
+            Variety details
+          </h1>
+
+          {{ govukInput({
+            label: {
+              text: "Variety",
+              classes: "govuk-label--s",
+              isPageHeading: false
+            },
+            id: "variety",
+            name: "variety",
+            classes: "govuk-input--width-10"
+          }) }}
+
+          {{ govukInput({
+            label: {
+              text: "Area to be sampled in hectares",
+              classes: "govuk-label--s",
+              isPageHeading: false
+            },
+            id: "areatosample",
+            name: "areatosample",
+            classes: "govuk-input--width-10"
+          }) }}
+
+          {% else %}
+          {{ govukInput({
+            label: {
+              text: "Area to be sampled in hectares",
+              classes: "govuk-label--xl govuk-!-margin-bottom-6",
+              isPageHeading: true
+            },
+            id: "areatosample",
+            name: "areatosample",
+            classes: "govuk-input--width-10"
+          }) }}
+          {% endif %}
+
+          {{ govukButton({
+            classes: "govuk-!-margin-top-4",
+            text: "Save and continue",
+            href: "soil-commodity-list-2"
+          }) }}
+
+        </form>
+      </div>
+    </div>
+
+</div>
+{% endblock %}
