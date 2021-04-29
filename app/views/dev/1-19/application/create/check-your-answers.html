@@ -10,7 +10,7 @@ GOV.UK Prototype Kit
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-three-quarters">
     <h1 class="govuk-heading-xl">
-      Check your answers before sending your application {% if data.reforwarding %}for a <br>re-forwarding certificate{% endif %}
+      Check your answers before sending your {% if data.pheats_check == "yes" %}PHEATS {% endif %}application {% if data.reforwarding %}for a <br>re-forwarding certificate{% endif %}
     </h1>
     <h2 class="govuk-heading-m">Application summary</h2>
     <!--<h2 class="govuk-heading-m">Your reference</h2>-->
@@ -32,7 +32,7 @@ GOV.UK Prototype Kit
           Certificate
         </dt>
         <dd class="govuk-summary-list__value">
-          {% if data.reforwarding %}Re-forwarding phytosanitary{% else %}Phytosanitary{% endif %} for {{ data.commodity or "plants" }}
+          {% if data.reforwarding %}Re-forwarding phytosanitary{% else %}Phytosanitary{% endif %} for {{ data.commodity or "plants" }}{% if data.pheats_check == "yes" %} (PHEATS){% endif %}
         </dd>
         <dd class="govuk-summary-list__actions">
         </dd>
@@ -495,6 +495,22 @@ GOV.UK Prototype Kit
             </a>
           </dd>
         </div>-->
+        {% if data.commodity == "plants" %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Are you applying under PHEATS?
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {% if data.pheats_check == "yes" %}Yes{% else %}No{% endif %}
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="pheats-check?change=yes">
+              Change<span class="govuk-visually-hidden">
+                Certification region</span>
+            </a>
+          </dd>
+        </div>
+        {% endif %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
             Address

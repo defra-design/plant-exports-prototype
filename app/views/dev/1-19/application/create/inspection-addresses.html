@@ -12,9 +12,10 @@ Where will the inspection take place? - {{serviceName}} - GOV.UK
 {% block content %}
 <div class="govuk-grid-row govuk-!-margin-bottom-6">
   <div class="govuk-grid-column-two-thirds">
-    {% if data.pheats == 1 %}
+    {% if data.pheats_check == "yes" %}
     <h1 class="govuk-heading-xl">Select the inspection address</h1>
     <p class="govuk-body">
+        Showing all PHEATS-approved addresses.<br>
     {% elseif data.reforwarding %}
       <h1 class="govuk-heading-xl">Select the inspection address</h1>
       <p class="govuk-body">
@@ -38,9 +39,6 @@ Where will the inspection take place? - {{serviceName}} - GOV.UK
           </th>
           <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
             Contact name
-          </th>
-          <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
-            Phone number
           </th>-->
           <th class="govuk-table__header" scope="col">
             Actions
@@ -49,6 +47,7 @@ Where will the inspection take place? - {{serviceName}} - GOV.UK
       </thead>
       <tbody class="govuk-table__body">
         <!--Inspection address 1-->
+        {% if data.pheats_check == "yes" %}
         <tr class="govuk-table__row">
           <td class="govuk-table__cell">
             Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH
@@ -58,9 +57,6 @@ Where will the inspection take place? - {{serviceName}} - GOV.UK
           </td>
           <td class="govuk-table__cell">
             Sarah Philips
-          </td>
-          <td class="govuk-table__cell govuk-table__cell">
-            024 546 7069
           </td>-->
           <td class="govuk-table__cell" style="text-align:right;">
             <a href="confirm-inspection-address" class="govuk-link govuk-link--no-visited-state">
@@ -68,7 +64,24 @@ Where will the inspection take place? - {{serviceName}} - GOV.UK
             </a>
           </td>
         </tr>
+        {% else %}
         <!--Inspection address 2-->
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH
+          </td>
+          <!--<td class="govuk-table__cell">
+            Yes
+          </td>
+          <td class="govuk-table__cell">
+            Sarah Philips
+          </td>-->
+          <td class="govuk-table__cell" style="text-align:right;">
+            <a href="confirm-inspection-address" class="govuk-link govuk-link--no-visited-state">
+              Select
+            </a>
+          </td>
+        </tr>
         <tr class="govuk-table__row">
           <td class="govuk-table__cell">
             Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ
@@ -78,9 +91,6 @@ Where will the inspection take place? - {{serviceName}} - GOV.UK
           </td>
           <td class="govuk-table__cell">
             Clive Jones
-          </td>
-          <td class="govuk-table__cell govuk-table__cell">
-            024 556 6598
           </td>-->
           <td class="govuk-table__cell" style="text-align:right;">
             <a href="confirm-inspection-address" class="govuk-link govuk-link--no-visited-state">
@@ -88,90 +98,9 @@ Where will the inspection take place? - {{serviceName}} - GOV.UK
             </a>
           </td>
         </tr>
+        {% endif %}
       </tbody>
     </table>
-    <!--<div class="app-summary-card govuk-!-margin-top-6">
-      <header class="app-summary-card--header">
-        <h3 class="app-summary-card--title">Old Farm</h3>
-        <div class="app-summary-card__actions">
-          <ul class="app-summary-card__actions-list">
-            <li class="app-summary-card__actions-list-item">
-              <a class="govuk-link" href="confirm-inspection-address">
-                Select<span class="govuk-visually-hidden"></span>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </header>
-      <div class="app-summary-card--content">
-        <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-              Organisation name
-            </dt>
-            <dd class="govuk-summary-list__value">
-              Old Farm
-            </dd>
-          </div>
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-              Address 1
-            </dt>
-            <dd class="govuk-summary-list__value">
-              Long Acre Lane
-            </dd>
-          </div>
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-              Address 2
-            </dt>
-            <dd class="govuk-summary-list__value">
-              Riverford
-            </dd>
-          </div>
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-              Town or city
-            </dt>
-            <dd class="govuk-summary-list__value">
-              Peterborough
-            </dd>
-          </div>
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-              County
-            </dt>
-            <dd class="govuk-summary-list__value">
-              Cambridgeshire
-            </dd>
-          </div>
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-              Postcode
-            </dt>
-            <dd class="govuk-summary-list__value">
-              PO5 8HJ
-            </dd>
-          </div>
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-              Contact Name
-            </dt>
-            <dd class="govuk-summary-list__value">
-              Clive Jones
-            </dd>
-          </div>
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-              Phone number
-            </dt>
-            <dd class="govuk-summary-list__value">
-              024 556 6598
-            </dd>
-          </div>
-        </dl>
-      </div>
-    </div>-->
     {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
 
     <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible govuk-!-margin-top-9">
