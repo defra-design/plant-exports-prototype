@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-GOV.UK Prototype Kit
+Check your answers before sending your application - Growing season inspection - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent%}
-
+{{super()}}
 <a href="javascript:history.back()" class="govuk-back-link">Back</a>
 {% endblock %}
 
@@ -19,6 +19,17 @@ GOV.UK Prototype Kit
     {% set commodity = data.commodity or "plants" %}
 
     <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Application
+        </dt>
+        <dd class="govuk-summary-list__value">
+          Growing season inspection for {{commodity}}
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <!--<a class="govuk-link" href="setup/reference?change=yes&return_url=../create/check-your-answers" data-qa-id="Link-ChangeAnswer" id="Link-ChangeAnswer-0">Change</a>-->
+        </dd>
+      </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Your reference
@@ -42,10 +53,10 @@ GOV.UK Prototype Kit
           ABC LIMITED, 27 The Crescent, NORTH WEST LONDON, NW7 0HX
         </dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="exporter?change=yes">
+          <!--<a class="govuk-link" href="exporter?change=yes">
             Change<span class="govuk-visually-hidden">
               applicant details</span>
-          </a>
+          </a>-->
         </dd>
       </div>
     </dl>
@@ -58,10 +69,10 @@ GOV.UK Prototype Kit
           Where will the inspection take place?
         </dt>
         <dd class="govuk-summary-list__value">
-          ABC LIMITED, 27 The Crescent, NORTH WEST LONDON, NW7 0HX
+          Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH
         </dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="exporter?change=yes">
+          <a class="govuk-link" href="inspection-addresses?change=yes">
             Change<span class="govuk-visually-hidden">
               inspection details</span>
           </a>
@@ -69,13 +80,13 @@ GOV.UK Prototype Kit
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          When will the field be ready for inspection?
+          When will the fields be ready for inspection?
         </dt>
         <dd class="govuk-summary-list__value">
-            {{data.inpection_date or "Early October 2020"}}
+            {{data.inpection_date or "Early June 2021"}}
         </dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="exporter?change=yes">
+          <a class="govuk-link" href="inspection-dates?change=yes">
             Change<span class="govuk-visually-hidden">
               inspection period</span>
           </a>
@@ -117,10 +128,63 @@ GOV.UK Prototype Kit
             <a class="govuk-link" href="field?change=yes">
               Change<span class="govuk-visually-hidden">
                 field</span>
+            </a><br>
+            <a href="#" class="govuk-link govuk-link--no-visited-state">
+              Delete
             </a>
           </dd>
         </div>
       </dl>
+
+      <table class="govuk-table govuk-!-margin-bottom-4">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            {% if data.addfielddetails == "gridgps" %}
+            <th class="govuk-table__header" scope="col">
+              Grid reference or GPS reading
+            </th>
+            {% else %}
+            <th class="govuk-table__header" scope="col">
+              IACS/RLR number
+            </th>
+            {% endif %}
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">
+              Area of whole field in hectares
+            </th>
+            <th class="govuk-table__header" scope="col">
+              Field map
+            </th>
+            <!--<th class="govuk-table__header" scope="col"></th>-->
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            {% if data.addfielddetails == "iacs" %}
+            <td class="govuk-table__cell">
+              {{data.iacs or "NF24681357"}}
+            </td>
+            {% else %}
+            <td class="govuk-table__cell">
+              {{data.gridgps or "NF 2468 1357"}}
+            </td>
+            {% endif %}
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              {{ data.areaoffield or "3.5" }}
+            </td>
+            <td class="govuk-table__cell govuk-table__cell">
+              <a class="govuk-link govuk-link--no-visited-state" href="#">{{ data.description or "Filename.jpg" }}</a>
+            </td>
+            <!--<td class="govuk-table__cell">
+              <a href="field" class="govuk-link govuk-link--no-visited-state">
+                Change
+              </a><br>
+              <a href="#" class="govuk-link govuk-link--no-visited-state">
+                Delete
+              </a>
+            </td>-->
+          </tr>
+        </tbody>
+      </table>
 
       <!-- multiple commodity table starts -->
 
@@ -138,7 +202,7 @@ GOV.UK Prototype Kit
             <th class="govuk-table__header" scope="col">
               Destination countries
             </th>
-            <th class="govuk-table__header" scope="col"></th>
+            <!--<th class="govuk-table__header" scope="col"></th>-->
           </tr>
         </thead>
         <tbody class="govuk-table__body">
@@ -152,14 +216,6 @@ GOV.UK Prototype Kit
             <td class="govuk-table__cell">
               Belize
             </td>
-            <td class="govuk-table__cell">
-              <a href="how-to-identify-2" class="govuk-link govuk-link--no-visited-state">
-                Change
-              </a><br>
-              <a href="#" class="govuk-link govuk-link--no-visited-state">
-                Delete
-              </a>
-            </td>
           </tr>
           <tr class="govuk-table__row">
             <td class="govuk-table__cell">
@@ -171,14 +227,6 @@ GOV.UK Prototype Kit
             <td class="govuk-table__cell">
               Norway
             </td>
-            <td class="govuk-table__cell">
-              <a href="how-to-identify-2" class="govuk-link govuk--link-no-visited-state">
-                Change
-              </a><br>
-              <a href="#" class="govuk-link govuk-link--no-visited-state">
-                Delete
-              </a>
-            </td>
           </tr>
         </tbody>
       </table>
@@ -186,10 +234,10 @@ GOV.UK Prototype Kit
       <p class="govuk-body"><a href="how-to-identify?return_url=check-your-answers-2" class="govuk-link govuk-link--no-visited-state">Add more crops</a></p>
 
       <!--Field 2 starts-->
-      <dl class="govuk-summary-list govuk-!-margin-top-9 govuk-!-margin-bottom-9 govuk-summary-list__m">
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-!-margin-top-9 govuk-summary-list__m">
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
-            2. {{data.nurseryplotno or "Bottom field"}}
+            2. {{data.nurseryplotno or "Big barn field"}}
           </dt>
           <dd class="govuk-summary-list__value">
 
@@ -198,10 +246,64 @@ GOV.UK Prototype Kit
             <a class="govuk-link" href="field-2?change=yes">
               Change<span class="govuk-visually-hidden">
                 field</span>
+            </a><br>
+            <a href="#" class="govuk-link govuk-link--no-visited-state">
+              Delete
             </a>
           </dd>
         </div>
       </dl>
+
+      <table class="govuk-table govuk-!-margin-bottom-4">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            {% if data.addfielddetails == "gridgps" %}
+            <th class="govuk-table__header" scope="col">
+              Grid reference or GPS reading
+            </th>
+            {% else %}
+            <th class="govuk-table__header" scope="col">
+              IACS/RLR number
+            </th>
+            {% endif %}
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">
+              Area of whole field in hectares
+            </th>
+            <th class="govuk-table__header" scope="col">
+              Field map
+            </th>
+            <!--<th class="govuk-table__header" scope="col"></th>-->
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            {% if data.addfielddetails == "iacs" %}
+            <td class="govuk-table__cell">
+              {{data.iacs or "NF24681357"}}
+            </td>
+            {% else %}
+            <td class="govuk-table__cell">
+              {{data.gridgps or "NF 2468 1357"}}
+            </td>
+            {% endif %}
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              {{ data.areaoffield or "3.5" }}
+            </td>
+            <td class="govuk-table__cell govuk-table__cell">
+              <a class="govuk-link govuk-link--no-visited-state" href="#">{{ data.description or "map.jpg" }}</a>
+            </td>
+            <!--<td class="govuk-table__cell">
+              <a href="field" class="govuk-link govuk-link--no-visited-state">
+                Change
+              </a><br>
+              <a href="#" class="govuk-link govuk-link--no-visited-state">
+                Delete
+              </a>
+            </td>-->
+          </tr>
+        </tbody>
+      </table>
+
       <!-- multiple commodity table starts -->
       {% if commodity.has_botanicial_name == "yes" %}
       {% set commodity_id_name = commodity.genus %}
@@ -209,7 +311,7 @@ GOV.UK Prototype Kit
       {% set commodity_id_name = commodity.commodity_common_name %}
       {% endif %}
 
-      <h2 class="govuk-heading-s govuk-!-margin-top-6">5 crops added to {{data.nurseryplotno or "Bottom field"}}</h2>
+      <h2 class="govuk-heading-s govuk-!-margin-top-6">5 crops added to {{data.nurseryplotno or "Big barn field"}}</h2>
       <table class="govuk-table govuk-!-margin-bottom-4">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
@@ -222,7 +324,7 @@ GOV.UK Prototype Kit
             <th class="govuk-table__header" scope="col">
               Destination countries
             </th>
-            <th class="govuk-table__header" scope="col"></th>
+            <!--<th class="govuk-table__header" scope="col"></th>-->
           </tr>
         </thead>
         <tbody class="govuk-table__body">
@@ -236,14 +338,6 @@ GOV.UK Prototype Kit
             <td class="govuk-table__cell">
               Bolivia
             </td>
-            <td class="govuk-table__cell">
-              <a href="commodity-list" class="govuk-link govuk-link--no-visited-state">
-                Change
-              </a><br>
-              <a href="#" class="govuk-link govuk-link--no-visited-state">
-                Delete
-              </a>
-            </td>
           </tr>
           <tr class="govuk-table__row">
             <td class="govuk-table__cell">
@@ -254,14 +348,6 @@ GOV.UK Prototype Kit
             </td>
             <td class="govuk-table__cell">
               France, Bolivia
-            </td>
-            <td class="govuk-table__cell">
-              <a href="commodity-list" class="govuk-link govuk--link-no-visited-state">
-                Change
-              </a><br>
-              <a href="#" class="govuk-link govuk-link--no-visited-state">
-                Delete
-              </a>
             </td>
           </tr>
           <tr class="govuk-table__row">
@@ -274,14 +360,6 @@ GOV.UK Prototype Kit
             <td class="govuk-table__cell">
               France, Spain, Nigeria
             </td>
-            <td class="govuk-table__cell">
-              <a href="commodity-list" class="govuk-link govuk-link--no-visited-state">
-                Change
-              </a><br>
-              <a href="#" class="govuk-link govuk-link--no-visited-state">
-                Delete
-              </a>
-            </td>
           </tr>
           <tr class="govuk-table__row">
             <td class="govuk-table__cell">
@@ -292,14 +370,6 @@ GOV.UK Prototype Kit
             </td>
             <td class="govuk-table__cell">
               France
-            </td>
-            <td class="govuk-table__cell">
-              <a href="commodity-list" class="govuk-link govuk-link--no-visited-state">
-                Change
-              </a><br>
-              <a href="#" class="govuk-link govuk-link--no-visited-state">
-                Delete
-              </a>
             </td>
           </tr>
           <tr class="govuk-table__row">
@@ -312,25 +382,17 @@ GOV.UK Prototype Kit
             <td class="govuk-table__cell">
               Spain, France
             </td>
-            <td class="govuk-table__cell">
-              <a href="commodity-list" class="govuk-link govuk-link--no-visited-state">
-                Change
-              </a><br>
-              <a href="#" class="govuk-link govuk-link--no-visited-state">
-                Delete
-              </a>
-            </td>
           </tr>
         </tbody>
       </table>
       <!--Field 2 ends-->
 
-      <p class="govuk-body"><a href="how-to-identify-2?return_url=check-your-answers-2" class="govuk-link govuk-link--no-visited-state">Add more</a></p>
+      <p class="govuk-body"><a href="how-to-identify-2?return_url=check-your-answers-2" class="govuk-link govuk-link--no-visited-state">Add more crops</a></p>
 
       <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-      <p class="govuk-body"><a href="field-2?return_url=check-your-answers" class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-regular">Add another field</a></p>
+      <p class="govuk-body"><a href="field-2?return_url=check-your-answers-2" class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-regular">Add another field</a></p>
   </div>
-  <div class="govuk-grid-column-three-quarters">
+  <div class="govuk-grid-column-three-quarters govuk-!-margin-top-9">
     <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_blank">what fees you need to pay</a> for a growing season inspection (opens in a new window).</p>
     <p class="govuk-body govuk-!-margin-top-6">By submitting this application form, you are agreeing that to the best of your knowledge and belief the statements made in this document are true and complete.</p>
     <p class="govuk-body govuk-!-margin-top-6">

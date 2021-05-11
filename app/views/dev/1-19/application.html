@@ -3,6 +3,7 @@
 Manage application - {{serviceName}} - GOV.UK
 {% endblock %}
 {% block beforeContent %}
+{{super()}}
 <a href="javascript:history.back()" class="govuk-back-link">Return to your applications</a>
 <style media="screen">
   .govuk-status--warning {
@@ -68,12 +69,13 @@ Manage application - {{serviceName}} - GOV.UK
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Certificate
+          {% if query.id == 6 %}Application{% else %}Certificate{% endif %}
         </dt>
         <dd class="govuk-summary-list__value">
-          {% if query.id == 2 %}Re-forwarding phytosanitary for plants{% elseif query.id == 0 %}Phytosanitary for plants{% else %}Phytosanitary for commodity{% endif %}
+          {% if query.id == 2 %}Re-forwarding phytosanitary for plants{% elseif query.id == 0 %}Phytosanitary for plants{% elseif query.id == 6 %}Growing season inspection for plants{% else %}Phytosanitary for commodity{% endif %}
         </dd>
       </div>
+      {% if query.id != 6 %}
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Destination
@@ -90,6 +92,7 @@ Manage application - {{serviceName}} - GOV.UK
           {{query.id | appInfo('consignee') or "Example consignee name"}}
         </dd>
       </div>
+      {% endif %}
       {% if query.id == 0 %}
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
