@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Add commodities by uploading a file - GOV UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <div class="app-alert app-alert--error">
+          <p class="govuk-heading-m">There are problems with your file upload</p>
+          <p class="govuk-body">Fix the errors in your file, save it, and upload it again.</p>
+        </div>
+        <form action="/form-handler" method="post" novalidate>
+
+          {% set commodity = data.commodity or "products" %}
+
+          {% if data.commodity == "plant products" %}
+
+          {% set commodity = "products" %}
+
+          {% elseif data.commodity == "Used farm machinery" %}
+
+          {% set commodity = "used farm machines" %}
+
+          {% endif %}
+
+          <div class="govuk-form-group  govuk-!-margin-bottom-9">
+            <fieldset class="govuk-fieldset">
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">
+                    Upload details for multiple commodities at the same time
+                </h1>
+              </legend>
+            </fieldset>
+
+            <p class="govuk-body">
+              {% if data.commodity == "plants" %}
+              Download and fill in the <a href="/public/images/template-plants.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
+              {% elseif data.commodity == "plant products" %}
+              Download and fill in the <a href="/public/images/template-plant-products.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
+              {% elseif data.commodity == "used farm machines" %}
+              Download and fill in the <a href="/public/images/template-used-farm-machinery.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
+              {% elseif data.commodity == "potatoes" %}
+              Download and fill in the <a href="/public/images/template-potatoes.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
+              {% elseif data.commodity == "seeds" %}
+              Download and fill in the <a href="/public/images/APHA_phytosanitary_certificate_csv_template - SEEDS.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
+              {% else %}
+              Download and fill in the <a href="/public/images/APHA_phytosanitary_certificate_csv_template.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
+              {% endif %}
+            </p>
+            <p class="govuk-body">
+                Open the csv file in Excel or whatever you use to edit spreadsheets. When you have finished, save the file and select Comma Separated Values (.csv) as the file format.
+            </p>
+
+            {{ govukFileUpload({
+              id: "file-upload-1",
+              name: "file-upload-1",
+              label: {
+                text: "Upload your completed csv file"
+              }
+            }) }}
+
+          </div>
+
+          {{ govukButton({
+            text: "Re-upload",
+            disabled: false,
+            href: "upload-completed"
+          }) }}
+
+        </form>
+      </div>
+    </div>
+{% endblock %}

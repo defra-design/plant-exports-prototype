@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+GOV.UK Prototype Kit
+{% endblock %}
+{% block beforeContent%}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <div>
+      <h1 class="govuk-heading-xl">Regulations for {% if data.reforwarding %}<br>re-forwarding{% else %}exporting{% endif %} {{data.commodity or 'plant products'}} to {{data.countrySelect[0] or 'China'}}</h1>
+    </div>
+      {% if data.reforwarding %}
+        <p class="govuk-body" lang="en">Before you start this application, check if the <a href="https://www.ippc.int/en/countries/all/list-countries/">competent authority in {{data.countrySelect[0] or 'China'}}</a> (the equivalent of Defra):</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>needs you to have a phytosanitary certificate to export {{data.commodity or 'plant products'}} to {{data.countrySelect[0] or 'China'}}</li>
+          <li>allows you to re-forward this commodity</li>
+        </ul>
+          {% if data.commodity == "bulbs" or data.commodity == "grain" or data.commodity == "plants" or data.commodity == "plant products" or data.commodity == "seeds" %}
+          <p class="govuk-body" lang="en">You should also check if you need to describe your consignment using the botanical name (genus and species).</p>
+          {% endif %}
+    {% else %}
+    <p class="govuk-body" lang="en">Before you start this application, check if the <a href="https://www.ippc.int/en/countries/all/list-countries/">competent authority in {{data.countrySelect[0] or 'China'}}</a> (the equivalent of Defra):</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>needs you to have a phytosanitary certificate to export {{data.commodity or 'plant products'}} to
+        {{data.countrySelect[0] or 'China'}}
+      </li>
+      {% if data.commodity == "plants" or data.commodity == "bulbs" or data.commodity == "potatoes" %}
+        {% if data.pheats == 1 %}
+          <li>needs you to inspect your {{data.commodity or "commodity"}}, or the soil they were grown in</li>
+        {% else %}
+          <li>needs you to arrange an inspection of your {{data.commodity or "commodity"}}, or the soil they were grown in</li>
+        {% endif %}
+      {% endif %}
+      {% if data.commodity == "bulbs" or data.commodity == "grain" or data.commodity == "plants" or data.commodity == "plant products" or data.commodity == "seeds" %}
+        <li>needs you to describe your consignment using the botanical name (genus and species)</li>
+      {% endif %}
+    </ul>
+    {% if data.commodity == "plant products" %}
+      {% if data.pheats == 1 %}
+        <p class="govuk-body" lang="en">You'll need to do your own phytosanitary inspection. You'll be told where to send any samples at the end of this application.</p>
+      {% else %}
+        <p class="govuk-body" lang="en">You’ll need to send a sample of your commodity for inspection before we can issue a phytosanitary certificate. You’ll see the address of where to send your sample at the end of this application.</p>
+      {% endif %}
+    {% endif %}
+    {% if data.commodity == "plants" or data.commodity == "bulbs" or data.commodity == "potatoes" or data.commodity == "seeds" %}
+      <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+          <span class="govuk-details__summary-text">
+            Inspections you might need
+          </span>
+        </summary>
+        <div class="govuk-details__text">
+          <ul class="govuk-list govuk-list--bullet">
+            <li>
+              a growing season inspection (GSI) on the crop that the {{data.commodity}} were taken from
+            </li>
+            {% if data.commodity != "seeds" %}
+            <li>
+              soil sampling of the soil your {{data.commodity}} are growing in or will grow in
+            </li>
+            {% else %}
+            <li>
+              sampling of your seeds
+            </li>
+            {% endif %}
+            {% if data.commodity == "bulbs" and data.countrySelect[0] == "United States" %}
+            <li>
+              a dry bulb inspection
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </details>
+      {% endif %}
+    {% endif %}
+    <p class="govuk-body">Date of declaration: <span data-qa-id="TextDisplay-DateOfDeclaration">20 April 2021</span></p>
+    <form class="review-form" action="../setup/reference" method="POST">
+      <div class="govuk-form-group">
+        <div class="govuk-checkboxes">
+          <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" type="checkbox" autofocus="autofocus" name="confirm" id="confirm">
+            <label class="govuk-checkboxes__label govuk-!-font-weight-bold" for="confirm" style="margin-top: -10px;">
+              I confirm that I have understood and followed the {%if data.reforwarding == 1%}re-forwarding{%else%}exporting{%endif%} regulations for this commodity
+            </label>
+          </div>
+        </div>
+      </div>
+      <input type="hidden" name="crumb_csrf_token" value="-OFEIl7HkGmNi3ZbrlI4BeayEl-1-jTpR6CRsveyix5">
+      <input name="submissionDate" type="hidden" value="15 March 2021">
+      <!-- <a class="govuk-button margin-top-30" href="
+      {% if data.commodity == 'plants'%}pre-application-test
+      {%else%}../setup/reference
+      {%endif%}"
+      value="Sub" id="Button-SubmitApplication">Confirm</a> -->
+      <input type="submit" class="govuk-button" value="Continue">
+      <a class="govuk-link app-button--link govuk-!-margin-left-2" href="../../dashboard"> Cancel </a>
+    </form>
+  </div><a>
+  </a>
+</div>
+
+{% endblock %}
