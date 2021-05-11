@@ -16,6 +16,10 @@ Your application - {{serviceName}} - GOV.UK
     <!--<h2 class="govuk-heading-m govuk-!-margin-bottom-6" style="color:grey; font-weight:normal;">Such as tractors, combine harvesters</h2>-->
     {% if data.reforwarding %}
     <p class="govuk-body govuk-!-margin-bottom-7">Enter the details about your consignment to apply for a re-forwarding certificate</p>
+    {% elseif data.journey == "coc" %}
+    <p class="govuk-body govuk-!-margin-bottom-7">Enter the details about your consignment to complete your application for a conformity certificate</p>
+    {% elseif data.journey == "both" %}
+    <p class="govuk-body govuk-!-margin-bottom-7">Enter the details about your consignment to complete your application for phytosanitary and conformity certificates</p>
     {% else %}
     <p class="govuk-body govuk-!-margin-bottom-7">Enter the details about your consignment to complete your application for a phytosanitary certificate</p>
     {% endif %}
@@ -64,6 +68,22 @@ Your application - {{serviceName}} - GOV.UK
             {% endif %}
           </li>
           {% endif %}
+
+          {% if data.journey != "phyto" %}
+          <li class="app-task-list__item">
+            <span class="app-task-list__task-name">
+              <a href="import-details" aria-describedby="eligibility-status">
+                What are the conformity certificate details?
+              </a>
+            </span>
+            {% if data.import_no %}
+            <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Completed</strong>
+            {% else %}
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="list-convictions-status">Not started</strong>
+            {% endif %}
+          </li>
+          {% endif %}
+
           <li class="app-task-list__item">
             <span class="app-task-list__task-name">
               {% if data.commodity == "Used farm machinery" %}
