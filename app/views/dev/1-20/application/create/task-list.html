@@ -82,7 +82,7 @@ Your application - {{serviceName}} - GOV.UK
               </a>
               {% endif %}
             </span>
-            {% if data.commodities and ( data.commodities | length ) > 0  or data.stock_number or data.upload %}
+            {% if data.commodities and ( data.commodities | length ) > 0  or data.stock_number or data.upload or data.variety %}
             <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Completed</strong>
             {% else %}
             <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="list-convictions-status">Not started</strong>
@@ -102,17 +102,15 @@ Your application - {{serviceName}} - GOV.UK
             <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="list-convictions-status">Not started</strong>
             {% endif %}
           </li>-->
-          {% if data.commodity == "plants" or (data.commodity == "bulbs" and data.countrySelect[0] != "United States") or data.commodity == "potatoes" or  data.commodity == "used farm machinery" %}
+          {% if data.commodity == "plants" or (data.commodity == "bulbs" and data.countrySelect[0] != "United States") or data.commodity == "potatoes" or  data.commodity == "used farm machinery" or data.journey == "coc" %}
           <li class="app-task-list__item">
             <span class="app-task-list__task-name">
-                <!--{% if data.commodity == "plants" and data.pheats %}-->
+              {% if data.commodity == "plants" and data.journey != "coc" %}
                 <a href="pheats-check" aria-describedby="pheats-check">
-                <!--{% else %}
+              {% else %}
                 <a href="inspection-addresses" aria-describedby="eligibility-status">
-                {% endif %}-->
-                What are the inspection details?
-                <!--Where will the inspection take place?-->
-              </a>
+              {% endif %}
+                What are the inspection details?</a>
             </span>
             {% if data.confirm_address %}
             <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Completed</strong>
