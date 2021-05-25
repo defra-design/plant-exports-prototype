@@ -1,0 +1,109 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+Packaging information - {{serviceName}} - GOV.UK
+{% endblock %}
+{% block beforeContent%}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+<style media="screen">
+  .app-result-list li{
+    padding: 15px 0;
+    border-top:1px solid #b1b4b6;
+    position:relative;
+
+  }
+  .app-result-list{
+    padding-bottom: 0;
+    border-bottom:1px solid #b1b4b6;
+  }
+  .app-result-list li .govuk-button--secondary{
+    position:absolute;
+    right:0;
+    top:20px;
+
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <form method="post" action="commodity-list-coc">
+      <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+          Add commodities to your consignment
+        </legend>
+
+        {{ govukInput({
+          label: {
+            text: "Variety",
+            classes: "govuk-!-font-weight-bold"
+          },
+          classes: "govuk-input--width-20",
+          id: "variety",
+          name: "variety"
+        }) }}
+
+        {{ govukRadios({
+          idPrefix: "class",
+          name: "class",
+          fieldset: {
+            legend: {
+              text: "What class is your commodity?",
+              isPageHeading: false,
+              classes: "govuk-fieldset__legend--s"
+            }
+          },
+          items: [
+            {
+              value: "Class I",
+              text: "Class I"
+            },
+            {
+              value: "Class II",
+              text: "Class II"
+            },
+            {
+              value: "Extra class",
+              text: "Extra class"
+            }
+          ]
+        }) }}
+
+        {% set country_module_label = "Country of origin"%}
+        {% set module_name = "country_origin"%}
+        {% block country %}{% include "../modules/_country-select.html" %}{% endblock %}
+
+        <!--<div class="govuk-form-group">
+          <label class="govuk-label" for="quantity">
+            Net weight per package, in kilograms
+          </label>
+          <input class="govuk-input govuk-input--width-5" id="quantity" name="quantity" type="text" aria-describedby="quantity">
+        </div>-->
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="weight">
+            Net weight per package, in kilograms
+          </label>
+          <div class="govuk-input__wrapper" style="display:flex;">
+            <input class="govuk-input govuk-input--width-5" id="weight" name="weight" type="text" spellcheck="false">
+            <div class="govuk-input__suffix" style="box-sizing:border-box; background-color:#f3f2f1; border:2px solid #0b0b0c; padding:5px; font-family:'GDS Transport',arial,sans-serif; height:2.5rem; min-width:2.5rem; text-align:center; font-size:1.2rem;" aria-hidden="true">kg</div>
+          </div>
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="number_of_packages">
+            Number of packages
+          </label>
+          <input class="govuk-input govuk-input--width-5" id="number_of_packages" name="number_of_packages" type="packaging_type" aria-describedby="passport-number-hint">
+        </div>
+
+        {% set country_module_label = "Packaging type"%}
+        {% block packing %}{% include "../modules/_packaging.html" %}{% endblock %}
+      </fieldset>
+      <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+    </form>
+    {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+  </div>
+</div>
+{% endblock %}
