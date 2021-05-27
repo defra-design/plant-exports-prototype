@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block pageTitle %}
-Packaging information - {{serviceName}} - GOV.UK
+Add commodities to your consignment - {{serviceName}} - GOV.UK
 {% endblock %}
 {% block beforeContent%}
 {{super()}}
@@ -34,7 +34,25 @@ Packaging information - {{serviceName}} - GOV.UK
           Add commodities to your consignment
         </legend>
 
-        {% if data.commodity == "Peaches" %}
+        {% if data.commodity == "Apples" %}
+
+          {% set apple_variety_module_label = "What variety are the apples?"%}
+          {% set module_name = "apple_variety"%}
+          {% block appleVariety %}{% include "../modules/_apple-variety-select.html" %}{% endblock %}
+
+        {% elseif data.commodity == "Peaches" %}
+
+          {% set peachesOtherHtml %}
+            {{ govukInput({
+            id: "peaches_variety",
+            name: "peaches_variety",
+            type: "text",
+            classes: "govuk-!-width-one-third",
+            label: {
+              text: "Enter another type"
+            }
+            }) }}
+          {% endset -%}
 
           {{ govukRadios({
             idPrefix: "type",
@@ -57,7 +75,10 @@ Packaging information - {{serviceName}} - GOV.UK
               },
               {
                 value: "Other",
-                text: "Other"
+                text: "Other",
+                conditional: {
+                  html: peachesOtherHtml
+                }
               },
               {
                 value: "None",
@@ -67,6 +88,17 @@ Packaging information - {{serviceName}} - GOV.UK
           }) }}
 
           {% elseif data.commodity == "Nectarines" %}
+            {% set nectarinesOtherHtml %}
+              {{ govukInput({
+              id: "nectarines_variety",
+              name: "nectarines_variety",
+              type: "text",
+              classes: "govuk-!-width-one-third",
+              label: {
+                text: "Enter another type"
+              }
+              }) }}
+            {% endset -%}
 
             {{ govukRadios({
               idPrefix: "type",
@@ -89,7 +121,10 @@ Packaging information - {{serviceName}} - GOV.UK
                 },
                 {
                   value: "Other",
-                  text: "Other"
+                  text: "Other",
+                  conditional: {
+                    html: nectarinesOtherHtml
+                  }
                 },
                 {
                   value: "None",
