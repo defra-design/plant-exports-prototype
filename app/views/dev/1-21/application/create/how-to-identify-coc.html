@@ -30,26 +30,94 @@ Packaging information - {{serviceName}} - GOV.UK
   <div class="govuk-grid-column-two-thirds">
     <form method="post" action="commodity-list-coc">
       <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
           Add commodities to your consignment
         </legend>
 
-        {{ govukInput({
-          label: {
-            text: "Variety",
-            classes: "govuk-!-font-weight-bold"
-          },
-          classes: "govuk-input--width-20",
-          id: "variety",
-          name: "variety"
-        }) }}
+        {% if data.commodity == "Peaches" %}
+
+          {{ govukRadios({
+            idPrefix: "type",
+            name: "type",
+            fieldset: {
+              legend: {
+                text: "What type are the peaches?",
+                isPageHeading: false,
+                classes: "govuk-fieldset__legend--s"
+              }
+            },
+            items: [
+              {
+                value: "White flesh",
+                text: "White flesh"
+              },
+              {
+                value: "Yellow flesh",
+                text: "Yellow flesh"
+              },
+              {
+                value: "Other",
+                text: "Other"
+              },
+              {
+                value: "None",
+                text: "None"
+              }
+            ]
+          }) }}
+
+          {% elseif data.commodity == "Nectarines" %}
+
+            {{ govukRadios({
+              idPrefix: "type",
+              name: "type",
+              fieldset: {
+                legend: {
+                  text: "What type are the nectarines?",
+                  isPageHeading: false,
+                  classes: "govuk-fieldset__legend--s"
+                }
+              },
+              items: [
+                {
+                  value: "White flesh",
+                  text: "White flesh"
+                },
+                {
+                  value: "Yellow flesh",
+                  text: "Yellow flesh"
+                },
+                {
+                  value: "Other",
+                  text: "Other"
+                },
+                {
+                  value: "None",
+                  text: "None"
+                }
+              ]
+            }) }}
+
+        {% else %}
+
+          {{ govukInput({
+            label: {
+              text: "Variety",
+              classes: "govuk-!-font-weight-bold"
+            },
+            classes: "govuk-input--width-20",
+            id: "variety",
+            name: "variety"
+          }) }}
+
+        {% endif %}
 
         {{ govukRadios({
           idPrefix: "class",
           name: "class",
           fieldset: {
             legend: {
-              text: "What class is your commodity?",
+              text: "What quality class is your commodity?",
               isPageHeading: false,
               classes: "govuk-fieldset__legend--s"
             }
@@ -64,8 +132,12 @@ Packaging information - {{serviceName}} - GOV.UK
               text: "Class II"
             },
             {
-              value: "Extra class",
-              text: "Extra class"
+              value: "Extra",
+              text: "Extra"
+            },
+            {
+              value: "None",
+              text: "None"
             }
           ]
         }) }}
