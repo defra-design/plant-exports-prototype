@@ -34,7 +34,7 @@ Add commodities to your consignment - {{serviceName}} - GOV.UK
           Add commodities to your consignment
         </legend>
 
-        {% if data.commodity == "Apples" %}
+        {% if data.commodity == "apples" %}
 
           {% set apple_variety_module_label = "What variety are the apples?"%}
           {% set module_name = "apple_variety"%}
@@ -51,7 +51,17 @@ Add commodities to your consignment - {{serviceName}} - GOV.UK
           }
           }) }}
 
-        {% elseif data.commodity == "Peaches" %}
+        {% elseif data.commodity == "citrus" %}
+
+          {{data.citrussubtypeSelect}}
+
+          {% if data.citrussubtypeSelect == "clementines" %}
+          {% set citrus_clementines_variety_module_label = "What variety are the clementines?"%}
+          {% set module_name = "clementines_variety"%}
+          {% block clementinesVariety %}{% include "../modules/_clementines-variety-select.html" %}{% endblock %}
+          {% endif %}
+
+        {% elseif data.commodity == "peaches" %}
 
           {% set peachesOtherHtml %}
             {{ govukInput({
@@ -91,7 +101,7 @@ Add commodities to your consignment - {{serviceName}} - GOV.UK
             ]
           }) }}
 
-          {% elseif data.commodity == "Nectarines" %}
+          {% elseif data.commodity == "nectarines" %}
             {% set nectarinesOtherHtml %}
               {{ govukInput({
               id: "nectarines_variety",
