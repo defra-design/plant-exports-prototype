@@ -1,15 +1,41 @@
 <tr class="govuk-table__row">
   <td class="govuk-table__cell">
-    {{data.commodity or "Apples"}}
+    {{data.commodity or "apples"}}
   </td>
   <td class="govuk-table__cell">
-    {{commodity.applevarietySelect[0] or "white flesh"}}
+    {% if data.commodity == "apples" %}
+      {{data.applevarietySelect[0] or "braeburn"}}
+    {% elseif data.commodity == "citrus" %}
+      tangerine - murcott
+    {% elseif data.commodity == "grapes" %}
+      {{data.grapesvarietySelect[0] or "black seedless"}}
+    {% elseif data.commodity == "kiwi" %}
+      {{data.class or "None stated"}}
+    {% elseif data.commodity == "lettuce" %}
+      iceberg
+    {% elseif data.commodity == "nectarines" %}
+      {{data.type or "white flesh"}}
+    {% elseif data.commodity == "peaches" %}
+      {{data.type or "yellow flesh"}}
+    {% elseif data.commodity == "pears" %}
+      {{data.pearsvarietySelect[0] or "conference"}}
+    {% elseif data.commodity == "strawberries" %}
+      {{data.class or "None stated"}}
+    {% elseif data.commodity == "sweet peppers" %}
+      {{data.class or "None stated"}}
+    {% elseif data.commodity == "tomatoes" %}
+      {% if data.type == "other"%}
+        {{data.tomatoes_variety or "cherry"}}
+      {% else %}
+        {{data.type or "round"}}
+      {% endif %}
+    {% endif %}
   </td>
   <td class="govuk-table__cell govuk-table__cell">
     {{data.weight * data.number_of_packages or "1000"}}kg ({{data.weight or "5"}}kg x {{data.number_of_packages or "200"}} packages)
   </td>
   <td class="govuk-table__cell" style="text-align:right;">
-    <a href="coc-commodity?change=yes" class="govuk-link govuk-link--no-visited-state">
+    <a href="how-to-identify-coc?change=yes" class="govuk-link govuk-link--no-visited-state">
       Change
     </a><br>
     <a href="#" class="govuk-link govuk-link--no-visited-state">

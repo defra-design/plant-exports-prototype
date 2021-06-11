@@ -34,7 +34,7 @@ Add commodities to your consignment - {{serviceName}} - GOV.UK
           Add commodities to your consignment
         </legend>
 
-        {% if data.commodity == "apples" %}
+        {% if data.commodity == "apples" or data.commodity == "grapes" or data.commodity == "pears" %}
           <p class="govuk-body govuk-!-font-weight-bold" for="how-contacted-conditional">
             What variety are your {{data.commodity or "apples"}}?
           </p>
@@ -43,22 +43,27 @@ Add commodities to your consignment - {{serviceName}} - GOV.UK
               <div class="govuk-radios__item">
                 <input class="govuk-radios__input" id="how-contacted-conditional" name="has_botanicial_name" type="radio" value="yes" data-aria-controls="conditional-how-contacted-conditional" {% if data.has_botanicial_name=="yes"%}checked{% endif %}>
                 <label class="govuk-label govuk-radios__label" for="how-contacted-conditional">
-                  Variety or type
+                  Variety
                 </label>
               </div>
               <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional">
                 {% if data.show_manual_input != "yes"%}
-                {% block appleVariety %}{% include "../modules/_apple-variety-select.html" %}{% endblock %}
+                  {% if data.commodity == "apples" %}
+                    {% block appleVariety %}{% include "../modules/_apples-variety-select.html" %}{% endblock %}
+                  {% elseif data.commodity == "grapes" %}
+                    {% block grapesVariety %}{% include "../modules/_grapes-variety-select.html" %}{% endblock %}
+                  {% else %}
+                    {% block pearsVariety %}{% include "../modules/_pears-variety-select.html" %}{% endblock %}
+                  {% endif %}
                 {% else %}
                   <div class="govuk-form-group">
                     <label class="govuk-label" for="commodity_host_species">
-                      Variety or type
+                      Variety
                     </label>
                     <input class="govuk-input govuk-input--width-20" id="commodity_genus" name="genus" type="text" value="{% if query.has_commodity %}{{query.genus}}{%endif%}">
                   </div>
                 {% endif %}
               </div>
-
 
               <div class="govuk-radios__divider">or</div>
               <div class="govuk-radios__item">
@@ -73,27 +78,15 @@ Add commodities to your consignment - {{serviceName}} - GOV.UK
               <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional-3">
                 <div class="govuk-form-group">
                   <label class="govuk-visually-hidden" for="passport-number">
-                    Variety or type
+                    Variety
                   </label>
                   <input class="govuk-input" id="plant-identify--description" name="commodity_description" aria-describedby="more-detail-hint">
                 </div>
               </div>
             </div>
           </div>
-        {% endif %}
-        {% if data.commodity == "peaches" %}
 
-          {% set peachesOtherHtml %}
-            {{ govukInput({
-            id: "peaches_variety",
-            name: "peaches_variety",
-            type: "text",
-            classes: "govuk-!-width-one-third",
-            label: {
-              text: "Enter another type"
-            }
-            }) }}
-          {% endset -%}
+        {% elseif data.commodity == "peaches" %}
 
           {{ govukRadios({
             idPrefix: "type",
@@ -122,17 +115,6 @@ Add commodities to your consignment - {{serviceName}} - GOV.UK
           }) }}
 
           {% elseif data.commodity == "nectarines" %}
-            {% set nectarinesOtherHtml %}
-              {{ govukInput({
-              id: "nectarines_variety",
-              name: "nectarines_variety",
-              type: "text",
-              classes: "govuk-!-width-one-third",
-              label: {
-                text: "Enter another type"
-              }
-              }) }}
-            {% endset -%}
 
             {{ govukRadios({
               idPrefix: "type",
@@ -160,6 +142,69 @@ Add commodities to your consignment - {{serviceName}} - GOV.UK
               ]
             }) }}
 
+            {% elseif data.commodity == "tomatoes" %}
+
+              {% set tomatoesOtherHtml %}
+                {{ govukInput({
+                id: "tomatoes_variety",
+                name: "tomatoes_variety",
+                type: "text",
+                classes: "govuk-!-width-one-third",
+                label: {
+                  text: "Enter another type"
+                }
+                }) }}
+              {% endset -%}
+
+              {{ govukRadios({
+                idPrefix: "type",
+                name: "type",
+                fieldset: {
+                  legend: {
+                    text: "What type are the tomatoes?",
+                    isPageHeading: false,
+                    classes: "govuk-fieldset__legend--s"
+                  }
+                },
+                items: [
+                  {
+                    value: "cherry",
+                    text: "cherry"
+                  },
+                  {
+                    value: "field-grown",
+                    text: "field-grown"
+                  },
+                  {
+                    value: "glasshouse",
+                    text: "glasshouse"
+                  },
+                  {
+                    value: "on-the-vine",
+                    text: "on-the-vine"
+                  },
+                  {
+                    value: "plum",
+                    text: "plum"
+                  },
+                  {
+                    value: "round",
+                    text: "round"
+                  },
+                  {
+                    value: "other",
+                    text: "other",
+                    conditional: {
+                      html: tomatoesOtherHtml
+                    }
+                  },
+                  {
+                    value: "unknown",
+                    text: "unknown"
+                  }
+                ]
+              }) }}
+
         {% endif %}
 
         {{ govukRadios({
@@ -186,8 +231,8 @@ Add commodities to your consignment - {{serviceName}} - GOV.UK
               text: "class II"
             },
             {
-              value: "unknown",
-              text: "unknown"
+              value: "none stated",
+              text: "none stated"
             }
           ]
         }) }}

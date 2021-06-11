@@ -34,13 +34,12 @@ Check your answers before sending your application - {{serviceName}} - GOV.UK
         <dd class="govuk-summary-list__value">
           {% if data.pheats_check != "yes" %}
             {% if data.reforwarding %}
-              Re-forwarding phytosanitary certificate
+              Re-forwarding phytosanitary certificate for {{ data.commodity or "produce" }}
             {% elseif data.journey == "coc" %}
-              Certificate of conformity
+              Certificate of conformity for produce
             {% else %}
-              Phytosanitary certificate
+              Phytosanitary certificate for {{ data.commodity or "produce" }}
             {% endif %}
-              for {{ data.commodity or "plants" }}
           {% else %}
              Phytosanitary certificate (PHEATS)
           {% endif %}
@@ -665,7 +664,7 @@ Check your answers before sending your application - {{serviceName}} - GOV.UK
             Date when your consignment will be ready for inspection
           </dt>
           <dd class="govuk-summary-list__value">
-              3 Feb {{data.inpection_date_year or "2021"}}
+              15 Jun {{data.inpection_date_year or "2021"}}
           </dd>
           <dd class="govuk-summary-list__actions">
             <a class="govuk-link" href="inspection-dates?change=yes">
@@ -680,7 +679,7 @@ Check your answers before sending your application - {{serviceName}} - GOV.UK
               Time when your consignment will be ready for inspection
             </dt>
             <dd class="govuk-summary-list__value">
-                9:{{data.inpection_time_minute or "00"}}am
+                9:{{data.inpection_time_minute or "30"}}am
             </dd>
             <dd class="govuk-summary-list__actions">
               <a class="govuk-link" href="inspection-dates?change=yes">
@@ -733,7 +732,7 @@ Check your answers before sending your application - {{serviceName}} - GOV.UK
           Value of consignment
         </dt>
         <dd class="govuk-summary-list__value">
-          {{data.value or "£10,000"}}
+          {{data.value or "10000"}}
         </dd>
         <dd class="govuk-summary-list__actions">
           <a class="govuk-link" href="shipping?change=yes&return_url=check-your-answers">
@@ -760,7 +759,7 @@ Check your answers before sending your application - {{serviceName}} - GOV.UK
           How will the consignment be transported?
         </dt>
         <dd class="govuk-summary-list__value">
-          {{data.transportation_method or "Air"}}
+          {{data.transport_method or "Air"}}
         </dd>
         <dd class="govuk-summary-list__actions">
           <a class="govuk-link" href="shipping?change=yes&return_url=check-your-answers">
@@ -771,7 +770,7 @@ Check your answers before sending your application - {{serviceName}} - GOV.UK
       {% if data.journey == "coc" %}
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Airway bill number
+          Bill of lading number or container number
         </dt>
         <dd class="govuk-summary-list__value">
           {{data.method_air or "12345"}}
@@ -960,7 +959,8 @@ Check your answers before sending your application - {{serviceName}} - GOV.UK
 
         <p class="govuk-body govuk-!-margin-top-6">
           {% if data.journey == "coc" %}
-            <a href="do-the-other-thing" class="govuk-button">Continue</a>
+            <a href="../submit/declaration" class="govuk-button">Continue</a>
+            <!--<a href="do-the-other-thing" class="govuk-button">Continue</a>-->
           {% else %}
             <a href="../submit/submit-date" class="govuk-button">Continue</a>
           {% endif %}
