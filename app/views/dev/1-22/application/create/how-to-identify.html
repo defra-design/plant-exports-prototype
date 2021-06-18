@@ -32,7 +32,7 @@ GOV.UK Prototype Kit
     <form method="post">
       <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-          Add {% if data.pheats != 1 %}{{data.commodity}}{% endif %} to your {%if data.reforwarding%}<br>re-forwarding{%endif%} consignment
+          Add {% if data.pheats != 1 %}{% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your {%if data.reforwarding%}<br>re-forwarding{%endif%} consignment
         </legend>
 
         <!--<div class="govuk-inset-text">
@@ -42,7 +42,7 @@ GOV.UK Prototype Kit
           This will appear on the certificate. If possible, use the botanical name.
         </p>-->
         <p class="govuk-body govuk-!-margin-top-6" for="how-contacted-conditional">
-          How do you want to describe your {{data.commodity}}?
+          How do you want to describe your {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}?
         </p>
 
         <div class="govuk-form-group">

@@ -1,11 +1,10 @@
 {% extends "layout.html" %}
-
 {% block pageTitle %}
-GOV.UK Prototype Kit
+Copy application - {{serviceName}} - GOV.UK
 {% endblock %}
-
 {% block beforeContent %}
-<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Return to your applications</a>
 {% endblock%}
 
 {% block content %}
@@ -39,9 +38,7 @@ GOV.UK Prototype Kit
           Certificate
         </dt>
         <dd class="govuk-summary-list__value">
-          {{query.id | appInfo('EHC')}} (version 2)
-          <br>
-          {{query.id | appInfo('cert_info')}}
+          {% if query.id == 2 %}Re-forwarding phytosanitary certificate for plants and fresh produce{% elseif query.id == 0 %}Phytosanitary certificate for plants and fresh produce{% elseif query.id == 6 %}Growing season inspection for plants and fresh produce{% else %}Phytosanitary certificate for commodity{% endif %}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -65,7 +62,7 @@ GOV.UK Prototype Kit
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">
           <div class="govuk-radios" data-module="govuk-radios">
-            <div class="govuk-radios__item">              
+            <div class="govuk-radios__item">
               {% if (query.id | appInfo('reference')) != "" %}
               <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~reuse-ref">
               {% else %}

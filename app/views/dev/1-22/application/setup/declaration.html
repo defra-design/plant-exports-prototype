@@ -10,12 +10,12 @@ GOV.UK Prototype Kit
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <div>
-      <h1 class="govuk-heading-xl">Regulations for {% if data.reforwarding %}<br>re-forwarding{% else %}exporting{% endif %} {{data.commodity or 'plant products'}} to {{data.countrySelect[0] or 'China'}}</h1>
+      <h1 class="govuk-heading-xl">Regulations for {% if data.reforwarding %}<br>re-forwarding{% else %}exporting{% endif %} {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %} to {{data.countrySelect[0] or 'China'}}</h1>
     </div>
       {% if data.reforwarding %}
         <p class="govuk-body" lang="en">Before you start this application, check if the <a href="https://www.ippc.int/en/countries/all/list-countries/">competent authority in {{data.countrySelect[0] or 'China'}}</a> (the equivalent of Defra):</p>
         <ul class="govuk-list govuk-list--bullet">
-          <li>needs you to have a phytosanitary certificate to export {{data.commodity or 'plant products'}} to {{data.countrySelect[0] or 'China'}}</li>
+          <li>needs you to have a phytosanitary certificate to export {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %} to {{data.countrySelect[0] or 'China'}}</li>
           <li>allows you to re-forward this commodity</li>
         </ul>
           {% if data.commodity == "bulbs" or data.commodity == "grain" or data.commodity == "plants" or data.commodity == "plant products" or data.commodity == "seeds" %}
@@ -24,14 +24,14 @@ GOV.UK Prototype Kit
     {% else %}
     <p class="govuk-body" lang="en">Before you start this application, check if the <a href="https://www.ippc.int/en/countries/all/list-countries/">competent authority in {{data.countrySelect[0] or 'China'}}</a> (the equivalent of Defra):</p>
     <ul class="govuk-list govuk-list--bullet">
-      <li>needs you to have a phytosanitary certificate to export {{data.commodity or 'plant products'}} to
+      <li>needs you to have a phytosanitary certificate to export {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %} to
         {{data.countrySelect[0] or 'China'}}
       </li>
       {% if data.commodity == "plants" or data.commodity == "bulbs" or data.commodity == "potatoes" %}
         {% if data.pheats == 1 %}
-          <li>needs you to inspect your {{data.commodity or "commodity"}}, or the soil they were grown in</li>
+          <li>needs you to inspect your {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}, or the soil they were grown in</li>
         {% else %}
-          <li>needs you to arrange an inspection of your {{data.commodity or "commodity"}}, or the soil they were grown in</li>
+          <li>needs you to arrange an inspection of your {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}, or the soil they were grown in</li>
         {% endif %}
       {% endif %}
       {% if data.commodity == "bulbs" or data.commodity == "grain" or data.commodity == "plants" or data.commodity == "plant products" or data.commodity == "seeds" %}
@@ -55,11 +55,11 @@ GOV.UK Prototype Kit
         <div class="govuk-details__text">
           <ul class="govuk-list govuk-list--bullet">
             <li>
-              a growing season inspection (GSI) on the crop that the {{data.commodity}} were taken from
+              a growing season inspection (GSI) on the crop that the {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %} were taken from
             </li>
             {% if data.commodity != "seeds" %}
             <li>
-              soil sampling of the soil your {{data.commodity}} are growing in or will grow in
+              soil sampling of the soil your {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %} are growing in or will grow in
             </li>
             {% else %}
             <li>
