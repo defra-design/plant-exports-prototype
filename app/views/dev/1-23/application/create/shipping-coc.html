@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+GOV.UK Prototype Kit
+{% endblock %}
+{% block beforeContent%}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      How will this consignment be transported?
+    </h1>
+    <form action="{{query.return_url or '../create/complete-coc'}}" method="POST">
+      <fieldset class="govuk-fieldset" role="group">
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset" aria-describedby="contact-hint">
+            <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="contact" name="transport_method" type="radio" value="Air" data-aria-controls="conditional-contact">
+                <label class="govuk-label govuk-radios__label" for="contact">
+                  Air
+                </label>
+              </div>
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-contact">
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="contact-by-email">
+                    Airway bill number
+                  </label>
+                  <input class="govuk-input govuk-!-width-one-third" id="contact-by-email" name="contact-by-email" type="text" spellcheck="false"></div>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="contact-2" name="transport_method" type="radio" value="Maritime" data-aria-controls="conditional-contact-2">
+                <label class="govuk-label govuk-radios__label" for="contact-2">
+                  Maritime
+                </label>
+              </div>
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-contact-2">
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="contact-by-phone">
+                    Bill of lading number or container number
+                  </label>
+                  <input class="govuk-input govuk-!-width-one-third" id="contact-by-phone" name="contact-by-phone" type="text"></div>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="contact-3" name="transport_method" type="radio" value="Road" data-aria-controls="conditional-contact-3">
+                <label class="govuk-label govuk-radios__label" for="contact-3">
+                  Road
+                </label>
+              </div>
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-contact-3">
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="contact-by-text">
+                    CMR form number
+                  </label>
+                  <input class="govuk-input govuk-!-width-one-third" id="contact-by-text" name="contact-by-text" type="text"></div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </fieldset>
+      <input class="govuk-button govuk-!-margin-top-6" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+    </form>
+  {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

@@ -1,9 +1,10 @@
 {% extends "layout.html" %}
 {% block pageTitle %}
-GOV.UK Prototype Kit
+You have successfully submitted your application - {{serviceName}} - GOV.UK
 {% endblock %}
 {% block content %}
 <div class="govuk-grid-row">
+  <form method="post" class="form">
       <div class="govuk-grid-column-three-quarters">
         <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-6">
           <h1 class="govuk-panel__title">
@@ -44,9 +45,46 @@ GOV.UK Prototype Kit
         <p class="govuk-body govuk-!-margin-bottom-6">We'll only contact you if there is a problem with your application.</p>
         <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_self">what fees you will pay</a> for this application.</p>
 
-        <h2 class="govuk-heading-m">What do you want to do?</h2>
+        <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
 
-        {% if data.route == "new" %}
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-!-margin-bottom-4">
+              <h1 class="govuk-fieldset__heading">
+                What do you want to do?
+              </h1>
+            </legend>
+            <div class="govuk-radios" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="copy_coc" name="what_do_you_want_to_do" type="radio" value="copy-coc~../../copy-as-coc?id=0">
+                <label class="govuk-label govuk-radios__label" for="copy_coc">
+                  Use this application to apply for a certificate of conformity
+                </label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="copy_phyto" name="what_do_you_want_to_do" type="radio" value="copy-phyto~../../clone?id=0">
+                <label class="govuk-label govuk-radios__label" for="copy_phyto">
+                  Copy this application to create a new phytosanitary certificate
+                </label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="view" name="what_do_you_want_to_do" type="radio" value="view~../../dashboard-one?filter_status=&has_filter=&date_range=&filter_name=&show_applications_by=me">
+                <label class="govuk-label govuk-radios__label" for="view">
+                  View your applications
+                </label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        {{ govukButton({
+          classes: "govuk-!-margin-top-4",
+          text: "Continue"
+        }) }}
+
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+        <!--{% if data.route == "new" %}
             {{ govukButton({
               text: "View your applications",
               href: "../../dashboard-one?filter_status=&has_filter=&date_range=&filter_name=&show_applications_by=me"
@@ -56,7 +94,7 @@ GOV.UK Prototype Kit
             text: "View your applications",
             href: "../../dashboard?filter_status=&has_filter=&date_range=&filter_name=&show_applications_by=me"
           }) }}
-        {% endif %}
+        {% endif %}-->
 
         <h2 class="govuk-heading-m">If you need help</h2>
           <p class="govuk-body">
@@ -66,63 +104,16 @@ GOV.UK Prototype Kit
           <li><span id="phoneNumber">0300 1000 313</span>, Monday to Friday 8.30am to 5pm</li>
           <li><a href="mailto:planthealth.info@apha.gov.uk" class="govuk-link" id="emailLink">planthealth.info@apha.gov.uk</a></li>
         </ul>
-        <!-- <div class="govuk-body">
-              <a id="link-confirmationPage-viewYourApplications2" href="../dashboard?submitted=yes" class="govuk-button_no_margin_bottom">View your applications</a>
-        </div> -->
 
         <div class="govuk-!-margin-top-6" style="padding:20px; background-color:#f3f2f1; border-left-color:#666;">
           <h2 class="govuk-heading-m">
             Give feedback on this service
           </h2>
           <p class="govuk-body-m">Take a 3 minute survey about your application so that we can improve the service. The survey will open in a new window.<br><br>
-
-          <!--{{ govukButton({
-            text: "Give feedback",
-            href: "https://www.smartsurvey.co.uk/s/RAGNFE/",
-            target: "_blank"
-          }) }}-->
-
             <a href="https://www.smartsurvey.co.uk/s/RAGNFE/" target="_blank" class="govuk-link">Give feedback</a>
           </p>
-
         </div>
-
-        <!--<h2 class="govuk-heading-m">
-          Help us improve this service
-        </h2>
-        <p class="govuk-body">Take a 3 minute survey about applying for the phytosanitary certificate so that we can improve the service.</p>
-        <p class="govuk-body"><a href="give-feedback" class="govuk-link">Give feedback</a></p>
-
-        {{ govukRadios({
-          idPrefix: "where-do-you-live",
-          name: "where-do-you-live",
-          fieldset: {
-            legend: {
-              text: "Next steps",
-              isPageHeading: true,
-              classes: "govuk-fieldset__legend--m"
-            }
-          },
-          items: [
-            {
-              value: "feedback",
-              text: "Take a 3 minute survey so that we can improve the service",
-              href: "give-feedback"
-            },
-            {
-              value: "view",
-              text: "View your applications to check progress",
-              href: "../../dashboard"
-            }
-          ]
-        }) }}
-
-        {{ govukButton({
-          text: "Continue",
-          href: "give-feedback"
-        }) }}-->
-
-      </div>
     </div>
-
+  </form>
+</div>
 {% endblock %}
