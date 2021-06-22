@@ -24,14 +24,20 @@ GOV.UK Prototype Kit
             {% if data.reforwarding %}
               <li>If an inspection is necessary, we will arrange it within 7 working days.</li>
             {% else %}
-              <li>We will arrange an inspection of your consignment within 7 working days.</li>
+              {% if data.journey != "coc" %}
+                <li>We will arrange an inspection of your consignment within 7 working days.</li>
+              {% else %}
+                <li>If an inspection is required, we will arrange one.</li>
+              {% endif %}
             {% endif %}
           {% endif %}
           <li>If there are no problems, we will issue your {% if data.reforwarding %}re-forwarding{% endif %} certificate.</li>
-          {% if data.pheats_check == "yes" %}
-          <li>We will then send you an invoice for your application.</li>
-          {% else %}
-          <li>We will then send you an invoice for the inspection.</li>
+          {% if data.journey != "coc" %}
+            {% if data.pheats_check == "yes" %}
+            <li>We will then send you an invoice for your application.</li>
+            {% else %}
+            <li>We will then send you an invoice for the inspection.</li>
+            {% endif %}
           {% endif %}
         </ol>
 
@@ -58,7 +64,9 @@ GOV.UK Prototype Kit
             }) }}
           {% endif %}
 
-          <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_self">what fees you will pay</a> for this application.</p>
+          {% if data.journey != "coc" %}
+            <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_self">what fees you will pay</a> for this application.</p>
+          {% endif %}
 
           <h2 class="govuk-heading-m">If you need help</h2>
           <p class="govuk-body">
