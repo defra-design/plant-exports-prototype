@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+Select your commodities to add to the certificate of conformity - {{serviceName}} - GOV.UK
+{% endblock %}
+{% block beforeContent%}
+{{super()}}
+<a href="{{page.content.prev or 'javascript:history.back()'}}" class="govuk-back-link">Back</a>
+{% endblock %}
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <form method="POST" action="commodity-list-copy-as-coc">
+      {{ govukCheckboxes({
+        idPrefix: "prelist",
+        name: "prelist",
+        fieldset: {
+          legend: {
+            text: "Which commodities do you want to use?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--l"
+          }
+        },
+        hint: {
+          text: "Select all that you want to use."
+        },
+        items: [
+          {
+            value: "apples",
+            text: "Apples (braeburn), 1000kg"
+          },
+          {
+            value: "apples",
+            text: "Apples (cripps pink), 750kg"
+          },
+          {
+            value: "apples",
+            text: "Apples (jazz), 500kg"
+          },
+          {
+            value: "beetroot",
+            text: "Beetroot, 1 tonne"
+          },
+          {
+            value: "french_beans",
+            text: "French beans, 250kg"
+          }
+        ]
+      }) }}
+      <div class="govuk-!-margin-left-0 govuk-grid-column-one-quarter govuk-!-padding-0">
+        <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+      </div>
+    </form>
+{% endblock %}

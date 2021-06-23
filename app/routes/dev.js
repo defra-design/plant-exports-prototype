@@ -179,6 +179,13 @@ module.exports = function(router) {
     res.redirect(301, page);
   })
 
+  // **** Apply to How to identify for PLANTS and fresh produce ***
+  router.post('/' + base_url + '*/application/create/how-to-identify*', function(req, res) {
+    var page = req.query.return_url || '/' + base_url + req.params[0] + '/application/create/commodity-list*'
+    addCommodity(req.body, req.session.data.commodities)
+    res.redirect(301, page);
+  })
+
   // **** GSI specific ***
   router.post('/' + base_url + '*/application/gsi/create/commodity-page*', function(req, res) {
     var page = req.query.return_url || '/' + base_url + req.params[0] + '/application/gsi/create/commodity-list'
