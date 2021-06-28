@@ -184,8 +184,25 @@ module.exports = function(router) {
         return list
       }
 
-
-
+      // static inspector dashboad of tasks
+      let tasks = [
+        { ref:"PO24521GSI", name:"ABC TRADING LTD", address:"New Farm, Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH", inspectionDate:"8 Jul 2021", dispatchDate: "8 Jul 2021", status:"completed", tag:"green"},
+        { ref:"PO24522GSI", name:"ABC TRADING LTD", address:"New Farm, Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH", inspectionDate:"8 Jul 2021", dispatchDate: "9 Jul 2021", status:"awaiting<br/>decision", tag:"blue"},
+        { ref:"PO24523GSI", name:"ABC TRADING LTD", address:"New Farm, Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH", inspectionDate:"8 Jul 2021", dispatchDate: "10 Jul 2021", status:"todo", tag:"grey"},
+        { ref:"PO24524GSI", name:"ABC TRADING LTD", address:"New Farm, Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH", inspectionDate:"8 Jul 2021", dispatchDate: "11 Jul 2021", status:"todo", tag:"grey"},
+        { ref:"PO26624Australia", name:"GRAND FARM LTD", address:"Grand Farm, Farm Road, Wittering, Peterborough, Cambridgeshire, PO5 4GH", inspectionDate:"18 Jul 2021", dispatchDate: "21 Jul 2021", status:"todo", tag:"grey"},
+        { ref:"PO26624 china", name:"GRAND FARM LTD", address:"Grand Farm, Farm Road, Wittering, Peterborough, Cambridgeshire, PO5 4GH", inspectionDate:"18 Jul 2021", dispatchDate: "21 Jul 2021", status:"todo", tag:"grey"},
+        { ref:"PO26624_GFL", name:"GRAND FARM LTD", address:"Grand Farm, Farm Road, Wittering, Peterborough, Cambridgeshire, PO5 4GH", inspectionDate:"18 Jul 2021", dispatchDate: "21 Jul 2021", status:"todo", tag:"grey"},
+        { ref:"PO 29300", name:"Rowell XP LTD", address:"Eye Farm, Boro Road, Peterborough, Cambridgeshire, PO5 4GH", inspectionDate:"18 Jul 2021", dispatchDate: "22 Jul 2021", status:"todo", tag:"grey"},
+      ];
+      router.get('/' + base_url + '*'+ 'inspector/dashboard', function(req, res) {
+        console.log("default get routing page for: " + base_url + req.params[0])
+        // Attempt to render a page in the current folder
+        console.log("------- inspector ------ ")
+        res.render(base_url + req.params[0] + 'inspector/dashboard', {
+          tasks
+        })
+      })
 
       router.get('/' + base_url + '*' + 'application/create/plant-lookup2', function(req, res) {
         var q = req.query.keyword || "Rosa";
@@ -254,3 +271,5 @@ module.exports = function(router) {
       })
 
     }
+
+
