@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block pageTitle %}
-GOV.UK Prototype Kit
+Add commodities to your consignment - {{serviceName}} - GOV.UK
 {% endblock %}
 {% block beforeContent%}
 {{super()}}
@@ -18,7 +18,7 @@ GOV.UK Prototype Kit
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--s govuk-!-font-weight-regular">
-            <h1 class="govuk-fieldset__heading">
+            <h1 class="govuk-fieldset__heading govuk-!-font-weight-bold">
               Type of potato
             </h1>
           </legend>
@@ -77,15 +77,63 @@ GOV.UK Prototype Kit
           </fieldset>
         </div>
 
+        <!-- These are the countries which require differnt information to be provided -->
         {% if data.countrySelect == "Norway,NO" or data.countrySelect == "Iceland,IS" or data.countrySelect == "Canary Islands,CI" or data.countrySelect == "Nigeria,NG" or data.countrySelect == "Ghana,GH" or data.countrySelect == "Falkland Islands,FK" %}
         {% endif %}
 
-        <div class="govuk-form-group">
+        <!--<div class="govuk-form-group">
           <label class="govuk-label" for="commodity_variety">
             Variety
           </label>
           <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety" type="text">
-        </div>
+        </div>-->
+
+          <p class="govuk-body govuk-!-font-weight-bold" for="how-contacted-conditional">
+            What variety are your potatoes?
+          </p>
+          <div class="govuk-form-group">
+            <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="how-contacted-conditional" name="has_botanicial_name" type="radio" value="yes" data-aria-controls="conditional-how-contacted-conditional" {% if data.has_botanicial_name=="yes"%}checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="how-contacted-conditional">
+                  Variety
+                </label>
+              </div>
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional">
+                {% if data.show_manual_input != "yes"%}
+                  {% if data.commodity == "potatoes" %}
+                    {% block potatoVariety %}{% include "../modules/_potatoes-variety-select.html" %}{% endblock %}
+                  {% endif %}
+                {% else %}
+                  <div class="govuk-form-group">
+                    <label class="govuk-label" for="commodity_host_species">
+                      Variety
+                    </label>
+                    <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety" type="text" value="{% if query.has_commodity %}{{query.genus}}{%endif%}">
+                  </div>
+                {% endif %}
+              </div>
+
+              <div class="govuk-radios__divider">or</div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="how-contacted-conditional-3" name="has_botanicial_name" type="radio" value="use_description" data-aria-controls="conditional-how-contacted-conditional-3" {% if data.has_botanicial_name == "use_description"%}checkjed{%endif%}>
+                <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-3">
+                  Other
+                </label>
+                <div id="how-contacted-conditional-hint" class="govuk-hint govuk-radios__hint">
+                  If you can't find the variety by searching in the field above, select other and enter the variety.
+                </div>
+              </div>
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional-3">
+                <div class="govuk-form-group">
+                  <label class="govuk-visually-hidden" for="plant-identify--description">
+                    Variety
+                  </label>
+                  <input class="govuk-input" id="plant-identify--description" name="commodity_variety" aria-describedby="more-detail-hint">
+                </div>
+              </div>
+            </div>
+          </div>
 
         <div class="govuk-form-group">
           <label class="govuk-label" for="chemicals_used">
