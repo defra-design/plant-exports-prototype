@@ -222,9 +222,10 @@ if (useAutoStoreData === 'true') {
         data: d
       }
 
-      //log.data.sample=[];
+      log.data.applications="hidden in server.js";
+      log.data.sample="hidden in server.js";
       console.log(JSON.stringify(log, null, 2))
-      console.log(log.data)
+
 /* 
  data: {
     applications: [],
