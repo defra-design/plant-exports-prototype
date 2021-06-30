@@ -208,7 +208,7 @@ if (useAutoStoreData === 'true') {
 }
 
 // Logging session data
- if (useLogging !== 'false') {
+/*  if (useLogging !== 'false') {
   app.use((req, res, next) => {
     const all = (useLogging === 'true')
     const post = (useLogging === 'post' && req.method === 'POST')
@@ -224,20 +224,20 @@ if (useAutoStoreData === 'true') {
 
       console.log(JSON.stringify(log, null, 2))
 
-/* 
- data: {
-    applications: [],
-    commodities: [],
-    id_count: 1,
-    sample: [],
-    plants: []
-    }
-       */
+
+//  data: {
+//     applications: [],
+//     commodities: [],
+//     id_count: 1,
+//     sample: [],
+//     plants: []
+//     }
+
     }
     next()
   })
 }
-
+ */
 
 
 // Clear all data in session if you open /prototype-admin/clear-data

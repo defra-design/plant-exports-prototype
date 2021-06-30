@@ -195,10 +195,68 @@ module.exports = function(router) {
         { ref:"PO26624 GFL", name:"GRAND FARM LTD", address:"Grand Farm, Farm Road, Wittering, Peterborough, Cambridgeshire, PO5 4GH", inspectionDate:"18 Jul 2021", dispatchDate: "21 Jul 2021", status:"todo", tag:"grey"},
         { ref:"PO 29300", name:"Rowell XP LTD", address:"Eye Farm, Boro Road, Peterborough, Cambridgeshire, PO5 4GH", inspectionDate:"18 Jul 2021", dispatchDate: "22 Jul 2021", status:"todo", tag:"grey"},
       ];
+      let months = [null, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      let timeLog = [{id:0, name:"Inspector X", date:"19 July 2021", admin:"15", travel:"", inspection:"", day:"19", month:"7", year:"2021"}];
+
+      router.get('/' + base_url + '*'+ 'inspector/time-entry', function(req, res) {
+        console.log("id", req.query.id);
+        let id = 0;
+        if(req.query.id){
+          id = parseInt(req.query.id);
+          times = timeLog[id];
+        }else{
+          times = {id:null, name:"", date:"", admin:"", travel:"", inspection:"", day:"", month:"", year:""}
+        }
+        console.log(times);
+        res.render(base_url + req.params[0] + 'inspector/time-entry', {
+          times
+        })
+      })
+
+
+      router.all('/' + base_url + '*'+ 'inspector/check-answers', function(req, res) {
+        console.log("default get routing page for: " + base_url + req.params[0])
+        // add logged time to table
+        let loggedDate = "20 July 2021";
+        if(req.body.day && req.body.month && req.body.year){
+          loggedDate = req.body.day  +" "+  months[req.body.month] +" "+ req.body.year;
+          let obj  = {
+            id:null,
+            name:req.body["inspector-name"][0],
+            date:loggedDate,
+            day:req.body.day,
+            month:req.body.month,
+            year:req.body.year,
+            admin:req.body.admin,
+            travel:req.body.travel,
+            inspection:req.body.inspection
+          };
+          if(req.body.id){
+            //console.log('update exisitng', req.body.id);
+            obj.id = req.body.id;
+            let idx = parseInt(req.body.id);
+            timeLog[idx] = obj;
+          }else{
+            obj.id = timeLog.length;
+            //console.log('add new item', obj.id);
+            timeLog.push(obj);
+          }
+        }
+        // Attempt to render a page in the current folder
+        console.log("------- check-answers ------ ")
+        //console.log(req.body);
+        //console.log(timeLog);
+        res.render(base_url + req.params[0] + 'inspector/check-answers', {
+          timeLog
+        })
+      })
+
       router.get('/' + base_url + '*'+ 'inspector/dashboard', function(req, res) {
         console.log("default get routing page for: " + base_url + req.params[0])
+
         // Attempt to render a page in the current folder
         console.log("------- inspector ------ ")
+        console.log(req.body)
         res.render(base_url + req.params[0] + 'inspector/dashboard', {
           tasks
         })
