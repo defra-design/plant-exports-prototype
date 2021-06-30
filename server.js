@@ -62,7 +62,8 @@ useHttps = useHttps.toLowerCase()
 
 var useDocumentation = (config.useDocumentation === 'true')
 // logging
-var useLogging = config.useLogging
+var useLogging = config.useLogging;
+
 // Promo mode redirects the root to /docs - so our landing page is docs when published on heroku
 var promoMode = process.env.PROMO_MODE || 'false'
 promoMode = promoMode.toLowerCase()
@@ -207,25 +208,37 @@ if (useAutoStoreData === 'true') {
 }
 
 // Logging session data
-//  if (useLogging !== 'false') {
-//   app.use((req, res, next) => {
-//     const all = (useLogging === 'true')
-//     const post = (useLogging === 'post' && req.method === 'POST')
-//     const get = (useLogging === 'get' && req.method === 'GET')
-//     const d = req.session.data
-//
-//     if (all || post || get) {
-//       const log = {
-//         method: req.method,
-//         url: req.originalUrl,
-//         data: d
-//       }
-//
-//       console.log(JSON.stringify(log, null, 2))
-//     }
-//     next()
-//   })
-// }
+ if (useLogging !== 'false') {
+  app.use((req, res, next) => {
+    const all = (useLogging === 'true')
+    const post = (useLogging === 'post' && req.method === 'POST')
+    const get = (useLogging === 'get' && req.method === 'GET')
+    const d = req.session.data
+
+    if (all || post || get) {
+      const log = {
+        method: req.method,
+        url: req.originalUrl,
+        data: d
+      }
+
+      console.log(JSON.stringify(log, null, 2))
+
+/* 
+ data: {
+    applications: [],
+    commodities: [],
+    id_count: 1,
+    sample: [],
+    plants: []
+    }
+       */
+    }
+    next()
+  })
+}
+
+
 
 // Clear all data in session if you open /prototype-admin/clear-data
 app.post('/prototype-admin/clear-data', function (req, res) {
