@@ -219,7 +219,7 @@ module.exports = function(router) {
         // add logged time to table
         let loggedDate = "20 July 2021";
         if(req.body.day && req.body.month && req.body.year){
-          loggedDate = req.body.day  +" "+  months[req.body.month] +" "+ req.body.year;
+          loggedDate = req.body.day  +" "+  months[parseInt(req.body.month)] +" "+ req.body.year;
           let obj  = {
             id:null,
             name:req.body["inspector-name"][0],
@@ -298,7 +298,7 @@ module.exports = function(router) {
 
       // this adds query to all pages and will be used if no other get routing exists to override this.
       router.get('/' + base_url + '*', function(req, res) {
-        console.log("default get routing page for: " + base_url + req.params[0])
+        console.log("v1.23 default get routing page for: " + base_url + req.params[0])
         var dir = req.params[0].split(/\/+/g);
         // Remove the main folder from URL
         dir.shift()
