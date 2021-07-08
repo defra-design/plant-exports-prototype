@@ -38,58 +38,10 @@ module.exports = function(router) {
 
     // MIDDLEWARE: Called every time a page is rendered
     router.use(function(req, res, next) {
-      // this makes sure a certificate is loaded
-      // if (req.query.certificate && req.session.database != req.query.certificate) {
-      //   req.session.database = req.query.certificate
-      //   req.session.db = tools.getDB(req.query.certificate, db).data
-      // }
-      // // if the certificate is does not exist get one.
-      // req.session.db = req.session.db || tools.getDB(req.session.data.database, db).data
-      // req.session.data.is_multiple = req.session.db.is_multiple
-      // req.session.data.certificate_code = req.session.db.certificate_code
       next()
     })
 
-    // ** GET template **
-    // router.get('/' + base_url + '*/anypage', function(req, res) {
-    //   res.render(base_url + req.params[0] + '/anypage', {
-    //     "query": req.query
-    //   }, function(err, html) {
-    //     if (err) {
-    //       if (err.message.indexOf('template not found') !== -1) {
-    //         return res.render(file_url + '/anypage', {
-    //           "query": req.query
-    //         });
-    //       }
-    //       throw err;
-    //     }
-    //     res.send(html);
-    //   })
-    // });
-
-    // **** POST TEMPLATE ***
-    // router.post('/'+base_url+'*/clone', function(req, res) {
-    //     res.redirect(301, '/' + base_url +req.params[0]+'/another page');
-    // })
-    //
-    //
-    // router.get('/poc/dev/index', function(req, res) {
-    //   console.log("working")
-    //   res.render('/poc/dev/index', {
-    //     "query": req.query
-    //   }, function(err, html) {
-    //     if (err) {
-    //       if (err.message.indexOf('template not found') !== -1) {
-    //         return res.render('poc/dev/index', {
-    //           "query": req.query
-    //         });
-    //       }
-    //       throw err;
-    //     }
-    //     res.send(html);
-    //   })
-    // });
-    function filterResults(r, q) {
+   function filterResults(r, q) {
       var list = []
       for (var i = 0; i < r.length; i++) {
         console.log("checking: " + r[i].lang)
@@ -219,7 +171,7 @@ module.exports = function(router) {
         // add logged time to table
         let loggedDate = "20 July 2021";
         if(req.body.day && req.body.month && req.body.year){
-          loggedDate = req.body.day  +" "+  months[req.body.month] +" "+ req.body.year;
+          loggedDate = req.body.day  +" "+  months[parseInt(req.body.month)] +" "+ req.body.year;
           let obj  = {
             id:null,
             name:req.body["inspector-name"][0],
