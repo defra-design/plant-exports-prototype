@@ -1,0 +1,122 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Time entry - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item" id="Nav-DisplayName">Inspector X</li>
+    <li class="login-nav__list-item"> | Manage account |</li>
+    <li class="login-nav__list-item"><a href="#" class="govuk-link login-nav__link govuk-link--no-visited-state"
+        id="Link-SignOut">Sign out</a></li>
+  </ul>
+</div>
+{% endblock%}
+
+{% block content %}
+<div class="govuk-grid-row govuk-!-margin-bottom-6">
+
+  <div class="govuk-grid-column-two-thirds">
+    <form action="check-answers" method="post" novalidate>
+      <input type="hidden" id="id" name="id" value="{{times.id}}">
+      <fieldset class="govuk-fieldset">
+
+
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+          <span class="govuk-caption-l">Work order DEFRA_17516</span>
+          <h1 class="govuk-label-wrapper"><label class="govuk-label govuk-label--xl" for="postcode">
+              Enter time spent on an inspection task
+            </label>
+          </h1>
+          
+        </legend>
+
+        {% set select_label="Full name of inspector who did the inspection" %}
+        {% set module_name="inspector-name" %}
+        {% set user_name=times.name %}
+        {% include("includes/_person-select.html") %}
+        
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset" role="group" aria-describedby="passport-issued-hint">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+              <h1 class="govuk-fieldset__heading">
+                Date
+              </h1>
+            </legend>
+            <span id="passport-issued-hint" class="govuk-hint">
+            </span>
+            <div class="govuk-date-input" id="passport-issued">
+              <div class="govuk-date-input__item">
+                <div class="govuk-form-group">
+                  <label class="govuk-label govuk-date-input__label" for="day">
+                    Day
+                  </label>
+                  <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="day" name="day" type="text" pattern="[0-9]*" inputmode="numeric" value="{{times.day}}">
+                </div>
+              </div>
+              <div class="govuk-date-input__item">
+                <div class="govuk-form-group">
+                  <label class="govuk-label govuk-date-input__label" for="month">
+                    Month
+                  </label>
+                  <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="month" name="month" type="text" pattern="[0-9]*" inputmode="numeric" value="{{times.month}}">
+                </div>
+              </div>
+              <div class="govuk-date-input__item">
+                <div class="govuk-form-group">
+                  <label class="govuk-label govuk-date-input__label" for="year">
+                    Year
+                  </label>
+                  <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="year" name="year" type="text" pattern="[0-9]*" inputmode="numeric" value="{{times.year}}">
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+        
+
+        <div class="govuk-form-group">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+            <h1 class="govuk-fieldset__heading">
+              Time
+            </h1>
+          </legend>
+          <div id="event-name-hint" class="govuk-hint">
+            Enter the time spent in minutes
+          </div>
+          <label class="govuk-label" for="travel">
+            Time spent on travel
+          </label>
+          <input class="govuk-input govuk-!-width-one-third" id="travel" name="travel" type="text" value="{{times.travel}}">
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="inspection">
+            Time spent on an inspection
+          </label>
+          <input class="govuk-input govuk-!-width-one-third" id="inspection" name="inspection" type="text" value="{{times.inspection}}">
+        </div>
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="admin">
+           Time spent on admin
+          </label>
+          <input class="govuk-input govuk-!-width-one-third" id="admin" name="admin" type="text" value="{{times.admin}}">
+        </div>
+
+      </fieldset>
+
+      <div>
+        <button class="govuk-button" data-module="govuk-button">
+          Continue
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+{% endblock %}

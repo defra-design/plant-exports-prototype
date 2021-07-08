@@ -1,0 +1,143 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Time entry - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item" id="Nav-DisplayName">Inspector X</li>
+    <li class="login-nav__list-item"> | Manage account |</li>
+    <li class="login-nav__list-item"><a href="#" class="govuk-link login-nav__link govuk-link--no-visited-state"
+        id="Link-SignOut">Sign out</a></li>
+  </ul>
+</div>
+{% endblock%}
+
+{% block content %}
+<div class="govuk-grid-row govuk-!-margin-bottom-6">
+
+  <div class="govuk-grid-column-two-thirds">
+    <form action="check-answers" method="post" novalidate>
+
+
+      <fieldset class="govuk-fieldset">
+
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            <span class="govuk-caption-l">Work order DEFRA_17516</span>
+            <h1 class="govuk-label-wrapper"><label class="govuk-label govuk-label--xl" for="postcode">
+                Enter time spent on training
+              </label>
+            </h1>
+            <div id="event-name-hint" class="govuk-hint">
+              Enter the details of a single training session.
+            </div>
+          </legend>
+
+
+            {% set select_label="Full name of inspector" %}
+            {% set module_name="inspector-name" %}
+            {% include("includes/_person-select.html") %}
+
+                    
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset" role="group" aria-describedby="passport-issued-hint">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+              <h1 class="govuk-fieldset__heading">
+                Date of the training session
+              </h1>
+            </legend>
+            <span id="passport-issued-hint" class="govuk-hint">
+            </span>
+            <div class="govuk-date-input" id="passport-issued">
+              <div class="govuk-date-input__item">
+                <div class="govuk-form-group">
+                  <label class="govuk-label govuk-date-input__label" for="export_to_day">
+                    Day
+                  </label>
+                  <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="export_to_day" name="export_to_day" type="text" pattern="[0-9]*" inputmode="numeric">
+                </div>
+              </div>
+              <div class="govuk-date-input__item">
+                <div class="govuk-form-group">
+                  <label class="govuk-label govuk-date-input__label" for="export_to_month">
+                    Month
+                  </label>
+                  <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="export_to_month" name="export_to_month" type="text" pattern="[0-9]*" inputmode="numeric">
+                </div>
+              </div>
+              <div class="govuk-date-input__item">
+                <div class="govuk-form-group">
+                  <label class="govuk-label govuk-date-input__label" for="export_to_year">
+                    Year
+                  </label>
+                  <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="export_to_year" name="export_to_year" type="text" pattern="[0-9]*" inputmode="numeric">
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+        
+            <div class="govuk-form-group">
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                <h1 class="govuk-fieldset__heading">
+                  Time
+                </h1>
+              </legend>
+              <div id="event-name-hint" class="govuk-hint">
+                Enter the time spent in minutes
+              </div>
+              
+              <label class="govuk-label" for="address-county">
+                Time spent training the exporter
+              </label>
+              <div id="event-name-hint" class="govuk-hint">
+                If the training was for an exporter, enter the time here in hours and minutes. If the training was for an inspector, leave this section blank.
+              </div>
+              <input class="govuk-input govuk-!-width-one-third" id="address-county" name="address-county" type="text">
+            </div>
+
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="address-county">
+                Time spent training an inspector
+              </label>
+              <div id="event-name-hint" class="govuk-hint">
+                If the training was for an inspector, enter the time here in hours and minutes. If the training was for an exporter, leave this section blank
+              </div>
+              <input class="govuk-input govuk-!-width-one-third" id="address-county" name="address-county" type="text">
+            </div>
+
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="address-county">
+                Amount of training time received
+              </label>
+              <input class="govuk-input govuk-!-width-one-third" id="address-county" name="address-county" type="text">
+            </div>
+
+      </fieldset>
+
+
+
+
+      <div class="hmcts-button-action">
+        <button class="govuk-button govuk-button--secondary  govuk-add-another__add-button  govuk-!-margin-bottom-4"
+          data-module="govuk-button">
+          Add training time for another person
+        </button>
+      </div>
+
+      <div>
+        <button class="govuk-button" data-module="govuk-button">
+          Continue
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+
+{% endblock %}
