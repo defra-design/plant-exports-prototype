@@ -26,6 +26,7 @@ router.use('/', (req, res, next) => {
 const fs = require('fs');
 const route_path= "./routes/"
 const normalizedPath = require("path").join(__dirname, "./routes/");
+/* 
 fs.readdirSync(normalizedPath).forEach(function(file) {
     //loads directory this didnt work. Make it work later
 
@@ -33,7 +34,7 @@ fs.readdirSync(normalizedPath).forEach(function(file) {
     console.log(normalizedPath+file)
     // require('./routes/'+file)(router);
   });
-
+ */
 const tools = require('./routes/tools.js')
 require('./routes/routes.js')(router);
 // dev loads a specific version route in turn
