@@ -12,20 +12,58 @@ GOV.UK Prototype Kit
     <h1 class="govuk-heading-xl">
       Update your answers before resubmitting your application
     </h1>
-    <h2 class="govuk-heading-m">Your reference</h2>
+    <h2 class="govuk-heading-m">Application summary</h2>
+
     <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Certificate
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {% if data.pheats_check != "yes" %}
+            {% if data.reforwarding %}
+              Re-forwarding phytosanitary certificate for {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}
+            {% elseif data.journey == "coc" %}
+              Certificate of conformity
+            {% else %}
+              Phytosanitary certificate for {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}
+            {% endif %}
+          {% else %}
+             Phytosanitary certificate (PHEATS)
+          {% endif %}
+        </dd>
+        <dd class="govuk-summary-list__actions">
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Destination
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ data.countrySelect[0] or "Spain"}}
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="../setup/what-country?change=yes">
+            Change<span class="govuk-visually-hidden">
+              Certification region</span>
+          </a>
+        </dd>
+      </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Your reference for this application
         </dt>
         <dd class="govuk-summary-list__value">
-          {{data.reference_num or "PO 86608 Canaries"}}
+          {{ data.reference_num or "12345" }}
         </dd>
         <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="../setup/what-country?change=yes">
+            Change<span class="govuk-visually-hidden">
+              Certification region</span>
+          </a>
         </dd>
       </div>
     </dl>
-    
 
     <h2 class="govuk-heading-m">Exporter details</h2>
     <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
@@ -252,7 +290,7 @@ GOV.UK Prototype Kit
           Transportation identification
         </dt>
         <dd class="govuk-summary-list__value">
-          {{data.transport_id or ""}}
+          {{data.transport_id or "<span style='color:#999'>Not supplied</span>" | safe}}
         </dd>
         <dd class="govuk-summary-list__actions">
           <a class="govuk-link" href="shipping-amend?change=yes&return_url=check-your-answers-amend">
@@ -265,7 +303,7 @@ GOV.UK Prototype Kit
           Container number
         </dt>
         <dd class="govuk-summary-list__value">
-          {{data.container_num or ""}}
+          {{data.container_num or "<span style='color:#999'>Not supplied</span>" | safe}}
         </dd>
         <dd class="govuk-summary-list__actions">
           <a class="govuk-link" href="shipping-amend?change=yes&return_url=check-your-answers-amend">
