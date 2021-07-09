@@ -1,7 +1,7 @@
 // There might be a better way to use this data.
 var applications = require('./data/applications.json')
 var sample = require('./data/sample.json')
-module.exports = function(env) {
+module.exports = function (env) {
   /**
    * Instantiate object used to store the methods registered as a
    * 'filter' (of the same name) within nunjucks. You can override
@@ -12,9 +12,9 @@ module.exports = function(env) {
 
 
   // get application information
-  filters.appInfo = function(id, key) {
+  filters.appInfo = function (id, key) {
     var app = {};
-    applications.forEach(function(item) {
+    applications.forEach(function (item) {
       if (item.index == id) {
         app = item;
       }
@@ -24,7 +24,7 @@ module.exports = function(env) {
   }
 
   // show hide infomation based on search results
-  filters.showHide = function(obj, text) {
+  filters.showHide = function (obj, text) {
     var query = text.split();
     for (key in obj) {
       for (var v = 0; v < query.length; v++) {
@@ -37,12 +37,12 @@ module.exports = function(env) {
   }
 
   // Way of increasing a number in nunjucks
-  filters.increase = function(num) {
+  filters.increase = function (num) {
     return num += 1;
   }
 
 
-  filters.toMonth = function(x) {
+  filters.toMonth = function (x) {
     months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     if (x > 0) {
       return months[x - 1]; // returns date as per month
@@ -50,23 +50,23 @@ module.exports = function(env) {
       return x;
     }
   }
-  filters.toMoney = function(x) {
+  filters.toMoney = function (x) {
     return ("£" + x);
     //TO ADD - case to handle nothing being there
   }
-  filters.getCommodity =function(str,val){
-    console.log("looking up commodity: "+val)
+  filters.getCommodity = function (str, val) {
+    console.log("looking up commodity: " + val)
     var regExp = /\(([^)]+)\)/;
     var matches = regExp.exec(str);
 
-//matches[1] contains the value between the parentheses
-console.log(matches[1]);
-for(key in sample){
- console.log("found "+sample[key].eppocode);
-  if(sample[key].eppocode==matches[1]){
-    return sample[key][val];
-  }
-}
+    //matches[1] contains the value between the parentheses
+    console.log(matches[1]);
+    for (key in sample) {
+      console.log("found " + sample[key].eppocode);
+      if (sample[key].eppocode == matches[1]) {
+        return sample[key][val];
+      }
+    }
   }
 
   /* ------------------------------------------------------------------
