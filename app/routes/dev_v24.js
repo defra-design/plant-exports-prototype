@@ -148,17 +148,19 @@ module.exports = function(router) {
         { ref:"PO 29300", name:"Rowell XP LTD", address:"Eye Farm, Boro Road, Peterborough, Cambridgeshire, PO5 4GH", inspectionDate:"18 Jul 2021", dispatchDate: "22 Jul 2021", status:"todo", tag:"grey"},
       ];
       let months = [null, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-      let timeLog = [{id:0, name:"Inspector X", date:"19 July 2021", admin:"15", travel:"", inspection:"", day:"19", month:"7", year:"2021"}];
+      //let timeLog = [{id:0, name:"Inspector X", date:"19 July 2021", admin:"15", travel:"", inspection:"", day:"19", month:"7", year:"2021"}];
+
 
       router.get('/' + base_url + '*'+ 'inspector/time-entry', function(req, res) {
         console.log("id", req.query.id);
         let id = 0;
         if(req.query.id){
           id = parseInt(req.query.id);
-          times = timeLog[id];
+          times = req.session.data.timeLog[id];
         }else{
           times = {id:null, name:"", date:"", admin:"", travel:"", inspection:"", day:"", month:"", year:""}
         }
+        console.log("times");
         console.log(times);
         res.render(base_url + req.params[0] + 'inspector/time-entry', {
           times
@@ -167,9 +169,13 @@ module.exports = function(router) {
 
 
       router.all('/' + base_url + '*'+ 'inspector/check-answers', function(req, res) {
-        console.log("default get routing page for: " + base_url + req.params[0])
+        console.log("default get routing page for cya: " + base_url + req.params[0])
         // add logged time to table
         let loggedDate = "20 July 2021";
+        if(!req.session.data.timeLog){
+          req.session.data.timeLog = [];
+          req.session.data.timeLog.push({id:0, name:"Inspector X", date:"19 July 2021", admin:"15", travel:"", inspection:"", day:"19", month:"7", year:"2021"} );
+        }
         if(req.body.day && req.body.month && req.body.year){
           loggedDate = req.body.day  +" "+  months[parseInt(req.body.month)] +" "+ req.body.year;
           let obj  = {
@@ -184,22 +190,23 @@ module.exports = function(router) {
             inspection:req.body.inspection
           };
           if(req.body.id){
-            //console.log('update exisitng', req.body.id);
+            console.log('update exisitng', req.body.id);
             obj.id = req.body.id;
             let idx = parseInt(req.body.id);
-            timeLog[idx] = obj;
+            req.session.data.timeLog[idx] = obj;
           }else{
-            obj.id = timeLog.length;
-            //console.log('add new item', obj.id);
-            timeLog.push(obj);
+            obj.id = req.session.data.timeLog.length;
+            console.log(req.session.data.timeLog);
+            console.log('add new item', obj.id);
+            req.session.data.timeLog.push(obj);
           }
         }
         // Attempt to render a page in the current folder
         console.log("------- check-answers ------ ")
         //console.log(req.body);
-        //console.log(timeLog);
+        console.log(req.session.data.timeLog);
         res.render(base_url + req.params[0] + 'inspector/check-answers', {
-          timeLog
+          timeLog: req.session.data.timeLog
         })
       })
 
