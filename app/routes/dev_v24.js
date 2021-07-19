@@ -257,7 +257,7 @@ module.exports = function(router) {
 
       // this adds query to all pages and will be used if no other get routing exists to override this.
       router.get('/' + base_url + '*', function(req, res) {
-        console.log("default get routing page for: " + base_url + req.params[0])
+        console.log("default global GET routing page for: " + base_url + req.params[0])
         var dir = req.params[0].split(/\/+/g);
         // Remove the main folder from URL
         dir.shift()
