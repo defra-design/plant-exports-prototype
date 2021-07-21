@@ -116,6 +116,10 @@ Your applications - {{serviceName}} - GOV.UK
         border: 3px solid #000000;
         color: #000000;
     }
+    .client-ref{
+      display: inline-block;
+      margin-top: 4px;
+    }
 </style>
 
 <div class="govuk-grid-row">
@@ -134,7 +138,7 @@ Your applications - {{serviceName}} - GOV.UK
     <form method="GET">
       <div class="search-wrapper govuk-form-group">
         <label for="search-reservations" class="govuk-label">
-          Search by application ID, destination, submission date or reference number
+          Search by Phyto number, reference, customer or destination
         </label>
         <div class="search-input-wrapper">
           <input type="search" value="{{query.search or ''}}" id="search-reservations" name="search" title="Search" class="govuk-input">
@@ -156,7 +160,7 @@ Your applications - {{serviceName}} - GOV.UK
 </div>
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
-    <div class="defra-filter--content" style="display: none;">
+    <div class="defra-filter--content">
       <form method="get">
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-one-third">
@@ -440,7 +444,7 @@ Your applications - {{serviceName}} - GOV.UK
         <table class="govuk-table responsive-table">
           <thead class="govuk-table__head">
             <tr class="govuk-table__row">
-              <th class="govuk-table__header" scope="col">Application reference</th>
+              <th class="govuk-table__header" scope="col">Phyto number / Reference</th>
               <th class="govuk-table__header" scope="col">Certificate</th>
               <th class="govuk-table__header" scope="col">Destination</th>
               <th class="govuk-table__header" scope="col">Submitted date</th>
@@ -464,46 +468,46 @@ Your applications - {{serviceName}} - GOV.UK
                   %}
                     {% if data.show_applications_by == "me"%}
                       {% if app.name == logged_in_as %}
-                      <tr class="govuk-table__row result">
-                        <th id="1721147986456-appRef" class="govuk-table__cell applicationRef-column table-header" scope="row">
-                          <a href="application?id=0" class="govuk-link govuk-link--no-visited-state">
-                          <span class="table-heading table-heading-full" aria-hidden="true">Application reference</span> <strong>{{app.applicationID}}</strong></a>
-                          {% if app.status != "draft" %}
-                          <br/>
-                            <span class="table-heading table-heading-full" aria-hidden="true">Customer reference</span><span class="client-ref">{{app.reference}}</span>
-                          {% endif %}
-                        </th>
-                        <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
-                          <span class="table-heading" aria-hidden="true">Certificate</span>
-                          {{app.cert_info}}
-                        </td>
-                        <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
-                          {% if (app.cert_info != "Conformity") and (app.status != "draft") %}
-                            <span class="table-heading " aria-hidden="true">Destination</span>
-                            {{app.importer}}<br/>
-                          {% endif %}
-                            {{app.destination}}
-                        </td>
-                        <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
-                          <span class="table-heading" aria-hidden="true">Submitted date</span>
-                          {{app.date}}
-                        </td>
-                        <td id="1721147986456-status" class="govuk-table__cell" scope="row">
-                          <span class="table-heading" aria-hidden="true">Status</span>
-                          <div class="app-status-tag app-status-tag--{{app.tag | lower}}">
-                            {{app.status}}
-                          </div>
-                        </td>
-                        <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
-                          {% if app.index != "5" and app.index != "7" and app.index != "24" %}
-                            <a href="clone?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">Copy</a>
-                          {% endif %}
-                        </td>
-                      </tr>
+                        <tr class="govuk-table__row result">
+                          <th id="1721147986456-appRef" class="govuk-table__cell applicationRef-column table-header" scope="row">
+                            <a href="application?id=0" class="govuk-link govuk-link--no-visited-state">
+                            <span class="table-heading table-heading-full" aria-hidden="true">Phyto number</span> <strong>{{app.applicationID}}</strong></a>
+                            {% if app.status != "draft" %}
+                            <br/>
+                              <span class="table-heading table-heading-full" aria-hidden="true">Customer reference</span><span class="client-ref">{{app.reference}}</span>
+                            {% endif %}
+                          </th>
+                          <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
+                            <span class="table-heading" aria-hidden="true">Certificate</span>
+                            {{app.cert_info}}
+                          </td>
+                          <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
+                            {% if (app.cert_info != "Conformity") and (app.status != "draft") %}
+                              <span class="table-heading " aria-hidden="true">Destination</span>
+                              {{app.importer}}<br/>
+                            {% endif %}
+                              {{app.destination}}
+                          </td>
+                          <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
+                            <span class="table-heading" aria-hidden="true">Submitted date</span>
+                            {{app.date}}
+                          </td>
+                          <td id="1721147986456-status" class="govuk-table__cell" scope="row">
+                            <span class="table-heading" aria-hidden="true">Status</span>
+                            <div class="app-status-tag app-status-tag--{{app.tag | lower}}">
+                              {{app.status}}
+                            </div>
+                          </td>
+                          <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
+                            {% if app.index != "5" and app.index != "7" and app.index != "24" %}
+                              <a href="clone?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">Copy</a>
+                            {% endif %}
+                          </td>
+                        </tr>
                       {% endif %}
                     {% else %}
                         <tr class="govuk-table__row result">
-                          <th id="1721147986456-appRef" class="govuk-table__cell applicationRef-column table-header" scope="row">
+                          <td id="1721147986456-appRef" class="govuk-table__cell applicationRef-column table-header" scope="row">
                             {% if app.index == "4" %}
                             <a href="application-amend?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
                             {% elseif app.index == "7" %}
@@ -513,17 +517,26 @@ Your applications - {{serviceName}} - GOV.UK
                             {% else %}
                             <a href="application?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
                             {% endif %}
-                              <span class="table-heading table-heading-full" aria-hidden="true">Application reference</span> {% if app.reference %}{{app.reference}}{%else%}{{app.applicationID}}{%endif%}
-                            </a>
+
+                              <span class="table-heading table-heading-full" aria-hidden="true">Phyto number</span> <strong>{{app.applicationID}}</strong></a>
+                              {% if app.status != "draft" %}
+                              <br/>
+                                <span class="table-heading table-heading-full" aria-hidden="true">Customer reference</span><span class="client-ref">{{app.reference}}</span>
+                              {% endif %}
+                              
+                            
                             <br>
-                          </th>
+                          </td>
                           <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
                             <span class="table-heading" aria-hidden="true">Certificate</span>
                             {{app.cert_info}}
                           </td>
                           <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
-                            <span class="table-heading" aria-hidden="true">Destination</span>
-                            {{app.destination}}
+                            {% if (app.cert_info != "Conformity") and (app.status != "draft") %}
+                              <span class="table-heading " aria-hidden="true">Destination</span>
+                              {{app.importer}}<br/>
+                            {% endif %}
+                              {{app.destination}}
                           </td>
                           <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
                             <span class="table-heading" aria-hidden="true">Submitted date</span>
@@ -607,13 +620,13 @@ Your applications - {{serviceName}} - GOV.UK
     window.addEventListener('load', function() {
       var count = $('.govuk-table__row').length - 1
       // show hide content
-      //$('.defra-filter--content').hide()
+      $('.defra-filter--content').hide()
       $('.defra-filter--action').show()
       $('#js-case-count').text(count);
       if (count == 0) {
         $('.govuk-tbody').hide()
       }
-      //$('.defra-filter--content').hide()
+      $('.defra-filter--content').hide()
       $('#defra-filter--button').on("click", function() {
         if (!$('.defra-filter--action').hasClass('defra-filter--open')) {
           $('.defra-filter--content').show().focus()
