@@ -171,8 +171,7 @@ app.locals.serviceName = config.serviceName
 // extensionConfig sets up variables used to add the scripts and stylesheets to each page.
 app.locals.extensionConfig = extensions.getAppConfig()
 // date
-const now = moment().format('DD MMM YYYY');
-
+const now = moment().format('DD MMMM YYYY');
 app.locals.todaysDate = now;
 
 // Session uses service name to avoid clashes with other prototypes
