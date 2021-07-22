@@ -44,7 +44,19 @@ GOV.UK Prototype Kit
 
         <div class="govuk-inset-text">
           <p class="govuk-body">
-            If you’re exporting {{data.commodity or "Apples" | lower}} to {{data.countrySelect[0] or "Russia"}}, you may need to apply for a phytosanitary certificate.
+            If you’re 
+            {% if (data.countrySelect[0] == "United Kingdom (Northern Ireland)" ) %}
+              sending
+            {% else %}
+              exporting
+            {% endif %}
+            {{data.commodity or "Apples" | lower}} to 
+            {% if (data.countrySelect[0] == "United Kingdom (Northern Ireland)" ) %}
+              Northern Ireland,
+            {% else %}
+              {{data.countrySelect[0] or 'China'}},  
+            {% endif %} 
+            you may need to apply for a phytosanitary certificate.
           </p>
             
           <p class="govuk-body">

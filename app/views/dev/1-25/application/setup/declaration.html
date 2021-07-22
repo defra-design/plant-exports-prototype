@@ -10,22 +10,78 @@ GOV.UK Prototype Kit
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <div>
-      <h1 class="govuk-heading-xl">Regulations for {% if data.reforwarding %}<br>re-forwarding{% else %}exporting{% endif %} {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %} to {{data.countrySelect[0] or 'China'}}</h1>
+      <h1 class="govuk-heading-xl">Regulations for 
+        {% if data.reforwarding %}
+        <br>re-forwarding
+        
+        {% elif (data.countrySelect[0] == "United Kingdom (Northern Ireland)" ) %}
+        sending
+        {% else %}
+        exporting
+        {% endif %}
+        
+        {% if data.commodity == "plants" %}
+        plants and fresh produce
+        {% else %}
+        {{data.commodity or 'plant products'}}
+        {% endif %}
+        to 
+        {% if (data.countrySelect[0] == "United Kingdom (Northern Ireland)" ) %}
+        Northern Ireland
+        {% else %}
+         {{data.countrySelect[0] or 'China'}}  
+        {% endif %}
+      </h1>
     </div>
       {% if data.reforwarding %}
-        <p class="govuk-body" lang="en">Before you start this application, check if the <a href="https://www.ippc.int/en/countries/all/list-countries/">competent authority in {{data.countrySelect[0] or 'China'}}</a> (the equivalent of Defra):</p>
+        <p class="govuk-body" lang="en">Before you start this application, check if the <a href="https://www.ippc.int/en/countries/all/list-countries/">competent authority in 
+          {% if (data.countrySelect[0] == "United Kingdom (Northern Ireland)" ) %}
+          Northern Ireland
+          {% else %}
+           {{data.countrySelect[0] or 'China'}}  
+          {% endif %}</a> (the equivalent of Defra):</p>
         <ul class="govuk-list govuk-list--bullet">
-          <li>needs you to have a phytosanitary certificate to export {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %} to {{data.countrySelect[0] or 'China'}}</li>
+          <li>needs you to have a phytosanitary certificate to 
+          {% if (data.countrySelect[0] == "United Kingdom (Northern Ireland)" ) %}
+            send
+          {% else %}
+            export
+          {% endif %}
+        
+            {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %} to 
+            {% if (data.countrySelect[0] == "United Kingdom (Northern Ireland)" ) %}
+            Northern Ireland
+            {% else %}
+             {{data.countrySelect[0] or 'China'}}  
+            {% endif %}
+          
+          </li>
           <li>allows you to re-forward this commodity</li>
         </ul>
           {% if data.commodity == "bulbs" or data.commodity == "grain" or data.commodity == "plants" or data.commodity == "plant products" or data.commodity == "seeds" %}
           <p class="govuk-body" lang="en">You should also check if you need to describe your consignment using the botanical name (genus and species).</p>
           {% endif %}
     {% else %}
-    <p class="govuk-body" lang="en">Before you start this application, check if the <a href="https://www.ippc.int/en/countries/all/list-countries/">competent authority in {{data.countrySelect[0] or 'China'}}</a> (the equivalent of Defra):</p>
+    <p class="govuk-body" lang="en">Before you start this application, check if the <a href="https://www.ippc.int/en/countries/all/list-countries/">competent authority in 
+      {% if (data.countrySelect[0] == "United Kingdom (Northern Ireland)" ) %}
+      Northern Ireland
+      {% else %}
+       {{data.countrySelect[0] or 'China'}}  
+      {% endif %}</a> (the equivalent of Defra):</p>
     <ul class="govuk-list govuk-list--bullet">
-      <li>needs you to have a phytosanitary certificate to export {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %} to
-        {{data.countrySelect[0] or 'China'}}
+      <li>needs you to have a phytosanitary certificate to 
+      {% if (data.countrySelect[0] == "United Kingdom (Northern Ireland)" ) %}
+        send
+      {% else %}
+        export
+      {% endif %}
+        
+        {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %} to
+        {% if (data.countrySelect[0] == "United Kingdom (Northern Ireland)" ) %}
+        Northern Ireland
+        {% else %}
+         {{data.countrySelect[0] or 'China'}}  
+        {% endif %}
       </li>
       {% if data.commodity == "plants" or data.commodity == "bulbs" or data.commodity == "potatoes" %}
         {% if data.pheats == 1 %}
@@ -83,7 +139,7 @@ GOV.UK Prototype Kit
           <div class="govuk-checkboxes__item">
             <input class="govuk-checkboxes__input" type="checkbox" autofocus="autofocus" name="confirm" id="confirm">
             <label class="govuk-checkboxes__label govuk-!-font-weight-bold" for="confirm" style="margin-top: -10px;">
-              I confirm that I have understood and followed the {%if data.reforwarding == 1%}re-forwarding{%else%}exporting{%endif%} regulations for this commodity
+              I confirm that I have understood and followed the {%if data.reforwarding == 1%}re-forwarding{%endif%} regulations for this commodity
             </label>
           </div>
         </div>
