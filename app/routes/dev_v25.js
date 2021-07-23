@@ -257,7 +257,7 @@ module.exports = function(router) {
 
       // this adds query to all pages and will be used if no other get routing exists to override this.
       router.get('/' + base_url + '*', function(req, res) {
-        console.log("default global GET routing page for: " + base_url + req.params[0])
+        console.log("default global GET routing page for: " + base_url +" plus "+ req.params[0])
         var dir = req.params[0].split(/\/+/g);
         // Remove the main folder from URL
         dir.shift()
@@ -267,6 +267,12 @@ module.exports = function(router) {
           baseDir += path
 
         })
+        console.log(baseDir);
+        // clear previous session data if the user has selected commodity and cert type
+        if(baseDir==="/setup/what-country"){
+          req.session.data = {}
+        }
+
         // Attempt to render a page in the current folder
         res.render(base_url + req.params[0], {
           "query": req.query,
