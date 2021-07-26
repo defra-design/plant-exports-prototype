@@ -269,7 +269,8 @@ module.exports = function(router) {
         })
         console.log(baseDir);
         // clear previous session data if the user has selected commodity and cert type
-        if(baseDir==="/setup/what-country"){
+        if(baseDir==="/setup/what-export"){
+          console.log("clearing data")
           req.session.data = {}
         }
 
