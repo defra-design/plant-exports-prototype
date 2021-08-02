@@ -8,19 +8,55 @@ GOV.UK Prototype Kit
 <a href="javascript:history.back()" class="govuk-back-link">Back</a>
 {% endblock%}
 
-{% block content %}
+{%  set items = ['The buyer has cancelled the order', 'It is a duplicate application','Application made in error'] %}
 
+{%  set reason = items[query.reason] %}
+{% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">
-      Are you sure you want to cancel this application?
+      Are you sure you want to cancel this application? {{query.reason}}
     </h1>
 
     {{ govukWarningText({
       text: "You may be charged for any work we have done on your application",
       iconFallbackText: "Warning"
     }) }}
-
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          APHA reference
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{(query.id | appInfo('applicationID')) or "PO 86608 Canaries"}}
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Your reference
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{(query.id | appInfo('reference')) or "PO 86608 Canaries"}}
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Destination
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{(query.id | appInfo('destination')) or "Canaries"}}
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Reason
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{reason or "The buyer has cancelled the order"}}
+        </dd>
+      </div>
+    </dl>
+<!-- 
     <table class='govuk-table govuk-!-margin-bottom-9'>
       <thead class='govuk-table__head'>
         <tr class='govuk-table__row'>
@@ -37,13 +73,13 @@ GOV.UK Prototype Kit
         </tr>
       </tbody>
     </table>
-
+ -->
     <form method="post" novalidate>
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">
           <div class="govuk-radios" data-module="govuk-radios">
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="application_type_cancel" name="application_type" type="radio" value="yes~cancel-reason?id=2">
+              <input class="govuk-radios__input" id="application_type_cancel" name="application_type" type="radio" value="yes~application-cancelled?id=2">
               <label class="govuk-label govuk-radios__label" for="application_type_cancel">
                 Yes, cancel this application
               </label>
@@ -58,7 +94,7 @@ GOV.UK Prototype Kit
         </fieldset>
       </div>
       <button class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">
-        Continue
+        Confirm
       </button>
     </form>
   </div>
