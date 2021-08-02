@@ -5,7 +5,7 @@
 module.exports = {
   // Service name used in header. Eg: 'Renew your passport'
   // serviceName: 'Apply for a phytosanitary certificate',
-  serviceName: 'Apply for plant health certificates and inspections',
+  serviceName: 'Apply for plant export certificates and inspections',
   //serviceName: 'Apply for a plant health export certificate or inspection',
 
 
