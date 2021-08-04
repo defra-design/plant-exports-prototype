@@ -8,7 +8,7 @@ module.exports = function(router) {
 
   // ADD extra routing here if needed.
   require('./dev_v24.js')(router) // temporarily keep v1-24 for inspector data
-  require('./dev_v25.js')(router)
+  require('./dev_v26.js')(router)
 
 
 
