@@ -207,10 +207,11 @@ Your application - {{serviceName}} - GOV.UK
 {% block scripts %}
 {{super()}}
 <script type="text/javascript">
-    // don't disable the  submit link on localhost
+    // don't disable the submit link on localhost
     let hostname = window.location.hostname;
-    console.log(hostname);
-    if (hostname.indexOf('localhost') > -1) {
+    var urlParams = new URLSearchParams(window.location.search);
+
+    if (hostname.indexOf('localhost') > -1 || urlParams.get('test')) {
       $('.task-list-submit-enabled').show();
       $('.task-list-submit-disabled').hide();
     }else{    
