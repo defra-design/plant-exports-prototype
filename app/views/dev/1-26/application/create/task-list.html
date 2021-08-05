@@ -207,22 +207,30 @@ Your application - {{serviceName}} - GOV.UK
 {% block scripts %}
 {{super()}}
 <script type="text/javascript">
-  window.addEventListener('load', function() {
-    var tasks = $('.app-task-list__tag')
-    var max = tasks.length - 2
-    $('.task-list-max').text(max)
-    var count = 0
-    tasks.each(function(index, value) {
-      console.log($(value).text())
-      if ($(value).text() == "Completed") {
-        count += 1
-      }
-    })
-    if (count >= max-1) {
-      $('.task-list-submit-enabled').show()
-      $('.task-list-submit-disabled').hide()
+    // don't disable the  submit link on localhost
+    let hostname = window.location.hostname;
+    console.log(hostname);
+    if (hostname.indexOf('localhost') > -1) {
+      $('.task-list-submit-enabled').show();
+      $('.task-list-submit-disabled').hide();
+    }else{    
+      window.addEventListener('load', function() {
+        var tasks = $('.app-task-list__tag')
+        var max = tasks.length - 2
+        $('.task-list-max').text(max)
+        var count = 0
+        tasks.each(function(index, value) {
+          console.log($(value).text())
+          if ($(value).text() == "Completed") {
+            count += 1
+          }
+        })
+        if (count >= max-1) {
+          $('.task-list-submit-enabled').show()
+          $('.task-list-submit-disabled').hide()
+        }
+        $('.task-list-completed').text(count)
+      })
     }
-    $('.task-list-completed').text(count)
-  })
 </script>
 {% endblock %}
