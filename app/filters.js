@@ -68,7 +68,14 @@ module.exports = function (env) {
       }
     }
   }
-
+  // Way of increasing a number in nunjucks
+  filters.getRandomSerial = function (num) {
+    let str= "";
+    for (var i=0; i<num; i++){
+      str += Math.floor(Math.random()*10);
+    }
+    return str;
+  }
   /* ------------------------------------------------------------------
     add your methods to the filters obj below this comment block:
     @example:
