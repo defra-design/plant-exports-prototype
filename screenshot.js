@@ -10,7 +10,7 @@
  * Set `domain` to the website you want to screenshot, eg localhost:3000
  */
 //const domain = 'http://localhost:3000'
-const domain = 'https://exporter:pl4ant_exp0rts@defra-plant-exports.herokuapp.com'
+const domain = 'https://defra-plant-exports.herokuapp.com'
 // option to take mobile screenshots (iphone 6/7/8)
 const isMobile = false;
 
