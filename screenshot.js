@@ -19,7 +19,8 @@ const isMobile = false;
  * Set `paths` to an array of named paths, for example:
  */
 const paths = [
-/*   // potatoes soil samples
+  // potatoes soil samples
+  /*   
   { title: '01_Start', path: '/dev/1-26/application/setup/what-export'},
   { title: 'What do you need', path: '/dev/1-26/application/setup/pre-application-test'},
   { title: 'Which type of potato', path: '/dev/1-26/application/soil/setup/potato-type'},
@@ -33,6 +34,7 @@ const paths = [
   { title: 'Confirmation', path: '/dev/1-26/application/soil/submit/confirmation'},
    */
   // potatoes GSI
+  /*   
   { title: '01 Create reference', path: '/dev/1-26/application/gsi/create/reference'},
   { title: '02 Task list', path: '/dev/1-26/application/gsi/create/task-list'},
   { title: '03 Where is inspection', path: '/dev/1-26/application/gsi/create/inspection-addresses'},
@@ -45,7 +47,7 @@ const paths = [
   { title: '10 Task list 2', path: '/dev/1-26/application/gsi/create/task-list-2'},
   { title: '11 Check your answers', path: '/dev/1-26/application/gsi/create/check-your-answers-2'},
   { title: '12 GSI confirmation', path: '/dev/1-26/application/gsi/submit/confirmation-gsi'},
-
+ */
 
 ]
 
