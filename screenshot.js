@@ -2,7 +2,7 @@
 // npm install --dev luxon fs webshot-node
 // 2 config (see steps inline)
 // 3 run the script
-// node screenshot.js destination-folder
+// node screenshot.js screenshots
 
 
 /*
@@ -19,7 +19,7 @@ const isMobile = false;
  * Set `paths` to an array of named paths, for example:
  */
 const paths = [
-  // potatoes soil samples
+/*   // potatoes soil samples
   { title: '01_Start', path: '/dev/1-26/application/setup/what-export'},
   { title: 'What do you need', path: '/dev/1-26/application/setup/pre-application-test'},
   { title: 'Which type of potato', path: '/dev/1-26/application/soil/setup/potato-type'},
@@ -31,6 +31,7 @@ const paths = [
   { title: 'Field and varieties', path: '/dev/1-26/application/soil/create/soil-commodity-list'},
   { title: 'Check your answers', path: '/dev/1-26/application/soil/create/check-your-answers-2'},
   { title: 'Confirmation', path: '/dev/1-26/application/soil/submit/confirmation'},
+   */
   // potatoes GSI
   { title: '01 Create reference', path: '/dev/1-26/application/gsi/create/reference'},
   { title: '02 Task list', path: '/dev/1-26/application/gsi/create/task-list'},
@@ -40,7 +41,7 @@ const paths = [
   { title: '06 Task list', path: '/dev/1-26/application/gsi/create/task-list'},
   { title: '07 Crop location', path: '/dev/1-26/application/gsi/create/field'},
   { title: '08 How to identify crop', path: '/dev/1-26/application/gsi/create/how-to-identify'},
-  { title: '09 Commodity list', path: 'dev/1-26/application/gsi/create/gsi-commodity-list'},
+  { title: '09 Commodity list', path: '/dev/1-26/application/gsi/create/gsi-commodity-list'},
   { title: '10 Task list 2', path: '/dev/1-26/application/gsi/create/task-list-2'},
   { title: '11 Check your answers', path: '/dev/1-26/application/gsi/create/check-your-answers-2'},
   { title: '12 GSI confirmation', path: '/dev/1-26/application/gsi/submit/confirmation-gsi'},
