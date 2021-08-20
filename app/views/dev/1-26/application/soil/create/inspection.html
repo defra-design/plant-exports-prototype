@@ -1,8 +1,11 @@
 {% extends "layout.html" %}
+
 {% block pageTitle %}
-GSI Inspection details - GOV.UK
+Inspection details - Growing season inspection - {{serviceName}} - GOV.UK
 {% endblock %}
+
 {% block beforeContent%}
+{{super()}}
 <a href="javascript:history.back()" class="govuk-back-link">Back</a>
 {% endblock %}
 
@@ -10,14 +13,15 @@ GSI Inspection details - GOV.UK
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">
-      Sampling site details
+      Inspection details
     </h1>
     <form action="{{query.return_url or '../create/task-list'}}" method="POST">
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset" role="group" aria-describedby="expiry-hint">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            Where will the sampling take place?
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+            Where will the inspection take place?
           </legend>
+
           <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="applicant-conditional" name="inspection_address" type="radio" value="ABC LIMITED, 27 The Crescent, NORTH WEST LONDON, NW7 0HX" data-aria-controls="conditional-applicant-conditional">
@@ -95,63 +99,100 @@ GSI Inspection details - GOV.UK
 
       </div>
 
-      {% if data.commodity == "potatoes" %}
-      <div class="govuk-form-group govuk-!-margin-top-9">
-        <fieldset class="govuk-fieldset" aria-describedby="changed-name-hint">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            <h1 class="govuk-fieldset__heading">
-              Type of application
-            </h1>
-          </legend>
-          <div class="govuk-radios govuk-radios">
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="apptypefield" name="apptype" type="radio" value="field">
-              <label class="govuk-label govuk-radios__label" for="apptypefield">
-                Field sample
+      {{ govukInput({
+        label: {
+          text: "When will the field be ready for inspection?",
+          classes: "govuk-label--s",
+          isPageHeading: true
+        },
+        hint: {
+          text: "For example, early October 2020"
+          },
+        id: "submit-date",
+        name: "submit-date",
+        classes: "govuk-!-width-one-half"
+      }) }}
+      <!--<fieldset class="govuk-fieldset" aria-describedby="applicant-conditional-hint">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+          <h1 class="govuk-fieldset__heading">
+            Date when the field will be ready for inspection
+          </h1>
+        </legend>
+        <span id="submit-date-hint" class="govuk-hint">
+          For example, 31 8 2020
+        </span>
+        <div class="govuk-date-input" id="submit-date">
+          <div class="govuk-date-input__item">
+            <div class="govuk-form-group">
+              <label class="govuk-label govuk-date-input__label" for="submit-date-day">
+                Day
               </label>
-            </div>
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="apptyperiddle" name="apptype" type="radio" value="riddle">
-              <label class="govuk-label govuk-radios__label" for="apptyperiddle">
-                Under riddle
-              </label>
-            </div>
-          </div>
-        </fieldset>
-      </div>
-      {% else %}
-      <div class="govuk-form-group govuk-!-margin-top-9">
-        <fieldset class="govuk-fieldset" aria-describedby="changed-name-hint">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            <h1 class="govuk-fieldset__heading">
-              Type of application
-            </h1>
-          </legend>
-          <div class="govuk-radios govuk-radios">
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="apptypefield" name="apptype" type="radio" value="field">
-              <label class="govuk-label govuk-radios__label" for="apptypefield">
-                Field grown
-              </label>
-            </div>
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="apptypeglasshouse" name="apptype" type="radio" value="glasshouse">
-              <label class="govuk-label govuk-radios__label" for="apptypeglasshouse">
-                Glasshouse
-              </label>
-            </div>
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="apptypeplot" name="apptype" type="radio" value="plot">
-              <label class="govuk-label govuk-radios__label" for="apptypeplot">
-                Plot grown
-              </label>
+              <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="submit-date-day" name="inpection_date_day" type="text" pattern="[0-9]*" inputmode="numeric">
             </div>
           </div>
-        </fieldset>
-      </div>      
-      {% endif %}
+          <div class="govuk-date-input__item">
+            <div class="govuk-form-group">
+              <label class="govuk-label govuk-date-input__label" for="submit-date-month">
+                Month
+              </label>
+              <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="submit-date-month" name="inpection_date_month" type="text" pattern="[0-9]*" inputmode="numeric">
+            </div>
+          </div>
+          <div class="govuk-date-input__item">
+            <div class="govuk-form-group">
+              <label class="govuk-label govuk-date-input__label" for="submit-date-year">
+                Year
+              </label>
+              <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="submit-date-year" name="inpection_date_year" type="text" pattern="[0-9]*" inputmode="numeric">
+            </div>
+          </div>
+        </div>
+      </fieldset>-->
 
-      <input class="govuk-button govuk-!-margin-top-9" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+      <!--{% if data.commodity == "potatoes" %}
+      <fieldset class="govuk-fieldset" aria-describedby="applicant-conditional-hint">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+          <h1 class="govuk-fieldset__heading">
+            Time when your consignment will be ready for inspection
+          </h1>
+        </legend>
+        <span id="submit-date-hint" class="govuk-hint">
+          For example, 9:30am or 2:50pm
+        </span>
+        <div class="govuk-date-input" id="submit-date">
+          <div class="govuk-date-input__item">
+            <div class="govuk-form-group">
+              <label class="govuk-label govuk-date-input__label" for="submit-date-day">
+                Hour
+              </label>
+              <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="submit-date-day" name="inpection_time_hour" type="text" pattern="[0-9]*" inputmode="numeric">
+            </div>
+          </div>
+
+          <div class="govuk-date-input__item">
+            <div class="govuk-form-group">
+              <label class="govuk-label govuk-date-input__label" for="submit-date-month">
+                Minute
+              </label>
+              <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="submit-date-month" name="inpection_time_minute" type="text" pattern="[0-9]*" inputmode="numeric">
+            </div>
+          </div>
+          <div class="govuk-date-input__item">
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="sort">
+                am or pm
+              </label>
+              <select class="govuk-select govuk-input--width-" id="sort" name="inpection_time_period">
+                <option value="empty"></option>
+                <option value="am">am</option>
+                <option value="pm">pm</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+      {% endif %}-->
+      <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
     </form>
 
 

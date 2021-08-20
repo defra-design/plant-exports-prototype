@@ -1,10 +1,14 @@
 {% extends "layout.html" %}
+
 {% block pageTitle %}
-GOV.UK Prototype Kit
+Check your answers before sending your application - Growing season inspection - {{serviceName}} - GOV.UK
 {% endblock %}
+
 {% block beforeContent%}
+{{super()}}
 <a href="javascript:history.back()" class="govuk-back-link">Back</a>
 {% endblock %}
+
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-three-quarters">
@@ -15,6 +19,17 @@ GOV.UK Prototype Kit
     {% set commodity = data.commodity or "plants" %}
 
     <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Application
+        </dt>
+        <dd class="govuk-summary-list__value">
+          Growing season inspection for {{commodity}}
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <!--<a class="govuk-link" href="setup/reference?change=yes&return_url=../create/check-your-answers" data-qa-id="Link-ChangeAnswer" id="Link-ChangeAnswer-0">Change</a>-->
+        </dd>
+      </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Your reference
@@ -38,48 +53,45 @@ GOV.UK Prototype Kit
           ABC LIMITED, 27 The Crescent, NORTH WEST LONDON, NW7 0HX
         </dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="exporter?change=yes">
+          <!--<a class="govuk-link" href="exporter?change=yes">
             Change<span class="govuk-visually-hidden">
-              Certification region</span>
-          </a>
+              applicant details</span>
+          </a>-->
         </dd>
       </div>
     </dl>
 
-    <h2 class="govuk-heading-m">Sampling site details</h2>
+    <h2 class="govuk-heading-m">Inspection details</h2>
     <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Where will the sampling take place?
+          Where will the inspection take place?
         </dt>
         <dd class="govuk-summary-list__value">
-          ABC LIMITED, 27 The Crescent, NORTH WEST LONDON, NW7 0HX
+          Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH
         </dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="exporter?change=yes">
+          <a class="govuk-link" href="inspection-addresses?change=yes">
             Change<span class="govuk-visually-hidden">
-              Certification region</span>
+              inspection details</span>
           </a>
         </dd>
       </div>
-
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Type of application
+          When will the fields be ready for inspection?
         </dt>
         <dd class="govuk-summary-list__value">
-          {{data.apptype or "Field grown"}}
+            {{data.inpection_date or "Early June 2021"}}
         </dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="exporter?change=yes">
+          <a class="govuk-link" href="inspection-dates?change=yes">
             Change<span class="govuk-visually-hidden">
-              Certification region</span>
+              inspection period</span>
           </a>
         </dd>
       </div>
-
-
     </dl>
 
     <!--<h2 class="govuk-heading-m">Destination countries</h2>
@@ -95,16 +107,35 @@ GOV.UK Prototype Kit
         <dd class="govuk-summary-list__actions">
           <a class="govuk-link" href="exporter?change=yes">
             Change<span class="govuk-visually-hidden">
-              Certification region</span>
+              field details</span>
           </a>
         </dd>
       </div>
     </dl>-->
 
-    <!--Your fields and varieties-->
-    <h2 class="govuk-heading-m">Field and variety details</h2>
-      <h3 class="govuk-heading-s">Field {{loop.index or "1"}}</h3>
-      <table class="govuk-table govuk-!-margin-bottom-4 govuk-!-margin-bottom-4">
+    <!--Your fields and crops-->
+      <h2 class="govuk-heading-m">Field and crop details</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            {{data.nurseryplotno or "Top field"}}
+          </dt>
+          <dd class="govuk-summary-list__value">
+
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="field?change=yes">
+              Change<span class="govuk-visually-hidden">
+                field</span>
+            </a><br>
+            <a href="#" class="govuk-link govuk-link--no-visited-state">
+              Delete
+            </a>
+          </dd>
+        </div>
+      </dl>
+
+      <table class="govuk-table govuk-!-margin-bottom-4">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             {% if data.addfielddetails == "gridgps" %}
@@ -122,7 +153,7 @@ GOV.UK Prototype Kit
             <th class="govuk-table__header" scope="col">
               Field map
             </th>
-            <th class="govuk-table__header" scope="col"></th>
+            <!--<th class="govuk-table__header" scope="col"></th>-->
           </tr>
         </thead>
         <tbody class="govuk-table__body">
@@ -137,108 +168,116 @@ GOV.UK Prototype Kit
             </td>
             {% endif %}
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              {{ data.areaoffield or "12" }}
+              {{ data.areaoffield or "3.5" }}
             </td>
             <td class="govuk-table__cell govuk-table__cell">
               <a class="govuk-link govuk-link--no-visited-state" href="#">{{ data.description or "Filename.jpg" }}</a>
             </td>
-            <td class="govuk-table__cell">
+            <!--<td class="govuk-table__cell">
               <a href="field" class="govuk-link govuk-link--no-visited-state">
                 Change
               </a><br>
               <a href="#" class="govuk-link govuk-link--no-visited-state">
                 Delete
               </a>
-            </td>
+            </td>-->
           </tr>
           </tbody>
         </table>
-        <!--<p class="govuk-body govuk-!-margin-top-6"><a href="field-2?return_url=check-your-answers">Add another field</a></p>-->
 
-        <h3 class="govuk-heading-s govuk-!-margin-top-9">1 variety added to Field {{loop.index or "1"}}</h3>
-        {% if data.commodity == "potatoes" %}
-        <table class="govuk-table govuk-!-margin-bottom-4">
-          <thead class="govuk-table__head">
-            <tr class="govuk-table__row">
-              <th class="govuk-table__header" scope="col">
-                Variety
-              </th>
-              <th class="govuk-table__header govuk-table__header--numeric" scope="col">
-                Area to be sampled in hectares
-              </th>
-              <th class="govuk-table__header" scope="col"></th>
-            </tr>
-          </thead>
-          <tbody class="govuk-table__body">
-            <tr class="govuk-table__row">
-              <td class="govuk-table__cell">
-                {{data.variety or 'Maris piper'}}
-              </td>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                2
-              </td>
-              <td class="govuk-table__cell">
-                <a href="varieties" class="govuk-link govuk-link--no-visited-state">
-                  Change
-                </a><br>
-                <a href="#" class="govuk-link govuk-link--no-visited-state">
-                  Delete
-                </a>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-          {% else %}
-          <table class="govuk-table govuk-!-margin-bottom-4">
-            <thead class="govuk-table__head">
-              <tr class="govuk-table__row">
-                <th class="govuk-table__header" scope="col">
-                  Area to be sampled
-                </th>
-                <!--<th class="govuk-table__header" scope="col">
-                  Stock number
-                </th>
-                <th class="govuk-table__header" scope="col">
-                  Variety
-                </th>
-                <th class="govuk-table__header govuk-table__header--numeric" scope="col">
-                  Weight (in Kilograms)
-                </th>-->
-                <th class="govuk-table__header" scope="col"></th>
-              </tr>
-            </thead>
-            <tbody class="govuk-table__body">
-              <tr class="govuk-table__row">
-                <td class="govuk-table__cell">
-                  2 hectares
-                </td>
-                <td class="govuk-table__cell">
-                  <a href="varieties-2" class="govuk-link govuk-link--no-visited-state">
-                    Change
-                  </a><br>
-                  <a href="#" class="govuk-link govuk-link--no-visited-state">
-                    Delete
-                  </a>
-                </td>
-              </tr>              
-              </tbody>
-            </table>
-          {% endif %}
+      <!-- multiple commodity table starts -->
+      {% if commodity.has_botanicial_name == "yes" %}
+      {% set commodity_id_name = commodity.genus %}
+      {% else %}
+      {% set commodity_id_name = commodity.commodity_common_name %}
+      {% endif %}
 
-          <p class="govuk-body govuk-!-margin-bottom-9"><a href="varieties-2?return_url=check-your-answers">Add another variety</a></p>
-          <p class="govuk-body"><a href="field-2?return_url=check-your-answers">Add another field</a></p>
+      <h2 class="govuk-heading-s govuk-!-margin-top-6">5 crops added to {{data.nurseryplotno or "Top field"}}</h2>
+      <table class="govuk-table govuk-!-margin-bottom-4">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">
+              Description
+            </th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">
+              Hectarage of plot
+            </th>
+            <th class="govuk-table__header" scope="col">
+              Destination countries
+            </th>
+            <!--<th class="govuk-table__header" scope="col"></th>-->
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Corylus avellana'}}
+            </td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              5
+            </td>
+            <td class="govuk-table__cell">
+              Spain, Bolivia
+            </td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Rosa rugosa'}}
+            </td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              2
+            </td>
+            <td class="govuk-table__cell">
+              Spain
+            </td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Dianthus repens'}}
+            </td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              3
+            </td>
+            <td class="govuk-table__cell">
+              Bolivia
+            </td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Papaver alpinum'}}
+            </td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              1.5
+            </td>
+            <td class="govuk-table__cell">
+              Ghana
+            </td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Agapanthus africanus'}}
+            </td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              1
+            </td>
+            <td class="govuk-table__cell">
+              Spain, Bolivia, Peru
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- multiple commodity table ends -->
+      <p class="govuk-body"><a href="how-to-identify?return_url=check-your-answers" class="govuk-link govuk-link--no-visited-state">Add more crops</a></p>
 
-      {% for commodity in data.commodities %}
-      {% block summaryGeneral %}{% include "../modules/_summary-general.html" %}{% endblock %}
-      {% endfor %}
-
-
+      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+      <p class="govuk-body"><a href="field-2?return_url=check-your-answers" class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-regular">Add another field</a></p>
   </div>
-    <div class="govuk-grid-column-three-quarters govuk-!-margin-top-9">
-      <p class="govuk-body">By submitting this application form, you are agreeing that to the best of your knowledge and belief the statements made in this document are true and complete.</p>
-      <p class="govuk-body govuk-!-margin-top-6">
-        <a href="../submit/confirmation" class="govuk-button">Submit</a>
-      </p>
-    </div>
+  <div class="govuk-grid-column-three-quarters govuk-!-margin-top-9">
+    <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_blank">what fees you need to pay</a> for a growing season inspection (opens in a new window).</p>
+    <p class="govuk-body govuk-!-margin-top-6">By submitting this application form, you are agreeing that to the best of your knowledge and belief the statements made in this document are true and complete.</p>
+    <p class="govuk-body govuk-!-margin-top-6">
+      <a href="../submit/confirmation-gsi" class="govuk-button">Submit</a>
+    </p>
+  </div>
 </div>
 {% endblock %}

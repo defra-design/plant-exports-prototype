@@ -1,31 +1,27 @@
 {% extends "layout.html" %}
+
 {% block pageTitle %}
-{{page.title}} - GOV.UK
+Your crops for inspection - Growing season inspection - {{serviceName}} - GOV.UK
 {% endblock %}
+
 {% block beforeContent%}
 {{super()}}
 <a href="{{page.content.prev or 'javascript:history.back()'}}" class="govuk-back-link">Back</a>
 {% endblock %}
+
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-three-quarters">
-    <form  method="POST">
     <h1 class="govuk-heading-xl">
-      Field and varieties
+      Your crops for inspection
     </h1>
-    <h2 class="govuk-heading-m">Field {{loop.index or "1"}}</h2>
+    <h2 class="govuk-heading-m">{{data.nurseryplotno or "Top field"}}</h2>
     <table class="govuk-table govuk-!-margin-bottom-4">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
-          {% if data.addfielddetails == "gridgps" %}
           <th class="govuk-table__header" scope="col">
-            Grid reference or GPS reading
+            Field location
           </th>
-          {% else %}
-          <th class="govuk-table__header" scope="col">
-            IACS/RLR number
-          </th>
-          {% endif %}
           <th class="govuk-table__header govuk-table__header--numeric" scope="col">
             Area of whole field in hectares
           </th>
@@ -39,15 +35,15 @@
         <tr class="govuk-table__row">
           {% if data.addfielddetails == "iacs" %}
           <td class="govuk-table__cell">
-            {{data.iacs or "NF24681358"}}
+            {{data.iacs or "NF24681357"}}
           </td>
           {% else %}
           <td class="govuk-table__cell">
-            {{data.gridgps or "NF 2468 1358"}}
+            {{data.gridgps or "NF 2468 1357"}}
           </td>
           {% endif %}
           <td class="govuk-table__cell govuk-table__cell--numeric">
-            {{ data.areaoffield or "12" }}
+            {{ data.areaoffield or "3.5" }}
           </td>
           <td class="govuk-table__cell govuk-table__cell">
             <a class="govuk-link govuk-link--no-visited-state" href="#">{{ data.description or "Filename.jpg" }}</a>
@@ -64,103 +60,41 @@
         </tbody>
       </table>
 
-
-
-    <!-- multiple commodity table starts -->
-    {% if commodity.has_botanicial_name == "yes" %}
-    {% set commodity_id_name = commodity.genus %}
-    {% else %}
-    {% set commodity_id_name = commodity.commodity_common_name %}
-    {% endif %}
-
-    <h2 class="govuk-heading-s govuk-!-margin-top-9">2 varieties added to Field {{loop.index or "1"}}</h2>
-    {% if data.commodity == "potatoes" %}
-    <table class="govuk-table govuk-!-margin-bottom-4">
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th class="govuk-table__header" scope="col">
-            Variety
-          </th>
-          <th class="govuk-table__header govuk-table__header--numeric" scope="col">
-            Area to be sampled in hectares
-          </th>
-          <th class="govuk-table__header" scope="col"></th>
-        </tr>
-      </thead>
-      <tbody class="govuk-table__body">
-        <tr class="govuk-table__row">
-          <td class="govuk-table__cell">
-            {{data.variety or 'King Edwards'}}
-          </td>
-          <td class="govuk-table__cell govuk-table__cell--numeric">
-            3.5
-          </td>
-          <td class="govuk-table__cell">
-            <a href="varieties" class="govuk-link govuk-link--no-visited-state">
-              Change
-            </a><br>
-            <a href="#" class="govuk-link govuk-link--no-visited-state">
-              Delete
-            </a>
-          </td>
-        </tr>
-        <tr class="govuk-table__row">
-          <td class="govuk-table__cell">
-            {{data.variety or 'Purple majesty'}}
-          </td>
-          <td class="govuk-table__cell govuk-table__cell--numeric">
-            1.5
-          </td>
-          <td class="govuk-table__cell">
-            <a href="varieties" class="govuk-link govuk-link--no-visited-state">
-              Change
-            </a><br>
-            <a href="#" class="govuk-link govuk-link--no-visited-state">
-              Delete
-            </a>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+      {% if commodity.has_botanicial_name == "yes" %}
+      {% set commodity_id_name = commodity.genus %}
       {% else %}
+      {% set commodity_id_name = commodity.commodity_common_name %}
+      {% endif %}
+
+      <h2 class="govuk-heading-s govuk-!-margin-top-9">1 variety added to {{data.nurseryplotno or "Top field"}}</h2>
       <table class="govuk-table govuk-!-margin-bottom-4">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">
-              Area to be sampled
-            </th>
-            <!--<th class="govuk-table__header" scope="col">
-              Stock number
-            </th>
-            <th class="govuk-table__header" scope="col">
-              Variety
+              Description
             </th>
             <th class="govuk-table__header govuk-table__header--numeric" scope="col">
-              Weight (in Kilograms)
-            </th>-->
+              Hectarage of inspection plot
+            </th>
+            <th class="govuk-table__header" scope="col">
+              Destination countries
+            </th>
             <th class="govuk-table__header" scope="col"></th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">
           <tr class="govuk-table__row">
             <td class="govuk-table__cell">
-              2 hectares
+              {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Corylus avellana'}}
+            </td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              2
             </td>
             <td class="govuk-table__cell">
-              <a href="varieties-2" class="govuk-link govuk-link--no-visited-state">
-                Change
-              </a><br>
-              <a href="#" class="govuk-link govuk-link--no-visited-state">
-                Delete
-              </a>
-            </td>
-          </tr>
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">
-              3.5 hectares
+              Belize
             </td>
             <td class="govuk-table__cell">
-              <a href="varieties-2" class="govuk-link govuk-link--no-visited-state">
+              <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">
                 Change
               </a><br>
               <a href="#" class="govuk-link govuk-link--no-visited-state">
@@ -170,29 +104,43 @@
           </tr>
           </tbody>
         </table>
-      {% endif %}
+        <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="how-to-identify-2">Add more crops</a></p>
       </div>
     </div>
 
+    <div class="govuk-button-group govuk-!-margin-top-9">
+      {{ govukButton({
+        text: "Save and continue",
+        href: "task-list-2"
+      }) }}
+
+      {{ govukButton({
+        text: "Add another field",
+        href: "field-2",
+        classes: "govuk-button--secondary govuk-!-margin-left-4"
+      }) }}
+    </div>
+
+    <!--<form  method="POST">
       <fieldset class="govuk-fieldset" aria-describedby="applicant-conditional-hint">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-!-margin-top-9 govuk-!-margin-bottom-6">
           <h3 class="govuk-fieldset__heading">
-            Do you want to add another variety or field?
+            Do you want to add another crop or field?
           </h3>
         </legend>
         <div class="govuk-form-group">
           <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
 
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="add_more_commodities-yes" name="add_more_commodities" type="radio" value="yes~varieties-2" data-aria-controls="conditional-applicant-conditional-2">
+              <input class="govuk-radios__input" id="add_more_commodities-yes" name="add_more_commodities" type="radio" value="yes~how-to-identify-2" data-aria-controls="conditional-applicant-conditional-2">
               <label class="govuk-label govuk-radios__label" for="add_more_commodities-yes">
-                Yes, add another variety to this field
+                Yes, add another crop to this field
               </label>
             </div>
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="add_more_commodities-no" name="add_more_commodities" type="radio" value="no~task-list-2" data-aria-controls="conditional-applicant-conditional-2">
               <label class="govuk-label govuk-radios__label" for="add_more_commodities-no">
-                No, I have finished adding varieties to this field
+                No, I have finished adding crops to this field
               </label>
             </div>
             <div class="govuk-radios__divider">or</div>
@@ -205,14 +153,13 @@
           </div>
         </div>
       </fieldset>
-
       <div class="govuk-!-margin-left-0 govuk-!-margin-top-6 govuk-grid-column-one-quarter govuk-!-padding-0">
-        <input class="govuk-button" type="submit" name="saveAndContinue" value="Continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+        <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
       </div>
       <div class="govuk-grid-row">
-        <!-- <div class="govuk-grid-column-full govuk-body">
+        <div class="govuk-grid-column-full govuk-body">
           <input class="link-button" type="submit" value="Save and continue later" name="saveAndResumeLater" data-qa-id="Button-SaveAndResumeLater" id="Button-SaveAndResumeLater">
-        </div> -->
+        </div>
       </div>
-    </form>
+    </form>-->
     {% endblock %}
