@@ -10,7 +10,7 @@ module.exports = {
 
 
   // Default port that prototype runs on
-  port: '5000',
+  port: '3000',
 
   // Enable or disable password protection on production
   useAuth: 'true',

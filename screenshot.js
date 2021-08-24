@@ -47,8 +47,19 @@ const paths = [
   { title: '10 Task list 2', path: '/dev/1-26/application/gsi/create/task-list-2'},
   { title: '11 Check your answers', path: '/dev/1-26/application/gsi/create/check-your-answers-2'},
   { title: '12 GSI confirmation', path: '/dev/1-26/application/gsi/submit/confirmation-gsi'},
- */
-
+  */
+ // confirmation pages
+ { title: '01 confirmation', path: '/dev/1-26/application/submit/confirmation'},
+ { title: '02 plant products confirmation', path: '/dev/1-26/application/submit/confirmation-plant-products-hh91'},
+ { title: '03 bulb confirmation', path: '/dev/1-26/application/submit/confirmation-bulbs-ko1'},
+ { title: '04 grain confirmation', path: '/dev/1-26/application/submit/confirmation-grain-hh93'},
+ { title: '05 plants confirmation', path: '/dev/1-26/application/submit/confirmation-plants-phe36'},
+ { title: '06 potatoes confirmation', path: '/dev/1-26/application/submit/confirmation-potatoes-phe60'},
+ { title: '07 potatoes amends confirmation', path: '/dev/1-26/application/submit/confirmation-potatoes-amend'},
+ { title: '08 seeds confirmation', path: '/dev/1-26/application/submit/confirmation-seeds-phe90'},
+ { title: '09 machinery confirmation', path: '/dev/1-26/application/submit/confirmation-machinery-HH36A'},
+ { title: '10 both confirmation', path: '/dev/1-26/application/submit/confirmation-both'},
+ { title: '11  confirmation', path: '/dev/1-26/application/submit/confirmation-coc'}
 ]
 
 /*
@@ -98,9 +109,9 @@ function makeDirectories () {
     fs.mkdirSync(imageDirectory)
   }
 
-  if (!fs.existsSync(postDirectory)) {
+/*   if (!fs.existsSync(postDirectory)) {
     fs.mkdirSync(postDirectory)
-  }
+  } */
 }
 
 function decoratePaths () {
@@ -116,10 +127,7 @@ function takeScreenshots () {
   // https://github.com/brenden/node-webshot
   const webshotOptions = {
     phantomConfig: {
-      //username:'defra2019',
-      //password:'defra2019node ',
       //'remote-debugger-port':'9000',
-      'proxy-auth=defra2019':'defra2019',
       //'ignore-ssl-errors': 'true'
     },
     windowSize: {
@@ -205,4 +213,4 @@ date: ${datestamp}
   )
 }
 
-start()
+start();

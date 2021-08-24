@@ -13,17 +13,14 @@ const usageDataConfig = usageData.getUsageDataConfig()
 if (usageDataConfig.collectUsageData === undefined) {
   // No recorded answer, so ask for permission
   const promptPromise = usageData.askForUsageDataPermission()
-  promptPromise.then(function (answer) {
-    if (answer === 'yes') {
-      usageDataConfig.collectUsageData = true
-      usageData.setUsageDataConfig(usageDataConfig)
+  promptPromise.then(function (permissionGranted) {
+    usageDataConfig.collectUsageData = permissionGranted
+    usageData.setUsageDataConfig(usageDataConfig)
+
+    if (permissionGranted) {
       usageData.startTracking(usageDataConfig)
-    } else if (answer === 'no') {
-      usageDataConfig.collectUsageData = false
-      usageData.setUsageDataConfig(usageDataConfig)
-    } else {
-      console.error(answer)
     }
+
     runGulp()
   })
 } else if (usageDataConfig.collectUsageData === true) {
@@ -71,7 +68,7 @@ function runGulp () {
   const spawn = require('cross-spawn')
 
   process.env.FORCE_COLOR = 1
-  var gulp = spawn('./node_modules/.bin/gulp')
+  var gulp = spawn('node', ['./node_modules/gulp/bin/gulp.js', '--log-level', '-L'])
   gulp.stdout.pipe(process.stdout)
   gulp.stderr.pipe(process.stderr)
   process.stdin.pipe(gulp.stdin)
