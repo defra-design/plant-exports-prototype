@@ -59,7 +59,7 @@ const paths = [
  { title: '08 seeds confirmation', path: '/dev/1-26/application/submit/confirmation-seeds-phe90'},
  { title: '09 machinery confirmation', path: '/dev/1-26/application/submit/confirmation-machinery-HH36A'},
  { title: '10 both confirmation', path: '/dev/1-26/application/submit/confirmation-both'},
- { title: '11  confirmation', path: '/dev/1-26/application/submit/confirmation-coc'}
+ { title: '11 conformity confirmation', path: '/dev/1-26/application/submit/confirmation-coc'}
 ]
 
 /*
