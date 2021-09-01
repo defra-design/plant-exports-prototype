@@ -12,7 +12,7 @@ module.exports = function(router) {
 
 
     // CHANGE VERSION each time you create a new version
-    const version = 'dev/1-26'
+    const version = 'dev/1-27'
     const base_url = version + "/"
     const file_url = version + "/dev"
 
