@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+GOV.UK Prototype Kit
+{% endblock %}
+{% block beforeContent%}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <div>
+      <h1 class="govuk-heading-xl">Declaration</h1>
+    </div>
+    {% if data.pheats_check != "yes" %}
+    <p class="govuk-body" lang="en">
+      By submitting these application forms, you are agreeing that to the best of your knowledge and belief the statements made in these applications are true and complete.<!-- You will comply with the legal requirements of UK law, including payment for official controls, repossession of any consignment rejected after transit from the UK to another country or costs of destruction if necessary.-->
+    </p>
+    {% else %}
+    <p class="govuk-body" lang="en">
+      By submitting this application form, you are agreeing that a PHEATS Authorised Person has carried out the official inspection of the consignment, and only those commodities that have passed this inspection have been entered in this application.
+    </p>
+    {% endif %}
+    <p class="govuk-body">Date of declaration: <span data-qa-id="TextDisplay-DateOfDeclaration">{{todaysDate}}  </span></p>
+
+    <form class="review-form" action="confirmation" method="POST">
+      <div class="govuk-form-group">
+        <div class="govuk-checkboxes">
+          <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" type="checkbox" autofocus="autofocus" name="confirm" id="confirm">
+            <label class="govuk-checkboxes__label govuk-!-font-weight-bold" for="confirm" style="margin-top: -10px;">
+              I confirm that the information I have provided is correct to the best of my knowledge
+            </label>
+          </div>
+        </div>
+
+      </div>
+      <input type="hidden" name="crumb_csrf_token" value="-OFEIl7HkGmNi3ZbrlI4BeayEl-1-jTpR6CRsveyix5">
+      <input name="submissionDate" type="hidden" value="15 May 2021">
+      {{data.CountrySelect[0]}}
+
+      <a class="govuk-button margin-top-30" href="confirmation-both" value="Submit application" id="Button-SubmitApplication">Submit both applications</a>
+
+      <div class="govuk-grid-row">
+
+      </div>
+
+
+    </form>
+  </div>
+</div>
+
+{% endblock %}

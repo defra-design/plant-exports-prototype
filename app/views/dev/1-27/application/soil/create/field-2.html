@@ -1,0 +1,143 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Field details - Soil inspection - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-width-container">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form method="post" class="form">
+        <h1 class="govuk-heading-xl">
+          Field location
+        </h1>
+
+        {% set iacsHtml %}
+        {{ govukInput({
+          id: "iacs",
+          name: "navigation",
+          type: "text",
+          spellcheck: false,
+          classes: "govuk-!-width-one-third",
+          label: {
+            text: "Enter the 10 character IACS or RLR number eg NF 1234 1234"
+          }
+        }) }}
+        {% endset -%}
+
+        {% set gridHtml %}
+        {{ govukInput({
+          id: "gridgps",
+          name: "navigation",
+          type: "text",
+          spellcheck: false,
+          classes: "govuk-!-width-one-third",
+          label: {
+            text: "Enter the grid reference or GPS reading"
+          }
+        }) }}
+        {% endset -%}
+
+        {{ govukRadios({
+          idPrefix: "addfielddetails",
+          name: "addfielddetails",
+          fieldset: {
+            legend: {
+              text: "How do you want to provide the location?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--s"
+            }
+          },
+          items: [
+              {
+                value: "gridgps",
+                text: "Grid reference or GPS reading",
+                conditional: {
+                  html: gridHtml
+                }
+            },
+            {
+              value: "iacs",
+              text: "IACS/RLR number",
+              conditional: {
+                html: iacsHtml
+              }
+            }
+          ]
+        }) }}
+
+        {{ govukInput({
+          label: {
+            text: "Nursery plot number or field name",
+            classes: "govuk-label--s",
+            isPageHeading: false
+          },
+          id: "nurseryplotno",
+          name: "nurseryplotno",
+          classes: "govuk-input--width-20"
+        }) }}
+
+        {{ govukInput({
+          label: {
+            text: "Area of whole field in hectares",
+            classes: "govuk-label--s",
+            isPageHeading: false
+          },
+          id: "areaoffield",
+          name: "areaoffield",
+          classes: "govuk-input--width-4"
+        }) }}
+
+        {{ govukTextarea({
+          name: "more-detail",
+          id: "more-detail",
+          label: {
+            text: "Additional information (optional)",
+            classes: "govuk-label--s",
+            isPageHeading: true
+          },
+          hint: {
+            text: "For example, access points to the field"
+          }
+        }) }}
+
+        <h2 class="govuk-heading-s">Send the inspector a map (optional)</h2>
+        <p class="govuk-body">Upload a map to show your inspector where they will carry out their inspection, including the access point.</p>
+        <p class="govuk-body">If you prefer to post a map to your inspector, you should contact them to ask what address to send it to. You should include the APHA reference number for this application with your map. You will be given the APHA reference number at the end of this application.</p>
+        <p class="govuk-body">Any file you upload must:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>be in JPEG, PNG, GIF, PDF or Word format</li>
+          <li>be less than 10 megabytes (10MB)</li>
+        </ul>
+
+        {{ govukFileUpload({
+          id: "map-upload",
+          name: "map-upload"
+        }) }}
+
+        {{ govukButton({
+          text: "Upload map",
+          classes: "govuk-button--secondary",
+          href: "field-upload-wip"
+        }) }}
+
+        {%if data.commodities and ( data.commodities | length ) > 0 %}
+          {% set url = "commodity-list-2" %}
+        {% else %}
+          {% set url = "how-to-identify-2" %}
+        {% endif %}
+
+        <p class="govuk-body govuk-!-margin-top-4">
+          <a href="{{url}}" class="govuk-button">Save and continue</a>
+        </p>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
