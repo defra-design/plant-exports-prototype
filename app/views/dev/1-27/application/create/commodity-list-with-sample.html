@@ -12,6 +12,9 @@ Your consignment - {{serviceName}} - GOV.UK
     <h1 class="govuk-heading-xl">
       Your consignment
     </h1>
+    <h2 class="govuk-heading-l">
+      Commodities
+    </h2>
     <table class="govuk-table govuk-!-margin-bottom-9">
       <thead class="govuk-table__head">
         {% if data.commodity == "potatoes" or data.commodity == "bulbs" %}
@@ -38,7 +41,9 @@ Your consignment - {{serviceName}} - GOV.UK
           <th class="govuk-table__header" scope="col">
             Quantity
           </th>
-          <th class="govuk-table__header" scope="col"></th>
+          <th class="govuk-table__header" scope="col">
+            Action
+          </th>
         </tr>
         {% elseif data.commodity == "seeds" %}
         <tr class="govuk-table__row">
@@ -51,7 +56,9 @@ Your consignment - {{serviceName}} - GOV.UK
           <th class="govuk-table__header" scope="col">
             Quantity
           </th>
-          <th class="govuk-table__header" scope="col"></th>
+          <th class="govuk-table__header" scope="col">
+            Action
+          </th>
         </tr>
         {% else %}
         <tr class="govuk-table__row">
@@ -64,7 +71,9 @@ Your consignment - {{serviceName}} - GOV.UK
           <th class="govuk-table__header" scope="col">
             Unique ID
           </th>
-          <th class="govuk-table__header" scope="col"></th>
+          <th class="govuk-table__header" scope="col">
+            Action
+          </th>
         </tr>
         {% endif %}
       </thead>
@@ -94,6 +103,37 @@ Your consignment - {{serviceName}} - GOV.UK
         {% endif %}
       </tbody>
     </table>
+
+
+    {% if data.commodity == "plants" or data.commodity == "plant products" %}
+    <h2 class="govuk-heading-l">
+      Samples
+    </h2>
+    <table class="govuk-table govuk-!-margin-bottom-9">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">
+            Application number
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Commodity
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Expires
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Action
+          </th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+
+          {% block samples %}{% include "../modules/_summary-samples.html" %}{% endblock %}
+
+
+      </tbody>
+    </table>
+    {% endif %}
 
     <form  method="POST">
       <fieldset class="govuk-fieldset" aria-describedby="applicant-conditional-hint">
