@@ -1,44 +1,44 @@
 {% extends "layout.html" %}
 
 {% set items = [
-  {
-    date: '23 Sep 2021',
-    application_number: '120664110369',
-    amount: '100kg',
-    remaining: '250kg'
-  },
-  {
-    date: '21 Sep 2021',
-    application_number: '120664110283',
-    amount: '50kg',
-    remaining: '300kg'
-  },
-  {
-    date: '19 Sep 2021',
-    application_number: '120664110233',
-    amount: '100kg',
-    remaining: '400kg'
-  },
-  {
-    date: '16 Sep 2021',
-    application_number: '120664110167',
-    amount: '100kg',
-    remaining: '500kg'
-  },
-  {
-    date: '14 Sep 2021',
-    application_number: '120664110123',
-    amount: '50kg',
-    remaining: '550kg'
-  },
-  {
-    date: '12 Sep 2021',
-    application_number: '120664109150',
-    amount: '100kg',
-    remaining: '650kg'
-  }
+{
+date: '23 Sep 2021',
+application_number: '120664110369',
+amount: '100kg',
+remaining: '250kg'
+},
+{
+date: '21 Sep 2021',
+application_number: '120664110283',
+amount: '50kg',
+remaining: '300kg'
+},
+{
+date: '19 Sep 2021',
+application_number: '120664110233',
+amount: '100kg',
+remaining: '400kg'
+},
+{
+date: '16 Sep 2021',
+application_number: '120664110167',
+amount: '100kg',
+remaining: '500kg'
+},
+{
+date: '14 Sep 2021',
+application_number: '120664110123',
+amount: '50kg',
+remaining: '550kg'
+},
+{
+date: '12 Sep 2021',
+application_number: '120664109150',
+amount: '100kg',
+remaining: '650kg'
+}
 
-  ] %}
+] %}
 {% block pageTitle %}
 Single stock draw down- {{serviceName}} - GOV.UK
 {% endblock %}
@@ -49,17 +49,84 @@ Single stock draw down- {{serviceName}} - GOV.UK
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-three-quarters">
+<!--     
     <h1 class="govuk-heading-xl">
       Single stock draw down
-      </h1>
+    </h1>
+ -->
+<!-- 
+      <dl class="govuk-summary-list">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Original application number
+          </dt>
+          <dd class="govuk-summary-list__value">
+            1721 1480 4825
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Commodity
+          </dt>
+          <dd class="govuk-summary-list__value">
+            Rosa balearica
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Expires
+          </dt>
+          <dd class="govuk-summary-list__value">
+            6 Oct 2021 (14 days)
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Remaining stock
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <p class="govuk-body">250kg</p>
+          </dd>
+        </div>
+      </dl>
+ -->
+    <div class="govuk-form-group">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+        <h1 class="govuk-fieldset__heading">
+          How much stock are you exporting? 
+        </h1>
+      </legend>
+      <div id="quantity-hint" class="govuk-body">
+        There is <strong>250kg</strong> of <strong>Rosa balearica</strong> stock remaining.
+      </div>
+      <label class="govuk-label" for="quantity">
+        Quantity and unit of measurement
+      </label>
+      <span id="quantity-hint" class="govuk-hint">
+        For example, 50 kilograms{% if data.commodity == "potatoes"%}. You can update this amount when you load your
+        consignment. {% endif %}
+      </span>
+      <input class="govuk-input govuk-input--width-5" id="quantity" name="quantity" type="text"
+        aria-describedby="quantity">
+      <select name="unit" id="unit" class="govuk-select govuk-!-margin-left-1">
+        <option value="" selected="selected">-</option>
+        <option value="Grams">Grams</option>
+        <option value="Kilograms">Kilograms</option>
+        <option value="Litres">Litres</option>
+        <option value="Tonnes">Tonnes</option>
+        <option value="Units">Units</option>
+      </select>
+    </div>
 
-      <p class="govuk-body">
-        Original application number: 1721 1480 4825,
-        <br/>
-        Commodity: Rosa balearica
-        <br/>
-        Expires: 6 Oct 2021 (14 days)
-      <p>
+    {{ govukButton({
+    text: "Save and continue",
+    href: "task-list"
+    }) }}
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-4">
+      Stock history
+    </h2>
+
 
     <table class="govuk-table responsive-table">
       <thead class="govuk-table__head">
@@ -74,7 +141,7 @@ Single stock draw down- {{serviceName}} - GOV.UK
       </thead>
 
       <tbody>
-{% for item in items %}
+        {% for item in items %}
         <tr class="govuk-table__row result">
           <td class="govuk-table__cell" scope="row">{{ item.date }}
           </td>
@@ -88,18 +155,13 @@ Single stock draw down- {{serviceName}} - GOV.UK
           <td class="govuk-table__cell" scope="row">{{ item.remaining }}
           </td>
         </tr>
-{% endfor %}
+        {% endfor %}
       </tbody>
-    
+
     </table>
 
 
-    {{ govukButton({
-      text: "Save and continue",
-      href: "task-list"
-    }) }}
+
   </div>
 </div>
 {% endblock %}
-
-
