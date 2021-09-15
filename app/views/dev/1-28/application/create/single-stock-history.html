@@ -1,0 +1,163 @@
+{% extends "layout.html" %}
+
+{% set items = [
+{
+date: '23 Sep 2021',
+application_number: '120664110369',
+amount: '100kg',
+remaining: '250kg'
+},
+{
+date: '21 Sep 2021',
+application_number: '120664110283',
+amount: '50kg',
+remaining: '300kg'
+},
+{
+date: '19 Sep 2021',
+application_number: '120664110233',
+amount: '100kg',
+remaining: '400kg'
+},
+{
+date: '16 Sep 2021',
+application_number: '120664110167',
+amount: '100kg',
+remaining: '500kg'
+},
+{
+date: '14 Sep 2021',
+application_number: '120664110123',
+amount: '50kg',
+remaining: '550kg'
+},
+{
+date: '12 Sep 2021',
+application_number: '120664109150',
+amount: '100kg',
+remaining: '650kg'
+}
+
+] %}
+{% block pageTitle %}
+Single stock draw down- {{serviceName}} - GOV.UK
+{% endblock %}
+{% block beforeContent %}
+{{super()}}
+<a href="{{page.content.prev or 'javascript:history.back()'}}" class="govuk-back-link">Back</a>
+{% endblock %}
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+<!--     
+    <h1 class="govuk-heading-xl">
+      Single stock draw down
+    </h1>
+ -->
+<!-- 
+      <dl class="govuk-summary-list">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Original application number
+          </dt>
+          <dd class="govuk-summary-list__value">
+            1721 1480 4825
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Commodity
+          </dt>
+          <dd class="govuk-summary-list__value">
+            Rosa balearica
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Expires
+          </dt>
+          <dd class="govuk-summary-list__value">
+            6 Oct 2021 (14 days)
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Remaining stock
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <p class="govuk-body">250kg</p>
+          </dd>
+        </div>
+      </dl>
+ -->
+    <div class="govuk-form-group">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+        <h1 class="govuk-fieldset__heading">
+          How much stock are you exporting? 
+        </h1>
+      </legend>
+      <div id="quantity-hint" class="govuk-body govuk-!-margin-top-6 govuk-!-margin-bottom-6">
+        There is <strong>250kg</strong> of <strong>Rosa balearica</strong> stock remaining.
+      </div>
+ 
+
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="weight">
+          Quantity
+        </label>
+        <span id="quantity-hint" class="govuk-hint">
+          For example, 50 kilograms
+        </span>
+        <div class="govuk-input__wrapper"><input class="govuk-input govuk-input--width-5" id="weight" name="weight" type="text" spellcheck="false">
+          <div class="govuk-input__suffix" aria-hidden="true">kg</div>
+        </div>
+      </div>
+    </div>
+
+    {{ govukButton({
+    text: "Save and continue",
+    href: "task-list"
+    }) }}
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-4">
+      Stock history
+    </h2>
+
+
+    <table class="govuk-table responsive-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">Date</th>
+          <th class="govuk-table__header" scope="col">Application reference</th>
+          <th class="govuk-table__header" scope="col">Amount</th>
+          <th class="govuk-table__header" scope="col">Remaining</th>
+          <!-- 
+          <th class="govuk-table__header" scope="col">Action</th> -->
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for item in items %}
+        <tr class="govuk-table__row result">
+          <td class="govuk-table__cell" scope="row">{{ item.date }}
+          </td>
+          <td class="govuk-table__cell" scope="row">
+            <a href="../../application-amend?id={{loop.index}}" class="govuk-link govuk-link--no-visited-state">
+              {{ item.application_number }}
+            </a>
+          </td>
+          <td class="govuk-table__cell" scope="row">{{ item.amount }}
+          </td>
+          <td class="govuk-table__cell" scope="row">{{ item.remaining }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+
+    </table>
+
+
+
+  </div>
+</div>
+{% endblock %}
