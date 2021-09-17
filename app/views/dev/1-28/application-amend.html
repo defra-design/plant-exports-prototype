@@ -27,6 +27,14 @@ GOV.UK Prototype Kit
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">{% if query.is_block == "yes" %}block application{%elseif query.is_group == "yes" %}group application{%else%}Application{%endif%} <span style="white-space: nowrap;">{{query.id | appInfo('reference')}}</span>
     </h1>
+
+    {% if data.is_amend == "yes" %}
+    <div class="app-alert app-alert--info">
+      <p class="govuk-body">This application has been amended. You must resubmit your application for these changes to appear on your certificate.</p>
+    </div>
+    {% endif %}
+
+
     {% if query.is_block == "yes" %}
     <p class="govuk-body">This is a block application of 100 certificates</p>
     {% endif %}
@@ -127,7 +135,7 @@ GOV.UK Prototype Kit
       <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-pre-inspect-amend-message">Update this application</a></li>
 
       {% else %}
-      <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-pre-inspect-amend">Update this application</a><!--  - change details like final weight or transportation --></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-pre-inspect-amend?is_amend=yes">Update this application</a><!--  - change details like final weight or transportation --></li>
       {% endif%}
       <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{ query.is_group }}">Copy as new application</a></li>
       <li><a class="govuk-link govuk-link--no-visited-state" href="cancel-reason">Cancel this application</a></li>
