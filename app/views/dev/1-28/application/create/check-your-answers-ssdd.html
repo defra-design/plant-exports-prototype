@@ -306,15 +306,15 @@ Check your answers before sending your application - {{serviceName}} - GOV.UK
                 {{item.countrySelect[0] or "United Kingdom"}}
               </td>
               <td class="govuk-table__cell govuk-table__cell">
-                {{item.quantity or "25"}} {{item.unit or "Tonnes"}}
+                {{data.weight or item.quantity or "25"}} {{item.unit or "Tonnes"}}
               </td>
               <td class="govuk-table__cell" style="text-align:right;">
-                <a href="how-to-identify?change=yes" class="govuk-link govuk-link--no-visited-state">
+                <a href="ssdd-list?change=yes&return_url=check-your-answers" class="govuk-link govuk-link--no-visited-state">
                   Change
                 </a><br>
-                <a href="#" class="govuk-link govuk-link--no-visited-state">
+<!--                 <a href="#" class="govuk-link govuk-link--no-visited-state">
                   Delete
-                </a>
+                </a> -->
               </td>
             </tr>
             {% endfor %}
@@ -326,26 +326,63 @@ Check your answers before sending your application - {{serviceName}} - GOV.UK
       <!--Inspection details-->
       {% if data.commodity == "plants" or (data.commodity == "bulbs" and data.countrySelect[0] != "United States") or data.commodity == "used farm machinery" or data.commodity == "potatoes" or data.journey == "coc" %}
       <h2 class="govuk-heading-m govuk-!-margin-top-9">Inspection details</h2>
-      <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
-        {% if data.commodity == "plants" %}
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Is this single stock drawn?
-          </dt>
-          <dd class="govuk-summary-list__value">
-            Yes
-          </dd>
-          <dd class="govuk-summary-list__actions">
-           <!--  <a class="govuk-link" href="pheats-check?change=yes">
-              Change<span class="govuk-visually-hidden">
-                Inspection details</span>
-            </a> -->
-          </dd>
-        </div>
-        {% endif %}
 
-      </dl>
-      {% endif %}
+        <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Date this stock was inspected for single stock draw down
+            </dt>
+            <dd class="govuk-summary-list__value">
+                3 Feb {{data.inpection_date_year or "2021"}}
+            </dd>
+            <dd class="govuk-summary-list__actions">
+            </dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Address
+            </dt>
+            <dd class="govuk-summary-list__value">
+              Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH
+            </dd>
+            <dd class="govuk-summary-list__actions">
+            </dd>
+          </div>
+          {% if data.pheats != 1 %}
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Contact name
+            </dt>
+            <dd class="govuk-summary-list__value">
+              Mayur Kumar
+            </dd>
+            <dd class="govuk-summary-list__actions">
+            </dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Phone number
+            </dt>
+            <dd class="govuk-summary-list__value">
+              024 546 7069
+            </dd>
+            <dd class="govuk-summary-list__actions">
+            </dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Email address
+            </dt>
+            <dd class="govuk-summary-list__value">
+              email@domain.com
+            </dd>
+            <dd class="govuk-summary-list__actions">
+            </dd>
+          </div>
+        {% endif %}
+        </dl>
+    {% endif %}
 
 
       <!--Transportation-->
