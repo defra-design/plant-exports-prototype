@@ -10,23 +10,23 @@ Do you want to reuse the same application reference? - {{serviceName}} - GOV.UK
 {% endblock%}
 
 {% block content %}
-
+{%set orig_ref_num = query.id | appInfo('reference')%}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <div class="app-alert app-alert--success"><p class="govuk-body">You have successfully copied this application</p></div>
+    <div class="app-alert app-alert--success"><p class="govuk-body">You’re applying for stock draw down using application {{ orig_ref_num or "SSDD 26599" }}</p></div>
     <h1 class="govuk-heading-xl">
       Do you want to reuse the same application reference?
     </h1>
-    <p class="govuk-body govuk-!-font-weight-bold">Reference: {{ data.reference_num or "12345" }}</p>
+    <p class="govuk-body govuk-!-font-weight-bold">Reference: {{ orig_ref_num or "SSDD 26599" }}</p>
     <form method="post" novalidate>
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">
           <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
             <div class="govuk-radios__item">
-              {%set orig_ref_num = query.id | appInfo('reference')%}
+              
               <input class="govuk-radios__input" id="contact" name="contact" type="radio" value="yes~ssdd-quantity-cya" data-aria-controls="conditional-contact">
               <label class="govuk-label govuk-radios__label" for="contact">
-                Yes, use {{ data.reference_num or "12345" }}
+                Yes, use {{ orig_ref_num or "SSDD 26599" }}
               </label>
             </div>
             <div class="govuk-radios__item">
