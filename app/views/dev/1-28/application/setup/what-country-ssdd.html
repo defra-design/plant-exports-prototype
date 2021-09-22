@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+Destination country - {{serviceName}} - GOV.UK
+{% endblock %}
+{% block beforeContent %}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock%}
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% set journey = data.has_reference %}
+
+    {% if data.commodity == "farm machinery" %}
+    <form method="post" action="{{query.return_url or 'declaration-used-farm-machinery'}}" novalidate action="reference">
+    <!--<form method="post" action="{{query.return_url or '../create/task-list'}}" novalidate action="reference">-->
+    {% elseif journey == "coc" %}
+    <form method="post" action="{{query.return_url or 'reference?journey=coc'}}" novalidate action="reference">
+    {% elseif journey == "both" %}
+    <form method="post" action="{{query.return_url or 'declaration?journey=both'}}" novalidate action="reference">
+    {% else %}
+    <form method="post" action="{{query.return_url or 'declaration'}}" novalidate action="reference">
+    <!--<form method="post" action="{{query.return_url or '../create/task-list'}}" novalidate action="reference">-->
+    {% endif %}
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-6">
+        <h1 class="govuk-fieldset__heading">
+          Destination country
+        </h1>
+        <p class="govuk-body govuk-!-margin-top-4">
+          Single stock draw down can only be used for exports to the EU.
+<!--           <br/>
+          Make sure you know what the rules are for exporting to the destination country -->
+        </p>
+      </legend>
+
+      {% block countrySelect %}{% include "../modules/_country-select.html" %}{% endblock %}
+      <button class="govuk-button" data-module="govuk-button">
+        Continue
+      </button>
+      <a class="govuk-link app-button--link govuk-!-margin-left-2" href="../../dashboard" > Cancel </a>
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+{{super()}}
+​
+{% endblock %}
