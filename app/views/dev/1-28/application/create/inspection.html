@@ -14,53 +14,14 @@ GOV.UK Prototype Kit
       Inspection details
     </h1>
     <p class="govuk-body">Enter the address of your business premises where the inspector will check your consignment</p>
-
+    {% if data.journey != "coc" %}
     <form action="{{query.return_url or '../create/task-list'}}" method="POST">
+      {% else %}
+    <form action="{{query.return_url or '../create/inspection-dates-coc'}}" method="POST">
+    {% endif %}
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset" role="group" aria-describedby="expiry-hint">
-          <!--<legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-            Inspection address
-          </legend>
-          <span id="submit-date-hint" class="govuk-hint">
-            This is usually where the crops are grown or at your business premises
-          </span>
-          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="applicant-conditional" name="inspection_address" type="radio" value="ABC LIMITED, 27 The Crescent, NORTH WEST LONDON, NW7 0HX" data-aria-controls="conditional-applicant-conditional">
-              <label class="govuk-label govuk-radios__label" for="applicant-conditional">
-                ABC LIMITED, 27 The Crescent, NORTH WEST LONDON, NW7 0HX
-              </label>
-            </div>
-            {% if data.applicant == "different"%}
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="applicant-conditional-2" name="inspection_address" type="radio" value="ZYX LIMITED, 95 Church Lane, CAMBRIDGE, CB84 2JU" data-aria-controls="conditional-applicant-conditional-2">
-              <label class="govuk-label govuk-radios__label" for="applicant-conditional-2">
-                ZYX LIMITED, 95 Church Lane, CAMBRIDGE, CB84 2JU
-              </label>
-            </div>
-            {% endif%}
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="applicant-conditional-2" name="inspection_address" type="radio" value="different" data-aria-controls="conditional-applicant-conditional-2">
-              <label class="govuk-label govuk-radios__label" for="applicant-conditional-2">
-                a different address
-              </label>
-            </div>
 
-            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-applicant-conditional-2">-->
-
-              <!--<div class="govuk-form-group">
-                <label class="govuk-label" for="inspection">
-                  Contact name
-                </label>
-                <input class="govuk-input govuk-input--width-20" id="inspection" name="inspection" type="text" autocomplete="contact-name">
-              </div>
-
-              <div class="govuk-form-group ">
-                <label class="govuk-label " for="address-phone">
-                  Phone number
-                </label>
-                <input class="govuk-input govuk-input--width-20" id="address-phone" name="agent_phone_number" type="text" autocomplete="phone">
-              </div>-->
 
               <div class="govuk-form-group">
                 <label class="govuk-label" for="org_name">
@@ -113,7 +74,7 @@ GOV.UK Prototype Kit
 
 
       </div>
-      {% if data.commodity != "seeds"  %}
+      {% if data.commodity != "seeds" and data.journey != "coc" %}
       <fieldset class="govuk-fieldset" aria-describedby="applicant-conditional-hint">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
           <h1 class="govuk-fieldset__heading govuk-!-margin-top-9">

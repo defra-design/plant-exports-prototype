@@ -55,7 +55,7 @@ Complete a certificate of conformity application - {{serviceName}} - GOV.UK
             </li>
             <li class="app-task-list__item">
               <span class="app-task-list__task-name">
-                <a href="inspection-dates-coc" aria-describedby="eligibility-status">
+                <a href="inspection-addresses" aria-describedby="eligibility-status">
                   What are the inspection details?
                 </a>
               </span>
@@ -71,7 +71,7 @@ Complete a certificate of conformity application - {{serviceName}} - GOV.UK
                   How will this consignment be transported?
                 </a>
               </span>
-              {% if data.contact_by_email %}
+              {% if data.contact_by_email  or data.journey=="coc"%}
               <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Completed</strong>
               {% else%}
               <strong class="govuk-tag govuk-tag--blue app-task-list__tag" id="list-convictions-status">Add details</strong>
@@ -123,7 +123,7 @@ Complete a certificate of conformity application - {{serviceName}} - GOV.UK
 {% block scripts %}
 {{super()}}
 <script type="text/javascript">
-  window.addEventListener('load', function() {
+/*   window.addEventListener('load', function() {
     var tasks = $('.app-task-list__tag')
     var max = tasks.length - 2
     $('.task-list-max').text(max)
@@ -140,5 +140,8 @@ Complete a certificate of conformity application - {{serviceName}} - GOV.UK
     }
     $('.task-list-completed').text(count)
   })
+ */
+  $('.task-list-submit-enabled').show();
+  $('.task-list-submit-disabled').hide();
 </script>
 {% endblock %}
