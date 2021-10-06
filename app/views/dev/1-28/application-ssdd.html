@@ -1,5 +1,45 @@
 {% extends "layout.html" %}
 
+{% set items = [
+  {
+  date: '23 Sep 2021',
+  application_number: '120664110369',
+  amount: '100kg',
+  total: '500kg'
+  },
+  {
+  date: '21 Sep 2021',
+  application_number: '120664110283',
+  amount: '50kg',
+  total: '400kg'
+  },
+  {
+  date: '19 Sep 2021',
+  application_number: '120664110233',
+  amount: '100kg',
+  total: '350kg'
+  },
+  {
+  date: '16 Sep 2021',
+  application_number: '120664110167',
+  amount: '100kg',
+  total: '250kg'
+  },
+  {
+  date: '14 Sep 2021',
+  application_number: '120664110123',
+  amount: '50kg',
+  total: '150kg'
+  },
+  {
+  date: '12 Sep 2021',
+  application_number: '120664109150',
+  amount: '100kg',
+  total: '100kg'
+  }
+  
+  ] %}
+
 {% block pageTitle %}
 Manage application - {{serviceName}} - GOV.UK
 {% endblock %}
@@ -8,6 +48,16 @@ Manage application - {{serviceName}} - GOV.UK
 {{super()}}
 <a href="javascript:history.back()" class="govuk-back-link">Return to your applications</a>
 <style media="screen">
+
+  .govuk-width-three-tenths {
+    width: 15% !important;
+  }
+
+  .govuk-width-one-fifth {
+    width: 20% !important;
+  }
+
+
   .govuk-status--warning {
     width: auto !important;
     text-align: center;
@@ -168,19 +218,19 @@ Manage application - {{serviceName}} - GOV.UK
   <table class="govuk-table govuk-!-margin-bottom-9">
     <thead class="govuk-table__head">
       <tr class="govuk-table__row">
-        <th class="govuk-table__header" scope="col">
+        <th class="govuk-table__header govuk-width-one-fifth" scope="col">
           Description
         </th>
         <th class="govuk-table__header" scope="col">
           Details<!-- Variety -->
         </th>
-        <th class="govuk-table__header" scope="col">
+        <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
           Quantity
         </th>
         <!--        <th class="govuk-table__header" scope="col">
           Inspection status
         </th> -->
-        <th class="govuk-table__header" scope="col">
+        <th class="govuk-table__header govuk-width-three-tenths" scope="col">
           Action
         </th>
       </tr>
@@ -245,6 +295,47 @@ Manage application - {{serviceName}} - GOV.UK
       </tr>
     </tbody>
   </table>
+
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-4">
+      Stock history
+    </h2>
+    <p class="govuk-body">
+      This stock has been used for the following applications
+    </p>
+
+    <table class="govuk-table responsive-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header govuk-width-one-fifth" scope="col">Date</th>
+          <th class="govuk-table__header" scope="col">Application reference</th>
+          <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">Amount</th>
+          <th class="govuk-table__header govuk-width-three-tenths" scope="col">Total used</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for item in items %}
+        <tr class="govuk-table__row result">
+          <td class="govuk-table__cell" scope="row">{{ item.date }}
+          </td>
+          <td class="govuk-table__cell" scope="row">
+            <a href="../../application-amend?id={{loop.index}}" class="govuk-link govuk-link--no-visited-state">
+              {{ item.application_number }}
+            </a>
+          </td>
+          <td class="govuk-table__cell" scope="row">{{ item.amount }}
+          </td>
+          <td class="govuk-table__cell" scope="row">{{ item.total }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+
+    </table>
+
+
+
 </div>
 </div>
 
