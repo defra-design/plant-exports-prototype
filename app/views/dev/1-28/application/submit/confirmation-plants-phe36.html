@@ -42,6 +42,12 @@ You have successfully submitted your application - {{serviceName}} - GOV.UK
           {% endif %}
         </ol>
 
+        {# need to check conditionals here: ONLY display for phyto #}
+        {% if (data.reuse !=  "yes") %}
+        {% include "../modules/_confirmation_applyforcoc.html" %}
+        {% endif %} 
+    
+
         <p class="govuk-body govuk-!-margin-bottom-6">We'll only contact you if there is a problem with your application.</p>
         <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_self">what fees you will pay</a> for this application.</p>
 
@@ -52,28 +58,7 @@ You have successfully submitted your application - {{serviceName}} - GOV.UK
         }) }}
 
        
-        <div class="govuk-inset-text">
-          <p class="govuk-body">
-            If you’re 
-            {% if (data.countrySelect[0] == "United Kingdom (Northern Ireland)" ) %}
-              sending
-            {% else %}
-              exporting
-            {% endif %}
-            {{data.commodity or "Apples" | lower}} to 
-            {% if (data.countrySelect[0] == "United Kingdom (Northern Ireland)" ) %}
-              Northern Ireland,
-            {% else %}
-              {{data.countrySelect[0] or 'China'}},  
-            {% endif %} 
-            you may need to apply for a certificate of conformity.
-          </p>
-            
-          <p class="govuk-body">
-<!--             <a href="copy-coc~../../copy-as-coc?id=0" class="govuk-link" target="_self">Apply for a certificate of conformity</a>  -->
-            <a href="../../copy-as-coc?id=0" class="govuk-link" target="_self">Apply for a certificate of conformity</a> 
-          </p>
-        </div>
+  
 
 
           <!-- 
