@@ -1,5 +1,57 @@
 {% extends "layout.html" %}
 
+{% set items = [
+  {
+  date: '23 Sep 2021',
+  application_number: '120664110369',
+  description: 'White cabbage',
+  details: 'Durham Early',
+  amount: '100t',
+  total: '320t'
+  },
+  {
+  date: '21 Sep 2021',
+  application_number: '120664110283',
+  description: 'White cabbage',
+  details: 'Durham Early',
+  amount: '50t',
+  total: '270t'
+  },
+  {
+  date: '19 Sep 2021',
+  application_number: '120664110233',
+  description: 'White cabbage',
+  details: 'Durham Early',
+  amount: '60t',
+  total: '210t'
+  },
+  {
+  date: '16 Sep 2021',
+  application_number: '120664110167',
+  description: 'White cabbage',
+  details: 'Durham Early',
+  amount: '50t',
+  total: '160t'
+  },
+  {
+  date: '14 Sep 2021',
+  application_number: '120664110123',
+  description: 'Cabbage',
+  details: 'Avon Crest',
+  amount: '10t',
+  total: '150t'
+  },
+  {
+  date: '12 Sep 2021',
+  application_number: '120664109150',
+  description: 'White cabbage',
+  details: 'Durham Early',
+  amount: '50t',
+  total: '150t'
+  }
+  
+  ] %}
+
 {% block pageTitle %}
 Manage application - {{serviceName}} - GOV.UK
 {% endblock %}
@@ -8,6 +60,16 @@ Manage application - {{serviceName}} - GOV.UK
 {{super()}}
 <a href="javascript:history.back()" class="govuk-back-link">Return to your applications</a>
 <style media="screen">
+
+  .govuk-width-three-tenths {
+    width: 15% !important;
+  }
+
+  .govuk-width-one-fifth {
+    width: 20% !important;
+  }
+
+
   .govuk-status--warning {
     width: auto !important;
     text-align: center;
@@ -163,24 +225,24 @@ Manage application - {{serviceName}} - GOV.UK
 <div class="govuk-grid-column-full">
   <h2 class="govuk-heading-m">Stock draw down</h2>
   <p class="govuk-body">
-    This application was inspected 03 October 2021. It can be used for single stock draw down until 04 November 2021.
+    This application was inspected on 03 October 2021. It can be used for stock draw down until 02 November 2021.
   </p>
   <table class="govuk-table govuk-!-margin-bottom-9">
     <thead class="govuk-table__head">
       <tr class="govuk-table__row">
-        <th class="govuk-table__header" scope="col">
-          Description
+        <th class="govuk-table__header govuk-width-one-fifth" scope="col">
+          Commodity
         </th>
         <th class="govuk-table__header" scope="col">
-          Details<!-- Variety -->
+          Variety
         </th>
-        <th class="govuk-table__header" scope="col">
+        <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
           Quantity
         </th>
         <!--        <th class="govuk-table__header" scope="col">
           Inspection status
         </th> -->
-        <th class="govuk-table__header" scope="col">
+        <th class="govuk-table__header govuk-width-three-tenths" scope="col">
           Action
         </th>
       </tr>
@@ -196,11 +258,6 @@ Manage application - {{serviceName}} - GOV.UK
         <td class="govuk-table__cell">
           557t
         </td>
-        <!--         <td class="govuk-table__cell">
-          <div class="app-status-tag app-status-tag--green">
-            passed
-          </div>
-        </td> -->
         <td class="govuk-table__cell">
           <a class="govuk-link govuk-link--no-visited-state" href="application/create/reuse-ref-ssdd-skip">Draw down</a>
         </td>
@@ -245,6 +302,50 @@ Manage application - {{serviceName}} - GOV.UK
       </tr>
     </tbody>
   </table>
+
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-4">
+      History of draw downs
+    </h2>
+    <p class="govuk-body">
+      This stock has been used for draw downs in the past. These are the details of those draw downs.
+    </p>
+
+    <table class="govuk-table responsive-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header govuk-width-one-fifth" scope="col">Date of draw down</th>
+          <th class="govuk-table__header" scope="col">Application reference</th>
+          <th class="govuk-table__header" scope="col">Commodity</th>
+          <th class="govuk-table__header" scope="col">Variety</th>
+          <th class="govuk-table__header s" scope="col">Quantity</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for item in items %}
+        <tr class="govuk-table__row result">
+          <td class="govuk-table__cell" scope="row">{{ item.date }}
+          </td>
+          <td class="govuk-table__cell" scope="row">
+            <a href="application-amend?id={{loop.index}}" class="govuk-link govuk-link--no-visited-state">
+              {{ item.application_number }}
+            </a>
+          </td>
+          <td class="govuk-table__cell" scope="row">{{ item.description }}
+          </td>
+          <td class="govuk-table__cell" scope="row">{{ item.details }}
+          </td>
+          <td class="govuk-table__cell" scope="row">{{ item.amount }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+
+    </table>
+
+
+
 </div>
 </div>
 
