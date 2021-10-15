@@ -1,0 +1,182 @@
+{% extends "layout.html" %}
+
+{% set items = [
+  {
+  date: '23 Sep 2021',
+  application_number: '120664110369',
+  description: 'White cabbage',
+  details: 'Durham Early',
+  site: 'Store 3',
+  amount: '100t',
+  total: '320t'
+  },
+  {
+  date: '21 Sep 2021',
+  application_number: '120664110283',
+  description: 'White cabbage',
+  details: 'Durham Early',
+  site: 'Store 7',
+  amount: '50t',
+  total: '270t'
+  },
+  {
+  date: '19 Sep 2021',
+  application_number: '120664110233',
+  description: 'White cabbage',
+  site: 'Store 3',
+  details: 'Durham Early',
+  amount: '60t',
+  total: '210t'
+  },
+  {
+  date: '16 Sep 2021',
+  application_number: '120664110167',
+  description: 'White cabbage',
+  details: 'Durham Early',
+  site: 'Store 3',
+  amount: '50t',
+  total: '160t'
+  },
+  {
+  date: '14 Sep 2021',
+  application_number: '120664110123',
+  description: 'Cabbage',
+  details: 'Avon Crest',
+  site: 'Store 5',
+  amount: '10t',
+  total: '150t'
+  },
+  {
+  date: '12 Sep 2021',
+  application_number: '120664109150',
+  description: 'White cabbage',
+  details: 'Durham Early',
+  site: 'Store 7',
+  amount: '50t',
+  total: '150t'
+  }
+  
+  ] %}
+
+{% block pageTitle %}
+Stock summary - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Return to your applications</a>
+<style media="screen">
+
+  .govuk-width-three-tenths {
+    width: 15% !important;
+  }
+
+  .govuk-width-one-fifth {
+    width: 20% !important;
+  }
+
+</style>
+{% endblock%}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">Stock summary <span style="white-space: nowrap;">{{query.id | appInfo('reference')}}</span></h1>
+  </div>
+
+</div>
+
+<div class="govuk-grid-row govuk-!-margin-bottom-6">
+
+  <div class="govuk-grid-column-two-thirds">
+    <dl class="govuk-summary-list govuk-summary-list--no-border">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Inspected on
+        </dt>
+        <dd class="govuk-summary-list__value">
+          03 October 2021
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Valid until
+        </dt>
+        <dd class="govuk-summary-list__value">
+          02 November 2021
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Quantity inspected
+        </dt>
+        <dd class="govuk-summary-list__value">
+          883 tonnes
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Total amount
+        </dt>
+        <dd class="govuk-summary-list__value">
+          350 tonnes
+        </dd>
+      </div>
+
+    </dl>
+  </div>
+</div>
+
+
+<div class="govuk-grid-row govuk-!-margin-bottom-6">
+<div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-m govuk-!-margin-top-4">
+      History of draw downs
+    </h2>
+    <p class="govuk-body">
+      Some of this stock has been approved for draw downs in the past. These are the details of those draw downs.
+    </p>
+
+    <table class="govuk-table responsive-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">Date of draw down</th>
+          <th class="govuk-table__header" scope="col">Application reference</th>
+<!--           <th class="govuk-table__header" scope="col">Commodity</th>
+          <th class="govuk-table__header" scope="col">Variety</th> -->
+          <th class="govuk-table__header" scope="col">Quantity</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for item in items %}
+        <tr class="govuk-table__row result">
+          <td class="govuk-table__cell" scope="row">{{ item.date }}
+          </td>
+          <td class="govuk-table__cell" scope="row">
+            <a href="application-amend?id={{loop.index}}" class="govuk-link govuk-link--no-visited-state">
+              {{ item.application_number }}
+            </a>
+          </td>
+<!--           <td class="govuk-table__cell" scope="row">{{ item.description }}
+          </td>
+          <td class="govuk-table__cell" scope="row">{{ item.details }}
+          </td> -->
+          <td class="govuk-table__cell" scope="row">{{ item.amount }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+
+    </table>
+
+    {{ govukButton({
+      text: "Draw down",
+      href: "application/create/reuse-ref-ssdd-skip"
+    }) }}
+
+</div>
+</div>
+
+{% endblock %}
