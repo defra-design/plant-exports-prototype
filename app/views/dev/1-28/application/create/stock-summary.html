@@ -104,7 +104,7 @@ Stock summary - {{serviceName}} - GOV.UK
           Reference
         </dt>
         <dd class="govuk-summary-list__value">
-          Store 17
+          Store 7
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -138,12 +138,19 @@ Stock summary - {{serviceName}} - GOV.UK
           Total amount used
         </dt>
         <dd class="govuk-summary-list__value">
-          350 tonnes
+          320 tonnes
         </dd>
       </div>
 
     </dl>
-  </div>
+
+
+  {% if query.expired == "true" %}
+  <p class="govuk-body">
+    This stock has expired and can no longer to be used for stock draw down.
+  </p>
+  {% endif %}
+</div>
 </div>
 
 
@@ -155,6 +162,7 @@ Stock summary - {{serviceName}} - GOV.UK
     <p class="govuk-body">
       Some of this stock has been approved for draw downs in the past. These are the details of those draw downs.
     </p>
+
 
     <table class="govuk-table responsive-table">
       <thead class="govuk-table__head">
@@ -189,10 +197,19 @@ Stock summary - {{serviceName}} - GOV.UK
 
     </table>
 
+    {% if query.expired == "true" %}
+    {{ govukButton({
+      text: "Draw down",
+      href: "reuse-ref-ssdd-skip",
+      disabled: true
+    }) }}
+    {% else %}
     {{ govukButton({
       text: "Draw down",
       href: "reuse-ref-ssdd-skip"
     }) }}
+    {% endif %}
+
 
 </div>
 </div>
