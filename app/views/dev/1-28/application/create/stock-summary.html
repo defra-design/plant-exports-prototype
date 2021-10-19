@@ -2,11 +2,12 @@
 
 {% set items = [
   {
-  date: '23 Sep 2021',
+  date: '',
   application_number: '120664110369',
   description: 'White cabbage',
   details: 'Durham Early',
   site: 'Store 3',
+  status: 'draft',
   amount: '100t',
   total: '320t'
   },
@@ -16,6 +17,7 @@
   description: 'White cabbage',
   details: 'Durham Early',
   site: 'Store 7',
+  status: 'pending',
   amount: '50t',
   total: '270t'
   },
@@ -24,6 +26,7 @@
   application_number: '120664110233',
   description: 'White cabbage',
   site: 'Store 3',
+  status: 'completed',
   details: 'Durham Early',
   amount: '60t',
   total: '210t'
@@ -34,6 +37,7 @@
   description: 'White cabbage',
   details: 'Durham Early',
   site: 'Store 3',
+  status: 'completed',
   amount: '50t',
   total: '160t'
   },
@@ -43,6 +47,7 @@
   description: 'Cabbage',
   details: 'Avon Crest',
   site: 'Store 5',
+  status: 'completed',
   amount: '10t',
   total: '150t'
   },
@@ -52,6 +57,7 @@
   description: 'White cabbage',
   details: 'Durham Early',
   site: 'Store 7',
+  status: 'completed',
   amount: '50t',
   total: '150t'
   }
@@ -63,28 +69,28 @@
     description: 'White cabbage',
     variety: 'Durham Early',
     reference: 'Store 3',
-    amount: '100t',
+    amount: '320t',
     total: '557t'
     },
     {
     description: 'White cabbage',
     variety: 'Avon Crest',
     reference: 'Store 5',
-    amount: '140t',
+    amount: '320t',
     total: '1035t'
     },
     {
-    description: 'White cabbage',
-    variety: 'Durham Early',
+    description: 'Cabbage',
+    variety: 'Savoy',
     reference: 'Store 7',
-    amount: '220t',
+    amount: '320t',
     total: '883t'
     }
   ]
   %}
 
 {% block pageTitle %}
-Stock summary - {{serviceName}} - GOV.UK
+Stock details - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -107,7 +113,7 @@ Stock summary - {{serviceName}} - GOV.UK
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">Stock draw down details <span style="white-space: nowrap;">{{data.id | appInfo('reference')}}</span></h1>
+    <h1 class="govuk-heading-xl">Stock details <span style="white-space: nowrap;">{{data.id | appInfo('reference')}}</span></h1>
   </div>
 </div>
   {% if query.stock %}
@@ -139,7 +145,7 @@ Stock summary - {{serviceName}} - GOV.UK
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Your reference
+          Location
         </dt>
         <dd class="govuk-summary-list__value">
           {{stock.reference}}
@@ -198,7 +204,7 @@ Stock summary - {{serviceName}} - GOV.UK
       History of draw downs
     </h2>
     <p class="govuk-body">
-      Some of this stock has been approved for draw downs in the past. These are the details of those draw downs.
+      Some of this stock has been used for draw downs in the past. These are the details of those draw downs.
     </p>
 
 
@@ -207,8 +213,7 @@ Stock summary - {{serviceName}} - GOV.UK
         <tr class="govuk-table__row">
           <th class="govuk-table__header" scope="col">Date of draw down</th>
           <th class="govuk-table__header" scope="col">Application reference</th>
-<!--           <th class="govuk-table__header" scope="col">Commodity</th>
-          <th class="govuk-table__header" scope="col">Variety</th> -->
+          <th class="govuk-table__header" scope="col">Status</th>
           <th class="govuk-table__header" scope="col">Quantity</th>
         </tr>
       </thead>
@@ -223,10 +228,11 @@ Stock summary - {{serviceName}} - GOV.UK
               {{ item.application_number }}
             </a>
           </td>
-<!--           <td class="govuk-table__cell" scope="row">{{ item.description }}
+          <td class="govuk-table__cell " scope="row">
+            <strong class="govuk-tag {{item.status | tagColour }}">{{ item.status }}</strong>
+            
           </td>
-          <td class="govuk-table__cell" scope="row">{{ item.details }}
-          </td> -->
+
           <td class="govuk-table__cell" scope="row">{{ item.amount }}
           </td>
         </tr>
