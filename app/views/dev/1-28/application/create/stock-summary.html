@@ -55,8 +55,33 @@
   amount: '50t',
   total: '150t'
   }
-  
-  ] %}
+  ] 
+  %}
+
+  {% set stocks = [
+    {
+    description: 'White cabbage',
+    variety: 'Durham Early',
+    reference: 'Store 3',
+    amount: '100t',
+    total: '557t'
+    },
+    {
+    description: 'White cabbage',
+    variety: 'Avon Crest',
+    reference: 'Store 5',
+    amount: '140t',
+    total: '1035t'
+    },
+    {
+    description: 'White cabbage',
+    variety: 'Durham Early',
+    reference: 'Store 7',
+    amount: '220t',
+    total: '883t'
+    }
+  ]
+  %}
 
 {% block pageTitle %}
 Stock summary - {{serviceName}} - GOV.UK
@@ -84,8 +109,14 @@ Stock summary - {{serviceName}} - GOV.UK
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">Stock draw down details <span style="white-space: nowrap;">{{query.id | appInfo('reference')}}</span></h1>
   </div>
-
 </div>
+  {% if query.id %}
+  {% set ref = query.id %}
+  {% else %}
+  {% set ref = 0 %}
+  {% endif %}
+
+  {% set stock = stocks[ref] %}
 
 <div class="govuk-grid-row govuk-!-margin-bottom-6">
 
@@ -96,14 +127,14 @@ Stock summary - {{serviceName}} - GOV.UK
           Description
         </dt>
         <dd class="govuk-summary-list__value">
-          White cabbage
+          {{stock.description}}
         </dd>
       </div>      <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Variety
         </dt>
         <dd class="govuk-summary-list__value">
-          Durham Early 
+          {{stock.variety}}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -111,7 +142,7 @@ Stock summary - {{serviceName}} - GOV.UK
           Your reference
         </dt>
         <dd class="govuk-summary-list__value">
-          Store 7
+          {{stock.reference}}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -136,7 +167,7 @@ Stock summary - {{serviceName}} - GOV.UK
           Quantity inspected
         </dt>
         <dd class="govuk-summary-list__value">
-          883 tonnes
+          {{stock.total}}
         </dd>
       </div>
 
@@ -145,7 +176,7 @@ Stock summary - {{serviceName}} - GOV.UK
           Amount drawn down
         </dt>
         <dd class="govuk-summary-list__value">
-          320 tonnes
+          {{stock.amount}}
         </dd>
       </div>
 
