@@ -130,7 +130,14 @@ module.exports = function(env) {
       return "govuk-tag--orange"
     } else if (e == "Delayed") {
       return "govuk-tag--yellow"
-    } else {
+    } else if (e == "draft") {
+      return "govuk-tag--grey"
+    } else if (e == "processing") {
+      return "govuk-tag--blue"
+    }else if (e == "completed") {
+      return "govuk-tag--green"
+    }
+     else {
       return ""
     }
   }

@@ -6,48 +6,54 @@
   application_number: '120664110369',
   description: 'White cabbage',
   details: 'Durham Early',
-  amount: '100kg',
-  total: '500kg'
+  site: 'Store 3',
+  amount: '100t',
+  total: '320t'
   },
   {
   date: '21 Sep 2021',
   application_number: '120664110283',
   description: 'White cabbage',
   details: 'Durham Early',
-  amount: '50kg',
-  total: '400kg'
+  site: 'Store 7',
+  amount: '50t',
+  total: '270t'
   },
   {
   date: '19 Sep 2021',
   application_number: '120664110233',
   description: 'White cabbage',
+  site: 'Store 3',
   details: 'Durham Early',
-  amount: '100kg',
-  total: '350kg'
+  amount: '60t',
+  total: '210t'
   },
   {
   date: '16 Sep 2021',
   application_number: '120664110167',
   description: 'White cabbage',
   details: 'Durham Early',
-  amount: '100kg',
-  total: '250kg'
+  site: 'Store 3',
+  amount: '50t',
+  total: '160t'
   },
   {
   date: '14 Sep 2021',
   application_number: '120664110123',
   description: 'Cabbage',
   details: 'Avon Crest',
-  amount: '50kg',
-  total: '150kg'
+  site: 'Store 5',
+  amount: '10t',
+  total: '150t'
   },
   {
   date: '12 Sep 2021',
   application_number: '120664109150',
   description: 'White cabbage',
   details: 'Durham Early',
-  amount: '100kg',
-  total: '100kg'
+  site: 'Store 7',
+  amount: '50t',
+  total: '150t'
   }
   
   ] %}
@@ -169,6 +175,14 @@ Manage application - {{serviceName}} - GOV.UK
         </dd>
       </div>
       {% endif %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Draw down
+        </dt>
+        <dd class="govuk-summary-list__value">
+          Expired
+        </dd>
+      </div>
     </dl>
   </div>
 
@@ -223,10 +237,8 @@ Manage application - {{serviceName}} - GOV.UK
 
 <div class="govuk-grid-row govuk-!-margin-bottom-6">
 <div class="govuk-grid-column-full">
-  <h2 class="govuk-heading-m">Stock draw down</h2>
-  <p class="govuk-body">
-    This application was inspected on 03 October 2021. It can no longer to be used for stock draw down.
-  </p>
+  <h2 class="govuk-heading-m">Commodities</h2>
+
   <table class="govuk-table govuk-!-margin-bottom-9">
     <thead class="govuk-table__head">
       <tr class="govuk-table__row">
@@ -236,10 +248,13 @@ Manage application - {{serviceName}} - GOV.UK
         <th class="govuk-table__header" scope="col">
           Variety
         </th>
-        <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
+        <th class="govuk-table__header" scope="col">
           Quantity
         </th>
-        <th class="govuk-table__header govuk-width-three-tenths" scope="col">
+        <th class="govuk-table__header" scope="col">
+          Location
+        </th>
+        <th class="govuk-table__header" scope="col">
           Action
         </th>
       </tr>
@@ -256,7 +271,10 @@ Manage application - {{serviceName}} - GOV.UK
           557t
         </td>
         <td class="govuk-table__cell">
-          Expired
+          Store 3
+        </td>
+        <td class="govuk-table__cell">
+          <a class="govuk-link govuk-link--no-visited-state" href="application/create/stock-summary?expired=true&stock=0">View stock</a>
         </td>
       </tr>
       <tr class="govuk-table__row">
@@ -270,7 +288,10 @@ Manage application - {{serviceName}} - GOV.UK
           1035t
         </td>
         <td class="govuk-table__cell">
-          Expired
+          Store 5
+        </td>
+        <td class="govuk-table__cell">
+          <a class="govuk-link govuk-link--no-visited-state" href="application/create/stock-summary?expired=true&stock=1">View stock</a>
         </td>
       </tr>
       <tr class="govuk-table__row">
@@ -278,24 +299,27 @@ Manage application - {{serviceName}} - GOV.UK
           Cabbage
         </td>
         <td class="govuk-table__cell">
-          Durham Early
+          Savoy
         </td>
         <td class="govuk-table__cell">
           883t
         </td>
         <td class="govuk-table__cell">
-          Expired
+          Store 7
+        </td>
+        <td class="govuk-table__cell">
+          <a class="govuk-link govuk-link--no-visited-state" href="application/create/stock-summary?expired=true&stock=2">View stock</a>
         </td>
       </tr>
     </tbody>
   </table>
 
-
+<!-- 
     <h2 class="govuk-heading-m govuk-!-margin-top-4">
       History of draw downs
     </h2>
     <p class="govuk-body">
-      This stock has been used for draw downs in the past. These are the details of those draw downs.
+      Some of this stock has been approved for draw downs in the past. These are the details of those draw downs.
     </p>
 
     <table class="govuk-table responsive-table">
@@ -305,7 +329,8 @@ Manage application - {{serviceName}} - GOV.UK
           <th class="govuk-table__header" scope="col">Application reference</th>
           <th class="govuk-table__header" scope="col">Commodity</th>
           <th class="govuk-table__header" scope="col">Variety</th>
-          <th class="govuk-table__header s" scope="col">Quantity</th>
+          <th class="govuk-table__header" scope="col">Site</th>
+          <th class="govuk-table__header" scope="col">Quantity</th>
         </tr>
       </thead>
 
@@ -323,6 +348,8 @@ Manage application - {{serviceName}} - GOV.UK
           </td>
           <td class="govuk-table__cell" scope="row">{{ item.details }}
           </td>
+          <td class="govuk-table__cell" scope="row">{{ item.site }}
+          </td>
           <td class="govuk-table__cell" scope="row">{{ item.amount }}
           </td>
         </tr>
@@ -331,7 +358,7 @@ Manage application - {{serviceName}} - GOV.UK
 
     </table>
 
-
+ -->
 
 </div>
 </div>
