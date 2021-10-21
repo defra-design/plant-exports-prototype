@@ -34,10 +34,19 @@ Add commodities to your consignment - {{serviceName}} - GOV.UK
           Add commodities to your consignment
         </legend>
 
-        {% if data.commodity == "apples" or data.commodity == "grapes" or data.commodity == "pears" %}
+        {% if data.commodity == "cidre" or data.commodity == "lacsc" or data.commodity == "lacsp" %}
+
+
+          {% block cidreVariety %}
+          
+          {% set citrus_subtype_module_label = "Select your commodity" %}
+          {% include "../modules/_cidre-variety-select.html" %}
+          {% endblock %}
+
+        {% elseif data.commodity == "apples" or data.commodity == "grapes" or data.commodity == "pears" or data.commodity == "cidre" %}
           <p class="govuk-body govuk-!-font-weight-bold" for="how-contacted-conditional">
-            What variety are your {{data.commodity or "apples"}}?
-          </p>
+             What variety are your {{data.commodity or "apples"}}?
+           </p>
           <div class="govuk-form-group">
             <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
               <div class="govuk-radios__item">
@@ -49,9 +58,11 @@ Add commodities to your consignment - {{serviceName}} - GOV.UK
               <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional">
                 {% if data.show_manual_input != "yes"%}
                   {% if data.commodity == "apples" %}
-                    {% block appleVariety %}{% include "../modules/_apples-variety-select-with-value.html" %}{% endblock %}
+                    {% block appleVariety %}
+                    {% include "../modules/_apples-variety-select-with-value.html" %}
+                    {% endblock %}
                   {% elseif data.commodity == "grapes" %}
-                    {% block grapesVariety %}{% include "../modules/_grapes-variety-select.html" %}{% endblock %}
+                    {% block grapesVariety %}{% include "../modules/_grapes-variety-select.html" %}{% endblock %}            
                   {% else %}
                     {% block pearsVariety %}{% include "../modules/_pears-variety-select.html" %}{% endblock %}
                   {% endif %}
