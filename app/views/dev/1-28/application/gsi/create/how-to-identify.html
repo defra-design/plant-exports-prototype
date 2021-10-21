@@ -18,6 +18,135 @@ Add your products - Growing season inspection - {{serviceName}} - GOV.UK
     </p>
     <!--<form method="get" action="commodity-page">-->
     <form method="get" action="gsi-commodity-list">
+      {% if data.commodity == "potatoes"%}
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--s govuk-!-font-weight-regular">
+            <h1 class="govuk-fieldset__heading ">
+              Type of potato
+            </h1>
+          </legend>
+            <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="potato_1" name="potato" type="radio" value="ware" data-aria-controls="conditional-contact">
+                <label class="govuk-label govuk-radios__label" for="potato_1">
+                  Ware
+                </label>
+              </div>
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-contact">
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="app_number">
+                    Soil sampling application number
+                  </label>
+                  <input class="govuk-input govuk-!-width-one-half" id="app_number" name="app_number" type="text" spellcheck="false">
+                </div>
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="stock_number">
+                    Stock number
+                  </label>
+                  <span id="quantity-hint" class="govuk-hint">
+                  Enter the stock number for stock that was soil sampled<br/> For ware potatoes grown in a seed certification scheme, enter "Seed"
+                </span>
+
+                  <input class="govuk-input govuk-!-width-one-half" id="stock_number" name="stock_number" type="text" spellcheck="false">
+                </div>
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="lot_reference">
+                    Lot reference
+                  </label>
+                  <span id="quantity-hint" class="govuk-hint">
+                  This is the number that will go on the bag labels.<br/> For ware potatoes grown in a seed certification scheme, enter the certification number
+                </span>
+                  <input class="govuk-input govuk-!-width-one-half" id="lot_reference" name="lot_reference" type="text" spellcheck="false">
+                </div>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="potato_2" name="potato" type="radio" value="seed" data-aria-controls="conditional-contact-2">
+                <label class="govuk-label govuk-radios__label" for="potato_2">
+                  Seed
+                </label>
+              </div>
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-contact-2">
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="stock_number">
+                    Certification number
+                  </label>
+                  <span id="quantity-hint" class="govuk-hint">
+                </span>
+                  <input class="govuk-input govuk-!-width-one-half" id="stock_number" name="stock_number" type="text">
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- These are the countries which require differnt information to be provided -->
+        {% if data.countrySelect == "Norway,NO" or data.countrySelect == "Iceland,IS" or data.countrySelect == "Canary Islands,CI" or data.countrySelect == "Nigeria,NG" or data.countrySelect == "Ghana,GH" or data.countrySelect == "Falkland Islands,FK" %}
+        {% endif %}
+
+        <!--<div class="govuk-form-group">
+          <label class="govuk-label" for="commodity_variety">
+            Variety
+          </label>
+          <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety" type="text">
+        </div>-->
+
+          <p class="govuk-body" for="how-contacted-conditional">
+            What variety are your potatoes?
+          </p>
+          <div class="govuk-form-group">
+            <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="how-contacted-conditional" name="has_botanicial_name" type="radio" value="yes" data-aria-controls="conditional-how-contacted-conditional" {% if data.has_botanicial_name=="yes"%}checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="how-contacted-conditional">
+                  Variety
+                </label>
+              </div>
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional">
+                {% if data.show_manual_input != "yes"%}
+                  {% if data.commodity == "potatoes" %}
+                    {% block potatoVariety %}{% include "../../modules/_potatoes-variety-select.html" %}{% endblock %}
+                  {% endif %}
+                {% else %}
+                  <div class="govuk-form-group">
+                    <label class="govuk-label" for="commodity_host_species">
+                      Variety
+                    </label>
+                    <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety" type="text" value="{% if query.has_commodity %}{{query.genus}}{%endif%}">
+                  </div>
+                {% endif %}
+              </div>
+
+              <div class="govuk-radios__divider">or</div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="how-contacted-conditional-3" name="has_botanicial_name" type="radio" value="use_description" data-aria-controls="conditional-how-contacted-conditional-3" {% if data.has_botanicial_name == "use_description"%}checkjed{%endif%}>
+                <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-3">
+                  Other
+                </label>
+                <div id="how-contacted-conditional-hint" class="govuk-hint govuk-radios__hint">
+                  If you can't find the variety by searching in the field above, select other and enter the variety.
+                </div>
+              </div>
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional-3">
+                <div class="govuk-form-group">
+                  <label class="govuk-visually-hidden" for="plant-identify--description">
+                    Variety
+                  </label>
+                  <input class="govuk-input" id="plant-identify--description" name="commodity_variety" aria-describedby="more-detail-hint">
+                </div>
+              </div>
+            </div>
+          </div>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="chemicals_used">
+            Chemical used on tubers (optional)
+          </label>
+          <input class="govuk-input govuk-input--width-20" id="chemicals_used" name="chemicals_used" type="text">
+        </div>
+
+      {% endif %}
+
       {% if data.commodity != "potatoes" %}
       <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
