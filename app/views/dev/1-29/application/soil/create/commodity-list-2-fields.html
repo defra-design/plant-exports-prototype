@@ -1,0 +1,267 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Your fields for inspection - Soil inspection - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent%}
+{{super()}}
+<a href="{{page.content.prev or 'javascript:history.back()'}}" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <h1 class="govuk-heading-xl">
+      Your fields for inspection
+    </h1>
+    <h2 class="govuk-heading-m">{{data.nurseryplotno or "Top field"}}</h2>
+    <table class="govuk-table govuk-!-margin-bottom-4">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          {% if data.addfielddetails == "gridgps" %}
+          <th class="govuk-table__header" scope="col">
+            Grid reference or GPS reading
+          </th>
+          {% else %}
+          <th class="govuk-table__header" scope="col">
+            IACS/RLR number
+          </th>
+          {% endif %}
+          <th class="govuk-table__header govuk-table__header--numeric" scope="col">
+            Area of whole field in hectares
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Field map
+          </th>
+          <th class="govuk-table__header" scope="col"></th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          {% if data.addfielddetails == "iacs" %}
+          <td class="govuk-table__cell">
+            {{data.iacs or "NF24681358"}}
+          </td>
+          {% else %}
+          <td class="govuk-table__cell">
+            {{data.gridgps or "NF 2468 1358"}}
+          </td>
+          {% endif %}
+          <td class="govuk-table__cell govuk-table__cell--numeric">
+            {{ data.areaoffield or "3.5" }}
+          </td>
+          <td class="govuk-table__cell govuk-table__cell">
+            <a class="govuk-link govuk-link--no-visited-state" href="#">{{ data.description or "Filename.jpg" }}</a>
+          </td>
+          <td class="govuk-table__cell">
+            <a href="field-2" class="govuk-link govuk-link--no-visited-state">
+              Change
+            </a><br>
+            <a href="#" class="govuk-link govuk-link--no-visited-state">
+              Delete
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    {% if commodity.has_botanicial_name == "yes" %}
+    {% set commodity_id_name = commodity.genus %}
+    {% else %}
+    {% set commodity_id_name = commodity.commodity_common_name %}
+    {% endif %}
+
+    <h2 class="govuk-heading-s govuk-!-margin-top-9">2 crops added to {{data.nurseryplotno or "Top field"}}</h2>
+    <table class="govuk-table govuk-!-margin-bottom-4">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">
+            Description
+          </th>
+          <th class="govuk-table__header govuk-table__header--numeric" scope="col">
+            Hectarage of inspection plot
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Destination countries
+          </th>
+          <th class="govuk-table__header" scope="col"></th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Corylus avellana'}}
+          </td>
+          <td class="govuk-table__cell govuk-table__cell--numeric">
+            2
+          </td>
+          <td class="govuk-table__cell">
+            Belize
+          </td>
+          <td class="govuk-table__cell">
+            <a href="how-to-identify-2" class="govuk-link govuk-link--no-visited-state">
+              Change
+            </a><br>
+            <a href="#" class="govuk-link govuk-link--no-visited-state">
+              Delete
+            </a>
+          </td>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Corylus colurna'}}
+            </td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              1.5
+            </td>
+            <td class="govuk-table__cell">
+              Norway
+            </td>
+          <td class="govuk-table__cell">
+            <a href="how-to-identify-2" class="govuk-link govuk-link--no-visited-state">
+              Change
+            </a><br>
+            <a href="#" class="govuk-link govuk-link--no-visited-state">
+              Delete
+            </a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="how-to-identify-2">Add more crops</a></p>
+
+
+  <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+
+    <h2 class="govuk-heading-m">{{data.nurseryplotno or "Big barn field"}}</h2>
+    <table class="govuk-table govuk-!-margin-bottom-4">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          {% if data.addfielddetails == "gridgps" %}
+          <th class="govuk-table__header" scope="col">
+            Grid reference or GPS reading
+          </th>
+          {% else %}
+          <th class="govuk-table__header" scope="col">
+            IACS/RLR number
+          </th>
+          {% endif %}
+          <th class="govuk-table__header govuk-table__header--numeric" scope="col">
+            Area of whole field in hectares
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Field map
+          </th>
+          <th class="govuk-table__header" scope="col"></th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          {% if data.addfielddetails == "iacs" %}
+          <td class="govuk-table__cell">
+            {{data.iacs or "NF24681359"}}
+          </td>
+          {% else %}
+          <td class="govuk-table__cell">
+            {{data.gridgps or "NF 2468 1359"}}
+          </td>
+          {% endif %}
+          <td class="govuk-table__cell govuk-table__cell--numeric">
+            {{ data.areaoffield or "1.5" }}
+          </td>
+          <td class="govuk-table__cell govuk-table__cell">
+            <a class="govuk-link govuk-link--no-visited-state" href="#">{{ data.description or "map-big-barn.jpg" }}</a>
+          </td>
+          <td class="govuk-table__cell">
+            <a href="field-2" class="govuk-link govuk-link--no-visited-state">
+              Change
+            </a><br>
+            <a href="#" class="govuk-link govuk-link--no-visited-state">
+              Delete
+            </a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      {% if commodity.has_botanicial_name == "yes" %}
+      {% set commodity_id_name = commodity.genus %}
+      {% else %}
+      {% set commodity_id_name = commodity.commodity_common_name %}
+      {% endif %}
+
+      <h2 class="govuk-heading-s govuk-!-margin-top-9">2 crops added to {{data.nurseryplotno or "Big barn field"}}</h2>
+      <table class="govuk-table govuk-!-margin-bottom-4">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">
+              Description
+            </th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">
+              Hectarage of inspection plot
+            </th>
+            <th class="govuk-table__header" scope="col">
+              Destination countries
+            </th>
+            <th class="govuk-table__header" scope="col"></th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Corylus avellana'}}
+            </td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              2
+            </td>
+            <td class="govuk-table__cell">
+              Belize
+            </td>
+            <td class="govuk-table__cell">
+              <a href="how-to-identify-2" class="govuk-link govuk-link--no-visited-state">
+                Change
+              </a><br>
+              <a href="#" class="govuk-link govuk-link--no-visited-state">
+                Delete
+              </a>
+            </td>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">
+                {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Corylus colurna'}}
+              </td>
+              <td class="govuk-table__cell govuk-table__cell--numeric">
+                1.5
+              </td>
+              <td class="govuk-table__cell">
+                Norway
+              </td>
+            <td class="govuk-table__cell">
+              <a href="how-to-identify-2" class="govuk-link govuk-link--no-visited-state">
+                Change
+              </a><br>
+              <a href="#" class="govuk-link govuk-link--no-visited-state">
+                Delete
+              </a>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="how-to-identify-2">Add more crops</a></p>
+
+
+    <div class="govuk-button-group govuk-!-margin-top-9">
+      {{ govukButton({
+        text: "Save and continue",
+        href: "task-list-2"
+      }) }}
+
+      {{ govukButton({
+        text: "Add another field",
+        href: "field-2",
+        classes: "govuk-button--secondary govuk-!-margin-left-4"
+      }) }}
+    </div>
+  </div>
+</div>
+
+    {% endblock %}

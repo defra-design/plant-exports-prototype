@@ -7,9 +7,7 @@ module.exports = function(router) {
   var client3 = new RestClient()
 
   // ADD extra routing here if needed.
-  //require('./dev_v24.js')(router) // temporarily keep v1-24 for inspector data
-  require('./dev_v28.js')(router)
-
+  require('./dev_v29.js')(router)
 
 
   // CHANGE VERSION each time you create a new version
