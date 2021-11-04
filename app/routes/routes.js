@@ -18,7 +18,7 @@ module.exports = function(router) {
 
   // MIDDLEWARE: Called every time a page is rendered
   router.use(function(req, res, next) {
-    console.log("working")
+    console.log("(app/routes.js) working")
     // this makes sure a certificate is loaded
     // if (req.query.certificate && req.session.database != req.query.certificate) {
     //   req.session.database = req.query.certificate
@@ -77,6 +77,7 @@ module.exports = function(router) {
 
   // this adds query to all pages and will be used if no other get routing exists to override this.
   router.get('/' + base_url + '*', function(req, res) {
+    console.log("app/routes.js")
     console.log("default get routing page for: " + base_url + req.params[0])
     // Attempt to render a page in the current folder
     res.render(base_url + req.params[0], {

@@ -12,7 +12,10 @@ router.use('/', (req, res, next) => {
   res.locals.currentURL = req.originalUrl; //current screen
   req.session.data.currentURL = req.path
   res.locals.prevURL = req.get('Referrer'); // previous screen
-  console.log('previous page is: ' + res.locals.prevURL + " and current page is " + req.url + " " + res.locals.currentURL );
+  console.log('(routes.js)');
+  console.log('prevURL:    ' + res.locals.prevURL );
+  console.log('currentURL: ' + res.locals.currentURL );
+  //console.log('req.url: ' + req.url);
   next();
 });
 

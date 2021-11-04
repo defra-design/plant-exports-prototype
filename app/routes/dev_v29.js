@@ -1,3 +1,5 @@
+const { registerPrompt } = require('inquirer');
+
 module.exports = function(router) {
     // Load helper functions
     var RestClient = require('node-rest-client').Client;
@@ -232,7 +234,7 @@ module.exports = function(router) {
           plants = populateResults2(data)
           console.log("------- plants output ------ ")
           console.log(plants)
-          console.log("------- end plats output ------ ")
+          console.log("------- end plants output ------ ")
           res.render(base_url + req.params[0] + 'application/create/plant-lookup', {
             "query": req.query,
             "db": plants,
@@ -257,6 +259,10 @@ module.exports = function(router) {
 
       // this adds query to all pages and will be used if no other get routing exists to override this.
       router.get('/' + base_url + '*', function(req, res) {
+        console.log("(dev_v29.js)");
+/*         for (item in req.query){
+          console.log(item + ": " + req.query[item])
+        } */
         console.log("default global GET routing page for: " + base_url +" plus "+ req.params[0])
         var dir = req.params[0].split(/\/+/g);
         // Remove the main folder from URL
@@ -267,7 +273,7 @@ module.exports = function(router) {
           baseDir += path
 
         })
-        console.log(baseDir);
+        //console.log("base dir:", baseDir);
         // clear previous session data if the user has selected commodity and cert type
         if(baseDir==="/setup/what-export"){
           console.log("clearing data")
