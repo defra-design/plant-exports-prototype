@@ -27,47 +27,50 @@
 
       {% set iacsHtml %}
       {{ govukInput({
-        id: "iacs",
-        name: "navigation",
+        id: "navigation_iacs",
+        name: "navigation_iacs",
         type: "text",
         spellcheck: false,
         classes: "govuk-!-width-one-third",
+        value: data.navigation_iacs or "",
         label: {
-          text: "Enter the 10 character IACS or RLR number eg NF 1234 1234"
+          text: "Enter the 10 character IACS or RLR number, for example NF 1234 1234"
         }
       }) }}
       {% endset -%}
 
       {% set gridHtml %}
       {{ govukInput({
-        id: "gridgps",
-        name: "navigation",
+        id: "navigation_gridgps",
+        name: "navigation_gridgps",
         type: "text",
         spellcheck: false,
         classes: "govuk-!-width-one-third",
+        value: data.navigation_gridgps or "",
         label: {
           text: "Enter the grid reference or GPS reading"
         }
       }) }}
       {% endset -%}
 
+      {% if data.addfielddetails == 'gridgps' %}
       {{ govukRadios({
         idPrefix: "addfielddetails",
         name: "addfielddetails",
         fieldset: {
           legend: {
             text: "How do you want to provide the location?",
-            isPageHeading: true,
-            classes: "govuk-fieldset__legend--s"
+            isPageHeading: false
           }
         },
         items: [
-            {
-              value: "gridgps",
-              text: "Grid reference or GPS reading",
-              conditional: {
-                html: gridHtml
-              }
+          {
+            value: "gridgps",
+            text: "Grid reference or GPS reading",
+            checked: true,
+            conditional: {
+              html: gridHtml
+            }
           },
           {
             value: "iacs",
@@ -78,36 +81,101 @@
           }
         ]
       }) }}
+      {% elif data.addfielddetails == 'iacs' %}
+      {{ govukRadios({
+        idPrefix: "addfielddetails",
+        name: "addfielddetails",
+        fieldset: {
+          legend: {
+            text: "How do you want to provide the location?",
+            isPageHeading: false
+          }
+        },
+        items: [
+          {
+            value: "gridgps",
+            text: "Grid reference or GPS reading",
+            conditional: {
+              html: gridHtml
+            }
+          },
+          {
+            value: "iacs",
+            text: "IACS/RLR number",
+            checked: true,
+            conditional: {
+              html: iacsHtml
+            }
+          }
+        ]
+      }) }}
+      {% else %}
+      {{ govukRadios({
+        idPrefix: "addfielddetails",
+        name: "addfielddetails",
+        fieldset: {
+          legend: {
+            text: "How do you want to provide the location?",
+            isPageHeading: false
+          }
+        },
+        items: [
+          {
+            value: "gridgps",
+            text: "Grid reference or GPS reading",
+            conditional: {
+              html: gridHtml
+            }
+          },
+          {
+            value: "iacs",
+            text: "IACS/RLR number",
+            conditional: {
+              html: iacsHtml
+            }
+          }
+        ]
+      }) }}
+      {% endif %}
 
       {{ govukInput({
         label: {
           text: "Nursery plot number or field name",
-          classes: "govuk-label--s",
           isPageHeading: false
         },
         id: "nurseryplotno",
         name: "nurseryplotno",
-        classes: "govuk-input--width-20"
+        classes: "govuk-input--width-20",
+        value: data.nurseryplotno or ""
       }) }}
 
       {{ govukInput({
         label: {
           text: "Area of whole field in hectares",
-          classes: "govuk-label--s",
           isPageHeading: false
         },
         id: "areaoffield",
         name: "areaoffield",
-        classes: "govuk-input--width-4"
+        classes: "govuk-input--width-4",
+        value: data.areaoffield or ""
       }) }}
 
+      <div class="govuk-checkboxes govuk-!-margin-bottom-6">
+        
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" type="checkbox" autofocus="autofocus" name="confirm" id="confirm" value="Yes" {% if data.confirm == 'Yes' %}checked{% else %}{% endif %}>
+          <label class="govuk-checkboxes__label" for="confirm">I confirm that I have the land owner's consent to inspect this field</label>
+        </div>
+
+      </div>
+
       {{ govukTextarea({
-        name: "more-detail",
-        id: "more-detail",
+        name: "more_detail",
+        id: "more_detail",
+        value: data.more_detail or "",
         label: {
           text: "Additional information (optional)",
-          classes: "govuk-label--s",
-          isPageHeading: true
+          isPageHeading: false
         },
         hint: {
           text: "For example, access points to the field"
@@ -124,18 +192,18 @@
       </ul>
 
       {{ govukFileUpload({
-        id: "map-upload",
-        name: "map-upload"
+        id: "map_upload",
+        name: "map_upload"
       }) }}
 
       {{ govukButton({
         text: "Upload map",
         classes: "govuk-button--secondary",
-        href: "field-upload-wip"
+        href: "#"
       }) }}
 
-      <div class="govuk-button-group govuk-!-margin-top-4 govuk-!-margin-bottom-7">
-        <button class="govuk-button" type="submit" data-module="govuk-button">Continue</button>
+      <div class="govuk-form-group govuk-!-margin-top-2 govuk-!-margin-bottom-6">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
       </div>
 
       {% block continueLater %}
