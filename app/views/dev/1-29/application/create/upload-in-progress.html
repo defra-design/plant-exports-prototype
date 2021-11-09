@@ -81,7 +81,11 @@ Add commodities by uploading a file - {{serviceName}} - GOV UK
     </div>
     <ul class="govuk-list govuk-list">
       <li>
+        {% if data.journey == "coc" or data.journey == "both"%}
+        <a href="commodity-list-split" class="govuk-link govuk-link-no-visited-state">Skip</a>
+        {% else %}
         <a href="commodity-list" class="govuk-link govuk-link-no-visited-state">Skip</a>
+        {% endif %}
         (Page reloads after 10 seconds)
       </li>
     </ul>
@@ -96,8 +100,12 @@ var a11ytimer = setTimeout(function() {
   }, 5000); 
 */
    var timer = setTimeout(function() {
-      //window.location='upload-completed'
-      window.location='commodity-list'
+    {% if data.journey == "coc" %}
+    window.location='commodity-list-split'
+    {% else %}
+    window.location='commodity-list'
+    {% endif %}
+      
   }, 10000); 
 </script>
 {% endblock %}
