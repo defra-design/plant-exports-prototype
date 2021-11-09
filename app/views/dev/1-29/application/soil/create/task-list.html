@@ -9,43 +9,43 @@
 <div class="login-nav login-border">
   <ul class="login-nav__list">
     <li class="login-nav__list-item" id="Nav-DisplayName">Prototype user</li>
-    <li class="login-nav__list-item"> | <a href="../../../account" class="govuk-link login-nav__link govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a>|</li>
+    <li class="login-nav__list-item"> | <a href="../../../account?returnURL=application" class="govuk-link login-nav__link govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a>|</li>
     <li class="login-nav__list-item"><a href="#" class="govuk-link login-nav__link govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
   </ul>
 </div>
 
-<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+<a href="../../../dashboard" class="govuk-back-link">Back to applications</a>
 {% endblock %}
 
 {% block content %}
-<div class="govuk-grid-row">
+<div class="govuk-grid-row govuk-!-margin-bottom-6">
 
 	<div class="govuk-grid-column-two-thirds">
 		{% if data.reference_num %}<span class="govuk-caption-xl">{{data.reference_num}}</span>{% endif%}
 		<h1 class="govuk-heading-xl">Arrange soil sampling</h1>
-		<p class="govuk-body govuk-!-margin-bottom-7">Enter the details of your inspection needs.</p>
+		<p class="govuk-body govuk-!-margin-bottom-7">Complete these details to arrange a soil sampling inspection.</p>
 		<ol class="app-task-list">
 			<li>
 				<h2 class="app-task-list__section"><span class="app-task-list__section-number">1. </span> Application details</h2>
 				<ul class="app-task-list__items">
 					<li class="app-task-list__item">
-						<span class="app-task-list__task-name"><a href="reference?change=yes" aria-describedby="eligibility-status">Create a reference</a></span>
-						<strong class="govuk-tag app-task-list__tag" id="eligibility-status">Completed</strong>
+						<span class="app-task-list__task-name"><a href="reference?change=yes" aria-describedby="create-a-reference">Create a reference</a></span>
+						<strong class="govuk-tag app-task-list__tag" id="create-a-reference">Completed</strong>
 					</li>
 					<li class="app-task-list__item">
-						<span class="app-task-list__task-name"><a href="{% if data.submit_date %}inspection-addresses?change=yes{% else %}inspection-addresses{% endif %}" aria-describedby="eligibility-status">What are the inspection details?</a></span>
+						<span class="app-task-list__task-name"><a href="{% if data.submit_date %}inspection-addresses?change=yes{% else %}inspection-addresses{% endif %}" aria-describedby="inspection-details">What are the inspection details?</a></span>
 						{% if data.submit_date %}
-						<strong class="govuk-tag app-task-list__tag" id="eligibility-status">Completed</strong>
+						<strong class="govuk-tag app-task-list__tag" id="inspection-details">Completed</strong>
 						{% else %}
-						<strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="list-convictions-status">Not started</strong>
+						<strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="inspection-details">Not started</strong>
 						{% endif %}
 					</li>
 					<li class="app-task-list__item">
-						<span class="app-task-list__task-name"><a href="field" aria-describedby="contact-details-status">Where is the sampling site?</a></span>
-						{% if data.navigation %}
-						<strong class="govuk-tag app-task-list__tag" id="status-c">Completed</strong>
+						<span class="app-task-list__task-name"><a href="{{data.crop_task_list_data or 'field'}}" aria-describedby="sampling-site-details">Where is the sampling site?</a></span>
+						{% if data.crop_task_list_data %}
+						<strong class="govuk-tag app-task-list__tag" id="sampling-site-details">Completed</strong>
 						{% else %}
-						<strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="status-ns">Not started</strong>
+						<strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="sampling-site-details">Not started</strong>
 						{% endif %}
 					</li>
 				</ul>
@@ -54,14 +54,13 @@
         <h2 class="app-task-list__section"><span class="app-task-list__section-number">2. </span> Check and submit your application</h2>
         <ul class="app-task-list__items">
           <li class="app-task-list__item">
-            <span class="task-list-submit-disabled">
-              <span class="app-task-list__task-name">Check your answers and submit your application</span>
-              <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="submit-pay-status">Cannot start yet</strong>
-            </span>
-            <span class="task-list-submit-enabled" style="display:none">
-              <span class="app-task-list__task-name"><a href="check-your-answers" aria-describedby="list-convictions-status">Check your answers and submit your application</a></span>
-              <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="submit-pay-status">Not started</strong>
-            </span>
+            {% if data.submit_date and data.crop_task_list_data %}
+            <span class="app-task-list__task-name"><a href="check-your-answers" aria-describedby="check-your-answers">Check your answers and submit your application</a></span>
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="check-your-answers">Not started</strong>
+            {% else %}
+            <span class="app-task-list__task-name">Check your answers and submit your application</span>
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="check-your-answers">Cannot start yet</strong>
+            {% endif %}
           </li>
 	      </ul>
 	    </li>
@@ -70,41 +69,7 @@
     {% block continueLater %}
     {% include "../modules/_save-continue-later.html" %}
     {% endblock %}
-
 	</div>
 
 </div>
-{% endblock %}
-
-{% block scripts %}
-{{super()}}
-<script type="text/javascript">
-
-  window.addEventListener('load', function() {
-    
-    var tasks = $('.app-task-list__tag');
-    var max = tasks.length - 2;
-    	
-		$('.task-list-max').text(max);
-    		
-    var count = 0;
-      
-    tasks.each(function(index, value) {
-      console.log($(value).text());
-        
-      if ($(value).text() == "Completed") {
-        count += 1;
-      }
-
-    });
-
-    if (count >= max-1) {
-      $('.task-list-submit-enabled').show();
-      $('.task-list-submit-disabled').hide();
-    }
-
-    $('.task-list-completed').text(count);
-  })
-
-</script>
 {% endblock %}

@@ -27,7 +27,7 @@
     <form method="get" action="commodity-list">
       {% if data.commodity != "potatoes" %}
       <fieldset class="govuk-fieldset">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">How do you want to identify your {{data.commodity or "crops"}}?</legend>
+        <legend class="govuk-fieldset__legend">How do you want to identify your {{data.commodity or "crops"}}?</legend>
         
         <div class="govuk-form-group">
           
@@ -76,9 +76,9 @@
 
               </div>
               {% if data.show_manual_input == "yes" %}
-              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display:none">The botanical name needs to be spelled correctly, if you are not sure <a href="?show_manual_input=no&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">search for a botanical name</a></p>
+              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display:none">The botanical name needs to be spelled correctly, if you are not sure <a href="?show_manual_input=no&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">search for a botanical name</a>.</p>
               {% else %}
-              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display:none">If you cannot find your {{data.commodity or "plant"}}, but you know the botanical name, <a href="?show_manual_input=yes&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">enter the botanical name manually</a></p>
+              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display:none">If you cannot find your {{data.commodity or "plant"}}, but you know the botanical name, <a href="?show_manual_input=yes&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">enter the botanical name manually</a>.</p>
               {% endif %}
 
               {% if data.commodity == "plants" or data.commodity == "seeds" or data.commodity == "bulbs" %}
@@ -147,14 +147,58 @@
         {% endif %}
 
         {% if data.commodity == "potatoes" %}
+        {% if data.commodity_type == 'Seed potatoes' %}
         {{ govukRadios({
           idPrefix: "Type",
           name: "commodity_type",
           fieldset: {
             legend: {
               text: "Type",
-              isPageHeading: true,
-              classes: "govuk-fieldset__legend--s"
+              isPageHeading: false
+            }
+          },
+          items: [
+            {
+              value: "Seed potatoes",
+              text: "Seed potatoes",
+              checked: true
+            },
+            {
+              value: "Ware potatoes",
+              text: "Ware potatoes"
+            }
+          ]
+        }) }}
+        {% elif data.commodity_type == 'Ware potatoes' %}
+        {{ govukRadios({
+          idPrefix: "Type",
+          name: "commodity_type",
+          fieldset: {
+            legend: {
+              text: "Type",
+              isPageHeading: false
+            }
+          },
+          items: [
+            {
+              value: "Seed potatoes",
+              text: "Seed potatoes"
+            },
+            {
+              value: "Ware potatoes",
+              text: "Ware potatoes",
+              checked: true
+            }
+          ]
+        }) }}
+        {% else %}
+        {{ govukRadios({
+          idPrefix: "Type",
+          name: "commodity_type",
+          fieldset: {
+            legend: {
+              text: "Type",
+              isPageHeading: false
             }
           },
           items: [
@@ -168,15 +212,16 @@
             }
           ]
         }) }}
+        {% endif %}
 
         <div class="govuk-form-group govuk-!-margin-top-4">
-          <label class="govuk-label govuk-!-font-weight-bold" for="commodity_lot">Lot reference (optional)</label>
-          <input class="govuk-input govuk-input--width-20" id="commodity_lot" name="commodity_lot" type="text">
+          <label class="govuk-label" for="commodity_lot">Lot reference (optional)</label>
+          <input class="govuk-input govuk-input--width-20" id="commodity_lot" name="commodity_lot" type="text" value="{{data.commodity_lot or ''}}">
         </div>
 
         <div class="govuk-form-group">
-          <label class="govuk-label govuk-!-font-weight-bold" for="chemicals_used">Chemical used on tubers (optional)</label>
-          <input class="govuk-input govuk-input--width-30" id="chemicals_used" name="chemicals_used" type="text">
+          <label class="govuk-label" for="chemicals_used">Chemical used on tubers (optional)</label>
+          <input class="govuk-input govuk-input--width-30" id="chemicals_used" name="chemicals_used" type="text" value="{{data.chemicals_used or ''}}">
         </div>
 
       </fieldset>
@@ -185,28 +230,31 @@
       {{ govukInput({
         label: {
           text: "Approximate hectarage of plot to be inspected",
-          classes: "govuk-label--s",
           isPageHeading: false
         },
         id: "approxhectofplot",
         name: "approxhectofplot",
-        classes: "govuk-input--width-4"
+        classes: "govuk-input--width-4",
+        value: data.approxhectofplot or ""
       }) }}
 
       {{ govukTextarea({
         name: "destinationcountries",
         id: "destinationcountries",
+        value: data.destinationcountries or "",
         label: {
           text: "Destination countries",
-          classes: "govuk-label--s",
           isPageHeading: false
         }
       }) }}
 
-      {{ govukButton({
-        text: "Save and continue"
-      }) }}
+      <div class="govuk-form-group govuk-!-margin-top-7 govuk-!-margin-bottom-6">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      </div>
 
+      {% block continueLater %}
+      {% include "../modules/_save-continue-later.html" %}
+      {% endblock %}
     </form>
 
   </div>
