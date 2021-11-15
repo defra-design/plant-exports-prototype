@@ -1,0 +1,176 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+There is a problem - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-width-container">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+          <h2 class="govuk-error-summary__title" id="error-summary-title">
+            There is a problem
+          </h2>
+          <h3 class="govuk-heading-s">
+            There are 10 errors in your file
+          </h3>
+          <div class="govuk-error-summary__body">
+            <ul class="govuk-list govuk-error-summary__list">
+              <li>
+                <a href="#file-upload-1">Correct the problems with your file and then upload the file again.</a>
+              </li>
+            </ul>
+            <ul class="govuk-list govuk-error-summary__list">
+              <li>Row 2: Destination country is missing</li>
+              <li>Row 4: Quantity unit is missing</li>
+              <li>Row 5: Genus is too long.  It should be 50 characters or less</li>
+              <li>Row 5: Quantity unit is missing</li>
+              <li>Row 8: Potato type doesn't match either of the expected values</li>
+              <li>Row 9: Potato type doesn't match either of the expected values</li>
+              <li>Row 15: Quantity doesn't match the expected type of number</li>
+              <li>Row 16: Number of packages doesn't match the expected type of number</li>
+              <li>Row 29: Destination country is missing</li>
+              <li>Row 29: Number of packages doesn't match the expected type of number</li>
+            </ul>
+          </div>
+          <!--<h2 class="govuk-error-summary__title" id="error-summary-title">
+            There are 13 errors in your file
+          </h2>
+          <div class="govuk-_body">
+            <ul class="govuk-list govuk-list--bullet">
+              <li>
+                Check the column headings match those in the downloadable template
+              </li>
+              <li>
+                1 record where Destination country is missing:
+              </li>
+                <ul class="govuk-list govuk-list--bullet">
+                  <li>Row 2</li>
+                </ul>
+              <li>
+                4 records where Quantity units are missing:
+              </li>
+                <ul class="govuk-list govuk-list--bullet">
+                  <li>Row 4</li>
+                  <li>Row 5</li>
+                  <li>Row 6</li>
+                  <li>Row 7</li>
+                </ul>
+              <li>
+                1 record where Genus is too long. It should be 50 characters or fewer:
+              </li>
+                <ul class="govuk-list govuk-list--bullet">
+                  <li>Row 5</li>
+                </ul>
+              <li>
+                2 records where Potato type doesn't match either of the expected values:
+              </li>
+                <ul class="govuk-list govuk-list--bullet">
+                  <li>Row 8</li>
+                  <li>Row 9</li>
+                </ul>
+              <li>
+                1 record where Quantity doesn't match the expected type of number:
+              </li>
+              <ul class="govuk-list govuk-list--bullet">
+                <li>Row 15</li>
+              </ul>
+              <li>
+                3 records where Number of packages doesn't match the expected type of number:
+              </li>
+                <ul class="govuk-list govuk-list--bullet">
+                  <li>Row 16</li>
+                  <li>Row 28</li>
+                  <li>Row 29</li>
+                </ul>
+            </ul>
+          </div>-->
+          <!--<h2 class="govuk-error-summary__title" id="error-summary-title">
+            There are problems with your file upload
+          </h2>
+          <div class="govuk-_body">
+            <ul class="govuk-list govuk-list--bullet">
+              <li>
+                Check the column headings match those in the downloadable template
+              </li>
+              <li>
+                Row <b>3</b> is missing <b>Destination country</b>
+              </li>
+              <li>
+                There are 5 rows with missing <b>Quantity</b> units
+              </li>
+              <li>
+                <b>Genus</b> in row <b>17</b> is too long. It should be 50 characters or fewer
+              </li>
+              <li>
+                There are 5 rows where Genus is too long. It should be 50 characters or fewer
+              </li>
+              <li>
+                <b>Potato type</b> in row <b>4</b> does not match any of the expected values
+              </li>
+              <li>
+                There are 3 rows where <b>Potato type</b> does not match any of the expected values
+              </li>
+              <li>
+                <b>Quantity</b> in row <b>4</b> does not match the expected type of number
+              </li>
+              <li>
+                There are 3 rows where <b>Number of packages</b> does not match the expected type of number
+              </li>
+            </ul>
+          </div>-->
+        </div>
+        <form method="post">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+              <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">
+                  Upload a file
+              </h1>
+            </legend>
+          </fieldset>
+          <p class="govuk-body">
+            {% if data.commodity == "plants" %}
+            Download and fill in the <a href="/public/images/template-plants.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
+            {% elseif data.commodity == "plant products" %}
+            Download and fill in the <a href="/public/images/template-plant-products.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
+            {% elseif data.commodity == "used farm machines" %}
+            Download and fill in the <a href="/public/images/template-used-farm-machinery.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
+            {% elseif data.commodity == "potatoes" %}
+            Download and fill in the <a href="/public/images/template-potatoes.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
+            {% elseif data.commodity == "seeds" %}
+            Download and fill in the <a href="/public/images/APHA_phytosanitary_certificate_csv_template - SEEDS.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
+            {% else %}
+            Download and fill in the <a href="/public/images/APHA_phytosanitary_certificate_csv_template.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
+            {% endif %}
+          </p>
+          <p class="govuk-body govuk-!-margin-bottom-6">
+              Open the csv file in Excel or whatever you use to edit spreadsheets. When you have finished, save the file and select Comma Separated Values (.csv) as the file format.
+          </p>
+
+          {{ govukFileUpload({
+            id: "file-upload-1",
+            name: "file-upload-1",
+            errorMessage: {
+            text: "Correct the problems with your file and then upload the file again."
+            }
+          }) }}
+
+          {{ govukButton({
+            text: "Re-upload your file",
+            href: "upload-in-progress"
+          }) }}
+
+        </form>
+      </div>
+    </div>
+</div>
+{% endblock %}

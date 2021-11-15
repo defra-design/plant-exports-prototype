@@ -1,0 +1,217 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Field location - Soil inspection - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item" id="Nav-DisplayName">Prototype user</li>
+    <li class="login-nav__list-item"> | <a href="../../../account" class="govuk-link login-nav__link govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a>|</li>
+    <li class="login-nav__list-item"><a href="#" class="govuk-link login-nav__link govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
+  </ul>
+</div>
+
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row govuk-!-margin-bottom-6">
+
+  <div class="govuk-grid-column-two-thirds">
+    
+    <form action="how-to-identify-3" method="post">
+      <h1 class="govuk-heading-xl">Field location</h1>
+
+      {% set iacsHtml %}
+      {{ govukInput({
+        id: "navigation_iacs2",
+        name: "navigation_iacs2",
+        type: "text",
+        spellcheck: false,
+        classes: "govuk-!-width-one-third",
+        value: data.navigation_iacs2 or "",
+        label: {
+          text: "Enter the 10 character IACS or RLR number, for example NF 1234 1234"
+        }
+      }) }}
+      {% endset -%}
+
+      {% set gridHtml %}
+      {{ govukInput({
+        id: "navigation_gridgps2",
+        name: "navigation_gridgps2",
+        type: "text",
+        spellcheck: false,
+        classes: "govuk-!-width-one-third",
+        value: data.navigation_gridgps2 or "",
+        label: {
+          text: "Enter the grid reference or GPS reading"
+        }
+      }) }}
+      {% endset -%}
+
+      {% if data.addfielddetails2 == 'gridgps' %}
+      {{ govukRadios({
+        idPrefix: "addfielddetails2",
+        name: "addfielddetails2",
+        fieldset: {
+          legend: {
+            text: "How do you want to provide the location?",
+            isPageHeading: false
+          }
+        },
+        items: [
+          {
+            value: "gridgps",
+            text: "Grid reference or GPS reading",
+            checked: true,
+            conditional: {
+              html: gridHtml
+            }
+          },
+          {
+            value: "iacs",
+            text: "IACS/RLR number",
+            conditional: {
+              html: iacsHtml
+            }
+          }
+        ]
+      }) }}
+      {% elif data.addfielddetails2 == 'iacs' %}
+      {{ govukRadios({
+        idPrefix: "addfielddetails2",
+        name: "addfielddetails2",
+        fieldset: {
+          legend: {
+            text: "How do you want to provide the location?",
+            isPageHeading: false
+          }
+        },
+        items: [
+          {
+            value: "gridgps",
+            text: "Grid reference or GPS reading",
+            conditional: {
+              html: gridHtml
+            }
+          },
+          {
+            value: "iacs",
+            text: "IACS/RLR number",
+            checked: true,
+            conditional: {
+              html: iacsHtml
+            }
+          }
+        ]
+      }) }}
+      {% else %}
+      {{ govukRadios({
+        idPrefix: "addfielddetails2",
+        name: "addfielddetails2",
+        fieldset: {
+          legend: {
+            text: "How do you want to provide the location?",
+            isPageHeading: false
+          }
+        },
+        items: [
+          {
+            value: "gridgps",
+            text: "Grid reference or GPS reading",
+            conditional: {
+              html: gridHtml
+            }
+          },
+          {
+            value: "iacs",
+            text: "IACS/RLR number",
+            conditional: {
+              html: iacsHtml
+            }
+          }
+        ]
+      }) }}
+      {% endif %}
+
+      {{ govukInput({
+        label: {
+          text: "Nursery plot number or field name",
+          isPageHeading: false
+        },
+        id: "nurseryplotno2",
+        name: "nurseryplotno2",
+        classes: "govuk-input--width-20",
+        value: data.nurseryplotno2 or ""
+      }) }}
+
+      {{ govukInput({
+        label: {
+          text: "Area of whole field in hectares",
+          isPageHeading: false
+        },
+        id: "areaoffield2",
+        name: "areaoffield2",
+        classes: "govuk-input--width-4",
+        value: data.areaoffield2 or ""
+      }) }}
+
+      <div class="govuk-checkboxes govuk-!-margin-bottom-6">
+        
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" type="checkbox" autofocus="autofocus" name="confirm2" id="confirm2" value="Yes" {% if data.confirm2 == 'Yes' %}checked{% else %}{% endif %}>
+          <label class="govuk-checkboxes__label" for="confirm2">I confirm that I have the land owner's consent to inspect this field</label>
+        </div>
+
+      </div>
+
+      {{ govukTextarea({
+        name: "more_detail2",
+        id: "more_detail2",
+        value: data.more_detail2 or "",
+        label: {
+          text: "Additional information (optional)",
+          isPageHeading: false
+        },
+        hint: {
+          text: "For example, access points to the field"
+        }
+      }) }}
+
+      <h2 class="govuk-heading-s">Send the inspector a map (optional)</h2>
+      <p class="govuk-body">Upload a map to show your inspector where they will carry out their inspection, including the access point.</p>
+      <p class="govuk-body">If you prefer to post a map to your inspector, you should contact them to ask what address to send it to. You should include the APHA reference number for this application with your map. You will be given the APHA reference number at the end of this application.</p>
+      <p class="govuk-body">Any file you upload must:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>be in JPEG, PNG, GIF, PDF or Word format</li>
+        <li>be less than 10 megabytes (10MB)</li>
+      </ul>
+
+      {{ govukFileUpload({
+        id: "map_upload2",
+        name: "map_upload2"
+      }) }}
+
+      {{ govukButton({
+        text: "Upload map",
+        classes: "govuk-button--secondary",
+        href: "#"
+      }) }}
+
+      <div class="govuk-form-group govuk-!-margin-top-2 govuk-!-margin-bottom-6">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      </div>
+
+      {% block continueLater %}
+      {% include "../modules/_save-continue-later.html" %}
+      {% endblock %}
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}
