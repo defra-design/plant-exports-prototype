@@ -4,9 +4,7 @@
 
 module.exports = {
   // Service name used in header. Eg: 'Renew your passport'
-  // serviceName: 'Apply for a phytosanitary certificate',
   serviceName: 'Apply for plant export certificates and inspections',
-  //serviceName: 'Apply for a plant health export certificate or inspection',
 
 
   // Default port that prototype runs on
@@ -27,14 +25,10 @@ module.exports = {
 
   // Force HTTP to redirect to HTTPS on production
   useHttps: 'true',
-
-  // Cookie warning - update link to service's cookie page.
-  cookieText: 'GOV.UK uses cookies to make the site simpler. <a href="#">Find out more about cookies</a>',
-
+ // Cookie warning - update link to service's cookie page.
+ cookieText: 'GOV.UK uses cookies to make the site simpler. <a href="#">Find out more about cookies</a>',
   // Enable or disable Browser Sync
   useBrowserSync: 'true',
-
-// Enable logging, options: true, false, get or post
+  // Enable logging, options: true, false, get or post
   useLogging: 'true'
-
 }

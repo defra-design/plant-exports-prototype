@@ -54,7 +54,7 @@ Field details - Growing season inspection - {{serviceName}} - GOV.UK
             legend: {
               text: "How do you want to provide the location?",
               isPageHeading: true,
-              classes: "govuk-fieldset__legend--s"
+              classes: "govuk-fieldset__legend"
             }
           },
           items: [
@@ -78,7 +78,7 @@ Field details - Growing season inspection - {{serviceName}} - GOV.UK
         {{ govukInput({
           label: {
             text: "Location",
-            classes: "govuk-label--s",
+            classes: "",
             isPageHeading: false
           },
           hint: {
@@ -92,7 +92,7 @@ Field details - Growing season inspection - {{serviceName}} - GOV.UK
         {{ govukInput({
           label: {
             text: "Area of whole field in hectares",
-            classes: "govuk-label--s",
+            classes: "",
             isPageHeading: false
           },
           id: "areaoffield",
@@ -114,13 +114,14 @@ Field details - Growing season inspection - {{serviceName}} - GOV.UK
           id: "more-detail",
           label: {
             text: "Additional information (optional)",
-            classes: "govuk-label--s",
+            classes: "",
             isPageHeading: true
           },
           hint: {
             text: "For example, access points to the field"
           }
         }) }}
+<!-- 
 
         <h2 class="govuk-heading-s">Send the inspector a map (optional)</h2>
         <p class="govuk-body">Upload a map to show your inspector where they will carry out their inspection. Include the access point.</p>
@@ -142,15 +143,45 @@ Field details - Growing season inspection - {{serviceName}} - GOV.UK
           href: "field-upload-wip"
         }) }}
 
-        {%if data.commodities and ( data.commodities | length ) > 0 %}
-          {% set url = "gsi-commodity-list" %}
-        {% else %}
-          {% set url = "how-to-identify" %}
-        {% endif %}
+ -->        
 
-        <p class="govuk-body govuk-!-margin-top-4">
-          <a href="{{url}}" class="govuk-button">Save and continue</a>
-        </p>
+      {%if data.commodities and ( data.commodities | length ) > 0 %}
+      {% set url = "no~gsi-commodity-list" %}
+      {% else %}
+      {% set url = "no~how-to-identify" %}
+      {% endif %}
+
+      {{ govukRadios({
+        idPrefix: "next",
+        name: "next",
+        fieldset:
+        {
+          legend:
+          {
+            text: "Do you want to upload a location map?",
+            isPageHeading: true,
+            classes: ""
+          }
+        },
+        items: [
+        {
+          value: "upload~upload",
+          text: "Yes, add a map"
+        },
+        {
+          value: url,          
+          text: "No, continue with the application"
+        }
+        ]
+      }) }}
+
+
+
+      {{ govukButton({
+        text: "Save and continue"
+      }) }}
+
+
       </form>
     </div>
   </div>
