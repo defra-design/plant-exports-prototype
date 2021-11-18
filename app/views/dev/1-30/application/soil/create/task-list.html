@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-	Arrange soil sampling - Soil inspection - {{serviceName}} - GOV.UK
+	Arrange soil sampling for {% if data.potato_type == "Seed" %}seed potatoes{% elif data.potato_type == "Ware" %}ware potatoes{% else %}seed potatoes{% endif %} - Soil inspection - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -18,11 +18,11 @@
 {% endblock %}
 
 {% block content %}
-<div class="govuk-grid-row govuk-!-margin-bottom-6">
+<div class="govuk-grid-row">
 
 	<div class="govuk-grid-column-two-thirds">
 		{% if data.reference_num %}<span class="govuk-caption-xl">{{data.reference_num}}</span>{% endif%}
-		<h1 class="govuk-heading-xl">Arrange soil sampling</h1>
+		<h1 class="govuk-heading-xl">Arrange soil sampling for {% if data.potato_type == "Seed" %}seed potatoes{% elif data.potato_type == "Ware" %}ware potatoes{% else %}seed potatoes{% endif %}</h1>
 		<p class="govuk-body govuk-!-margin-bottom-7">Complete these details to arrange a soil sampling inspection.</p>
 		<ol class="app-task-list">
 			<li>
@@ -33,33 +33,60 @@
 						<strong class="govuk-tag app-task-list__tag" id="create-a-reference">Completed</strong>
 					</li>
 					<li class="app-task-list__item">
-						<span class="app-task-list__task-name"><a href="{% if data.submit_date %}inspection-addresses?change=yes{% else %}inspection-addresses{% endif %}" aria-describedby="inspection-details">What are the inspection details?</a></span>
-						{% if data.submit_date %}
+						<span class="app-task-list__task-name"><a href="{% if data.inspection_task_list_data == 'Complete' %}inspection-addresses?change=yes{% else %}inspection-addresses{% endif %}" aria-describedby="inspection-details">What are the inspection details?</a></span>
+						{% if data.inspection_task_list_data == 'Complete' %}
 						<strong class="govuk-tag app-task-list__tag" id="inspection-details">Completed</strong>
 						{% else %}
 						<strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="inspection-details">Not started</strong>
 						{% endif %}
 					</li>
 					<li class="app-task-list__item">
-						<span class="app-task-list__task-name"><a href="{{data.crop_task_list_data or 'field'}}" aria-describedby="sampling-site-details">Where is the sampling site?</a></span>
-						{% if data.crop_task_list_data %}
+						<span class="app-task-list__task-name"><a href="{{data.field_task_list_data or 'field'}}" aria-describedby="sampling-site-details">Where is the sampling site?</a></span>
+						{% if data.field_task_list_data %}
 						<strong class="govuk-tag app-task-list__tag" id="sampling-site-details">Completed</strong>
 						{% else %}
 						<strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="sampling-site-details">Not started</strong>
 						{% endif %}
 					</li>
+					{% if data.potato_type == "Seed" %}
+					<!-- Show nothing for this variety of potatoes -->
+					{% else %}
+					<li class="app-task-list__item">
+						{% if data.field_task_list_data %}
+						<span class="app-task-list__task-name"><a href="{% if data.crop_task_list_data %}{{data.crop_task_list_data}}{% elif data.field_task_list_data == 'field-list' %}how-to-identify{% else %}add-crop-to-field{% endif %}" aria-describedby="crop-details">Ware potato details</a></span>
+						{% if data.crop_task_list_data %}
+						<strong class="govuk-tag app-task-list__tag" id="crop-details">Completed</strong>
+						{% else %}
+						<strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="sampling-site-details">Not started</strong>
+						{% endif %}
+						{% else %}
+						<span class="app-task-list__task-name">Ware potato details</span>
+						<strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="crop-details">Cannot start yet</strong>
+						{% endif %}
+					</li>
+					{% endif %}
 				</ul>
 			</li>
 			<li>
         <h2 class="app-task-list__section"><span class="app-task-list__section-number">2. </span> Check and submit your application</h2>
         <ul class="app-task-list__items">
           <li class="app-task-list__item">
-            {% if data.submit_date and data.crop_task_list_data %}
+			      {% if data.potato_type == "Seed" %}
+            {% if data.inspection_task_list_data == 'Complete' and data.field_task_list_data %}
             <span class="app-task-list__task-name"><a href="check-your-answers" aria-describedby="check-your-answers">Check your answers and submit your application</a></span>
             <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="check-your-answers">Not started</strong>
             {% else %}
             <span class="app-task-list__task-name">Check your answers and submit your application</span>
             <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="check-your-answers">Cannot start yet</strong>
+            {% endif %}
+            {% else %}
+            {% if data.inspection_task_list_data == 'Complete' and data.crop_task_list_data %}
+            <span class="app-task-list__task-name"><a href="check-your-answers" aria-describedby="check-your-answers">Check your answers and submit your application</a></span>
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="check-your-answers">Not started</strong>
+            {% else %}
+            <span class="app-task-list__task-name">Check your answers and submit your application</span>
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="check-your-answers">Cannot start yet</strong>
+            {% endif %}
             {% endif %}
           </li>
 	      </ul>
