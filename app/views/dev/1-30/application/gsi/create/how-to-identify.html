@@ -13,6 +13,7 @@ Add your products - Growing season inspection - {{serviceName}} - GOV.UK
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
+    <!-- Error message -->
     {% if data.commodity == "false" %}
     <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
       <h2 class="govuk-error-summary__title" id="error-summary-title">
@@ -28,14 +29,16 @@ Add your products - Growing season inspection - {{serviceName}} - GOV.UK
     </div>
     {% endif %}
 
-    <h1 class="govuk-heading-xl">Describe a crop for inspection in {{data.nurseryplotno or "Top field"}}</h1>
+    <h1 class="govuk-heading-xl">Describe a crop for inspection in {{ data['nurseryplotno'] or "Top Field" }}</h1>
     <p class="govuk-body">
       Describe a single crop for inspection at this location. Later, you’ll be able to add further crops at this location if you want to.
     </p>
-    <!--<form method="get" action="commodity-page">-->
+    
+
     <form method="get" action="gsi-commodity-list">
       {% if data.commodity == "potatoes"%}
       
+      <!-- Highlighted error state -->
       {% if data.potato_1 == "false" %}
       <div class="govuk-form-group govuk-form-group--error">
         <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
@@ -195,7 +198,7 @@ Add your products - Growing season inspection - {{serviceName}} - GOV.UK
                     <label class="govuk-label" for="commodity_host_species">
                       Variety
                     </label>
-                    <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety" type="text" value="{% if query.has_commodity %}{{query.genus}}{%endif%}">
+                    <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety" type="text">
                   </div>
                 {% endif %}
               </div>
@@ -394,8 +397,8 @@ Add your products - Growing season inspection - {{serviceName}} - GOV.UK
           classes: "govuk-label--s",
           isPageHeading: false
         },
-        id: "approxhectofplot",
-        name: "approxhectofplot",
+        id: "approxhectofplot-2",
+        name: "approxhectofplot-2",
         classes: "govuk-input--width-4"
       }) }}
 <!-- 

@@ -18,7 +18,7 @@ Your crops for inspection - Growing season inspection - {{serviceName}} - GOV.UK
     <p class="govuk-body">
       Here’s what you currently have listed for growing season inspection. You can add more locations and more crops to each location.
     </p>
-    <h2 class="govuk-heading-m">Location: {{data.nurseryplotno or "Top field"}}</h2>
+    <h2 class="govuk-heading-m">Location: {{ data['nurseryplotno'] }}</h2>
     
     <table class="govuk-table govuk-!-margin-bottom-4">
       <thead class="govuk-table__head">
@@ -45,11 +45,11 @@ Your crops for inspection - Growing season inspection - {{serviceName}} - GOV.UK
         <tr class="govuk-table__row">
           {% if data.addfielddetails == "iacs" %}
           <td class="govuk-table__cell">
-            {{data.iacs or "NF24681358"}}
+            {{ data['iacs'] }}
           </td>
           {% else %}
           <td class="govuk-table__cell">
-            {{data.gridgps or "NF 2468 1358"}}
+            {{ data['gridgps'] or "NF 2468 1358" }}
           </td>
           {% endif %}
           <td class="govuk-table__cell govuk-table__cell--numeric">
@@ -94,14 +94,15 @@ Your crops for inspection - Growing season inspection - {{serviceName}} - GOV.UK
         </thead>
         <tbody class="govuk-table__body">
           <tr class="govuk-table__row">
-            <td class="govuk-table__cell">
-              {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Corylus avellana'}}
+            <td class="govuk-table__cell"> 
+              {{ data['potatovarietySelect'] }}
+              <!--{{ data['commodity_host_species'] or data['genus'] or data['commodity_common_name'] or data['commodity_type'] or data['commodity_variety'] or data['potatovarietySelect'] or 'Corylus avellana' }}-->
             </td>
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              2
+              {{ data['approxhectofplot'] }}
             </td>
             <td class="govuk-table__cell">
-              Belize
+              {{ data['filter_demo'] or Belize }}
             </td>
             <td class="govuk-table__cell">
               <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">
@@ -126,7 +127,7 @@ Your crops for inspection - Growing season inspection - {{serviceName}} - GOV.UK
 
       {{ govukButton({
         text: "Add another location",
-        href: "field-2",
+        href: "field-two",
         classes: "govuk-button--secondary govuk-!-margin-left-4"
       }) }}
     </div>
