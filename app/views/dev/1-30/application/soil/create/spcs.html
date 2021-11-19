@@ -1,0 +1,167 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Seed potato details - Soil inspection - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item" id="Nav-DisplayName">Prototype user</li>
+    <li class="login-nav__list-item"> | <a href="../../../account" class="govuk-link login-nav__link govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a>|</li>
+    <li class="login-nav__list-item"><a href="#" class="govuk-link login-nav__link govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
+  </ul>
+</div>
+
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">Seed potato details</h1>
+    
+    <form action="field-list" method="post">
+      
+      {{ govukInput({
+        label: {
+          text: "Approximate hectarage of plot to be inspected",
+          isPageHeading: false
+        },
+        id: "approxhectofplot",
+        name: "approxhectofplot",
+        classes: "govuk-input--width-4",
+        value: data.approxhectofplot or ""
+      }) }}
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="potatoes-last-grown-hint">
+          <legend class="govuk-fieldset__legend">When were potatoes last grown at this location?</legend>
+          
+          <div id="potatoes-last-grown-hint" class="govuk-hint">
+            For example, 27 3 2007
+          </div>
+
+          <div class="govuk-date-input" id="potatoes-last-grown">
+            
+            <div class="govuk-date-input__item">
+              
+              <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" for="potatoes-last-grown-day">Day</label>
+                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="potatoes-last-grown-day" name="potatoes_last_grown_day" type="text" pattern="[0-9]*" inputmode="numeric" value="{{data.potatoes_last_grown_day or ''}}">
+              </div>
+
+            </div>
+
+            <div class="govuk-date-input__item">
+
+              <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" for="potatoes-last-grown-month">Month</label>
+                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="potatoes-last-grown-month" name="potatoes_last_grown_month" type="text" pattern="[0-9]*" inputmode="numeric" value="{{data.potatoes_last_grown_month or ''}}">
+              </div>
+
+            </div>
+
+            <div class="govuk-date-input__item">
+              
+              <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" for="potatoes-last-grown-year">Year</label>
+                <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="potatoes-last-grown-year" name="potatoes_last_grown_year" type="text" pattern="[0-9]*" inputmode="numeric" value="{{data.potatoes_last_grown_year or ''}}">
+              </div>
+
+            </div>
+
+          </div>
+      
+        </fieldset>
+      </div>
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend">Do you need the stocks to be marketed with a ZP-d1 statement?</legend>
+          
+          <div class="govuk-radios">
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="zpd_yes" name="zpd" type="radio" value="Yes"{% if data.zpd == 'Yes' %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="zpd_yes">Yes</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="zpd_no" name="zpd" type="radio" value="No"{% if data.zpd == 'No' %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="zpd_no">No</label>
+            </div>
+
+          </div>
+      
+        </fieldset>
+      </div>
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend">Has rhizomania disease of beet even been recorded at this location?</legend>
+          
+          <div class="govuk-radios">
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="rhizomania_yes" name="rhizomania" type="radio" value="Yes"{% if data.rhizomania == 'Yes' %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="rhizomania_yes">Yes</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="rhizomania_no" name="rhizomania" type="radio" value="No"{% if data.rhizomania == 'No' %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="rhizomania_no">No</label>
+            </div>
+
+          </div>
+      
+        </fieldset>
+      </div>
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend">Have beet crops been grown at this location since 2002?</legend>
+          
+          <div class="govuk-radios">
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="beet_yes" name="beet" type="radio" value="Yes"{% if data.beet == 'Yes' %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="beet_yes">Yes</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="beet_no" name="beet" type="radio" value="No"{% if data.beet == 'No' %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="beet_no">No</label>
+            </div>
+
+          </div>
+      
+        </fieldset>
+      </div>
+
+      <div class="govuk-form-group govuk-!-margin-top-4">
+        <label class="govuk-label" for="commodity_lot">Lot reference (optional)</label>
+        <input class="govuk-input govuk-input--width-20" id="commodity_lot" name="commodity_lot" type="text" value="{{data.commodity_lot or ''}}">
+      </div>
+
+      <!-- <div class="govuk-form-group">
+        <label class="govuk-label" for="chemicals_used">Chemical used on tubers (optional)</label>
+        <input class="govuk-input govuk-input--width-30" id="chemicals_used" name="chemicals_used" type="text" value="{{data.chemicals_used or ''}}">
+      </div> -->
+
+      <div class="govuk-form-group govuk-!-margin-top-7 govuk-!-margin-bottom-6">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      </div>
+
+      {% block continueLater %}
+      {% include "../modules/_save-continue-later.html" %}
+      {% endblock %}
+    </form>
+
+  </div>
+
+</div>
+
+{% endblock %}
