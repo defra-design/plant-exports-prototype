@@ -30,10 +30,14 @@
 				<ul class="app-task-list__items">
 					<li class="app-task-list__item">
 						<span class="app-task-list__task-name"><a href="reference?change=yes" aria-describedby="create-a-reference">Create a reference</a></span>
+						{% if data.reference_num != "" %}
 						<strong class="govuk-tag app-task-list__tag" id="create-a-reference">Completed</strong>
+						{% else %}
+						<strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="inspection-details">Not started</strong>
+						{% endif %}
 					</li>
 					<li class="app-task-list__item">
-						<span class="app-task-list__task-name"><a href="{% if data.inspection_task_list_data == 'Complete' %}inspection-addresses?change=yes{% else %}inspection-addresses{% endif %}" aria-describedby="inspection-details">What are the inspection details?</a></span>
+						<span class="app-task-list__task-name"><a href="{% if data.inspection_task_list_data == 'Complete' %}inspection-addresses?change=yes{% else %}inspection-addresses{% endif %}" aria-describedby="inspection-details">Where is the farm?</a></span>
 						{% if data.inspection_task_list_data == 'Complete' %}
 						<strong class="govuk-tag app-task-list__tag" id="inspection-details">Completed</strong>
 						{% else %}
@@ -53,14 +57,14 @@
 					{% else %}
 					<li class="app-task-list__item">
 						{% if data.field_task_list_data %}
-						<span class="app-task-list__task-name"><a href="{% if data.crop_task_list_data %}{{data.crop_task_list_data}}{% elif data.field_task_list_data == 'field-list' %}how-to-identify{% else %}add-crop-to-field{% endif %}" aria-describedby="crop-details">Ware potato details</a></span>
+						<span class="app-task-list__task-name"><a href="{% if data.crop_task_list_data %}{{data.crop_task_list_data}}{% elif data.field_task_list_data == 'field-list' %}how-to-identify{% else %}add-crop-to-field{% endif %}" aria-describedby="crop-details">Crop details</a></span>
 						{% if data.crop_task_list_data %}
 						<strong class="govuk-tag app-task-list__tag" id="crop-details">Completed</strong>
 						{% else %}
 						<strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="sampling-site-details">Not started</strong>
 						{% endif %}
 						{% else %}
-						<span class="app-task-list__task-name">Ware potato details</span>
+						<span class="app-task-list__task-name">Crop details</span>
 						<strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="crop-details">Cannot start yet</strong>
 						{% endif %}
 					</li>

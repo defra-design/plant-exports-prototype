@@ -43,7 +43,7 @@
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Your reference</dt>
-          <dd class="govuk-summary-list__value">{{data.reference_num}}</dd>
+          <dd class="govuk-summary-list__value">{% if data.reference_num %}{{data.reference_num or "SS" }}{% else %}&nbsp;{% endif %}</dd>
           <dd class="govuk-summary-list__actions"><a class="govuk-link" href="reference?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> your reference</span></a></dd>
         </div>
 
@@ -53,7 +53,7 @@
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
         <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Where will the inspection take place?</dt>
+          <dt class="govuk-summary-list__key">Where is the farm?</dt>
           <dd class="govuk-summary-list__value">{{data.select_address or "Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH"}}</dd>
           <dd class="govuk-summary-list__actions"><a class="govuk-link" href="inspection-addresses?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> where the inspection will take place</span></a></dd>
         </div>
@@ -93,14 +93,14 @@
           <dt class="govuk-summary-list__key">Your fields for inspection</dt>
           <dd class="govuk-summary-list__value">
             {% if data.field_task_list_data == "field-list" %}
-            {{data.nurseryplotno or "Top field"}} ({% if data.addfielddetails == "Google Maps" %}Google Maps: {{data.navigation_googlemaps or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails == "iacs" %}IACS or RLR number: {{data.navigation_iacs or "NF 1234 1234"}}{% elif data.addfielddetails == "gridgps" %}Grid reference or GPS reading: {{data.navigation_gridgps or "NX 509 582"}}{% elif data.addfielddetails == "what3words" %}what3words address: ///{{data.navigation_what3words or "///pretty.needed.chill"}}{% else %}Grid reference or GPS reading: NX 509 582{% endif %})
+            {{data.nurseryplotno or "Top field"}} ({% if data.addfielddetails == "Google Maps" %}Google Maps: {{data.navigation_googlemaps or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails == "iacs" %}IACS or RLR number: {{data.navigation_iacs or "NF 1234 1234"}}{% elif data.addfielddetails == "gridgps" %}Grid reference or GPS reading: {{data.navigation_gridgps or "NX 509 582"}}{% elif data.addfielddetails == "what3words" %}what3words address: ///{{data.navigation_what3words or "pretty.needed.chill"}}{% else %}Grid reference or GPS reading: NX 509 582{% endif %})
             {% elif data.field_task_list_data == "field-list-2" %}
             <ul class="govuk-list govuk-list--bullet">
-              <li>{{data.nurseryplotno2 or "Bottom field"}} ({% if data.addfielddetails2 == "Google Maps" %}Google Maps: {{data.navigation_googlemaps2 or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails2 == "iacs" %}IACS or RLR number: {{data.navigation_iacs2 or "NF 1234 1234"}}{% elif data.addfielddetails2 == "gridgps" %}Grid reference or GPS reading: {{data.navigation_gridgps2 or "NX 509 582"}}{% elif data.addfielddetails2 == "what3words" %}what3words address: ///{{data.navigation_what3words2 or "///pretty.needed.chill"}}{% else %}Grid reference or GPS reading: NX 509 582{% endif %})</li>
-              <li>{{data.nurseryplotno or "Top field"}} ({% if data.addfielddetails == "Google Maps" %}Google Maps: {{data.navigation_googlemaps or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails == "iacs" %}IACS or RLR number: {{data.navigation_iacs or "NF 1234 1234"}}{% elif data.addfielddetails == "gridgps" %}Grid reference or GPS reading: {{data.navigation_gridgps or "NX 509 582"}}{% elif data.addfielddetails == "what3words" %}what3words address: ///{{data.navigation_what3words or "///pretty.needed.chill"}}{% else %}Grid reference or GPS reading: NX 509 582{% endif %})</li>
+              <li>{{data.nurseryplotno2 or "Bottom field"}} ({% if data.addfielddetails2 == "Google Maps" %}Google Maps: {{data.navigation_googlemaps2 or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails2 == "iacs" %}IACS or RLR number: {{data.navigation_iacs2 or "NF 1234 1234"}}{% elif data.addfielddetails2 == "gridgps" %}Grid reference or GPS reading: {{data.navigation_gridgps2 or "NX 509 582"}}{% elif data.addfielddetails2 == "what3words" %}what3words address: ///{{data.navigation_what3words2 or "pretty.needed.chill"}}{% else %}Grid reference or GPS reading: NX 509 582{% endif %})</li>
+              <li>{{data.nurseryplotno or "Top field"}} ({% if data.addfielddetails == "Google Maps" %}Google Maps: {{data.navigation_googlemaps or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails == "iacs" %}IACS or RLR number: {{data.navigation_iacs or "NF 1234 1234"}}{% elif data.addfielddetails == "gridgps" %}Grid reference or GPS reading: {{data.navigation_gridgps or "NX 509 582"}}{% elif data.addfielddetails == "what3words" %}what3words address: ///{{data.navigation_what3words or "pretty.needed.chill"}}{% else %}Grid reference or GPS reading: NX 509 582{% endif %})</li>
             </ul>            
             {% else %}
-            {{data.nurseryplotno or "Top field"}} ({% if data.addfielddetails == "Google Maps" %}Google Maps: {{data.navigation_googlemaps or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails == "iacs" %}IACS or RLR number: {{data.navigation_iacs or "NF 1234 1234"}}{% elif data.addfielddetails == "gridgps" %}Grid reference or GPS reading: {{data.navigation_gridgps or "NX 509 582"}}{% elif data.addfielddetails == "what3words" %}what3words address: ///{{data.navigation_what3words or "///pretty.needed.chill"}}{% else %}Grid reference or GPS reading: NX 509 582{% endif %})
+            {{data.nurseryplotno or "Top field"}} ({% if data.addfielddetails == "Google Maps" %}Google Maps: {{data.navigation_googlemaps or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails == "iacs" %}IACS or RLR number: {{data.navigation_iacs or "NF 1234 1234"}}{% elif data.addfielddetails == "gridgps" %}Grid reference or GPS reading: {{data.navigation_gridgps or "NX 509 582"}}{% elif data.addfielddetails == "what3words" %}what3words address: ///{{data.navigation_what3words or "pretty.needed.chill"}}{% else %}Grid reference or GPS reading: NX 509 582{% endif %})
             {% endif %}
           </dd>          
           <dd class="govuk-summary-list__actions"><a class="govuk-link" href="{{data.field_task_list_data or 'field-list'}}?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> your fields for inspection</span></a></dd>
@@ -111,7 +111,7 @@
         <!-- Show nothing for this variety of potatoes -->
         {% elif data.potato_type == "Ware" %}
         <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Your ware potatoes at the sampling site</dt>
+          <dt class="govuk-summary-list__key">Crops at each location</dt>
           <dd class="govuk-summary-list__value">
             {% if data.crop_task_list_data == "commodity-list" %}
             {{data.nurseryplotno or "Top field"}}
@@ -148,7 +148,7 @@
         </div>
         {% else %}
         <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Your ware potatoes at the sampling site</dt>
+          <dt class="govuk-summary-list__key">Crops at each location</dt>
           <dd class="govuk-summary-list__value">
             {% if data.crop_task_list_data == "commodity-list" %}
             {{data.nurseryplotno or "Top field"}}
@@ -186,7 +186,7 @@
         {% endif %}
         {% else %}
         <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Your crops at the sampling site</dt>
+          <dt class="govuk-summary-list__key">Crops at each location</dt>
           <dd class="govuk-summary-list__value">
             {% if data.crop_task_list_data == "commodity-list" %}
             {{data.nurseryplotno or "Top field"}}
