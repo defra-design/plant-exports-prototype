@@ -46,7 +46,7 @@ Your consignment - {{serviceName}} - GOV.UK
             Description
           </th>
           <th class="govuk-table__header" scope="col">
-            Lot reference
+            Country of Origin
           </th>
           <th class="govuk-table__header" scope="col">
             Quantity
@@ -69,8 +69,13 @@ Your consignment - {{serviceName}} - GOV.UK
         {% endif %}
       </thead>
       <tbody class="govuk-table__body">
+
         {% if data.upload == 1 %}
           {% block summaryBulk %}{% include "../modules/_summary-bulk.html" %}{% endblock %}
+        {% elseif data.commodity == "seeds" %}
+              <!-- SEEDS -->
+              {% include "../modules/_summary-seed.html" %}
+
         {% else %}
           {% for commodity in data.commodities %}
             {% set commodity_page = "bulbs" %}
