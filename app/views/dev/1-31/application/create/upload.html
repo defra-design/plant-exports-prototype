@@ -19,6 +19,7 @@ Add commodities by uploading a file - {{serviceName}} - GOV.UK
       <form action="/form-handler" method="post" novalidate>
 
         {% set commodity = data.commodity or "products" %}
+        {% set exampleTemplate = "template-seeds-phyto-example.csv" %}
 
         {% if data.commodity == "plants" %}
           {% set template = "template-plants.csv" %}
@@ -53,19 +54,46 @@ Add commodities by uploading a file - {{serviceName}} - GOV.UK
           </fieldset>
 
           <p class="govuk-body">
-            Download the <a href="/public/images/{{template}}" class="govuk-link govuk-link--no-visited-state"
-              title="CSV template">csv template</a>.
+            Download the <a href="/public/images/{{template}}" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>.
           </p>
 
           <p class="govuk-body govuk-!-margin-bottom-6">
-            Open the file in Excel or whatever you use to edit spreadsheets. Fill in the csv template. There are
-            instructions in the template telling you what you need to do.
+            Open the file in Excel or whatever you use to edit spreadsheets. Fill in the template using the guidance notes below, then save and upload it.
           </p>
 
-          <p class="govuk-body govuk-!-margin-bottom-6">
-            When you have finished editing the file, save the file and select comma separated values (csv) as the file
-            format.
-          </p>
+          <h2 class="govuk-heading-m"> How to edit the file</h2>
+         
+          <ol class="govuk-list govuk-list--number">
+            <li>All fields are mandatory. You must not leave any field blank.</li>
+            <li>You must use the country code for the country of origin - you can find the 2 letter country code here: (opens in new tab)<br/>
+              <a href="https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes" target="_blank">https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes</a> 
+              <br/>
+              The only exceptions are if the country of origin is one of these countries - in which case, enter it as it appears in this list: 
+              Aland Islands, Alaska, Azores, Bolivia, Bonaire, British Virgin Islands, Myanmar, Canary Islands, Cape Verde, Cocos Islands, Cote d'Ivoire, Curacao, Falkland Islands, Hawaii, Republic of Ireland, Kosovo, Madeira, Netherlands Antilles, Northern Ireland, Palestine, Reunion, Ross dependency, Saba, Sabah, St Barthelemy, St Eustatius, Taiwan, Wallis and Futuna Islands.
+              <br/>
+              If you do not know the country of origin or it is not listed, you must enter Origin unknown or Other.</li>
+            <li>Save your completed file as a .CSV and upload it</li>
+
+          </ol>
+
+          <p class="govuk-body">You may find it helpful to compare your file against this <a href="/public/images/{{exampleTemplate}}" class="govuk-link govuk-link--no-visited-state" title="CSV template">example template</a></p>
+
+          <details class="govuk-details" data-module="govuk-details">
+            <summary class="govuk-details__summary">
+              <span class="govuk-details__summary-text">
+                Further advice
+              </span>
+            </summary>
+            <div class="govuk-details__text">
+              <h3 class="govuk-heading-s">If you are having problems with the upload</h3>
+              <ul class="govuk-list govuk-list--bullet">
+                <li>Check that you have not added extra commas as this will create errors when you try to upload the file.</li>
+                <li>Make sure you have made entries in all fields.</li>
+                <li>Make sure you have not deleted any columns or headers from the template.</li>
+              </ul>
+            </div>
+          </details>
+          
 
           {{ govukFileUpload({
             id: "file-upload-1",
@@ -122,9 +150,13 @@ Add commodities by uploading a file - {{serviceName}} - GOV.UK
         </li>
         <li>
           <a href="/public/images/template-seeds-sample.csv"
-            class="govuk-link govuk-link-no-visited-state">Seeds</a>
+            class="govuk-link govuk-link-no-visited-state">Seeds Template</a>
         </li>
         <li>
+          <a href="/public/images/template-seeds-sample-example.csv"
+            class="govuk-link govuk-link-no-visited-state">Seeds Example</a>
+        </li>
+         <li>
           <a href="/public/images/template-grain.csv" class="govuk-link govuk-link-no-visited-state">Grain</a>
         </li>
         <li>
