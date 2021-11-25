@@ -16,7 +16,7 @@ Check your answers before sending your application - Growing season inspection -
       Check your answers before sending your application
     </h1>
 
-    {% set commodity = data.commodity or "plants" %}
+    {% set commodity = data.commodity or "potatoes" %}
 
     <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
       <div class="govuk-summary-list__row">
@@ -24,7 +24,7 @@ Check your answers before sending your application - Growing season inspection -
           Application
         </dt>
         <dd class="govuk-summary-list__value">
-          Growing season inspection for {{commodity}}
+          Growing season inspection for potatoes
         </dd>
         <dd class="govuk-summary-list__actions">
           <!--<a class="govuk-link" href="setup/reference?change=yes&return_url=../create/check-your-answers" data-qa-id="Link-ChangeAnswer" id="Link-ChangeAnswer-0">Change</a>-->
@@ -35,7 +35,7 @@ Check your answers before sending your application - Growing season inspection -
           Your reference
         </dt>
         <dd class="govuk-summary-list__value">
-          {{data.reference_num}}
+          {{data.reference_num or 'NM123 4321234' }}
         </dd>
         <dd class="govuk-summary-list__actions">
           <a class="govuk-link" href="setup/reference?change=yes&return_url=../create/check-your-answers" data-qa-id="Link-ChangeAnswer" id="Link-ChangeAnswer-0">Change</a>
@@ -47,16 +47,32 @@ Check your answers before sending your application - Growing season inspection -
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Who is the applicant?
+          Name
         </dt>
         <dd class="govuk-summary-list__value">
-          ABC LIMITED, 27 The Crescent, NORTH WEST LONDON, NW7 0HX
+          Mr. John Davies
         </dd>
         <dd class="govuk-summary-list__actions">
-          <!--<a class="govuk-link" href="exporter?change=yes">
-            Change<span class="govuk-visually-hidden">
-              applicant details</span>
-          </a>-->
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Address
+        </dt>
+        <dd class="govuk-summary-list__value">
+          ABC Limited, 27 The Crescent, North West London, NW7 0HX
+        </dd>
+        <dd class="govuk-summary-list__actions">
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Phone number
+        </dt>
+        <dd class="govuk-summary-list__value">
+          07777 123456
+        </dd>
+        <dd class="govuk-summary-list__actions">
         </dd>
       </div>
     </dl>
@@ -139,48 +155,43 @@ Check your answers before sending your application - Growing season inspection -
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             {% if data.addfielddetails == "gridgps" %}
-            <th class="govuk-table__header" scope="col">
+            <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
               Grid reference or GPS reading
             </th>
             {% else %}
-            <th class="govuk-table__header" scope="col">
+            <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
               IACS/RLR number
             </th>
             {% endif %}
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">
-              Area of whole field in hectares
+            <th class="govuk-table__header govuk-table__header--numeric govuk-!-width-one-half" scope="col">
+              Field area<br>(hectares)
             </th>
-            <th class="govuk-table__header" scope="col">
+            <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
               Field map
             </th>
-            <!--<th class="govuk-table__header" scope="col"></th>-->
+            <th class="govuk-table__header" scope="col"></th>
+            </th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">
           <tr class="govuk-table__row">
             {% if data.addfielddetails == "iacs" %}
-            <td class="govuk-table__cell">
+            <td class="govuk-table__cell govuk-!-width-one-quarter">
               {{data.iacs or "NF24681357"}}
             </td>
             {% else %}
-            <td class="govuk-table__cell">
+            <td class="govuk-table__cell govuk-!-width-one-quarter">
               {{data.gridgps or "NF 2468 1357"}}
             </td>
             {% endif %}
-            <td class="govuk-table__cell govuk-table__cell--numeric">
+            <td class="govuk-table__cell govuk-table__cell--numeric govuk-!-width-one-quarter">
               {{ data.areaoffield or "3.5" }}
             </td>
-            <td class="govuk-table__cell govuk-table__cell">
+            <td class="govuk-table__cell govuk-table__cell govuk-!-width-one-half">
               <a class="govuk-link govuk-link--no-visited-state" href="#">{{ data.description or "Filename.jpg" }}</a>
             </td>
-            <!--<td class="govuk-table__cell">
-              <a href="field" class="govuk-link govuk-link--no-visited-state">
-                Change
-              </a><br>
-              <a href="#" class="govuk-link govuk-link--no-visited-state">
-                Delete
-              </a>
-            </td>-->
+            <td class="govuk-table__cell govuk-table__cell govuk-!-width-one-quarter">
+            </td>
           </tr>
           </tbody>
         </table>
@@ -196,16 +207,16 @@ Check your answers before sending your application - Growing season inspection -
       <table class="govuk-table govuk-!-margin-bottom-4">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">
+            <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
               Description
             </th>
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">
+            <th class="govuk-table__header govuk-table__header--numeric govuk-!-width-one-quarter" scope="col">
               Hectarage of plot
             </th>
-            <th class="govuk-table__header" scope="col">
+            <th class="govuk-table__header govuk-!-width-one-half" scope="col">
               Destination countries
             </th>
-            <th class="govuk-table__header" scope="col"></th>
+            <th class="govuk-table__header govuk-!-width-one-quarter" scope="col"></th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">
