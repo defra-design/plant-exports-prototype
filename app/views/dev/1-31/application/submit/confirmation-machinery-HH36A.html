@@ -1,0 +1,90 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+You have successfully submitted your application - {{serviceName}} - GOV.UK
+{% endblock %}
+{% block content %}
+<div class="govuk-grid-row">
+      <div class="govuk-grid-column-three-quarters">
+        <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-6">
+          <h1 class="govuk-panel__title">
+            You have successfully submitted your application {% if data.reforwarding %}for a re-forwarding certificate{% endif %}
+          </h1>
+          <div class="govuk-panel__body">
+            The APHA reference is<br>
+            <strong class="bold" id="applicationFormId" data-qa-id="TextDisplay-CVEDReferenceNumber">1721 1480 04809</strong>
+          </div>
+        </div>
+        <h2 class="govuk-heading-m">What happens next</h2>
+        <p class="govuk-body">
+        </p>
+        <ol class="govuk-list govuk-list--number">
+          <li>We will check and process your application{% if data.reforwarding %} and decide if an inspection is necessary{% endif %}.</li>
+          {% if data.reforwarding %}
+            <li>If an inspection is necessary, we will arrange it within 7 working days.</li>
+          {% else %}
+            <li>We will arrange an inspection of your consignment within 7 working days.</li>
+          {% endif %}
+          <li>If there are no problems, we will issue your {% if data.reforwarding %}re-forwarding{% endif %} certificate.</li>
+          <li>We will then send you an invoice for the inspection.</li>
+        </ol>
+
+        <p class="govuk-body">We'll only contact you if there is a problem with your application.</p>
+
+        {% if data.route == "new" %}
+        <!--<p>
+          <a href="../../dashboard-one?filter_status=&has_filter=&date_range=&filter_name=&show_applications_by=me" class="govuk-link">View your applications</a>
+
+          to check progress.</p>-->
+            {{ govukButton({
+              text: "View your applications",
+              href: "../../dashboard-one?filter_status=&has_filter=&date_range=&filter_name=&show_applications_by=me"
+            }) }}
+          {% else %}
+          <!--<p>
+            <a href="../../dashboard?filter_status=&has_filter=&date_range=&filter_name=&show_applications_by=me" class="govuk-link">View your applications</a>
+
+            to check progress.</p>-->
+            {{ govukButton({
+              text: "View your applications",
+              href: "../../dashboard?filter_status=&has_filter=&date_range=&filter_name=&show_applications_by=me"
+            }) }}
+          {% endif %}
+
+          <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_self">what fees you will pay</a> for this application.</p>
+
+          <h2 class="govuk-heading-m">If you need help</h2>
+          <p class="govuk-body">
+            Contact us quoting your APHA reference <strong id="applicationFormId2">1721 1480 04809</strong>:
+          </p>
+        <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-8">
+          <li><span id="phoneNumber">0300 1000 313</span>, Monday to Friday 8.30am to 5pm</li>
+          <li><a href="mailto:planthealth.info@apha.gov.uk" class="govuk-link" id="emailLink">planthealth.info@apha.gov.uk</a></li>
+        </ul>
+        <!-- <div class="govuk-body">
+              <a id="link-confirmationPage-viewYourApplications2" href="../dashboard?submitted=yes" class="govuk-button_no_margin_bottom">View your applications</a>
+        </div> -->
+
+        <div class="govuk-!-margin-top-6" style="padding:20px; background-color:#f3f2f1; border-left-color:#666;">
+          <h2 class="govuk-heading-m">
+            Give feedback on this service
+          </h2>
+          <p class="govuk-body-m">Take a 3 minute survey about your application so that we can improve the service. The survey will open in a new window.<br><br>
+
+          <!--{{ govukButton({
+            text: "Give feedback",
+            href: "https://defragroup.eu.qualtrics.com/jfe/form/SV_1RDraVxZ03Ja2qy",
+            target: "_blank"
+          }) }}-->
+
+            <a href="https://defragroup.eu.qualtrics.com/jfe/form/SV_1RDraVxZ03Ja2qy" target="_blank" class="govuk-link">Give feedback</a>
+          </p>
+
+        </div>
+
+        <!-- <div class="govuk-body">
+              <a id="link-confirmationPage-viewYourApplications2" href="../dashboard?submitted=yes" class="govuk-button_no_margin_bottom">View your applications</a>
+        </div> -->
+      </div>
+    </div>
+
+{% endblock %}
