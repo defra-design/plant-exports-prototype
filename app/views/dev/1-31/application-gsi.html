@@ -72,7 +72,7 @@ Manage application - {{serviceName}} - GOV.UK
           {% if query.id == 6 %}Application{% else %}Certificate{% endif %}
         </dt>
         <dd class="govuk-summary-list__value">
-          {% if query.id == 2 %}Re-forwarding phytosanitary certificate for plants and fresh produce{% elseif query.id == 0 %}Phytosanitary certificate for plants and fresh produce{% elseif query.id == 6 %}Growing season inspection for plants and fresh produce{% elseif query.id == 25 %}Growing season inspection{% else %}Phytosanitary certificate for commodity{% endif %}
+          {% if query.id == 2 %}Re-forwarding phytosanitary certificate for plants and fresh produce{% elseif query.id == 0 %}Phytosanitary certificate for plants and fresh produce{% elseif query.id == 6 %}Growing season inspection for plants and fresh produce{% elseif query.id == 25 %}Growing season inspection for potatoes{% else %}Phytosanitary certificate for commodity{% endif %}
         </dd>
       </div>
       {% if query.id != 6 %}
@@ -92,13 +92,10 @@ Manage application - {{serviceName}} - GOV.UK
     </dl>
 
     <ul class="govuk-list govuk-!-margin-top-6 govuk-!-margin-bottom-6 noprint">
-      <li><a class="govuk-link govuk-link--no-visited-state" href="application/gsi/create/check-your-answers-2-viewonly">View this application</a></li>
-      {% if (query.id | appInfo('status')) == 'draft' %}
-      <li><a class="govuk-link govuk-link--no-visited-state" href="certificate/check-your-progress?certificate=ehc2849">Edit and submit this application</a></li>
-      {% endif %}
-      <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{ query.is_group }}">Copy as new application</a></li>
       {% if (query.id | appInfo('status')) == 'submitted' or (query.id | appInfo('status')) == 'processing' or (query.id | appInfo('status')) == 'with inspector' or (query.id | appInfo('status')) == 'scheduled' or (query.id | appInfo('status')) == 'exporter action' or (query.id | appInfo('status')) == 'preparing phyto' or (query.id | appInfo('status')) == 'returned' or (query.id | appInfo('status')) == 'awaiting decision'%}
       <li><a class="govuk-link govuk-link--no-visited-state" href="#">Update this application</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="application/gsi/create/check-your-answers-2-viewonly">View this application</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{ query.is_group }}">Copy as new application</a></li>
       <li><a class="govuk-link govuk-link--no-visited-state" href="cancel-reason">Cancel this application</a></li>
       {% endif%}
       {% if (query.id | appInfo('status')) == 'draft' %}
