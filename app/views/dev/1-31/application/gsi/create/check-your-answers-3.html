@@ -1,0 +1,530 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Check your answers before sending your application - Growing season inspection - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent%}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <h1 class="govuk-heading-xl">
+      Check your answers before sending your application
+    </h1>
+    <h2 class="govuk-heading-m">Application summary</h2>
+    {% set commodity = data.commodity or "potatoes" %}
+
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Certificate
+        </dt>
+        <dd class="govuk-summary-list__value">
+          Growing season inspection for potatoes
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <!--<a class="govuk-link" href="setup/reference?change=yes&return_url=../create/check-your-answers" data-qa-id="Link-ChangeAnswer" id="Link-ChangeAnswer-0">Change</a>-->
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Your reference
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{data.reference_num or 'NM123 4321234' }}
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="setup/reference?change=yes&return_url=../create/check-your-answers" data-qa-id="Link-ChangeAnswer" id="Link-ChangeAnswer-0">Change</a>
+        </dd>
+      </div>
+    </dl>
+    <h2 class="govuk-heading-m">Applicant details</h2>
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Name
+        </dt>
+        <dd class="govuk-summary-list__value">
+          Mr. John Davies
+        </dd>
+        <dd class="govuk-summary-list__actions">
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Address
+        </dt>
+        <dd class="govuk-summary-list__value">
+          ABC Limited, 27 The Crescent, North West London, NW7 0HX
+        </dd>
+        <dd class="govuk-summary-list__actions">
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Phone number
+        </dt>
+        <dd class="govuk-summary-list__value">
+          07777 123456
+        </dd>
+        <dd class="govuk-summary-list__actions">
+        </dd>
+      </div>
+    </dl>
+
+    <h2 class="govuk-heading-m">Inspection details</h2>
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Contact name
+        </dt>
+        <dd class="govuk-summary-list__value">
+          Mrs A. Jaye
+        </dd>
+        <dd class="govuk-summary-list__actions">
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Address
+        </dt>
+        <dd class="govuk-summary-list__value">
+          Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="inspection-addresses?change=yes">
+            Change<span class="govuk-visually-hidden">
+              inspection details</span>
+          </a>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Phone number
+        </dt>
+        <dd class="govuk-summary-list__value">
+          07888111222
+        </dd>
+        <dd class="govuk-summary-list__actions">
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Email address
+        </dt>
+        <dd class="govuk-summary-list__value">
+          ajaye@emailaddress.com
+        </dd>
+        <dd class="govuk-summary-list__actions">
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          When will the fields be ready for inspection?
+        </dt>
+        <dd class="govuk-summary-list__value">
+            {{data.inpection_date or "Early June 2021"}}
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="inspection-dates?change=yes">
+            Change<span class="govuk-visually-hidden">
+              inspection period</span>
+          </a>
+        </dd>
+      </div>
+    </dl>
+
+    <!--Your fields and crops-->
+      <h2 class="govuk-heading-m">Field and crop details</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Location: {{data.nurseryplotno or "Top field"}}
+          </dt>
+          <dd class="govuk-summary-list__value">
+
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="field?change=yes">
+              Change<span class="govuk-visually-hidden">
+                field</span>
+            </a><br>
+            <a href="delete-field" class="govuk-link govuk-link--no-visited-state">
+              Delete
+            </a>
+          </dd>
+        </div>
+      </dl>
+
+      <table class="govuk-table govuk-!-margin-bottom-4">
+        
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            {% if data.addfielddetails == "gridgps" %}
+            <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
+              Grid reference or GPS reading
+            </th>
+            {% else %}
+            <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
+              IACS/RLR number
+            </th>
+            {% endif %}
+            <th class="govuk-table__header govuk-table__header--numeric govuk-!-width-one-quarter" scope="col">
+              Field area<br>(hectares)
+            </th>
+            <th class="govuk-table__header govuk-!-width-one-half" scope="col">
+              Field map
+            </th>
+            <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+          </tr>
+        </thead>
+
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            {% if data.addfielddetails == "iacs" %}
+            <td class="govuk-table__cell">
+              {{data.iacs or "NF24681357"}}
+            </td>
+            {% else %}
+            <td class="govuk-table__cell">
+              {{data.gridgps or "NF 2468 1357"}}
+            </td>
+            {% endif %}
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              {{ data.areaoffield or "3.5" }}
+            </td>
+            <td class="govuk-table__cell govuk-table__cell">
+              <a class="govuk-link govuk-link--no-visited-state" href="#">{{ data.description or "Filename.jpg" }}</a>
+            </td>
+            <td class="govuk-table__cell govuk-table__cell">
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+      <!-- multiple commodity table starts -->
+      {% if commodity.has_botanicial_name == "yes" %}
+      {% set commodity_id_name = commodity.genus %}
+      {% else %}
+      {% set commodity_id_name = commodity.commodity_common_name %}
+      {% endif %}
+
+      <h2 class="govuk-heading-s govuk-!-margin-top-6">Field and crop details</h2>
+      <table class="govuk-table govuk-!-margin-bottom-4">
+      <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell govuk-summary-list__key govuk-!-width-one-quarter" style="border:none;">{{data.nurseryplotno or "Top field"}}<br><span class="govuk-body">20 hectares</span></td>
+          <td class="govuk-table__cell govuk-table__cell--numeric govuk-!-width-one-half" style="border:none;">
+            <ul class="govuk-list govuk-list--bullet">
+                <li style="text-align:left">Corylus avellana - 8 hectares <br>Belize</li>
+              </ul>
+          </td>
+          <td class="govuk-table__cell govuk-table__cell govuk-!-width-one-quarter" style="border:none;">
+            <a class="govuk-link govuk-link--no-visited-state"></a>
+          </td>
+          <td class="govuk-table__cell govuk-table__cell govuk-!-width-one-quarter" style="border:none;">
+            <a class="govuk-link govuk-link--no-visited-state" href="#">Change</a>
+          </td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-summary-list__key govuk-!-width-one-quarter">{{data.nurseryplotno2 or "Bottom field"}}<br><span class="govuk-body">48 hectares</span></td>
+            <td class="govuk-table__cell govuk-table__cell--numeric govuk-!-width-one-half">
+              <ul class="govuk-list govuk-list--bullet">
+                  <li style="text-align:left">Corylus avellana - 12 hectares <br>Spain, Italy</li>
+                  <li style="text-align:left">Maris Piper - 18 hectares <br>Slovakia, Russia</li>
+                  <li style="text-align:left">Maris Piper - 10 hectares <br>France, Belgium</li>
+                  <li style="text-align:left">Corylus avellana - 8 hectares <br>Belgium</li>
+              </ul>
+            </td>
+            <td class="govuk-table__cell govuk-table__cell govuk-!-width-one-quarter">
+              <a class="govuk-link govuk-link--no-visited-state"></a>
+            </td>
+            <td class="govuk-table__cell govuk-table__cell govuk-!-width-one-quarter">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+        
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">{{data.nurseryplotno or "Top field"}}</dt>
+          <dd class="govuk-summary-list__value">
+            {% if data.field_task_list_data == "field-list" %}
+            ({% if data.addfielddetails == "Google Maps" %}Google Maps: {{data.navigation_googlemaps or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails == "iacs" %}IACS or RLR number: {{data.navigation_iacs or "NF 1234 1234"}}{% elif data.addfielddetails == "gridgps" %}Grid reference or GPS reading: {{data.navigation_gridgps or "NX 509 582"}}{% elif data.addfielddetails == "what3words" %}what3words address: ///{{data.navigation_what3words or "pretty.needed.chill"}}{% else %}Grid reference or GPS reading: NX 509 582{% endif %})
+            {% elif data.field_task_list_data == "field-list-2" %}
+            <ul class="govuk-list govuk-list--bullet">
+              <li>({% if data.addfielddetails2 == "Google Maps" %}Google Maps: {{data.navigation_googlemaps2 or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails2 == "iacs" %}IACS or RLR number: {{data.navigation_iacs2 or "NF 1234 1234"}}{% elif data.addfielddetails2 == "gridgps" %}Grid reference or GPS reading: {{data.navigation_gridgps2 or "NX 509 582"}}{% elif data.addfielddetails2 == "what3words" %}what3words address: ///{{data.navigation_what3words2 or "pretty.needed.chill"}}{% else %}Grid reference or GPS reading: NX 509 582{% endif %})</li>
+              <li>({% if data.addfielddetails == "Google Maps" %}Google Maps: {{data.navigation_googlemaps or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails == "iacs" %}IACS or RLR number: {{data.navigation_iacs or "NF 1234 1234"}}{% elif data.addfielddetails == "gridgps" %}Grid reference or GPS reading: {{data.navigation_gridgps or "NX 509 582"}}{% elif data.addfielddetails == "what3words" %}what3words address: ///{{data.navigation_what3words or "pretty.needed.chill"}}{% else %}Grid reference or GPS reading: NX 509 582{% endif %})</li>
+            </ul>            
+            {% else %}
+            ({% if data.addfielddetails == "Google Maps" %}Google Maps: {{data.navigation_googlemaps or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails == "iacs" %}IACS or RLR number: {{data.navigation_iacs or "NF 1234 1234"}}{% elif data.addfielddetails == "gridgps" %}Grid reference or GPS reading: {{data.navigation_gridgps or "NX 509 582"}}{% elif data.addfielddetails == "what3words" %}what3words address: ///{{data.navigation_what3words or "pretty.needed.chill"}}{% else %}Grid reference or GPS reading: NX 509 582{% endif %})
+            {% endif %}
+          </dd>          
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="{{data.field_task_list_data or 'field-list'}}?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> your fields for inspection</span></a></dd>
+        </div>
+
+        {% if data.commodity == "potatoes" %}
+        {% if data.potato_type == "Seed" %}
+        <!-- Show nothing for this variety of potatoes -->
+        {% elseif data.potato_type == "Ware" %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Crops at each location</dt>
+          <dd class="govuk-summary-list__value">
+            {% if data.crop_task_list_data == "commodity-list" %}
+            {{data.nurseryplotno or "Top field"}}
+            <ul class="govuk-list govuk-list--bullet">
+              <li>{% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}}{% endif %} for {{data.destinationcountries or "Belize"}} - {{data.approxhectofplot or "2"}} hectares</li>
+            </ul>
+            {% elseif data.crop_task_list_data == "commodity-list-2" %}
+            {{data.nurseryplotno2 or "Bottom field"}}
+            <ul class="govuk-list govuk-list--bullet">
+              <li>{% if data.commodity_variety2 == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety2 == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other2 or "Corylus avellana"}}{% endif %} for {{data.destinationcountries2 or "USA"}} - {{data.approxhectofplot2 or "18"}} hectares</li>
+            </ul>
+            {{data.nurseryplotno or "Top field"}}
+            <ul class="govuk-list govuk-list--bullet">
+              <li>{% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}}{% endif %} for {{data.destinationcountries or "Belize"}} - {{data.approxhectofplot or "2"}} hectares</li>
+            </ul>
+            {% elseif data.crop_task_list_data == "commodity-list-3" %}
+            {{data.nurseryplotno2 or "Bottom field"}}
+            <ul class="govuk-list govuk-list--bullet">
+              <li>{% if data.commodity_variety2 == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety2 == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other2 or "Corylus avellana"}}{% endif %} for {{data.destinationcountries2 or "USA"}} - {{data.approxhectofplot2 or "18"}} hectares</li>
+            </ul>
+            {{data.nurseryplotno or "Top field"}}
+            <ul class="govuk-list govuk-list--bullet">
+              <li>{% if data.commodity_variety3 == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety3 == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other3 or "Corylus avellana"}}{% endif %} for {{data.destinationcountries3 or "Brazil"}} - {{data.approxhectofplot3 or "100"}} hectares</li>
+              <li>{% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}}{% endif %} for {{data.destinationcountries or "Belize"}} - {{data.approxhectofplot or "2"}} hectares</li>
+            </ul>
+            {% else %}
+            {{data.nurseryplotno or "Top field"}}
+            <ul class="govuk-list govuk-list--bullet">
+              <li>{% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}}{% endif %} for {{data.destinationcountries or "Belize"}} - {{data.approxhectofplot or "2"}} hectares</li>
+            </ul>
+            {% endif %}
+          </dd>          
+          <dd class="govuk-summary-list__actions"><<a class="govuk-link" href="{{data.crop_task_list_data or 'commodity-list'}}?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> your fields for inspection</span></a></dd>>
+        </div>
+        {% else %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">{{data.nurseryplotno or "Bottom field"}}</dt>
+          <dd class="govuk-summary-list__value">
+            {% if data.crop_task_list_data == "commodity-list" %}
+            {{data.nurseryplotno or "Top field"}}
+            <ul class="govuk-list govuk-list--bullet">
+              <li>{% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}}{% endif %} for {{data.destinationcountries or "Belize"}} - {{data.approxhectofplot or "2"}} hectares</li>
+            </ul>
+            {% elseif data.crop_task_list_data == "commodity-list-2" %}
+            {{data.nurseryplotno2 or "Bottom field"}}
+            <ul class="govuk-list govuk-list--bullet">
+              <li>{% if data.commodity_variety2 == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety2 == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other2 or "Corylus avellana"}}{% endif %} for {{data.destinationcountries2 or "USA"}} - {{data.approxhectofplot2 or "18"}} hectares</li>
+            </ul>
+            {{data.nurseryplotno or "Top field"}}
+            <ul class="govuk-list govuk-list--bullet">
+              <li>{% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}}{% endif %} for {{data.destinationcountries or "Belize"}} - {{data.approxhectofplot or "2"}} hectares</li>
+            </ul>
+            {% elseif data.crop_task_list_data == "commodity-list-3" %}
+            {{data.nurseryplotno2 or "Bottom field"}}
+            <ul class="govuk-list govuk-list--bullet">
+              <li>{% if data.commodity_variety2 == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety2 == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other2 or "Corylus avellana"}}{% endif %} for {{data.destinationcountries2 or "USA"}} - {{data.approxhectofplot2 or "18"}} hectares</li>
+            </ul>
+            {{data.nurseryplotno or "Top field"}}
+            <ul class="govuk-list govuk-list--bullet">
+              <li>{% if data.commodity_variety3 == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety3 == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other3 or "Corylus avellana"}}{% endif %} for {{data.destinationcountries3 or "Brazil"}} - {{data.approxhectofplot3 or "100"}} hectares</li>
+              <li>{% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}}{% endif %} for {{data.destinationcountries or "Belize"}} - {{data.approxhectofplot or "2"}} hectares</li>
+            </ul>
+            {% else %}
+            {{data.nurseryplotno or "Top field"}}
+            <ul class="govuk-list govuk-list--bullet">
+              <li>{% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}}{% endif %} for {{data.destinationcountries or "Belize"}} - {{data.approxhectofplot or "2"}} hectares</li>
+            </ul>
+            {% endif %}
+          </dd>          
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="{{data.crop_task_list_data or 'commodity-list'}}?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> your fields for inspection</span></a></dd>
+        </div>
+        {% endif %}
+        {% else %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Crops at each location</dt>
+          <dd class="govuk-summary-list__value">
+            {% if data.crop_task_list_data == "commodity-list" %}
+            {{data.nurseryplotno or "Top field"}}
+            <ul class="govuk-list govuk-list--bullet">
+              <li>{% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}}{% endif %} for {{data.destinationcountries or "Belize"}} - {{data.approxhectofplot or "2"}} hectares</li>
+            </ul>
+            {% elseif data.crop_task_list_data == "commodity-list-2" %}
+            {{data.nurseryplotno2 or "Bottom field"}}
+            <ul class="govuk-list govuk-list--bullet">
+              <li>{% if data.commodity_variety2 == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety2 == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other2 or "Corylus avellana"}}{% endif %} for {{data.destinationcountries2 or "USA"}} - {{data.approxhectofplot2 or "18"}} hectares</li>
+            </ul>
+            {{data.nurseryplotno or "Top field"}}
+            <ul class="govuk-list govuk-list--bullet">
+              <li>{% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}}{% endif %} for {{data.destinationcountries or "Belize"}} - {{data.approxhectofplot or "2"}} hectares</li>
+            </ul>
+            {% elseif data.crop_task_list_data == "commodity-list-3" %}
+            {{data.nurseryplotno2 or "Bottom field"}}
+            <ul class="govuk-list govuk-list--bullet">
+              <li>{% if data.commodity_variety2 == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety2 == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other2 or "Corylus avellana"}}{% endif %} for {{data.destinationcountries2 or "USA"}} - {{data.approxhectofplot2 or "18"}} hectares</li>
+            </ul>
+            {{data.nurseryplotno or "Top field"}}
+            <ul class="govuk-list govuk-list--bullet">
+              <li>{% if data.commodity_variety3 == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety3 == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other3 or "Corylus avellana"}}{% endif %} for {{data.destinationcountries3 or "Brazil"}} - {{data.approxhectofplot3 or "100"}} hectares</li>
+              <li>{% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}}{% endif %} for {{data.destinationcountries or "Belize"}} - {{data.approxhectofplot or "2"}} hectares</li>
+            </ul>
+            {% else %}
+            {{data.nurseryplotno or "Top field"}}
+            <ul class="govuk-list govuk-list--bullet">
+              <li>{% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}}{% endif %} for {{data.destinationcountries or "Belize"}} - {{data.approxhectofplot or "2"}} hectares</li>
+            </ul>
+            {% endif %}
+          </dd>          
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="{{data.crop_task_list_data or 'commodity-list'}}?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> your fields for inspection</span></a></dd>
+        </div>
+        {% endif %}
+
+      </dl>
+      
+      
+      
+      <table class="govuk-table govuk-!-margin-bottom-4">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
+              Description
+            </th>
+            <th class="govuk-table__header govuk-table__header--numeric govuk-!-width-one-quarter" scope="col">
+              Hectarage of plot
+            </th>
+            <th class="govuk-table__header govuk-!-width-one-half" scope="col">
+              Destination countries
+            </th>
+            <th class="govuk-table__header govuk-!-width-one-quarter" scope="col"></th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Corylus avellana'}}
+            </td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              5
+            </td>
+            <td class="govuk-table__cell">
+              Spain, Bolivia
+            </td>
+            <td class="govuk-table__cell">
+              <a class="govuk-link" href="how-to-identify-prepopulated?return_url=check-your-answers">
+                Change<span class="govuk-visually-hidden">
+                  crop details</span>
+                </a><br>
+                <a class="govuk-link" href="">
+                  Delete<span class="govuk-visually-hidden">
+                    Delete crop</span>
+                </a>
+            </td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Rosa rugosa'}}
+            </td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              2
+            </td>
+            <td class="govuk-table__cell">
+              Spain
+            </td>
+            <td class="govuk-table__cell">
+              <a class="govuk-link" href="how-to-identify-prepopulated?return_url=check-your-answers">
+                Change<span class="govuk-visually-hidden">
+                  crop details</span>
+              </a><br>
+                <a class="govuk-link" href="">
+                  Delete<span class="govuk-visually-hidden">
+                    Delete crop</span>
+                </a>
+            </td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Dianthus repens'}}
+            </td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              3
+            </td>
+            <td class="govuk-table__cell">
+              Bolivia
+            </td>
+            <td class="govuk-table__cell">
+              <a class="govuk-link" href="how-to-identify-prepopulated?return_url=check-your-answers">
+                Change<span class="govuk-visually-hidden">
+                  crop details</span>
+              </a><br>
+                <a class="govuk-link" href="">
+                  Delete<span class="govuk-visually-hidden">
+                    Delete crop</span>
+                </a>
+            </td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Papaver alpinum'}}
+            </td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              1.5
+            </td>
+            <td class="govuk-table__cell">
+              Ghana
+            </td>
+            <td class="govuk-table__cell">
+              <a class="govuk-link" href="how-to-identify-prepopulated?return_url=check-your-answers">
+                Change<span class="govuk-visually-hidden">
+                  crop details</span>
+                </a><br>
+                <a class="govuk-link" href="">
+                  Delete<span class="govuk-visually-hidden">
+                    Delete crop</span>
+                </a>
+            </td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Agapanthus africanus'}}
+            </td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              1
+            </td>
+            <td class="govuk-table__cell">
+              Spain, Bolivia, Peru
+            </td>
+            <td class="govuk-table__cell">
+              <a class="govuk-link" href="how-to-identify-prepopulated?return_url=check-your-answers">
+                Change<span class="govuk-visually-hidden">
+                  crop details</span>
+              </a><br>
+              <a class="govuk-link" href="">
+                Delete<span class="govuk-visually-hidden">
+                  Delete crop</span>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- multiple commodity table ends -->
+      <p class="govuk-body"><a href="how-to-identify?return_url=check-your-answers" class="govuk-link govuk-link--no-visited-state">Add more crops</a></p>
+
+      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+      <p class="govuk-body"><a href="field-2?return_url=check-your-answers" class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-regular">Add another field</a></p>
+  </div>
+  <div class="govuk-grid-column-three-quarters govuk-!-margin-top-9">
+    <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_blank">what fees you need to pay</a> for a growing season inspection (opens in a new window).</p>
+    <p class="govuk-body govuk-!-margin-top-6">
+      <a href="../submit/declaration-gsi" class="govuk-button">Save and continue</a>
+    </p>
+  </div>
+</div>
+{% endblock %}
