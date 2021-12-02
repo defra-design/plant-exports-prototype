@@ -23,7 +23,66 @@
   <div class="govuk-grid-column-three-quarters">
     <h1 class="govuk-heading-xl">Your fields and {% if data.commodity == "potatoes" %}ware potatoes{% else %}crops{% endif %} for inspection</h1>
     <p>Here’s what you currently have listed for soil sampling.</p>
-    <h2 class="govuk-heading-l">Location: {{data.nurseryplotno or "Top field"}}</h2>
+    <h2 class="govuk-heading-l">Location: {{data.nurseryplotno2 or "Bottom field"}}</h2>
+    <dl class="govuk-summary-list govuk-summary-list--no-border">
+    
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">{% if data.addfielddetails2 == "Google Maps" %}Google Maps{% elif data.addfielddetails2 == "iacs" %}IACS or RLR number{% elif data.addfielddetails2 == "gridgps" %}Grid reference or GPS reading{% elif data.addfielddetails2 == "what3words" %}what3words address{% else %}Grid reference or GPS reading{% endif %}</dt>
+        <dd class="govuk-summary-list__value">{% if data.addfielddetails2 == "Google Maps" %}{{data.navigation_googlemaps2 or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails2 == "iacs" %}{{data.navigation_iacs2 or "NF 1234 1234"}}{% elif data.addfielddetails2 == "gridgps" %}{{data.navigation_gridgps2 or "NX 509 582"}}{% elif data.addfielddetails2 == "what3words" %}///{{data.navigation_what3words2 or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}</dd>
+        <dd class="govuk-summary-list__actions">&nbsp;</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Area to be inspected in hectares</dt>
+        <dd class="govuk-summary-list__value">{{data.areaoffield2 or "20"}}</dd>
+        <dd class="govuk-summary-list__actions">&nbsp;</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Field map</dt>
+        <dd class="govuk-summary-list__value">{% if data.send_inspector_map2 == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload2 or "Another filename.jpg"}}</a>{% else %}Not provided{% endif %}</dd>
+        <dd class="govuk-summary-list__actions">&nbsp;</dd>
+      </div>
+
+    </dl>
+    <ul class="govuk-list govuk-list--no-bullet">
+      <li><a class="govuk-link govuk-link--no-visited-state" href="field-2">Change this field</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="delete-field-2">Delete this field</a></li>
+    </ul>
+    <h2 class="govuk-heading-s govuk-!-margin-top-7">1 variety of {% if data.commodity == "potatoes" %}ware potatoes{% else %}crops{% endif %} added to {{data.nurseryplotno2 or "Bottom field"}}</h2>
+
+    <table class="govuk-table govuk-!-margin-bottom-4">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">Variety</th>
+          <th class="govuk-table__header govuk-table__header--numeric" scope="col">Area to be inspected in hectares</th>
+          <th class="govuk-table__header" scope="col">Destination countries</th>
+          <th class="govuk-table__header" scope="col"></th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">{% if data.commodity_variety3 == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety3 == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other3 or "Corylus avellana"}}{% endif %}</td>
+          <td class="govuk-table__cell govuk-table__cell--numeric">{{data.approxhectofplot3 or "50"}}</td>
+          <td class="govuk-table__cell">{{data.destinationcountries3 or "Brazil"}}</td>
+          <td class="govuk-table__cell">
+            <a href="how-to-identify-3" class="govuk-link govuk-link--no-visited-state">Change</a>
+            <br>
+            <a href="delete-crop-3" class="govuk-link govuk-link--no-visited-state">Delete</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    {% if commodity.has_botanicial_name == "yes" %}
+    {% set commodity_id_name = commodity.genus %}
+    {% else %}
+    {% set commodity_id_name = commodity.commodity_common_name %}
+    {% endif %}
+
+    <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="how-to-identify-3">Add more {% if data.commodity == "potatoes" %}ware potatoes{% else %}crops{% endif %} to {{data.nurseryplotno2 or "Bottom field"}}</a></p>
+
+    <h2 class="govuk-heading-l govuk-!-margin-top-6">Location: {{data.nurseryplotno or "Top field"}}</h2>
     <dl class="govuk-summary-list govuk-summary-list--no-border">
     
       <div class="govuk-summary-list__row">
@@ -49,7 +108,7 @@
       <li><a class="govuk-link govuk-link--no-visited-state" href="field">Change this field</a></li>
       <li><a class="govuk-link govuk-link--no-visited-state" href="delete-field">Delete this field</a></li>
     </ul>
-    <h2 class="govuk-heading-s govuk-!-margin-top-7">1 variety of {% if data.commodity == "potatoes" %}ware potatoes{% else %}crops{% endif %} added to {{data.nurseryplotno or "Top field"}}</h2>
+    <h2 class="govuk-heading-s govuk-!-margin-top-7">2 varieties of {% if data.commodity == "potatoes" %}ware potato{% else %}crop{% endif %} added to {{data.nurseryplotno or "Top field"}}</h2>
 
     <table class="govuk-table govuk-!-margin-bottom-4">
       <thead class="govuk-table__head">
@@ -92,7 +151,7 @@
       <!-- Session data hook to update the task list so that this section is marked as 'COMPLETED' -->
       <div class="govuk-form-group" hidden>
         <label class="govuk-label" for="field_task_list_data">Task list section URL</label>
-        <input class="govuk-input" id="field_task_list_data" name="field_task_list_data" type="text" value="commodity-list">
+        <input class="govuk-input" id="field_task_list_data" name="field_task_list_data" type="text" value="commodity-list-2-fields">
       </div>
 
     </form>
