@@ -34,8 +34,17 @@ Add your products - Growing season inspection - {{serviceName}} - GOV.UK
       Describe a single crop for inspection at this location. Later, you’ll be able to add further crops at this location if you want to.
     </p>
     
+    {% set url = "add-country" %}
+    {% if query.return_url == "check-your-answers-2" %}
+      {% set url = "country-summary" %}
 
-    <form method="get" action="gsi-commodity-list">
+    {% endif %}
+
+
+    <form method="get" action="{{url}}">
+      {% if query.return_url == "check-your-answers-2" %}
+        <input type="hidden" id="return_url" name="return_url" value="check-your-answers-2">
+      {% endif %}
       {% if data.commodity == "potatoes"%}
       
       <!-- Highlighted error state -->
@@ -392,14 +401,12 @@ Add your products - Growing season inspection - {{serviceName}} - GOV.UK
       {# include "../modules/_country-select.html" #}
       {% endblock %}
  -->
-      {% block country2 %}
-      <h3 class="govuk-heading-s">Destination countries</h3>
-      {% include "../modules/_multi-select.html" %}
-      {% endblock %}
 
-      {{ govukButton({
-        text: "Save and continue"
-      }) }}
+ <div class="govuk-body govuk-!-margin-top-9">
+   {{ govukButton({
+     text: "Save and continue"
+    }) }}
+  </div>
 
     </form>
   </div>
