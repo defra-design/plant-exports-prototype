@@ -1,0 +1,91 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Destination countries for your crops - Growing season inspection - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent%}
+{{super()}}
+<a href="{{page.content.prev or 'javascript:history.back()'}}" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      Destination countries for your crops
+    </h1>
+    <p class="govuk-body">
+      Here’s the destination countries you currently have listed for this crop. You can add up to 10 countries.
+    </p>
+
+    <form action="">
+
+      {% if commodity.has_botanicial_name == "yes" %}
+      {% set commodity_id_name = commodity.genus %}
+      {% else %}
+      {% set commodity_id_name = commodity.commodity_common_name %}
+      {% endif %}
+
+      {% set url = "gsi-commodity-list?return_url=" + query.return_url %}
+
+
+      <h2 class="govuk-heading-s govuk-!-margin-top-9">3 countries added for {{ data['commodity_host_species'] or data['genus'] or data['commodity_common_name'] or data['commodity_type'] or data['commodity_variety'] or data['potatovarietySelect'] or 'Corylus avellana' }}
+      </h2>
+      <table class="govuk-table govuk-!-margin-bottom-4">
+<!--          <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header govuk-!-width-three-quarters" scope="col"></th>
+            <th class="govuk-table__header" scope="col"></th>
+          </tr>
+        </thead>  -->
+        <tbody class="govuk-table__body">
+
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell"> 
+              Belize
+              <!-- {{ data['countrySelect'] or Belize }} -->
+            </td>
+            <td class="govuk-table__cell ">
+              <a href="delete-country?return_url=country-summary" class="govuk-link govuk-link--no-visited-state">
+                Delete
+              </a>
+            </td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell"> 
+              Canada
+            </td>
+            <td class="govuk-table__cell ">
+              <a href="delete-country?return_url=country-summary" class="govuk-link govuk-link--no-visited-state">
+                Delete
+              </a>
+            </td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell"> 
+              New Zealand
+            </td>
+            <td class="govuk-table__cell ">
+              <a href="delete-country?return_url=country-summary" class="govuk-link govuk-link--no-visited-state">
+                Delete
+              </a>
+            </td>
+          </tr>
+
+          
+          </tbody>
+        </table>
+        <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="add-country">Add more destination countries</a></p>
+      </div>
+    </div>
+
+    <div class="govuk-button-group govuk-!-margin-top-9">
+      {{ govukButton({
+        text: "Save and continue",
+        href: url
+      }) }}
+
+    </div>
+    </form>
+    {% endblock %}
