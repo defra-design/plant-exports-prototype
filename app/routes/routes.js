@@ -18,7 +18,7 @@ module.exports = function(router) {
 
   // MIDDLEWARE: Called every time a page is rendered
   router.use(function(req, res, next) {
-    console.log("(app/routes.js) working")
+    console.log("(app/routes/routes.js) working")
     // this makes sure a certificate is loaded
     // if (req.query.certificate && req.session.database != req.query.certificate) {
     //   req.session.database = req.query.certificate
