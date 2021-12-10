@@ -1,0 +1,119 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Are you sure you want to delete this variety of {% if data.commodity == "potatoes" %}ware potato{% else %}crop{% endif %}? - Soil inspection - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item" id="Nav-DisplayName">Prototype user</li>
+    <li class="login-nav__list-item"> | <a href="../../../account" class="govuk-link login-nav__link govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a>|</li>
+    <li class="login-nav__list-item"><a href="#" class="govuk-link login-nav__link govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
+  </ul>
+</div>
+
+<a href="{{page.content.prev or 'javascript:history.back()'}}" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if query.designB == "true" %}
+    <form action="how-to-identify?has_botanicial_name=&commodity_variety=&commodity_variety_other=&approxhectofplot=&destinationcountries=&commodity_lot=" method="post">
+      
+      <div class="govuk-button-group">
+        <h1 class="govuk-heading-xl">Confirm you want to remove this variety of {% if data.commodity == "potatoes" %}ware potato{% else %}crop{% endif %}</h1>
+        <dl class="govuk-summary-list govuk-summary-list--no-border">
+    
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Variety</dt>
+            <dd class="govuk-summary-list__value">{% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}}{% endif %}</dd>
+            <dd class="govuk-summary-list__actions">&nbsp;</dd>
+          </div>
+    
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Area to be inspected in hectares</dt>
+            <dd class="govuk-summary-list__value">{{data.approxhectofplot or "2"}}</dd>
+            <dd class="govuk-summary-list__actions">&nbsp;</dd>
+          </div>
+    
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Destination countries</dt>
+            <dd class="govuk-summary-list__value">{{data.destinationcountries or "Belize"}}</dd>
+            <dd class="govuk-summary-list__actions">&nbsp;</dd>
+          </div>
+    
+        </dl>
+      </div>
+
+      <div class="govuk-button-group">
+        <button class="govuk-button govuk-button--warning" type="submit" data-module="govuk-button">Delete</button>
+        <a class="govuk-link" href="commodity-list">Cancel and go back</a>
+      </div>
+
+      <!-- Session data hook to update the task list so that this section is marked as 'NOT COMPLETED' -->
+      <div class="govuk-form-group" hidden>
+        <label class="govuk-label" for="field_task_list_data">Task list section URL</label>
+        <input class="govuk-input" id="field_task_list_data" name="field_task_list_data" type="text" value="Not Completed">
+      </div>
+          
+    </form>
+    {% else %}
+    <form action="how-to-identify" method="post">
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+            <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-7">Are you sure you want to delete this variety of {% if data.commodity == "potatoes" %}ware potato{% else %}crop{% endif %}?</h1>
+          </legend>
+          <dl class="govuk-summary-list govuk-summary-list--no-border">
+    
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Variety</dt>
+              <dd class="govuk-summary-list__value">{% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}}{% endif %}</dd>
+              <dd class="govuk-summary-list__actions">&nbsp;</dd>
+            </div>
+      
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Area to be inspected in hectares</dt>
+              <dd class="govuk-summary-list__value">{{data.approxhectofplot or "2"}}</dd>
+              <dd class="govuk-summary-list__actions">&nbsp;</dd>
+            </div>
+      
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Destination countries</dt>
+              <dd class="govuk-summary-list__value">{{data.destinationcountries or "Belize"}}</dd>
+              <dd class="govuk-summary-list__actions">&nbsp;</dd>
+            </div>
+      
+          </dl>
+          
+          <div class="govuk-radios" data-module="govuk-radios">
+            
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="delete_yes" name="delete" type="radio" value="Yes~how-to-identify?has_botanicial_name=&commodity_variety=&commodity_variety_other=&approxhectofplot=&destinationcountries=&commodity_lot=">
+              <label class="govuk-label govuk-radios__label govuk-radios-long-label" for="delete_yes">Yes, delete</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="delete_no" name="delete" type="radio" value="No~commodity-list">
+              <label class="govuk-label govuk-radios__label govuk-radios-long-label" for="delete_no">Cancel and go back</label>
+            </div>
+
+          </div>
+
+        </fieldset>
+      </div>
+
+      <button class="govuk-button" type="submit" data-module="govuk-button">Confirm</button>
+    </form>
+    {% endif %}
+
+  </div>
+
+</div>
+{% endblock %}

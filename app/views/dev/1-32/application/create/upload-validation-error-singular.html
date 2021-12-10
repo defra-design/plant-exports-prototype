@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+There is a problem - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-width-container">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+          <h2 class="govuk-error-summary__title" id="error-summary-title">
+            There is a problem
+          </h2>
+          <div class="govuk-error-summary__body">
+            <!--<ul class="govuk-list govuk-error-summary__list">-->
+            <ul class="govuk-list">
+              <li>
+                Check the column headings match those in the downloadable template
+              </li>
+            </ul>
+          </div>
+        </div>
+        <form method="post">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+              <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">
+                  Upload a file
+              </h1>
+            </legend>
+          </fieldset>
+          <p class="govuk-body">
+            {% if data.commodity == "plants" %}
+            Download and fill in the <a href="/public/images/template-plants.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
+            {% elseif data.commodity == "plant products" %}
+            Download and fill in the <a href="/public/images/template-plant-products.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
+            {% elseif data.commodity == "used farm machines" %}
+            Download and fill in the <a href="/public/images/template-used-farm-machinery.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
+            {% elseif data.commodity == "potatoes" %}
+            Download and fill in the <a href="/public/images/template-potatoes.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
+            {% elseif data.commodity == "seeds" %}
+            Download and fill in the <a href="/public/images/template-seeds-phyto.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
+            {% else %}
+            Download and fill in the <a href="/public/images/APHA_phytosanitary_certificate_csv_template.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
+            {% endif %}
+          </p>
+          <p class="govuk-body govuk-!-margin-bottom-6">
+              Open the csv file in Excel or whatever you use to edit spreadsheets. When you have finished, save the file and select Comma Separated Values (.csv) as the file format.
+          </p>
+
+          {{ govukFileUpload({
+            id: "file-upload-1",
+            name: "file-upload-1",
+            label: {
+              text: "Fix the errors in your file, save it, and upload your completed csv file again"
+            }
+          }) }}
+
+          {{ govukButton({
+            text: "Re-upload your file",
+            href: "upload-in-progress"
+          }) }}
+
+        </form>
+      </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,131 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Your crops for inspection - Growing season inspection - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent%}
+{{super()}}
+<a href="{{page.content.prev or 'javascript:history.back()'}}" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <h1 class="govuk-heading-xl">
+      Your crops for inspection
+    </h1>
+    <p class="govuk-body">
+      Here’s what you currently have listed for growing season inspection. You can add more locations and more crops to each location.
+    </p>
+    <h2 class="govuk-heading-l">Location: {{ data['nurseryplotno'] }}</h2>
+    <form action="">
+
+      <dl class="govuk-summary-list govuk-summary-list--no-border">
+        <div class="govuk-summary-list__row">
+            {% if data.addfielddetails == "gridgps" %}
+            <dt class="govuk-summary-list__key"> 
+              Grid reference or GPS reading
+            </dt>
+            {% else %}
+            <dt class="govuk-summary-list__key">
+              IACS/RLR number
+            </dt>
+            {% endif %}
+            {% if data.addfielddetails == "iacs" %}
+            <dd class="govuk-summary-list__value">
+              {{data.navigation_iacs or "NF24681358"}}
+            </dd>
+            {% else %}
+            <dd class="govuk-summary-list__value">
+              {{data.gridgps or "NF 2468 1358"}}
+            </dd>
+            {% endif %}
+          <dd class="govuk-summary-list__actions">
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Field area (hectares)
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{ data.areaoffield or "5.5" }}
+          </dd>
+          <dd class="govuk-summary-list__actions">
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Field map
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <a class="govuk-link govuk-link--no-visited-state" href="#">{{ data.description or "Filename.jpg" }}</a>
+          </dd>
+          <dd class="govuk-summary-list__actions">
+          </dd>
+        </div>
+      </dl>
+      <ul class="govuk-list govuk-list--no-bullet">
+        <li><a class="govuk-link govuk-link--no-visited-state" href="field-2">Change this field</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="delete-field-2.html">Delete this field</a></li>
+      </ul>
+
+      {% if commodity.has_botanicial_name == "yes" %}
+      {% set commodity_id_name = commodity.genus %}
+      {% else %}
+      {% set commodity_id_name = commodity.commodity_common_name %}
+      {% endif %}
+
+      <h2 class="govuk-heading-s govuk-!-margin-top-9">1 crop variety added to {% if data.nurseryplotno or "Top Field" %}<span>{{data.nurseryplotno or "Top Field"}}</span>{% endif%}</h2>
+      <table class="govuk-table govuk-!-margin-bottom-4">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
+              Description
+            </th>
+            <th class="govuk-table__header govuk-table__header--numeric  govuk-!-width-one-quarter" scope="col">
+              Area to be inspected in hectares
+            </th>
+            <th class="govuk-table__header govuk-!-width-one-half" scope="col">
+              Destination countries
+            </th>
+            <th class="govuk-table__header" scope="col"></th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell"> 
+              {{ data['commodity_host_species'] or data['genus'] or data['commodity_common_name'] or data['commodity_type'] or data['commodity_variety'] or data['potatovarietySelect'] or 'Corylus avellana' }}
+            </td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              {{ data['approxhectofplot'] }}
+            </td>
+            <td class="govuk-table__cell">
+              {{ data['filter_demo'] or Belize }}
+            </td>
+            <td class="govuk-table__cell">
+              <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">
+                Change
+              </a><br>
+              <a href="delete-crop?return_url=gsi-commodity-list" class="govuk-link govuk-link--no-visited-state">
+                Delete
+              </a>
+            </td>
+          </tr>
+          
+          </tbody>
+        </table>
+        <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="how-to-identify-3">Add more crops to this location</a></p>
+      </div>
+    </div>
+
+    <div class="govuk-button-group govuk-!-margin-top-9">
+      {{ govukButton({
+        text: "Save and continue",
+        href: "task-list-2"
+      }) }}
+
+      <a class="govuk-link" href="field-two">Add another location</a>
+    </div>
+    </form>
+    {% endblock %}
