@@ -18,57 +18,58 @@ Your crops for inspection - Growing season inspection - {{serviceName}} - GOV.UK
     <p class="govuk-body">
       Here’s what you currently have listed for growing season inspection. You can add more locations and more crops to each location.
     </p>
-    <h2 class="govuk-heading-m">Location: {{ data['nurseryplotno'] }}</h2>
+    <h2 class="govuk-heading-l">Location: {{ data['nurseryplotno'] or 'Top field' }}</h2>
     
-    <table class="govuk-table govuk-!-margin-bottom-4">
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          {% if data.addfielddetails == "gridgps" %}
-          <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
-            Grid reference or GPS reading
-          </th>
-          {% else %}
-          <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
-            IACS/RLR number
-          </th>
-          {% endif %}
-          <th class="govuk-table__header govuk-table__header--numeric govuk-!-width-one-quarter" scope="col">
-            Field area<br>(hectares)
-          </th>
-          <th class="govuk-table__header govuk-!-width-one-half" scope="col">
+    <form action="post">
+
+      <dl class="govuk-summary-list govuk-summary-list--no-border">
+        <div class="govuk-summary-list__row">
+            {% if data.addfielddetails == "gridgps" %}
+            <dt class="govuk-summary-list__key"> 
+              Grid reference or GPS reading
+            </dt>
+            {% else %}
+            <dt class="govuk-summary-list__key">
+              IACS/RLR number
+            </dt>
+            {% endif %}
+            {% if data.addfielddetails == "iacs" %}
+            <dd class="govuk-summary-list__value">
+              {{data.navigation_iacs or "NF24681358"}}
+            </dd>
+            {% else %}
+            <dd class="govuk-summary-list__value">
+              {{data.gridgps or "NF 2468 1358"}}
+            </dd>
+            {% endif %}
+          <dd class="govuk-summary-list__actions">
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Field area (hectares)
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{ data.areaoffield or "5" }}
+          </dd>
+          <dd class="govuk-summary-list__actions">
+          </dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
             Field map
-          </th>
-          <th class="govuk-table__header" scope="col"></th>
-        </tr>
-      </thead>
-      <tbody class="govuk-table__body">
-        <tr class="govuk-table__row">
-          {% if data.addfielddetails == "iacs" %}
-          <td class="govuk-table__cell">
-            {{ data['navigation_iacs'] }}
-          </td>
-          {% else %}
-          <td class="govuk-table__cell">
-            {{ data['gridgps'] or "NF 2468 1358" }}
-          </td>
-          {% endif %}
-          <td class="govuk-table__cell govuk-table__cell--numeric">
-            {{ data.areaoffield or "3.5" }}
-          </td>
-          <td class="govuk-table__cell govuk-table__cell">
+          </dt>
+          <dd class="govuk-summary-list__value">
             <a class="govuk-link govuk-link--no-visited-state" href="#">{{ data.description or "Filename.jpg" }}</a>
-          </td>
-          <td class="govuk-table__cell">
-            <a href="field-2" class="govuk-link govuk-link--no-visited-state">
-              Change
-            </a><br>
-            <a href="delete-field-2" class="govuk-link govuk-link--no-visited-state">
-              Delete
-            </a>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+          </dd>
+          <dd class="govuk-summary-list__actions">
+          </dd>
+        </div>
+      </dl>
+      <ul class="govuk-list govuk-list--no-bullet">
+        <li><a class="govuk-link govuk-link--no-visited-state" href="field-2">Change this field</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="delete-field-2.html">Delete this field</a></li>
+      </ul>
 
       {% if commodity.has_botanicial_name == "yes" %}
       {% set commodity_id_name = commodity.genus %}
@@ -98,10 +99,10 @@ Your crops for inspection - Growing season inspection - {{serviceName}} - GOV.UK
               {{ data['commodity_host_species'] or data['genus'] or data['commodity_common_name'] or data['commodity_type'] or data['commodity_variety'] or data['potatovarietySelect'] or 'Corylus avellana' }}
             </td>
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              {{ data['approxhectofplot'] }}
+              {{ data.approxhectofplot or "3.5" }}
             </td>
             <td class="govuk-table__cell">
-              {{ data['filter_demo'] or Belize }}
+              {{ data.filter_demo or "Belize" }}
             </td>
             <td class="govuk-table__cell">
               <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">
@@ -117,10 +118,10 @@ Your crops for inspection - Growing season inspection - {{serviceName}} - GOV.UK
               {{ data['commodity_host_species'] or data['genus'] or data['commodity_common_name'] or data['commodity_type'] or data['commodity_variety'] or data['potatovarietySelect'] or 'Corylus avellana' }}
             </td>
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              {{ data['approxhectofplot3'] }}
+              {{ data.approxhectofplot3 or "1.5" }}
             </td>
             <td class="govuk-table__cell">
-              {{ data['filter_demo3'] or Belize }}
+              {{ data.filter_demo3 or "Spain" }}
             </td>
             <td class="govuk-table__cell">
               <a href="how-to-identify-3" class="govuk-link govuk-link--no-visited-state">
@@ -150,45 +151,5 @@ Your crops for inspection - Growing season inspection - {{serviceName}} - GOV.UK
       }) }}
     </div>
 
-    <!--<form  method="POST">
-      <fieldset class="govuk-fieldset" aria-describedby="applicant-conditional-hint">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-!-margin-top-9 govuk-!-margin-bottom-6">
-          <h3 class="govuk-fieldset__heading">
-            Do you want to add another crop or field?
-          </h3>
-        </legend>
-        <div class="govuk-form-group">
-          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
-
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="add_more_commodities-yes" name="add_more_commodities" type="radio" value="yes~how-to-identify-2" data-aria-controls="conditional-applicant-conditional-2">
-              <label class="govuk-label govuk-radios__label" for="add_more_commodities-yes">
-                Yes, add another crop to this field
-              </label>
-            </div>
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="add_more_commodities-no" name="add_more_commodities" type="radio" value="no~task-list-2" data-aria-controls="conditional-applicant-conditional-2">
-              <label class="govuk-label govuk-radios__label" for="add_more_commodities-no">
-                No, I have finished adding crops to this field
-              </label>
-            </div>
-            <div class="govuk-radios__divider">or</div>
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="add_more_fields_yes" name="add_more_commodities" type="radio" value="field_yes~field-2" data-aria-controls="conditional-applicant-conditional-2">
-              <label class="govuk-label govuk-radios__label" for="add_more_fields_yes">
-                Yes, add another field
-              </label>
-            </div>
-          </div>
-        </div>
-      </fieldset>
-      <div class="govuk-!-margin-left-0 govuk-!-margin-top-6 govuk-grid-column-one-quarter govuk-!-padding-0">
-        <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
-      </div>
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-full govuk-body">
-          <input class="link-button" type="submit" value="Save and continue later" name="saveAndResumeLater" data-qa-id="Button-SaveAndResumeLater" id="Button-SaveAndResumeLater">
-        </div>
-      </div>
-    </form>-->
+    </form>
     {% endblock %}
