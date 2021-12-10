@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Upload completed - Soil inspection - {{serviceName}} - GOV UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item" id="Nav-DisplayName">Prototype user</li>
+    <li class="login-nav__list-item"> | <a href="../../../account" class="govuk-link login-nav__link govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a>|</li>
+    <li class="login-nav__list-item"><a href="#" class="govuk-link login-nav__link govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
+  </ul>
+</div>
+
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}  
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-two-thirds">
+      
+    <div class="app-alert app-alert--success">
+      <p class="govuk-body">Location map uploaded successfully</p>
+    </div>
+        
+    <form action="how-to-identify" method="post">
+      <h1 class="govuk-heading-xl">Upload completed</h1>
+      
+      <table class="govuk-table govuk-!-margin-bottom-9">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header">Location map</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              <a href="#" class="govuk-link">{{data.map_upload or "Filename.jpg"}}</a>
+              <input type="hidden" id="import-phyto" name="import-phyto" value="1">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      {{ govukRadios({
+        idPrefix: "next",
+        name: "next",
+        fieldset:
+        {
+          legend:
+          {
+            text: "Do you want to keep this map?",
+            isPageHeading: false,
+            classes: "govuk-fieldset__legend--m govuk-!-margin-top-4"
+          }
+        },
+        items: [
+        {
+          value: "Confirm~how-to-identify",
+          text: "Yes, keep this map"
+        },
+        {
+          value: "Send another map~send-inspector-map",
+          text: "No, upload a different file and delete this one"
+        }
+        ]
+      }) }}
+
+      {{ govukButton({
+        text: "Save and continue",
+        classes: "govuk-!-margin-top-4"
+      }) }}
+    </form>
+      
+  </div>
+
+</div>
+{% endblock %}
