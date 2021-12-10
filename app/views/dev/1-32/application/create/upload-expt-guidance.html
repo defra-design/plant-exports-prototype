@@ -1,0 +1,187 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Add commodities by uploading a file - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-width-container">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form action="/form-handler" method="post" novalidate>
+
+        {% set commodity = data.commodity or "products" %}
+        {% set exampleTemplate = "template-seeds-phyto-example.csv" %}
+
+        {% if data.commodity == "plants" %}
+          {% set template = "template-plants.csv" %}
+        {% elseif data.commodity == "plant products" %}
+          {% set commodity = "products" %}
+          {% set template = "template-plant-products.csv" %}
+        {% elseif data.commodity == "used farm machines" %}
+          {% set commodity = "used farm machines" %}
+          {% set template = "template-used-farm-machinery.csv" %}
+        {% elseif data.commodity == "potatoes" %}
+          {% set template = "template-potatoes.csv" %}
+        {% elseif data.commodity == "seeds" %}
+          {% set template = "template-seeds-phyto.csv" %}
+        {% elseif data.commodity == "grain" %}
+          {% set template = "template-grain.csv" %}
+        {% else %}
+          {% set template = "APHA_phytosanitary_certificate_csv_template.csv" %}
+        {% endif %}
+
+        {% if data.journey == "coc" %}
+          {% set template = "template-hmi.csv" %}
+        {% endif %}
+
+
+        <div class="govuk-form-group  govuk-!-margin-bottom-9">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+              <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">
+                Upload a file
+              </h1>
+            </legend>
+          </fieldset>
+
+          <p class="govuk-body">
+            Download the <a href="/public/images/{{template}}" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>.
+          </p>
+
+          <p class="govuk-body govuk-!-margin-bottom-6">
+            Open the file in Excel or whatever software program you use to edit spreadsheets. Fill in the template using the guidance notes below, then save and upload it.
+          </p>
+
+          <h2 class="govuk-heading-m"> How to edit the file</h2>
+         
+          <ol class="govuk-list govuk-list--number">
+            <li>All fields are mandatory. You must not leave any field blank.</li>
+            <li>You must use the country code for the country of origin - you can find the 2 letter country code here: (opens in new tab)<br/>
+              <a href="https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes" target="_blank">https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes</a> 
+              <br/>
+              The only exceptions are if the country of origin is one of these countries - in which case, you must enter it as it appears in this list: 
+              <div class="govuk-grid-row">
+                <div class="govuk-grid-column-one-third">
+                  <p>
+                    Aland Islands<br/>Alaska<br/>Azores<br/>Bolivia<br/>Bonaire<br/>British Virgin Islands<br/>Myanmar<br/>Canary Islands<br/>Cape Verde<br/>Cocos Islands 
+                  </p>
+                </div>
+                <div class="govuk-grid-column-one-third">
+                  <p>
+                    Cote d'Ivoire<br/>Curacao<br/>Falkland Islands<br/>Hawaii<br/>Republic of Ireland<br/>Kosovo<br/>Madeira<br/>Netherlands Antilles<br/>Northern Ireland<br/>Palestine
+                  </p>
+                </div>
+                <div class="govuk-grid-column-one-third">
+                  <p>
+                     Reunion<br/>Ross dependency<br/>Saba<br/>Sabah<br/>St Barthelemy<br/>St Eustatius<br/>Taiwan<br/>Wallis and Futuna Islands.
+                  </p>
+                </div>
+              </div>
+              If you do not know the country of origin, you must enter Origin unknown. If the country of origin does not have a two letter county code or is not listed on this page, you must enter Other.</li>
+            <li>Save your completed file as a .CSV and upload it</li>
+
+          </ol>
+
+          <p class="govuk-body">You may find it helpful to compare your file against this <a href="/public/images/{{exampleTemplate}}" class="govuk-link govuk-link--no-visited-state" title="CSV template">example template</a></p>
+
+          <details class="govuk-details" data-module="govuk-details">
+            <summary class="govuk-details__summary">
+              <span class="govuk-details__summary-text">
+                Further advice
+              </span>
+            </summary>
+            <div class="govuk-details__text">
+              <h3 class="govuk-heading-s">If you are having problems with the upload</h3>
+              <ul class="govuk-list govuk-list--bullet">
+                <li>Check that you have not added extra commas as this will create errors when you try to upload the file.</li>
+                <li>Make sure you have made entries in all fields.</li>
+                <li>Make sure you have not deleted any columns or headers from the template.</li>
+              </ul>
+            </div>
+          </details>
+          
+
+          {{ govukFileUpload({
+            id: "file-upload-1",
+            name: "file-upload-1",
+            label: {
+            text: "Upload your completed csv file"
+          }
+          }) }}
+
+        </div>
+
+        {{ govukButton({
+          text: "Upload",
+          href: "upload-in-progress"
+        }) }}
+
+
+        <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+        <p class="govuk-body govuk-!-margin-top-9">
+          <a href="upload-validation-error-singular" class="govuk-link govuk-link-no-visited-state">View Upload screen
+            with single validation error</a>
+        </p>
+        <p class="govuk-body">
+          <a href="upload-validation-errors" class="govuk-link govuk-link-no-visited-state">View Upload screen with
+            validation errors</a>
+        </p>
+        <p class="govuk-body">
+          <a href="upload-error" class="govuk-link govuk-link-no-visited-state">View Upload screen with file type
+            error</a>
+        </p>
+
+      </form>
+      <h3 class="govuk-heading-s">Templates</h3>
+      <ul class="govuk-list govuk-list">
+        <li>
+          <a href="/public/images/template-plants.csv" class="govuk-link govuk-link-no-visited-state">Plants</a>
+        </li>
+        <li>
+          <a href="/public/images/template-sms.csv" class="govuk-link govuk-link-no-visited-state">SMS</a>
+        </li>
+        <li>
+          <a href="/public/images/template-gms.csv" class="govuk-link govuk-link-no-visited-state">GMS</a>
+        </li>
+        <li>
+          <a href="/public/images/template-plant-products.csv" class="govuk-link govuk-link-no-visited-state">Plant
+            products</a>
+        </li>
+        <li>
+          <a href="/public/images/template-used-farm-machinery.csv" class="govuk-link govuk-link-no-visited-state">Used
+            farm machinery</a>
+        </li>
+        <li>
+          <a href="/public/images/template-potatoes.csv" class="govuk-link govuk-link-no-visited-state">Potatoes</a>
+        </li>
+        <li>
+          <a href="/public/images/template-seeds-sample.csv"
+            class="govuk-link govuk-link-no-visited-state">Seeds Template</a>
+        </li>
+        <li>
+          <a href="/public/images/template-seeds-sample-example.csv"
+            class="govuk-link govuk-link-no-visited-state">Seeds Example</a>
+        </li>
+         <li>
+          <a href="/public/images/template-grain.csv" class="govuk-link govuk-link-no-visited-state">Grain</a>
+        </li>
+        <li>
+          <a href="/public/images/APHA_phytosanitary_certificate_csv_template.csv"
+            class="govuk-link govuk-link-no-visited-state">Generic APHA template</a>
+        </li>
+      </ul>
+
+
+    </div>
+  </div>
+</div>
+{% endblock %}
