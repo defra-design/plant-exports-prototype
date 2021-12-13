@@ -18,56 +18,55 @@ Your crops for inspection - Growing season inspection - {{serviceName}} - GOV.UK
     <p class="govuk-body">
       Here’s what you currently have listed for growing season inspection. You can add more locations and more crops to each location.
     </p>
-    <h2 class="govuk-heading-m">Location: {{data.nurseryplotno or "Top field"}}</h2>
-    <table class="govuk-table govuk-!-margin-bottom-4">
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
+    <h2 class="govuk-heading-l">Location: {{data.nurseryplotno or "Top field"}}</h2>
+    <dl class="govuk-summary-list govuk-summary-list--no-border">
+      <div class="govuk-summary-list__row">
           {% if data.addfielddetails == "gridgps" %}
-          <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
+          <dt class="govuk-summary-list__key"> 
             Grid reference or GPS reading
-          </th>
+          </dt>
           {% else %}
-          <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
+          <dt class="govuk-summary-list__key">
             IACS/RLR number
-          </th>
+          </dt>
           {% endif %}
-          <th class="govuk-table__header govuk-table__header--numeric govuk-!-width-one-quarter" scope="col">
-            Field area<br>(hectares)
-          </th>
-          <th class="govuk-table__header govuk-!-width-one-half" scope="col">
-            Field map
-          </th>
-          <th class="govuk-table__header" scope="col"></th>
-        </tr>
-      </thead>
-      <tbody class="govuk-table__body">
-        <tr class="govuk-table__row">
           {% if data.addfielddetails == "iacs" %}
-          <td class="govuk-table__cell">
-            {{data.iacs or "NF24681358"}}
-          </td>
+          <dd class="govuk-summary-list__value">
+            {{data.navigation_iacs or "NF24681358"}}
+          </dd>
           {% else %}
-          <td class="govuk-table__cell">
+          <dd class="govuk-summary-list__value">
             {{data.gridgps or "NF 2468 1358"}}
-          </td>
+          </dd>
           {% endif %}
-          <td class="govuk-table__cell govuk-table__cell--numeric">
-            {{ data.areaoffield or "3.5" }}
-          </td>
-          <td class="govuk-table__cell govuk-table__cell">
-            <a class="govuk-link govuk-link--no-visited-state" href="#">{{ data.description or "Filename.jpg" }}</a>
-          </td>
-          <td class="govuk-table__cell">
-            <a href="field-2" class="govuk-link govuk-link--no-visited-state">
-              Change
-            </a><br>
-            <a href="#" class="govuk-link govuk-link--no-visited-state">
-              Delete
-            </a>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+        <dd class="govuk-summary-list__actions">
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Field area (hectares)
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ data.areaoffield or "5" }}
+        </dd>
+        <dd class="govuk-summary-list__actions">
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Field map
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <a class="govuk-link govuk-link--no-visited-state" href="#">{{ data.description or "Filename.jpg" }}</a>
+        </dd>
+        <dd class="govuk-summary-list__actions">
+        </dd>
+      </div>
+    </dl>
+    <ul class="govuk-list govuk-list--no-bullet">
+      <li><a class="govuk-link govuk-link--no-visited-state" href="field-2">Change this field</a></li>
+    <li><a class="govuk-link govuk-link--no-visited-state" href="delete-field-2.html">Delete this field</a></li>
+    </ul>
 
       {% if commodity.has_botanicial_name == "yes" %}
       {% set commodity_id_name = commodity.genus %}
@@ -97,7 +96,7 @@ Your crops for inspection - Growing season inspection - {{serviceName}} - GOV.UK
               {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Corylus avellana'}}
             </td>
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              2
+              {{ data['approxhectofplot'] or '3.5' }}
             </td>
             <td class="govuk-table__cell">
               {% if data['filter_demo'] %}
@@ -120,13 +119,13 @@ Your crops for inspection - Growing season inspection - {{serviceName}} - GOV.UK
               {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Corylus avellana'}}
             </td>
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              1.5
+              {{ data['approxhectofplot2'] or '1.5' }}
             </td>
             <td class="govuk-table__cell">
-              {% if data['filter_demo'] %}
-              {{ data['filter_demo']| join(", ")}}
+              {% if data['filter_demo2'] %}
+              {{ data['filter_demo2']| join(", ")}}
               {% else %}
-              Norway
+              Belgium
               {% endif  %}
             </td>
             <td class="govuk-table__cell">
