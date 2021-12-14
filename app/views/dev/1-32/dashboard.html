@@ -135,7 +135,7 @@
 
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl govuk-!-margin-top-8">Your applications</h1>
-    <a class="govuk-button" href="application/setup/what-export" >Start a new application</a>
+    <a class="govuk-button" href="application/setup/what-export?route={{data.route}}" >Start a new application</a>
   </div>
 
 </div>
@@ -486,6 +486,71 @@
           </thead>
           {% if data.route != "new" %}
           <tbody>
+            {% if data.application_submission_data == "draft" %}
+            <tr class="govuk-table__row result">
+              <td class="govuk-table__cell applicationRef-column table-header" scope="row">
+                <a href="application-ss?application_submission_data=draft" class="govuk-link govuk-link--no-visited-state">
+                <span class="table-heading table-heading-full" aria-hidden="true">Application number</span> 1721148004809</a>
+                <br/>
+                <span class="table-heading table-heading-full" aria-hidden="true">Customer reference</span><span class="client-ref">{% if data.reference_num %}{{data.reference_num or "REFERENCE"}}{% else %}&nbsp;{% endif %}</span>
+              </td>
+              <td class="govuk-table__cell submitted-column" scope="row">
+                <span class="table-heading" aria-hidden="true">Certificate</span>
+                Soil sampling
+              </td>
+              <td class="govuk-table__cell submitted-column" scope="row">
+                <span class="table-heading" aria-hidden="true">Destination</span>
+                {% if data.destinationcountries %}{{data.destinationcountries or "USA" }}{% else %}&nbsp;{% endif %}
+              </td>
+              <td class="govuk-table__cell submitted-column" scope="row">
+                <span class="table-heading" aria-hidden="true">Submitted date</span>
+                &nbsp;
+              </td>
+              <td class="govuk-table__cell" scope="row">
+                <span class="table-heading" aria-hidden="true">Status</span>
+                
+                <div class="app-status-tag app-status-tag--grey">
+                  draft
+                </div>
+
+              </td>
+              <td class="govuk-table__cell submitted-column" scope="row">
+                <a href="#" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden">  certificate 1721148004809</span></a>
+              </td>
+            </tr>
+            {% elif data.application_submission_data == "submitted" %}
+            <tr class="govuk-table__row result">
+              <td class="govuk-table__cell applicationRef-column table-header" scope="row">
+                <a href="application-ss?application_submission_data=submitted" class="govuk-link govuk-link--no-visited-state">
+                <span class="table-heading table-heading-full" aria-hidden="true">Application number</span> 1721148004809</a>
+                <br/>
+                <span class="table-heading table-heading-full" aria-hidden="true">Customer reference</span><span class="client-ref">{% if data.reference_num %}{{data.reference_num or "REFERENCE"}}{% else %}&nbsp;{% endif %}</span>
+              </td>
+              <td class="govuk-table__cell submitted-column" scope="row">
+                <span class="table-heading" aria-hidden="true">Certificate</span>
+                Soil sampling
+              </td>
+              <td class="govuk-table__cell submitted-column" scope="row">
+                <span class="table-heading" aria-hidden="true">Destination</span>
+                {% if data.destinationcountries %}{{data.destinationcountries or "USA" }}{% else %}&nbsp;{% endif %}
+              </td>
+              <td class="govuk-table__cell submitted-column" scope="row">
+                <span class="table-heading" aria-hidden="true">Submitted date</span>
+                {{todaysDate}}
+              </td>
+              <td class="govuk-table__cell" scope="row">
+                <span class="table-heading" aria-hidden="true">Status</span>
+                
+                <div class="app-status-tag app-status-tag--white-tag-blue-border-and-text">
+                  submitted
+                </div>
+
+              </td>
+              <td class="govuk-table__cell submitted-column" scope="row">
+                <a href="#" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden">  certificate 1721148004809</span></a>
+              </td>
+            </tr>
+            {% endif %}
             {% for app in data.applications %}
               {% if (data.show_applications_by == "me" and app.name == logged_in_as) or (data.show_applications_by == "me" or not data.show_applications_by) or ((app.name | upper) in (data.filter_name | upper) or data.filter_name == "All users") %}
                 {% if (data.has_filter != "yes" or data.filter_status == "any") or app.status in data.filter_status %}
@@ -557,12 +622,28 @@
                             <a href="application-coc?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
                             {% elseif app.index == "9" %}
                             <a href="application-phy?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            <!-- Soil sampling applications (START) -->
+                            {% elseif app.index == "16" %}
+                            <a href="application-ss?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            {% elseif app.index == "17" %}
+                            <a href="application-ss?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            {% elseif app.index == "18" %}
+                            <a href="application-ss?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            {% elseif app.index == "19" %}
+                            <a href="application-ss?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            {% elseif app.index == "26" %}
+                            <a href="application-ss?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            {% elseif app.index == "27" %}
+                            <a href="application-ss?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            {% elseif app.index == "28" %}
+                            <a href="application-ss?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            <!-- Soil sampling applications (END) -->
                             {% elseif app.index == "21" %}
                             <a href="application-ssdd-coc?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
-                            {% elseif app.index == "30" %}
-                            <a href="application-seed-sample?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
                             {% elseif app.index == "25" %}
                             <a href="application-gsi?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            {% elseif app.index == "30" %}
+                            <a href="application-seed-sample?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
                             {% else %}
                             <a href="application?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
                             {% endif %}
@@ -644,92 +725,93 @@
 
   </div>
 
-  <script>
-    window.addEventListener('load', function() {
-      $(".clear-search-holder").hide()
-      $(".search-what-cont").hide()
-      $("#search").click(function(e) {
-        $(".search-what-text").text($("#search-input").val());
-        $(".search-what-cont").show();
-        $(".result").each(function(e) {
-          var text = $(this).text().toLowerCase();
-          if (text.indexOf($("#search-input").val().toLowerCase()) > -1) {
-            $(this).show();
-          } else {
-            $(this).hide();
-          }
-        });
-      });
-      $("#clear-search, .search-what-close").click(function(e) {
-        $(".clear-search-holder").show()
-        $(".search-what-text").text($("#search-input").val());
-        $(".search-what-cont").show()
-        clear - search - holder
-        $(".search-what-cont").hide();
-        $("#search-input").val("");
-        $(".result").each(function(e) {
+</div>
+
+<script>
+  window.addEventListener('load', function() {
+    $(".clear-search-holder").hide()
+    $(".search-what-cont").hide()
+    $("#search").click(function(e) {
+      $(".search-what-text").text($("#search-input").val());
+      $(".search-what-cont").show();
+      $(".result").each(function(e) {
+        var text = $(this).text().toLowerCase();
+        if (text.indexOf($("#search-input").val().toLowerCase()) > -1) {
           $(this).show();
-        });
-        $(this).blur();
+        } else {
+          $(this).hide();
+        }
       });
     });
-  </script>
-  <script type="text/javascript">
-    window.addEventListener('load', function() {
-      var count = $('.govuk-table__row').length - 1;
-
-      // show hide content
-      $('.defra-filter--content').hide()
-      $('.defra-filter--action').show()
-      $('#js-case-count').text(count);
-      $('.js-case-count').text(count);
-      if (count == 0) {
-        $('.govuk-tbody').hide()
-      }
-      $('.defra-filter--content').hide()
-      $('#defra-filter--button').on("click", function() {
-        if (!$('.defra-filter--action').hasClass('defra-filter--open')) {
-          $('.defra-filter--content').show().focus()
-          $('.defra-filter--action').addClass('defra-filter--open')
-          $('#defra-filter--button').attr('aria-expanded', 'true');
-          $(".defra-filter--button-content").text('Hide filters')
-
-        } else {
-          $('.defra-filter--content').hide()
-          $('.defra-filter--action').removeClass('defra-filter--open')
-          $('#defra-filter--button').attr('aria-expanded', 'false');
-          $(".defra-filter--button-content").text('Show filters')
-        }
-      })
-    })
-  </script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function(event) {
-      if (document.querySelectorAll('.sm-daterange-component').length) {
-        SmDateRangePicker('#from', '#to').init();
-      }
+    $("#clear-search, .search-what-close").click(function(e) {
+      $(".clear-search-holder").show()
+      $(".search-what-text").text($("#search-input").val());
+      $(".search-what-cont").show()
+      clear - search - holder
+      $(".search-what-cont").hide();
+      $("#search-input").val("");
+      $(".result").each(function(e) {
+        $(this).show();
+      });
+      $(this).blur();
     });
-  </script>
-  <script type="text/javascript" src="/public/javascripts/accessible-autocomplete.min.js"></script>
-  <script type="text/javascript">
-    // dropdownArrow: function (config) {
-    //   return '<svg class="' + config.className + '" style="top: 8px;" viewBox="0 0 512 512" ><path d="M256,298.3L256,298.3L256,298.3l174.2-167.2c4.3-4.2,11.4-4.1,15.8,0.2l30.6,29.9c4.4,4.3,4.5,11.3,0.2,15.5L264.1,380.9  c-2.2,2.2-5.2,3.2-8.1,3c-3,0.1-5.9-0.9-8.1-3L35.2,176.7c-4.3-4.2-4.2-11.2,0.2-15.5L66,131.3c4.4-4.3,11.5-4.4,15.8-0.2L256,298.3  z"/></svg>'
-    // },
-    selectEl = document.querySelector('#passport-location')
-    accessibleAutocomplete.enhanceSelectElement({
-      autoselect: false,
-      placeholder: "Select name",
-      showAllValues: true,
-      selectElement: selectEl,
-      defaultValue: '',
-      dropdownArrow: function(config) {
-        return '<svg class="' + config.className +
-          '" style="top: 8px; z-index:1" viewBox="0 0 512 512" ><path d="M256,298.3L256,298.3L256,298.3l174.2-167.2c4.3-4.2,11.4-4.1,15.8,0.2l30.6,29.9c4.4,4.3,4.5,11.3,0.2,15.5L264.1,380.9  c-2.2,2.2-5.2,3.2-8.1,3c-3,0.1-5.9-0.9-8.1-3L35.2,176.7c-4.3-4.2-4.2-11.2,0.2-15.5L66,131.3c4.4-4.3,11.5-4.4,15.8-0.2L256,298.3  z"/></svg>'
-      },
+  });
+</script>
+<script type="text/javascript">
+  window.addEventListener('load', function() {
+    var count = $('.govuk-table__row').length - 1;
+
+    // show hide content
+    $('.defra-filter--content').hide()
+    $('.defra-filter--action').show()
+    $('#js-case-count').text(count);
+    $('.js-case-count').text(count);
+    if (count == 0) {
+      $('.govuk-tbody').hide()
+    }
+    $('.defra-filter--content').hide()
+    $('#defra-filter--button').on("click", function() {
+      if (!$('.defra-filter--action').hasClass('defra-filter--open')) {
+        $('.defra-filter--content').show().focus()
+        $('.defra-filter--action').addClass('defra-filter--open')
+        $('#defra-filter--button').attr('aria-expanded', 'true');
+        $(".defra-filter--button-content").text('Hide filters')
+
+      } else {
+        $('.defra-filter--content').hide()
+        $('.defra-filter--action').removeClass('defra-filter--open')
+        $('#defra-filter--button').attr('aria-expanded', 'false');
+        $(".defra-filter--button-content").text('Show filters')
+      }
     })
+  })
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function(event) {
+    if (document.querySelectorAll('.sm-daterange-component').length) {
+      SmDateRangePicker('#from', '#to').init();
+    }
+  });
+</script>
+<script type="text/javascript" src="/public/javascripts/accessible-autocomplete.min.js"></script>
+<script type="text/javascript">
+  // dropdownArrow: function (config) {
+  //   return '<svg class="' + config.className + '" style="top: 8px;" viewBox="0 0 512 512" ><path d="M256,298.3L256,298.3L256,298.3l174.2-167.2c4.3-4.2,11.4-4.1,15.8,0.2l30.6,29.9c4.4,4.3,4.5,11.3,0.2,15.5L264.1,380.9  c-2.2,2.2-5.2,3.2-8.1,3c-3,0.1-5.9-0.9-8.1-3L35.2,176.7c-4.3-4.2-4.2-11.2,0.2-15.5L66,131.3c4.4-4.3,11.5-4.4,15.8-0.2L256,298.3  z"/></svg>'
+  // },
+  selectEl = document.querySelector('#passport-location')
+  accessibleAutocomplete.enhanceSelectElement({
+    autoselect: false,
+    placeholder: "Select name",
+    showAllValues: true,
+    selectElement: selectEl,
+    defaultValue: '',
+    dropdownArrow: function(config) {
+      return '<svg class="' + config.className +
+        '" style="top: 8px; z-index:1" viewBox="0 0 512 512" ><path d="M256,298.3L256,298.3L256,298.3l174.2-167.2c4.3-4.2,11.4-4.1,15.8,0.2l30.6,29.9c4.4,4.3,4.5,11.3,0.2,15.5L264.1,380.9  c-2.2,2.2-5.2,3.2-8.1,3c-3,0.1-5.9-0.9-8.1-3L35.2,176.7c-4.3-4.2-4.2-11.2,0.2-15.5L66,131.3c4.4-4.3,11.5-4.4,15.8-0.2L256,298.3  z"/></svg>'
+    },
+  })
 
-    // var queryStringParameters = window.location.search
-    // var previouslySubmitted = queryStringParameters.length > 0
-  </script>
-
+  // var queryStringParameters = window.location.search
+  // var previouslySubmitted = queryStringParameters.length > 0
+</script>
 {% endblock %}

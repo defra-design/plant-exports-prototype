@@ -32,12 +32,12 @@
         <div class="govuk-radios govuk-radios--inline govuk-form-group" data-module="govuk-radios">
       
           <div class="govuk-radios__item">
-            <input class="govuk-radios__input" id="save_and_exit_yes" name="save_and_exit" type="radio" value="Yes~../dashboard" data-aria-controls="save_and_exit_yes">
+            <input class="govuk-radios__input" id="save_and_exit_yes" name="save_and_exit" type="radio" value="Yes~../{% if data.route == 'new' %}dashboard-one{% else %}dashboard{% endif %}" data-aria-controls="save_and_exit_yes">
             <label class="govuk-label govuk-radios__label" for="save_and_exit_yes">Yes</label>
           </div>
 
           <div class="govuk-radios__item">
-            <input class="govuk-radios__input" id="save_and_exit_no" name="save_and_exit" type="radio" value="No~javascript:history.back()" data-aria-controls="save_and_exit_no">
+            <input class="govuk-radios__input" id="save_and_exit_no" name="save_and_exit" type="radio" value="No~{{query.return_url or '../dashboard'}}" data-aria-controls="save_and_exit_no">
             <label class="govuk-label govuk-radios__label" for="save_and_exit_no">No</label>
           </div>
 
@@ -45,6 +45,13 @@
 
       </fieldset>
       <button class="govuk-button govuk-!-margin-bottom-9" data-module="govuk-button">Continue</button>
+
+      <!-- Session data hook to update the dashboard so that it knows a new application has been saved as a draft -->
+      <div class="govuk-form-group" hidden>
+        <label class="govuk-label" for="application_submission_data">Application submission status</label>
+        <input class="govuk-input" id="application_submission_data" name="application_submission_data" type="text" value="draft">
+      </div>
+
     </form>
 
   </div>
