@@ -135,7 +135,7 @@
 
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl govuk-!-margin-top-8">Your applications</h1>
-    <a class="govuk-button" href="application/setup/what-export" >Start a new application</a>
+    <a class="govuk-button" href="application/setup/what-export?route={{data.route}}" >Start a new application</a>
   </div>
 
 </div>
@@ -483,6 +483,71 @@
             </tr>
           </thead>
           <tbody>
+            {% if data.application_submission_data == "draft" %}
+            <tr class="govuk-table__row result">
+              <td class="govuk-table__cell applicationRef-column table-header" scope="row">
+                <a href="application-ss?application_submission_data=draft" class="govuk-link govuk-link--no-visited-state">
+                <span class="table-heading table-heading-full" aria-hidden="true">Application number</span> 1721148004809</a>
+                <br/>
+                <span class="table-heading table-heading-full" aria-hidden="true">Customer reference</span><span class="client-ref">{% if data.reference_num %}{{data.reference_num or "REFERENCE"}}{% else %}&nbsp;{% endif %}</span>
+              </td>
+              <td class="govuk-table__cell submitted-column" scope="row">
+                <span class="table-heading" aria-hidden="true">Certificate</span>
+                Soil sampling
+              </td>
+              <td class="govuk-table__cell submitted-column" scope="row">
+                <span class="table-heading" aria-hidden="true">Destination</span>
+                {% if data.destinationcountries %}{{data.destinationcountries or "USA" }}{% else %}&nbsp;{% endif %}
+              </td>
+              <td class="govuk-table__cell submitted-column" scope="row">
+                <span class="table-heading" aria-hidden="true">Submitted date</span>
+                &nbsp;
+              </td>
+              <td class="govuk-table__cell" scope="row">
+                <span class="table-heading" aria-hidden="true">Status</span>
+                
+                <div class="app-status-tag app-status-tag--grey">
+                  draft
+                </div>
+
+              </td>
+              <td class="govuk-table__cell submitted-column" scope="row">
+                <a href="#" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden">  certificate 1721148004809</span></a>
+              </td>
+            </tr>
+            {% elif data.application_submission_data == "submitted" %}
+            <tr class="govuk-table__row result">
+              <td class="govuk-table__cell applicationRef-column table-header" scope="row">
+                <a href="application-ss?application_submission_data=submitted" class="govuk-link govuk-link--no-visited-state">
+                <span class="table-heading table-heading-full" aria-hidden="true">Application number</span> 1721148004809</a>
+                <br/>
+                <span class="table-heading table-heading-full" aria-hidden="true">Customer reference</span><span class="client-ref">{% if data.reference_num %}{{data.reference_num or "REFERENCE"}}{% else %}&nbsp;{% endif %}</span>
+              </td>
+              <td class="govuk-table__cell submitted-column" scope="row">
+                <span class="table-heading" aria-hidden="true">Certificate</span>
+                Soil sampling
+              </td>
+              <td class="govuk-table__cell submitted-column" scope="row">
+                <span class="table-heading" aria-hidden="true">Destination</span>
+                {% if data.destinationcountries %}{{data.destinationcountries or "USA" }}{% else %}&nbsp;{% endif %}
+              </td>
+              <td class="govuk-table__cell submitted-column" scope="row">
+                <span class="table-heading" aria-hidden="true">Submitted date</span>
+                {{todaysDate}}
+              </td>
+              <td class="govuk-table__cell" scope="row">
+                <span class="table-heading" aria-hidden="true">Status</span>
+                
+                <div class="app-status-tag app-status-tag--white-tag-blue-border-and-text">
+                  submitted
+                </div>
+
+              </td>
+              <td class="govuk-table__cell submitted-column" scope="row">
+                <a href="#" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden">  certificate 1721148004809</span></a>
+              </td>
+            </tr>
+            {% else %}
             <tr class="govuk-table__row result">
               <th id="1721147986456-appRef" class="govuk-table__cell applicationRef-column table-header" scope="row">
                 <a href="application?id=0" class="govuk-link govuk-link--no-visited-state">{{data.reference_num or 'PO260521NI'}}</a><br>
@@ -515,6 +580,7 @@
                 <a href="clone?id=0" class="govuk-link govuk-link--no-visited-state">Copy</a>
               </td>
             </tr>
+            {% endif %}
           </tbody>
         </table>
 
