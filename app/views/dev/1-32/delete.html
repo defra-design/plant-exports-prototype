@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  Are you sure you want to cancel this application? - {{serviceName}} - GOV.UK
+  Are you sure you want to delete this application? - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -17,22 +17,24 @@
 <a href="dashboard" class="govuk-back-link">Return to your applications</a>
 {% endblock%}
 
-{% set items = ['The buyer has cancelled the order','It is a duplicate application','Application made in error'] %}
-{% set reason = items[query.reason] %}
-
 {% block content %}
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">Are you sure you want to cancel this application?</h1>
-
-    {{ govukWarningText({
-      text: "You may be charged for any work we have done on your application",
-      iconFallbackText: "Warning"
-    }) }}
-
+    <h1 class="govuk-heading-xl">Are you sure you want to delete this application?</h1>
     <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
       
+      {% if (query.id | appInfo('cert_info')) == 'Soil sampling' %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Type of application</dt>
+        <dd class="govuk-summary-list__value">Soil sampling for {{data.commodity or "crops"}}</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Your reference</dt>
+        <dd class="govuk-summary-list__value">{{(query.id | appInfo('reference')) or "PO 86608 Canaries"}}</dd>
+      </div>
+      {% else %}
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">APHA reference</dt>
         <dd class="govuk-summary-list__value">{{(query.id | appInfo('applicationID')) or "PO 86608 Canaries"}}</dd>
@@ -52,6 +54,7 @@
         <dt class="govuk-summary-list__key">Reason</dt>
         <dd class="govuk-summary-list__value">{{reason or "The buyer has cancelled the order"}}</dd>
       </div>
+      {% endif %}
 
     </dl>
 
@@ -63,12 +66,12 @@
           <div class="govuk-radios" data-module="govuk-radios">
             
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="application_type_cancel" name="application_type" type="radio" value="yes~application-cancelled?id={{query.id or 1}}&is_group={{query.is_group}}">
-              <label class="govuk-label govuk-radios__label" for="application_type_cancel">Yes, cancel this application</label>
+              <input class="govuk-radios__input" id="application_type_delete" name="application_type" type="radio" value="yes~application-deleted?id={{query.id or 1}}&is_group={{query.is_group}}">
+              <label class="govuk-label govuk-radios__label" for="application_type_delete">Yes, delete this application</label>
             </div>
 
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="application_type_return" name="application_type" type="radio" value="no~application?id={{query.id or 1}}&is_group={{query.is_group}}">
+              <input class="govuk-radios__input" id="application_type_return" name="application_type" type="radio" value="no~{% if (query.id | appInfo('cert_info')) == 'Soil sampling' %}application-ss{% else %}application{% endif %}?id={{query.id or 1}}&is_group={{query.is_group}}">
               <label class="govuk-label govuk-radios__label" for="application_type_return">Cancel and go back</label>
             </div>
 
@@ -77,7 +80,7 @@
         </fieldset>
       </div>
 
-      <button class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Confirm</button>
+      <button class="govuk-button" type="submit" data-module="govuk-button">Confirm</button>
     </form>
 
   </div>

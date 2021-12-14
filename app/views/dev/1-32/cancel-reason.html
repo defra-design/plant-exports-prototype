@@ -1,63 +1,59 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-GOV.UK Prototype Kit
+  Why do you want to cancel this application? - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
-<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item" id="Nav-DisplayName">Prototype user</li>
+    <li class="login-nav__list-item"> | <a href="account?returnURL=dashboard" class="govuk-link login-nav__link govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a>|</li>
+    <li class="login-nav__list-item"><a href="#" class="govuk-link login-nav__link govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
+  </ul>
+</div>
+
+<a href="dashboard" class="govuk-back-link">Return to your applications</a>
 {% endblock%}
 
 {% block content %}
-
 <div class="govuk-grid-row">
+
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">
-      Why do you want to cancel this application?
-    </h1>
-
-<!-- 
-    <p class="govuk-body">
-      You must complete this page to cancel the application
-    </p>
- -->
-
+    <h1 class="govuk-heading-xl">Why do you want to cancel this application?</h1>
 
     <form method="post" novalidate>
+      
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">
+          
           <div class="govuk-radios" data-module="govuk-radios">
+            
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="application_type_cancel" name="application_type" type="radio" value="1~cancel?id=2&reason=0">
-              <label class="govuk-label govuk-radios__label" for="application_type_cancel">
-                The buyer has cancelled the order
-              </label>
+              <input class="govuk-radios__input" id="application_type_cancel" name="application_type" type="radio" value="1~cancel?id={{query.id or 1}}&is_group={{query.is_group}}&reason=0">
+              <label class="govuk-label govuk-radios__label" for="application_type_cancel">The buyer has cancelled the order</label>
             </div>
+
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="application_type_return" name="application_type" type="radio" value="2~cancel?id=2&reason=1">
-              <label class="govuk-label govuk-radios__label" for="application_type_return">
-                It is a duplicate application
-              </label>
+              <input class="govuk-radios__input" id="application_type_duplicate" name="application_type" type="radio" value="2~cancel?id={{query.id or 1}}&is_group={{query.is_group}}&reason=1">
+              <label class="govuk-label govuk-radios__label" for="application_type_duplicate">It is a duplicate application</label>
             </div>
+
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="application_type_return" name="application_type" type="radio" value="3~cancel?id=2&reason=2">
-              <label class="govuk-label govuk-radios__label" for="application_type_return">
-                Application made in error
-              </label>
+              <input class="govuk-radios__input" id="application_type_error" name="application_type" type="radio" value="3~cancel?id={{query.id or 1}}&is_group={{query.is_group}}&reason=2">
+              <label class="govuk-label govuk-radios__label" for="application_type_error">Application made in error</label>
             </div>
+
           </div>
+
         </fieldset>
       </div>
-      <button class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">
-        Continue
-      </button>
+
+      <button class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">Confirm</button>
     </form>
+
   </div>
+
 </div>
-
-
-
-
-
-
 {% endblock %}
