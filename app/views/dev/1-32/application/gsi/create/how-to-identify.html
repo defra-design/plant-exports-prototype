@@ -13,102 +13,14 @@ Add your products - Growing season inspection - {{serviceName}} - GOV.UK
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-
-    <!-- Error message -->
-    {% if data.commodity == "false" %}
-    <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
-      <h2 class="govuk-error-summary__title" id="error-summary-title">
-        There is a problem
-      </h2>
-      <div class="govuk-error-summary__body">
-        <ul class="govuk-list govuk-error-summary__list">
-          <li>
-            <a href="#addcropssilly">Add crops to your fields</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-    {% endif %}
-
-    <h1 class="govuk-heading-xl">Describe a crop for inspection in {{ data['nurseryplotno'] or "Top Field" }}</h1>
+    <h1 class="govuk-heading-xl">Describe a crop for inspection in {{data.nurseryplotno or "Top field"}}</h1>
     <p class="govuk-body">
       Describe a single crop for inspection at this location. Later, you’ll be able to add further crops at this location if you want to.
     </p>
-    
-
-
+   
     <form method="POST" action="gsi-commodity-list">
-      {% if data.commodity == "potatoes"%}
-      
-      <!-- Highlighted error state -->
-      {% if data.potato_1 == "false" %}
-      <div class="govuk-form-group govuk-form-group--error">
-        <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--s govuk-!-font-weight-regular">
-            <h1 id="addcropssilly">
-              Type of potato
-            </h1>
-          </legend>
-          <span id="commodity-type-error" class="govuk-error-message">
-            <span class="govuk-visually-hidden">Error:</span> Please enter the type of crop
-          </span>
-            <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
-              <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="potato_1" name="potato" type="radio" value="ware" data-aria-controls="conditional-contact">
-                <label class="govuk-label govuk-radios__label" for="potato_1">
-                  Ware
-                </label>
-              </div>
-              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-contact">
-                <div class="govuk-form-group">
-                  <label class="govuk-label" for="app_number">
-                    Soil sampling application number
-                  </label>
-                  <input class="govuk-input govuk-!-width-one-half" id="app_number" name="app_number" type="text" spellcheck="false">
-                </div>
-<!--                 <div class="govuk-form-group">
-                  <label class="govuk-label" for="stock_number">
-                    Stock number
-                  </label>
-                  <span id="quantity-hint" class="govuk-hint">
-                  Enter the stock number for stock that was soil sampled<br/> For ware potatoes grown in a seed certification scheme, enter "Seed"
-                </span>
 
-                  <input class="govuk-input govuk-!-width-one-half" id="stock_number" name="stock_number" type="text" spellcheck="false">
-                </div>
-                <div class="govuk-form-group">
-                  <label class="govuk-label" for="lot_reference">
-                    Lot reference
-                  </label>
-                  <span id="quantity-hint" class="govuk-hint">
-                  This is the number that will go on the bag labels.<br/> For ware potatoes grown in a seed certification scheme, enter the certification number
-                </span>
-                  <input class="govuk-input govuk-!-width-one-half" id="lot_reference" name="lot_reference" type="text" spellcheck="false">
-                </div> -->
-              </div>
-              <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="potato_2" name="potato" type="radio" value="seed" data-aria-controls="conditional-contact-2">
-                <label class="govuk-label govuk-radios__label" for="potato_2">
-                  Seed
-                </label>
-              </div>
-              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-contact-2">
-                <div class="govuk-form-group">
-                  <label class="govuk-label" for="stock_number">
-                    Certification number
-                  </label>
-                  <span id="quantity-hint" class="govuk-hint">
-                </span>
-                  <input class="govuk-input govuk-!-width-one-half" id="stock_number" name="stock_number" type="text">
-                </div>
-              </div>
-            </div>
-          </fieldset>
-        </div>
-      {% else %}
-      
-
-
+      {% if data.commodity == "potatoes"%} 
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">
           <legend class="govuk-fieldset__legend">
@@ -138,10 +50,6 @@ Add your products - Growing season inspection - {{serviceName}} - GOV.UK
         <input class="govuk-input govuk-input--width-20" id="app_number" name="app_number" type="text">
       </div>
 
-
-
-
-      {% endif %}
         <!-- These are the countries which require differnt information to be provided -->
         {% if data.countrySelect == "Norway,NO" or data.countrySelect == "Iceland,IS" or data.countrySelect == "Canary Islands,CI" or data.countrySelect == "Nigeria,NG" or data.countrySelect == "Ghana,GH" or data.countrySelect == "Falkland Islands,FK" %}
         {% endif %}
@@ -167,14 +75,14 @@ Add your products - Growing season inspection - {{serviceName}} - GOV.UK
               <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional">
                 {% if data.show_manual_input != "yes"%}
                   {% if data.commodity == "potatoes" %}
-                    {% block potatoVariety %}{% include "../../modules/_potatoes-variety-select.html" %}{% endblock %}
+                    {% block potatoVariety %}{% include "../../modules/_potatoes-variety-select-3.html" %}{% endblock %}
                   {% endif %}
                 {% else %}
                   <div class="govuk-form-group">
                     <label class="govuk-label" for="commodity_host_species">
                       Search for a variety
                     </label>
-                    <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety" type="text">
+                    <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety" type="text" value="{% if query.has_commodity %}{{query.genus}}{%endif%}">
                   </div>
                 {% endif %}
               </div>
@@ -186,7 +94,7 @@ Add your products - Growing season inspection - {{serviceName}} - GOV.UK
                   Enter the variety
                 </label>
                 <div id="how-contacted-conditional-hint" class="govuk-hint govuk-radios__hint">
-                  Use this option only if you can’t find the variety through search.
+                  If you can't find the variety by searching in the field above, select other and enter the variety.
                 </div>
               </div>
               <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional-3">
@@ -208,6 +116,7 @@ Add your products - Growing season inspection - {{serviceName}} - GOV.UK
         </div>
 
       {% endif %}
+
 
       {% if data.commodity != "potatoes" %}
       <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
@@ -373,14 +282,14 @@ Add your products - Growing season inspection - {{serviceName}} - GOV.UK
           classes: "govuk-label--s",
           isPageHeading: false
         },
-        id: "approxhectofplot",
-        name: "approxhectofplot",
+        id: "approxhectofplot3",
+        name: "approxhectofplot3",
         classes: "govuk-input--width-4"
       }) }}
 <!-- 
       {{ govukTextarea({
-        name: "destinationcountries",
-        id: "destinationcountries",
+        name: "destinationcountries3",
+        id: "destinationcountries3",
         label: {
           text: "Destination countries",
           classes: "govuk-label--s",
@@ -414,20 +323,5 @@ Add your products - Growing season inspection - {{serviceName}} - GOV.UK
     $("#commodity-lookup--manual").show()
   })
 </script>
-
-
-<div class="govuk-section-break govuk-section-break--m govuk-section-break--visible"></div>
-<div>
-  <p class="govuk-body">Page variations</p>
-  <ul class="govuk-list govuk-list--no-bullet">
-  <li><a href="how-to-identify-error-message.html" class="govuk-link govuk-link--no-visited-state">
-    One mandatory field is not populated
-  </a></li>
-  <li><a href="how-to-identify-error-message-no-fields.html" class="govuk-link govuk-link--no-visited-state">
-    Multiple mandatory entry fields have been populated
-  </a></li>
-</ul>
-  </div>
-
 
 {% endblock %}
