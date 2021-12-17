@@ -1,0 +1,126 @@
+{% extends "layout.html" %}
+
+{% set items = [
+{
+date: '23 Sep 2021',
+application_number: '120664110369',
+amount: '100kg',
+remaining: '250kg'
+},
+{
+date: '21 Sep 2021',
+application_number: '120664110283',
+amount: '50kg',
+remaining: '300kg'
+},
+{
+date: '19 Sep 2021',
+application_number: '120664110233',
+amount: '100kg',
+remaining: '400kg'
+},
+{
+date: '16 Sep 2021',
+application_number: '120664110167',
+amount: '100kg',
+remaining: '500kg'
+},
+{
+date: '14 Sep 2021',
+application_number: '120664110123',
+amount: '50kg',
+remaining: '550kg'
+},
+{
+date: '12 Sep 2021',
+application_number: '120664109150',
+amount: '100kg',
+remaining: '650kg'
+}
+
+] %}
+{% block pageTitle %}
+Single stock draw down- {{serviceName}} - GOV.UK
+{% endblock %}
+{% block beforeContent %}
+{{super()}}
+<a href="{{page.content.prev or 'javascript:history.back()'}}" class="govuk-back-link">Back</a>
+{% endblock %}
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+
+    <form method="post" action="{{query.return_url or 'ssdd-attachments'}}" novalidate action="reference">
+    <div class="govuk-form-group">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+        <h1 class="govuk-fieldset__heading">
+          How much stock are you exporting? 
+        </h1>
+      </legend>
+
+
+  <!--     <h2 class="govuk-heading-m govuk-!-margin-top-6">Batch: Store 15, 883t White Cabbage</h2> -->
+      <div id="quantity-hint" class="govuk-body">
+        <strong>833 tonnes</strong> of <strong>Cabbage</strong> stock was inspected on 03 October 2021. You have until 02 November 2021 to draw down this stock.
+<!--         <strong>[quantity amount][relevant unit]</strong> of <strong>[commodity]</strong> stock was inspected on 03 October 2021. You have until 02 November 2021 to draw down this stock. -->
+      </div>
+ 
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="weight">
+          Quantity
+        </label>
+        <span id="quantity-hint" class="govuk-hint">
+         <!--  For example, 150 tonnes -->
+        </span>
+        <div class="govuk-input__wrapper"><input class="govuk-input govuk-input--width-5" id="weight" name="weight" type="text" spellcheck="false">
+          <div class="govuk-input__suffix" aria-hidden="true">tonnes</div>
+        </div>
+      </div>
+
+    </div>
+
+    {{ govukButton({
+    text: "Save and continue"
+    }) }}
+
+    </form>
+<!--
+    <h2 class="govuk-heading-m govuk-!-margin-top-4">
+      Stock history
+    </h2>
+
+    <table class="govuk-table responsive-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">Date</th>
+          <th class="govuk-table__header" scope="col">Application reference</th>
+          <th class="govuk-table__header" scope="col">Amount</th>
+          <th class="govuk-table__header" scope="col">Remaining</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for item in items %}
+        <tr class="govuk-table__row result">
+          <td class="govuk-table__cell" scope="row">{{ item.date }}
+          </td>
+          <td class="govuk-table__cell" scope="row">
+            <a href="../../application-amend?id={{loop.index}}" class="govuk-link govuk-link--no-visited-state">
+              {{ item.application_number }}
+            </a>
+          </td>
+          <td class="govuk-table__cell" scope="row">{{ item.amount }}
+          </td>
+          <td class="govuk-table__cell" scope="row">{{ item.remaining }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+
+    </table>
+-->
+
+
+  </div>
+</div>
+{% endblock %}

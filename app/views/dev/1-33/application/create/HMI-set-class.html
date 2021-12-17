@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+What's the packing information? - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent%}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <form action="{{query.return_url or '../create/task-list'}}" method="POST">
+      <div class="govuk-form-group">
+
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="applicant-conditional-4">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-6">
+            <h1 class="govuk-fieldset__heading">
+              Set the quality class for this group
+            </h1>
+          </legend>
+
+          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="applicant-conditional-4" name="packer" type="radio" value="extra~HMI-set-group" >
+              <label class="govuk-label govuk-radios__label" for="applicant-conditional-4">
+                Extra
+              </label>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="applicant-conditional-4" name="packer" type="radio" value="1~HMI-set-group" >
+              <label class="govuk-label govuk-radios__label" for="applicant-conditional-4">
+                Class I
+              </label>
+            </div>
+ 
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="applicant-conditional" name="packer" type="radio" value="2~HMI-set-group">
+              <label class="govuk-label govuk-radios__label" for="applicant-conditional">
+                Class II
+              </label>
+            </div>
+
+          </div>
+        </fieldset>
+      </div>
+      <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+    </form>
+    {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+
+  </div>
+</div>
+{% endblock %}

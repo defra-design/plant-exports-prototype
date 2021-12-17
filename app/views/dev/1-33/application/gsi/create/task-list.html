@@ -1,0 +1,116 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Arrange a growing season inspection - Growing season inspection - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent%}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    {% if data.reference_num %}<span class="govuk-caption-xl">{{data.reference_num}}</span>{% endif%}
+    <h1 class="govuk-heading-xl">
+      Arrange a growing season inspection
+    </h1>
+    <!--<h2 class="govuk-heading-s govuk-!-margin-bottom-2">Application incomplete</h2>
+    <p class="govuk-body govuk-!-margin-bottom-7">You have completed <span class="task-list-completed">0</span> of <span class="task-list-max">6</span> required sections</p>-->
+    <p class="govuk-body govuk-!-margin-bottom-7">Complete these details to arrange a growing season inspection.</p>
+    <ol class="app-task-list">
+      <li>
+        <h2 class="app-task-list__section">
+          <span class="app-task-list__section-number">1. </span> Application details
+        </h2>
+        <ul class="app-task-list__items">
+          <li class="app-task-list__item">
+            <span class="app-task-list__task-name">
+              <a href="../create/reference?return_url=task-list" aria-describedby="eligibility-status">
+                Create a reference
+              </a>
+            </span>
+            <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Completed</strong>
+          </li>
+          <li class="app-task-list__item">
+            <span class="app-task-list__task-name">
+              <a href="inspection-addresses" aria-describedby="eligibility-status">
+                What are the inspection details?
+              </a>
+            </span>
+            {% if data.confirm_address == "yes" %}
+            <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Completed</strong>
+            {% else %}
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="list-convictions-status">Not started</strong>
+            {% endif %}
+          </li>
+          <li class="app-task-list__item">
+            <span class="app-task-list__task-name">
+              <a href="field" aria-describedby="contact-details-status">
+                Where is the crop?
+              </a>
+            </span>
+            {% if data.navigation == "yes" %}
+            <strong class="govuk-tag app-task-list__tag" id="status-c">Completed</strong>
+            {% else %}
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="status-ns">Not started</strong>
+            {% endif %}
+          </li>
+        </ul>
+      </li>
+      <li>
+        <h2 class="app-task-list__section">
+          <span class="app-task-list__section-number">2. </span> Check and submit your application
+        </h2>
+        <ul class="app-task-list__items">
+          <li class="app-task-list__item">
+            <span class="task-list-submit-disabled">
+              <span class="app-task-list__task-name">
+                Check your answers and submit your application
+              </span>
+              <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="submit-pay-status">Cannot start yet</strong>
+            </span>
+            <span class="task-list-submit-enabled" style="display:none">
+              <span class="app-task-list__task-name">
+                <a href="check-your-answers-3" aria-describedby="list-convictions-status">
+                  Check your answers and submit your application
+                </a>
+              </span>
+              <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="submit-pay-status">Not started</strong>
+            </span>
+          </li>
+        </ul>
+      </li>
+    </ol>
+    {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+{{super()}}
+<script type="text/javascript">
+/*   window.addEventListener('load', function() {
+    var tasks = $('.app-task-list__tag')
+    var max = tasks.length - 2
+    $('.task-list-max').text(max)
+    var count = 0
+    tasks.each(function(index, value) {
+      console.log($(value).text())
+      if ($(value).text() == "Completed") {
+        count += 1
+      }
+    })
+    if (count >= max-1) {
+      $('.task-list-submit-enabled').show()
+      $('.task-list-submit-disabled').hide()
+    }
+    $('.task-list-completed').text(count)
+  })
+   */
+  $('.task-list-submit-enabled').show()
+  $('.task-list-submit-disabled').hide()
+</script>
+{% endblock %}
