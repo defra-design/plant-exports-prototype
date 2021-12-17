@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+What type of business activity happens here? - Manage account - {{serviceName}} - GOV.UK
+{% endblock %}
+{% block beforeContent%}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item" id="Nav-DisplayName">Prototype user</li>
+    <li class="login-nav__list-item"> | <a href="../account" class="govuk-link login-nav__link govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a>|</li>
+    <li class="login-nav__list-item"><a href="#" class="govuk-link login-nav__link govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
+  </ul>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <!--<h1 class="govuk-heading-xl">
+      What type of business activity happens here?
+    </h1>-->
+    <form action="add-contact-details" method="POST">
+      {{ govukCheckboxes({
+        idPrefix: "business_activity",
+        name: "business_activity",
+        fieldset: {
+          legend: {
+            text: "What type of business activity happens here?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--xl"
+          }
+        },
+        hint: {
+          text: "Select all that apply."
+        },
+        items: [
+          {
+            value: "disposing",
+            text: "Disposing"
+          },
+          {
+            value: "distributing",
+            text: "Distributing"
+          },
+          {
+            value: "exporting",
+            text: "Exporting"
+          }
+        ]
+      }) }}
+      <input class="govuk-button" type="submit" name="saveAndContinue" value="Continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+    </form>
+  </div>
+</div>
+
+{% endblock %}
