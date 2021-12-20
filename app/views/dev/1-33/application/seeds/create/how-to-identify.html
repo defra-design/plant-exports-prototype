@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "layout-option.html" %}
 {% block pageTitle %}
 Seeds to be sampled - Seed sampling - {{serviceName}} - GOV.UK
 {% endblock %}
@@ -154,15 +154,7 @@ Seeds to be sampled - Seed sampling - {{serviceName}} - GOV.UK
         </span>
         <input class="govuk-input govuk-input--width-20" id="commodity_lot" name="commodity_lot" type="text">
       </div>
-<!-- 
-      <div class="govuk-form-group">
-        <fieldset class="govuk-fieldset" aria-describedby="contact-hint">
-        <label class="govuk-label" for="quantity">
-          Lot size (in Kilograms)
-        </label>
-        <input class="govuk-input govuk-input--width-5" id="quantity" name="quantity" type="text" aria-describedby="quantity">
-      </div>
- -->
+
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset" aria-describedby="quantity-hint">
         <legend class="govuk-fieldset__legend ">
@@ -194,13 +186,6 @@ Seeds to be sampled - Seed sampling - {{serviceName}} - GOV.UK
         </fieldset>
       </div>
 
-      {% set country_module_label = "Country where grown"%}
-      {% set module_name = "country_grown"%}
-      {% block country %}{% include "../../modules/_country-select.html" %}{% endblock %}
-
-      {% set country_module_label2 = "Destination country"%}
-      {% set module_name2 = "destination_country"%}
-      {% block country2 %}{% include "../../modules/_country-select0.html" %}{% endblock %}
 
       <div class="govuk-form-group">
       <fieldset class="govuk-fieldset" aria-describedby="contact-hint">
@@ -234,11 +219,20 @@ Seeds to be sampled - Seed sampling - {{serviceName}} - GOV.UK
       </fieldset>
       {% endif %}
 
-      <div class="govuk-checkboxes__item govuk-!-margin-top-6">
+      <div class="govuk-checkboxes__item govuk-!-margin-top-6 govuk-!-margin-bottom-6">
         <input class="govuk-checkboxes__input" type="checkbox" autofocus="autofocus" name="confirm" id="confirm" value="Yes" {% if data.confirm == 'Yes' %}checked{% else %}{% endif %}>
         <label class="govuk-checkboxes__label" for="confirm">This sample requires non-destructive testing</label>
       </div>
 
+
+      {% set country_module_label = "Country where grown"%}
+      {% set module_name = "country_grown"%}
+      {% block country %}{% include "../../modules/_country-select.html" %}{% endblock %}
+
+      {% set country_module_label2 = "Destination country"%}
+      {% set module_name2 = "destination_country"%}
+      {% include "../modules/_multi-select.html" %}
+ 
       </fieldset>
 
       <input class="govuk-button govuk-!-margin-top-6" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
