@@ -312,7 +312,7 @@ module.exports = function(router) {
 
   // this adds query to all pages and will be used if no other get routing exists to override this.
   router.get('/' + base_url + '*', function(req, res) {
-    console.log("(dev_v30.js)");
+    console.log("(dev_v33.js)");
     /* for (item in req.query){
       console.log(item + ": " + req.query[item]);
     } */
@@ -338,8 +338,32 @@ module.exports = function(router) {
       req.session.data = {}
     }
 
+    var page = base_url + req.params[0];
+
+    // Redirect users to the USDA page when they are exporting bulbs to the 
+    if (baseDir === "/setup/declaration") {
+
+      var commodity = req.session.data.commodity;
+      var countrySelect = req.session.data.countrySelect[0];
+      
+      if (commodity == "bulbs") {
+
+        if (countrySelect == "United States") {
+          page = base_url + "application/setup/usda";
+        }
+        else {
+          page = base_url + "application/setup/declaration";
+        }
+
+      }
+      else {
+        // Don't do the USDA check or change the page parameter
+      }
+
+    }
+
     // Attempt to render a page in the current folder
-    res.render(base_url + req.params[0], {
+    res.render(page, {
       "query": req.query,
     }, function(err, html) {
       
