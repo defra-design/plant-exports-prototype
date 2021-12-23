@@ -2,55 +2,55 @@
 
 {% set items = [
   {
-  date: '23 Sep 2021',
-  application_number: '120664110369',
-  description: 'White cabbage',
-  details: 'Durham Early',
-  amount: '100kg',
-  total: '500kg'
+  date: '',
+  application_number: '1721148005555',
+  description: 'Corylus americana',
+  details: '',
+  amount: '10kg',
+  total: '32kg'
   },
   {
   date: '21 Sep 2021',
-  application_number: '120664110283',
-  description: 'White cabbage',
-  details: 'Durham Early',
+  application_number: '1721148005555',
+  description: 'Corylus americana',
+  details: '',
   amount: '50kg',
-  total: '400kg'
+  total: '270kg'
   },
   {
   date: '19 Sep 2021',
-  application_number: '120664110233',
-  description: 'White cabbage',
-  details: 'Durham Early',
-  amount: '100kg',
-  total: '350kg'
+  application_number: '1721148005555',
+  description: 'Corylus americana',
+  details: '',
+  amount: '60kg',
+  total: '210kg'
   },
   {
   date: '16 Sep 2021',
-  application_number: '120664110167',
-  description: 'White cabbage',
-  details: 'Durham Early',
-  amount: '100kg',
-  total: '250kg'
+  application_number: '1721148005555',
+  description: 'Corylus americana',
+  details: '',
+  amount: '50kg',
+  total: '160kg'
   },
   {
   date: '14 Sep 2021',
-  application_number: '120664110123',
-  description: 'White cabbage',
-  details: 'Avon Crest',
-  amount: '50kg',
+  application_number: '1721148005555',
+  description: 'Corylus colurna',
+  details: '',
+  amount: '10kg',
   total: '150kg'
   },
   {
   date: '12 Sep 2021',
-  application_number: '120664109150',
-  description: 'White cabbage',
-  details: 'Durham Early',
-  amount: '100kg',
-  total: '100kg'
+  application_number: '1721148005555',
+  description: 'Corylus americana',
+  details: '',
+  amount: '50kg',
+  total: '150kg'
   }
-  
-  ] %}
+  ] 
+  %}
 
 {% block pageTitle %}
 Manage application - {{serviceName}} - GOV.UK
@@ -181,9 +181,17 @@ Manage application - {{serviceName}} - GOV.UK
       </div>
       {% endif %}
     </dl>
+    <div class="govuk-inset-text">
+      <p class="govuk-body">
+        Draw down stock is available
+      </p>
+    </div>
+    
   </div>
 
-  <div class="govuk-grid-column-one-half govuk-!-margin-bottom-2">
+
+
+  <div class="govuk-grid-column-one-half govuk-!-margin-bottom-4">
     <h2 class="govuk-heading-m">Your certificate</h2>
 
     <ul class="govuk-list  noprint">
@@ -199,17 +207,24 @@ Manage application - {{serviceName}} - GOV.UK
 <div class="govuk-grid-row govuk-!-margin-bottom-6">
   <div class="govuk-grid-column-two-thirds">
 
-    <h2 class="govuk-heading-m govuk-!-margin-top-4">
-      Other actions
-    </h2>
+<!--     <h2 class="govuk-heading-m govuk-!-margin-top-4">
+      Actions
+    </h2> -->
     <ul class="govuk-list govuk-!-margin-bottom-9 noprint">
-      <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-viewonly">View application details</a>
-      </li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-viewonly">View
+          application details</a></li>
       {% if (query.id | appInfo('status')) == 'draft' %}
       <li><a class="govuk-link govuk-link--no-visited-state"
           href="certificate/check-your-progress?certificate=ehc2849">Edit and submit this application</a></li>
       {% endif %}
-
+      <!-- 
+      {% if (query.id | appInfo('status')) == 'completed'  %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/reuse-ref-ssdd">Use this application for stock draw down</a></li>
+      {% endif%}
+ -->
+      <li><a class="govuk-link govuk-link--no-visited-state"
+          href="copy-as-coc?id={{query.id or 0}}&is_group={{ query.is_group }}">Use this application to apply for a
+          certificate of conformity</a></li>
       <li><a class="govuk-link govuk-link--no-visited-state"
           href="clone?id={{query.id or 0}}&is_group={{ query.is_group }}">Copy this application to create a new
           phytosanitary certificate</a></li>
@@ -227,6 +242,80 @@ Manage application - {{serviceName}} - GOV.UK
   </div>
 </div>
 
+<div class="govuk-grid-row govuk-!-margin-bottom-6">
+<div class="govuk-grid-column-full">
+  <h2 class="govuk-heading-m">Commodities in this application</h2>
 
+  <table class="govuk-table govuk-!-margin-bottom-9">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th class="govuk-table__header govuk-width-one-fifth" scope="col">
+          Commodity
+        </th>
+        <th class="govuk-table__header" scope="col">
+          Variety
+        </th>
+        <th class="govuk-table__header" scope="col">
+          Quantity
+        </th>
+        <th class="govuk-table__header" scope="col">
+          Action
+        </th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell">
+          Corylus americana
+        </td>
+        <td class="govuk-table__cell">
+          
+        </td>
+        <td class="govuk-table__cell">
+          17kg
+        </td>
+        <td class="govuk-table__cell">
+          <a class="govuk-link govuk-link--no-visited-state" href="application/create/stock-summary-bulbs?stock=0">Draw down or view stock</a>
+<!--           <br/>
+            <a class="govuk-link govuk-link--no-visited-state" href="application/create/stock-summary?stock=2">Draw down</a> -->
+        </td>
+      </tr>
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell">
+          Corylus colurna
+        </td>
+        <td class="govuk-table__cell">
+          
+        </td>
+        <td class="govuk-table__cell">
+          35kg
+        </td>
+        <td class="govuk-table__cell">
+          <a class="govuk-link govuk-link--no-visited-state" href="application/create/stock-summary-bulbs?stock=1">Draw down or view stock</a>
+<!--           <br/>
+            <a class="govuk-link govuk-link--no-visited-state" href="application/create/stock-summary?stock=2">Draw down</a> -->
+        </td>
+      </tr>
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell">
+          Commelina tuberosa
+        </td>
+        <td class="govuk-table__cell">
+          
+        </td>
+        <td class="govuk-table__cell">
+          30kg
+        </td>
+        <td class="govuk-table__cell">
+          <a class="govuk-link govuk-link--no-visited-state" href="application/create/stock-summary-bulbs?stock=2&expired=true">View stock</a>
+<!--         <br/>
+          <a class="govuk-link govuk-link--no-visited-state" href="application/create/stock-summary?stock=2">Draw down</a> -->
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+</div>
 
 {% endblock %}
