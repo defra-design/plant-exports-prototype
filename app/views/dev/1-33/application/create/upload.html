@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-Add commodities by uploading a file - {{serviceName}} - GOV.UK
+  Upload details for multiple commodities at the same time - Phytosanitary certificate - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -14,8 +14,11 @@ Add commodities by uploading a file - {{serviceName}} - GOV.UK
 
 {% block content %}
 <div class="govuk-width-container">
+
   <div class="govuk-grid-row">
+
     <div class="govuk-grid-column-two-thirds">
+      
       <form action="/form-handler" method="post" novalidate>
 
         {% set commodity = data.commodity or "products" %}
@@ -42,8 +45,7 @@ Add commodities by uploading a file - {{serviceName}} - GOV.UK
           {% set template = "template-hmi.csv" %}
         {% endif %}
 
-
-        <div class="govuk-form-group  govuk-!-margin-bottom-9">
+        <div class="govuk-form-group govuk-!-margin-bottom-7">
           <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
               <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">
@@ -51,22 +53,18 @@ Add commodities by uploading a file - {{serviceName}} - GOV.UK
               </h1>
             </legend>
           </fieldset>
-
           <p class="govuk-body">
             Download the <a href="/public/images/{{template}}" class="govuk-link govuk-link--no-visited-state"
               title="CSV template">csv template</a>.
           </p>
-
           <p class="govuk-body govuk-!-margin-bottom-6">
             Open the file in Excel or whatever you use to edit spreadsheets. Fill in the csv template. There are
             instructions in the template telling you what you need to do.
           </p>
-
           <p class="govuk-body govuk-!-margin-bottom-6">
             When you have finished editing the file, save the file and select comma separated values (csv) as the file
             format.
           </p>
-
           {{ govukFileUpload({
             id: "file-upload-1",
             name: "file-upload-1",
@@ -74,37 +72,40 @@ Add commodities by uploading a file - {{serviceName}} - GOV.UK
             text: "Upload your completed csv file"
           }
           }) }}
-
         </div>
 
-        {{ govukButton({
-          text: "Upload",
-          href: "upload-in-progress"
-        }) }}
+        <div class="govuk-form-group govuk-!-margin-bottom-6">
+          {{ govukButton({
+            text: "Upload",
+            href: "upload-in-progress"
+          }) }}
+        </div>
 
-
-        <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-        <p class="govuk-body govuk-!-margin-top-9">
-          <a href="upload-validation-errors" class="govuk-link govuk-link-no-visited-state">Existing Upload screen with
-            validation errors</a>
-        </p>
-        <p class="govuk-body">
-          <a href="upload-completed-with-errors-seeds" class="govuk-link govuk-link-no-visited-state">View Upload screen with errors and table</a>
-        </p>
-        <p class="govuk-body">
-          <a href="upload-completed-with-errors-seeds-generic" class="govuk-link govuk-link-no-visited-state">View Upload screen with generic errors and table</a>
-        </p>
-        <p class="govuk-body">
-          <a href="upload-validation-error-singular" class="govuk-link govuk-link-no-visited-state">View Upload screen
-            with single validation error</a>
-        </p>
-
-        <p class="govuk-body">
-          <a href="upload-error" class="govuk-link govuk-link-no-visited-state">View Upload screen with file type
-            error</a>
-        </p>
+        {% block continueLater %}
+        {% include "../modules/_save-continue-later.html" %}
+        {% endblock %}
 
       </form>
+
+      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+      <p class="govuk-body govuk-!-margin-top-7">
+        <a href="upload-validation-errors" class="govuk-link govuk-link-no-visited-state">Existing Upload screen with
+          validation errors</a>
+      </p>
+      <p class="govuk-body">
+        <a href="upload-completed-with-errors-seeds" class="govuk-link govuk-link-no-visited-state">View Upload screen with errors and table</a>
+      </p>
+      <p class="govuk-body">
+        <a href="upload-completed-with-errors-seeds-generic" class="govuk-link govuk-link-no-visited-state">View Upload screen with generic errors and table</a>
+      </p>
+      <p class="govuk-body">
+        <a href="upload-validation-error-singular" class="govuk-link govuk-link-no-visited-state">View Upload screen
+          with single validation error</a>
+      </p>
+      <p class="govuk-body">
+        <a href="upload-error" class="govuk-link govuk-link-no-visited-state">View Upload screen with file type
+          error</a>
+      </p>
       <h3 class="govuk-heading-s">Templates</h3>
       <ul class="govuk-list govuk-list">
         <li>
@@ -143,9 +144,9 @@ Add commodities by uploading a file - {{serviceName}} - GOV.UK
             class="govuk-link govuk-link-no-visited-state">Generic APHA template</a>
         </li>
       </ul>
-
-
     </div>
+
   </div>
+
 </div>
 {% endblock %}

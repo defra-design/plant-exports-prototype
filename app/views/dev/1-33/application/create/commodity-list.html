@@ -1,24 +1,24 @@
 {% extends "layout.html" %}
+
 {% block pageTitle %}
-Your commodities - {{serviceName}} - GOV.UK
+  Your commodities - Phytosanitary certificate - {{serviceName}} - GOV.UK
 {% endblock %}
+
 {% block beforeContent%}
 {{super()}}
 {% include "../modules/_account-banner.html" %}
 <a href="{{page.content.prev or 'javascript:history.back()'}}" class="govuk-back-link">Back</a>
 {% endblock %}
+
 {% block content %}
 <div class="govuk-grid-row">
+  
   <div class="govuk-grid-column-three-quarters">
-    <h1 class="govuk-heading-xl">
-      Your commodities 
-    </h1>
+    <h1 class="govuk-heading-xl">Your commodities </h1>
 
     {% if data.upload == 1 %}
     <div class="app-alert app-alert--info">
-      <p class="govuk-body">
-        File has been uploaded successfully
-      </p>
+      <p class="govuk-body">File has been uploaded successfully</p>
     </div>
     {% endif %}
 
@@ -87,7 +87,6 @@ Your commodities - {{serviceName}} - GOV.UK
         {% endif %}
       </thead>
       <tbody class="govuk-table__body">
-
         {% if data.commodity == "seeds" %}
         {% set showAll = true %}
           {% include "../modules/_summary-seed.html" %}
@@ -95,9 +94,9 @@ Your commodities - {{serviceName}} - GOV.UK
           {% include "../modules/_summary-bulk.html" %}
         {% else %}
           {% for commodity in data.commodities %}
-            {% set commodity_page = "bulbs" %}
             {% if data.commodity == "bulbs" %}
               <!-- BULBS -->
+              {% set commodity_page = "bulbs" %}
               {% block summaryBulb %}{% include "../modules/_summary-bulbs.html" %}{% endblock %}
             {% elseif data.commodity == "used farm machinery" %}
               <!-- USED FARM MACHINERY -->
@@ -117,25 +116,26 @@ Your commodities - {{serviceName}} - GOV.UK
       </tbody>
     </table>
 
-    <form  method="POST">
+    <form method="post">
       <fieldset class="govuk-fieldset" aria-describedby="applicant-conditional-hint">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-!-margin-bottom-6">
-          <h3 class="govuk-fieldset__heading">
+          <h2 class="govuk-fieldset__heading">
             Do you want to add more commodities?
-<!--             Do you want to add more {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %} to your consignment? -->
-          </h3>
+            <!-- Do you want to add more {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %} to your consignment? -->
+          </h2>
         </legend>
+       
         <div class="govuk-form-group">
+          
           <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
-
             {% set url="how-to-identify" %}
-            {% if data.commodity=="bulbs" %}
+            {% if data.commodity == "bulbs" %}
               {% set url="how-to-identify" %}
-            {% elseif data.commodity=="used farm machinery" %}
+            {% elseif data.commodity == "used farm machinery" %}
               {% set url="commodity-page-machinery" %}
-            {% elseif data.commodity=="potatoes" %}
+            {% elseif data.commodity == "potatoes" %}
               {% set url="commodity-page" %}
-            {% elseif data.commodity=="grain" %}
+            {% elseif data.commodity == "grain" %}
               {% set url="input-method" %}
             {% endif %}
             
@@ -143,9 +143,10 @@ Your commodities - {{serviceName}} - GOV.UK
               <input class="govuk-radios__input" id="add_more_commodities-yes" name="add_more_commodities" type="radio" value="yes~{{url}}" data-aria-controls="conditional-applicant-conditional-2">
               <label class="govuk-label govuk-radios__label" for="add_more_commodities-yes">
                 Yes, add another commodity
-<!--                 Yes, add more {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %} -->
+                <!-- Yes, add more {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %} -->
               </label>
             </div>
+
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="add_more_commodities-no" name="add_more_commodities" type="radio" value="no~{% if data.commodity_group == 'produce' %}pheats-check{% elseif (data.commodity == 'plant products' or data.commodity == 'plants') %}task-list{% else %}task-list{% endif %}" data-aria-controls="conditional-applicant-conditional-2">
               <!-- <input class="govuk-radios__input" id="add_more_commodities-no" name="add_more_commodities" type="radio" value="no~{% if data.commodity_group == 'produce' %}pheats-check{% else %}task-list{% endif %}" data-aria-controls="conditional-applicant-conditional-2"> -->
@@ -153,16 +154,23 @@ Your commodities - {{serviceName}} - GOV.UK
                 No, I have finished adding commodities
               </label>
             </div>
+
           </div>
+
         </div>
+
       </fieldset>
-      <div class="govuk-!-margin-left-0 govuk-grid-column-one-quarter govuk-!-padding-0">
-        <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+
+      <div class="govuk-form-group govuk-!-margin-bottom-6">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
       </div>
-      <div class="govuk-grid-row">
-        <!--<div class="govuk-grid-column-full govuk-body">
-          <input class="link-button" type="submit" value="Save and continue later" name="saveAndResumeLater" data-qa-id="Button-SaveAndResumeLater" id="Button-SaveAndResumeLater">
-        </div> -->
-      </div>
+
+      {% block continueLater %}
+      {% include "../modules/_save-continue-later.html" %}
+      {% endblock %}
     </form>
-    {% endblock %}
+    
+  </div>
+
+</div>
+{% endblock %}

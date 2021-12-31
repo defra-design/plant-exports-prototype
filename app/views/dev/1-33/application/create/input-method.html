@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-How do you want to add products to your consignment? - GOV UK
+  How do you want to add commodities to your consignment? - Phytosanitary certificate - GOV UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -16,94 +16,89 @@ How do you want to add products to your consignment? - GOV UK
 {% block content %}
 <div class="govuk-width-container">
 
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
-        <form method="post" class="form">
+  <div class="govuk-grid-row">
 
-          {% set commodity = data.commodity or "products" %}
+    <div class="govuk-grid-column-two-thirds">
 
-          {% if data.commodity == "plant products" %}
+      <form method="post" class="form">
 
-            {% set url = "how-to-identify" %}
+        {% set commodity = data.commodity or "products" %}
 
-            {% set commodity = "products" %}
-
-          {% elseif data.commodity == "potatoes" %}
-
-            {% set url = "commodity-page" %}
-
-          {% elseif data.commodity == "seeds" %}
-
-            {% set url = "how-to-identify" %}
-
-          {% elseif data.commodity == "used farm machinery" %}
-
-            {% set url = "commodity-page-machinery" %}
-
-            {% set commodity = "farm machines" %}
-
-          {% else %}
-
-            {% set url = "how-to-identify" %}
-
-            {% if data.journey == "coc" %}
-
-              {% set url = "coc-commodity" %}
-
-            {% endif %}
-
+        {% if data.commodity == "plant products" %}
+          {% set url = "how-to-identify" %}
+          {% set commodity = "products" %}
+        {% elseif data.commodity == "potatoes" %}
+          {% set url = "commodity-page" %}
+        {% elseif data.commodity == "seeds" %}
+          {% set url = "how-to-identify" %}
+        {% elseif data.commodity == "used farm machinery" %}
+          {% set url = "commodity-page-machinery" %}
+          {% set commodity = "farm machines" %}
+        {% else %}
+          {% set url = "how-to-identify" %}
+          {% if data.journey == "coc" %}
+            {% set url = "coc-commodity" %}
           {% endif %}
+        {% endif %}
 
-          <div class="govuk-form-group">
-            <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
-              <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
-                <h1 class="govuk-fieldset__heading">
-                  How do you want to add commodities to your consignment?
-                </h1>
-              </legend>
-              <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
+              <h1 class="govuk-fieldset__heading">
+                How do you want to add commodities to your consignment?
+              </h1>
+            </legend>
 
-                <div class="govuk-radios__item">
-                  <input class="govuk-radios__input" id="how-contacted-conditional" name="how-contacted" type="radio" value="manual~{{url}}" data-aria-controls="conditional-how-contacted-conditional">
-                  <label class="govuk-label govuk-radios__label" for="one-at-a-time">
-                    Manually, by adding one at a time
-                  </label>
-                </div>
-                <div class="govuk-radios__item">
-                  <input class="govuk-radios__input" id="how-contacted-conditional" name="how-contacted" type="radio" value="bulk~upload?upload=1" data-aria-controls="conditional-how-contacted-conditional">
-                  <label class="govuk-label govuk-radios__label" for="upload-a-file">
-                    All at once, by uploading a file
-                  </label>
-                </div>
+            <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
 
-
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="how-contacted-conditional" name="how-contacted" type="radio" value="manual~{{url}}" data-aria-controls="conditional-how-contacted-conditional">
+                <label class="govuk-label govuk-radios__label" for="one-at-a-time">
+                  Manually, by adding one at a time
+                </label>
               </div>
-            </fieldset>
-          </div>
 
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="how-contacted-conditional" name="how-contacted" type="radio" value="bulk~upload?upload=1" data-aria-controls="conditional-how-contacted-conditional">
+                <label class="govuk-label govuk-radios__label" for="upload-a-file">
+                  All at once, by uploading a file
+                </label>
+              </div>
+
+            </div>
+
+          </fieldset>
+        </div>
+
+        <div class="govuk-form-group govuk-!-margin-bottom-6">
           {{ govukButton({
             classes: "govuk-!-margin-top-4",
             text: "Continue"
           }) }}
+        </div>
 
-          {% if data.journey == "coc" %}
-          <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-          <p class="govuk-body govuk-!-margin-top-9">
-            Journey variant: <a href="how-to-identify" class="govuk-link govuk-link-no-visited-state">Add commodities to your consignment one at a time</a>
-          </p>
-          {% endif %}
+        {% block continueLater %}
+        {% include "../modules/_save-continue-later.html" %}
+        {% endblock %}
 
-        </form>
-      </div>
+        {% if data.journey == "coc" %}
+        <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+        <p class="govuk-body govuk-!-margin-top-9">
+          Journey variant: <a href="how-to-identify" class="govuk-link govuk-link-no-visited-state">Add commodities to your consignment one at a time</a>
+        </p>
+        {% endif %}
+      </form>
+
     </div>
 
+  </div>
 
-    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-    <ul class="govuk-list govuk-list">
-      <li>
-        <a href="upload-expt-guidance.html" class="govuk-link govuk-link-no-visited-state">Experimental upload guidance</a>
-      </li>
-    </ul>
+  <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+  <ul class="govuk-list govuk-list">
+    <li>
+      <a href="upload-expt-guidance.html" class="govuk-link govuk-link-no-visited-state">Experimental upload guidance</a>
+    </li>
+  </ul>
 
 </div>
 {% endblock %}

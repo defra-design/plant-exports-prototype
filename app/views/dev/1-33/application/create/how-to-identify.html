@@ -1,7 +1,9 @@
 {% extends "layout.html" %}
+
 {% block pageTitle %}
-Add commodities to your consignment - {{serviceName}} - GOV.UK
+  Add {% if data.pheats != 1 %}{% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your {% if data.reforwarding %}re-forwarding{% endif %} consignment - Phytosanitary certificate - {{serviceName}} - GOV.UK
 {% endblock %}
+
 {% block beforeContent%}
 {{super()}}
 {% include "../modules/_account-banner.html" %}
@@ -15,7 +17,7 @@ Add commodities to your consignment - {{serviceName}} - GOV.UK
     <form method="post">
       <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-          Add {% if data.pheats != 1 %}{% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your {%if data.reforwarding%}<br>re-forwarding{%endif%} consignment
+          Add {% if data.pheats != 1 %}{% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your {% if data.reforwarding %}<br>re-forwarding{% endif %} consignment
         </legend>
 
         <p class="govuk-body govuk-!-margin-top-6" for="how-contacted-conditional">
@@ -284,23 +286,28 @@ Add commodities to your consignment - {{serviceName}} - GOV.UK
         </div>
         {% endif %}
 
-
       </fieldset>
 
-      <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+      <div class="govuk-form-group govuk-!-margin-top-3 govuk-!-margin-bottom-6">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      </div>
 
+      {% block continueLater %}
+      {% include "../modules/_save-continue-later.html" %}
+      {% endblock %}
     </form>
-    {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
 
   </div>
+  
 </div>
 
 <script type="text/javascript">
+  
   window.addEventListener('load', function() {
     $("#commodity-botanical_name").hide()
     $("#commoditiy-botanical-lookup").show()
     $("#commodity-lookup--manual").show()
-  })
-</script>
+  });
 
+</script>
 {% endblock %}
