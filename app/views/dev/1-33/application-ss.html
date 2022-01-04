@@ -8,9 +8,9 @@
 {{super()}}
 <div class="login-nav login-border">
   <ul class="login-nav__list">
-    <li class="login-nav__list-item" id="Nav-DisplayName">Prototype user</li>
-    <li class="login-nav__list-item"> | <a href="account?returnURL=dashboard" class="govuk-link login-nav__link govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a>|</li>
-    <li class="login-nav__list-item"><a href="#" class="govuk-link login-nav__link govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
+    <li class="login-nav__list-item-new" id="Nav-DisplayName">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="account?returnURL=dashboard" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
   </ul>
 </div>
 
@@ -86,14 +86,14 @@
       </div>
 
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">APHA reference</dt>
+        <dt class="govuk-summary-list__key">{% if data.build == "development" %}Reference{% else %}APHA reference{% endif %}</dt>
         <dd class="govuk-summary-list__value">
           {% if (query.id | appInfo('reference')) == "" %}<span class="govuk-hint">Not set</span>{% elif query.id | appInfo('reference') %}{{query.id | appInfo('applicationID')}}{% else %}1721148004809{% endif %}
         </dd>
       </div>
 
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">{% if (query.id | appInfo('status')) == 'completed' %}Certificate{% else %}Application{% endif %}</dt>
+        <dt class="govuk-summary-list__key">{% if data.build == "development" %}Certificate{% else %}Application{% endif %}</dt>
         <dd class="govuk-summary-list__value">Soil sampling for {{data.commodity or "crops"}}</dd>
       </div>
 
