@@ -8,9 +8,9 @@
 {{super()}}
 <div class="login-nav login-border">
   <ul class="login-nav__list">
-    <li class="login-nav__list-item" id="Nav-DisplayName">Prototype user</li>
-    <li class="login-nav__list-item"> | <a href="account?returnURL=dashboard" class="govuk-link login-nav__link govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a>|</li>
-    <li class="login-nav__list-item"><a href="#" class="govuk-link login-nav__link govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
+    <li class="login-nav__list-item-new" id="Nav-DisplayName">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="account?returnURL=dashboard" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
   </ul>
 </div>
 
@@ -26,18 +26,18 @@
     <dl class="govuk-summary-list govuk-summary-list--no-border">
       
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Application</dt>
+        <dt class="govuk-summary-list__key">{% if data.build == "development" %}Application{% else %}APHA reference{% endif %}</dt>
         <!-- appInfo() can be found in app/filters.js -->
         <dd class="govuk-summary-list__value">{{query.id | appInfo('applicationID')}}</dd>
       </div>
 
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Reference</dt>
+        <dt class="govuk-summary-list__key">{% if data.build == "development" %}Reference{% else %}Your reference{% endif %}</dt>
         <dd class="govuk-summary-list__value">{{query.id | appInfo('reference')}}</dd>
       </div>
 
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Certificate name</dt>
+        <dt class="govuk-summary-list__key">{% if data.build == "development" %}Certificate{% else %}Application{% endif %} name</dt>
         <dd class="govuk-summary-list__value">{% if (query.id | appInfo('cert_info')) == 'Soil sampling' %}Soil sampling for {{data.commodity or "crops"}}{% else %}{% if query.id == 2 %}Re-forwarding phytosanitary certificate for plants and fresh produce{% elseif query.id == 0 %}Phytosanitary certificate for plants and fresh produce{% elseif query.id == 6 %}Growing season inspection for plants and fresh produce{% elseif query.id == 25 %}Growing season inspection{% else %}Phytosanitary certificate for commodity{% endif %}{% endif %}</dd>
       </div>
 
