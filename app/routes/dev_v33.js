@@ -316,7 +316,7 @@ module.exports = function(router) {
     /* for (item in req.query){
       console.log(item + ": " + req.query[item]);
     } */
-    console.log("default global GET routing page for: " + base_url +" plus "+ req.params[0]);
+    console.log("default global GET routing page for: " + base_url + " plus " + req.params[0]);
     
     var dir = req.params[0].split(/\/+/g);
     
@@ -332,7 +332,7 @@ module.exports = function(router) {
     });
     // console.log("base dir:", baseDir);
      
-    // clear previous session data if the user has selected commodity and cert type
+    // Clear previous session data if the user has selected commodity and cert type
     if (baseDir === "/setup/what-export") {
       console.log("clearing data");
       req.session.data = {}
@@ -340,8 +340,8 @@ module.exports = function(router) {
 
     var page = base_url + req.params[0];
 
-    // Redirect users to the USDA page when they are exporting bulbs to the 
-    if (baseDir === "/setup/declaration") {
+    // Decide whether to redirect users to the USDA page when they are exporting bulbs to the United States
+    if (baseDir === "/setup/bulbs-declaration") {
 
       var commodity = req.session.data.commodity;
       var countrySelect = req.session.data.countrySelect[0];
@@ -349,9 +349,11 @@ module.exports = function(router) {
       if (commodity == "bulbs") {
 
         if (countrySelect == "United States") {
+          // Redirect users to the USDA page when they are exporting bulbs to the United States
           page = base_url + "application/setup/usda";
         }
         else {
+          // Continue to the declaration page
           page = base_url + "application/setup/declaration";
         }
 
