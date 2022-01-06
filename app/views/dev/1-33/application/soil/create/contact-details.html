@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  Who is the main contact for this application? - Soil inspection - {{serviceName}} - GOV.UK
+  {% if data.build == "development" %}Who is the contact for this application?{% else %}Who is the main contact for this application?{% endif %} - Soil inspection - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -27,12 +27,30 @@
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset" aria-describedby="contact-details-hint">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-            <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-7">Who is the main contact for this application?</h1>
+            <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-7">{% if data.build == "development" %}Who is the contact for this application?{% else %}Who is the main contact for this application?{% endif %}</h1>
           </legend>
           <!-- <p class="govuk-body">Enter the address of your business premises where the inspector will check your consignment</p> -->
           
-          <div id="contact-details-hint" class="govuk-hint">The inspector may contact this person about the application.</div>
+          <div id="contact-details-hint" class="govuk-hint">
+            The inspector may contact this person about the application.
+          </div>
 
+          {% if data.build == "development" %}
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="contact_name">Contact name</label>
+            <input class="govuk-input govuk-input--width-20" id="contact_name" name="contact_name" type="text" spellcheck="false" autocomplete="name" value="{{data.contact_name or ''}}">
+          </div>
+
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="address_phone">Phone number</label>
+            <input class="govuk-input govuk-input--width-20" id="address_phone" name="address_phone" type="tel" autocomplete="tel" value="{{data.address_phone or ''}}">
+          </div>
+
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="email_address">Email address</label>
+            <input class="govuk-input govuk-input--width-20" id="email_address" name="email_address" type="email" spellcheck="false" autocomplete="email" value="{{data.email_address or ''}}">
+          </div>
+          {% else %}
           <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
 
             <div class="govuk-radios__item">
@@ -65,6 +83,7 @@
             </div>
 
           </div>
+          {% endif %}
       
         </fieldset>
       </div>
