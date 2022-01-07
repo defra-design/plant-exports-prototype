@@ -1,0 +1,82 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Main contact for this address - Manage account - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new" id="Nav-DisplayName">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="../account" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
+  </ul>
+</div>
+
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row govuk-!-margin-bottom-6">
+
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">Main contact for this address</h1>
+    <p class="govuk-body">Enter the main contact for inspections at this address.</p>
+
+    <form action="{{query.return_url or 'check-inspection-contact-edit'}}" method="post">
+      {{ govukInput({
+        id: "main-contact-name",
+        name: "main-contact-name",
+        type: "text",
+        spellcheck: false,
+        classes: "govuk-!-width-two-thirds",
+        value: data.main-contact-name or "Bill Shoggins",
+        label: {
+          text: "Name"
+        }
+      }) }}
+      {{ govukInput({
+        id: "main-contact-email",
+        name: "main-contact-email",
+        type: "email",
+        spellcheck: false,
+        classes: "govuk-!-width-two-thirds",
+        value: data.main-contact-email or "bill.shoggins@acmeltd.com",
+        label: {
+          text: "Email address"
+        }
+      }) }}
+      {{ govukInput({
+        id: "main-contact-phone",
+        name: "main-contact-phone",
+        type: "text",
+        spellcheck: false,
+        classes: "govuk-!-width-one-half",
+        value: data.main-contact-phone or "01234 567890",
+        label: {
+          text: "Phone number (optional)"
+        }
+      }) }}
+      {{ govukInput({
+        id: "main-contact-mobile",
+        name: "main-contact-mobile",
+        type: "text",
+        spellcheck: false,
+        classes: "govuk-!-width-one-half",
+        value: data.main-contact-mobile or "07123 456789",
+        label: {
+          text: "Mobile number (optional)"
+        }
+      }) }}
+
+      {{ govukButton({
+        text: "Continue",
+        classes: "govuk-!-margin-top-6"
+      }) }}
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

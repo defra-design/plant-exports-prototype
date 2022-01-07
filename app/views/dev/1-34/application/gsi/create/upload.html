@@ -1,0 +1,97 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Add commodities by uploading a file - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-width-container">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <form action="/form-handler" method="post" novalidate>
+
+        {% set commodity = data.commodity or "products" %}
+
+        {% if data.commodity == "plants" %}
+          {% set template = "template-plants.csv" %}
+        {% elseif data.commodity == "plant products" %}
+          {% set commodity = "products" %}
+          {% set template = "template-plant-products.csv" %}
+        {% elseif data.commodity == "used farm machines" %}
+          {% set commodity = "used farm machines" %}
+          {% set template = "template-used-farm-machinery.csv" %}
+        {% elseif data.commodity == "potatoes" %}
+          {% set template = "template-potatoes.csv" %}
+        {% elseif data.commodity == "seeds" %}
+          {% set template = "template-seeds-sample.csv" %}
+        {% elseif data.commodity == "grain" %}
+          {% set template = "template-grain.csv" %}
+        {% else %}
+          {% set template = "APHA_phytosanitary_certificate_csv_template.csv" %}
+        {% endif %}
+
+        {% if data.journey == "coc" %}
+          {% set template = "template-hmi.csv" %}
+        {% endif %}
+
+
+        <div class="govuk-form-group  govuk-!-margin-bottom-9">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+              <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">
+                Upload a crop location map
+              </h1>
+            </legend>
+          </fieldset>
+
+           <p class="govuk-body">Upload a map to show your inspector where they will carry out their inspection. Include the access point.</p>
+          <p class="govuk-body">If you prefer to post a map to your inspector, you should contact them to ask what address to send it to. You must include the APHA reference number for this application. You will be given the APHA reference number at the end of this application.</p>
+          <p class="govuk-body">Any file you upload must:</p>
+          <ul class="govuk-list govuk-list--bullet">
+            <li>be in JPEG, PNG, GIF or PDF format</li>
+            <li>be fewer than 10 megabytes (10MB)</li>
+          </ul>
+
+          {{ govukFileUpload({
+            id: "file-upload-1",
+            name: "file-upload-1",
+            label: {
+            text: "Upload your completed csv file"
+          }
+          }) }}
+
+        </div>
+
+        {{ govukButton({
+          text: "Upload",
+          href: "upload-in-progress"
+        }) }}
+
+
+<!--         <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+        <p class="govuk-body govuk-!-margin-top-9">
+          <a href="upload-validation-error-singular" class="govuk-link govuk-link-no-visited-state">View Upload screen
+            with single validation error</a>
+        </p>
+        <p class="govuk-body">
+          <a href="upload-validation-errors" class="govuk-link govuk-link-no-visited-state">View Upload screen with
+            validation errors</a>
+        </p>
+        <p class="govuk-body">
+          <a href="upload-error" class="govuk-link govuk-link-no-visited-state">View Upload screen with file type
+            error</a>
+        </p> -->
+      </form>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

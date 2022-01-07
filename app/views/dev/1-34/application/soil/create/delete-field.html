@@ -1,0 +1,138 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Are you sure you want to delete {{data.nurseryplotno or "Top field"}}? - Soil inspection - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new" id="Nav-DisplayName">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="../../../account" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
+  </ul>
+</div>
+
+<a href="{{page.content.prev or 'javascript:history.back()'}}" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if query.designB == "true" %}
+    <form action="task-list?addfielddetails=&navigation_googlemaps=&navigation_gridgps=&navigation_iacs=&navigation_what3words=&nurseryplotno=&areaoffield=&confirm=&more_detail=&send_inspector_map=&map_upload=&has_botanicial_name=&commodity_variety=&commodity_variety_other=&approxhectofplot=&destinationcountries=&commodity_lot=" method="post">
+      
+      <div class="govuk-button-group">
+        <h1 class="govuk-heading-xl">Confirm you want to remove {{data.nurseryplotno or "Top field"}}</h1>
+        <dl class="govuk-summary-list govuk-summary-list--no-border">
+    
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">{% if data.addfielddetails == "Google Maps" %}Google Maps{% elif data.addfielddetails == "iacs" %}IACS or RLR number{% elif data.addfielddetails == "gridgps" %}Grid reference or GPS reading{% elif data.addfielddetails == "what3words" %}what3words address{% else %}Grid reference or GPS reading{% endif %}</dt>
+            <dd class="govuk-summary-list__value">{% if data.addfielddetails == "Google Maps" %}{{data.navigation_googlemaps or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails == "iacs" %}{{data.navigation_iacs or "NF 1234 1234"}}{% elif data.addfielddetails == "gridgps" %}{{data.navigation_gridgps or "NX 509 582"}}{% elif data.addfielddetails == "what3words" %}///{{data.navigation_what3words or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}</dd>
+            <dd class="govuk-summary-list__actions">&nbsp;</dd>
+          </div>
+    
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Area to be inspected in hectares</dt>
+            <dd class="govuk-summary-list__value">{{data.areaoffield or "3.5"}}</dd>
+            <dd class="govuk-summary-list__actions">&nbsp;</dd>
+          </div>
+    
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Field map</dt>
+            <dd class="govuk-summary-list__value">{% if data.send_inspector_map == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload or "Filename.jpg"}}</a>{% else %}Not provided{% endif %}</dd>
+            <dd class="govuk-summary-list__actions">&nbsp;</dd>
+          </div>
+    
+        </dl>
+
+        <div class="govuk-inset-text govuk-!-margin-top-2">
+          This will also delete any {% if data.commodity == "potatoes" %}ware potatoes{% else %}crops{% endif %} you have added for inspection at this location.
+        </div>
+
+        <!-- <p class="govuk-body">This will permanently delete it from your list of fields, along with any associated {% if data.commodity == "potatoes" %}ware potatoes{% else %}crops{% endif %} you have added.</p> -->
+      </div>
+
+      <div class="govuk-button-group">
+        <button class="govuk-button govuk-button--warning" type="submit" data-module="govuk-button">Delete field</button>
+        <a class="govuk-link" href="commodity-list">Cancel and go back</a>
+      </div>
+
+      <!-- Session data hook to update the task list so that this section is marked as 'NOT COMPLETED' -->
+      <div class="govuk-form-group" hidden>
+        <label class="govuk-label" for="field_task_list_data">Task list section URL</label>
+        <input class="govuk-input" id="field_task_list_data" name="field_task_list_data" type="text" value="Not Completed">
+      </div>
+          
+    </form>
+    {% else %}
+    <form action="task-list" method="post">
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+            <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-7">Are you sure you want to delete {{data.nurseryplotno or "Top field"}}?</h1>
+          </legend>
+          <dl class="govuk-summary-list govuk-summary-list--no-border">
+    
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">{% if data.addfielddetails == "Google Maps" %}Google Maps{% elif data.addfielddetails == "iacs" %}IACS or RLR number{% elif data.addfielddetails == "gridgps" %}Grid reference or GPS reading{% elif data.addfielddetails == "what3words" %}what3words address{% else %}Grid reference or GPS reading{% endif %}</dt>
+              <dd class="govuk-summary-list__value">{% if data.addfielddetails == "Google Maps" %}{{data.navigation_googlemaps or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails == "iacs" %}{{data.navigation_iacs or "NF 1234 1234"}}{% elif data.addfielddetails == "gridgps" %}{{data.navigation_gridgps or "NX 509 582"}}{% elif data.addfielddetails == "what3words" %}///{{data.navigation_what3words or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}</dd>
+              <dd class="govuk-summary-list__actions">&nbsp;</dd>
+            </div>
+      
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Area to be inspected in hectares</dt>
+              <dd class="govuk-summary-list__value">{{data.areaoffield or "3.5"}}</dd>
+              <dd class="govuk-summary-list__actions">&nbsp;</dd>
+            </div>
+      
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Field map</dt>
+              <dd class="govuk-summary-list__value">{% if data.send_inspector_map == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload or "Filename.jpg"}}</a>{% else %}Not provided{% endif %}</dd>
+              <dd class="govuk-summary-list__actions">&nbsp;</dd>
+            </div>
+      
+          </dl>
+
+          <div class="govuk-inset-text">
+            This will also delete any {% if data.commodity == "potatoes" %}ware potatoes{% else %}crops{% endif %} you have added for inspection at this location.
+          </div>
+  
+          <!-- <p class="govuk-body">This will permanently delete it from your list of fields, along with any associated {% if data.commodity == "potatoes" %}ware potatoes{% else %}crops{% endif %} you have added.</p> -->
+          
+          <div class="govuk-radios" data-module="govuk-radios">
+            
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="delete_yes" name="delete" type="radio" value="Yes~task-list?addfielddetails=&navigation_googlemaps=&navigation_gridgps=&navigation_iacs=&navigation_what3words=&nurseryplotno=&areaoffield=&confirm=&more_detail=&send_inspector_map=&map_upload=&has_botanicial_name=&commodity_variety=&commodity_variety_other=&approxhectofplot=&destinationcountries=&commodity_lot=">
+              <label class="govuk-label govuk-radios__label govuk-radios-long-label" for="delete_yes">Yes, delete this field</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="delete_no" name="delete" type="radio" value="No~commodity-list">
+              <label class="govuk-label govuk-radios__label govuk-radios-long-label" for="delete_no">Cancel and go back</label>
+            </div>
+
+          </div>
+
+        </fieldset>
+      </div>
+
+      <button class="govuk-button" type="submit" data-module="govuk-button">Confirm</button>
+
+      <!-- Session data hook to update the task list so that this section is marked as 'NOT COMPLETED' -->
+      <div class="govuk-form-group" hidden>
+        <label class="govuk-label" for="field_task_list_data">Task list section URL</label>
+        <input class="govuk-input" id="field_task_list_data" name="field_task_list_data" type="text" value="Not Completed">
+      </div>
+
+    </form>
+    {% endif %}
+
+  </div>
+
+</div>
+{% endblock %}
