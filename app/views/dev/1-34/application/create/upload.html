@@ -1,0 +1,152 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Upload details for multiple commodities at the same time - Phytosanitary certificate - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-width-container">
+
+  <div class="govuk-grid-row">
+
+    <div class="govuk-grid-column-two-thirds">
+      
+      <form action="/form-handler" method="post" novalidate>
+
+        {% set commodity = data.commodity or "products" %}
+
+        {% if data.commodity == "plants" %}
+          {% set template = "template-plants.csv" %}
+        {% elseif data.commodity == "plant products" %}
+          {% set commodity = "products" %}
+          {% set template = "template-plant-products.csv" %}
+        {% elseif data.commodity == "used farm machines" %}
+          {% set commodity = "used farm machines" %}
+          {% set template = "template-used-farm-machinery.csv" %}
+        {% elseif data.commodity == "potatoes" %}
+          {% set template = "template-potatoes.csv" %}
+        {% elseif data.commodity == "seeds" %}
+          {% set template = "APHA_phytosanitary_certificate_csv_template - SEEDS.csv" %}
+        {% elseif data.commodity == "grain" %}
+          {% set template = "template-grain.csv" %}
+        {% else %}
+          {% set template = "APHA_phytosanitary_certificate_csv_template.csv" %}
+        {% endif %}
+
+        {% if data.journey == "coc" %}
+          {% set template = "template-hmi.csv" %}
+        {% endif %}
+
+        <div class="govuk-form-group govuk-!-margin-bottom-7">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+              <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">
+                Upload details for multiple commodities at the same time
+              </h1>
+            </legend>
+          </fieldset>
+          <p class="govuk-body">
+            Download the <a href="/public/images/{{template}}" class="govuk-link govuk-link--no-visited-state"
+              title="CSV template">csv template</a>.
+          </p>
+          <p class="govuk-body govuk-!-margin-bottom-6">
+            Open the file in Excel or whatever you use to edit spreadsheets. Fill in the csv template. There are
+            instructions in the template telling you what you need to do.
+          </p>
+          <p class="govuk-body govuk-!-margin-bottom-6">
+            When you have finished editing the file, save the file and select comma separated values (csv) as the file
+            format.
+          </p>
+          {{ govukFileUpload({
+            id: "file-upload-1",
+            name: "file-upload-1",
+            label: {
+            text: "Upload your completed csv file"
+          }
+          }) }}
+        </div>
+
+        <div class="govuk-form-group govuk-!-margin-bottom-6">
+          {{ govukButton({
+            text: "Upload",
+            href: "upload-in-progress"
+          }) }}
+        </div>
+
+        {% block continueLater %}
+        {% include "../modules/_save-continue-later.html" %}
+        {% endblock %}
+
+      </form>
+
+      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+      <p class="govuk-body govuk-!-margin-top-7">
+        <a href="upload-validation-errors" class="govuk-link govuk-link-no-visited-state">Existing Upload screen with
+          validation errors</a>
+      </p>
+      <p class="govuk-body">
+        <a href="upload-completed-with-errors-seeds" class="govuk-link govuk-link-no-visited-state">View Upload screen with errors and table</a>
+      </p>
+      <p class="govuk-body">
+        <a href="upload-completed-with-errors-seeds-generic" class="govuk-link govuk-link-no-visited-state">View Upload screen with generic errors and table</a>
+      </p>
+      <p class="govuk-body">
+        <a href="upload-validation-error-singular" class="govuk-link govuk-link-no-visited-state">View Upload screen
+          with single validation error</a>
+      </p>
+      <p class="govuk-body">
+        <a href="upload-error" class="govuk-link govuk-link-no-visited-state">View Upload screen with file type
+          error</a>
+      </p>
+      <h3 class="govuk-heading-s">Templates</h3>
+      <ul class="govuk-list govuk-list">
+        <li>
+          <a href="/public/images/template-plants.csv" class="govuk-link govuk-link-no-visited-state">Plants</a>
+        </li>
+        <li>
+          <a href="/public/images/template-sms.csv" class="govuk-link govuk-link-no-visited-state">SMS</a>
+        </li>
+        <li>
+          <a href="/public/images/template-gms.csv" class="govuk-link govuk-link-no-visited-state">GMS</a>
+        </li>
+        <li>
+          <a href="/public/images/template-plant-products.csv" class="govuk-link govuk-link-no-visited-state">Plant
+            products</a>
+        </li>
+        <li>
+          <a href="/public/images/template-used-farm-machinery.csv" class="govuk-link govuk-link-no-visited-state">Used
+            farm machinery</a>
+        </li>
+        <li>
+          <a href="/public/images/template-potatoes.csv" class="govuk-link govuk-link-no-visited-state">Potatoes</a>
+        </li>
+        <li>
+          <a href="/public/images/template-seeds-phyto.csv"
+            class="govuk-link govuk-link-no-visited-state">Seeds</a>
+        </li>
+        <li>
+          <a href="/public/images/APHA_phytosanitary_certificate_csv_template - SEEDS.csv"
+            class="govuk-link govuk-link-no-visited-state">Seeds (v1)</a>
+        </li>
+        <li>
+          <a href="/public/images/template-grain.csv" class="govuk-link govuk-link-no-visited-state">Grain</a>
+        </li>
+        <li>
+          <a href="/public/images/APHA_phytosanitary_certificate_csv_template.csv"
+            class="govuk-link govuk-link-no-visited-state">Generic APHA template</a>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

@@ -1,11 +1,8 @@
 // Use this file to change prototype configuration.
-
 // Note: prototype config can be overridden using environment variables (eg on heroku)
-
 module.exports = {
   // Service name used in header. Eg: 'Renew your passport'
   serviceName: 'Apply for plant export certificates and inspections',
-
 
   // Default port that prototype runs on
   port: '3000',
@@ -25,10 +22,13 @@ module.exports = {
 
   // Force HTTP to redirect to HTTPS on production
   useHttps: 'true',
- // Cookie warning - update link to service's cookie page.
- cookieText: 'GOV.UK uses cookies to make the site simpler. <a href="#">Find out more about cookies</a>',
+  
+  // Cookie warning - update link to service's cookie page.
+  cookieText: 'GOV.UK uses cookies to make the site simpler. <a href="#">Find out more about cookies</a>',
+
   // Enable or disable Browser Sync
   useBrowserSync: 'true',
+
   // Enable logging, options: true, false, get or post
   useLogging: 'true'
 }

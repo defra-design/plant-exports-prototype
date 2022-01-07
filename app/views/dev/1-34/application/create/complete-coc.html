@@ -1,0 +1,153 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Complete a certificate of conformity application - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-width-container">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
+        Complete a certificate of conformity application
+      </h1>
+      <div id="complete-phyto-hint" class="govuk-hint">
+        Add some further details about your consignment to complete your application for a certificate of conformity.
+      </div>
+      <ol class="app-task-list">
+        <li>
+          <h2 class="app-task-list__section">
+            <span class="app-task-list__section-number">1. </span> Certificate of conformity application details
+          </h2>
+          <ul class="app-task-list__items">
+            <li class="app-task-list__item">
+              <span class="app-task-list__task-name">
+                <a href="../setup/reference?return_url=../create/complete-coc&change=yes" aria-describedby="eligibility-status">
+                  Create a reference
+                </a>
+              </span>
+              {% if data.reference_num or data.journey=="coc" %}
+              <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Completed</strong>
+              {% else%}
+              <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="list-convictions-status">Not started</strong>
+              {% endif %}
+            </li>
+
+            <li class="app-task-list__item">
+              <span class="app-task-list__task-name">
+                <a href="commodity-list-copy-as-coc?return_url=../create/complete-coc" aria-describedby="contact-details-status">
+                  What's in your consignment?
+                </a>
+              </span>
+              {% if data.class %}
+              <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Completed</strong>
+              {% else%}
+              <strong class="govuk-tag govuk-tag--blue app-task-list__tag" id="list-convictions-status">Add details</strong>
+              {% endif %}
+            </li>
+            <li class="app-task-list__item">
+              <span class="app-task-list__task-name">
+                <a 
+                {% if data.journey=="coc" %}
+                href="confirm-inspection-address"
+                {% else %}
+                
+                href="inspection-addresses"
+                {% endif %}aria-describedby="eligibility-status">
+                  What are the inspection details?
+                </a>
+              </span>
+              {% if data.contact_name %}
+              <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Completed</strong>
+              {% else %}
+              <strong class="govuk-tag govuk-tag--blue app-task-list__tag" id="list-convictions-status">Add details</strong>
+              {% endif %}
+            </li>
+            <li class="app-task-list__item">
+              <span class="app-task-list__task-name">
+                <a href="shipping-coc?return_url=../create/complete-coc" aria-describedby="contact-details-status">
+                  How will this consignment be transported?
+                </a>
+              </span>
+              {% if data.contact_by_email or data.journey=="coc"%}
+              <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Completed</strong>
+              {% else%}
+              <strong class="govuk-tag govuk-tag--blue app-task-list__tag" id="list-convictions-status">Add details</strong>
+              {% endif %}
+            </li>
+            <li class="app-task-list__item">
+              <span class="app-task-list__task-name">
+                <a href="packer?return_url=../create/complete-coc" aria-describedby="contact-details-status">
+                  What are the packer details?
+                </a>
+              </span>
+              {% if data.packer %}
+              <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Completed</strong>
+              {% else%}
+              <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="list-convictions-status">Not started</strong>
+              {% endif %}
+            </li>
+          </ul>
+        </li>
+        <li>
+          <h2 class="app-task-list__section">
+            <span class="app-task-list__section-number">2. </span> Check your application details
+          </h2>
+          <ul class="app-task-list__items">
+            <li class="app-task-list__item">
+              <span class="task-list-submit-disabled">
+                <span class="app-task-list__task-name">
+                  Check your answers and submit your application
+                </span>
+                <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="submit-pay-status">Cannot start yet</strong>
+              </span>
+              <span class="task-list-submit-enabled" style="display:none">
+                <span class="app-task-list__task-name">
+                  <a href="check-your-answers-complete-coc" aria-describedby="list-convictions-status">
+                    Check your answers and submit your application
+                  </a>
+                </span>
+                <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="submit-pay-status">Not started</strong>
+              </span>
+            </li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+<script type="text/javascript">
+/*   window.addEventListener('load', function() {
+    var tasks = $('.app-task-list__tag')
+    var max = tasks.length - 2
+    $('.task-list-max').text(max)
+    var count = 0
+    tasks.each(function(index, value) {
+      console.log($(value).text())
+      if ($(value).text() == "Completed") {
+        count += 1
+      }
+    })
+    if (count >= max-1) {
+      $('.task-list-submit-enabled').show()
+      $('.task-list-submit-disabled').hide()
+    }
+    $('.task-list-completed').text(count)
+  })
+ */
+  $('.task-list-submit-enabled').show();
+  $('.task-list-submit-disabled').hide();
+</script>
+{% endblock %}
