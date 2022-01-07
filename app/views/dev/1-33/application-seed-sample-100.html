@@ -1,0 +1,234 @@
+{% extends "layout.html" %}
+
+{% set items = [
+  {
+  date: '23 Sep 2021',
+  application_number: '120664110369',
+  description: 'White cabbage',
+  details: 'Durham Early',
+  site: 'Store 3',
+  amount: '100 tonnes',
+  total: '320 tonnes'
+  },
+  {
+  date: '21 Sep 2021',
+  application_number: '120664110283',
+  description: 'White cabbage',
+  details: 'Durham Early',
+  site: 'Store 7',
+  amount: '50 tonnes',
+  total: '270 tonnes'
+  },
+  {
+  date: '19 Sep 2021',
+  application_number: '120664110233',
+  description: 'White cabbage',
+  site: 'Store 3',
+  details: 'Durham Early',
+  amount: '60 tonnes',
+  total: '210 tonnes'
+  },
+  {
+  date: '16 Sep 2021',
+  application_number: '120664110167',
+  description: 'White cabbage',
+  details: 'Durham Early',
+  site: 'Store 3',
+  amount: '50 tonnes',
+  total: '160 tonnes'
+  },
+  {
+  date: '14 Sep 2021',
+  application_number: '120664110123',
+  description: 'Cabbage',
+  details: 'Avon Crest',
+  site: 'Store 5',
+  amount: '10 tonnes',
+  total: '150 tonnes'
+  },
+  {
+  date: '12 Sep 2021',
+  application_number: '120664109150',
+  description: 'White cabbage',
+  details: 'Durham Early',
+  site: 'Store 7',
+  amount: '50 tonnes',
+  total: '150 tonnes'
+  }
+  
+  ] %}
+
+{% block pageTitle %}
+Manage application - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Return to your applications</a>
+<style media="screen">
+
+  .govuk-width-three-tenths {
+    width: 15% !important;
+  }
+
+  .govuk-width-one-fifth {
+    width: 20% !important;
+  }
+
+
+  .doc-icon::before {
+    content: '';
+    width: 1em;
+    height: 1.5em;
+    margin-right: 1em;
+    position: relative;
+    top: 0.5em;
+    display: inline-block;
+    background: #bfc1c3;
+    box-shadow: 3px -3px 0 #fff, 6px -6px 0 #bfc1c3;
+  }
+</style>
+{% endblock%}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">Manage application <span style="white-space: nowrap;">{{query.id |
+        appInfo('reference')}}</span></h1>
+  </div>
+
+</div>
+
+<div class="govuk-grid-row govuk-!-margin-bottom-2">
+
+  <div class="govuk-grid-column-one-half">
+    <dl class="govuk-summary-list govuk-summary-list--no-border">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Status
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <div class="app-status-tag app-status-tag--{{query.id | appInfo('tag')}}">
+            {{query.id | appInfo('status')}}
+          </div>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Reference
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {% if (query.id | appInfo('reference')) == "" %}<span class="govuk-hint">Not set</span>{%else%}{{query.id |
+          appInfo('applicationID')}}{%endif%}
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          {% if query.id == 30 %}Application{% else %}Certificate{% endif %}
+        </dt>
+        <dd class="govuk-summary-list__value">
+          Seed sampling application
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Sampled on
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{query.id | appInfo('date')}}
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Quantity inspected 
+        </dt>
+        <dd class="govuk-summary-list__value">
+          8.0 tonnes
+        </dd>
+      </div>
+    </dl>
+<!-- 
+    <div class="govuk-inset-text">
+      <p class="govuk-body">
+        Draw down stock is available
+      </p>
+    </div>
+     -->
+  </div>
+
+
+
+  <div class="govuk-grid-column-one-half govuk-!-margin-bottom-9">
+    <h2 class="govuk-heading-m">Your certificate</h2>
+    <p class="govuk-body">
+      Not all your commodities passed inspection. Your certificate is only for those commodities that met the relevant standards.
+    </p>
+    <ul class="govuk-list  noprint">
+    <li><p class="doc-icon"><a href="#" class="govuk-link govuk-link--no-visited-state">Sampling report (pdf)</a>
+    </p></li>      
+    
+    <li><p class="doc-icon"><a href="#" class="govuk-link govuk-link--no-visited-state">Stock list (csv)</a>
+    </p></li>  
+      
+    </ul>
+
+  </div>
+
+</div>
+
+<div class="govuk-grid-row govuk-!-margin-bottom-6">
+  <div class="govuk-grid-column-two-thirds">
+
+<!--     <h2 class="govuk-heading-m govuk-!-margin-top-4">
+      Actions
+    </h2> -->
+    <ul class="govuk-list govuk-!-margin-bottom-9 noprint">
+      <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-viewonly">View application details</a>
+      </li>      
+      
+      <li><a class="govuk-link govuk-link--no-visited-state"
+          href="clone?id={{query.id or 0}}&is_group={{ query.is_group }}">Use this application to create a new phytosanitary certificate</a>
+      </li>
+
+    </ul>
+  </div>
+</div>
+
+<div class="govuk-grid-row govuk-!-margin-bottom-6">
+ <div class="govuk-grid-column-full">
+  <h2 class="govuk-heading-m">Commodities in this application</h2>
+
+  <table class="govuk-table govuk-!-margin-bottom-9">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th class="govuk-table__header govuk-width-one-fifth" scope="col">
+          Commodity
+        </th>
+        <th class="govuk-table__header" scope="col">
+          Variety
+        </th>
+        <th class="govuk-table__header" scope="col">
+          Sample reference
+        </th>
+        <th class="govuk-table__header" scope="col">
+          Quantity
+        </th>
+        <th class="govuk-table__header" scope="col">
+          Remaining
+        </th>
+ <!--        <th class="govuk-table__header" scope="col">
+          Action
+        </th> -->
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+      {% include "./application/modules/_summary-seeds-draw-down.html" %}
+    </tbody>
+  </table>
+
+</div> 
+</div>
+
+{% endblock %}
