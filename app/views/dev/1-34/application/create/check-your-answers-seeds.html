@@ -240,26 +240,43 @@ Review your answers - {{serviceName}} - GOV.UK
 
     {% elseif data.commodity == "seeds" %}
       <h2 class="govuk-heading-m">Your consignment</h2>
-        <table class="govuk-table govuk-!-margin-bottom-4">
-          <thead class="govuk-table__head">
-            <tr class="govuk-table__row">
-              <th class="govuk-table__header" scope="col">
-                Description
-              </th>
-               <th class="govuk-table__header" scope="col">
-                Packages
-              </th>
-               <th class="govuk-table__header" scope="col">
-                Total quantity
-              </th>
-              <th class="govuk-table__header" scope="col"></th>
-            </tr>
-          </thead>
-          <tbody class="govuk-table__body">
-            {% include "../modules/_summary-seed-bulk.html" %}
+
+      {% if data.upload %}
+      <table class="govuk-table govuk-!-margin-bottom-4">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">
+              Description
+            </th>
+             <th class="govuk-table__header" scope="col">
+              Packages
+            </th>
+             <th class="govuk-table__header" scope="col">
+              Total quantity
+            </th>
+            <th class="govuk-table__header" scope="col"></th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          {% include "../modules/_summary-seed-bulk.html" %}
+      </tbody>
+    </table>
+      {% else %}
+      <table class="govuk-table govuk-!-margin-bottom-4">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Description</th>
+            <th class="govuk-table__header" scope="col">Country of origin</th>
+            <th class="govuk-table__header" scope="col">Quantity</th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          {% set showAll=true %}
+          {% include "../modules/_summary-seed.html" %}
         </tbody>
       </table>
-      <!-- <p class="govuk-body"><a href="commodity-page" class="govuk-link">Change these commodities</a></p> -->
+      {% endif %}
 
       {% elseif data.journey == "coc" %}
 
