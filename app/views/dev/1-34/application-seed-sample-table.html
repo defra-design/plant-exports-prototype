@@ -1,63 +1,5 @@
 {% extends "layout.html" %}
 
-{% set items = [
-  {
-  date: '23 Sep 2021',
-  application_number: '120664110369',
-  description: 'White cabbage',
-  details: 'Durham Early',
-  site: 'Store 3',
-  amount: '100 tonnes',
-  total: '320 tonnes'
-  },
-  {
-  date: '21 Sep 2021',
-  application_number: '120664110283',
-  description: 'White cabbage',
-  details: 'Durham Early',
-  site: 'Store 7',
-  amount: '50 tonnes',
-  total: '270 tonnes'
-  },
-  {
-  date: '19 Sep 2021',
-  application_number: '120664110233',
-  description: 'White cabbage',
-  site: 'Store 3',
-  details: 'Durham Early',
-  amount: '60 tonnes',
-  total: '210 tonnes'
-  },
-  {
-  date: '16 Sep 2021',
-  application_number: '120664110167',
-  description: 'White cabbage',
-  details: 'Durham Early',
-  site: 'Store 3',
-  amount: '50 tonnes',
-  total: '160 tonnes'
-  },
-  {
-  date: '14 Sep 2021',
-  application_number: '120664110123',
-  description: 'Cabbage',
-  details: 'Avon Crest',
-  site: 'Store 5',
-  amount: '10 tonnes',
-  total: '150 tonnes'
-  },
-  {
-  date: '12 Sep 2021',
-  application_number: '120664109150',
-  description: 'White cabbage',
-  details: 'Durham Early',
-  site: 'Store 7',
-  amount: '50 tonnes',
-  total: '150 tonnes'
-  }
-  
-  ] %}
-
 {% block pageTitle %}
 Manage application - {{serviceName}} - GOV.UK
 {% endblock %}
@@ -67,9 +9,7 @@ Manage application - {{serviceName}} - GOV.UK
 <a href="javascript:history.back()" class="govuk-back-link">Return to your applications</a>
 <style media="screen">
 
-  .govuk-width-three-tenths {
-    width: 15% !important;
-  }
+
 
   .govuk-width-one-fifth {
     width: 20% !important;
@@ -197,9 +137,25 @@ Manage application - {{serviceName}} - GOV.UK
 </div>
 
 <div class="govuk-grid-row govuk-!-margin-bottom-6">
- <div class="govuk-grid-column-full">
+ <div class="govuk-grid-column-two-thirds">
   <h2 class="govuk-heading-m">Commodities in this application</h2>
+  <div class="search-wrapper govuk-form-group ">
+    <label for="search-reservations" class="govuk-label">
+      Search by commodity, variety or sample reference destination
+    </label>
 
+    <div class="search-input-wrapper">
+      <input type="search" value="{{query.search or ''}}" id="search-reservations" name="search" title="Search" class="govuk-input">
+      
+      <div class="search-input-submit-wrapper">
+        <button type="submit" class="search-submit">Search</button>
+      </div>
+
+    </div>
+
+  </div>
+  </div>
+  <div class="govuk-grid-column-full">
   <table class="govuk-table govuk-!-margin-bottom-9">
     <thead class="govuk-table__head">
       <tr class="govuk-table__row">
@@ -212,10 +168,10 @@ Manage application - {{serviceName}} - GOV.UK
         <th class="govuk-table__header" scope="col">
           Sample reference
         </th>
-        <th class="govuk-table__header" scope="col">
+        <th class="govuk-table__header govuk-table__header--numeric" scope="col">
           Quantity
         </th>
-        <th class="govuk-table__header" scope="col">
+        <th class="govuk-table__header govuk-table__header--numeric" scope="col">
           Remaining
         </th>
  <!--        <th class="govuk-table__header" scope="col">
@@ -224,9 +180,17 @@ Manage application - {{serviceName}} - GOV.UK
       </tr>
     </thead>
     <tbody class="govuk-table__body">
-      {% include "./application/modules/_summary-seeds-draw-down.html" %}
+      {% include "./application/modules/_summary-seeds-draw-down-30.html" %}
     </tbody>
   </table>
+  
+  <div class="app-example-page govuk-!-margin-bottom-9">
+    <nav class="defra-pagination" id="pagination-label">
+      <p class="govuk-visually-hidden" aria-labelledby="pagination-label">Pagination navigation</p>
+      <p class="defra-pagination__results" style="float: left;"><a href="#" style=" text-decoration:none;"><b>1</b></a></p>
+      <p class="defra-pagination__results" style="float: right;">Showing <b>1</b> to <b><span class="js-case-count">30</span></b> of <b><span class="js-case-count">225</span></b> results</p>
+    </nav>
+  </div>
 
 </div> 
 </div>
