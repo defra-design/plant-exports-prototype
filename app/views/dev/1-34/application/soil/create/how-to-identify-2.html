@@ -45,7 +45,7 @@
             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-has-botanicial-name">
               {% if data.show_manual_input != "yes" %}
               {% block genus %}
-              {% include "../modules/_genus.html" %}
+              {% include "../modules/_genus-2.html" %}
               {% endblock %}
               {% else %}
 
@@ -73,20 +73,20 @@
                   <input class="govuk-input govuk-input--width-20" id="commodity_host_species" name="commodity_host_species2" type="text" value="{% if query.has_commodity %}{{query.species}}{% endif %}">
                 </div>
 
-              </div>
+                {% if data.show_manual_input == "yes" %}
+                <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display: none;">The botanical name needs to be spelled correctly, if you are not sure <a href="?show_manual_input=no&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">search for a botanical name</a>.</p>
+                {% else %}
+                <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display: none;">If you cannot find your {{data.commodity or "plant"}}, but you know the botanical name, <a href="?show_manual_input=yes&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">enter the botanical name manually</a></p>
+                {% endif %}
 
-              {% if data.show_manual_input == "yes" %}
-              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display: none;">The botanical name needs to be spelled correctly, if you are not sure <a href="?show_manual_input=no&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">search for a botanical name</a>.</p>
-              {% else %}
-              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display: none;">If you cannot find your {{data.commodity or "plant"}}, but you know the botanical name, <a href="?show_manual_input=yes&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">enter the botanical name manually</a>.</p>
-              {% endif %}
+                {% if data.commodity == "plants" or data.commodity == "seeds" or data.commodity == "bulbs" %}
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="commodity_variety">Variety (optional)</label>
+                  <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety2" type="text">
+                </div>
+                {% endif %}
 
-              {% if data.commodity == "plants" or data.commodity == "seeds" or data.commodity == "bulbs" %}
-              <div class="govuk-form-group">
-                <label class="govuk-label" for="commodity_variety">Variety (optional)</label>
-                <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety2" type="text">
               </div>
-              {% endif %}
 
             </div>
 
@@ -108,7 +108,7 @@
               
               <div class="govuk-form-group">
                 <label class="govuk-visually-hidden" for="passport-number">Description of the {{data.commodity or "plant"}}</label>
-                <!--<span class="govuk-hint">Only use this if you cannot enter the botanical name and you do not have an agreed common name</span>-->
+                <!-- <span class="govuk-hint">Only use this if you cannot enter the botanical name and you do not have an agreed common name</span> -->
                 <textarea class="govuk-textarea" id="plant-identify--description" name="commodity_description2" rows="4" aria-describedby="more-detail-hint"></textarea>
               </div>
 

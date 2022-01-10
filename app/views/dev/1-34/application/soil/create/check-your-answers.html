@@ -30,7 +30,7 @@
         
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Application type</dt>
-          <dd class="govuk-summary-list__value">Soil sampling for {% if data.commodity == "potatoes" %}ware potatoes{% else %}crops{% endif %}</dd>
+          <dd class="govuk-summary-list__value">Soil sampling for {% if data.commodity == "potatoes" %}ware potatoes{% else %}{{data.commodity or "crops"}}{% endif %}</dd>
           <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
 
@@ -42,7 +42,7 @@
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Your reference</dt>
-          <dd class="govuk-summary-list__value">{% if data.reference_num %}{{data.reference_num or "SS" }}{% else %}&nbsp;{% endif %}</dd>
+          <dd class="govuk-summary-list__value">{% if data.reference_num %}{{data.reference_num or "REFERENCE" }}{% else %}&nbsp;{% endif %}</dd>
           <dd class="govuk-summary-list__actions"><a class="govuk-link" href="reference?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> your reference</span></a></dd>
         </div>
 
@@ -99,7 +99,7 @@
             Field map: {% if data.send_inspector_map == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload or "Filename.jpg"}}</a>{% else %}Not provided{% endif %}
             <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
               <li>
-                {% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}}{% endif %} - {{data.approxhectofplot or "2"}} hectares
+                {% if data.commodity == "bulbs" %}{{data.botanical_name or "Corylus avellana (CYLAV)"}}{% elif data.commodity == "potatoes" %}{% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}Corylus avellana{% endif %}{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}}{% endif %} - {{data.approxhectofplot or "2"}} hectares
                 <!-- <br>
                 {{data.destinationcountries or "Belize"}} -->
               </li>
@@ -118,12 +118,12 @@
             Field map: {% if data.send_inspector_map == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload or "Filename.jpg"}}</a>{% else %}Not provided{% endif %}
             <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
               <li>
-                {% if data.commodity_variety2 == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety2 == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other2 or "Corylus avellana"}}{% endif %} - {{data.approxhectofplot2 or "18"}} hectares
+                {% if data.commodity == "bulbs" %}{{data.botanical_name2 or "Malus x atrosanguinea (MABAT)"}}{% elif data.commodity == "potatoes" %}{% if data.commodity_variety2 == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety2 == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}Corylus avellana{% endif %}{% else %}{{data.commodity_host_species2 or data.genus2 or data.commodity_common_name2 or data.commodity_type2 or data.commodity_variety_other2 or "Corylus avellana"}}{% endif %} - {{data.approxhectofplot2 or "18"}} hectares
                 <!-- <br>
                 {{data.destinationcountries2 or "USA"}} -->
               </li>
               <li>
-                {% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}}{% endif %} - {{data.approxhectofplot or "2"}} hectares
+                {% if data.commodity == "bulbs" %}{{data.botanical_name or "Corylus avellana (CYLAV)"}}{% elif data.commodity == "potatoes" %}{% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}Corylus avellana{% endif %}{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}}{% endif %} - {{data.approxhectofplot or "2"}} hectares
                 <!-- <br>
                 {{data.destinationcountries or "Belize"}} -->
               </li>
@@ -142,7 +142,7 @@
             Field map: {% if data.send_inspector_map2 == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload2 or "Another filename.jpg"}}</a>{% else %}Not provided{% endif %}
             <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
               <li>
-                {% if data.commodity_variety3 == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety3 == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other3 or "Corylus avellana"}}{% endif %} - {{data.approxhectofplot3 or "50"}} hectares
+                {% if data.commodity == "bulbs" %}{{data.botanical_name3 or "Dicksonia squarrosa (DCKSQ)"}}{% elif data.commodity == "potatoes" %}{% if data.commodity_variety3 == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety3 == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}Corylus avellana{% endif %}{% else %}{{data.commodity_host_species3 or data.genus3 or data.commodity_common_name3 or data.commodity_type3 or data.commodity_variety_other3 or "Corylus avellana"}}{% endif %} - {{data.approxhectofplot3 or "50"}} hectares
                 <!-- <br>
                 {{data.destinationcountries3 or "Brazil"}} -->
               </li>
@@ -161,7 +161,7 @@
             Field map: {% if data.send_inspector_map == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload or "Filename.jpg"}}</a>{% else %}Not provided{% endif %}
             <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
               <li>
-                {% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}}{% endif %} - {{data.approxhectofplot or "2"}} hectares
+                {% if data.commodity == "bulbs" %}{{data.botanical_name or "Corylus avellana (CYLAV)"}}{% elif data.commodity == "potatoes" %}{% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}Corylus avellana{% endif %}{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}}{% endif %} - {{data.approxhectofplot or "2"}} hectares
                 <!-- <br>
                 {{data.destinationcountries or "Belize"}} -->
               </li>

@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  Your fields and {% if data.commodity == "potatoes" %}ware potatoes{% else %}crops{% endif %} for inspection
+  Your fields and {% if data.commodity == "potatoes" %}ware potatoes{% else %}{{data.commodity or "crops"}}{% endif %} for inspection - Soil inspection - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -21,7 +21,7 @@
 <div class="govuk-grid-row">
   
   <div class="govuk-grid-column-three-quarters">
-    <h1 class="govuk-heading-xl">Your fields and {% if data.commodity == "potatoes" %}ware potatoes{% else %}crops{% endif %} for inspection</h1>
+    <h1 class="govuk-heading-xl">Your fields and {% if data.commodity == "potatoes" %}ware potatoes{% else %}{{data.commodity or "crops"}}{% endif %} for inspection</h1>
     <p>Here’s what you currently have listed for soil sampling.</p>
     <h2 class="govuk-heading-l" id="1">Location: {{data.nurseryplotno or "Top field"}}</h2>
     <dl class="govuk-summary-list govuk-summary-list--no-border">
@@ -51,6 +51,30 @@
     </ul>
     <h2 class="govuk-heading-s govuk-!-margin-top-7">You added 1 variety to {{data.nurseryplotno or "Top field"}}</h2>
 
+    {% if data.commodity == "bulbs" %}
+    <table class="govuk-table govuk-!-margin-bottom-4">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">Botanical name or description</th>
+          <th class="govuk-table__header govuk-table__header--numeric" scope="col">Approximate hectarage of plot to be inspected</th>
+          <!-- <th class="govuk-table__header" scope="col">Destination countries</th> -->
+          <th class="govuk-table__header" scope="col"></th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">{{data.botanical_name or "Corylus avellana (CYLAV)"}}</td>
+          <td class="govuk-table__cell govuk-table__cell--numeric">{{data.approxhectofplot or "2"}}</td>
+          <!-- <td class="govuk-table__cell">{{data.destinationcountries or "Belize"}}</td> -->
+          <td class="govuk-table__cell">
+            <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">Change</a>
+            <br>
+            <a href="delete-crop" class="govuk-link govuk-link--no-visited-state">Delete</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    {% elif data.commodity == "potatoes" %}
     <table class="govuk-table govuk-!-margin-bottom-4">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
@@ -62,7 +86,7 @@
       </thead>
       <tbody class="govuk-table__body">
         <tr class="govuk-table__row">
-          <td class="govuk-table__cell">{% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}}{% endif %}</td>
+          <td class="govuk-table__cell">{% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}Corylus avellana{% endif %}</td>
           <td class="govuk-table__cell govuk-table__cell--numeric">{{data.approxhectofplot or "2"}}</td>
           <!-- <td class="govuk-table__cell">{{data.destinationcountries or "Belize"}}</td> -->
           <td class="govuk-table__cell">
@@ -73,6 +97,30 @@
         </tr>
       </tbody>
     </table>
+    {% else %}
+    <table class="govuk-table govuk-!-margin-bottom-4">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">Variety</th>
+          <th class="govuk-table__header govuk-table__header--numeric" scope="col">Approximate hectarage of plot to be inspected</th>
+          <!-- <th class="govuk-table__header" scope="col">Destination countries</th> -->
+          <th class="govuk-table__header" scope="col"></th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}}</td>
+          <td class="govuk-table__cell govuk-table__cell--numeric">{{data.approxhectofplot or "2"}}</td>
+          <!-- <td class="govuk-table__cell">{{data.destinationcountries or "Belize"}}</td> -->
+          <td class="govuk-table__cell">
+            <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">Change</a>
+            <br>
+            <a href="delete-crop" class="govuk-link govuk-link--no-visited-state">Delete</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    {% endif %}
 
     {% if commodity.has_botanicial_name == "yes" %}
     {% set commodity_id_name = commodity.genus %}
