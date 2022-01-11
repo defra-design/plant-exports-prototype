@@ -6,6 +6,70 @@ Check your answers before sending your application - Seed sampling - {{serviceNa
 {{super()}}
 <a href="javascript:history.back()" class="govuk-back-link">Back</a>
 {% endblock %}
+
+{% if data.commodities.length == 0%}
+{% set items = [
+  {
+    commodity: 'Antirrhinum majus', 
+    variety: 'Crackle & Pop', 
+    commodity_lot: '93880-*-*-1',
+    quantity: '41,000', 
+    country: 'Kenya'
+  },{
+    commodity: 'Begonia boliviensis', 
+    variety: 'Bossa Nova', 
+    commodity_lot: '84870-*-*-1',
+    quantity: '5,000',
+    country: 'UK'
+  },{
+    commodity: 'Cosmos bipinnatus', 
+    variety: 'Apollo', 
+    commodity_lot: '94218-*-*-1', 
+    quantity: '10,000', 
+    country: 'India'
+  },{
+    commodity: 'Nemesia foetens', 
+    variety: 'Seventh Heaven', 
+    commodity_lot: '83471-*-*-1', 
+    quantity: '5,000',
+    country: 'Kenya'
+  },{
+    commodity: 'Pelargonium x hortorum', 
+    variety: 'Horizon', 
+    commodity_lot: '83786-*-H-1', 
+    quantity: '8,000', 
+    country: 'Kenya'
+  },{
+    commodity: 'Pelargonium x hortorum', 
+    variety: 'Divas', 
+    commodity_lot: '83786-*-H-1', 
+    quantity: '5,000', 
+    country: 'Kenya'
+  },{
+    commodity: 'Pelargonium x hortorum', 
+    variety: 'Dancer', 
+    commodity_lot: '86830-*-H-1', 
+    quantity: '7,000', 
+    country: 'India'
+  },{
+    commodity: 'Pelargonium x hortorum', 
+    variety: 'Quantum', 
+    commodity_lot: '75032-*-H-1', 
+    quantity: '3,000', 
+    country: 'Kenya'
+  },{
+    commodity: 'Salvia splendens', 
+    variety: 'Mojave Imp', 
+    commodity_lot: '86262-*-*-1', 
+    quantity: '5,000', 
+    country: 'India'
+  }
+  ]
+%}
+{% else %}
+{% set items = data.commodities %}
+{% endif %}
+
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-three-quarters">
@@ -122,7 +186,7 @@ Check your answers before sending your application - Seed sampling - {{serviceNa
         </tr>
       </thead>
       <tbody class="govuk-table__body">
-        {% for commodity in data.commodities %}
+        {% for commodity in items %}
         {% block summaryGeneral %}{% include "../../modules/_summary-seed-sampling.html" %}{% endblock %}
         {% endfor %}
       </tbody>
