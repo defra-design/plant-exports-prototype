@@ -98,7 +98,7 @@
               <input class="govuk-radios__input" id="how-contacted-conditional-3" name="has_botanicial_name" type="radio" value="use_description" data-aria-controls="conditional-how-contacted-conditional-3"{% if data.has_botanicial_name == "use_description" %} checked{% endif %}>
               <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-3">Description</label>
               
-              <div id="how-contacted-conditional-hint" class="govuk-hint govuk-radios__hint">
+              <div id="commodity_description-hint" class="govuk-hint govuk-radios__hint">
                 If you cannot find the botanical name, or your product is made of many species, enter a description instead
               </div>
 
@@ -107,9 +107,9 @@
             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional-3">
               
               <div class="govuk-form-group">
-                <label class="govuk-visually-hidden" for="passport-number">Description of the {{data.commodity or "plant"}}</label>
+                <label class="govuk-visually-hidden" for="commodity_description">Description of the {{data.commodity or "plant"}}</label>
                 <!-- <span class="govuk-hint">Only use this if you cannot enter the botanical name and you do not have an agreed common name</span> -->
-                <textarea class="govuk-textarea" id="plant-identify--description" name="commodity_description" rows="4" aria-describedby="more-detail-hint"></textarea>
+                <textarea class="govuk-textarea" id="commodity_description" name="commodity_description" rows="4" aria-describedby="commodity_description-hint">{{data.commodity_description or ""}}</textarea>
               </div>
 
             </div>
@@ -257,6 +257,36 @@
 
 </div>
 
+<!-- JavaScript (START) -->
+<script type="text/javascript" src="/public/javascripts/jquery-3.6.0.js"></script>
+<script type="text/javascript">
+
+  /* Clear down any entered commodity information for a previous choice
+     + Bulbs ('Botanical name' or 'Description')
+     + Potatoes ('Search for a variety' or 'Enter a variety')
+  */
+  $("input[name='has_botanicial_name']").change(function () {
+    
+    var commodityInfo = $("input[name='has_botanicial_name']:checked").val();
+
+    // User has chosen to search, so we clear down the manual value entered
+    if (commodityInfo == "Yes") {
+      // Bulbs
+      $("#commodity_description").val('');
+      // Potatoes
+      $("#commodity_variety_other").val('');
+    }
+    // User has chosen to enter a manual value, so we clear the search value entered
+    else if (commodityInfo == "use_description" || commodityInfo == "Other") {
+      // Bulbs
+      $("#autocomplete-customTemplates").val('');
+      // Potatoes
+      $("#autocomplete-progressiveEnhancement-0").val('');
+    }
+               
+  });
+
+</script>
 <script type="text/javascript">
   
   window.addEventListener('load', function() {
@@ -266,4 +296,5 @@
   });
 
 </script>
+<!-- JavaScript (END) -->
 {% endblock %}

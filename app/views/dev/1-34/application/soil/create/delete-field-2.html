@@ -22,53 +22,6 @@
 
   <div class="govuk-grid-column-two-thirds">
 
-    {% if query.designB == "true" %}
-    <form action="commodity-list?addfielddetails2=&navigation_googlemaps2=&navigation_gridgps2=&navigation_iacs2=&navigation_what3words2=&nurseryplotno2=&areaoffield2=&confirm2=&more_detail2=&send_inspector_map2=&map_upload2=&has_botanicial_name3=&commodity_variety3=&commodity_variety_other3=&approxhectofplot3=&destinationcountries3=&commodity_lot3=" method="post">
-      
-      <div class="govuk-button-group">
-        <h1 class="govuk-heading-xl">Confirm you want to remove {{data.nurseryplotno2 or "Bottom field"}}</h1>
-        <dl class="govuk-summary-list govuk-summary-list--no-border">
-    
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">{% if data.addfielddetails2 == "Google Maps" %}Google Maps{% elif data.addfielddetails2 == "iacs" %}IACS or RLR number{% elif data.addfielddetails2 == "gridgps" %}Grid reference or GPS reading{% elif data.addfielddetails2 == "what3words" %}what3words address{% else %}Grid reference or GPS reading{% endif %}</dt>
-            <dd class="govuk-summary-list__value">{% if data.addfielddetails2 == "Google Maps" %}{{data.navigation_googlemaps2 or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails2 == "iacs" %}{{data.navigation_iacs2 or "NF 1234 1234"}}{% elif data.addfielddetails2 == "gridgps" %}{{data.navigation_gridgps2 or "NX 509 582"}}{% elif data.addfielddetails2 == "what3words" %}///{{data.navigation_what3words2 or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}</dd>
-            <dd class="govuk-summary-list__actions">&nbsp;</dd>
-          </div>
-    
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Area to be inspected in hectares</dt>
-            <dd class="govuk-summary-list__value">{{data.areaoffield2 or "3.5"}}</dd>
-            <dd class="govuk-summary-list__actions">&nbsp;</dd>
-          </div>
-    
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Field map</dt>
-            <dd class="govuk-summary-list__value">{% if data.send_inspector_map2 == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload2 or "Filename.jpg"}}</a>{% else %}Not provided{% endif %}</dd>
-            <dd class="govuk-summary-list__actions">&nbsp;</dd>
-          </div>
-    
-        </dl>
-
-        <div class="govuk-inset-text govuk-!-margin-top-2">
-          This will also delete any {% if data.commodity == "potatoes" %}ware potatoes{% else %}crops{% endif %} you have added for inspection at this location.
-        </div>
-
-        <!-- <p class="govuk-body">This will permanently delete it from your list of fields, along with any associated {% if data.commodity == "potatoes" %}ware potatoes{% else %}crops{% endif %} you have added.</p> -->
-      </div>
-
-      <div class="govuk-button-group">
-        <button class="govuk-button govuk-button--warning" type="submit" data-module="govuk-button">Delete field</button>
-        <a class="govuk-link" href="commodity-list">Cancel and go back</a>
-      </div>
-
-      <!-- Session data hook to update the task list so that this section is marked as 'NOT COMPLETED' -->
-      <div class="govuk-form-group" hidden>
-        <label class="govuk-label" for="field_task_list_data">Task list section URL</label>
-        <input class="govuk-input" id="field_task_list_data" name="field_task_list_data" type="text" value="Not Completed">
-      </div>
-          
-    </form>
-    {% else %}
     <form action="commodity-list" method="post">
 
       <div class="govuk-form-group">
@@ -99,10 +52,10 @@
           </dl>
 
           <div class="govuk-inset-text">
-            This will also delete any {% if data.commodity == "potatoes" %}ware potatoes{% else %}crops{% endif %} you have added for inspection at this location.
+            This will also delete any {% if data.commodity == "potatoes" %}ware potatoes{% else %}{{data.commodity or "crops"}}{% endif %} you have added for inspection at this location.
           </div>
   
-          <!-- <p class="govuk-body">This will permanently delete it from your list of fields, along with any associated {% if data.commodity == "potatoes" %}ware potatoes{% else %}crops{% endif %} you have added.</p> -->
+          <!-- <p class="govuk-body">This will permanently delete it from your list of fields, along with any associated {% if data.commodity == "potatoes" %}ware potatoes{% else %}{{data.commodity or "crops"}}{% endif %} you have added.</p> -->
           
           <div class="govuk-radios" data-module="govuk-radios">
             
@@ -130,7 +83,6 @@
       </div>
 
     </form>
-    {% endif %}
 
   </div>
 
