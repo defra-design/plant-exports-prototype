@@ -18,6 +18,15 @@
 {% endblock %}
 
 {% block content %}
+<style>
+
+  /* Needs extracting and adding to the external Sass or CSS */
+  .no-padding {
+    padding: 0px !important;
+  }
+
+</style>
+
 <div class="govuk-grid-row">
   
   <div class="govuk-grid-column-three-quarters">
@@ -97,13 +106,40 @@
             {% if data.addfielddetails == "Google Maps" %}Google Maps{% elif data.addfielddetails == "iacs" %}IACS or RLR number{% elif data.addfielddetails == "gridgps" %}Grid reference or GPS reading{% elif data.addfielddetails == "what3words" %}what3words address{% else %}Grid reference or GPS reading{% endif %}: {% if data.addfielddetails == "Google Maps" %}{{data.navigation_googlemaps or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails == "iacs" %}{{data.navigation_iacs or "NF 1234 1234"}}{% elif data.addfielddetails == "gridgps" %}{{data.navigation_gridgps or "NX 509 582"}}{% elif data.addfielddetails == "what3words" %}///{{data.navigation_what3words or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}
             <br>
             Field map: {% if data.send_inspector_map == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload or "Filename.jpg"}}</a>{% else %}Not provided{% endif %}
+            {% if data.commodity == "bulbs" %}
             <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
               <li>
-                {% if data.commodity == "bulbs" %}{% if data.commodity_description %}{{data.commodity_description}}{% else %}{{data.botanical_name or "Corylus avellana (CYLAV)"}}{% endif %}{% elif data.commodity == "potatoes" %}{% if data.commodity_variety_other %}{{data.commodity_variety_other}}{% else %}{% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}Corylus avellana{% endif %}{% endif %}{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}}{% endif %} - {{data.approxhectofplot or "2"}} hectares
+                {% if data.commodity_description %}{{data.commodity_description}}{% else %}{{data.botanical_name or "Corylus avellana (CYLAV)"}}{% endif %} - {{data.approxhectofplot or "2"}} hectares
                 <!-- <br>
                 {{data.destinationcountries or "Belize"}} -->
               </li>
             </ul>
+            {% elif data.commodity == "plants" %}
+            <h3 class="govuk-heading-s govuk-!-margin-top-4">{{data.commodity_type or "Plants"}}</h3> 
+            <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
+              <li>  
+                {% if data.commodity_description %}{{data.commodity_description}}{% else %}{{data.botanical_name or "Corylus avellana (CYLAV)"}}{% endif %} - {{data.approxhectofplot or "2"}} hectares
+                <!-- <br>
+                {{data.destinationcountries or "Belize"}} -->
+              </li>
+            </ul>
+            {% elif data.commodity == "potatoes" %}
+            <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
+              <li>
+                {% if data.commodity_variety_other %}{{data.commodity_variety_other}}{% else %}{% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}Corylus avellana{% endif %}{% endif %} - {{data.approxhectofplot or "2"}} hectares
+                <!-- <br>
+                {{data.destinationcountries or "Belize"}} -->
+              </li>
+            </ul>
+            {% else %}
+            <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
+              <li>
+                {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}} - {{data.approxhectofplot or "2"}} hectares
+                <!-- <br>
+                {{data.destinationcountries or "Belize"}} -->
+              </li>
+            </ul>
+            {% endif %}
           </dd>          
           <dd class="govuk-summary-list__actions"><a class="govuk-link" href="{{data.field_task_list_data or 'commodity-list'}}?change=yes&return_url=check-your-answers#1">Change<span class="govuk-visually-hidden"> {{data.nurseryplotno or "Top field"}}</span></a></dd>
         </div>
@@ -116,18 +152,79 @@
             {% if data.addfielddetails == "Google Maps" %}Google Maps{% elif data.addfielddetails == "iacs" %}IACS or RLR number{% elif data.addfielddetails == "gridgps" %}Grid reference or GPS reading{% elif data.addfielddetails == "what3words" %}what3words address{% else %}Grid reference or GPS reading{% endif %}: {% if data.addfielddetails == "Google Maps" %}{{data.navigation_googlemaps or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails == "iacs" %}{{data.navigation_iacs or "NF 1234 1234"}}{% elif data.addfielddetails == "gridgps" %}{{data.navigation_gridgps or "NX 509 582"}}{% elif data.addfielddetails == "what3words" %}///{{data.navigation_what3words or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}
             <br>
             Field map: {% if data.send_inspector_map == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload or "Filename.jpg"}}</a>{% else %}Not provided{% endif %}
+            {% if data.commodity == "bulbs" %}
             <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
               <li>
-                {% if data.commodity == "bulbs" %}{% if data.commodity_description2 %}{{data.commodity_description2}}{% else %}{{data.botanical_name2 or "Malus x atrosanguinea (MABAT)"}}{% endif %}{% elif data.commodity == "potatoes" %}{% if data.commodity_variety_other2 %}{{data.commodity_variety_other2}}{% else %}{% if data.commodity_variety2 == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety2 == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}Corylus avellana{% endif %}{% endif %}{% else %}{{data.commodity_host_species2 or data.genus2 or data.commodity_common_name2 or data.commodity_type2 or data.commodity_variety_other2 or "Corylus avellana"}}{% endif %} - {{data.approxhectofplot2 or "18"}} hectares
+                {% if data.commodity_description2 %}{{data.commodity_description2}}{% else %}{{data.botanical_name2 or "Malus x atrosanguinea (MABAT)"}}{% endif %} - {{data.approxhectofplot2 or "18"}} hectares
                 <!-- <br>
                 {{data.destinationcountries2 or "USA"}} -->
               </li>
               <li>
-                {% if data.commodity == "bulbs" %}{% if data.commodity_description %}{{data.commodity_description}}{% else %}{{data.botanical_name or "Corylus avellana (CYLAV)"}}{% endif %}{% elif data.commodity == "potatoes" %}{% if data.commodity_variety_other %}{{data.commodity_variety_other}}{% else %}{% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}Corylus avellana{% endif %}{% endif %}{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}}{% endif %} - {{data.approxhectofplot or "2"}} hectares
+                {% if data.commodity_description %}{{data.commodity_description}}{% else %}{{data.botanical_name or "Corylus avellana (CYLAV)"}}{% endif %} - {{data.approxhectofplot or "2"}} hectares
                 <!-- <br>
                 {{data.destinationcountries or "Belize"}} -->
               </li>
             </ul>
+            {% elif data.commodity == "plants" %}
+            {% if data.commodity_type == data.commodity_type2 %}
+            <h3 class="govuk-heading-s govuk-!-margin-top-4">{{data.commodity_type or data.commodity_type2 or "Plants"}}</h3> 
+            <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
+              <li>
+                {% if data.commodity_description2 %}{{data.commodity_description2}}{% else %}{{data.botanical_name2 or "Malus x atrosanguinea (MABAT)"}}{% endif %} - {{data.approxhectofplot2 or "18"}} hectares
+                <!-- <br>
+                {{data.destinationcountries2 or "USA"}} -->
+              </li>
+              <li>  
+                {% if data.commodity_description %}{{data.commodity_description}}{% else %}{{data.botanical_name or "Corylus avellana (CYLAV)"}}{% endif %} - {{data.approxhectofplot or "2"}} hectares
+                <!-- <br>
+                {{data.destinationcountries or "Belize"}} -->
+              </li>
+            </ul>
+            {% else %}
+            <h3 class="govuk-heading-s govuk-!-margin-top-4">{{data.commodity_type2 or "Produce (fruit, flowers or vegetables)"}}</h3> 
+            <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
+              <li>
+                {% if data.commodity_description2 %}{{data.commodity_description2}}{% else %}{{data.botanical_name2 or "Malus x atrosanguinea (MABAT)"}}{% endif %} - {{data.approxhectofplot2 or "18"}} hectares
+                <!-- <br>
+                {{data.destinationcountries2 or "USA"}} -->
+              </li>
+            </ul>
+            <h3 class="govuk-heading-s no-padding">{{data.commodity_type or "Plants"}}</h3> 
+            <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
+              <li>  
+                {% if data.commodity_description %}{{data.commodity_description}}{% else %}{{data.botanical_name or "Corylus avellana (CYLAV)"}}{% endif %} - {{data.approxhectofplot or "2"}} hectares
+                <!-- <br>
+                {{data.destinationcountries or "Belize"}} -->
+              </li>
+            </ul>
+            {% endif %}
+            {% elif data.commodity == "potatoes" %}
+            <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
+              <li>
+                {% if data.commodity_variety_other2 %}{{data.commodity_variety_other2}}{% else %}{% if data.commodity_variety2 == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety2 == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}Corylus avellana{% endif %}{% endif %} - {{data.approxhectofplot2 or "18"}} hectares
+                <!-- <br>
+                {{data.destinationcountries2 or "USA"}} -->
+              </li>
+              <li>
+                {% if data.commodity_variety_other %}{{data.commodity_variety_other}}{% else %}{% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}Corylus avellana{% endif %}{% endif %} - {{data.approxhectofplot or "2"}} hectares
+                <!-- <br>
+                {{data.destinationcountries or "Belize"}} -->
+              </li>
+            </ul>
+            {% else %}
+            <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
+              <li>
+                {{data.commodity_host_species2 or data.genus2 or data.commodity_common_name2 or data.commodity_type2 or data.commodity_variety_other2 or "Corylus avellana"}} - {{data.approxhectofplot2 or "18"}} hectares
+                <!-- <br>
+                {{data.destinationcountries2 or "USA"}} -->
+              </li>
+              <li>
+                {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}} - {{data.approxhectofplot or "2"}} hectares
+                <!-- <br>
+                {{data.destinationcountries or "Belize"}} -->
+              </li>
+            </ul>
+            {% endif %}
           </dd>          
           <dd class="govuk-summary-list__actions"><a class="govuk-link" href="{{data.field_task_list_data or 'commodity-list'}}?change=yes&return_url=check-your-answers#1">Change<span class="govuk-visually-hidden"> {{data.nurseryplotno or "Top field"}}</span></a></dd>
         </div>
@@ -140,13 +237,40 @@
             {% if data.addfielddetails2 == "Google Maps" %}Google Maps{% elif data.addfielddetails2 == "iacs" %}IACS or RLR number{% elif data.addfielddetails2 == "gridgps" %}Grid reference or GPS reading{% elif data.addfielddetails2 == "what3words" %}what3words address{% else %}Grid reference or GPS reading{% endif %}: {% if data.addfielddetails2 == "Google Maps" %}{{data.navigation_googlemaps2 or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails2 == "iacs" %}{{data.navigation_iacs2 or "NF 1234 1234"}}{% elif data.addfielddetails2 == "gridgps" %}{{data.navigation_gridgps2 or "NX 509 582"}}{% elif data.addfielddetails2 == "what3words" %}///{{data.navigation_what3words2 or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}
             <br>
             Field map: {% if data.send_inspector_map2 == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload2 or "Another filename.jpg"}}</a>{% else %}Not provided{% endif %}
+            {% if data.commodity == "bulbs" %}
             <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
               <li>
-                {% if data.commodity == "bulbs" %}{% if data.commodity_description3 %}{{data.commodity_description3}}{% else %}{{data.botanical_name3 or "Dicksonia squarrosa (DCKSQ)"}}{% endif %}{% elif data.commodity == "potatoes" %}{% if data.commodity_variety_other3 %}{{data.commodity_variety_other3}}{% else %}{% if data.commodity_variety3 == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety3 == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}Corylus avellana{% endif %}{% endif %}{% else %}{{data.commodity_host_species3 or data.genus3 or data.commodity_common_name3 or data.commodity_type3 or data.commodity_variety_other3 or "Corylus avellana"}}{% endif %} - {{data.approxhectofplot3 or "50"}} hectares
+                {% if data.commodity_description3 %}{{data.commodity_description3}}{% else %}{{data.botanical_name3 or "Dicksonia squarrosa (DCKSQ)"}}{% endif %} - {{data.approxhectofplot3 or "50"}} hectares
                 <!-- <br>
                 {{data.destinationcountries3 or "Brazil"}} -->
               </li>
             </ul>
+            {% elif data.commodity == "plants" %}
+            <h3 class="govuk-heading-s govuk-!-margin-top-4">{{data.commodity_type or "Plants"}}</h3> 
+            <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
+              <li>  
+                {% if data.commodity_description3 %}{{data.commodity_description3}}{% else %}{{data.botanical_name3 or "Dicksonia squarrosa (DCKSQ)"}}{% endif %} - {{data.approxhectofplot3 or "50"}} hectares
+                <!-- <br>
+                {{data.destinationcountries3 or "Brazil"}} -->
+              </li>
+            </ul>
+            {% elif data.commodity == "potatoes" %}
+            <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
+              <li>
+                {% if data.commodity_variety_other3 %}{{data.commodity_variety_other3}}{% else %}{% if data.commodity_variety3 == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety3 == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}Corylus avellana{% endif %}{% endif %} - {{data.approxhectofplot3 or "50"}} hectares
+                <!-- <br>
+                {{data.destinationcountries3 or "Brazil"}} -->
+              </li>
+            </ul>
+            {% else %}
+            <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
+              <li>
+                {{data.commodity_host_species3 or data.genus3 or data.commodity_common_name3 or data.commodity_type3 or data.commodity_variety_other3 or "Corylus avellana"}} - {{data.approxhectofplot3 or "50"}} hectares
+                <!-- <br>
+                {{data.destinationcountries3 or "Brazil"}} -->
+              </li>
+            </ul>
+            {% endif %}
           </dd>          
           <dd class="govuk-summary-list__actions"><a class="govuk-link" href="{{data.field_task_list_data or 'commodity-list'}}?change=yes&return_url=check-your-answers#1">Change<span class="govuk-visually-hidden"> {{data.nurseryplotno2 or "Bottom field"}}</span></a></dd>
         </div>
@@ -159,13 +283,40 @@
             {% if data.addfielddetails == "Google Maps" %}Google Maps{% elif data.addfielddetails == "iacs" %}IACS or RLR number{% elif data.addfielddetails == "gridgps" %}Grid reference or GPS reading{% elif data.addfielddetails == "what3words" %}what3words address{% else %}Grid reference or GPS reading{% endif %}: {% if data.addfielddetails == "Google Maps" %}{{data.navigation_googlemaps or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails == "iacs" %}{{data.navigation_iacs or "NF 1234 1234"}}{% elif data.addfielddetails == "gridgps" %}{{data.navigation_gridgps or "NX 509 582"}}{% elif data.addfielddetails == "what3words" %}///{{data.navigation_what3words or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}
             <br>
             Field map: {% if data.send_inspector_map == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload or "Filename.jpg"}}</a>{% else %}Not provided{% endif %}
+            {% if data.commodity == "bulbs" %}
             <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
               <li>
-                {% if data.commodity == "bulbs" %}{% if data.commodity_description %}{{data.commodity_description}}{% else %}{{data.botanical_name or "Corylus avellana (CYLAV)"}}{% endif %}{% elif data.commodity == "potatoes" %}{% if data.commodity_variety_other %}{{data.commodity_variety_other}}{% else %}{% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}Corylus avellana{% endif %}{% endif %}{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}}{% endif %} - {{data.approxhectofplot or "2"}} hectares
+                {% if data.commodity_description %}{{data.commodity_description}}{% else %}{{data.botanical_name or "Corylus avellana (CYLAV)"}}{% endif %} - {{data.approxhectofplot or "2"}} hectares
                 <!-- <br>
                 {{data.destinationcountries or "Belize"}} -->
               </li>
             </ul>
+            {% elif data.commodity == "plants" %}
+            <h3 class="govuk-heading-s govuk-!-margin-top-4">{{data.commodity_type or "Plants"}}</h3> 
+            <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
+              <li>  
+                {% if data.commodity_description %}{{data.commodity_description}}{% else %}{{data.botanical_name or "Corylus avellana (CYLAV)"}}{% endif %} - {{data.approxhectofplot or "2"}} hectares
+                <!-- <br>
+                {{data.destinationcountries or "Belize"}} -->
+              </li>
+            </ul>
+            {% elif data.commodity == "potatoes" %}
+            <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
+              <li>
+                {% if data.commodity_variety_other %}{{data.commodity_variety_other}}{% else %}{% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}Corylus avellana{% endif %}{% endif %} - {{data.approxhectofplot or "2"}} hectares
+                <!-- <br>
+                {{data.destinationcountries or "Belize"}} -->
+              </li>
+            </ul>
+            {% else %}
+            <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
+              <li>
+                {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}} - {{data.approxhectofplot or "2"}} hectares
+                <!-- <br>
+                {{data.destinationcountries or "Belize"}} -->
+              </li>
+            </ul>
+            {% endif %}
           </dd>          
           <dd class="govuk-summary-list__actions"><a class="govuk-link" href="{{data.field_task_list_data or 'commodity-list'}}?change=yes&return_url=check-your-answers#2">Change<span class="govuk-visually-hidden"> {{data.nurseryplotno or "Top field"}}</span></a></dd>
         </div>
