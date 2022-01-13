@@ -52,12 +52,15 @@
 
     <form action="how-to-identify" method="POST">
 
-      <h1 class="govuk-heading-xl">Field location</h1>
-
+      <h1 class="govuk-heading-xl">Crop location</h1>
+      <p class="govuk-body">
+        Describe a location for inspection. You will be able to list multiple crops for inspection at this location if you want to.
+      </p>
       <div class="govuk-form-group govuk-!-margin-bottom-1">
-        <fieldset class="govuk-fieldset">
-          <legend class="govuk-fieldset__legend">How do you want to provide the location?</legend>
 
+          <!-- FOUR LOCATION OPTIONS -->
+          <!--
+          <fieldset class="govuk-fieldset">
           <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
 
             <div class="govuk-radios__item">
@@ -70,7 +73,6 @@
               <div class="govuk-form-group">
                 <label class="govuk-label wrap-content" for="navigation_googlemaps">For example, https://www.google.com/maps/place/Natural+England/@53.0922428,-2.415669,17z/data=!4m6!3m5!1s0x0:0xa679866b86f4e67c!4b1!8m2!3d53.0917192!4d-2.4162063</label>
                 <textarea class="govuk-textarea govuk-!-width-three-quarters" id="navigation_googlemaps" name="navigation_googlemaps" rows="3">{{data.navigation_googlemaps or ''}}</textarea>
-                <!-- <input class="govuk-input govuk-!-width-three-quarters" id="navigation_googlemaps" name="navigation_googlemaps" type="text" spellcheck="false" value="{{data.navigation_googlemaps or ''}}"> -->
               </div>
             
             </div>
@@ -145,8 +147,64 @@
             </details>
           </div>
       
-        </fieldset>      
+        </fieldset>  
+        -->    
       </div>
+    
+
+    {% set iacsHtml %}
+        {{ govukInput({
+          id: "iacs",
+          name: "navigation",
+          type: "text",
+          spellcheck: false,
+          classes: "govuk-!-width-one-third",
+          label: {
+            text: "Enter the 10 character IACS or RLR number. For example, NF 1234 1234."
+          }
+        }) }}
+        {% endset -%}
+
+        {% set gridHtml %}
+        {{ govukInput({
+          id: "gridgps",
+          name: "navigation",
+          type: "text",
+          spellcheck: false,
+          classes: "govuk-!-width-one-third",
+          label: {
+            text: "Enter the grid reference or GPS reading"
+          }
+        }) }}
+        {% endset -%}
+
+        {{ govukRadios({
+          idPrefix: "addfielddetails",
+          name: "addfielddetails",
+          fieldset: {
+            legend: {
+              text: "How do you want to provide the location?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend"
+            }
+          },
+          items: [
+              {
+                value: "iacs",
+                text: "IACS/RLR number",
+                conditional: {
+                  html: iacsHtml
+                }
+              },
+              {
+                value: "gridgps",
+                text: "Grid reference or GPS reading",
+                conditional: {
+                  html: gridHtml
+                }
+            }
+          ]
+        }) }}
 
       {{ govukInput({
         label: {
