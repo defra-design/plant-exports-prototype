@@ -2,6 +2,70 @@
 {% block pageTitle %}
 Review your answers - {{serviceName}} - GOV.UK
 {% endblock %}
+
+{% if data.commodities.length == 0%}
+{% set items = [
+  {
+    commodity: 'Antirrhinum majus', 
+    variety: 'Crackle & Pop', 
+    commodity_lot: '93880-*-*-1',
+    quantity: '41,000', 
+    country: 'New Zealand'
+  },{
+    commodity: 'Begonia boliviensis', 
+    variety: 'Bossa Nova', 
+    commodity_lot: '84870-*-*-1',
+    quantity: '5,000',
+    country: 'France, Spain, Israel'
+  },{
+    commodity: 'Cosmos bipinnatus', 
+    variety: 'Apollo', 
+    commodity_lot: '94218-*-*-1', 
+    quantity: '10,000', 
+    country: 'France'
+  },{
+    commodity: 'Nemesia foetens', 
+    variety: 'Seventh Heaven', 
+    commodity_lot: '83471-*-*-1', 
+    quantity: '5,000',
+    country: 'Spain, Belgium'
+  },{
+    commodity: 'Pelargonium x hortorum', 
+    variety: 'Horizon', 
+    commodity_lot: '83786-*-H-1', 
+    quantity: '8,000', 
+    country: 'Belgium'
+  },{
+    commodity: 'Pelargonium x hortorum', 
+    variety: 'Divas', 
+    commodity_lot: '83786-*-H-1', 
+    quantity: '5,000', 
+    country: 'Israel'
+  },{
+    commodity: 'Pelargonium x hortorum', 
+    variety: 'Dancer', 
+    commodity_lot: '86830-*-H-1', 
+    quantity: '7,000', 
+    country: 'New Zealand'
+  },{
+    commodity: 'Pelargonium x hortorum', 
+    variety: 'Quantum', 
+    commodity_lot: '75032-*-H-1', 
+    quantity: '3,000', 
+    country: 'Spain'
+  },{
+    commodity: 'Salvia splendens', 
+    variety: 'Mojave Imp', 
+    commodity_lot: '86262-*-*-1', 
+    quantity: '5,000', 
+    country: 'France'
+  }
+  ]
+%}
+{% else %}
+{% set items = data.commodities %}
+{% endif %}
+
 {% block beforeContent%}
 {{super()}}
 <a href="javascript:history.back()" class="govuk-back-link">Back</a>
@@ -241,7 +305,25 @@ Review your answers - {{serviceName}} - GOV.UK
     {% elseif data.commodity == "seeds" %}
       <h2 class="govuk-heading-m">Your consignment</h2>
 
-      {% if data.upload == 1 %}
+      <table class="govuk-table govuk-!-margin-bottom-4">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Description</th>
+            <th class="govuk-table__header" scope="col">Variety</th>
+            <th class="govuk-table__header" scope="col">Lot reference</th>
+            <th class="govuk-table__header" scope="col">Quantity</th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          {% for commodity in items %}
+          {% include "../modules/_summary-seed-sampling.html" %}
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <p class="govuk-body">The following additional commodities where uploaded</p>
+
       <table class="govuk-table govuk-!-margin-bottom-4">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
@@ -258,25 +340,54 @@ Review your answers - {{serviceName}} - GOV.UK
           </tr>
         </thead>
         <tbody class="govuk-table__body">
-          {% include "../modules/_summary-seed-bulk.html" %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              <a href="/public/images/template-seeds-sample-example.csv">21.11.30 XXXXXXX C144158.csv</a>
+            </td>
+            <td class="govuk-table__cell">
+              108
+            </td>
+            <td class="govuk-table__cell">
+              29.53kg
+            </td>
+            <td class="govuk-table__cell" style="text-align:right;">
+              <a href="#" class="govuk-link govuk-link--no-visited-state">
+                View
+              </a>
+              <br/>
+              <a href="commodity-list-seeds-mvp?return_url=check-your-answers-seeds" class="govuk-link govuk-link--no-visited-state">
+                Change
+              </a>
+              <br/>
+            </td>
+          </tr>
+   
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              <a href="/public/images/template-seeds-sample-example.csv">21.09.16 XXXXXXX C154189.csv</a>
+            </td>
+            <td class="govuk-table__cell">
+              236
+            </td>
+            <td class="govuk-table__cell">
+              16.34kg
+            </td>
+            <td class="govuk-table__cell" style="text-align:right;">
+              <a href="#" class="govuk-link govuk-link--no-visited-state">
+                View
+              </a>
+              <br/>
+              <a href="commodity-list-seeds-mvp?return_url=check-your-answers-seeds" class="govuk-link govuk-link--no-visited-state">
+                Change
+              </a>
+              <br/>
+            </td>
+          </tr>
       </tbody>
     </table>
-      {% else %}
-      <table class="govuk-table govuk-!-margin-bottom-4">
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">Lot reference</th>
-            <th class="govuk-table__header" scope="col">Quantity</th>
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Action</th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-          {% set showAll=true %}
-          {% include "../modules/_summary-seed.html" %}
-        </tbody>
-      </table>
-      {% endif %}
+
+
+
 
       {% elseif data.journey == "coc" %}
 
