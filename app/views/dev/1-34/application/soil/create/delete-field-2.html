@@ -51,24 +51,28 @@
       
           </dl>
 
+          {% if data.commodity == 'bulbs' or data.commodity == 'plants' %}
+          
+          {% else %}
           <div class="govuk-inset-text">
             This will also delete any {% if data.commodity == "potatoes" %}ware potatoes{% else %}{{data.commodity or "crops"}}{% endif %} you have added for inspection at this location.
           </div>
+          {% endif %}
   
           <!-- <p class="govuk-body">This will permanently delete it from your list of fields, along with any associated {% if data.commodity == "potatoes" %}ware potatoes{% else %}{{data.commodity or "crops"}}{% endif %} you have added.</p> -->
           
           <div class="govuk-radios" data-module="govuk-radios">
             
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="delete_yes" name="delete" type="radio" value="Yes~commodity-list?addfielddetails2=&navigation_googlemaps2=&navigation_gridgps2=&navigation_iacs2=&navigation_what3words2=&nurseryplotno2=&areaoffield2=&confirm2=&more_detail2=&send_inspector_map2=&map_upload2=&has_botanicial_name3=&commodity_variety3=&commodity_variety_other3=&approxhectofplot3=&destinationcountries3=&commodity_lot3=">
+              <input class="govuk-radios__input" id="delete_yes" name="delete" type="radio" value="Yes~{% if data.commodity == 'bulbs' or data.commodity == 'plants' %}field-list{% else %}commodity-list{% endif %}?addfielddetails2=&navigation_googlemaps2=&navigation_gridgps2=&navigation_iacs2=&navigation_what3words2=&nurseryplotno2=&areaoffield2=&confirm2=&more_detail2=&send_inspector_map2=&map_upload2=&has_botanicial_name3=&commodity_variety3=&commodity_variety_other3=&approxhectofplot3=&destinationcountries3=&commodity_lot3=">
               <label class="govuk-label govuk-radios__label govuk-radios-long-label" for="delete_yes">Yes, delete this field</label>
             </div>
 
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="delete_no" name="delete" type="radio" value="No~commodity-list-2-fields">
+              <input class="govuk-radios__input" id="delete_no" name="delete" type="radio" value="No~{% if data.commodity == 'bulbs' or data.commodity == 'plants' %}field-list-2{% else %}commodity-list-2-fields{% endif %}">
               <label class="govuk-label govuk-radios__label govuk-radios-long-label" for="delete_no">Cancel and go back</label>
             </div>
-
+            
           </div>
 
         </fieldset>
