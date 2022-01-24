@@ -59,7 +59,13 @@
               <a href="{%if data.commodities and ( data.commodities | length ) > 0 %}commodity-list{% else %}input-method{% endif %}" aria-describedby="status-1.2">What's in your consignment?</a>
               {% else %}
               <!-- <a href="{%if data.commodities and ( data.commodities | length ) > 0 %}commodity-list{% else %}input-method{% endif %}" aria-describedby="contact-details-status"> -->
-              <a href="{% if data.upload %}upload-completed{% elseif data.commodities and ( data.commodities | length ) > 0 %}commodity-list{% else %}input-method{% endif %}" aria-describedby="status-1.2">What's in your consignment?</a>
+              <a href="{% if data.upload %}
+              {% if data.commodity=='seeds' %}
+              upload-completed-seeds
+              {% else %}
+              upload-completed
+              {% endif %}
+              {% elseif data.commodities and ( data.commodities | length ) > 0 %}commodity-list{% else %}input-method{% endif %}" aria-describedby="status-1.2">What's in your consignment?</a>
               {% endif %}
             </span>
             {% if data.commodities and ( data.commodities | length ) > 0 or data.stock_number or data.upload or data.variety or data.number_of_packages %}
