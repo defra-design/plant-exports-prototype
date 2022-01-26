@@ -45,7 +45,30 @@
 
       {% set commodity = data.commodity or "plants" %}
       
-      {% if data.build == "development" %}
+      {% if data.build == "ux" %}
+      <h2 class="govuk-heading-m">Application details</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+        
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Application type</dt>
+          <dd class="govuk-summary-list__value">Soil sampling for {% if data.commodity == "potatoes" %}ware potatoes{% else %}{{data.commodity or "crops"}}{% endif %}</dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Who is the applicant?</dt>
+          <dd class="govuk-summary-list__value">ABC LIMITED, 27 The Crescent, NORTH WEST LONDON, NW7 0HX</dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Your reference</dt>
+          <dd class="govuk-summary-list__value">{% if data.reuse_reference == "yes" %}{{query.id | appInfo('reference') or "REFERENCE"}}{% else %}{{data.new_ref_num or "REFERENCE"}}{% endif %}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="reference?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> your reference</span></a></dd>
+        </div>
+
+      </dl>
+      {% else %}
       <h2 class="govuk-heading-m">Application summary</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
         
@@ -82,29 +105,6 @@
           <dt class="govuk-summary-list__key">Phone number</dt>
           <dd class="govuk-summary-list__value">07777 123456</dd>
           <dd class="govuk-summary-list__actions">&nbsp;</dd>
-        </div>
-
-      </dl>
-      {% else %}
-      <h2 class="govuk-heading-m">Application details</h2>
-      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-        
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Application type</dt>
-          <dd class="govuk-summary-list__value">Soil sampling for {% if data.commodity == "potatoes" %}ware potatoes{% else %}{{data.commodity or "crops"}}{% endif %}</dd>
-          <dd class="govuk-summary-list__actions">&nbsp;</dd>
-        </div>
-
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Who is the applicant?</dt>
-          <dd class="govuk-summary-list__value">ABC LIMITED, 27 The Crescent, NORTH WEST LONDON, NW7 0HX</dd>
-          <dd class="govuk-summary-list__actions">&nbsp;</dd>
-        </div>
-
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Your reference</dt>
-          <dd class="govuk-summary-list__value">{% if data.reuse_reference == "yes" %}{{query.id | appInfo('reference') or "REFERENCE"}}{% else %}{{data.new_ref_num or "REFERENCE"}}{% endif %}</dd>
-          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="reference?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> your reference</span></a></dd>
         </div>
 
       </dl>
@@ -342,41 +342,7 @@
       {% endif %}
 
       <h2 class="govuk-heading-m">Contact information</h2>
-      {% if data.build == "development" %}
-      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Where will the inspection take place?</dt>
-          <dd class="govuk-summary-list__value">{{data.select_address or "Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH"}}</dd>
-          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="inspection-addresses?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> where the inspection will take place</span></a></dd>
-        </div>
-
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Contact name</dt>
-          <dd class="govuk-summary-list__value">{% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}Bill Shoggins{% else %}{{data.contact_name or "Bill Shoggins"}}{% endif %}</dd>
-          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> who the main contact for this application</span></a></dd>
-        </div>
-
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Phone number</dt>
-          <dd class="govuk-summary-list__value">{% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}01234 567890{% else %}{{data.address_phone or "01234 567890"}}{% endif %}</dd>
-          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> who the main contact for this application</span></a></dd>
-        </div>
-
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Email address</dt>
-          <dd class="govuk-summary-list__value">{% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}bill.shoggins@acmeltd.com{% else %}{{data.email_address or "bill.shoggins@acmeltd.com"}}{% endif %}</dd>
-          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> who the main contact for this application</span></a></dd>
-        </div>
-
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">When will the fields be ready for inspection?</dt>
-          <dd class="govuk-summary-list__value">{{data.submit_date or "December 2021"}}</dd>
-          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="inspection-dates?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> when the fields will be ready for inspection</span></a></dd>
-        </div>
-
-      </dl>
-      {% else %}
+      {% if data.build == "ux" %}
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
         <div class="govuk-summary-list__row">
@@ -412,15 +378,49 @@
         </div>
 
       </dl>
+      {% else %}
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Where will the inspection take place?</dt>
+          <dd class="govuk-summary-list__value">{{data.select_address or "Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH"}}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="inspection-addresses?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> where the inspection will take place</span></a></dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Contact name</dt>
+          <dd class="govuk-summary-list__value">{% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}Bill Shoggins{% else %}{{data.contact_name or "Bill Shoggins"}}{% endif %}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> who the main contact for this application</span></a></dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Phone number</dt>
+          <dd class="govuk-summary-list__value">{% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}01234 567890{% else %}{{data.address_phone or "01234 567890"}}{% endif %}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> who the main contact for this application</span></a></dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Email address</dt>
+          <dd class="govuk-summary-list__value">{% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}bill.shoggins@acmeltd.com{% else %}{{data.email_address or "bill.shoggins@acmeltd.com"}}{% endif %}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> who the main contact for this application</span></a></dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">When will the fields be ready for inspection?</dt>
+          <dd class="govuk-summary-list__value">{{data.submit_date or "December 2021"}}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="inspection-dates?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> when the fields will be ready for inspection</span></a></dd>
+        </div>
+
+      </dl>
       {% endif %}
 
-      {% if data.build == "development" %}
+      {% if data.build == "ux" %}
       <div class="govuk-form-group govuk-!-margin-top-9">
-        <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_blank">what fees you need to pay</a> for this application (opens in a new window).</p>
+        <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_blank">what fees you need to pay (opens in new tab)</a> for a soil sampling inspection.</p>
       </div>
       {% else %}
       <div class="govuk-form-group govuk-!-margin-top-9">
-        <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_blank">what fees you need to pay (opens in new tab)</a> for a soil sampling inspection.</p>
+        <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_blank">what fees you need to pay</a> for this application (opens in a new window).</p>
       </div>
       {% endif %}
 
