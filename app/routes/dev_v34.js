@@ -363,6 +363,12 @@ module.exports = function(router) {
       }
 
     }
+    // Decide whether to redirect to import permit upload if they enter a permit number
+    if (baseDir === "/create/task-list") {
+      if (req.session.data['import-permit']) {
+        page = base_url + "application/create/upload-permit";
+      }
+    }
 
     // Attempt to render a page in the current folder
     res.render(page, {
