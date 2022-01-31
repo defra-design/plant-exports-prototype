@@ -364,13 +364,13 @@ module.exports = function(router) {
 
     }
     // Decide whether to redirect to import permit upload if they enter a permit number
-
     if (req.session.data.build && req.session.data.build == "ux") {
-      if (baseDir === "/create/task-list") {
+      // only check when the consignee page is submitted
+      if (res.locals.prevURL.indexOf("destination-consignee")>-1) {
         if (req.session.data['import-permit']) {
           page = base_url + "application/create/upload-permit";
-        }
-      }
+        } 
+      } 
     }
 
     // Attempt to render a page in the current folder
