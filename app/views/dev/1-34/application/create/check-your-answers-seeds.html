@@ -165,82 +165,7 @@ Review your answers - {{serviceName}} - GOV.UK
     {% endif %}
 
     <!--Your commodities-->
-    {% if data.commodity == "bulbs" %}
-      <h2 class="govuk-heading-m" id="your-consignment">Your consignment</h2>
-        <table class="govuk-table govuk-!-margin-bottom-4">
-          <thead class="govuk-table__head">
-            <tr class="govuk-table__row">
-              <th class="govuk-table__header" scope="col">
-                Stock number
-              </th>
-              <th class="govuk-table__header" scope="col">
-                Variety
-              </th>
-              <th class="govuk-table__header" scope="col">
-                Weight
-              </th>
-              <th class="govuk-table__header" scope="col"></th>
-            </tr>
-          </thead>
-          <tbody class="govuk-table__body">
-            {% for commodity in data.commodities %}
-              {% block summaryBulb %}{% include "../modules/_summary-bulbs.html" %}{% endblock %}
-            {% endfor %}
-          </tbody>
-        </table>
-
-      <p class="govuk-body"><a href="commodity-page-bulbs" class="govuk-link">Add another bulb</a></p>
-    {% elseif data.commodity == "used farm machinery" %}
-      <h2 class="govuk-heading-m">Your consignment</h2>
-        <table class="govuk-table govuk-!-margin-bottom-4">
-          <thead class="govuk-table__head">
-            <tr class="govuk-table__row">
-              <th class="govuk-table__header" scope="col">
-                Description
-              </th>
-              <th class="govuk-table__header" scope="col">
-                Country of origin
-              </th>
-              <th class="govuk-table__header govuk-table__header" scope="col">
-                Unique ID
-              </th>
-              <th class="govuk-table__header" scope="col"></th>
-            </tr>
-          </thead>
-          <tbody class="govuk-table__body">
-        {% for commodity in data.commodities %}
-          {% block summaryMachinery %}{% include "../modules/_summary-machinery-check-answers.html" %}{% endblock %}
-        {% endfor %}
-        </tbody>
-      </table>
-      <p class="govuk-body"><a href="commodity-page-machinery" class="govuk-link">Add another machine</a></p>
-    {% elseif data.commodity == "potatoes" %}
-      <h2 class="govuk-heading-m">Your consignment</h2>
-        <table class="govuk-table govuk-!-margin-bottom-4">
-          <thead class="govuk-table__head">
-            <tr class="govuk-table__row">
-              <th class="govuk-table__header" scope="col">
-                Description
-              </th>
-              <th class="govuk-table__header" scope="col">
-                Stock number
-              </th>
-              <th class="govuk-table__header" scope="col">
-                Quantity
-              </th>
-              <th class="govuk-table__header" scope="col"></th>
-            </tr>
-          </thead>
-          <tbody class="govuk-table__body">
-        {% for commodity in data.commodities %}
-          {% block summaryPotatoes %}{% include "../modules/_summary-potatoes.html" %}{% endblock %}
-        {% endfor %}
-        </tbody>
-      </table>
-      <p class="govuk-body"><a href="commodity-page" class="govuk-link">Add another variety</a></p>
-
-    {% elseif data.commodity == "seeds" %}
-      <h2 class="govuk-heading-m">Your consignment</h2>
+    <h2 class="govuk-heading-m">Your consignment</h2>
 
       {% if data.upload == 1 %}
       <dl class="govuk-summary-list">
@@ -273,6 +198,7 @@ Review your answers - {{serviceName}} - GOV.UK
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">Description</th>
             <th class="govuk-table__header" scope="col">Lot reference</th>
+            <th class="govuk-table__header" scope="col">Sample reference</th>
             <th class="govuk-table__header" scope="col">Quantity</th>
             <th class="govuk-table__header govuk-table__header--numeric" scope="col">Action</th>
           </tr>
@@ -280,71 +206,15 @@ Review your answers - {{serviceName}} - GOV.UK
         <tbody class="govuk-table__body">
           {% set showDelete = "true" %}
           {% set showChange = "true" %}
-          {% include "../modules/_summary-seed.html" %}
+          {% include "../modules/_summary-seed-cya.html" %}
         </tbody>
       </table>
       {% endif %}
 
-      {% elseif data.journey == "coc" %}
+      <p class="govuk-body"><a href="input-method?return_url=check-your-answers">Add more</a></p>
 
-      <h2 class="govuk-heading-m">Your consignment</h2>
-        <table class="govuk-table govuk-!-margin-bottom-4">
-          <thead class="govuk-table__head">
-            <tr class="govuk-table__row">
-              <th class="govuk-table__header" scope="col">
-                Commodity
-              </th>
-              <th class="govuk-table__header" scope="col">
-                Variety or type
-              </th>
-              <th class="govuk-table__header" scope="col">
-                Class
-              </th>
-              <th class="govuk-table__header" scope="col">
-                Total net weight
-              </th>
-              <th class="govuk-table__header" scope="col">
-              </th>
-            </tr>
-          </thead>
-          <tbody class="govuk-table__body">
-          {% block summaryCoc %}{% include "../modules/_summary-coc.html" %}{% endblock %}
-        </tbody>
-      </table>
-      <p class="govuk-body"><a href="coc-commodity" class="govuk-link">Add another commodity</a></p>
 
-      {%else%}
 
-        <h2 class="govuk-heading-m">Your consignment</h2>
-        <table class="govuk-table govuk-!-margin-bottom-4">
-          <thead class="govuk-table__head">
-            <tr class="govuk-table__row">
-              <th class="govuk-table__header" scope="col">
-                Description
-              </th>
-              {% if data.commodity != "seeds" %}
-              <th class="govuk-table__header" scope="col">
-                {% if data.commodity == "plant products"%}
-                Primary country where grown
-                {% else %}
-                Country of origin
-                {% endif %}
-              </th>
-              {% endif %}
-              <th class="govuk-table__header" scope="col">
-                Quantity
-              </th>
-              <th class="govuk-table__header" scope="col"></th>
-            </tr>
-          </thead>
-          <tbody class="govuk-table__body">
-            {% for commodity in data.commodities %}
-            {% block summaryGeneral %}{% include "../modules/_summary-general-check-answers.html" %}{% endblock %}
-            {% endfor %}
-          </tbody>
-        </table>
-        <p class="govuk-body"><a href="how-to-identify?return_url=check-your-answers">Add more</a></p>
-      {%endif%}
 
       <!--Inspection details-->
       {% if data.commodity == "plants" or (data.commodity == "bulbs" and data.countrySelect[0] != "United States") or data.commodity == "used farm machinery" or data.commodity == "potatoes" or data.journey == "coc" %}
