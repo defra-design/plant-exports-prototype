@@ -363,18 +363,22 @@ module.exports = function(router) {
       }
 
     }
-/*     console.log(baseDir);
+
     // Decide whether to redirect to import permit upload if they enter a permit number
-    if (req.session.data.build && req.session.data.build == "ux") {
-      // only check when the consignee page is submitted
-      if (res.locals.prevURL && res.locals.prevURL.indexOf("destination-consignee")>-1) {
-        console.log('base');
-        if (req.session.data['import-permit']) {
-          page = base_url + "application/create/upload-permit";
+    console.log(baseDir);
+    // this is only triggered when the consignee page is submitted 
+    if (baseDir === "/create/task-list") {
+      if (req.session.data.build && req.session.data.build == "ux") {
+        // only check when the consignee page is submitted
+        if (res.locals.prevURL && res.locals.prevURL.indexOf("destination-consignee")>-1) {
+          if (req.session.data['import-permit']) {
+            // redirect the page to show true url 
+            return res.redirect("upload-permit")
+          } 
         } 
-      } 
+      }
     }
- */
+
     // Attempt to render a page in the current folder
     res.render(page, {
       "query": req.query,
