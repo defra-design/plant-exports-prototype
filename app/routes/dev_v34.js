@@ -366,12 +366,13 @@ module.exports = function(router) {
 
     // Decide whether to redirect to import permit upload if they enter a permit number
     console.log(baseDir);
+    console.log(req.session.data['consignee-import-permit']);
     // this is only triggered when the consignee page is submitted 
     if (baseDir === "/create/task-list") {
       if (req.session.data.build && req.session.data.build == "ux") {
         // only check when the consignee page is submitted
         if (res.locals.prevURL && res.locals.prevURL.indexOf("destination-consignee")>-1) {
-          if (req.session.data['import-permit']) {
+          if (req.session.data['consignee-import-permit']) {
             // redirect the page to show true url 
             return res.redirect("upload-permit")
           } 
