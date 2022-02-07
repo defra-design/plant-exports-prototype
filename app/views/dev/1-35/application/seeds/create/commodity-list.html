@@ -1,0 +1,92 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+Your consignment - Seed sampling - {{serviceName}} - GOV.UK
+{% endblock %}
+{% block beforeContent%}
+{{super()}}
+<a href="{{page.content.prev or 'javascript:history.back()'}}" class="govuk-back-link">Back</a>
+{% endblock %}
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    {% if data.build == "ux" %}
+    <h1 class="govuk-heading-xl govuk-!-margin-top-4">Seeds to be sampled</h1>
+    {% else %}
+    <h1 class="govuk-heading-xl govuk-!-margin-top-4">Your commodities</h1>
+    {% endif %}
+    <table class="govuk-table govuk-!-margin-bottom-9">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">
+            Description
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Lot reference
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Destination
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Quantity 
+          </th>
+          <th class="govuk-table__header govuk-table__header--numeric" scope="col">
+            Actions
+          </th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+
+        {% block summaryGeneral %}{% include "../../modules/_summary-seed-sampling-countries.html" %}{% endblock %}
+      </tbody>
+    </table>
+
+    <form  method="POST">
+      {{ govukRadios({
+        idPrefix: "next",
+        name: "next",
+        fieldset:
+        {
+          legend:
+          {
+            text: "Do you want to add more seeds to your consignment?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--m govuk-!-margin-top-4"
+          }
+        },
+        items: [
+        {
+          value: "confirm~how-to-identify",
+          text: "Yes, add one more commodity"
+        },
+        {
+          value: "upload~upload",
+          text: "Yes, upload multiple commodities"
+        },
+        {
+          value: "upload~task-list",
+          text: "No, I have finished adding commodities"
+        }
+        ]
+      }) }}
+
+      <div class="govuk-body govuk-!-margin-top-4">
+        <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+      </div>
+    </form>
+
+    {% block continueLater %}{% include "../../modules/_save-continue-later.html" %}{% endblock %}
+
+    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible  govuk-!-margin-bottom-9">
+    <ul class="govuk-list govuk-list--no-bullet">
+    <li class="govuk-body">
+      <a href="commodity-list" class="govuk-link govuk-link-no-visited-state">Commodity list: manual upload</a>
+    </li>
+    <li class="govuk-body ">
+      <a href="commodity-list-seeds-mvp" class="govuk-link govuk-link-no-visited-state">Commodity list: bulk upload</a>
+    </li>
+    <li class="govuk-body ">
+      <a href="commodity-list-seeds" class="govuk-link govuk-link-no-visited-state">Commodity list: 108 results</a>
+    </li>
+  </ul>
+
+    {% endblock %}

@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Upload completed - {{serviceName}} - GOV UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-width-container">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <div class="app-alert app-alert--success"><p class="govuk-body">Location map uploaded successfully</p></div>
+        <form method="POST" class="form" action="how-to-identify">
+          <h1 class="govuk-heading-xl">Upload completed</h1>
+          <table class="govuk-table govuk-!-margin-bottom-9">
+            <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header">
+                  Location map
+                </th>
+              </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">
+                  <a href="#" class="govuk-link">top_field_scanned_map.pdf</a>
+                  <input type="hidden" id="import-phyto" name="import-phyto" value="1">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          {{ govukRadios({
+            idPrefix: "next",
+            name: "next",
+            fieldset:
+            {
+              legend:
+              {
+                text: "Do you want to keep this map?",
+                isPageHeading: true,
+                classes: "govuk-fieldset__legend--m govuk-!-margin-top-4"
+              }
+            },
+            items: [
+            {
+              value: "confirm~how-to-identify",
+              text: "Yes, keep this map"
+            },
+            {
+              value: "upload~field",
+              text: "No, upload a different file and delete this one"
+            }
+            ]
+          }) }}
+
+          {{ govukButton({
+            text: "Save and continue",
+            classes: "govuk-!-margin-top-4"
+          }) }}
+        </form>
+
+      </div>
+    </div>
+</div>
+{% endblock %}

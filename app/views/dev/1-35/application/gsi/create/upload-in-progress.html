@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Upload in progress - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-width-container">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <div class="app-alert app-alert--info"><p class="govuk-body">Upload in progress...</p></div>
+      <form action="/form-handler" method="post" novalidate>
+        <div class="govuk-form-group  govuk-!-margin-bottom-9">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+              <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">
+                Upload a crop location map
+              </h1>
+            </legend>
+          </fieldset>
+
+          <p class="govuk-body">Upload a map to show your inspector where they will carry out their inspection. Include the access point.</p>
+          <p class="govuk-body">If you prefer to post a map to your inspector, you should contact them to ask what address to send it to. You must include the APHA reference number for this application. You will be given the APHA reference number at the end of this application.</p>
+          <p class="govuk-body">Any file you upload must:</p>
+          <ul class="govuk-list govuk-list--bullet">
+            <li>be in JPEG, PNG, GIF or PDF format</li>
+            <li>be fewer than 10 megabytes (10MB)</li>
+          </ul>
+
+
+          {{ govukFileUpload({
+            id: "file-upload-1",
+            name: "file-upload-1",
+            label: {
+              text: "Upload an import phytosanitary certificate."
+            }
+          }) }}
+
+        </div>
+
+        {{ govukButton({
+          text: "Uploading...",
+          disabled: true,
+          href: "import-phyto-upload-completed"
+        }) }}
+
+        <!--<hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+        <p class="govuk-body govuk-!-margin-top-9">
+          <a href="upload-validation-error-singular" class="govuk-link govuk-link-no-visited-state">View Upload screen with single validation error</a>
+        </p>
+        <p class="govuk-body">
+          <a href="upload-validation-errors" class="govuk-link govuk-link-no-visited-state">View Upload screen with validation errors</a>
+        </p>
+        <p class="govuk-body">
+          <a href="upload-error" class="govuk-link govuk-link-no-visited-state">View Upload screen with file type error</a>
+        </p>-->
+
+      </form>
+
+      <ul class="govuk-list govuk-list">
+        <li>
+          <a href="upload-completed" class="govuk-link govuk-link-no-visited-state">Skip</a>
+          (Page reloads after 5 seconds)
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block pageScripts %}
+<script>
+  var timer = setTimeout(function() {
+    window.location='upload-completed'
+  }, 5000);
+</script>
+{% endblock %}

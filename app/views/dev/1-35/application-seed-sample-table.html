@@ -1,0 +1,201 @@
+/* 
+ The development build hides:
+ the inspected quantities,
+ a sample list csv download
+ a searchable/paginated table of commodities
+*/
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Manage application - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Return to your applications</a>
+<style media="screen">
+
+
+
+  .govuk-width-one-fifth {
+    width: 20% !important;
+  }
+
+
+  .doc-icon::before {
+    content: '';
+    width: 1em;
+    height: 1.5em;
+    margin-right: 1em;
+    position: relative;
+    top: 0.5em;
+    display: inline-block;
+    background: #bfc1c3;
+    box-shadow: 3px -3px 0 #fff, 6px -6px 0 #bfc1c3;
+  }
+</style>
+{% endblock%}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">Manage application <span style="white-space: nowrap;">{{query.id |
+        appInfo('reference')}}</span></h1>
+  </div>
+
+</div>
+
+<div class="govuk-grid-row govuk-!-margin-bottom-2">
+
+  <div class="govuk-grid-column-one-half">
+    <dl class="govuk-summary-list govuk-summary-list--no-border">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Status
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <div class="app-status-tag app-status-tag--{{query.id | appInfo('tag')}}">
+            {{query.id | appInfo('status')}}
+          </div>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Reference
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {% if (query.id | appInfo('reference')) == "" %}<span class="govuk-hint">Not set</span>{%else%}{{query.id |
+          appInfo('applicationID')}}{%endif%}
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          {% if query.id == 30 %}Application{% else %}Certificate{% endif %}
+        </dt>
+        <dd class="govuk-summary-list__value">
+          Seed sampling application
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Sampled on
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{query.id | appInfo('date')}}
+        </dd>
+      </div>
+      {% if data.build == "ux" %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Quantity inspected 
+        </dt>
+        <dd class="govuk-summary-list__value">
+          109,000 seeds
+        </dd>
+      </div>
+      {% endif %}
+    </dl>
+  </div>
+
+
+
+  <div class="govuk-grid-column-one-half govuk-!-margin-bottom-9">
+    <h2 class="govuk-heading-m">Your documents</h2>
+    <p class="govuk-body">
+      The sampling report shows the test results for the commodities in this application.
+    </p>
+    <ul class="govuk-list  noprint">
+    <li><p class="doc-icon"><a href="/public/images/seeds-sampling-report.csv" class="govuk-link govuk-link--no-visited-state">Sampling report (csv)</a>
+    </p></li>      
+    </ul>
+    {% if data.build == "ux" %}
+    <p class="govuk-body">
+      Download the data.
+    </p>
+    <ul class="govuk-list  noprint">
+    <li><p class="doc-icon"><a href="#" class="govuk-link govuk-link--no-visited-state">Stock list {{todaysDate}} (csv)</a>
+    </p></li>  
+    </ul>
+    {% endif %}
+
+  </div>
+
+</div>
+
+<div class="govuk-grid-row govuk-!-margin-bottom-6">
+  <div class="govuk-grid-column-two-thirds">
+
+    <ul class="govuk-list govuk-!-margin-bottom-9 noprint">
+      <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-seeds-viewonly">View application details</a>
+      </li>      
+      
+      <li><a class="govuk-link govuk-link--no-visited-state"
+          href="clone?id={{query.id or 0}}&is_group={{ query.is_group }}">Use this application to create a new phytosanitary certificate</a>
+      </li>
+
+    </ul>
+  </div>
+</div>
+
+
+{% if data.build == "ux" %}
+<div class="govuk-grid-row govuk-!-margin-bottom-6">
+ <div class="govuk-grid-column-two-thirds">
+  <h2 class="govuk-heading-m">Commodities in this application</h2>
+  <div class="search-wrapper govuk-form-group ">
+    <label for="search-reservations" class="govuk-label">
+      Search by commodity, variety or sample reference destination
+    </label>
+
+    <div class="search-input-wrapper">
+      <input type="search" value="{{query.search or ''}}" id="search-reservations" name="search" title="Search" class="govuk-input">
+      
+      <div class="search-input-submit-wrapper">
+        <button type="submit" class="search-submit">Search</button>
+      </div>
+
+    </div>
+
+  </div>
+  </div>
+
+  <div class="govuk-grid-column-full">
+  <table class="govuk-table govuk-!-margin-bottom-9">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th class="govuk-table__header govuk-width-one-fifth" scope="col">
+          Commodity
+        </th>
+        <th class="govuk-table__header" scope="col">
+          Variety
+        </th>
+        <th class="govuk-table__header" scope="col">
+          Sample reference
+        </th>
+        <th class="govuk-table__header govuk-table__header--numeric" scope="col">
+          Quantity
+        </th>
+        <th class="govuk-table__header govuk-table__header--numeric" scope="col">
+          Remaining
+        </th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+      {% include "./application/modules/_summary-seeds-draw-down-30.html" %}
+    </tbody>
+  </table>
+  
+  <div class="app-example-page govuk-!-margin-bottom-9">
+    <nav class="defra-pagination" id="pagination-label">
+      <p class="govuk-visually-hidden" aria-labelledby="pagination-label">Pagination navigation</p>
+      <p class="defra-pagination__results" style="float: left;"><a href="#" style=" text-decoration:none;"><b>1</b></a></p>
+      <p class="defra-pagination__results" style="float: right;">Showing <b>1</b> to <b><span class="js-case-count">30</span></b> of <b><span class="js-case-count">225</span></b> results</p>
+    </nav>
+  </div>
+  {% endif %}
+</div> 
+</div>
+
+{% endblock %}
