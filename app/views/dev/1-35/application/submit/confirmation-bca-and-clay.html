@@ -1,0 +1,90 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  You have successfully submitted your application - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent%}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+{% endblock %}
+
+{% block content %}
+<style>
+
+  /* Needs extracting and adding to the external Sass or CSS */
+  .govuk-feedback-box {
+    padding: 20px;
+    background-color: lightgray;
+    border-left-color: #666;
+  }
+
+</style>
+
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-three-quarters">
+
+    <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-6">
+      <h1 class="govuk-panel__title">You have successfully submitted your application{% if data.reforwarding %} for a re-forwarding certificate{% endif %}</h1>
+
+      <div class="govuk-panel__body">
+        The APHA reference is
+        <br>
+        <strong>1721 14800 4809</strong>
+      </div>
+
+    </div>
+
+    <h2 class="govuk-heading-m">What happens next</h2>
+    <ol class="govuk-list govuk-list--number">
+      <li>We will check and process your application{% if data.reforwarding %} and decide if an inspection is necessary{% endif %}.</li>
+      {% if data.pheats_check != "yes" %}
+      {% if data.reforwarding %}
+      <li>If an inspection is necessary, we will arrange it within 7 working days.</li>
+      {% else %}
+      {% endif %}
+      {% endif %}
+      <li>If there are no problems, we will issue your {% if data.reforwarding %}re-forwarding{% endif %} certificate.</li>
+      <li>We will then send you an invoice.</li>
+    </ol>
+    <p class="govuk-body govuk-!-margin-bottom-2">We'll only contact you if there is a problem with your application.</p>
+
+    <form action="{% if data.route == 'new' %}../../dashboard-one{% else %}../../dashboard{% endif %}" method="post">
+      <button class="govuk-button govuk-!-margin-top-6 govuk-!-margin-bottom-7" data-module="govuk-button">View your applications</button>
+
+      <!-- Session data hook to update the dashboard so that it knows a new application has been submitted -->
+      <div class="govuk-form-group" hidden>
+        <label class="govuk-label" for="application_submission_data">Application submission status</label>
+        <input class="govuk-input" id="application_submission_data" name="application_submission_data" type="text" value="submitted">
+      </div>
+
+    </form>
+
+    {% if data.build == "ux" %}
+    <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_blank">what fees you will pay (opens in new tab)</a> for this soil sampling inspection.</p>
+    {% else %}
+    <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_self">what fees you will pay</a> for this inspection.</p>
+    {% endif %}
+    <h2 class="govuk-heading-m">If you need help</h2>
+    <p class="govuk-body">Contact us quoting your APHA reference number <strong id="applicationFormId2">1721 14800 4809</strong> on:</p>
+    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-8">
+      <li>0300 1000 313, Monday to Friday 8.30am to 5pm</li>
+      <li><a href="mailto:planthealth.info@apha.gov.uk" class="govuk-link">planthealth.info@apha.gov.uk</a></li>
+    </ul>
+
+    <div class="govuk-feedback-box govuk-!-margin-top-6">
+      <h2 class="govuk-heading-m">Give feedback on this service</h2>
+      {% if data.build == "ux" %}
+      <p class="govuk-body">Take a 3 minute survey about your application so that we can improve the service.</p>
+      <p class="govuk-body"><a href="https://defragroup.eu.qualtrics.com/jfe/form/SV_1RDraVxZ03Ja2qy" class="govuk-link" target="_blank" class="govuk-link">Give feedback (opens in new tab)</a></p>
+      {% else %}
+      <p class="govuk-body">Take a 3 minute survey about your application so that we can improve the service. The survey will open in a new tab.</p>
+      <p class="govuk-body"><a href="https://defragroup.eu.qualtrics.com/jfe/form/SV_1RDraVxZ03Ja2qy" class="govuk-link" target="_blank" class="govuk-link">Give feedback</a></p>
+      {% endif %}
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

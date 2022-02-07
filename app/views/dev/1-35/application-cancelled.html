@@ -1,0 +1,268 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Manage {% if query.is_block == "yes" %}block application{% elseif query.is_group == "yes" %}group application{% else %}application{% endif %} {{query.id | appInfo('reference')}} - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new" id="Nav-DisplayName">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="account?returnURL=dashboard" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
+  </ul>
+</div>
+
+<a href="dashboard" class="govuk-back-link">Return to your applications</a>
+<style>
+
+  .govuk-status--warning {
+    width: auto !important;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    padding-bottom: 1px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    display: inline-block;
+    color: #0b0c0c;
+    background: #FFBF47;
+    border: 3px solid #FFBF47;
+  }
+
+  .app-status-tag--white-tag-blue-border-and-text {
+    background-color: #ffffff;
+    width: 90px;
+    text-align: center;
+    display: inline-block;
+    font-size: 15px;
+    border: 3px solid #1d70b8;
+    color: #1d70b8;
+  }
+
+</style>
+{% endblock%}
+
+{% block content %}
+{% if (query.id | appInfo('cert_info')) == 'Soil sampling' %}
+<div class="govuk-grid-row govuk-!-margin-bottom-6">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <div class="app-alert app-alert--warning">
+      <p class="govuk-body">You have successfully cancelled this application. We'll update this page soon.</p>
+    </div>
+
+    <h1 class="govuk-heading-xl">{% if query.is_block == "yes" %}Block application{% elseif query.is_group == "yes" %}Group application{% else %}Application{% endif %} <span style="white-space: nowrap;">{{query.id | appInfo('reference')}}</span></h1>
+    {% if query.is_block == "yes" %}
+    <p class="govuk-body">This is a block application of 100 certificates</p>
+    {% endif %}
+    {% if query.is_group == "yes" %}
+    <p class="govuk-body">This is an application of 5 certificates</p>
+    {% endif %}
+    <!-- <div class="defra-alert defra-alert--info ">
+      <h3 class="govuk-heading-s govuk-!-margin-bottom-2">1 certificate has been replaced </h3>
+      <p class="govuk-body">You can still clone this certificate. We'll adapt the information from the old version to fit the new form, but there may be new changes or changed questions. <br></p>
+    </div> -->
+    <dl class="govuk-summary-list govuk-summary-list--no-border">
+      
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Status</dt>
+        <dd class="govuk-summary-list__value">
+
+          <div class="app-status-tag app-status-tag--yellow">
+            cancelled
+          </div>
+
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">{% if data.build == "ux" %}APHA reference{% else %}Reference{% endif %}</dt>
+        <dd class="govuk-summary-list__value">
+          {% if (query.id | appInfo('reference')) == "" %}<span class="govuk-hint">Not set</span>{% else %}{{query.id | appInfo('applicationID')}}{% endif %}
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">{% if data.build == "ux" %}Application{% else %}Certificate{% endif %}</dt>
+        <dd class="govuk-summary-list__value">Soil sampling for {{data.commodity or "crops"}}</dd>
+      </div>
+
+      {% if query.id == 0 %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Agent</dt>
+        <dd class="govuk-summary-list__value">Agent name</dd>
+      </div>
+      {% endif %}
+
+    </dl>
+    <ul class="govuk-list govuk-!-margin-top-6 govuk-!-margin-bottom-6 noprint">
+      <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{query.is_group}}">Copy as new application</a></li>
+    </ul>
+  </div>
+
+</div>
+{% else %}
+<div class="govuk-grid-row govuk-!-margin-bottom-6">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <div class="app-alert app-alert--warning">
+      <p class="govuk-body">You have successfully cancelled this application. We'll update this page soon.</p>
+    </div>
+
+    <h1 class="govuk-heading-xl">{% if query.is_block == "yes" %}Block appication{%elseif query.is_group == "yes" %}Group application{% else %}Application{% endif %} <span style="white-space: nowrap;">{{query.id | appInfo('reference') or '1760969182500'}}</span>
+    </h1>
+    {% if query.is_block == "yes" %}
+    <p class="govuk-body">This is a block application of 100 certificates</p>
+    {% endif %}
+    {% if query.is_group == "yes" %}
+    <p class="govuk-body">This is an application of 5 certificates</p>
+    {% endif %}
+    <!-- <div class="defra-alert defra-alert--info ">
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-2">1 certificate has been replaced </h3>
+        <p class="govuk-body">You can still clone this certificate. We'll adapt the information from the old version to fit the new form, but there may be new changes or changed questions. <br></p>
+      </div> -->
+    <dl class="govuk-summary-list govuk-summary-list--no-border">
+      
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Status</dt>
+        <dd class="govuk-summary-list__value">
+          
+          <div class="app-status-tag app-status-tag--yellow">
+            cancelled
+          </div>
+
+        </dd>
+      </div>
+
+<!--       <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">APHA reference</dt>
+        <dd class="govuk-summary-list__value">246215835711</dd>
+      </div> -->
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Reference</dt>
+        <dd class="govuk-summary-list__value">PO 24477 UAE</dd>
+      </div>
+
+      <!-- <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Commodity
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{query.id | appInfo('commodity_plants')}}
+        </dd>
+      </div> -->
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Certificate</dt>
+        <dd class="govuk-summary-list__value">Phytosanitary certificate for used farm machinery</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Destination country</dt>
+        <dd class="govuk-summary-list__value">UAE</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Customer</dt>
+        <dd class="govuk-summary-list__value">GLUKGLUK LTD</dd>
+      </div>
+
+<!--       <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key govuk-summary-list__40">Loading date</dt>
+        <dd class="govuk-summary-list__value govuk-summary-list__40">6 September 2020</dd>
+      </div> -->
+
+      <!-- <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Certifier
+        </dt>
+        <dd class="govuk-summary-list__value">
+          ABC Vets LTD
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key govuk-summary-list__40">
+          Proposed export date
+        </dt>
+        <dd class="govuk-summary-list__value govuk-summary-list__40">
+          02 Jan 2019
+        </dd>
+      </div> -->
+
+    </dl>
+
+    <ul class="govuk-list govuk-!-margin-top-6 govuk-!-margin-bottom-6 noprint">
+      {% if (query.id | appInfo('status')) == 'draft' %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="certificate/check-your-progress?certificate=ehc2849">Edit and submit this application</a></li>
+      {% endif%}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{query.is_group}}">Copy as new application</a></li>
+      {% if (query.id | appInfo('status')) == 'draft' %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="delete">Delete this application</a></li>
+      {% endif%}
+    </ul>
+
+    {% if (query.id == 10) %}
+    <h2 class="govuk-heading-l govuk-!-margin-top-9">Samples for inspection</h2>
+
+    <table class='govuk-table govuk-!-margin-bottom-9'>
+      <thead class='govuk-table__head'>
+        <tr class='govuk-table__row'>
+          <th scope='col' class='govuk-table__header'>Commodity</th>
+          <th scope='col' class='govuk-table__header'>Sample reference</th>
+        </tr>
+      </thead>
+      <tbody class='govuk-table__body'>
+        <tr class='govuk-table__row'>
+          <td scope='row' class='govuk-table__cell'>Quercus acuta</td>
+          <td class='govuk-table__cell'>590347</td>
+        </tr>
+        <tr class='govuk-table__row'>
+          <td scope='row' class='govuk-table__cell'>Pinus albicaulis</td>
+          <td class='govuk-table__cell'>590348</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="govuk-body govuk-!-margin-bottom-9"><a href="print-label-print?id=10" class="govuk-link govuk-link-no-visited-state">Print the information</a> you'll need to send along with your samples.</p>
+    {% endif %}
+    <!-- <p class="govuk-body">Plant Clinic<br>
+      Block 4<br>
+      National Agri-Food Campus<br>
+      Sand Hutton<br>
+      York<br>
+      YO41 1LZ<br>
+
+    <p class="govuk-body">
+      {% if query.application_status == 'draft' %}
+      <a class="govuk-button govuk-!-margin-right-4" href="certificate/check-your-progress">Edit and submit</a>
+      {% endif%}
+      <a class="govuk-button govuk-button--secondary " href="clone">Clone as new application</a>
+      {% if query.application_status == 'draft' %}
+      <a class="govuk-link govuk-link--no-visited-state" href="delete">Delete application</a>
+      {% endif%}
+    </p>
+
+    <ul class="govuk-list  govuk-!-margin-bottom-6">
+      {% if (query.id | appInfo('status')) == 'draft' %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="certificate/check-your-progress?certificate=ehc2849">Edit and submit this application</a></li>
+      {% endif%}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{ query.is_group }}">Clone as new application</a></li>
+      {% if (query.id | appInfo('status')) == 'draft' %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="delete">Delete this application</a></li>
+      {% endif%}
+    </ul> -->
+
+  </div>
+
+</div>
+
+{% endif %}
+{% endblock %}
