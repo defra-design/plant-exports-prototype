@@ -31,6 +31,8 @@ Add commodities by uploading a file - {{serviceName}} - GOV.UK
           {% set template = "template-plant-products.csv" %}
           {% set extraSteps = "<li>For Product type, Class, Packaging type and Is the packaging reusable or reclaimed, you must choose from the  options listed and delete the rest of the options.</li>
           <li>Enter the net weight up to 1 decimal place.</li>" %}
+          {% set extraDetails = "<li>for Product type, Packaging type and Is the packaging reusable or reclaimed, make sure you have used only the options provided without changing them</li>
+          <li>for Product type, Packaging type and Is the packaging reusable or reclaimed, make sure that you have deleted any options you have not used</li>" %}
 
         {% elseif data.commodity == "used farm machines" %}
           {% set commodity = "used farm machines" %}
@@ -39,12 +41,17 @@ Add commodities by uploading a file - {{serviceName}} - GOV.UK
         {% elseif data.commodity == "potatoes" %}
           {% set template = "template-potatoes.csv" %}
           {% set extraSteps = "<li>For Variety, Quantity units and Packaging type you must choose from the options listed and delete the rest of the options.</li>" %}
+          {% set extraDetails = "<li>for Variety, Quantity units and Packaging type, make sure you have used only the options provided without changing them</li>
+          <li>for Variety, Quantity units and Packaging type, make sure that you have deleted any options you have not used</li>" %}
 
         {% elseif data.commodity == "seeds" %}
           {% set template = "template-seeds-phyto.csv" %}
           {% set extraSteps = "<li>For Quantity units you must choose from the options listed and delete the rest of the options.</li>
           <li>For Packaging type you must choose from the options listed and delete the rest of the options.</li>
           <li>For Is the packaging reusable or reclaimed, you must enter either yes or no.</li>" %}
+          {% set extraDetails = "<li>for Quantity unit and Packaging type, make sure you have used only the options provided without changing them</li>
+          <li>for Quantity unit and Packaging type, make sure that you have deleted any options you have not used</li>
+          <li>for Is the packaging reusable or reclaimed, check you have only entered either yes or no</li>" %}
 
         {% elseif data.commodity == "grain" %}
           {% set template = "template-grain.csv" %}
@@ -54,10 +61,17 @@ Add commodities by uploading a file - {{serviceName}} - GOV.UK
           {% set extraSteps = "<li>For Packaging type, you must choose from the packaging options listed and delete the rest of the packaging options.</li>
           <li>For Quantity units you must choose from the options listed and delete the rest of the options.</li>" %}
 
+          {% set details2 = "<li>make sure you have entered either an EPPO code or genus for each line</li>" %}
+
+          {% set extraDetails = "<li>for Quantity unit and Packaging type, make sure you have used only the options provided without changing them</li>
+          <li>for Quantity unit and Packaging type, make sure that you have deleted any options you have not used</li>" %}
+
         {% else %}
           {% set template = "APHA_phytosanitary_certificate_csv_template.csv" %}
           {% set step2 = "" %}
           {% set extraSteps = "" %}
+          {% set details2 = "" %}
+          {% set extraDetails = "" %}
 
         {% endif %}
 
@@ -114,14 +128,17 @@ Add commodities by uploading a file - {{serviceName}} - GOV.UK
             <div class="govuk-details__text">
               <h3 class="govuk-heading-s">If you are having problems with the upload</h3>
               <ul class="govuk-list govuk-list--bullet">
-                <li>make sure you have made entries in all fields</li>
+                <li>make sure you have made entries in all fields that are mandatory</li>
+                {{ details2 | safe }}
                 <li>make sure you have not changed or deleted any columns or headers from the template</li>
-                  <li>make sure the headers are consistently capitalised</li>
-                  <li>check that you have not added extra commas</li>
-                  <li>if you have edited the template using Excel, be aware that this program sometimes adds extra commas to your file</li>
-                  <li>use GB-NIR as the country code for Northern Ireland</li>
-                  <li>use PS as the country code for Palestine</li>
-                <li>Make sure you have not deleted any columns or headers from the template.</li>
+                <li>make sure the headers are consistently capitalised</li>
+                <li>check that you have not added extra commas</li>
+                <li>if you have edited the template using Excel, be aware that this program sometimes adds extra commas to your file</li>
+                <li>use GB-NIR as the country code for Northern Ireland</li>
+                <li>use PS as the country code for Palestine</li>
+                  
+                {{ extraDetails | safe }} 
+
               </ul>
               <p>You may find it helpful to compare your file against this <a href="/public/images/{{exampleTemplate}}" class="govuk-link govuk-link--no-visited-state" title="CSV template">example template</a>.</p>
             </div>
