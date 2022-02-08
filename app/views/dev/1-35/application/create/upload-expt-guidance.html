@@ -18,21 +18,34 @@ Add commodities by uploading a file - {{serviceName}} - GOV.UK
     <div class="govuk-grid-column-two-thirds">
       <form action="/form-handler" method="post" novalidate>
 
+        {# add template, additional bullets and details based on commodity #}
+
         {% set commodity = data.commodity or "products" %}
         {% set exampleTemplate = "template-seeds-phyto-example.csv" %}
 
         {% if data.commodity == "plants" %}
           {% set template = "template-plants.csv" %}
+
         {% elseif data.commodity == "plant products" %}
           {% set commodity = "products" %}
           {% set template = "template-plant-products.csv" %}
+          {% set extraSteps = "<li>For Product type, Class, Packaging type and Is the packaging reusable or reclaimed, you must choose from the  options listed and delete the rest of the options.</li>
+          <li>Enter the net weight up to 1 decimal place.</li>" %}
+
         {% elseif data.commodity == "used farm machines" %}
           {% set commodity = "used farm machines" %}
           {% set template = "template-used-farm-machinery.csv" %}
+
         {% elseif data.commodity == "potatoes" %}
           {% set template = "template-potatoes.csv" %}
+          {% set extraSteps = "<li>For Variety, Quantity units and Packaging type you must choose from the options listed and delete the rest of the options.</li>" %}
+
         {% elseif data.commodity == "seeds" %}
           {% set template = "template-seeds-phyto.csv" %}
+          {% set extraSteps = "<li>For Quantity units you must choose from the options listed and delete the rest of the options.</li>
+          <li>For Packaging type you must choose from the options listed and delete the rest of the options.</li>
+          <li>For Is the packaging reusable or reclaimed, you must enter either yes or no.</li>" %}
+
         {% elseif data.commodity == "grain" %}
           {% set template = "template-grain.csv" %}
           
@@ -40,10 +53,12 @@ Add commodities by uploading a file - {{serviceName}} - GOV.UK
 
           {% set extraSteps = "<li>For Packaging type, you must choose from the packaging options listed and delete the rest of the packaging options.</li>
           <li>For Quantity units you must choose from the options listed and delete the rest of the options.</li>" %}
+
         {% else %}
           {% set template = "APHA_phytosanitary_certificate_csv_template.csv" %}
           {% set step2 = "" %}
           {% set extraSteps = "" %}
+
         {% endif %}
 
         {% if data.journey == "coc" %}
@@ -128,7 +143,9 @@ Add commodities by uploading a file - {{serviceName}} - GOV.UK
           href: "upload-in-progress"
         }) }}
 
+      </form>
 
+      {% if data.build == "ux"%}
         <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
         <p class="govuk-body govuk-!-margin-top-9">
           <a href="upload-validation-error-singular" class="govuk-link govuk-link-no-visited-state">View Upload screen
@@ -143,11 +160,14 @@ Add commodities by uploading a file - {{serviceName}} - GOV.UK
             error</a>
         </p>
 
-      </form>
+
       <h3 class="govuk-heading-s">Templates</h3>
       <ul class="govuk-list govuk-list">
         <li>
           <a href="/public/images/template-plants.csv" class="govuk-link govuk-link-no-visited-state">Plants</a>
+        </li>
+        <li>
+          <a href="/public/images/template-hmi.csv" class="govuk-link govuk-link-no-visited-state">HMI</a>
         </li>
         <li>
           <a href="/public/images/template-sms.csv" class="govuk-link govuk-link-no-visited-state">SMS</a>
@@ -182,7 +202,7 @@ Add commodities by uploading a file - {{serviceName}} - GOV.UK
             class="govuk-link govuk-link-no-visited-state">Generic APHA template</a>
         </li>
       </ul>
-
+      {% endif %}
 
     </div>
   </div>
