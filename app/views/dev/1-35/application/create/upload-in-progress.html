@@ -1,0 +1,115 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Add commodities by uploading a file - {{serviceName}} - GOV UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <div aria-live="assertive" class="app-alert app-alert--info">
+          <p class="govuk-body">Upload in progress...</p>
+        </div>
+        <form action="/form-handler" method="post" novalidate>
+
+          {% set commodity = data.commodity or "products" %}
+
+          {% if data.commodity == "plant products" %}
+
+          {% set commodity = "products" %}
+
+          {% elseif data.commodity == "Used farm machinery" %}
+
+          {% set commodity = "used farm machines" %}
+
+          {% endif %}
+
+          <div class="govuk-form-group  govuk-!-margin-bottom-9">
+            <fieldset class="govuk-fieldset">
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">
+                    Upload a file
+                </h1>
+              </legend>
+            </fieldset>
+
+            <p class="govuk-body">
+              {% if data.commodity == "plants" %}
+              Download and fill in the <a href="/public/images/template-plants.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
+              {% elseif data.commodity == "plant products" %}
+              Download and fill in the <a href="/public/images/template-plant-products.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
+              {% elseif data.commodity == "used farm machines" %}
+              Download and fill in the <a href="/public/images/template-used-farm-machinery.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
+              {% elseif data.commodity == "potatoes" %}
+              Download and fill in the <a href="/public/images/template-potatoes.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
+              {% elseif data.commodity == "seeds" %}
+              Download and fill in the <a href="/public/images/template-seeds-phyto.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
+              {% else %}
+              Download and fill in the <a href="/public/images/APHA_phytosanitary_certificate_csv_template.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
+              {% endif %}
+            </p>
+            <p class="govuk-body">
+                Open the csv file in Excel or whatever you use to edit spreadsheets. When you have finished, save the file and select Comma Separated Values (.csv) as the file format.
+            </p>
+
+            {{ govukFileUpload({
+              id: "file-upload-1",
+              name: "file-upload-1",
+              label: {
+                text: "Upload your completed csv file"
+              }
+            }) }}
+
+          </div>
+
+          {{ govukButton({
+            text: "Uploading...",
+            disabled: true,
+            href: "commodity-list"
+          }) }}
+          <!--href: "upload-completed"-->
+        </form>
+      </div>
+    </div>
+    <ul class="govuk-list govuk-list">
+      <li>
+        {% if data.journey == "coc" or data.journey == "both"%}
+        <a href="commodity-list-split" class="govuk-link govuk-link-no-visited-state">Skip</a>
+        {% elif data.commodity == "seeds"%}
+        <a href="commodity-list-summary" class="govuk-link govuk-link-no-visited-state">Skip</a>
+        {% else %}
+        <a href="commodity-list" class="govuk-link govuk-link-no-visited-state">Skip</a>
+        {% endif %}
+        (Page reloads after 10 seconds)
+      </li>
+    </ul>
+{% endblock %}
+
+{% block pageScripts %}
+<script>
+/*   
+var a11ytimer = setTimeout(function() {
+    document.getElementById('alert').setAttribute("role", "alert");
+    document.getElementById('alert').innerHTML = "alert";
+  }, 5000); 
+*/
+   var timer = setTimeout(function() {
+    {% if data.journey == "coc" %}
+    window.location='commodity-list-split'
+    {% elif data.commodity == "seeds" %}
+    window.location='commodity-list-summary'
+    {% else %}
+    window.location='commodity-list'
+    {% endif %}
+      
+  }, 10000); 
+</script>
+{% endblock %}

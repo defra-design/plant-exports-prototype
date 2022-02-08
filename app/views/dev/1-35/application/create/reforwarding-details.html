@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+What are the re-forwarding details? - {{serviceName}} - GOV UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-width-container">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
+        What are the re-forwarding details?
+      </h1>
+      <form method="post" action="{{query.return_url or '../create/task-list'}}">
+        {{ govukInput({
+          label: {
+            text: "Where has the consignment been kept in the UK?",
+            classes: "govuk-!-font-weight-bold"
+          },
+          classes: "govuk-input--width-20",
+          id: "where-kept",
+          name: "where-kept"
+        }) }}
+
+        {{ govukInput({
+          label: {
+            text: "How long has the consignment been kept there?",
+            classes: "govuk-!-font-weight-bold"
+          },
+          hint: {
+            text: "It must have been kept without deteriorating or any change in state, such as being grown."
+          },
+          classes: "govuk-input--width-20",
+          id: "how-long",
+          name: "how-long"
+        }) }}
+
+        {{ govukRadios({
+          idPrefix: "repacked",
+          name: "repacked",
+          fieldset: {
+            legend: {
+              text: "If the consignment was repacked, what type of container did you use?",
+              isPageHeading: false,
+              classes: "govuk-fieldset__legend--s"
+            }
+          },
+          items: [
+            {
+              value: "New packaging",
+              text: "New packaging"
+            },
+            {
+              value: "Original packaging",
+              text: "Original packaging"
+            },
+            {
+              value: "The consignment has not been repacked",
+              text: "The consignment has not been repacked"
+            }
+          ]
+        }) }}
+
+        {{ govukButton({
+          classes: "govuk-!-margin-top-4",
+          text: "Save and continue"
+        }) }}
+      </form>
+    </div>
+  </div>
+  {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+</div>
+{% endblock %}

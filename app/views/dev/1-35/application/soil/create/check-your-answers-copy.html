@@ -1,0 +1,437 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Make changes to your application - Soil inspection - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new" id="Nav-DisplayName">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="../../../account?returnURL=application" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
+  </ul>
+</div>
+
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<style>
+
+  /* Needs extracting and adding to the external Sass or CSS */
+  .no-padding {
+    padding: 0px !important;
+  }
+
+</style>
+
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-three-quarters">
+
+    <form action="../submit/declaration" method="post">
+
+      <div class="app-alert app-alert--success">
+        <p class="govuk-body">You have successfully copied this application</p>
+      </div>
+
+      <h1 class="govuk-heading-xl">Make changes to your application</h1>
+
+      <div class="govuk-body">
+        Create your new application by changing the answers below.
+      </div>
+
+      {% set commodity = data.commodity or "plants" %}
+      
+      {% if data.build == "ux" %}
+      <h2 class="govuk-heading-m">Application details</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+        
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Application type</dt>
+          <dd class="govuk-summary-list__value">Soil sampling for {% if data.commodity == "potatoes" %}ware potatoes{% else %}{{data.commodity or "crops"}}{% endif %}</dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Who is the applicant?</dt>
+          <dd class="govuk-summary-list__value">ABC LIMITED, 27 The Crescent, NORTH WEST LONDON, NW7 0HX</dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Your reference</dt>
+          <dd class="govuk-summary-list__value">{% if data.reuse_reference == "yes" %}{{query.id | appInfo('reference') or "REFERENCE"}}{% else %}{{data.new_ref_num or "REFERENCE"}}{% endif %}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="reference?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> your reference</span></a></dd>
+        </div>
+
+      </dl>
+      {% else %}
+      <h2 class="govuk-heading-m">Application summary</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+        
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Certificate</dt>
+          <dd class="govuk-summary-list__value">Soil sampling for {% if data.commodity == "potatoes" %}ware potatoes{% else %}{{data.commodity or "crops"}}{% endif %}</dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Your application</dt>
+          <dd class="govuk-summary-list__value">{% if data.reuse_reference == "yes" %}{{query.id | appInfo('reference') or "REFERENCE"}}{% else %}{{data.new_ref_num or "REFERENCE"}}{% endif %}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="reference?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> your reference</span></a></dd>
+        </div>
+
+      </dl>
+
+      <h2 class="govuk-heading-m">Applicant details</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Name</dt>
+          <dd class="govuk-summary-list__value">Mr. John Davies</dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Address</dt>
+          <dd class="govuk-summary-list__value">ABC Limited, 27 The Crescent, North West London, NW7 0HX</dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Phone number</dt>
+          <dd class="govuk-summary-list__value">07777 123456</dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
+        </div>
+
+      </dl>
+      {% endif %}
+
+      {% if data.commodity == "bulbs" or data.commodity == "plants" %}
+      <h2 class="govuk-heading-m">Field details</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+        
+        {% if data.field_task_list_data == "field-list" %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            {{data.nurseryplotno or "Top field"}}
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {% if data.addfielddetails == "Google Maps" %}Google Maps{% elif data.addfielddetails == "iacs" %}IACS or RLR number{% elif data.addfielddetails == "gridgps" %}Grid reference or GPS reading{% elif data.addfielddetails == "what3words" %}what3words address{% else %}Grid reference or GPS reading{% endif %}: {% if data.addfielddetails == "Google Maps" %}{{data.navigation_googlemaps or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails == "iacs" %}{{data.navigation_iacs or "NF 1234 1234"}}{% elif data.addfielddetails == "gridgps" %}{{data.navigation_gridgps or "NX 509 582"}}{% elif data.addfielddetails == "what3words" %}///{{data.navigation_what3words or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}
+            <br>
+            Field map: {% if data.send_inspector_map == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload or "Filename.jpg"}}</a>{% else %}Not provided{% endif %}
+          </dd>          
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="{{data.field_task_list_data or 'field-list'}}?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> {{data.nurseryplotno or "Top field"}}</span></a></dd>
+        </div>
+        {% elif data.field_task_list_data == "field-list-2" %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            {{data.nurseryplotno2 or "Bottom field"}}
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {% if data.addfielddetails2 == "Google Maps" %}Google Maps{% elif data.addfielddetails2 == "iacs" %}IACS or RLR number{% elif data.addfielddetails2 == "gridgps" %}Grid reference or GPS reading{% elif data.addfielddetails2 == "what3words" %}what3words address{% else %}Grid reference or GPS reading{% endif %}: {% if data.addfielddetails2 == "Google Maps" %}{{data.navigation_googlemaps2 or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails2 == "iacs" %}{{data.navigation_iacs2 or "NF 1234 1234"}}{% elif data.addfielddetails2 == "gridgps" %}{{data.navigation_gridgps2 or "NX 509 582"}}{% elif data.addfielddetails2 == "what3words" %}///{{data.navigation_what3words2 or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}
+            <br>
+            Field map: {% if data.send_inspector_map2 == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload2 or "Another filename.jpg"}}</a>{% else %}Not provided{% endif %}         
+          </dd>          
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="{{data.field_task_list_data or 'field-list'}}?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> {{data.nurseryplotno2 or "Bottom field"}}</span></a></dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            {{data.nurseryplotno or "Top field"}}
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {% if data.addfielddetails == "Google Maps" %}Google Maps{% elif data.addfielddetails == "iacs" %}IACS or RLR number{% elif data.addfielddetails == "gridgps" %}Grid reference or GPS reading{% elif data.addfielddetails == "what3words" %}what3words address{% else %}Grid reference or GPS reading{% endif %}: {% if data.addfielddetails == "Google Maps" %}{{data.navigation_googlemaps or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails == "iacs" %}{{data.navigation_iacs or "NF 1234 1234"}}{% elif data.addfielddetails == "gridgps" %}{{data.navigation_gridgps or "NX 509 582"}}{% elif data.addfielddetails == "what3words" %}///{{data.navigation_what3words or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}
+            <br>
+            Field map: {% if data.send_inspector_map == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload or "Filename.jpg"}}</a>{% else %}Not provided{% endif %}
+          </dd>          
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="{{data.field_task_list_data or 'field-list'}}?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> {{data.nurseryplotno or "Top field"}}</span></a></dd>
+        </div>
+        {% elif data.field_task_list_data == "field-list-3" %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            {{data.nurseryplotno3 or "Middle field"}}
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {% if data.addfielddetails3 == "Google Maps" %}Google Maps{% elif data.addfielddetails3 == "iacs" %}IACS or RLR number{% elif data.addfielddetails3 == "gridgps" %}Grid reference or GPS reading{% elif data.addfielddetails3 == "what3words" %}what3words address{% else %}Grid reference or GPS reading{% endif %}: {% if data.addfielddetails3 == "Google Maps" %}{{data.navigation_googlemaps3 or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails3 == "iacs" %}{{data.navigation_iacs3 or "NF 1234 1234"}}{% elif data.addfielddetails3 == "gridgps" %}{{data.navigation_gridgps3 or "NX 509 582"}}{% elif data.addfielddetails3 == "what3words" %}///{{data.navigation_what3words3 or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}
+            <br>
+            Field map: {% if data.send_inspector_map3 == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload3 or "Another another filename.jpg"}}</a>{% else %}Not provided{% endif %}         
+          </dd>          
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="{{data.field_task_list_data or 'field-list'}}?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> {{data.nurseryplotno3 or "Middle field"}}</span></a></dd>
+        </div>
+        
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            {{data.nurseryplotno2 or "Bottom field"}}
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {% if data.addfielddetails2 == "Google Maps" %}Google Maps{% elif data.addfielddetails2 == "iacs" %}IACS or RLR number{% elif data.addfielddetails2 == "gridgps" %}Grid reference or GPS reading{% elif data.addfielddetails2 == "what3words" %}what3words address{% else %}Grid reference or GPS reading{% endif %}: {% if data.addfielddetails2 == "Google Maps" %}{{data.navigation_googlemaps2 or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails2 == "iacs" %}{{data.navigation_iacs2 or "NF 1234 1234"}}{% elif data.addfielddetails2 == "gridgps" %}{{data.navigation_gridgps2 or "NX 509 582"}}{% elif data.addfielddetails2 == "what3words" %}///{{data.navigation_what3words2 or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}
+            <br>
+            Field map: {% if data.send_inspector_map2 == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload2 or "Another filename.jpg"}}</a>{% else %}Not provided{% endif %}         
+          </dd>          
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="{{data.field_task_list_data or 'field-list'}}?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> {{data.nurseryplotno2 or "Bottom field"}}</span></a></dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            {{data.nurseryplotno or "Top field"}}
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {% if data.addfielddetails == "Google Maps" %}Google Maps{% elif data.addfielddetails == "iacs" %}IACS or RLR number{% elif data.addfielddetails == "gridgps" %}Grid reference or GPS reading{% elif data.addfielddetails == "what3words" %}what3words address{% else %}Grid reference or GPS reading{% endif %}: {% if data.addfielddetails == "Google Maps" %}{{data.navigation_googlemaps or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails == "iacs" %}{{data.navigation_iacs or "NF 1234 1234"}}{% elif data.addfielddetails == "gridgps" %}{{data.navigation_gridgps or "NX 509 582"}}{% elif data.addfielddetails == "what3words" %}///{{data.navigation_what3words or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}
+            <br>
+            Field map: {% if data.send_inspector_map == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload or "Filename.jpg"}}</a>{% else %}Not provided{% endif %}
+          </dd>          
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="{{data.field_task_list_data or 'field-list'}}?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> {{data.nurseryplotno or "Top field"}}</span></a></dd>
+        </div>
+        {% else %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            {{data.nurseryplotno2 or "Bottom field"}}
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {% if data.addfielddetails2 == "Google Maps" %}Google Maps{% elif data.addfielddetails2 == "iacs" %}IACS or RLR number{% elif data.addfielddetails2 == "gridgps" %}Grid reference or GPS reading{% elif data.addfielddetails2 == "what3words" %}what3words address{% else %}Grid reference or GPS reading{% endif %}: {% if data.addfielddetails2 == "Google Maps" %}{{data.navigation_googlemaps2 or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails2 == "iacs" %}{{data.navigation_iacs2 or "NF 1234 1234"}}{% elif data.addfielddetails2 == "gridgps" %}{{data.navigation_gridgps2 or "NX 509 582"}}{% elif data.addfielddetails2 == "what3words" %}///{{data.navigation_what3words2 or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}
+            <br>
+            Field map: {% if data.send_inspector_map2 == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload2 or "Another filename.jpg"}}</a>{% else %}Not provided{% endif %}         
+          </dd>          
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="{{data.field_task_list_data or 'field-list'}}?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> {{data.nurseryplotno2 or "Bottom field"}}</span></a></dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            {{data.nurseryplotno or "Top field"}}
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {% if data.addfielddetails == "Google Maps" %}Google Maps{% elif data.addfielddetails == "iacs" %}IACS or RLR number{% elif data.addfielddetails == "gridgps" %}Grid reference or GPS reading{% elif data.addfielddetails == "what3words" %}what3words address{% else %}Grid reference or GPS reading{% endif %}: {% if data.addfielddetails == "Google Maps" %}{{data.navigation_googlemaps or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails == "iacs" %}{{data.navigation_iacs or "NF 1234 1234"}}{% elif data.addfielddetails == "gridgps" %}{{data.navigation_gridgps or "NX 509 582"}}{% elif data.addfielddetails == "what3words" %}///{{data.navigation_what3words or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}
+            <br>
+            Field map: {% if data.send_inspector_map == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload or "Filename.jpg"}}</a>{% else %}Not provided{% endif %}
+          </dd>          
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="{{data.field_task_list_data or 'field-list'}}?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> {{data.nurseryplotno or "Top field"}}</span></a></dd>
+        </div>
+        {% endif %}
+
+      </dl>
+      {% else %}
+      <h2 class="govuk-heading-m">Field and crop details</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+        
+        {% if data.field_task_list_data == "commodity-list" %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            {{data.nurseryplotno or "Top field"}}
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {% if data.addfielddetails == "Google Maps" %}Google Maps{% elif data.addfielddetails == "iacs" %}IACS or RLR number{% elif data.addfielddetails == "gridgps" %}Grid reference or GPS reading{% elif data.addfielddetails == "what3words" %}what3words address{% else %}Grid reference or GPS reading{% endif %}: {% if data.addfielddetails == "Google Maps" %}{{data.navigation_googlemaps or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails == "iacs" %}{{data.navigation_iacs or "NF 1234 1234"}}{% elif data.addfielddetails == "gridgps" %}{{data.navigation_gridgps or "NX 509 582"}}{% elif data.addfielddetails == "what3words" %}///{{data.navigation_what3words or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}
+            <br>
+            Field map: {% if data.send_inspector_map == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload or "Filename.jpg"}}</a>{% else %}Not provided{% endif %}
+            <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
+              <li>
+                {% if data.commodity == "potatoes" %}{% if data.commodity_variety_other %}{{data.commodity_variety_other}}{% else %}{% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}Corylus avellana{% endif %}{% endif %}{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}}{% endif %} - {{data.approxhectofplot or "2"}} hectares
+                <!-- <br>
+                {{data.destinationcountries or "Belize"}} -->
+              </li>
+            </ul>
+          </dd>          
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="{{data.field_task_list_data or 'commodity-list'}}?change=yes&return_url=check-your-answers#1">Change<span class="govuk-visually-hidden"> {{data.nurseryplotno or "Top field"}}</span></a></dd>
+        </div>
+        {% elif data.field_task_list_data == "commodity-list-2" %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            {{data.nurseryplotno or "Top field"}}
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {% if data.addfielddetails == "Google Maps" %}Google Maps{% elif data.addfielddetails == "iacs" %}IACS or RLR number{% elif data.addfielddetails == "gridgps" %}Grid reference or GPS reading{% elif data.addfielddetails == "what3words" %}what3words address{% else %}Grid reference or GPS reading{% endif %}: {% if data.addfielddetails == "Google Maps" %}{{data.navigation_googlemaps or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails == "iacs" %}{{data.navigation_iacs or "NF 1234 1234"}}{% elif data.addfielddetails == "gridgps" %}{{data.navigation_gridgps or "NX 509 582"}}{% elif data.addfielddetails == "what3words" %}///{{data.navigation_what3words or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}
+            <br>
+            Field map: {% if data.send_inspector_map == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload or "Filename.jpg"}}</a>{% else %}Not provided{% endif %}            
+            <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
+              <li>
+                {% if data.commodity == "potatoes" %}{% if data.commodity_variety_other2 %}{{data.commodity_variety_other2}}{% else %}{% if data.commodity_variety2 == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety2 == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}Corylus avellana{% endif %}{% endif %}{% else %}{{data.commodity_host_species2 or data.genus2 or data.commodity_common_name2 or data.commodity_type2 or data.commodity_variety_other2 or "Corylus avellana"}}{% endif %} - {{data.approxhectofplot2 or "18"}} hectares
+                <!-- <br>
+                {{data.destinationcountries2 or "USA"}} -->
+              </li>
+              <li>
+                {% if data.commodity == "potatoes" %}{% if data.commodity_variety_other %}{{data.commodity_variety_other}}{% else %}{% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}Corylus avellana{% endif %}{% endif %}{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}}{% endif %} - {{data.approxhectofplot or "2"}} hectares
+                <!-- <br>
+                {{data.destinationcountries or "Belize"}} -->
+              </li>
+            </ul>
+          </dd>          
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="{{data.field_task_list_data or 'commodity-list'}}?change=yes&return_url=check-your-answers#1">Change<span class="govuk-visually-hidden"> {{data.nurseryplotno or "Top field"}}</span></a></dd>
+        </div>
+        {% elif data.field_task_list_data == "commodity-list-2-fields" %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            {{data.nurseryplotno2 or "Bottom field"}}
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {% if data.addfielddetails2 == "Google Maps" %}Google Maps{% elif data.addfielddetails2 == "iacs" %}IACS or RLR number{% elif data.addfielddetails2 == "gridgps" %}Grid reference or GPS reading{% elif data.addfielddetails2 == "what3words" %}what3words address{% else %}Grid reference or GPS reading{% endif %}: {% if data.addfielddetails2 == "Google Maps" %}{{data.navigation_googlemaps2 or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails2 == "iacs" %}{{data.navigation_iacs2 or "NF 1234 1234"}}{% elif data.addfielddetails2 == "gridgps" %}{{data.navigation_gridgps2 or "NX 509 582"}}{% elif data.addfielddetails2 == "what3words" %}///{{data.navigation_what3words2 or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}
+            <br>
+            Field map: {% if data.send_inspector_map2 == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload2 or "Another filename.jpg"}}</a>{% else %}Not provided{% endif %}
+            <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
+              <li>
+                {% if data.commodity == "potatoes" %}{% if data.commodity_variety_other3 %}{{data.commodity_variety_other3}}{% else %}{% if data.commodity_variety3 == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety3 == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}Corylus avellana{% endif %}{% endif %}{% else %}{{data.commodity_host_species3 or data.genus3 or data.commodity_common_name3 or data.commodity_type3 or data.commodity_variety_other3 or "Corylus avellana"}}{% endif %} - {{data.approxhectofplot3 or "50"}} hectares
+                <!-- <br>
+                {{data.destinationcountries3 or "Brazil"}} -->
+              </li>
+            </ul>            
+          </dd>          
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="{{data.field_task_list_data or 'commodity-list'}}?change=yes&return_url=check-your-answers#1">Change<span class="govuk-visually-hidden"> {{data.nurseryplotno2 or "Bottom field"}}</span></a></dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            {{data.nurseryplotno or "Top field"}}
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {% if data.addfielddetails == "Google Maps" %}Google Maps{% elif data.addfielddetails == "iacs" %}IACS or RLR number{% elif data.addfielddetails == "gridgps" %}Grid reference or GPS reading{% elif data.addfielddetails == "what3words" %}what3words address{% else %}Grid reference or GPS reading{% endif %}: {% if data.addfielddetails == "Google Maps" %}{{data.navigation_googlemaps or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails == "iacs" %}{{data.navigation_iacs or "NF 1234 1234"}}{% elif data.addfielddetails == "gridgps" %}{{data.navigation_gridgps or "NX 509 582"}}{% elif data.addfielddetails == "what3words" %}///{{data.navigation_what3words or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}
+            <br>
+            Field map: {% if data.send_inspector_map == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload or "Filename.jpg"}}</a>{% else %}Not provided{% endif %}
+            <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
+              <li>
+                {% if data.commodity == "potatoes" %}{% if data.commodity_variety_other %}{{data.commodity_variety_other}}{% else %}{% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}Corylus avellana{% endif %}{% endif %}{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}}{% endif %} - {{data.approxhectofplot or "2"}} hectares
+                <!-- <br>
+                {{data.destinationcountries or "Belize"}} -->
+              </li>
+            </ul>
+          </dd>          
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="{{data.field_task_list_data or 'commodity-list'}}?change=yes&return_url=check-your-answers#2">Change<span class="govuk-visually-hidden"> {{data.nurseryplotno or "Top field"}}</span></a></dd>
+        </div>
+        {% else %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            {{data.nurseryplotno2 or "Bottom field"}}
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {% if data.addfielddetails2 == "Google Maps" %}Google Maps{% elif data.addfielddetails2 == "iacs" %}IACS or RLR number{% elif data.addfielddetails2 == "gridgps" %}Grid reference or GPS reading{% elif data.addfielddetails2 == "what3words" %}what3words address{% else %}Grid reference or GPS reading{% endif %}: {% if data.addfielddetails2 == "Google Maps" %}{{data.navigation_googlemaps2 or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails2 == "iacs" %}{{data.navigation_iacs2 or "NF 1234 1234"}}{% elif data.addfielddetails2 == "gridgps" %}{{data.navigation_gridgps2 or "NX 509 582"}}{% elif data.addfielddetails2 == "what3words" %}///{{data.navigation_what3words2 or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}
+            <br>
+            Field map: {% if data.send_inspector_map2 == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload2 or "Another filename.jpg"}}</a>{% else %}Not provided{% endif %}
+            <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
+              <li>
+                {% if data.commodity == "potatoes" %}{% if data.commodity_variety_other3 %}{{data.commodity_variety_other3}}{% else %}{% if data.commodity_variety3 == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety3 == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}Corylus avellana{% endif %}{% endif %}{% else %}{{data.commodity_host_species3 or data.genus3 or data.commodity_common_name3 or data.commodity_type3 or data.commodity_variety_other3 or "Corylus avellana"}}{% endif %} - {{data.approxhectofplot3 or "50"}} hectares
+                <!-- <br>
+                {{data.destinationcountries3 or "Brazil"}} -->
+              </li>
+            </ul>            
+          </dd>          
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="{{data.field_task_list_data or 'commodity-list'}}?change=yes&return_url=check-your-answers#1">Change<span class="govuk-visually-hidden"> {{data.nurseryplotno2 or "Bottom field"}}</span></a></dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            {{data.nurseryplotno or "Top field"}}
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {% if data.addfielddetails == "Google Maps" %}Google Maps{% elif data.addfielddetails == "iacs" %}IACS or RLR number{% elif data.addfielddetails == "gridgps" %}Grid reference or GPS reading{% elif data.addfielddetails == "what3words" %}what3words address{% else %}Grid reference or GPS reading{% endif %}: {% if data.addfielddetails == "Google Maps" %}{{data.navigation_googlemaps or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails == "iacs" %}{{data.navigation_iacs or "NF 1234 1234"}}{% elif data.addfielddetails == "gridgps" %}{{data.navigation_gridgps or "NX 509 582"}}{% elif data.addfielddetails == "what3words" %}///{{data.navigation_what3words or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}
+            <br>
+            Field map: {% if data.send_inspector_map == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload or "Filename.jpg"}}</a>{% else %}Not provided{% endif %}
+            <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
+              <li>
+                {% if data.commodity == "potatoes" %}{% if data.commodity_variety_other %}{{data.commodity_variety_other}}{% else %}{% if data.commodity_variety == "Maris piper,Maris piper" %}Maris piper{% elif data.commodity_variety == "Pink fir apple,Pink fir apple" %}Pink fir apple{% else %}Corylus avellana{% endif %}{% endif %}{% else %}{{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or data.commodity_variety_other or "Corylus avellana"}}{% endif %} - {{data.approxhectofplot or "2"}} hectares
+                <!-- <br>
+                {{data.destinationcountries or "Belize"}} -->
+              </li>
+            </ul>
+          </dd>          
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="{{data.field_task_list_data or 'commodity-list'}}?change=yes&return_url=check-your-answers#2">Change<span class="govuk-visually-hidden"> {{data.nurseryplotno or "Top field"}}</span></a></dd>
+        </div>
+        {% endif %}
+
+      </dl>
+      {% endif %}
+
+      <h2 class="govuk-heading-m">Inspection details</h2>
+      {% if data.build == "ux" %}
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Where will the inspection take place?</dt>
+          <dd class="govuk-summary-list__value">{{data.select_address or "Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH"}}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="inspection-addresses?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> where the inspection will take place</span></a></dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Who is the contact for this application?</dt>
+          <dd class="govuk-summary-list__value">
+            {% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}
+            Bill Shoggins
+            <br>
+            01234 567890
+            <br>
+            bill.shoggins@acmeltd.com
+            {% else %}
+            {{data.contact_name or "Bill Shoggins"}}
+            <br>
+            {{data.address_phone or "01234 567890"}}
+            <br>
+            {{data.email_address or "bill.shoggins@acmeltd.com"}}
+            {% endif %}
+          </dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> who the main contact for this application</span></a></dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">When will the fields be ready for inspection?</dt>
+          <dd class="govuk-summary-list__value">{{data.submit_date or "December 2021"}}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="inspection-dates?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> when the fields will be ready for inspection</span></a></dd>
+        </div>
+
+      </dl>
+      {% else %}
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Where will the inspection take place?</dt>
+          <dd class="govuk-summary-list__value">{{data.select_address or "Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH"}}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="inspection-addresses?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> where the inspection will take place</span></a></dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Contact name</dt>
+          <dd class="govuk-summary-list__value">{% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}Bill Shoggins{% else %}{{data.contact_name or "Bill Shoggins"}}{% endif %}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> who the main contact for this application</span></a></dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Phone number</dt>
+          <dd class="govuk-summary-list__value">{% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}01234 567890{% else %}{{data.address_phone or "01234 567890"}}{% endif %}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> who the main contact for this application</span></a></dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Email address</dt>
+          <dd class="govuk-summary-list__value">{% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}bill.shoggins@acmeltd.com{% else %}{{data.email_address or "bill.shoggins@acmeltd.com"}}{% endif %}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> who the main contact for this application</span></a></dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">When will the fields be ready for inspection?</dt>
+          <dd class="govuk-summary-list__value">{{data.submit_date or "December 2021"}}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="inspection-dates?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> when the fields will be ready for inspection</span></a></dd>
+        </div>
+
+      </dl>
+      {% endif %}
+
+      {% if data.build == "ux" %}
+      <div class="govuk-form-group govuk-!-margin-top-9">
+        <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_blank">what fees you need to pay (opens in new tab)</a> for a soil sampling inspection.</p>
+      </div>
+      {% else %}
+      <div class="govuk-form-group govuk-!-margin-top-9">
+        <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_blank">what fees you need to pay</a> for this application (opens in a new window).</p>
+      </div>
+      {% endif %}
+
+      <div class="govuk-button-group govuk-!-margin-top-9">
+        <input type="hidden" name="answers-checked" value="true">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Continue</button>
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

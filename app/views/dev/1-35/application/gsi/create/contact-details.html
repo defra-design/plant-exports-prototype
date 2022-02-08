@@ -1,0 +1,105 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+Add a new inspection address - {{serviceName}} - GOV.UK
+{% endblock %}
+{% block beforeContent%}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+<!--<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new" id="Nav-DisplayName">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="../account" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
+  </ul>
+</div>-->
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      Who is the contact for this application?
+    </h1>
+    <!--<p class="govuk-body">Enter the address of your business premises where the inspector will check your consignment</p>-->
+    <div class="govuk-hint">The inspector may contact this person about the application.</div>
+    {% if data.reforwarding %}
+    <form action="{{query.return_url or 'task-list'}}" method="POST">
+    {% else %}
+    <form action="{{query.return_url or 'inspection-dates'}}" method="POST">
+    {% endif %}
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="expiry-hint">
+          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="applicant-conditional" name="contact_name_details" type="radio" value="Contact name (07123456789, email@domain.com)" data-aria-controls="conditional-applicant-conditional">
+              <label class="govuk-label govuk-radios__label" for="applicant-conditional">
+                {{data.main-contact-name or "Sarah Philips (07123456789, email@domain.com)"}}
+              </label>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="applicant-conditional-2" name="contact_name_details" type="radio" value="different" data-aria-controls="conditional-applicant-conditional-2">
+              <label class="govuk-label govuk-radios__label" for="applicant-conditional-2">
+                A different contact
+              </label>
+            </div>
+
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-applicant-conditional-2">
+              <div class="govuk-form-group ">
+                <label class="govuk-label govuk-!-font-weight-bold" for="contact_name">
+                  Contact name
+                </label>
+                <input class="govuk-input govuk-input--width-20" id="contact_name" name="contact_name" type="text" autocomplete="contact_name">
+              </div>
+
+              <div class="govuk-form-group ">
+                <label class="govuk-label govuk-!-font-weight-bold" for="address_phone">
+                  Phone number
+                </label>
+                <input class="govuk-input govuk-input--width-20" id="address_phone" name="agent_phone" type="text" autocomplete="address_phone">
+              </div>
+
+              <div class="govuk-form-group ">
+                <label class="govuk-label govuk-!-font-weight-bold" for="email_address">
+                  Email address
+                </label>
+                <input class="govuk-input govuk-input--width-20" id="email_address" name="email_address" type="text" autocomplete="email_address">
+              </div>
+            </div>
+
+          </div>
+        </fieldset>
+      </div>
+
+      <!--<div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="expiry-hint">
+              <div class="govuk-form-group ">
+                <label class="govuk-label govuk-!-font-weight-bold" for="contact_name">
+                  Contact name
+                </label>
+                <input class="govuk-input govuk-input--width-20" id="contact_name" name="contact_name" type="text" autocomplete="contact_name">
+              </div>
+
+              <div class="govuk-form-group ">
+                <label class="govuk-label govuk-!-font-weight-bold" for="address_phone">
+                  Phone number
+                </label>
+                <input class="govuk-input govuk-input--width-20" id="address_phone" name="agent_phone" type="text" autocomplete="address_phone">
+              </div>
+
+              <div class="govuk-form-group ">
+                <label class="govuk-label govuk-!-font-weight-bold" for="email_address">
+                  Email address
+                </label>
+                <input class="govuk-input govuk-input--width-20" id="email_address" name="email_address" type="text" autocomplete="email_address">
+              </div>
+
+        </fieldset>
+      </div>-->
+
+      <input class="govuk-button govuk-!-margin-top-4" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+    </form>
+  </div>
+</div>
+
+{% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+{% endblock %}
