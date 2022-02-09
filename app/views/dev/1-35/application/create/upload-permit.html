@@ -11,7 +11,7 @@ GOV.UK Prototype Kit
     <h1 class="govuk-heading-xl">
       Upload a copy of the import permit
     </h1>
-    <p class="govuk-body">You will need to upload a copy of the import permit <strong>{{data.import_permit}}</strong> before submitting this application</p>
+    <p class="govuk-body">You will need to upload a copy of the import permit <strong>{{data['consignee-import-permit']}}</strong> before submitting this application</p>
     <form action="{{query.return_url or '../create/task-list'}}" method="POST">
       <fieldset class="govuk-fieldset" aria-describedby="applicant-conditional-hint">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-!-margin-bottom-6">
@@ -26,7 +26,8 @@ GOV.UK Prototype Kit
               </label>
             </div>
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="applicant-conditional-2" name="permit_uploaded" type="radio" value="no~task-list" data-aria-controls="conditional-applicant-conditional-2" {% if data.permit_uploaded=="no" %}checked{%endif%}>
+              <!-- use a null value for date.file to clear any uploaded files -->
+              <input class="govuk-radios__input" id="applicant-conditional-2" name="permit_uploaded" type="radio" value="no?file=~task-list" data-aria-controls="conditional-applicant-conditional-2" {% if data.permit_uploaded=="no" %}checked{%endif%}>
               <label class="govuk-label govuk-radios__label" for="applicant-conditional-2">
                 No, I will upload it later
               </label>
