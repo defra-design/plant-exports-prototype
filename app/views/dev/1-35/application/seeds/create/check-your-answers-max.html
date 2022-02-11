@@ -1,0 +1,246 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+Check your answers before sending your application - Seed sampling - {{serviceName}} - GOV.UK
+{% endblock %}
+{% block beforeContent%}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+
+{% set items = [
+  {
+    commodity: 'Antirrhinum majus', 
+    variety: 'Crackle & Pop', 
+    commodity_lot: '93880-*-*-1',
+    quantity: '41,000', 
+    country: 'New Zealand'
+  },{
+    commodity: 'Begonia boliviensis', 
+    variety: 'Bossa Nova', 
+    commodity_lot: '84870-*-*-1',
+    quantity: '5,000',
+    country: 'France, Spain, Israel'
+  },{
+    commodity: 'Cosmos bipinnatus', 
+    variety: 'Apollo', 
+    commodity_lot: '94218-*-*-1', 
+    quantity: '10,000', 
+    country: 'France'
+  },{
+    commodity: 'Nemesia foetens', 
+    variety: 'Seventh Heaven', 
+    commodity_lot: '83471-*-*-1', 
+    quantity: '5,000',
+    country: 'Spain, Belgium'
+  },{
+    commodity: 'Pelargonium x hortorum', 
+    variety: 'Horizon', 
+    commodity_lot: '83786-*-H-1', 
+    quantity: '8,000', 
+    country: 'Belgium'
+  },{
+    commodity: 'Pelargonium x hortorum', 
+    variety: 'Divas', 
+    commodity_lot: '83786-*-H-1', 
+    quantity: '5,000', 
+    country: 'Israel'
+  },{
+    commodity: 'Pelargonium x hortorum', 
+    variety: 'Dancer', 
+    commodity_lot: '86830-*-H-1', 
+    quantity: '7,000', 
+    country: 'New Zealand'
+  },{
+    commodity: 'Pelargonium x hortorum', 
+    variety: 'Quantum', 
+    commodity_lot: '75032-*-H-1', 
+    quantity: '3,000', 
+    country: 'Spain'
+  },{
+    commodity: 'Salvia splendens', 
+    variety: 'Mojave Imp', 
+    commodity_lot: '86262-*-*-1', 
+    quantity: '5,000', 
+    country: 'France'
+  }
+  ]
+%}
+
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <h1 class="govuk-heading-xl">
+      Review your answers
+    </h1>
+    <h2 class="govuk-heading-m">Application summary</h2>
+    
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Application type
+        </dt>
+        <dd class="govuk-summary-list__value">
+          Seed sampling
+        </dd>
+        <dd class="govuk-summary-list__actions">
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Your reference
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ data.reference_num or "12345" }}
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="../setup/what-country?change=yes">
+            Change<span class="govuk-visually-hidden">
+              Certification region</span>
+          </a>
+        </dd>
+      </div>
+    </dl>
+    <!--Inspection details-->
+
+    <h2 class="govuk-heading-m">Applicant details</h2>
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+      
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Name</dt>
+        <dd class="govuk-summary-list__value">ABC TRADING LTD</dd>
+        <dd class="govuk-summary-list__actions">&nbsp;</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Address</dt>
+        <dd class="govuk-summary-list__value">Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH</dd>
+        <dd class="govuk-summary-list__actions">&nbsp;</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Phone number</dt>
+        <dd class="govuk-summary-list__value">024 546 7069</dd>
+        <dd class="govuk-summary-list__actions">&nbsp;</dd>
+      </div>
+
+    </dl>
+
+    <!--Inspection details-->
+    <h2 class="govuk-heading-m">Inspection details</h2>
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Address </dt>
+        <dd class="govuk-summary-list__value">{{data.select_address or "Egg Lane, Sacrewell, Peterborough,
+          Cambridgeshire, PO5 4GH"}}</dd>
+        <dd class="govuk-summary-list__actions"><a class="govuk-link"
+            href="inspection-addresses?change=yes&return_url=check-your-answers">Change<span
+              class="govuk-visually-hidden"> where the inspection will take place</span></a></dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Contact name</dt>
+        <dd class="govuk-summary-list__value">
+          {% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}
+          Bill Shoggins 
+          <br>
+          01234 567890
+          <br>
+          bill.shoggins@acmeltd.com
+          {% else %}
+          {{data.contact_name or "Sarah Philips"}}
+          <br>
+          {{data.address_phone or "01234 567890"}}
+          <br>
+          {{data.email_address or "sarah.philips@acmeltd.com"}}
+          {% endif %}
+        </dd>
+        <dd class="govuk-summary-list__actions"><a class="govuk-link"
+            href="contact-details?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden">
+              the main contact for this application</span></a></dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Date when your consignment will be ready for inspection </dt>
+        <dd class="govuk-summary-list__value">{{data.submit_date or "February 2022"}}</dd>
+        <dd class="govuk-summary-list__actions"><a class="govuk-link"
+            href="inspection-dates?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden">
+              when the fields will be ready for inspection</span></a></dd>
+      </div>
+
+    </dl>
+
+    <!--Your consignment-->
+    <h2 class="govuk-heading-m">Your consignment</h2>
+
+    <dl class="govuk-summary-list">
+      <div class="govuk-summary-list__row">
+       <dt class="govuk-summary-list__key">
+         Number of commodity&nbsp;records
+       </dt>
+       <dd class="govuk-summary-list__value">
+         395
+       </dd>
+       <dd class="govuk-summary-list__actions"><a class="govuk-link"
+        href="commodity-list-seeds-100-check?change=yes&return_url=check-your-answers?upload=1">Change<span class="govuk-visually-hidden">
+          commodity list</span></a></dd>
+     </div>
+     <div class="govuk-summary-list__row">
+       <dt class="govuk-summary-list__key">
+         Total quantity
+       </dt>
+       <dd class="govuk-summary-list__value">
+        109,100 seeds <br/>10.35Kg<br/>and 15 tonnes
+       </dd>
+       <dd class="govuk-summary-list__value">
+       </dd>
+     </div>
+     <div class="govuk-summary-list__row">
+       <dt class="govuk-summary-list__key">
+         Destination countries
+       </dt>
+       <dd class="govuk-summary-list__value">
+         <p class="govuk-body">Belgium, France, Israel, New Zealand, Spain </br>
+         </p>
+       </dd>
+       <dd class="govuk-summary-list__value">
+       </dd>
+     </div>
+   </dl>
+
+
+    <p class="govuk-body">This consignment is full.</p>
+
+
+    <h3 class="govuk-heading-m govuk-!-margin-top-9">Supporting documents</h3>
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9 ">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          File name<br>
+          File description
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {% if data.file %}
+          <a href="#"><strong>{{data.file}}</strong></a><br>
+          <a href="#"><strong>{{data.description}}</strong></a>
+          {%else%}
+          No documents uploaded
+          {%endif%}
+        </dd>
+      </div>
+    </dl>
+
+
+    <p class="govuk-body">
+      Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees"
+        class="govuk-link" rel="noreferrer noopener" target="_blank">what fees you will pay (opens in new tab)</a> for this application.
+    </p>
+
+    <p class="govuk-body govuk-!-margin-top-6">
+      <a href="../submit/declaration" class="govuk-button">Submit</a>
+    </p>
+  </div>
+</div>
+{% endblock %}
