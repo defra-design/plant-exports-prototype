@@ -30,9 +30,25 @@ Apply for seed sampling - Seed sampling - {{serviceName}} - GOV.UK
 
           </li>
 
+          {% set url="input-method"%}
+          
+          {% if data.restart == "true"  %}
+            {% set url="input-method?restart=false&upload=0"%}
+
+            {% else  %}
+              {% if data.upload>0 %}
+                {% set url="commodity-list-summary?return_url=task-list"%}
+              {% elseif data.commodities and ( data.commodities | length ) > 0 %}
+                {% set url="commodity-list"%}
+              {% else %}
+                {% set url="input-method?restart=false"%}
+              {% endif %}
+            {% endif %}
+
+
           <li class="app-task-list__item">
             <span class="app-task-list__task-name">
-              <a href="{%if data.upload %}commodity-list-summary?return_url=task-list{% elseif data.commodities and ( data.commodities | length ) > 0 %}commodity-list{% else %}input-method{% endif %}" aria-describedby="contact-details-status">
+              <a href="{{url}}" aria-describedby="contact-details-status">
                 Seeds to be sampled
               </a>
             </span>
