@@ -26,6 +26,12 @@ Add commodities by uploading a file - {{serviceName}} - GOV.UK
         {% if data.commodity == "plants" %}
           {% set template = "template-plants.csv" %}
           {% set exampleTemplate = "example-plant.csv" %}
+          {% set step2 = "<li>You must enter either an EPPO code or genus</li>" %}
+          {% set extraSteps = "<li>For Quantity units and Packaging type, you must choose from the  options listed and delete the rest of the options</li>" %}
+          {% set details2 = "<li>make sure you have entered either an EPPO code or genus for each line</li>"%}
+          {% set extraDetails = "<li>for Quantity units and Packaging type, make sure you have used only the options provided without changing them</li>
+          <li>for Quantity units and Packaging type, make sure that you have deleted any options you have not used</li>" %}
+
 
         {% elseif data.commodity == "plant products" %}
           {% set commodity = "products" %}
@@ -44,13 +50,16 @@ Add commodities by uploading a file - {{serviceName}} - GOV.UK
         {% elseif data.commodity == "potatoes" %}
           {% set template = "template-potatoes.csv" %}
           {% set exampleTemplate = "example-potatoes.csv" %}
-          {% set extraSteps = "<li>For Variety, Quantity units and Packaging type you must choose from the options listed and delete the rest of the options</li>" %}
-          {% set extraDetails = "<li>for Variety, Quantity units and Packaging type, make sure you have used only the options provided without changing them</li>
-          <li>for Variety, Quantity units and Packaging type, make sure that you have deleted any options you have not used</li>" %}
+          {% set extraSteps = "<li>For Potato type, Variety, Quantity units and Packaging type you must choose from the options listed and delete the rest of the options.</li>
+          <li>For Growing season inspection number, your should enter a growing season inspection number unless the growing season inspection was done on eDomero. If your growing season inspection was done using eDomero, just enter the word eDomero.</li>" %}
+          {% set extraDetails = "<li>for Potato type, Variety, Quantity units and Packaging type, make sure you have used only the options provided without changing them</li>
+          <li>for Potato type, Variety, Quantity units and Packaging type, make sure that you have deleted any options you have not used</li>
+          <li>for Growing season inspection number make sure your have entered either a growing season inspection number or just the word eDomero</li>" %}
 
         {% elseif data.commodity == "seeds" %}
           {% set template = "template-seeds.csv" %}
           {% set exampleTemplate = "example-seeds.csv" %}
+          {% set step2 = "<li>You must enter either an EPPO code together with both a genus and species OR a description</li>" %}
           {% set extraSteps = "<li>For Quantity units you must choose from the options listed and delete the rest of the options</li>
           <li>For Packaging type you must choose from the options listed and delete the rest of the options</li>
           <li>For Is the packaging reusable or reclaimed, you must enter either yes or no</li>" %}
@@ -112,17 +121,16 @@ Add commodities by uploading a file - {{serviceName}} - GOV.UK
 
             {{ step2 | safe }}
 
+            {% if data.commodity != "potatoes" %}
             <li>You must use the country code for the country of origin - you can find the 2 letter country code here: (opens in new tab)<br/>
               <a href="https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes" target="_blank">https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes</a> 
               <br/>
-              The only exceptions are if the country of origin is one of these countries - in which case, you must enter it as it appears in this list:
-              <br/>
+              The only exceptions are Northern Ireland and Palestine. If the country of origin is Northern Ireland, use GB-NIR. If it is Palestine, use PS.</li>
+            {% endif %}
               
-              <br/>
-              If the country of origin does not have a 2 letter country code or is not listed on this page, you must enter Other.</li>
-
             {{ extraSteps | safe }}
 
+            <li>Do not enter more than 500 rows of data.</li>
             <li>Save your completed file as a .CSV file and upload it</li>
 
           </ol>
@@ -141,10 +149,14 @@ Add commodities by uploading a file - {{serviceName}} - GOV.UK
                 <li>make sure you have not changed or deleted any columns or headers from the template</li>
                 <li>make sure the headers are consistently capitalised</li>
                 <li>check that you have not added extra commas</li>
-                <li>if you have edited the template using Excel, be aware that this program sometimes adds extra commas to your file</li>
+                <li>if you have edited the template using the Numbers application, be aware that this program sometimes adds extra columns to the file. If there are any empty columns without headers in your file, you should delete these columns completely</li>
+                <li>check that when you edited the template, your software didn't add extra commas into your CSV file</li>
+
+                {% if data.commodity != "potatoes" %}
                 <li>use GB-NIR as the country code for Northern Ireland</li>
                 <li>use PS as the country code for Palestine</li>
-                  
+                {% endif %}
+
                 {{ extraDetails | safe }} 
 
               </ul>
