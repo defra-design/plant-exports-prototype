@@ -36,9 +36,27 @@
           
           <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
 
+            <!-- Processed Plant Products -->
             <div class="govuk-radios__item">
+              {% if query.id == "32" %}
+              <input class="govuk-radios__input" id="reuse_reference_yes" name="reuse_reference" type="radio" value="yes~application/create/check-your-answers-ppp-copy?id={{query.id or 1}}&is_group={{query.is_group}}" data-aria-controls="conditional-contact">
+              <label class="govuk-label govuk-radios__label" for="reuse_reference_yes">Yes, use {{query.id | appInfo('reference') or "REFERENCE"}}</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="reuse_reference_no" name="reuse_reference" type="radio" value="no~application/create/check-your-answers-ppp-copy?id={{query.id or 1}}&is_group={{query.is_group}}" data-aria-controls="conditional-reuse-reference-no">
+              <label class="govuk-label govuk-radios__label" for="reuse_reference_no">No, use a different reference</label>
+            </div>
+
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-reuse-reference-no">
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="new_ref_num">Enter your reference name or number (max 20 characters)</label>
+                <input class="govuk-input govuk-!-width-one-half" id="new_ref_num" name="new_ref_num" type="text"></div>
+            </div>
+            <!-- Processed Plant Products END -->
+              {% else %}
               {% set orig_ref_num = query.id | appInfo('reference') %}
-              <input class="govuk-radios__input" id="reuse_reference_yes" name="reuse_reference" type="radio" value="yes~{% if (query.id | appInfo('cert_info')) == 'Soil sampling' %}application/soil/create/check-your-answers-copy?id={{query.id or 1}}&is_group={{query.is_group}}{% else %}application/create/check-your-answers-copy{% endif %}" data-aria-controls="conditional-contact">
+              <input class="govuk-radios__input" id="reuse_reference_yes" name="reuse_reference" type="radio" value="yes~{% if (query.id | appInfo('cert_info')) == 'Soil sampling' %}application/soil/create/check-your-answers-copy?id={{query.id or 1}}&is_group={{query.is_group}}{% elseif (query.id | appInfo('cert_info')) == 'plant products' %}application/soil/create/check-your-answers-ppp-copy?id={{query.id or 1}}&is_group={{query.is_group}}{% else %}application/create/check-your-answers-copy{% endif %}" data-aria-controls="conditional-contact">
               <label class="govuk-label govuk-radios__label" for="reuse_reference_yes">Yes, use {{query.id | appInfo('reference') or "REFERENCE"}}</label>
             </div>
 
@@ -52,7 +70,7 @@
                 <label class="govuk-label" for="new_ref_num">Enter your reference name or number (max 20 characters)</label>
                 <input class="govuk-input govuk-!-width-one-half" id="new_ref_num" name="new_ref_num" type="text"></div>
             </div>
-
+            {% endif %}
           </div>
 
         </fieldset>
