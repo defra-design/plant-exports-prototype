@@ -7,25 +7,30 @@ Commodity list - {{serviceName}} - GOV UK
 {% block beforeContent %}
 {{super()}}
 {{ govukBackLink({
-  text: "Back",
-  href: "javascript: window.history.go(-1)"
+text: "Back",
+href: "javascript: window.history.go(-1)"
 }) }}
 {% endblock %}
 
 {% block content %}
 
-{% if query.return_url!="task-list" %}
-<div class="app-alert app-alert--success">
-  <p class="govuk-body"><strong>21.09.16 XXXXXXX C154189.csv</strong> with 395 commodity records uploaded successfully</p>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <div class="app-alert app-alert--warning">
+      <p class="govuk-body">
+        This CSV could not be uploaded as it has more than 500 commodities. You should edit the file so that it contains
+        only 500 commodities. You will need to create a new application if you want to add more than 500 commodities.
+      </p>
+    </div>
+  </div>
 </div>
-{% endif %}
 
 <div class="govuk-width-container">
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <form method="post">
 
-      {% set commodity = data.commodity or "products" %}
+        {% set commodity = data.commodity or "products" %}
 
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-two-thirds">
@@ -37,15 +42,10 @@ Commodity list - {{serviceName}} - GOV UK
             {% endif %}
             <h2 class="govuk-heading-m">Commodity summary</h1>
 
-              <div class="govuk-inset-text">
-                This CSV could not be uploaded as it has more than 500 commodities. You should edit the file so that it contains only 500 commodities. You will need to create a new application if you want to add more than 500 commodities.</p>
-                
-              </div>
-          
-<!--               <p class="govuk-body">You can add a maximum of 500 commodities to this consignment.</p> -->
+              <!--               <p class="govuk-body">You can add a maximum of 500 commodities to this consignment.</p> -->
 
               <dl class="govuk-summary-list">
-                 <div class="govuk-summary-list__row">
+                <div class="govuk-summary-list__row">
                   <dt class="govuk-summary-list__key">
                     Number of commodity records
                   </dt>
@@ -58,7 +58,7 @@ Commodity list - {{serviceName}} - GOV UK
                     Total quantity
                   </dt>
                   <dd class="govuk-summary-list__value">
-                    109,100 seeds <br/>10.35Kg<br/>and 15 tonnes
+                    109,100 seeds <br />10.35Kg<br />and 15 tonnes
                   </dd>
                 </div>
                 <div class="govuk-summary-list__row">
@@ -74,22 +74,22 @@ Commodity list - {{serviceName}} - GOV UK
           </div>
         </div>
 
-      <ul class="govuk-list govuk-!-margin-top-4 govuk-!-margin-bottom-8 noprint">
-        <li>
-          <a class="govuk-link" href="commodity-list-seeds-100-check">
-            View all commodities
-          </a>
-        </li>
+        <ul class="govuk-list govuk-!-margin-top-4 govuk-!-margin-bottom-8 noprint">
+          <li>
+            <a class="govuk-link" href="commodity-list-seeds-100-check">
+              View all commodities
+            </a>
+          </li>
           <li></li>
           <a class="govuk-link" href="confirm-delete-all">
             Delete all commodities
           </a>
-        </li>
-      </ul>
+          </li>
+        </ul>
 
 
         {{ govukButton({
-          text: "Save and continue"
+        text: "Save and continue"
         }) }}
 
 
