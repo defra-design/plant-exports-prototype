@@ -6,6 +6,7 @@
   application_number: '120664110369',
   description: 'Vegetable oil',
   details: '',
+  sample_reference: 'PO 66622 Denmark',
   site: 'Store 3',
   amount: '10 tonnes',
   total: '15 tonnes'
@@ -15,12 +16,25 @@
   application_number: '120664110283',
   description: 'Vegetable oil',
   details: '',
+  sample_reference: 'PO 66622 Denmark',
   site: 'Store 3',
   amount: '5 tonnes',
   total: '5 tonnes'
   }
   
   ] %}
+
+  {% set stocks = [
+    {
+    description: 'Vegetable oil',
+    variety: '',
+    reference: 'Store 3',
+    sample_reference: 'PO 66622 Denmark',
+    amount: '10 tonnes',
+    total: '20 tonnes'
+    }
+  ]
+  %}
 
 {% block pageTitle %}
 Manage application - {{serviceName}} - GOV.UK
@@ -106,7 +120,7 @@ Manage application - {{serviceName}} - GOV.UK
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Reference
+          Application reference
         </dt>
         <dd class="govuk-summary-list__value">
           {% if (query.id | appInfo('reference')) == "" %}<span class="govuk-hint">Not set</span>{%else%}{{query.id |
@@ -136,6 +150,14 @@ Manage application - {{serviceName}} - GOV.UK
         </dt>
         <dd class="govuk-summary-list__value">
           {{query.id | appInfo('exporter') or "XYZ Trading Limited"}}
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Sample reference
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{query.id | appInfo('reference')}}
         </dd>
       </div>
       {% endif %}
@@ -202,6 +224,13 @@ Manage application - {{serviceName}} - GOV.UK
 <div class="govuk-grid-column-full">
   <h2 class="govuk-heading-m">Commodities in this application</h2>
 
+  {% if query.stock %}
+  {% set ref = query.stock %}
+  {% else %}
+  {% set ref = 0 %}
+  {% endif %}
+
+  {% set stock = stocks[ref] %}
   <table class="govuk-table govuk-!-margin-bottom-9">
     <thead class="govuk-table__head">
       <tr class="govuk-table__row">
@@ -222,13 +251,13 @@ Manage application - {{serviceName}} - GOV.UK
     <tbody class="govuk-table__body">
       <tr class="govuk-table__row">
         <td class="govuk-table__cell">
-          Vegetable oil
+          {{stock.description}}
         </td>
         <td class="govuk-table__cell">
-          444333555
+          {{stock.sample_reference}}
         </td>
         <td class="govuk-table__cell">
-          20 tonnes
+          {{stock.total}}
         </td>
         <td class="govuk-table__cell">
           <a class="govuk-link govuk-link--no-visited-state" href="application/create/stock-summary-ppp?stock=0">Draw down or view stock</a>
