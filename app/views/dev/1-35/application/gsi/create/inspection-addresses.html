@@ -13,6 +13,7 @@ Where will the inspection take place? - Growing season inspection - {{serviceNam
 {% block content %}
 <div class="govuk-grid-row govuk-!-margin-bottom-6">
   <div class="govuk-grid-column-two-thirds">
+
       <h1 class="govuk-heading-xl">Where will the inspection take place?</h1>
       <p class="govuk-body">
         Select the address where the inspector will inspect your crops. You will add further details of the crop location later on.<br><br>
@@ -20,35 +21,50 @@ Where will the inspection take place? - Growing season inspection - {{serviceNam
       You can <a href="../../account/inspection-addresses" class="govuk-link" id="Link-ManageAccount">manage your addresses</a> or <a class="govuk-link" href="address-lookup">add a new address</a>.
     </p>
     <table class="govuk-table govuk-!-margin-bottom-9">
+        <!-- UX DATA BUILD -->
+      {% if data.build == "ux" %}
+      <form action="{{query.return_url or 'contact-details-simple'}}" method="post">
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          
+          <div class="govuk-radios" data-module="govuk-radios">
+            
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="address_1" name="select_address" type="radio" value="Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH" {% if query.change == 'yes' and data.select_address == 'Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH' %}checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="address_1">Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="address_2" name="select_address" type="radio" value="Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ" {% if query.change == 'yes' and data.select_address == 'Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ' %}checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="address_2">Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ</label>
+            </div>
+
+          </div>
+
+        </fieldset>
+      </div>
+      <button class="govuk-button govuk-!-margin-bottom-9" type="submit" data-module="govuk-button">Save and continue</button>
+      </form>
+      {% else %}  
+      <!-- END DATA BUILD UX -->
+
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
           <th class="govuk-table__header" scope="col">
             Address
           </th>
-          <!--<th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
-            Legal owner?
-          </th>
-          <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
-            Contact name
-          </th>-->
           <th class="govuk-table__header" scope="col">
             Actions
           </th>
         </tr>
       </thead>
-      <tbody class="govuk-table__body">
+      <tbody class="govuk-table__body"> 
         <!--Inspection address 1-->
         {% if data.pheats_check == "yes" %}
         <tr class="govuk-table__row">
           <td class="govuk-table__cell">
             Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH
           </td>
-          <!--<td class="govuk-table__cell">
-            Yes
-          </td>
-          <td class="govuk-table__cell">
-            Sarah Philips
-          </td>-->
           <td class="govuk-table__cell" style="text-align:right;">
             <a href="confirm-inspection-address" class="govuk-link govuk-link--no-visited-state">
               Select
@@ -61,12 +77,6 @@ Where will the inspection take place? - Growing season inspection - {{serviceNam
           <td class="govuk-table__cell">
             Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH
           </td>
-          <!--<td class="govuk-table__cell">
-            Yes
-          </td>
-          <td class="govuk-table__cell">
-            Sarah Philips
-          </td>-->
           <td class="govuk-table__cell" style="text-align:right;">
             <a href="confirm-inspection-address" class="govuk-link govuk-link--no-visited-state">
               Select
@@ -77,18 +87,13 @@ Where will the inspection take place? - Growing season inspection - {{serviceNam
           <td class="govuk-table__cell">
             Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ
           </td>
-          <!--<td class="govuk-table__cell">
-            No
-          </td>
-          <td class="govuk-table__cell">
-            Clive Jones
-          </td>-->
           <td class="govuk-table__cell" style="text-align:right;">
             <a href="confirm-inspection-address" class="govuk-link govuk-link--no-visited-state">
               Select
             </a>
           </td>
         </tr>
+        {% endif %}
         {% endif %}
       </tbody>
     </table>
