@@ -31,13 +31,27 @@ Manage application - {{serviceName}} - GOV.UK
       border: 3px solid #1d70b8;
       color: #1d70b8;
   }
+
+  .doc-icon::before {
+    content: '';
+    width: 1em;
+    height: 1.5em;
+    margin-right: 1em;
+    position: relative;
+    top: 0.5em;
+    display: inline-block;
+    background: #bfc1c3;
+    box-shadow: 3px -3px 0 #fff, 6px -6px 0 #bfc1c3;
+  }
+  
 </style>
 {% endblock%}
 {% block content %}
 <div class="govuk-grid-row govuk-!-margin-bottom-6">
-  <div class="govuk-grid-column-two-thirds">
+  
     <h1 class="govuk-heading-xl">Manage {% if query.is_block == "yes" %}block appication{%elseif query.is_group == "yes" %}group application{%else%}application{%endif%} <span style="white-space: nowrap;">{{query.id | appInfo('reference')}}</span>
     </h1>
+    <div class="govuk-grid-column-one-half">
     {% if query.is_block == "yes" %}
     <p class="govuk-body">This is a block application of 100 certificates</p>
     {% endif %}
@@ -175,9 +189,21 @@ Manage application - {{serviceName}} - GOV.UK
     </ul>-->
 
   </div>
+
+  <div class="govuk-grid-column-one-half govuk-!-margin-bottom-4">
+    <h2 class="govuk-heading-m">Your certificate</h2>
+
+    <ul class="govuk-list  noprint">
+      <li>
+        <p class="doc-icon"><a href="#" class="govuk-link govuk-link--no-visited-state">View phyto certificate (pdf)</a>
+        </p>
+      </li>
+    </ul>
+  </div>
 </div>
 {% if (query.id | appInfo('status')) != 'draft' %}
-<div class="govuk-grid-row">
+<!--
+  <div class="govuk-grid-row">
   <div class="govuk-grid-column-full">
     <h2 class="govuk-heading-l">{% if (query.id | appInfo('is_block')) == 'yes' or query.is_group == "yes"   %}5 certificates{% else %}Certificate{% endif %} </h2>
       <table class="govuk-table">
@@ -253,9 +279,7 @@ Manage application - {{serviceName}} - GOV.UK
             <td id="status" class="govuk-table__cell" scope="row">CANCELLED
             </td>
             <td id="actions" class="govuk-table__cell" scope="row">
-              <!-- <a id="view_cert_19/2/008722" href="/public/images/ehc-6969ehc-8.1.pdf" target="_blank">
-                View certificate
-              </a> -->
+
             </td>
           </tr>
           {% endif %}
@@ -287,10 +311,12 @@ Manage application - {{serviceName}} - GOV.UK
         </tbody>
       </table>
   </div>
-  <div class="govuk-grid-column-two-thirds">
-      <p class="govuk-body govuk-hint">{% if query.application_status=="completed" or query.is_block == 'yes' %}If you need to cancel and replace a certificate, contact your certifier to make the request.{% endif %}</p>
-    </div>
 
+  <div class="govuk-grid-column-two-thirds">
+    <p class="govuk-body govuk-hint">{% if query.application_status=="completed" or query.is_block == 'yes' %}If you need to cancel and replace a certificate, contact your certifier to make the request.{% endif %}</p>
+  </div>
+  
 </div>
+-->
 {% endif %}
 {% endblock %}
