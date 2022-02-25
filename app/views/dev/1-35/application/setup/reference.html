@@ -15,6 +15,7 @@
 
   <div class="govuk-grid-column-two-thirds">
 	  <h1 class="govuk-heading-xl">Create a reference</h1>
+    {% if data.build == "ux" %}
     <p class="govuk-body">
       {% if query.change == 'yes' %}
       Change your reference for this {% if data.has_reference == 'phyto' %}phytosanitary certificate{% elif data.has_reference == 'coc' %}certificate of comformity{% else %}phytosanitary certificate{% endif %}.
@@ -22,6 +23,15 @@
       You can enter your own reference for this application. References can be up to 20 letters or numbers long.
       {% endif %}
     </p>
+    {% else %}
+    <p class="govuk-body">
+      {% if query.change == 'yes' %}
+      Change your reference for this {% if data.has_reference == 'phyto' %}phytosanitary certificate{% elif data.has_reference == 'coc' %}certificate of comformity{% else %}phytosanitary certificate{% endif %}.
+      {% else %}
+      You may find it helpful to enter your own reference such as an invoice number or consignee name. References can be up to 20 letters or numbers long.
+      {% endif %}
+    </p>
+    {% endif %}
 
     <form action="{{query.return_url or '../create/task-list'}}" method="post">
       
