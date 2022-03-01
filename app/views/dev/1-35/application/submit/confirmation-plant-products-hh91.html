@@ -29,53 +29,39 @@ You have successfully submitted your application - {{serviceName}} - GOV.UK
           <p class="govuk-body">You must write your sample reference number on each sample packet.</p>
           <h3 class="govuk-heading-s">Use these reference numbers for your samples</h3>
 
-          {{ govukTable({
-            firstCellIsHeader: false,
-            head: [
-              {
-                text: "Description"
-              },
-              {
-                text: "Country of origin"
-              },
-              {
-                text: "Weight"
-              },
-              {
-                text: "Sample reference"
-              }
-            ],
-            rows: [
-              [
-                {
-                  text: "Quercus acuta"
-                },
-                {
-                  text: "Denmark"
-                },
-                {
-                  text: "5kg"
-                },
-                {
-                  text: "10009347"
-                }
-              ],
-              [
-                {
-                  text: "Pinus albicaulis"
-                },
-                {
-                  text: "Germany"
-                },
-                {
-                  text: "34.5kg"
-                },
-                {
-                  text: "10009348"
-                }
-              ]
-            ]
-          }) }}
+          <table class="govuk-table">
+
+            <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header">Description</th>
+                <th scope="col" class="govuk-table__header">Country of origin</th>
+                <th scope="col" class="govuk-table__header">Weight</th>
+                <th scope="col" class="govuk-table__header">Sample
+                  <br/>reference</th>
+                <th scope="col" class="govuk-table__header ">Distinguishing marks</th>
+              </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+              {% set items = [
+                {ref:1, description:"Quercus acuta", country:"Denmark", quantity:"55Kg", marks:"SCU 23422, bags"},
+                {ref:2, description:"Quercus acuta", country:"Denmark", quantity:"55Kg", marks:"SCU 23423, boxes"},
+                {ref:3, description:"Pinus albicaulis", country:"Denmark", quantity:"55Kg", marks:"SCU 23424, barrels"},
+                {ref:4, description:"Pinus albicaulis", country:"Denmark", quantity:"55Kg", marks:"SCU 23425, pallets"},
+                {ref:5, description:"Pinus albicaulis", country:"Germany", quantity:"105Kg", marks:"SCU 23426, pallets"}
+                ]
+                %}
+              {% for item in items %}
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">{{item.description}}</td>
+                <td class="govuk-table__cell">{{item.country}}</td>
+                <td class="govuk-table__cell govuk-table__cell--numeric">{{item.quantity}}</td>
+                <td scope="row" class="govuk-table__cell ">{{ 10009346 + item.ref}}</td>
+                <td class="govuk-table__cell">{{item.marks}}</td>
+              </tr>
+              {% endfor %}
+             </tbody>
+          </table>
+
 
           <p class="govuk-body">Send your samples to:<br><br>
             Plant Clinic<br>
@@ -85,7 +71,7 @@ You have successfully submitted your application - {{serviceName}} - GOV.UK
             York<br>
             YO41 1LZ<br>
           </p>
-          <p class="govuk-body govuk-!-margin-bottom-9"><a href="../../print-label-print?id=10" class="govuk-link govuk-link-no-visited-state" target="_blank">Print the information (opens in new tab) </a> you'll need to send along with your samples. </p>
+          <p class="govuk-body govuk-!-margin-bottom-9"><a href="../../print-label-print?id=10" class="govuk-link govuk-link-no-visited-state" target="_blank">Print the information (opens in new tab)</a> you'll need to send along with your samples. </p>
         {% endif %}
 
         <h2 class="govuk-heading-m">What happens next</h2>

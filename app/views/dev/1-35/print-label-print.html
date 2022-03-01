@@ -125,25 +125,32 @@ Application details - GOV UK
       <caption class="govuk-table__caption">Samples for inspection</caption>
       <thead class='govuk-table__head'>
         <tr class='govuk-table__row'>
-          <th scope='col' class='govuk-table__header'>Commodity</th>
-          <th scope='col' class='govuk-table__header'>Country of origin</th>
-          <th scope='col' class='govuk-table__header'>Quantity</th>
-          <th scope='col' class='govuk-table__header'>Sample reference</th>
+          <th scope="col" class="govuk-table__header">Description</th>
+          <th scope="col" class="govuk-table__header">Country of origin</th>
+          <th scope="col" class="govuk-table__header">Weight</th>
+          <th scope="col" class="govuk-table__header">Sample
+            <br/>reference</th>
+          <th scope="col" class="govuk-table__header ">Distinguishing marks</th>
         </tr>
       </thead>
       <tbody class='govuk-table__body'>
-        <tr class='govuk-table__row'>
-          <td scope='row' class='govuk-table__cell'>Quercus acuta</td>
-          <td class='govuk-table__cell'>Denmark</td>
-          <td class='govuk-table__cell'>5kg</td>
-          <td class='govuk-table__cell'>10009347</td>
+        {% set items = [
+          {ref:1, description:"Quercus acuta", country:"Denmark", quantity:"55Kg", marks:"SCU 23422, bags"},
+          {ref:2, description:"Quercus acuta", country:"Denmark", quantity:"55Kg", marks:"SCU 23423, boxes"},
+          {ref:3, description:"Pinus albicaulis", country:"Denmark", quantity:"55Kg", marks:"SCU 23424, barrels"},
+          {ref:4, description:"Pinus albicaulis", country:"Denmark", quantity:"55Kg", marks:"SCU 23425, pallets"},
+          {ref:5, description:"Pinus albicaulis", country:"Germany", quantity:"105Kg", marks:"SCU 23426, pallets"}
+          ]
+          %}
+        {% for item in items %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">{{item.description}}</td>
+          <td class="govuk-table__cell">{{item.country}}</td>
+          <td class="govuk-table__cell govuk-table__cell--numeric">{{item.quantity}}</td>
+          <td scope="row" class="govuk-table__cell ">{{ 10009346 + item.ref}}</td>
+          <td class="govuk-table__cell">{{item.marks}}</td>
         </tr>
-        <tr class='govuk-table__row'>
-          <td scope='row' class='govuk-table__cell'>Pinus albicaulis</td>
-          <td class='govuk-table__cell'>Germany</td>
-          <td class='govuk-table__cell'>34.5Kg</td>
-          <td class='govuk-table__cell'>10009348</td>
-        </tr>
+        {% endfor %}
       </tbody>
     </table>
 
