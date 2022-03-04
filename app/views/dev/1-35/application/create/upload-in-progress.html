@@ -20,62 +20,171 @@ Add commodities by uploading a file - {{serviceName}} - GOV UK
         </div>
         <form action="/form-handler" method="post" novalidate>
 
+          {# add template, additional bullets and details based on commodity #}
+  
           {% set commodity = data.commodity or "products" %}
-
-          {% if data.commodity == "plant products" %}
-
-          {% set commodity = "products" %}
-
-          {% elseif data.commodity == "Used farm machinery" %}
-
-          {% set commodity = "used farm machines" %}
-
+          {% set exampleTemplate = "example-seeds.csv" %}
+  
+          {% if data.commodity == "plants" %}
+            {% set template = "template-plants.csv" %}
+            {% set exampleTemplate = "example-plant.csv" %}
+            {% set step2 = "<li>Delete the words MANDATORY, OPTIONAL, and ENTER EITHER - </li>
+            <li>You must enter either an EPPO code or genus</li>" %}
+            {% set extraSteps = "<li>For Quantity units and Packaging type, you must choose from the  options listed and delete the rest of the options</li>" %}
+            {% set details2 = "<li>make sure you have entered either an EPPO code or genus for each line</li>"%}
+            {% set extraDetails = "<li>for Quantity units and Packaging type, make sure you have used only the options provided without changing them</li>
+            <li>for Quantity units and Packaging type, make sure that you have deleted any options you have not used</li>" %}
+  
+  
+          {% elseif data.commodity == "plant products" %}
+            {% set commodity = "products" %}
+            {% set template = "template-plant-products.csv" %}
+            {% set exampleTemplate = "example-plant-products.csv" %}
+            {% set step2 = "<li>Delete the words MANDATORY, OPTIONAL, and ENTER EITHER - </li>" %}
+            {% set extraSteps = "<li>For Product type, Class, Packaging type and Is the packaging reusable or reclaimed, you must choose from the  options listed and delete the rest of the options</li>
+            <li>Enter the net weight up to 1 decimal place</li>" %}
+            {% set extraDetails = "<li>for Product type, Packaging type and Is the packaging reusable or reclaimed, make sure you have used only the options provided without changing them</li>
+            <li>for Product type, Packaging type and Is the packaging reusable or reclaimed, make sure that you have deleted any options you have not used</li>" %}
+  
+          {% elseif data.commodity == "used farm machines" %}
+            {% set commodity = "used farm machines" %}
+            {% set template = "template-used-farm-machinery.csv" %}
+            {% set exampleTemplate = "example-used-farm-machinery.csv" %}
+  
+          {% elseif data.commodity == "potatoes" %}
+            {% set template = "template-potatoes.csv" %}
+            {% set exampleTemplate = "example-potatoes.csv" %}
+            {% set extraSteps = "<li>For Potato type, Variety, Quantity units and Packaging type you must choose from the options listed and delete the rest of the options.</li>
+            <li>For Growing season inspection number, your should enter a growing season inspection number unless the growing season inspection was done on eDomero. If your growing season inspection was done using eDomero, just enter the word eDomero.</li>" %}
+            {% set extraDetails = "<li>for Potato type, Variety, Quantity units and Packaging type, make sure you have used only the options provided without changing them</li>
+            <li>for Potato type, Variety, Quantity units and Packaging type, make sure that you have deleted any options you have not used</li>
+            <li>for Growing season inspection number make sure your have entered either a growing season inspection number or just the word eDomero</li>" %}
+  
+          {% elseif data.commodity == "seeds" %}
+            {% set template = "template-seeds.csv" %}
+            {% set exampleTemplate = "example-seeds.csv" %}
+            {% set step2 = "<li>Delete the words MANDATORY, OPTIONAL, and ENTER EITHER - </li>
+            <li>You should enter an EPPO code together with both a genus and species. If you cannot enter an EPPO code, genus and species then you should enter a description</li>" %}
+            {% set extraSteps = "<li>For Quantity units you must choose from the options listed and delete the rest of the options</li>
+            <li>For Packaging type you must choose from the options listed and delete the rest of the options</li>
+            <li>For Is the packaging reusable or reclaimed, you must enter either yes or no</li>" %}
+            {% set extraDetails = "<li>for Quantity unit and Packaging type, make sure you have used only the options provided without changing them</li>
+            <li>for Quantity unit and Packaging type, make sure that you have deleted any options you have not used</li>
+            <li>for Is the packaging reusable or reclaimed, check you have only entered either yes or no</li>" %}
+  
+          {% elseif data.commodity == "grain" %}
+            {% set template = "template-grain.csv" %}
+            {% set exampleTemplate = "example-grain.csv" %}
+            
+            {% set step2 = "<li>You must enter either an EPPO code or genus (preferably with species, and optionally with variety)</li>" %}
+  
+            {% set extraSteps = "<li>For Packaging type, you must choose from the packaging options listed and delete the rest of the packaging options.</li>
+            <li>For Quantity units you must choose from the options listed and delete the rest of the options</li>" %}
+  
+            {% set details2 = "<li>make sure you have entered either an EPPO code or genus for each line</li>" %}
+  
+            {% set extraDetails = "<li>for Quantity unit and Packaging type, make sure you have used only the options provided without changing them</li>
+            <li>for Quantity unit and Packaging type, make sure that you have deleted any options you have not used</li>" %}
+  
+          {% else %}
+            {% set template = "template-plants.csv" %}
+            {% set exampleTemplate = "example-plants.csv" %}
+            {% set step2 = "" %}
+            {% set extraSteps = "" %}
+            {% set details2 = "" %}
+            {% set extraDetails = "" %}
+  
           {% endif %}
-
+  
+          {% if data.journey == "coc" %}
+            {% set template = "template-hmi.csv" %}
+            {% set exampleTemplate = "example-hmi.csv" %}
+          {% endif %}
+  
+  
           <div class="govuk-form-group  govuk-!-margin-bottom-9">
             <fieldset class="govuk-fieldset">
               <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
                 <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">
-                    Upload a file
+                  Upload a file
                 </h1>
               </legend>
             </fieldset>
-
+  
             <p class="govuk-body">
-              {% if data.commodity == "plants" %}
-              Download and fill in the <a href="/public/images/template-plants.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
-              {% elseif data.commodity == "plant products" %}
-              Download and fill in the <a href="/public/images/template-plant-products.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
-              {% elseif data.commodity == "used farm machines" %}
-              Download and fill in the <a href="/public/images/template-used-farm-machinery.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
-              {% elseif data.commodity == "potatoes" %}
-              Download and fill in the <a href="/public/images/template-potatoes.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
-              {% elseif data.commodity == "seeds" %}
-              Download and fill in the <a href="/public/images/template-seeds-phyto.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
-              {% else %}
-              Download and fill in the <a href="/public/images/APHA_phytosanitary_certificate_csv_template.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
+              Download the <a href="/public/templates/{{template}}" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>.
+            </p>
+  
+            <p class="govuk-body govuk-!-margin-bottom-6">
+              Open the file in whatever software program you use to edit comma-separated values (CSV) files. Fill in the template using the guidance notes below, then save and upload it.
+            </p>
+  
+            <h2 class="govuk-heading-m">How to edit the file</h2>
+           
+            <ol class="govuk-list govuk-list--number">
+              <li>You must complete all fields that are marked mandatory.</li>
+  
+              {{ step2 | safe }}
+  
+              {% if data.commodity != "potatoes" %}
+              <li>You must use the country code for the country of origin - you can find the 2 letter country code here: (opens in new tab)<br/>
+                <a href="https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes" target="_blank">https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes</a> 
+                <br/>
+                The only exceptions are Northern Ireland and Palestine. If the country of origin is Northern Ireland, use GB-NIR. If it is Palestine, use PS.</li>
               {% endif %}
-            </p>
-            <p class="govuk-body">
-                Open the csv file in Excel or whatever you use to edit spreadsheets. When you have finished, save the file and select Comma Separated Values (.csv) as the file format.
-            </p>
-
+                
+              {{ extraSteps | safe }}
+  
+              <li>Do not enter more than 500 rows of data.</li>
+              <li>Save your completed file as a .CSV file and upload it</li>
+  
+            </ol>
+  
+            <details class="govuk-details" data-module="govuk-details">
+              <summary class="govuk-details__summary">
+                <span class="govuk-details__summary-text">
+                  Further advice and example template 
+                </span>
+              </summary>
+              <div class="govuk-details__text">
+                <h3 class="govuk-heading-s">If you are having problems with the upload</h3>
+                <ul class="govuk-list govuk-list--bullet">
+                  <li>make sure you have made entries in all fields that are mandatory</li>
+                  {{ details2 | safe }}
+                  <li>make sure you have not changed or deleted any columns or headers from the template</li>
+                  <li>make sure the headers are consistently capitalised</li>
+                  <li>check that you have not added extra commas</li>
+                  <li>if you have edited the template using the Numbers application, be aware that this program sometimes adds extra columns to the file. If there are any empty columns without headers in your file, you should delete these columns completely</li>
+                  <li>check that when you edited the template, your software didn't add extra commas into your CSV file</li>
+  
+                  {% if data.commodity != "potatoes" %}
+                  <li>use GB-NIR as the country code for Northern Ireland</li>
+                  <li>use PS as the country code for Palestine</li>
+                  {% endif %}
+  
+                  {{ extraDetails | safe }} 
+  
+                </ul>
+                <p>You may find it helpful to compare your file against this <a href="/public/templates/{{exampleTemplate}}" class="govuk-link govuk-link--no-visited-state" title="CSV template">example template</a>.</p>
+              </div>
+            </details>
+            
+  
             {{ govukFileUpload({
               id: "file-upload-1",
               name: "file-upload-1",
               label: {
-                text: "Upload your completed csv file"
-              }
+              text: "Upload your completed CSV file"
+            }
             }) }}
-
+  
           </div>
-
+  
           {{ govukButton({
-            text: "Uploading...",
-            disabled: true,
-            href: "commodity-list"
+            text: "Upload",
+            href: "upload-in-progress"
           }) }}
-          <!--href: "upload-completed"-->
+  
         </form>
       </div>
     </div>
