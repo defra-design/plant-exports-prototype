@@ -8,149 +8,142 @@ You have successfully submitted your application - {{serviceName}} - GOV.UK
 {% endblock %}
 {% block content %}
 <div class="govuk-grid-row">
-      <div class="govuk-grid-column-three-quarters">
-        <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-6">
-          <h1 class="govuk-panel__title">
-            You have successfully submitted your application {% if data.reforwarding %}for a re-forwarding certificate{% endif %}
-          </h1>
+  <div class="govuk-grid-column-three-quarters">
+    <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-6">
+      <h1 class="govuk-panel__title">
+        You have successfully submitted your application {% if data.reforwarding %}for a re-forwarding certificate{%
+        endif %}
+      </h1>
 
-          <div class="govuk-panel__body">
-            The APHA reference is<br>
-            <strong class="bold" id="applicationFormId" data-qa-id="TextDisplay-CVEDReferenceNumber">1721 14800 4809</strong>
-          </div>
-        </div>
-
-        {% if not data.reforwarding %}
-          <h2 class="govuk-heading-m">Label and send your samples</h2>
-          <div class="govuk-inset-text">
-            Your certificate may be delayed if you do not label your samples with the sample reference numbers.
-          </div>
- 
-          <h3 class="govuk-heading-s">Instructions for sending your samples</h3>
-          <ul class="govuk-list govuk-list--number">
-            <li>Use the same packaging you would normally use to send samples to customers.</li>
-            <li>You must clearly label each sample with its sample reference.</li>
-            <li>Send your labelled samples to the address on this screen</ul>
-
-            <p class="govuk-body govuk-!-margin-bottom-6"><a href="../../print-label-print?id=10" class="govuk-link govuk-link-no-visited-state" target="_blank">Print the information (opens in new tab)</a> you need to send with your samples (optional).</p>
-
-          <h3 class="govuk-heading-s">Sampling reference information</h3>
-          
-          <table class="govuk-table">
-
-            <thead class="govuk-table__head">
-              <tr class="govuk-table__row">
-                <th scope="col" class="govuk-table__header">Description</th>
-                <th scope="col" class="govuk-table__header">Country of origin</th>
-                <th scope="col" class="govuk-table__header">Weight</th>
-                <th scope="col" class="govuk-table__header">Sample
-                  <br/>reference</th>
-                <th scope="col" class="govuk-table__header ">Distinguishing marks</th>
-              </tr>
-            </thead>
-            <tbody class="govuk-table__body">
-              {% set items = [
-                {ref:1, description:"Quercus acuta", country:"Denmark", quantity:"55Kg", marks:"SCU 23422, bags"},
-                {ref:2, description:"Quercus acuta", country:"Denmark", quantity:"55Kg", marks:"SCU 23423, boxes"},
-                {ref:3, description:"Pinus albicaulis", country:"Denmark", quantity:"55Kg", marks:"SCU 23424, barrels"},
-                {ref:4, description:"Pinus albicaulis", country:"Denmark", quantity:"55Kg", marks:"SCU 23425, pallets"},
-                {ref:5, description:"Pinus albicaulis", country:"Germany", quantity:"105Kg", marks:"SCU 23426, pallets"}
-                ]
-                %}
-              {% for item in items %}
-              <tr class="govuk-table__row">
-                <td class="govuk-table__cell">{{item.description}}</td>
-                <td class="govuk-table__cell">{{item.country}}</td>
-                <td class="govuk-table__cell govuk-table__cell--numeric">{{item.quantity}}</td>
-                <td scope="row" class="govuk-table__cell ">{{ 10009346 + item.ref}}</td>
-                <td class="govuk-table__cell">{{item.marks}}</td>
-              </tr>
-              {% endfor %}
-             </tbody>
-          </table>
-
-
-          <p class="govuk-body">Send your samples to:<br><br>
-            Plant Clinic<br>
-            Block 4<br>
-            National Agri-Food Campus<br>
-            Sand Hutton<br>
-            York<br>
-            YO41 1LZ<br>
-          </p>
-
-        {% endif %}
-
-        <h2 class="govuk-heading-m">What happens next</h2>
-        <ol class="govuk-list govuk-list--number">
-          {% if data.reforwarding %}
-          <li>We will check your application and decide if an inspection or sampling are necessary.</li>
-          <li>If an inspection or sampling is necessary, we'll be in touch with more details.</li>
-          <li>If there are no problems, we will issue your re-forwarding certificate.</li>
-          {% else %}
-          <li>We will check and process your application.</li>
-          <li>If there are no problems, we will issue your certificate.</li>
-          {% endif %}
-          <li>We will then send you an invoice.</li>
-        </ol>
-
-        <p class="govuk-body govuk-!-padding-bottom-2">We'll only contact you if there is a problem with your application{% if data.reforwarding %} or if you need to give samples{% endif %}.</p>
-
-        <!--<div class="govuk-body">
-              <a id="link-confirmationPage-viewYourApplications2" href="../../dashboard?submitted=yes" class="govuk-button_no_margin_bottom govuk-link govuk-link-no-visited-state">View your applications</a> to check progress.
-        </div>-->
-
-        {% if data.route == "new" %}
-        <!--<p>
-          <a href="../../dashboard-one?filter_status=&has_filter=&date_range=&filter_name=&show_applications_by=me" class="govuk-link">View your applications</a>
-
-          to check progress.</p>-->
-            {{ govukButton({
-              text: "View your applications",
-              href: "../../dashboard-one?filter_status=&has_filter=&date_range=&filter_name=&show_applications_by=me"
-            }) }}
-          {% else %}
-          <!--<p>
-            <a href="../../dashboard?filter_status=&has_filter=&date_range=&filter_name=&show_applications_by=me" class="govuk-link">View your applications</a>
-
-            to check progress.</p>-->
-            {{ govukButton({
-              text: "View your applications",
-              href: "../../dashboard?filter_status=&has_filter=&date_range=&filter_name=&show_applications_by=me"
-            }) }}
-          {% endif %}
-
-          <p class="govuk-body govuk-!-padding-top-2">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_self">what fees you will pay</a> for this application.</p>
-
-          <h2 class="govuk-heading-m">If you need help</h2>
-          <p class="govuk-body">
-            Contact us quoting your APHA reference <strong id="applicationFormId2">1721 14800 4809</strong>:
-          </p>
-        <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-8">
-          <li><span id="phoneNumber">0300 1000 313</span>, Monday to Friday 8.30am to 5pm</li>
-          <li><a href="mailto:planthealth.info@apha.gov.uk" class="govuk-link" id="emailLink">planthealth.info@apha.gov.uk</a></li>
-        </ul>
-        <!-- <div class="govuk-body">
-              <a id="link-confirmationPage-viewYourApplications2" href="../dashboard?submitted=yes" class="govuk-button_no_margin_bottom">View your applications</a>
-        </div> -->
-
-        <div class="govuk-!-margin-top-6" style="padding:20px; background-color:#f3f2f1; border-left-color:#666;">
-          <h2 class="govuk-heading-m">
-            Give feedback on this service
-          </h2>
-          <p class="govuk-body-m">Take a 3 minute survey about your application so that we can improve the service. The survey will open in a new window.<br><br>
-
-          <!--{{ govukButton({
-            text: "Give feedback",
-            href: "https://defragroup.eu.qualtrics.com/jfe/form/SV_1RDraVxZ03Ja2qy",
-            target: "_blank"
-          }) }}-->
-
-            <a href="https://defragroup.eu.qualtrics.com/jfe/form/SV_1RDraVxZ03Ja2qy" target="_blank" class="govuk-link">Give feedback</a>
-          </p>
-
-        </div>
+      <div class="govuk-panel__body">
+        The APHA reference is<br>
+        <strong class="bold" id="applicationFormId" data-qa-id="TextDisplay-CVEDReferenceNumber">1721 14800
+          4809</strong>
       </div>
     </div>
+
+    {% if not data.reforwarding %}
+    <h2 class="govuk-heading-m">Label and send your samples</h2>
+    <div class="govuk-inset-text app-alert--info">
+      Your certificate may be delayed if you do not label your samples with the sample reference numbers.
+    </div>
+
+    <h3 class="govuk-heading-s">Instructions for sending your samples</h3>
+    <ul class="govuk-list govuk-list--number">
+      <li>Use the same packaging you would normally use to send samples to customers.</li>
+      <li>You must clearly label each sample with its sample reference.</li>
+      <li>Send your labelled samples to the address on this screen
+    </ul>
+
+    <p class="govuk-body govuk-!-margin-bottom-6"><a href="../../print-label-print?id=10"
+        class="govuk-link govuk-link-no-visited-state" target="_blank">Print the information (opens in new tab)</a> you
+      need to send with your samples (optional).</p>
+
+    <h3 class="govuk-heading-s">Sampling reference information</h3>
+
+    <table class="govuk-table">
+
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">Description</th>
+          <th scope="col" class="govuk-table__header">Country of origin</th>
+          <th scope="col" class="govuk-table__header">Weight</th>
+          <th scope="col" class="govuk-table__header">Distinguishing marks</th>
+          <th scope="col" class="govuk-table__header">Sample
+            <br />reference
+          </th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        {% set items = [
+        {ref:1, description:"Quercus acuta", country:"Denmark", quantity:"55Kg", marks:"SCU 23422, bags"},
+        {ref:2, description:"Quercus acuta", country:"Denmark", quantity:"55Kg", marks:"SCU 23423, boxes"},
+        {ref:3, description:"Pinus albicaulis", country:"Denmark", quantity:"55Kg", marks:"SCU 23424, barrels"},
+        {ref:4, description:"Pinus albicaulis", country:"Denmark", quantity:"55Kg", marks:"SCU 23425, pallets"},
+        {ref:5, description:"Pinus albicaulis", country:"Germany", quantity:"105Kg", marks:"SCU 23426, pallets"}
+        ]
+        %}
+        {% for item in items %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">{{item.description}}</td>
+          <td class="govuk-table__cell">{{item.country}}</td>
+          <td class="govuk-table__cell govuk-table__cell--numeric">{{item.quantity}}</td>
+          <td class="govuk-table__cell">{{item.marks}}</td>
+          <td scope="row" class="govuk-table__cell ">{{ 10009346 + item.ref}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+
+    <p class="govuk-body">Send your samples to:<br><br>
+      Plant Clinic<br>
+      Block 4<br>
+      National Agri-Food Campus<br>
+      Sand Hutton<br>
+      York<br>
+      YO41 1LZ<br>
+    </p>
+
+    {% endif %}
+
+    <h2 class="govuk-heading-m">What happens next</h2>
+    <ol class="govuk-list govuk-list--number">
+      {% if data.reforwarding %}
+      <li>We will check your application and decide if an inspection or sampling are necessary.</li>
+      <li>If an inspection or sampling is necessary, we'll be in touch with more details.</li>
+      <li>If there are no problems, we will issue your re-forwarding certificate.</li>
+      {% else %}
+      <li>We will check and process your application.</li>
+      <li>If there are no problems, we will issue your certificate.</li>
+      {% endif %}
+      <li>We will then send you an invoice.</li>
+    </ol>
+
+    <p class="govuk-body govuk-!-padding-bottom-2">We'll only contact you if there is a problem with your application{%
+      if data.reforwarding %} or if you need to give samples{% endif %}.</p>
+
+    {% if data.route == "new" %}
+
+    {{ govukButton({
+    text: "View your applications",
+    href: "../../dashboard-one?filter_status=&has_filter=&date_range=&filter_name=&show_applications_by=me"
+    }) }}
+    {% else %}
+
+    {{ govukButton({
+    text: "View your applications",
+    href: "../../dashboard"
+    }) }}
+    {% endif %}
+
+    <p class="govuk-body govuk-!-padding-top-2">Find out <a
+        href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees"
+        class="govuk-link" target="_self">what fees you will pay</a> for this application.</p>
+
+    <h2 class="govuk-heading-m">If you need help</h2>
+    <p class="govuk-body">
+      Contact us quoting your APHA reference <strong id="applicationFormId2">1721 14800 4809</strong>:
+    </p>
+    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-8">
+      <li><span id="phoneNumber">0300 1000 313</span>, Monday to Friday 8.30am to 5pm</li>
+      <li><a href="mailto:planthealth.info@apha.gov.uk" class="govuk-link"
+          id="emailLink">planthealth.info@apha.gov.uk</a></li>
+    </ul>
+
+    <div class="govuk-!-margin-top-6" style="padding:20px; background-color:#f3f2f1; border-left-color:#666;">
+      <h2 class="govuk-heading-m">
+        Give feedback on this service
+      </h2>
+      <p class="govuk-body-m">Take a 3 minute survey about your application so that we can improve the service. The
+        survey will open in a new window.<br><br>
+
+        <a href="https://defragroup.eu.qualtrics.com/jfe/form/SV_1RDraVxZ03Ja2qy" target="_blank"
+          class="govuk-link">Give feedback</a>
+      </p>
+
+    </div>
+  </div>
+</div>
 
 {% endblock %}
