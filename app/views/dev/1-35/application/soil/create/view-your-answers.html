@@ -60,7 +60,7 @@
     </dl>
     {% else %}
     <h2 class="govuk-heading-m">Application summary</h2>
-    <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
       
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Certificate</dt>
@@ -77,7 +77,7 @@
     </dl>
 
     <h2 class="govuk-heading-m">Applicant details</h2>
-    <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Name</dt>
@@ -100,9 +100,82 @@
     </dl>
     {% endif %}
 
+    <h2 class="govuk-heading-m">Inspection details</h2>
+    {% if data.build == "ux" %}
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Who owns this land?</dt>
+        <dd class="govuk-summary-list__value">{{data.select_address or "Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH"}}</dd>
+        <dd class="govuk-summary-list__actions">&nbsp;</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Who is the main contact for this application?</dt>
+        <dd class="govuk-summary-list__value">
+          {% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}
+          Bill Shoggins
+          <br>
+          01234 567890
+          <br>
+          bill.shoggins@acmeltd.com
+          {% else %}
+          {{data.contact_name or "Bill Shoggins"}}
+          <br>
+          {{data.address_phone or "01234 567890"}}
+          <br>
+          {{data.email_address or "bill.shoggins@acmeltd.com"}}
+          {% endif %}
+        </dd>
+        <dd class="govuk-summary-list__actions">&nbsp;</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">When will the fields be ready for inspection?</dt>
+        <dd class="govuk-summary-list__value">{{data.submit_date or "December 2021"}}</dd>
+        <dd class="govuk-summary-list__actions">&nbsp;</dd>
+      </div>
+
+    </dl>
+    {% else %}
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Where will the inspection take place?</dt>
+        <dd class="govuk-summary-list__value">{{data.select_address or "Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH"}}</dd>
+        <dd class="govuk-summary-list__actions">&nbsp;</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Contact name</dt>
+        <dd class="govuk-summary-list__value">{% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}Bill Shoggins{% else %}{{data.contact_name or "Bill Shoggins"}}{% endif %}</dd>
+        <dd class="govuk-summary-list__actions">&nbsp;</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Phone number</dt>
+        <dd class="govuk-summary-list__value">{% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}01234 567890{% else %}{{data.address_phone or "01234 567890"}}{% endif %}</dd>
+        <dd class="govuk-summary-list__actions">&nbsp;</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Email address</dt>
+        <dd class="govuk-summary-list__value">{% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}bill.shoggins@acmeltd.com{% else %}{{data.email_address or "bill.shoggins@acmeltd.com"}}{% endif %}</dd>
+        <dd class="govuk-summary-list__actions">&nbsp;</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">When will the fields be ready for inspection?</dt>
+        <dd class="govuk-summary-list__value">{{data.submit_date or "December 2021"}}</dd>
+        <dd class="govuk-summary-list__actions">&nbsp;</dd>
+      </div>
+
+    </dl>
+    {% endif %}
+
     {% if data.commodity == "bulbs" or data.commodity == "plants" %}
     <h2 class="govuk-heading-m">Field details</h2>
-    <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+    <dl class="govuk-summary-list">
       
       {% if data.field_task_list_data == "field-list" %}
       <div class="govuk-summary-list__row">
@@ -205,7 +278,7 @@
     </dl>
     {% else %}
     <h2 class="govuk-heading-m">Field and crop details</h2>
-    <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
       
       {% if data.field_task_list_data == "commodity-list" %}
       <div class="govuk-summary-list__row">
@@ -327,79 +400,6 @@
         <dd class="govuk-summary-list__actions">&nbsp;</dd>
       </div>
       {% endif %}
-
-    </dl>
-    {% endif %}
-
-    <h2 class="govuk-heading-m">Inspection details</h2>
-    {% if data.build == "ux" %}
-    <dl class="govuk-summary-list">
-
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Who owns this land?</dt>
-        <dd class="govuk-summary-list__value">{{data.select_address or "Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH"}}</dd>
-        <dd class="govuk-summary-list__actions">&nbsp;</dd>
-      </div>
-
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Who is the main contact for this application?</dt>
-        <dd class="govuk-summary-list__value">
-          {% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}
-          Bill Shoggins
-          <br>
-          01234 567890
-          <br>
-          bill.shoggins@acmeltd.com
-          {% else %}
-          {{data.contact_name or "Bill Shoggins"}}
-          <br>
-          {{data.address_phone or "01234 567890"}}
-          <br>
-          {{data.email_address or "bill.shoggins@acmeltd.com"}}
-          {% endif %}
-        </dd>
-        <dd class="govuk-summary-list__actions">&nbsp;</dd>
-      </div>
-
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">When will the fields be ready for inspection?</dt>
-        <dd class="govuk-summary-list__value">{{data.submit_date or "December 2021"}}</dd>
-        <dd class="govuk-summary-list__actions">&nbsp;</dd>
-      </div>
-
-    </dl>
-    {% else %}
-    <dl class="govuk-summary-list">
-
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Where will the inspection take place?</dt>
-        <dd class="govuk-summary-list__value">{{data.select_address or "Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH"}}</dd>
-        <dd class="govuk-summary-list__actions">&nbsp;</dd>
-      </div>
-
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Contact name</dt>
-        <dd class="govuk-summary-list__value">{% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}Bill Shoggins{% else %}{{data.contact_name or "Bill Shoggins"}}{% endif %}</dd>
-        <dd class="govuk-summary-list__actions">&nbsp;</dd>
-      </div>
-
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Phone number</dt>
-        <dd class="govuk-summary-list__value">{% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}01234 567890{% else %}{{data.address_phone or "01234 567890"}}{% endif %}</dd>
-        <dd class="govuk-summary-list__actions">&nbsp;</dd>
-      </div>
-
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Email address</dt>
-        <dd class="govuk-summary-list__value">{% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}bill.shoggins@acmeltd.com{% else %}{{data.email_address or "bill.shoggins@acmeltd.com"}}{% endif %}</dd>
-        <dd class="govuk-summary-list__actions">&nbsp;</dd>
-      </div>
-
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">When will the fields be ready for inspection?</dt>
-        <dd class="govuk-summary-list__value">{{data.submit_date or "December 2021"}}</dd>
-        <dd class="govuk-summary-list__actions">&nbsp;</dd>
-      </div>
 
     </dl>
     {% endif %}
