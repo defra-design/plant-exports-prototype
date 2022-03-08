@@ -1,13 +1,22 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-Manage application - {{serviceName}} - GOV.UK
+  Manage {% if query.is_block == "yes" %}block application{% elseif query.is_group == "yes" %}group application{% else %}application{% endif %} {% if (query.id | appInfo('reference')) %}{{query.id | appInfo('reference')}}{% elif data.reference_num %}{{data.reference_num or "SS" }}{% else %}&nbsp;{% endif %} - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
 {{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new" id="Nav-DisplayName">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="account?returnURL=dashboard" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
+  </ul>
+</div>
+
 <a href="javascript:history.back()" class="govuk-back-link">Return to your applications</a>
 <style media="screen">
+
   .govuk-status--warning {
     width: auto !important;
     text-align: center;
@@ -45,6 +54,7 @@ Manage application - {{serviceName}} - GOV.UK
     background: #bfc1c3;
     box-shadow: 3px -3px 0 #fff, 6px -6px 0 #bfc1c3;
   }
+
 </style>
 {% endblock%}
 
@@ -52,8 +62,7 @@ Manage application - {{serviceName}} - GOV.UK
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">Manage application <span style="white-space: nowrap;">{{query.id |
-        appInfo('reference')}}</span></h1>
+    <h1 class="govuk-heading-xl">Manage {% if query.is_block == "yes" %}block application{% elseif query.is_group == "yes" %}group application{% else %}application{% endif %} {% if (query.id | appInfo('reference')) %}{{query.id | appInfo('reference')}}{% elif data.reference_num %}{{data.reference_num or "SS" }}{% else %}&nbsp;{% endif %}</h1>
   </div>
 
 </div>
