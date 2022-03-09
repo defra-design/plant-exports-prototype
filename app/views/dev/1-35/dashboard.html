@@ -566,7 +566,7 @@
                     {% if data.show_applications_by == "me"%}
                       {% if app.name == logged_in_as %}
                         <tr class="govuk-table__row result">
-                          <td id="1721147986456-appRef" class="govuk-table__cell applicationRef-column table-header" scope="row">
+                          <td id="{{app.applicationID}}-appRef" class="govuk-table__cell applicationRef-column table-header" scope="row">
                             {% if app.index == "6" %}
                             <a href="application-amend?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
                             {% else %}
@@ -579,22 +579,22 @@
                             <span class="table-heading table-heading-full" aria-hidden="true">Customer reference</span><span class="client-ref">{{app.reference}}</span>
                             {% endif %}
                           </td>
-                          <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
+                          <td id="{{app.applicationID}}-submitted" class="govuk-table__cell submitted-column" scope="row">
                             <span class="table-heading" aria-hidden="true">Certificate</span>
                             {{app.cert_info}}
                           </td>
-                          <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
+                          <td id="{{app.applicationID}}-submitted" class="govuk-table__cell submitted-column" scope="row">
                             {% if (app.cert_info != "Conformity") and (app.status != "draft") %}
                             <span class="table-heading" aria-hidden="true">Destination</span>
                             {{app.importer}}<br/>
                             {% endif %}
                             {{app.destination}}
                           </td>
-                          <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
+                          <td id="{{app.applicationID}}-submitted" class="govuk-table__cell submitted-column" scope="row">
                             <span class="table-heading" aria-hidden="true">Submitted date</span>
                             {{app.date}}
                           </td>
-                          <td id="1721147986456-status" class="govuk-table__cell" scope="row">
+                          <td id="{{app.applicationID}}-status" class="govuk-table__cell" scope="row">
                             <span class="table-heading" aria-hidden="true">Status</span>
                             
                             <div class="app-status-tag app-status-tag--{{app.tag | lower}}">
@@ -602,16 +602,20 @@
                             </div>
 
                           </td>
-                          <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
+                          <td id="{{app.applicationID}}-submitted" class="govuk-table__cell submitted-column" scope="row">
+                            <a href="clone?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden">  certificate {{app.applicationID}}</span></a>
+                          </td>
+                          <!-- Chris Harding (08.03.22) - Commenting this out since I can't see or find any reason why we should stop users being able to copy an application -->
+                          <!-- <td id="{{app.applicationID}}-submitted" class="govuk-table__cell submitted-column" scope="row">
                             {% if app.index != "5" and app.index != "7" and app.index != "24" %}
                             <a href="clone?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden">  certificate {{app.applicationID}}</span></a>
                             {% endif %}
-                          </td>
+                          </td> -->
                         </tr>
                       {% endif %}
                     {% else %}
                         <tr class="govuk-table__row result">
-                          <td id="1721147986456-appRef" class="govuk-table__cell applicationRef-column table-header" scope="row">
+                          <td id="{{app.applicationID}}-appRef" class="govuk-table__cell applicationRef-column table-header" scope="row">
                             {% if app.index == "0" or app.index == "8" or app.index == "10" %}
                             <a href="application-amend?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
                             {% elseif app.index == "1" %}
@@ -670,11 +674,11 @@
                             {% endif %}
                             <br>
                           </td>
-                          <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
+                          <td id="{{app.applicationID}}-submitted" class="govuk-table__cell submitted-column" scope="row">
                             <span class="table-heading" aria-hidden="true">Certificate</span>
                             {{app.cert_info}}
                           </td>
-                          <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
+                          <td id="{{app.applicationID}}-submitted" class="govuk-table__cell submitted-column" scope="row">
                             {% if (app.cert_info == "Conformity") or (app.cert_info == "Seed sampling") %}
                             {% else %}
                             <span class="table-heading" aria-hidden="true">Destination</span>
@@ -683,11 +687,11 @@
                             {% endif %}
                             {{app.destination}}
                           </td>
-                          <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
+                          <td id="{{app.applicationID}}-submitted" class="govuk-table__cell submitted-column" scope="row">
                             <span class="table-heading" aria-hidden="true">Submitted date</span>
                             {{app.date}}
                           </td>
-                          <td id="1721147986456-status" class="govuk-table__cell" scope="row">
+                          <td id="{{app.applicationID}}-status" class="govuk-table__cell" scope="row">
                             <span class="table-heading" aria-hidden="true">Status</span>
                             
                             <div class="app-status-tag app-status-tag--{{app.tag | lower}}">
@@ -695,16 +699,19 @@
                             </div>
 
                           </td>
-                          
-                          <td id="1721147986456-submitted" class="govuk-table__cell submitted-column" scope="row">
+                          <td id="{{app.applicationID}}-submitted" class="govuk-table__cell submitted-column" scope="row">
+                            <a href="clone?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden">  certificate {{app.applicationID}}</span></a>
+                          </td>
+                          <!-- Chris Harding (08.03.22) - Commenting this out since I can't see or find any reason why we should stop users being able to copy an application -->
+                          <!-- <td id="{{app.applicationID}}-submitted" class="govuk-table__cell submitted-column" scope="row">
                             {% if app.index != "5" and app.index != "7" and app.index != "24" %}
                             <a href="clone?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden">  certificate {{app.applicationID}}</span></a>
                             {% endif %}
-                            <!-- {% if app.index == "3" %}
+                            {% if app.index == "3" %}
                             <br>
                             <a href="application-ssdd?id=3" class="govuk-link govuk-link--no-visited-state">Draw down<span class="govuk-visually-hidden"> inspected stock</span></a>
-                            {% endif %} -->
-                          </td>
+                            {% endif %}
+                          </td> -->
                         </tr>
                     {% endif %}
                   {% endif %}

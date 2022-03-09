@@ -14,6 +14,13 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
+
+    {% if query.cloned == "yes" %}
+    <div class="app-alert app-alert--success">
+      <p class="govuk-body">You have successfully copied this application</p>
+    </div>
+    {% endif %}
+
     {% if data.reference_num %}<span class="govuk-caption-xl">{{data.reference_num}}</span>{% endif %}
     <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">Your {% if data.reforwarding%}re-forwarding{% endif %} application</h1>
     <p class="govuk-caption-l govuk-!-margin-bottom-8">
@@ -74,7 +81,9 @@
             <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="status-1.2">Not started</strong>
             {% endif %}
           </li>
-          {% if data.commodity == "plants" or (data.commodity == "bulbs" and data.countrySelect[0] != "United States") or data.commodity == "potatoes" or data.commodity == "used farm machinery" or data.journey == "coc" %}
+          {% if data.commodity == "biological control agents and clay" or (data.commodity == "bulbs" and data.countrySelect[0] == "United States") or data.commodity == "plant products" or data.commodity == "seeds" or data.commodity == "grain" %}
+
+          {% else %}
           <li class="app-task-list__item">
             <span class="app-task-list__task-name">
               {% if data.commodity == "plants" and data.journey != "coc" %}<a href="pheats-check" aria-describedby="status-1.3">{% else %}<a href="inspection-addresses" aria-describedby="status-1.3">{% endif %}What are the inspection details?</a>
