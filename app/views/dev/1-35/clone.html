@@ -37,29 +37,31 @@
       </div>
 
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          {% if data.build == "ux" %}Application{% else %}Certificate{% endif %} name</dt>
+        <dt class="govuk-summary-list__key">{% if data.build == "ux" %}Application{% else %}Certificate{% endif %} name</dt>
         <dd class="govuk-summary-list__value">
-          {% if (query.id | appInfo('cert_info')) == 'Soil sampling' %}
-            Soil sampling for {{data.commodity or "crops"}}
+          {% if (query.id | appInfo('cert_info')) == 'Conformity' %}
+          Certificate of conformity for {{data.commodity or "crops"}}
+          {% elif (query.id | appInfo('cert_info')) == 'Growing season inspection' %}
+          Growing season inspection for {{data.commodity or "crops"}}
+          {% elif (query.id | appInfo('cert_info')) == 'Seed sampling' %}
+          Seed sampling for {{data.commodity or "crops"}}
+          {% elif (query.id | appInfo('cert_info')) == 'Soil sampling' %}
+          Soil sampling for {{data.commodity or "crops"}}
+          {% elif (query.id | appInfo('cert_info')) == 'Phytosanitary' %}
+          Phytosanitary certificate for {{data.commodity or "crops"}}
+          {% elif (query.id | appInfo('cert_info')) == 'Re-forwarding' %}
+          Re-forwarding phytosanitary certificate for {{data.commodity or "crops"}}
           {% else %}
-            {% if query.id == 2 %}
-            Re-forwarding phytosanitary certificate for plants and fresh produce
-            {% elseif query.id == 0 %}
-            Phytosanitary certificate for plants and fresh produce
-            {% elseif query.id == 6 %}
-            Growing season inspection for plants and fresh produce
-            {% elseif query.id == 25 %}
-            Growing season inspection
-            {% elseif query.id == 34 %}
-            Phytosanitary certificate for processed plant products
-            {% else %}
-            Phytosanitary certificate for commodity
-            {% endif %}
-          {% endif %}</dd>
+          Phytosanitary certificate for commodity
+          {% endif %}
+        </dd>
       </div>
 
-      {% if (query.id | appInfo('cert_info')) == 'Soil sampling' %}
+      {% if (query.id | appInfo('cert_info')) == 'Growing season inspection' %}
+
+      {% elif (query.id | appInfo('cert_info')) == 'Seed sampling' %}
+
+      {% elif (query.id | appInfo('cert_info')) == 'Soil sampling' %}
       
       {% else %}
       <div class="govuk-summary-list__row">
@@ -81,11 +83,14 @@
         <fieldset class="govuk-fieldset">
           
           <div class="govuk-radios" data-module="govuk-radios">
-            {% if data.commodity == "seeds" %}
+            
+            <!-- Chris Harding (08.03.22) - Commenting this out until the design is agreed -->
+            <!-- {% if data.commodity == "seeds" %}
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~reuse-ref?id={{query.id or 1}}&is_group={{query.is_group}}">
               <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application and keep the commodity data</label>
             </div>
+
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="application_type_clone_no_data" name="application_type" type="radio" value="yes~reuse-ref?id={{query.id or 1}}&is_group={{query.is_group}}">
               <label class="govuk-label govuk-radios__label" for="application_type_clone_no_data">Yes, copy but delete the commodities from the new application</label>
@@ -94,12 +99,75 @@
             <div class="govuk-radios__item">
               {% if (query.id | appInfo('reference')) != "" %}
               <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~reuse-ref?id={{query.id or 1}}&is_group={{query.is_group}}">
-             {% else %}
+              {% else %}
               <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/create/check-your-answers-copy">
               {% endif %}
               <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application</label>
             </div>
+            {% endif %} -->
+            {% if (query.id | appInfo('cert_info')) == 'Conformity' %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&journey=coc&cloned=yes">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application</label>
+            </div>
+            {% elif (query.id | appInfo('cert_info')) == 'Growing season inspection' %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/gsi/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application{% if data.commodity == "seeds" %} and keep the commodity data{% endif %}</label>
+            </div>
+
+            {% if data.commodity == "seeds" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone_no_data" name="application_type" type="radio" value="yes~application/gsi/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone_no_data">Yes, copy but delete the commodities from the new application</label>
+            </div>
             {% endif %}
+            {% elif (query.id | appInfo('cert_info')) == 'Seed sampling' %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/seeds/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application and keep the commodity data</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone_no_data" name="application_type" type="radio" value="yes~application/seeds/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone_no_data">Yes, copy but delete the commodities from the new application</label>
+            </div>
+            {% elif (query.id | appInfo('cert_info')) == 'Soil sampling' %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/soil/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application</label>
+            </div>
+            {% elif (query.id | appInfo('cert_info')) == 'Phytosanitary' %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application{% if data.commodity == "seeds" %} and keep the commodity data{% endif %}</label>
+            </div>
+
+            {% if data.commodity == "seeds" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone_no_data" name="application_type" type="radio" value="yes~application/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone_no_data">Yes, copy but delete the commodities from the new application</label>
+            </div>
+            {% endif %}
+            {% elif (query.id | appInfo('cert_info')) == 'Re-forwarding' %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&reforwarding=1&cloned=yes">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application{% if data.commodity == "seeds" %} and keep the commodity data{% endif %}</label>
+            </div>
+
+            {% if data.commodity == "seeds" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone_no_data" name="application_type" type="radio" value="yes~application/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&reforwarding=1&cloned=yes">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone_no_data">Yes, copy but delete the commodities from the new application</label>
+            </div>
+            {% endif %}
+            {% else %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application</label>
+            </div>
+            {% endif %}
+
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="application_type_new" name="application_type" type="radio" value="no~dashboard">
               <label class="govuk-label govuk-radios__label" for="application_type_new">Cancel and go back</label>
