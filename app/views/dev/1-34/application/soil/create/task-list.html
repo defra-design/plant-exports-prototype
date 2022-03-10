@@ -21,6 +21,13 @@
 <div class="govuk-grid-row">
 
 	<div class="govuk-grid-column-two-thirds">
+
+		{% if query.cloned == "yes" %}
+    <div class="app-alert app-alert--success">
+      <p class="govuk-body">You have successfully copied this application</p>
+    </div>
+    {% endif %}
+
 		{% if data.reference_num %}<span class="govuk-caption-xl">{{data.reference_num}}</span>{% endif%}
 		<h1 class="govuk-heading-xl">Arrange soil sampling for {% if data.commodity == "potatoes" %}ware potatoes{% else %}{{data.commodity or "crops"}}{% endif %}</h1>
 		<p class="govuk-hint govuk-!-margin-bottom-7">Complete these details to arrange a soil sampling inspection</p>
@@ -36,7 +43,15 @@
 						<strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="inspection-details">Not started</strong>
 						{% endif %}
 					</li>
-					<li class="app-task-list__item">
+          <li class="app-task-list__item">
+						<span class="app-task-list__task-name"><a href="{% if data.inspection_task_list_data == 'Complete' %}inspection-addresses?change=yes{% else %}inspection-addresses{% endif %}" aria-describedby="inspection-details">What are the inspection details?</a></span>
+						{% if data.inspection_task_list_data == 'Complete' %}
+						<strong class="govuk-tag app-task-list__tag" id="inspection-details">Complete</strong>
+						{% else %}
+						<strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="inspection-details">Not started</strong>
+						{% endif %}
+					</li>
+          <li class="app-task-list__item">
 						{% if data.field_task_list_data == "Not Completed" %}
 						<span class="app-task-list__task-name"><a href="field" aria-describedby="sampling-site-details">Where is the sampling site?</a></span>
 						<strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="sampling-site-details">Not started</strong>
@@ -46,14 +61,6 @@
 						{% else %}
 						<span class="app-task-list__task-name"><a href="{{data.field_task_list_data or 'field'}}" aria-describedby="sampling-site-details">Where is the sampling site?</a></span>
 						<strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="sampling-site-details">Not started</strong>
-						{% endif %}
-					</li>
-          <li class="app-task-list__item">
-						<span class="app-task-list__task-name"><a href="{% if data.inspection_task_list_data == 'Complete' %}inspection-addresses?change=yes{% else %}inspection-addresses{% endif %}" aria-describedby="inspection-details">What are the inspection details?</a></span>
-						{% if data.inspection_task_list_data == 'Complete' %}
-						<strong class="govuk-tag app-task-list__tag" id="inspection-details">Complete</strong>
-						{% else %}
-						<strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="inspection-details">Not started</strong>
 						{% endif %}
 					</li>
 				</ul>
