@@ -60,7 +60,7 @@ Review your answers - {{serviceName}} - GOV.UK
           {{ data.reference_num or "12345" }}
         </dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="../setup/what-country-ssdd?return_url=../create/check-your-answers-ssdd&change=yes">
+          <a class="govuk-link" href="../setup/reference?return_url=../create/check-your-answers-ssdd&change=yes">
             Change<span class="govuk-visually-hidden">
               Certification region</span>
           </a>
@@ -120,7 +120,7 @@ Review your answers - {{serviceName}} - GOV.UK
               <th class="govuk-table__header" scope="col">
                 Quantity
               </th>
-              <th class="govuk-table__header" scope="col"></th>
+              <th class="govuk-table__header" scope="col">Action</th>
             </tr>
           </thead>
           <tbody class="govuk-table__body">
@@ -151,20 +151,28 @@ Review your answers - {{serviceName}} - GOV.UK
               <th class="govuk-table__header" scope="col">
                 Quantity
               </th>
-              <th class="govuk-table__header" scope="col"></th>
+              <th class="govuk-table__header" scope="col">Action</th>
             </tr>
           </thead>
           <tbody class="govuk-table__body">
             {% for item in items %}
             <tr class="govuk-table__row">
               <td class="govuk-table__cell">
+                {% if data.commodity == "plant products"%}
+                {{'Vegetable oil'}}
+                {% else %}
                 {{item.commodity_common_name or 'Corylus avellana'}}
+                {% endif %}
               </td>
               <td class="govuk-table__cell">
                 {{item.countrySelect[0] or "United Kingdom"}}
               </td>
               <td class="govuk-table__cell govuk-table__cell">
+                {% if data.commodity == "plant products"%}
+                {{'1'}}
+                {% else %}
                 {{data.weight or item.quantity or "25"}} {{item.unit or "Tonnes"}}
+                {% endif %}
               </td>
               <td class="govuk-table__cell" style="text-align:right;">
                 <a href="how-to-identify-part-edit.html?change=yes&return_url=check-your-answers-ssdd" class="govuk-link govuk-link--no-visited-state">
