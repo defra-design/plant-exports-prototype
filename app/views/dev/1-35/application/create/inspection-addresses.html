@@ -1,147 +1,94 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  Where will the inspection take place? - Phytosanitary certificate - {{serviceName}} - GOV.UK
+  {% if data.pheats_check == "yes" or data.reforwarding %}Select the inspection address{% else %}Where will the inspection take place?{% endif %} - Phytosanitary certificate - {{serviceName}} - GOV.UK
 {% endblock %}
 
-{% block beforeContent%}
+{% block beforeContent %}
 {{super()}}
 {% include "../modules/_account-banner.html" %}
 <a href="javascript:history.back()" class="govuk-back-link">Back</a>
-{% endblock%}
+{% endblock %}
 
 {% block content %}
-<div class="govuk-grid-row govuk-!-margin-bottom-6">
+<div class="govuk-grid-row">
+  
   <div class="govuk-grid-column-two-thirds">
-    {% if data.pheats_check == "yes" %}
-    <h1 class="govuk-heading-xl">Select the inspection address</h1>
-    <p class="govuk-body">
-        All your PHEATS-approved addresses are shown below. If there are no addresses, you will need to add one.<br>
-    {% elseif data.reforwarding %}
-      <h1 class="govuk-heading-xl">Select the inspection address</h1>
-      <p class="govuk-body">
-        Your inspector will decide whether your consignment can be re-forwarded without undergoing a further inspection. You should supply an inspection address in case it is needed.<br>
-    {% else %}
-      <h1 class="govuk-heading-xl">Where will the inspection take place?</h1>
-      <p class="govuk-body">
-        Select the address where the inspector will check your consignment.<br>
-    {% endif %}
-      <!--You can <a href="../../account/inspection-addresses" class="govuk-link" id="Link-ManageAccount">edit your addresses</a> or <a class="govuk-link" href="../../account/add-inspection-address-phyto">add a new address</a>.-->
-      You can <a href="../../account/inspection-addresses" class="govuk-link" id="Link-ManageAccount">manage your addresses</a> or <a class="govuk-link" href="address-lookup">add a new address</a>.
-    </p>
-    <table class="govuk-table govuk-!-margin-bottom-9">
 
-    <!-- UX DATA BUILD -->
-    {% if data.build == "ux" %}
-    <form action="{{query.return_url or 'contact-details-simple-short'}}" method="post">
-    <div class="govuk-form-group">
-      <fieldset class="govuk-fieldset">
-        
-        <div class="govuk-radios" data-module="govuk-radios">
-         
-          {% if data.pheats_check == "yes" %}
-          <div class="govuk-radios__item">
-            <input class="govuk-radios__input" id="address_1" name="select_address" type="radio" value="Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH" {% if query.change == 'yes' and data.select_address == 'Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH' %}checked{% endif %}>
-            <label class="govuk-label govuk-radios__label" for="address_1">Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH</label>
-          </div>
-          {% else %}
-          <div class="govuk-radios__item">
-            <input class="govuk-radios__input" id="address_1" name="select_address" type="radio" value="Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH" {% if query.change == 'yes' and data.select_address == 'Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH' %}checked{% endif %}>
-            <label class="govuk-label govuk-radios__label" for="address_1">Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH</label>
-          </div>
-
-          <div class="govuk-radios__item">
-            <input class="govuk-radios__input" id="address_2" name="select_address" type="radio" value="Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ" {% if query.change == 'yes' and data.select_address == 'Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ' %}checked{% endif %}>
-            <label class="govuk-label govuk-radios__label" for="address_2">Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ</label>
-          </div>
-          {% endif %}
-        </div>
-
-      </fieldset>
-    </div>
-    <button class="govuk-button govuk-!-margin-bottom-9" type="submit" data-module="govuk-button">Save and continue</button>
-    </form>
-    {% else %}  
-    <!-- END DATA BUILD UX -->
-
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th class="govuk-table__header" scope="col">
-            Address
-          </th>
-          <!--<th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
-            Legal owner?
-          </th>
-          <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
-            Contact name
-          </th>-->
-          <th class="govuk-table__header" scope="col">
-            Actions
-          </th>
-        </tr>
-      </thead>
-      <tbody class="govuk-table__body">
-        <!--Inspection address 1-->
+    <form action="{{query.return_url or 'contact-details'}}" method="post">
+    
+      <div class="govuk-form-group">
         {% if data.pheats_check == "yes" %}
-        <tr class="govuk-table__row">
-          <td class="govuk-table__cell">
-            Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH
-          </td>
-          <!--<td class="govuk-table__cell">
-            Yes
-          </td>
-          <td class="govuk-table__cell">
-            Sarah Philips
-          </td>-->
-          <td class="govuk-table__cell" style="text-align:right;">
-            <a href="confirm-inspection-address" class="govuk-link govuk-link--no-visited-state">
-              Select
-            </a>
-          </td>
-        </tr>
+        <h1 class="govuk-heading-xl">Select the inspection address</h1>
+        <p class="govuk-body">All your PHEATS-approved addresses are shown below. If there are no addresses, you will need to add one.<br>
+        {% elif data.reforwarding %}
+        <h1 class="govuk-heading-xl">Select the inspection address</h1>
+        <p class="govuk-body">Your inspector will decide whether your consignment can be re-forwarded without undergoing a further inspection. You should supply an inspection address in case it is needed.</p>
         {% else %}
-        <!--Inspection address 2-->
-        <tr class="govuk-table__row">
-          <td class="govuk-table__cell">
-            Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH
-          </td>
-          <!--<td class="govuk-table__cell">
-            Yes
-          </td>
-          <td class="govuk-table__cell">
-            Sarah Philips
-          </td>-->
-          <td class="govuk-table__cell" style="text-align:right;">
-            <a href="confirm-inspection-address" class="govuk-link govuk-link--no-visited-state">
-              Select
-            </a>
-          </td>
-        </tr>
-        <tr class="govuk-table__row">
-          <td class="govuk-table__cell">
-            Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ
-          </td>
-          <!--<td class="govuk-table__cell">
-            No
-          </td>
-          <td class="govuk-table__cell">
-            Clive Jones
-          </td>-->
-          <td class="govuk-table__cell" style="text-align:right;">
-            <a href="confirm-inspection-address" class="govuk-link govuk-link--no-visited-state">
-              Select
-            </a>
-          </td>
-        </tr>
+        <h1 class="govuk-heading-xl">Where will the inspection take place?</h1>
+        <p class="govuk-body">Select the address where the inspector will check your consignment.</p>
         {% endif %}
-        {% endif %}
-      </tbody>
-    </table>
-    {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+        <!-- You can <a href="../../account/inspection-addresses" class="govuk-link" id="Link-ManageAccount">edit your addresses</a> or <a class="govuk-link" href="../../account/add-inspection-address-phyto">add a new address</a>. -->
+        <p class="govuk-body">You can <a href="../../account/inspection-addresses" class="govuk-link" id="Link-ManageAccount">manage your addresses</a> or <a class="govuk-link" href="../../account/address-lookup">add a new address</a>.</p>
+      </div>
+      
+      {% if data.build == "ux" %}
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          
+          <div class="govuk-radios" data-module="govuk-radios">
+            
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="address_1" name="select_address" type="radio" value="Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH" {% if query.change == 'yes' and data.select_address == 'Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH' %}checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="address_1">Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="address_2" name="select_address" type="radio" value="Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ" {% if query.change == 'yes' and data.select_address == 'Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ' %}checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="address_2">Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ</label>
+            </div>
+
+          </div>
+
+        </fieldset>
+      </div>
+
+      <button class="govuk-button govuk-!-margin-bottom-9" type="submit" data-module="govuk-button">Save and continue</button>
+      {% else %}
+      <table class="govuk-table govuk-!-margin-bottom-9">
+        <caption class="govuk-table__caption govuk-visually-hidden">Your inspection addresses</caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Address</th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              <a href="confirm-inspection-address?address=1" class="govuk-link govuk-link--no-visited-state">Select</a>
+            </td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              <a href="confirm-inspection-address?address=2" class="govuk-link govuk-link--no-visited-state">Select</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      {% endif %}
+
+      {% block continueLater %}
+      {% include "../modules/_save-continue-later.html" %}
+      {% endblock %}
+    </form>
 
     <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible govuk-!-margin-top-9">
-    <p class="govuk-body">
-      <a href="no-inspection-addresses" class="govuk-link govuk-link-no-visited-state">Scenario: no inspection addresses exist</a>
-    </p>
+    <p class="govuk-body"><a href="no-inspection-addresses" class="govuk-link govuk-link-no-visited-state">Scenario: no inspection addresses exist</a></p>
+
+  </div>
+
 </div>
 {% endblock %}
