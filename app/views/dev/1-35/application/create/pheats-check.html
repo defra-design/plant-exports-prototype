@@ -1,59 +1,60 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-Are you applying as part of the Plant Health Exports Audited Trader Scheme? - {{serviceName}} - GOV UK
+  Are you applying as part of the Plant Health Exports Audited Trader Scheme? - Phytosanitary certificate - {{serviceName}} - GOV UK
 {% endblock %}
 
 {% block beforeContent %}
 {{super()}}
-{{ govukBackLink({
-  text: "Back",
-  href: "javascript: window.history.go(-1)"
-}) }}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
 {% endblock %}
 
 {% block content %}
-<div class="govuk-width-container">
+<div class="govuk-grid-row">
 
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
-        <form method="post" class="form">
+  <div class="govuk-grid-column-two-thirds">
 
-          <div class="govuk-form-group">
-            <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
-              <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-                <h1 class="govuk-fieldset__heading">
-                  Do you want to apply under the plant health exports audited trader scheme (PHEATS)?
-                </h1>
-              </legend>
-              <div id="changed-name-hint" class="govuk-hint">
-                The consignment must already have been officially inspected by an authorised person at an approved PHEATS site.<br><br>
-                You can select or add an PHEATS-approved address later on.<br><br>
-              <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
-                <div class="govuk-radios__item">
-                  <input class="govuk-radios__input" id="pheats-check-yes" name="pheats_check" type="radio" value="yes~inspection-addresses" data-aria-controls="conditional-how-contacted-conditional">
-                  <label class="govuk-label govuk-radios__label" for="pheats-check-yes">
-                    Yes, I want to apply under PHEATS
-                  </label>
-                </div>
-                <div class="govuk-radios__item">
-                  <input class="govuk-radios__input" id="pheats-check-no" name="pheats_check" type="radio" value="no~inspection-addresses" data-aria-controls="conditional-how-contacted-conditional">
-                  <label class="govuk-label govuk-radios__label" for="pheats-check-no">
-                    No, I don't want to apply under PHEATS
-                  </label>
-                </div>
-              </div>
-            </fieldset>
+    <form method="post" class="form">
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" aria-describedby="pheats-hint">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+            <h1 class="govuk-fieldset__heading">Do you want to apply under the plant health exports audited trader scheme (PHEATS)?</h1>
+          </legend>
+
+          <div id="pheats-hint" class="govuk-hint govuk-!-margin-top-7">
+            The consignment must already have been officially inspected by an authorised person at an approved PHEATS site.
+            <br>
+            <br>
+            You can select or add an PHEATS-approved address later on.
           </div>
 
-          {{ govukButton({
-            classes: "govuk-!-margin-top-4",
-            text: "Continue"
-          }) }}
+          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+            
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="pheats-check-yes" name="pheats_check" type="radio" value="yes~inspection-addresses" data-aria-controls="conditional-how-contacted-conditional">
+              <label class="govuk-label govuk-radios__label" for="pheats-check-yes">Yes, I want to apply under PHEATS</label>
+            </div>
 
-        </form>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="pheats-check-no" name="pheats_check" type="radio" value="no~inspection-addresses" data-aria-controls="conditional-how-contacted-conditional">
+              <label class="govuk-label govuk-radios__label" for="pheats-check-no">No, I don't want to apply under PHEATS</label>
+            </div>
+
+          </div>
+
+        </fieldset>
       </div>
-    </div>
+
+      {{ govukButton({
+        classes: "govuk-!-margin-top-4",
+        text: "Continue"
+      }) }}
+
+    </form>
+
+  </div>
 
 </div>
 {% endblock %}
