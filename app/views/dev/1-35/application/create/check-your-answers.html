@@ -17,6 +17,12 @@
 
     <form action="{% if data.journey == 'coc' %}../submit/submit-date-coc{% else %}../submit/submit-date{% endif %}" method="post">
       <h1 class="govuk-heading-xl">Review your answers</h1>
+
+      <div class="govuk-inset-text">
+        Your application is now ready to be submitted.<br><br>
+        Please check that the answers you've provided are correct.
+      </div>
+      
       <h2 class="govuk-heading-m">Application summary</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
 
@@ -47,7 +53,7 @@
         </div>
 
         <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Your reference for this application</dt>
+          <dt class="govuk-summary-list__key">Your reference</dt>
           <dd class="govuk-summary-list__value">{{data.reference_num or "12345"}}</dd>
           <dd class="govuk-summary-list__actions">
             <a class="govuk-link" href="../setup/what-country?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">your reference for this application</span></a>
@@ -128,8 +134,8 @@
       <table class="govuk-table govuk-!-margin-bottom-4">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
-            <th class="govuk-table__header govuk-summary-list__key" scope="col">Stock number</th>
-            <th class="govuk-table__header" scope="col">Variety</th>
+            <th class="govuk-table__header govuk-summary-list__key" scope="col">Variety</th>
+            <th class="govuk-table__header" scope="col">Stock number</th>
             <th class="govuk-table__header" scope="col">Weight</th>
             <th class="govuk-table__header govuk-table__header--numeric" scope="col"><span class="govuk-visually-hidden">Action</span></th>
           </tr>
@@ -140,6 +146,9 @@
           {% endfor %}
         </tbody>
       </table>
+
+      <p class="govuk-body"><a href="how-to-identify?return_url=check-your-answers">Add more</a></p>
+
       {% elseif data.commodity == "used farm machinery" %}
       <h2 class="govuk-heading-m">Your consignment</h2>
     
@@ -323,11 +332,12 @@
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
         <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Where is the farm?</dt>
+          <dt class="govuk-summary-list__key">Address</dt>
           <dd class="govuk-summary-list__value">{{data.select_address or "Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH"}}</dd>
           <dd class="govuk-summary-list__actions"><a class="govuk-link" href="inspection-addresses?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> where the inspection will take place</span></a></dd>
         </div>
 
+        <!--
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Who is the main contact for this application?</dt>
           <dd class="govuk-summary-list__value">
@@ -347,15 +357,45 @@
           </dd>
           <dd class="govuk-summary-list__actions"><a class="govuk-link" href="contact-details-simple-short?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> who the main contact for this application</span></a></dd>
         </div>
+      -->
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Contact name</dt>
+        <dd class="govuk-summary-list__value">Bill Shoggins</dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">contact name</span></a>
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Phone number</dt>
+        <dd class="govuk-summary-list__value">01234 567890</dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">phone number</span></a>
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Email address</dt>
+        <dd class="govuk-summary-list__value">bill.shoggins@acmeltd.com</dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">email address</span></a>
+        </dd>
+      </div>
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Date when your consignment will be ready for inspection</dt>
           <dd class="govuk-summary-list__value">
             {{data.inpection_date_day or "12"}} January {{data.inpection_date_year or "2022"}}
-            <br>
-            {{data.inspection_time_hour or "9"}}:{{data.inspection_time_minute or "30"}}{{data.inspection_time_period or "am"}}
           </dd>
           <dd class="govuk-summary-list__actions"><a class="govuk-link" href="inspection-dates?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">the date when your consignment will be ready for inspection</span></a></dd>
+        </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Time when your consignment will be ready for inspection</dt>
+          <dd class="govuk-summary-list__value">
+            {{data.inspection_time_hour or "9"}}:{{data.inspection_time_minute or "30"}}{{data.inspection_time_period or "am"}}
+          </dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="inspection-dates?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">the time when your consignment will be ready for inspection</span></a></dd>
         </div>
 
       </dl>
