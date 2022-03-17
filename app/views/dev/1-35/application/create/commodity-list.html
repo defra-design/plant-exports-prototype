@@ -1,7 +1,11 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
+  {% if data.build == "ux" %}
   Your commodities - Phytosanitary certificate - {{serviceName}} - GOV.UK
+  {% else %}
+  List Commodity Details - Exports application - GOV.UK
+  {% endif %}
 {% endblock %}
 
 {% block beforeContent%}
@@ -57,7 +61,7 @@
             Quantity
           </th>
           <th class="govuk-table__header" style="text-align:right;" scope="col">
-            Action
+            Actions
           </th>
         </tr>
         {% elseif data.commodity == "plant products" %}
@@ -75,7 +79,7 @@
             Quantity
           </th>
           <th class="govuk-table__header" style="text-align:right;" scope="col">
-            Action
+            Actions
           </th>
         </tr>
         {% elseif data.commodity == "seeds" %}
@@ -96,7 +100,7 @@
             Quantity
           </th>
           <th class="govuk-table__header" style="text-align:right;" scope="col">
-            Action
+            Actions
           </th>
         </tr>
         {% else %}
@@ -111,7 +115,7 @@
             Unique ID
           </th>
           <th class="govuk-table__header" style="text-align:right;" scope="col">
-            Action
+            Actions
           </th>
         </tr>
         {% endif %}
@@ -218,21 +222,25 @@
       <div class="govuk-form-group govuk-!-margin-bottom-6">
         <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
       </div>
-
+      
+      {% if data.build == "ux" %}
       {% block continueLater %}
       {% include "../modules/_save-continue-later.html" %}
       {% endblock %}
+
+      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+      <ul class="govuk-list govuk-list">
+        <li>
+          <a href="upload-validation-errors-summary-with-details" class="govuk-link govuk-link-no-visited-state">Error summary</a>
+        </li>
+      </ul>
+      {% else %}
+      
+      {% endif %}
+
     </form>
   
-    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-      
 
-    <ul class="govuk-list govuk-list">
-      <li>
-        <a href="upload-validation-errors-summary-with-details" class="govuk-link govuk-link-no-visited-state">Error summary</a>
-
-      </li>
-    </ul>
 
 
   </div>
