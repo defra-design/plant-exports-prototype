@@ -1,7 +1,11 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  Who will receive this consignment? - {{serviceName}} - GOV.UK
+{% if data.build == "ux" %}
+Who will receive this consignment? - {{serviceName}} - GOV.UK
+{% else %}
+Display question - Exports application - GOV.UK
+{% endif %}
 {% endblock %}
 
 {% block beforeContent%}
@@ -9,6 +13,12 @@
 {% include "../modules/_account-banner.html" %}
 <a href="javascript:history.back()" class="govuk-back-link">Back</a>
 {% endblock %}
+
+{# set label as bold #}
+{% set label_class = "govuk-label govuk-!-font-weight-bold" %}
+{% if data.build == "ux" %}
+{% set  label_class = "govuk-label" %}
+{% endif %}
 
 {% block content %}
 <div class="govuk-grid-row">
@@ -27,18 +37,18 @@
         <p class="govuk-body">The consignee is the importer or customer who receives your consignment when it arrives in the destination country.</p>
 
         <div class="govuk-form-group">
-          <label class="govuk-label" for="consignee-name">Name of the consignee</label>
+          <label class="{{label_class}}" for="consignee-name">Name of the consignee</label>
           <input class="govuk-input" id="consignee-name" name="consignee-name" type="text">
         </div>
 
         <div class="govuk-form-group">
-          <label class="govuk-label" for="consignee-address">Address of the consignee</label>
+          <label class="{{label_class}}" for="consignee-address">Address of the consignee</label>
           <textarea class="govuk-textarea" id="consignee-address" name="consignee-address" rows="5"></textarea>
         </div>
 
         {% if data.commodity == "grain" %}
         <div class="govuk-form-group">
-          <label class="govuk-label" for="consignee-more-detail">Further information{% if data.reforwarding %} or additional declarations{% endif %} (optional)</label>
+          <label class="{{label_class}}" for="consignee-more-detail">Further information{% if data.reforwarding %} or additional declarations{% endif %} (optional)</label>
           <span id="consignee-more-detail-hint" class="govuk-hint">Anything you put here will be added to your certificate. If the destination country requires information to be provided in foreign language translation, you should enter it here.</span>
           <textarea class="govuk-textarea" id="consignee-more-detail" name="consignee-more-detail" rows="5" aria-describedby="consignee-more-detail-hint"></textarea>
         </div>
@@ -47,8 +57,14 @@
         {% endif %}
 
         <div class="govuk-form-group">
-          <label class="govuk-label" for="consignee-import-permit">Import permit number (optional)</label>
-          <span id="consignee-import-permit-hint" class="govuk-hint">If you have been given an import permit by the destination country, enter the number here. You can upload the import permit as a supporting document later on in this application. </span>
+          <label class="{{label_class}}" for="consignee-import-permit">Import permit number{% if data.build == "ux" %} (optional){% endif %}</label>
+          <span id="consignee-import-permit-hint" class="govuk-hint">
+            {% if data.build == "ux" %}
+            If you have been given an import permit by the destination country, enter the number here. You can upload the import permit as a supporting document later on in this application. 
+            {% else %}
+            If you have been given an import permit by the destination country, enter the number here.
+            {% endif %}
+          </span>
           <input class="govuk-input" id="consignee-import-permit" name="consignee-import-permit" type="text" aria-describedby="consignee-import-permit-hint">
         </div>
 
