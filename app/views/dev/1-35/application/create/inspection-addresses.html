@@ -1,7 +1,11 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.pheats_check == "yes" or data.reforwarding %}Select the inspection address{% else %}Where will the inspection take place?{% endif %} - Phytosanitary certificate - {{serviceName}} - GOV.UK
+  {% if data.build == "ux" %}
+    {% if data.pheats_check == "yes" or data.reforwarding %}Select the inspection address{% else %}Where will the inspection take place?{% endif %} - Phytosanitary certificate - {{serviceName}} - GOV.UK
+  {% else %}
+  What are the inspection details?
+  {% endif %}
 {% endblock %}
 
 {% block beforeContent %}
@@ -28,7 +32,7 @@
         {% if data.build == "ux" %}
         <h1 class="govuk-heading-xl">Where will the inspection take place?</h1>
         {% else %}
-        <h1 class="govuk-heading-xl">What are the inspection details</h1>
+        <h1 class="govuk-heading-xl">What are the inspection details?</h1>
         {% endif %}
         <p class="govuk-body">Select the address where the inspector will check your consignment.</p>
         {% endif %}
@@ -92,8 +96,12 @@
       {% endblock %}
     </form>
 
+    {% if data.build == "ux" %}
     <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible govuk-!-margin-top-9">
     <p class="govuk-body"><a href="no-inspection-addresses" class="govuk-link govuk-link-no-visited-state">Scenario: no inspection addresses exist</a></p>
+    {% else %}
+     {% endif %}
+
 
   </div>
 
