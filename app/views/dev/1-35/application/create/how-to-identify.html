@@ -16,13 +16,24 @@
 
     <form method="post">
       <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
+        {% if data.build == "ux" %}
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
           Add {% if data.pheats != 1 %}{% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your {% if data.reforwarding %}<br>re-forwarding{% endif %} consignment
         </legend>
-
+        {% else %}
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+          Your commodity
+        </legend>
+        {% endif %}
+        {% if data.build == "ux" %}
         <p class="govuk-body govuk-!-margin-top-6" for="how-contacted-conditional">
           How do you want to describe your {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}?
         </p>
+        {% else %}
+        <p class="govuk-body govuk-!-margin-top-6" for="how-contacted-conditional">
+          How do you want to describe your commodity?
+        </p>
+        {% endif %}
 
         <div class="govuk-form-group">
           <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">

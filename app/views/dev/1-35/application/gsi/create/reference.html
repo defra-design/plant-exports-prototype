@@ -34,20 +34,25 @@
 				<input class="govuk-input govuk-input--width-20" id="reference_num" name="reference_num" value="{% if query.change == 'yes' %}{{data.reference_num}}{% endif %}" type="text">
 			</div>
 
-			{% if query.change == 'yes' %}
+			{% if query.change == 'yes' or query.saveContinueLater == 'yes' %}
 			<div class="govuk-button-group govuk-!-margin-bottom-7">
 				<button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
 			</div>
 
-			{% block continueLater %}
+      {% block continueLater %}
 			{% include "../modules/_save-continue-later.html" %}
 			{% endblock %}
+			
 			{% else %}
 			<div class="govuk-button-group">
-				<button class="govuk-button" type="submit" data-module="govuk-button">Continue</button>
+				<button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
 				<a class="govuk-link app-button--link" href="../../../dashboard">Cancel</a>
 			</div>
+
+      {% include "../modules/_save-continue-later.html" %}
+
 			{% endif %}
+			
 
     </form>
 
