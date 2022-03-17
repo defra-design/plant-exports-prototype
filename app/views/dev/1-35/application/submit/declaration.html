@@ -1,7 +1,12 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  Declaration - Soil inspection - {{serviceName}} - GOV.UK
+{% if data.build == "ux" %}
+Declaration - Soil inspection - {{serviceName}} - GOV.UK
+{% else %}
+Declaration - Exports application - GOV.UK
+{% endif %}
+  
 {% endblock %}
 
 {% block beforeContent%}
@@ -21,8 +26,12 @@
 </style>
 
 <div class="govuk-grid-row">
-  
+  {% if data.build == "ux" %}
   <div class="govuk-grid-column-two-thirds">
+  {% else %}
+  <div class="govuk-grid-column-full">
+  {% endif %}
+
     <h1 class="govuk-heading-xl">Exporter declaration</h1>
     {% if data.pheats_check != "yes" %}
     <p class="govuk-body">By submitting this application form, you are agreeing that to the best of your knowledge and belief the statements made in this {% if data.reforwarding %}re-forwarding{% endif %} application are true and complete.<!-- You will comply with the legal requirements of UK law, including payment for official controls, repossession of any consignment rejected after transit from the UK to another country or costs of destruction if necessary.--></p>
