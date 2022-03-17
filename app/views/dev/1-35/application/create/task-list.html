@@ -1,7 +1,11 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  Your application - Phytosanitary certificate - {{serviceName}} - GOV.UK
+  {% if data.build == "ux" %}
+    Your application - Phytosanitary certificate - {{serviceName}} - GOV.UK
+  {% else %}
+    Exports application - GOV.UK
+  {% endif %}
 {% endblock %}
 
 {% block beforeContent%}
@@ -11,6 +15,17 @@
 {% endblock %}
 
 {% block content %}
+{% if data.build == "ux" %}
+{# do nothing #}
+{% else %}
+{# overwrite tag style to replicate production #}
+<style>
+  .govuk-tag--grey {
+  background-color: white;
+  border: solid 1px #cbcbcb;
+  }
+</style>
+{% endif %}
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
@@ -37,7 +52,12 @@
     <ol class="app-task-list">
       <li>
         <h2 class="app-task-list__section">
-          <span class="app-task-list__section-number">1. </span> Tell us about your consignment
+          <span class="app-task-list__section-number">1. </span> 
+          {% if data.build == "ux" %}
+            Tell us about your consignment
+          {% else %}
+            About your application 
+          {% endif %}
         </h2>
         <ul class="app-task-list__items">
           <li class="app-task-list__item">
@@ -97,7 +117,13 @@
           {% endif %}
           <li class="app-task-list__item">
             <span class="app-task-list__task-name">
-              <a href="shipping" aria-describedby="status-1.4">How will this consignment be transported?</a>
+              <a href="shipping" aria-describedby="status-1.4">How will 
+                {% if data.build == "ux" %}
+                this
+              {% else %}
+                the
+              {% endif %}
+                consignment be transported?</a>
             </span>
             {% if data.shipping_task_list_data or data.port_entry or data.port_export or data.transport_method %}
             <strong class="govuk-tag app-task-list__tag" id="status-1.4">Complete</strong>
@@ -134,7 +160,12 @@
       {% if data.journey != "coc" %}
       <li>
         <h2 class="app-task-list__section">
-          <span class="app-task-list__section-number">2. </span> Upload supporting documents (optional)
+          <span class="app-task-list__section-number">2. </span> 
+          {% if data.build == "ux" %}
+            Upload supporting documents (optional)
+          {% else %}
+            Additional documents (optional) 
+          {% endif %}
         </h2>
         <ul class="app-task-list__items">
           <li class="app-task-list__item" style="border-top: none;">
