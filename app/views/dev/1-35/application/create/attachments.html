@@ -28,7 +28,11 @@
       <li>be in PDF, Word, Excel or JPEG format</li>
       <li>be smaller than 10 megabytes (10MB)</li>
       <li>have a unique, meaningful file name</li>
+      {% if data.build == "ux" %}
       <li>upload with a file description</li>
+      {% else %}
+      <li>uploaded with a file description</li>
+      {% endif %}
     </ul>
   </div>
 
@@ -37,7 +41,8 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-full">
-    <h2 class="govuk-heading-m">{% if not data.file %}<span class="file_count">0</span> files{% else %}<span class="file_count">1</span> file{% endif %} uploaded</h2>
+    <!--<h2 class="govuk-heading-m">{% if not data.file %}<span class="file_count">0</span> files{% else %}<span class="file_count">1</span> file{% endif %} uploaded</h2>-->
+    <h2 class="govuk-heading-m">{% if not data.file %}{% else %}<span class="file_count">1</span> file uploaded{% endif %}</h2>
 
     <table class="govuk-table">
       {% if data.file and query.delete_file != 'yes' %}
@@ -106,9 +111,6 @@
         <input class="govuk-input" id="supporting_documents_task_list_data" name="supporting_documents_task_list_data" type="text" value="Complete">
       </div>
 
-      {% block continueLater %}
-      {% include "../modules/_save-continue-later.html" %}
-      {% endblock %}
     </form>
 
   </div>
