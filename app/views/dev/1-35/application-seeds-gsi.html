@@ -59,7 +59,7 @@
   ] %}
 
 {% block pageTitle %}
-  Manage {% if query.is_block == "yes" %}block application{% elseif query.is_group == "yes" %}group application{% else %}application{% endif %} {% if (query.id | appInfo('reference')) %}{{query.id | appInfo('reference')}}{% elif data.reference_num %}{{data.reference_num or "SS" }}{% else %}&nbsp;{% endif %} - {{serviceName}} - GOV.UK
+  Manage {% if query.is_block == "yes" %}block application{% elseif query.is_group == "yes" %}group application{% else %}application{% endif %} {% if (query.id | appInfo('applicationID')) %}{{query.id | appInfo('reference')}}{% elif data.reference_num %}{{data.reference_num or "SS" }}{% else %}&nbsp;{% endif %} - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -128,7 +128,7 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">Manage {% if query.is_block == "yes" %}block application{% elseif query.is_group == "yes" %}group application{% else %}application{% endif %} {% if (query.id | appInfo('reference')) %}{{query.id | appInfo('reference')}}{% elif data.reference_num %}{{data.reference_num or "SS" }}{% else %}&nbsp;{% endif %}</h1>
+    <h1 class="govuk-heading-xl">Manage {% if query.is_block == "yes" %}block application{% elseif query.is_group == "yes" %}group application{% else %}application{% endif %} {% if (query.id | appInfo('applicationID')) %}{{query.id | appInfo('applicationID')}}{% elif data.reference_num %}{{data.reference_num or "SS" }}{% else %}&nbsp;{% endif %}</h1>
   </div>
 
 </div>
@@ -149,11 +149,11 @@
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          {% if data.build == "ux" %}APHA reference{% else %}Reference{% endif %}
+          {% if data.build == "ux" %}Your reference{% else %}Reference{% endif %}
         </dt>
         <dd class="govuk-summary-list__value">
           {% if (query.id | appInfo('reference')) == "" %}<span class="govuk-hint">Not set</span>{%else%}{{query.id |
-          appInfo('applicationID')}}{%endif%}
+          appInfo('reference')}}{%endif%}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
