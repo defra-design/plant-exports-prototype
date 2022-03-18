@@ -34,7 +34,11 @@ Display question - Exports application - GOV.UK
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-6">
           <h1 class="govuk-fieldset__heading">Who will receive this {% if data.reforwarding %}<br>re-forwarding{% endif %} consignment?</h1>
         </legend>
+        {% if data.build == "ux" %}
         <p class="govuk-body">The consignee is the importer or customer who receives your consignment when it arrives in the destination country.</p>
+        {% else %}
+
+        {% endif %}
 
         <div class="govuk-form-group">
           <label class="{{label_class}}" for="consignee-name">Name of the consignee</label>
@@ -42,7 +46,16 @@ Display question - Exports application - GOV.UK
         </div>
 
         <div class="govuk-form-group">
+          {% if data.build == "ux" %}
           <label class="{{label_class}}" for="consignee-address">Address of the consignee</label>
+
+          {% else %}
+            {% if data.commodity == "potatoes" %}
+            <label class="{{label_class}}" for="consignee-address">Consignee Address</label>
+            {% else %}
+            <label class="{{label_class}}" for="consignee-address">Address of the consignee</label>
+            {% endif %}
+          {% endif %}
           <textarea class="govuk-textarea" id="consignee-address" name="consignee-address" rows="5"></textarea>
         </div>
 
@@ -56,6 +69,8 @@ Display question - Exports application - GOV.UK
 
         {% endif %}
 
+
+        {% if data.build == "ux" %}
         <div class="govuk-form-group">
           <label class="{{label_class}}" for="consignee-import-permit">Import permit number{% if data.build == "ux" %} (optional){% endif %}</label>
           <span id="consignee-import-permit-hint" class="govuk-hint">
@@ -67,6 +82,7 @@ Display question - Exports application - GOV.UK
           </span>
           <input class="govuk-input" id="consignee-import-permit" name="consignee-import-permit" type="text" aria-describedby="consignee-import-permit-hint">
         </div>
+        {% endif %}
 
       </fieldset>
       <button class="govuk-button govuk-!-margin-bottom-9" type="submit" data-module="govuk-button">Save and continue</button>

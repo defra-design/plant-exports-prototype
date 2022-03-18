@@ -44,11 +44,9 @@ Display question - Exports application - GOV.UK
             {% if data.build == "ux" %}
             <input class="govuk-input govuk-input--width-10" id="consignment-value" name="consignment_value" type="text" aria-describedby="value-hint">
             {% else %}
-              <div id="value-hint" class="govuk-hint">
-                This information helps us improve the service we provide to exporters
-              </div>
-              <input class="govuk-input govuk-input--width-10" id="consignment-value" name="consignment_value" type="text" aria-describedby="value-hint">
-              {% endif %}
+              <span class="govuk-hint" id="transport-hint">This information helps us improve the service we provide to exporters</span>
+              <input class="govuk-input" id="consignment-value" name="consignment_value" type="text" aria-describedby="value-hint">
+            {% endif %}
           </div>
         {% endif %}
 
@@ -126,7 +124,11 @@ Display question - Exports application - GOV.UK
         <div class="govuk-form-group">
           <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend {{label_class}}">
+              {% if data.commodity == "potatoes" %}
+              Select Mode of Transport
+              {% else %}
               How will the consignment be transported?
+              {% endif %}
             </legend>
             <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
               <div class="govuk-radios__item">
@@ -175,10 +177,19 @@ Display question - Exports application - GOV.UK
         {% endif %}
         
         {% if data.commodity == "potatoes" %}
+        {% if data.build == "ux" %}
         <div class="govuk-form-group">
           <label class="govuk-label" for="container_num">Container number</label>
-          <input class="govuk-input govuk-input--width-20" id="container_num" name="container_num" value="{% if query.change=='yes'%}{{ data.container_num }}{%endif%}" type="text" data-qa-id="Question-7006EHC-1">
+          <input class="govuk-input govuk-input--width-20" id="container_num" name="container_num" value="{% if query.change=='yes'%}{{ data.container_num }}{%endif%}" type="text">
         </div>
+        {% else %}
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-!-font-weight-bold" for="container_num">Container number</label>
+          <span class="govuk-hint" id="transport-hint">container number</span>
+          <input class="govuk-input" id="container_num" name="container_num" value="{% if query.change=='yes'%}{{ data.container_num }}{%endif%}" type="text">
+        </div>
+        {% endif %}
+
         {% endif %}
 
       </fieldset>
