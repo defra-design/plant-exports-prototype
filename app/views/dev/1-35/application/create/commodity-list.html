@@ -34,13 +34,28 @@
 
     <table class="govuk-table govuk-!-margin-bottom-9">
       <thead class="govuk-table__head">
-        {% if data.commodity == "potatoes" or data.commodity == "bulbs" %}
+        {% if data.commodity == "bulbs" %}
         <tr class="govuk-table__row">
           <th class="govuk-table__header" scope="col">
             Description
           </th>
           <th class="govuk-table__header" scope="col">
             Country of origin
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Quantity
+          </th>
+          <th class="govuk-table__header" style="text-align:right;" scope="col">
+            Actions
+          </th>
+        </tr>
+        {% elseif data.commodity == "potatoes" %}
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">
+            Description
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Stock number
           </th>
           <th class="govuk-table__header" scope="col">
             Quantity
@@ -145,7 +160,9 @@
             {% elseif data.commodity == "potatoes" %}
               <!-- POTATOES -->
               {% set commodity_page = "commodity-page" %}
-              {% block summaryPotatoes %}{% include "../modules/_summary-plant-products-check-answers" %}{% endblock %}
+              {% block summaryPotatoes %}
+              {% include "../modules/_summary-potatoes-check-answers.html" %}
+              {% endblock %}
               {% else %}
             <!-- OTHER COMMODITES -->
               {% set commodity_page = "commodity-page" %}
