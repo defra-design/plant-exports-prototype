@@ -122,7 +122,7 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">Manage application <span style="white-space: nowrap;">{{query.id | appInfo('reference')}}</span></h1>
+    <h1 class="govuk-heading-xl">Manage application <span style="white-space: nowrap;">{{query.id | appInfo('applicationID')}}</span></h1>
   </div>
 
 </div>
@@ -143,11 +143,11 @@
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          {% if data.build == "ux" %}APHA reference{% else %}Reference{% endif %}
+          {% if data.build == "ux" %}Your reference{% else %}Reference{% endif %}
         </dt>
         <dd class="govuk-summary-list__value">
           {% if (query.id | appInfo('reference')) == "" %}<span class="govuk-hint">Not set</span>{%else%}{{query.id |
-          appInfo('applicationID')}}{%endif%}
+          appInfo('reference')}}{%endif%}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -169,7 +169,7 @@
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Consignee
+          Customer
         </dt>
         <dd class="govuk-summary-list__value">
           {{query.id | appInfo('consignee') or "XYZ Trading Limited"}}
@@ -197,6 +197,7 @@
     
   </div>
 
+  {% if (query.id | appInfo('status')) == 'completed' %}
   <div class="govuk-grid-column-one-half">
     <h2 class="govuk-heading-m">Your certificate</h2>
     <ul class="govuk-list  noprint">
@@ -205,7 +206,7 @@
       </li>
     </ul>
   </div>
-
+  {% endif %}
 </div>
 
 <div class="govuk-grid-row">
