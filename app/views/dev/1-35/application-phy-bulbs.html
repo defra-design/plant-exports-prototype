@@ -122,7 +122,7 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">Manage application <span style="white-space: nowrap;">{{query.id | appInfo('applicationID')}}</span></h1>
+    <h1 class="govuk-heading-xl">{% if data.build == "ux" %}Manage application{% else %}Application{% endif %} <span style="white-space: nowrap;">{{query.id | appInfo('applicationID')}}</span></h1>
   </div>
 
 </div>
@@ -213,9 +213,11 @@
 
   <div class="govuk-grid-column-two-thirds">
     <ul class="govuk-list govuk-!-margin-top-6 noprint">
-      <li>
+      <!--
+        <li>
         <a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-viewonly">View application details</a>
       </li>
+    -->
       {% if (query.id | appInfo('status')) == 'draft' %}
       <li>
         <a class="govuk-link govuk-link--no-visited-state" href="certificate/check-your-progress?certificate=ehc2849">Edit and submit this application</a>
@@ -225,15 +227,25 @@
       <li>
         <a class="govuk-link govuk-link--no-visited-state" href="application/create/reuse-ref-ssdd">Use this application for stock draw down</a>
       </li>
-      {% endif %} -->
+      {% endif %} 
       <li>
         <a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 0}}&is_group={{ query.is_group }}">Copy this application to create a new phytosanitary certificate</a>
       </li>
+      -->
       {% if (query.id | appInfo('status')) == 'submitted' or (query.id | appInfo('status')) == 'processing' or (query.id | appInfo('status')) == 'with inspector' or (query.id | appInfo('status')) == 'scheduled' or (query.id | appInfo('status')) == 'exporter action' or (query.id | appInfo('status')) == 'preparing phyto' or (query.id | appInfo('status')) == 'returned' %}
+      <li>
+        <a class="govuk-link govuk-link--no-visited-state" href="certificate/check-your-progress?certificate=ehc2849">Update this application</a>
+      </li>
+      <li>
+        <a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-viewonly">View application details</a>
+      </li>
+      <li>
+        <a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{ query.is_group }}">Copy as new application</a>
+      </li>
       <li>
         <a class="govuk-link govuk-link--no-visited-state" href="cancel">Cancel this application</a>
       </li>
-      {% endif%}
+      {% endif %}
       {% if (query.id | appInfo('status')) == 'draft' %}
       <li>
         <a class="govuk-link govuk-link--no-visited-state" href="delete">Delete this application</a>
