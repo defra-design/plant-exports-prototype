@@ -90,14 +90,14 @@
               </div>
             
             </div>
-
+            
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="addfielddetails-3" name="addfielddetails" type="radio" value="iacs" aria-controls="conditional-addfielddetails-3" aria-expanded="false"{% if data.addfielddetails == 'iacs' %} checked{% endif %}>
-              <label class="govuk-label govuk-radios__label" for="addfielddetails-3">IACS or RLR number</label>
+              <label class="govuk-label govuk-radios__label" for="addfielddetails-3">{% if data.build == "ux" %}IACS or RLR number{% else %}IACS/RLR number{% endif %}</label>
             </div>
               
             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-addfielddetails-3">
-                  
+            
               <div class="govuk-form-group">
                 <label class="govuk-label" for="navigation_iacs">Enter the 10 character IACS or RLR number, for example NF 1234 1234</label>
                 <input class="govuk-input govuk-!-width-one-third" id="navigation_iacs" name="navigation_iacs" type="text" spellcheck="false" value="{{data.navigation_iacs or ''}}">
@@ -132,6 +132,7 @@
             
             {% endif %}
 
+            {% if data.build == "ux" %}
             <details class="govuk-details" data-module="govuk-details">
               <summary class="govuk-details__summary">
                 <span class="govuk-details__summary-text">Help with providing location</span>
@@ -140,21 +141,18 @@
               <div class="govuk-details__text">
                 <h2 class="govuk-heading-s">How to find one of these location references</h2>
                 <ul class="govuk-list govuk-list--bullet">
-                  {% if data.build == "ux" %}
                   <li>Drop a pin on Google Maps by going to <a href="https://maps.google.co.uk" rel="noreferrer noopener" target="_blank">maps.google.co.uk (opens in new tab)</a>. Find the location you want and click or press on the exact point of the map where you want to drop a pin. The address or location will pop up at the bottom of the screen. You can then copy the web address and enter it as the location.</li>
                   <li>You can find the grid reference number using the ‘where am I’ tool on MAGIC at <a href="https://magic.defra.gov.uk" rel="noreferrer noopener" target="_blank">magic.defra.gov.uk (opens in new tab)</a>.</li>
                   <li>Not all land has an IACS number. If you rent your land, your landlord may be able to provide your IACS number.</li>
                   <li>To find a rural land register (RLR) number, contact the rural payments agency on <a href="mailto:ruralpayments@defra.gov.uk">ruralpayments@defra.gov.uk</a> or 03000 200 301.</li>
                   <li>You can find a what3words address by following the instructions at <a href="https://what3words.com" rel="noreferrer noopener" target="_blank">what3words.com (opens in new tab)</a>.</li>
-                  {% else %}
-                  <li>You can find the grid reference number using the ‘where am I’ tool on MAGIC at <a href="https://magic.defra.gov.uk" rel="noreferrer noopener" target="_blank">magic.defra.gov.uk (opens in new tab)</a>.</li>
-                  <li>Not all land has an IACS number. If you rent your land, your landlord may be able to provide your IACS number.</li>
-                  <li>To find a rural land register (RLR) number, contact the rural payments agency on <a href="mailto:ruralpayments@defra.gov.uk">ruralpayments@defra.gov.uk</a> or 03000 200 301.</li>
-                  {% endif %}
                 </ul>
               </div>
             
             </details>
+            {% else %}
+            <br>
+            {% endif %}
           </div>
       
         </fieldset>      
