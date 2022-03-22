@@ -1,7 +1,12 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  Check your answers before sending your application - Phytosanitary certificate - {{serviceName}} - GOV.UK
+{% if data.build == "ux" %}
+Check your answers before sending your application - Phytosanitary certificate - {{serviceName}} - GOV.UK
+{% else %}
+Review Answers - Exports application - GOV.UK
+{% endif %}
+
 {% endblock %}
 
 {% block beforeContent%}
@@ -17,11 +22,18 @@
 
     <form action="{% if data.journey == 'coc' %}../submit/submit-date-coc{% else %}../submit/submit-date{% endif %}" method="post">
       <h1 class="govuk-heading-xl">Review your answers</h1>
-
+      {% if data.build == "ux" %}
       <div class="govuk-inset-text">
         Your application is now ready to be submitted.<br><br>
         Please check that the answers you've provided are correct.
       </div>
+      {% else %}
+      <div class="govuk-inset-text govuk-!-font-weight-bold">
+        Your application is now ready to be submitted.<br><br>
+        Please check that the answers you've provided are correct.
+      </div>
+      {% endif %}
+
       
       <h2 class="govuk-heading-m">Application summary</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
@@ -140,10 +152,10 @@
             <th class="govuk-table__header govuk-summary-list__key" scope="col">Description</th>
             <th class="govuk-table__header" scope="col">Country of origin</th>
             <th class="govuk-table__header" scope="col">Quantity</th>
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions<span class="govuk-visually-hidden">Actions</span></th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
           </tr>
         </thead>
-        <tbody class="govuk-table__body">
+        <tbody class="govuk-table__body" style="text-align:right;">
           {% for commodity in data.commodities %}
             {% block summaryBulb %}{% include "../modules/_summary-bulbs-cya.html" %}{% endblock %}
           {% endfor %}
@@ -179,15 +191,18 @@
             <th class="govuk-table__header" scope="col">Description</th>
             <th class="govuk-table__header" scope="col">Stock number</th>
             <th class="govuk-table__header" scope="col">Quantity</th>
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Action</th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">
           {% for commodity in data.commodities %}
-            {% block summaryPotatoes %}{% include "../modules/_summary-potatoes.html" %}{% endblock %}
+            {% block summaryPotatoes %}{% include "../modules/_summary-potatoes-check-answers.html" %}{% endblock %}
           {% endfor %}
         </tbody>
       </table>
+
+      <p class="govuk-body"><a href="#">Add more</a></p>
+
       {% elseif data.commodity == "seeds" %}
       <h2 class="govuk-heading-m">Your consignment</h2>
 
@@ -198,7 +213,7 @@
             <th class="govuk-table__header" scope="col">Lot reference</th>
             <th class="govuk-table__header" scope="col">Sample reference</th>
             <th class="govuk-table__header" scope="col">Quantity</th>
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Action</th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">
@@ -217,7 +232,7 @@
             <th class="govuk-table__header" scope="col">Variety or type</th>
             <th class="govuk-table__header" scope="col">Class</th>
             <th class="govuk-table__header" scope="col">Total net weight</th>
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Action</th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">
@@ -235,7 +250,7 @@
             <th class="govuk-table__header" scope="col">{% if data.commodity == "plant products"%}Primary country where grown{% else %}Country of origin{% endif %}</th>
             {% endif %}
             <th class="govuk-table__header" scope="col">Quantity</th>
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Action</th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">
@@ -267,8 +282,12 @@
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Address</dt>
+          {% if data.build == "ux" %}
           <dd class="govuk-summary-list__value">Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH</dd>
-          <dd class="govuk-summary-list__actions">
+          {% else %}
+          <dd class="govuk-summary-list__value">{{ "Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH" | upper}}</dd>
+          {% endif %}
+           <dd class="govuk-summary-list__actions">
             <a class="govuk-link" href="inspection-addresses?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">address</span></a>
           </dd>
         </div>
@@ -434,7 +453,15 @@
         {% endif %}
 
         <div class="govuk-summary-list__row">
+          {% if data.build == "ux" %}
           <dt class="govuk-summary-list__key">How will the consignment be transported?</dt>
+          {% else %}
+            {% if data.commodity == "potatoes" %}
+            <dt class="govuk-summary-list__key">Select Mode of Transport </dt>
+            {% else %}
+            <dt class="govuk-summary-list__key">How will the consignment be transported?</dt>
+            {% endif %}
+          {% endif %}
           <dd class="govuk-summary-list__value">{{data.transport_method or "Air"}}</dd>
           <dd class="govuk-summary-list__actions">
             <a class="govuk-link" href="shipping?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">how the consignment will be transported</span></a>
@@ -475,6 +502,7 @@
           <dt class="govuk-summary-list__key">Name of the consignee</dt>
           {% endif %}
 
+
           <dd class="govuk-summary-list__value">{{data.consignee or 'Consignee name'}}</dd>
           <dd class="govuk-summary-list__actions">
             <a class="govuk-link" href="destination-consignee?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">who will receive this consignment</span></a>
@@ -482,13 +510,17 @@
         </div>
 
         <div class="govuk-summary-list__row">
+          {% if data.build == "ux" %}
           <dt class="govuk-summary-list__key">Address of the consignee</dt>
+          {% else %}
+          <dt class="govuk-summary-list__key">Consignee Address</dt>
+          {% endif %}
           <dd class="govuk-summary-list__value">{{data.consignee_address or 'XYZ China Imports Ltd, Kaiser Centre, Phase III, 9-11 Hok Yuen St., Kowloon, China'}}</dd>
           <dd class="govuk-summary-list__actions">
             <a class="govuk-link" href="destination-consignee?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">the address of the consignee</span></a>
           </dd>
         </div>
-
+        {% if data.build == "ux" %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Import permit number</dt>
           <dd class="govuk-summary-list__value">{{data.import_permit_number or '2244668800'}}</dd>
@@ -496,7 +528,8 @@
             <a class="govuk-link" href="destination-consignee?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">the import permit number</span></a>
           </dd>
         </div>
-
+        {% else %}
+        {% endif %}
       </dl>
 
       <h2 class="govuk-heading-m">Supporting documents</h2>

@@ -1,6 +1,10 @@
 {% extends "layout.html" %}
 {% block pageTitle %}
+{% if data.build == "ux" %}
 You have successfully submitted your application - {{serviceName}} - GOV.UK
+{% else %}
+Confirmation - Exports application - GOV.UK
+{% endif %}
 {% endblock %}
 {% block beforeContent%}
 {{super()}}
@@ -17,7 +21,11 @@ You have successfully submitted your application - {{serviceName}} - GOV.UK
 
           <div class="govuk-panel__body">
             The APHA reference is<br>
-            <strong class="bold" id="applicationFormId" data-qa-id="TextDisplay-CVEDReferenceNumber">1721 14800 4809</strong>
+            {% if data.build == "ux" %}
+            <strong class="bold" id="applicationFormId">1721 14800 4809</strong>
+            {% else %}
+            <strong class="bold" id="applicationFormId">1721 1480 04809</strong>
+            {% endif %}
           </div>
         </div>
         <h2 class="govuk-heading-m">What happens next</h2>
@@ -43,9 +51,14 @@ You have successfully submitted your application - {{serviceName}} - GOV.UK
         </ol>
 
         {# need to check conditionals here: ONLY display for phyto #}
+        {% if data.build == "ux" %}
         {% if (data.reuse !=  "yes") %}
         {% include "../modules/_confirmation_applyforcoc.html" %}
         {% endif %} 
+
+        {% else %}
+
+        {% endif %}
     
 
         <p class="govuk-body govuk-!-margin-bottom-2">We'll only contact you if there is a problem with your application.</p>
@@ -57,52 +70,20 @@ You have successfully submitted your application - {{serviceName}} - GOV.UK
         }) }}
 
 
-          <!-- 
-        <div class="govuk-form-group">
-          <fieldset class="govuk-fieldset">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-!-margin-bottom-4">
-              <h1 class="govuk-fieldset__heading">
-                What do you want to do?
-              </h1>
-            </legend>
-            <div class="govuk-radios" data-module="govuk-radios">
-              <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="copy_coc" name="what_do_you_want_to_do" type="radio" value="copy-coc~../../copy-as-coc?id=0">
-                <label class="govuk-label govuk-radios__label" for="copy_coc">
-                  Use this application to apply for a certificate of conformity
-                </label>
-              </div>
-
-              <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="view" name="what_do_you_want_to_do" type="radio" value="view~../../dashboard-one?filter_status=&has_filter=&date_range=&filter_name=&show_applications_by=me">
-                <label class="govuk-label govuk-radios__label" for="view">
-                  View your applications
-                </label>
-              </div>
-            </div>
-          </fieldset>
-        </div> -->
-
-
-
-
-        <!--{% if data.route == "new" %}
-            {{ govukButton({
-              text: "View your applications",
-              href: "../../dashboard-one?filter_status=&has_filter=&date_range=&filter_name=&show_applications_by=me"
-            }) }}
-        {% else %}
-          {{ govukButton({
-            text: "View your applications",
-            href: "../../dashboard?filter_status=&has_filter=&date_range=&filter_name=&show_applications_by=me"
-          }) }}
-        {% endif %}-->
-
+        {% if data.build == "ux" %}
         <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_self">what fees you will pay</a> for this application.</p>
+        {% else %}
+        <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_self">what fees you need to pay </a> for this application.</p>
+        {% endif %}
 
         <h2 class="govuk-heading-m govuk-!-padding-top-4">If you need help</h2>
           <p class="govuk-body">
-            Contact us quoting your APHA reference <strong id="applicationFormId2">1721 14800 4809</strong>:
+            Contact us quoting your APHA reference 
+            {% if data.build == "ux" %}
+            <strong id="applicationFormId2">1721 14800 4809</strong>:
+            {% else %}
+            <strong id="applicationFormId2">1721 1480 04809</strong>:
+            {% endif %}
           </p>
         <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-8">
           <li><span id="phoneNumber">0300 1000 313</span>, Monday to Friday 8.30am to 5pm</li>

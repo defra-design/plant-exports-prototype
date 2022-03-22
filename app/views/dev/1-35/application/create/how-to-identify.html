@@ -1,7 +1,11 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
+  {% if data.build == "ux" %}
   Add {% if data.pheats != 1 %}{% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your {% if data.reforwarding %}re-forwarding{% endif %} consignment - Phytosanitary certificate - {{serviceName}} - GOV.UK
+  {% else %}
+  Plants Details - Exports application - GOV.UK
+  {% endif %}
 {% endblock %}
 
 {% block beforeContent%}
@@ -58,7 +62,7 @@
                 </div>
                 <div class="govuk-form-group">
                   <label class="govuk-label" for="commodity_host_species">
-                    Species
+                    Species{% if data.build != "ux" %} (optional){% endif %}
                   </label>
                   <input class="govuk-input govuk-input--width-20" id="commodity_host_species" name="commodity_host_species" type="text" value="{% if query.has_commodity %}{{query.species}}{%endif%}">
                 </div>
@@ -121,6 +125,7 @@
           </div>
         </div>
 
+        <!--
         {% if data.commodity == "bulbs" and data.countrySelect[0] == "United States" %}
         <div class="govuk-form-group govuk-!-margin-top-6">
           <label class="govuk-label" for="stock_number">
@@ -129,13 +134,15 @@
           <span id="quantity-hint" class="govuk-hint">This is the number of the stock that was inspected</span>
           <input class="govuk-input govuk-!-width-one-half" id="stock_number" name="stock_number" type="text" spellcheck="false">
         </div>
-        <div class="govuk-form-group">
+        
+          <div class="govuk-form-group">
           <label class="govuk-label" for="lot_no">
             Lot number
           </label>
           <span id="quantity-hint" class="govuk-hint"></span>
           <input class="govuk-input govuk-!-width-one-half" id="lot_no" name="lot_no" type="text" spellcheck="false">
         </div>
+         -->
         {% endif %}
 
       <!-- BULBS UX -->
@@ -212,17 +219,24 @@
 
        <!-- PLANTS AND FRESH PRODUCE --> 
       {% if data.commodity == "plants" %}
+      {% if data.build == "ux" %}
+        {% set class="" %}
+        {% set hint="If you plan to apply under PHEATS, you must select 'Produce (fruit, flowers or vegetables)' " %}
+        {% else %}
+        {% set class="govuk-!-font-weight-bold" %}
+        {% set hint="" %}
+        {% endif %}
       {{ govukRadios({
         idPrefix: "commodity_type",
         name: "commodity_type",
         fieldset: {
           legend: {
             text: "Commodity type",
-            classes: ""
+            classes: class
           }
         },
         hint: {
-          text: "If you plan to apply under PHEATS, you must select 'Produce (fruit, flowers or vegetables)'"
+          text: hint
         },
         items: [
           {
@@ -260,7 +274,7 @@
     </div>
     {% endif %}
 
-    {% if data.commodity == "biological control agents and clay" or data.commodity == "plants" or data.commodity == "seeds" %}
+    {% if data.commodity == "biological control agents and clay" or data.commodity == "seeds" %}
     {% if data.pheats != 1 %}
     <div class="govuk-form-group govuk-!-margin-top-4">
       <label class="govuk-label" for="commodity_lot">
@@ -287,8 +301,12 @@
 
     <div class="govuk-form-group">
       <fieldset class="govuk-fieldset" aria-describedby="quantity-hint">
-      <legend class="govuk-fieldset__legend ">
+      <legend class="govuk-fieldset__legend">
+        {% if data.build == "ux" %}
         <h1 class="govuk-body govuk-!-margin-bottom-0">
+        {% else %}
+        <h1 class="govuk-body govuk-!-font-weight-bold  govuk-!-margin-bottom-0">
+        {% endif %}
           Quantity and unit of measurement
         </h1>
       </legend>
@@ -298,6 +316,7 @@
       <input class="govuk-input govuk-input--width-5" id="quantity" name="quantity" type="text" aria-label="Quantity or weight per package" aria-describedby="quantity">
 
       <select name="units" id="units" class="govuk-select govuk-!-margin-left-1" aria-label="Units of measurement">
+        <option value="Grams">Grams</option>
         <option value="Grams">Grams</option>
         <option value="Kilograms" selected="selected">Kilograms</option>
         <option value="Litres">Litres</option>
@@ -336,7 +355,11 @@
             Distinguishing marks (optional)
           </label>
           <span id="distinguishing-mark-hint" class="govuk-hint">
+            {% if data.build == "ux" %}
             For example, a container number or your own identification reference for this product
+            {% else %}
+            For example, container numbers, lot numbers 
+            {% endif %}
           </span>
           <input class="govuk-input govuk-input--width-20" id="distinguishing-marks" name="distinguishing_marks" type="text" aria-describedby="distinguishing-mark-hint">
         </div>

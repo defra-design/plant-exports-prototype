@@ -1,7 +1,11 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
+  {% if data.build == "ux" %}
   Your commodities - Phytosanitary certificate - {{serviceName}} - GOV.UK
+  {% else %}
+  List Commodity Details - Exports application - GOV.UK
+  {% endif %}
 {% endblock %}
 
 {% block beforeContent%}
@@ -16,8 +20,13 @@
   <div class="govuk-grid-column-three-quarters">
 
     {% if data.upload == 1 %}
+    {% if data.build == "ux" %}
     <div class="app-alert app-alert--info">
       <p class="govuk-body">File has been uploaded successfully</p>
+      {% else %}
+      <div class="app-alert app-alert--success">
+      <p class="govuk-body"><strong>1 APHA_phytosanitary_certificate_csv_template - PLANTS 15112021.csv</strong> with 4 commodity records uploaded successfully</p>
+      {% endif %}
     </div>
     {% endif %}
     
@@ -25,13 +34,28 @@
 
     <table class="govuk-table govuk-!-margin-bottom-9">
       <thead class="govuk-table__head">
-        {% if data.commodity == "potatoes" or data.commodity == "bulbs" %}
+        {% if data.commodity == "bulbs" %}
         <tr class="govuk-table__row">
           <th class="govuk-table__header" scope="col">
             Description
           </th>
           <th class="govuk-table__header" scope="col">
             Country of origin
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Quantity
+          </th>
+          <th class="govuk-table__header" style="text-align:right;" scope="col">
+            Actions
+          </th>
+        </tr>
+        {% elseif data.commodity == "potatoes" %}
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">
+            Description
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Stock number
           </th>
           <th class="govuk-table__header" scope="col">
             Quantity
@@ -52,7 +76,7 @@
             Quantity
           </th>
           <th class="govuk-table__header" style="text-align:right;" scope="col">
-            Action
+            Actions
           </th>
         </tr>
         {% elseif data.commodity == "plant products" %}
@@ -70,7 +94,7 @@
             Quantity
           </th>
           <th class="govuk-table__header" style="text-align:right;" scope="col">
-            Action
+            Actions
           </th>
         </tr>
         {% elseif data.commodity == "seeds" %}
@@ -91,7 +115,7 @@
             Quantity
           </th>
           <th class="govuk-table__header" style="text-align:right;" scope="col">
-            Action
+            Actions
           </th>
         </tr>
         {% else %}
@@ -106,7 +130,7 @@
             Unique ID
           </th>
           <th class="govuk-table__header" style="text-align:right;" scope="col">
-            Action
+            Actions
           </th>
         </tr>
         {% endif %}
@@ -136,7 +160,9 @@
             {% elseif data.commodity == "potatoes" %}
               <!-- POTATOES -->
               {% set commodity_page = "commodity-page" %}
-              {% block summaryPotatoes %}{% include "../modules/_summary-plant-products-check-answers" %}{% endblock %}
+              {% block summaryPotatoes %}
+              {% include "../modules/_summary-potatoes-check-answers.html" %}
+              {% endblock %}
               {% else %}
             <!-- OTHER COMMODITES -->
               {% set commodity_page = "commodity-page" %}
@@ -213,21 +239,25 @@
       <div class="govuk-form-group govuk-!-margin-bottom-6">
         <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
       </div>
-
+      
+      {% if data.build == "ux" %}
       {% block continueLater %}
       {% include "../modules/_save-continue-later.html" %}
       {% endblock %}
+
+      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+      <ul class="govuk-list govuk-list">
+        <li>
+          <a href="upload-validation-errors-summary-with-details" class="govuk-link govuk-link-no-visited-state">Error summary</a>
+        </li>
+      </ul>
+      {% else %}
+      
+      {% endif %}
+
     </form>
   
-    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-      
 
-    <ul class="govuk-list govuk-list">
-      <li>
-        <a href="upload-validation-errors-summary-with-details" class="govuk-link govuk-link-no-visited-state">Error summary</a>
-
-      </li>
-    </ul>
 
 
   </div>

@@ -28,8 +28,12 @@
     </div>
     {% endif %}
 
+		{% if data.build == "ux" %}
 		{% if data.reference_num %}<span class="govuk-caption-xl">{{data.reference_num}}</span>{% endif%}
 		<h1 class="govuk-heading-xl">Arrange soil sampling for {% if data.commodity == "potatoes" %}ware potatoes{% else %}{{data.commodity or "crops"}}{% endif %}</h1>
+		{% else %}
+		<h1 class="govuk-heading-xl">Arrange soil sampling</h1>
+		{% endif %}
 		<p class="govuk-hint govuk-!-margin-bottom-7">Complete these details to arrange a soil sampling inspection</p>
 		<ol class="app-task-list">
 			<li>
@@ -74,7 +78,10 @@
             <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="check-your-answers">Not started</strong>
             {% else %}
             <span class="app-task-list__task-name">Check your answers and submit your application</span>
+						{% if data.build == "ux" %}
             <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="check-your-answers">Cannot start yet</strong>
+						{% else %}
+						{% endif %}
             {% endif %}
           </li>
 	      </ul>

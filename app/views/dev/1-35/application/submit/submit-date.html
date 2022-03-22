@@ -1,7 +1,12 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  When do you need the certificate? - Phytosanitary certificate - {{serviceName}} - GOV.UK
+{% if data.build == "ux" %}
+When do you need the certificate? - Phytosanitary certificate - {{serviceName}} - GOV.UK
+{% else %}
+Date Needed - Exports application - GOV.UK
+{% endif %}
+  
 {% endblock %}
 
 {% block beforeContent%}
@@ -110,8 +115,13 @@
       </fieldset>
       {% endif %}
 
+
       <div class="govuk-form-group">
+        {% if data.build == "ux" %}
         <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+        {% else %}
+        <input class="govuk-button" type="submit" name="saveAndContinue" value="Continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+        {% endif %}  
       </div>
 
     </form>
