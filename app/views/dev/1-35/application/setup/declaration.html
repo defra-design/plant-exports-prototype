@@ -77,7 +77,15 @@ Confirm regulations - Exports application - GOV.UK
         {% else %}
         export
         {% endif %}
-        {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %} to 
+
+        {% if data.build == "ux" %}
+        {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %} 
+        {% else %}
+        {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'processed plant products'}}{% endif %} 
+        {% endif %}
+        
+        
+        to 
         {% if (data.countrySelect[0] == "United Kingdom (Northern Ireland)") %}
         Northern Ireland
         {% else %}
@@ -105,7 +113,16 @@ Confirm regulations - Exports application - GOV.UK
       {% else %}
       export
       {% endif %}
-      {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %} to
+
+      {% if data.build == "ux" %}
+      {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %} 
+      {% else %}
+      {% if data.commodity == "plants" %}plants and fresh produce
+      {% elif data.commodity == "plant products" %}processed plant products
+      {% else %}{{data.commodity or 'processed plant products'}}{% endif %} 
+      {% endif %}
+
+      to
       {% if (data.countrySelect[0] == "United Kingdom (Northern Ireland)") %}
       Northern Ireland
       {% else %}
@@ -127,9 +144,9 @@ Confirm regulations - Exports application - GOV.UK
     </ul>
     {% if data.commodity == "plant products" %}
     {% if data.pheats == 1 %}
-    <p class="govuk-body" lang="en">You'll need to do your own phytosanitary inspection. You'll be told where to send any samples at the end of this application.</p>
+    <p class="govuk-body" lang="en">You’ll need to do your own phytosanitary inspection. You’ll be told where to send any samples at the end of this application.</p>
     {% else %}
-    <p class="govuk-body" lang="en">You'll need to send a sample of your commodity for inspection before we can issue a phytosanitary certificate. You'll see the address of where to send your sample at the end of this application.</p>
+    <p class="govuk-body" lang="en">You’ll need to send a sample of your commodity for inspection before we can issue a phytosanitary certificate. You’ll see the address of where to send your sample at the end of this application.</p>
     {% endif %}
     {% endif %}
     {% if data.commodity == "biological control agents and clay" or data.commodity == "plants" or data.commodity == "bulbs" or data.commodity == "potatoes" or data.commodity == "seeds" %}
