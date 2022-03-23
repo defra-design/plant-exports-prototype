@@ -1,16 +1,32 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-Arrange a growing season inspection - Growing season inspection - {{serviceName}} - GOV.UK
+  {% if data.build == "ux" %}
+    Your application - Growing season inspection - {{serviceName}} - GOV.UK
+  {% else %}
+  Arrange a growing season inspection - Growing season inspection - {{serviceName}} - GOV.UK
+  {% endif %}
 {% endblock %}
 
 {% block beforeContent%}
 {{super()}}
 {% include "../modules/_account-banner.html" %}
-<a href="../../../dashboard" class="govuk-back-link">Back to applications</a>
+<a href="../../../dashboard" class="govuk-back-link">Return to your applications</a>
 {% endblock %}
 
 {% block content %}
+{% if data.build == "ux" %}
+{# do nothing #}
+{% else %}
+{# overwrite tag style to replicate production #}
+<style>
+  .govuk-tag--grey {
+  background-color: white;
+  border: solid 1px #cbcbcb;
+  }
+</style>
+{% endif %}
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     {% if data.reference_num %}<span class="govuk-caption-xl">{{data.reference_num}}</span>{% endif%}
@@ -82,7 +98,7 @@ Arrange a growing season inspection - Growing season inspection - {{serviceName}
                   Check and submit your application
                 </a>
               </span>
-              <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="submit-pay-status">Not started</strong>
+           <!--   <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="submit-pay-status">Not started</strong> -->
             </span>
           </li>
         </ul>
