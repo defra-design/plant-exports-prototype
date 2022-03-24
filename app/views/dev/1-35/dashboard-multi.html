@@ -240,32 +240,32 @@ Your applications - {{serviceName}} - GOV.UK
                 </legend>
                 <div class="govuk-radios govuk-radios--small govuk-radios--conditional" data-module="govuk-radios">
                   <div class="govuk-radios__item">
-                    <input class="govuk-radios__input" id="date_range" name="date_range" type="radio" value="any" {%if (data.date_range and data.date_range=="any" ) or not data.date_range %}checked="checked" {%endif%}>
+                    <input class="govuk-radios__input" id="date_range" name="date_range" type="radio" value="any" {%if (data.date_range and data.date_range=="any" ) or not data.date_range %}checked="checked" {% endif %}>
                     <label class="govuk-label govuk-radios__label" for="date_range">
                       Any
                     </label>
                   </div>
                   <div class="govuk-radios__item">
-                    <input class="govuk-radios__input" id="date_range-1" name="date_range" type="radio" value="today" {%if data.date_range and data.date_range=="today" %}checked="checked" {%endif%}>
+                    <input class="govuk-radios__input" id="date_range-1" name="date_range" type="radio" value="today" {%if data.date_range and data.date_range=="today" %}checked="checked" {% endif %}>
                     <label class="govuk-label govuk-radios__label" for="date_range-1">
                       Today
                     </label>
                   </div>
                   <div class="govuk-radios__item">
-                    <input class="govuk-radios__input" id="date_range-3" name="date_range" type="radio" value="tomorrow" {%if data.date_range and data.date_range=="tomorrow" %}checked="checked" {%endif%}>
+                    <input class="govuk-radios__input" id="date_range-3" name="date_range" type="radio" value="tomorrow" {%if data.date_range and data.date_range=="tomorrow" %}checked="checked" {% endif %}>
                     <label class="govuk-label govuk-radios__label" for="date_range-3">
                       Tomorrow
                     </label>
                   </div>
                   <div class="govuk-radios__item">
-                    <input class="govuk-radios__input" id="date_range-2" name="date_range" type="radio" value="in the next 7 days" {%if data.date_range and data.date_range=="in next 7 days" %}checked="checked" {%endif%}>
+                    <input class="govuk-radios__input" id="date_range-2" name="date_range" type="radio" value="in the next 7 days" {%if data.date_range and data.date_range=="in next 7 days" %}checked="checked" {% endif %}>
                     <label class="govuk-label govuk-radios__label" for="date_range-2">
                       Next 7 days
                     </label>
                   </div>
 
                   <div class="govuk-radios__item">
-                    <input class="govuk-radios__input" id="date_range-4" name="date_range" type="radio" value="custom" {%if data.date_range and data.date_range=="custom" %}checked="checked" {%endif%} data-aria-controls="conditional-how-contacted-conditional-2">
+                    <input class="govuk-radios__input" id="date_range-4" name="date_range" type="radio" value="custom" {%if data.date_range and data.date_range=="custom" %}checked="checked" {% endif %} data-aria-controls="conditional-how-contacted-conditional-2">
                     <label class="govuk-label govuk-radios__label" for="date_range-4">
                       Custom date range
                     </label>
@@ -364,14 +364,14 @@ Your applications - {{serviceName}} - GOV.UK
                 <div class="govuk-radios govuk-radios--small govuk-radios--conditional" data-module="govuk-radios">
                   <div class="govuk-radios__item">
                     <input class="govuk-radios__input" id="show_applications_by_me" name="show_applications_by" type="radio" value="me" {%if (data.show_applications_by and data.show_applications_by=="me" ) or not data.show_applications_by %}checked="checked"
-                      {%endif%}>
+                      {% endif %}>
                     <label class="govuk-label govuk-radios__label" for="show_applications_by_me">
                       Me
                     </label>
                   </div>
                   <div class="govuk-radios__item">
                     <input class="govuk-radios__input" id="show_applications_by_everyone" name="show_applications_by" type="radio" value="everyone" {%if data.show_applications_by and data.show_applications_by=="everyone" %}checked="checked"
-                      {%endif%} data-aria-controls="conditional-how-contacted-conditional-3">
+                      {% endif %} data-aria-controls="conditional-how-contacted-conditional-3">
                     <label class="govuk-label govuk-radios__label" for="show_applications_by_everyone">
                       Someone else
                     </label>
@@ -380,11 +380,11 @@ Your applications - {{serviceName}} - GOV.UK
                     <!-- <label class="govuk-label" for="filter_name">Filter by user name</label> -->
                     {% set logged_in_as = "Ann Cooper" %}
                     <select class="govuk-select govuk-!-width-full" id="filter_name" name="filter_name">
-                      <option value="All users" {% if not data.filter_name or data.filter_name=="All users" %}selected{%endif%}>All users</option>
+                      <option value="All users" {% if not data.filter_name or data.filter_name=="All users" %}selected{% endif %}>All users</option>
                       {% set list = [] %}
-                      {% for cert in data.applications %}
+                      {% for cert in data.applicationsv2 %}
                       {% if not cert.name in list %}
-                      <option value="{{cert.name}}" {% if cert.name==data.filter_name %}selected{%endif%}>{{cert.name}}{% if logged_in_as == cert.name %} <strong>(you)</strong>{%endif%}</option>
+                      <option value="{{cert.name}}" {% if cert.name==data.filter_name %}selected{% endif %}>{{cert.name}}{% if logged_in_as == cert.name %} <strong>(you)</strong>{% endif %}</option>
                       {{list.push(cert.name)}}
                       {% endif %}
 
@@ -461,7 +461,7 @@ Your applications - {{serviceName}} - GOV.UK
           </thead>
           {% if data.route != "new" %}
           <tbody>
-            {% for app in data.applications %}
+            {% for app in data.applicationsv2 %}
               {% if (data.show_applications_by == "me" and app.name==logged_in_as) or (data.show_applications_by=="me" or not data.show_applications_by) or ((app.name | upper) in (data.filter_name | upper) or data.filter_name == "All users") %}
                 {% if (data.has_filter != "yes" or data.filter_status == "any") or app.status in data.filter_status %}
                   {%
@@ -502,7 +502,7 @@ Your applications - {{serviceName}} - GOV.UK
                             {% else %}
                             <a href="application?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
                             {% endif %}
-                              <span class="table-heading table-heading-full" aria-hidden="true">Application reference</span> {% if app.reference %}{{app.reference}}{%else%}{{app.applicationID}}{%endif%}
+                              <span class="table-heading table-heading-full" aria-hidden="true">Application reference</span> {% if app.reference %}{{app.reference}}{% else %}{{app.applicationID}}{% endif %}
                             </a>
                             <br>
                           </th>

@@ -15,60 +15,78 @@
 {% endblock%}
 
 {% block content %}
-
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">
-      Do you want to select this inspection address?
-    </h1>
 
-    <table class="govuk-table govuk-!-margin-bottom-9">
+  <div class="govuk-grid-column-two-thirds">
+    {% if data.build == "ux" %}
+    <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+      
+      <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">Important</h2>
+      </div>
+
+      <div class="govuk-notification-banner__content">
+        <p class="govuk-notification-banner__heading">This page is not part of the UX build of the service. <a class="govuk-notification-banner__link" href="../../config?change=yes&return_url=/{{data.version}}/application/create/confirm-inspection-address">Switch to the development build</a> to view this page.</p>
+      </div>
+
+    </div>
+    {% else %}
+    <h1 class="govuk-heading-xl">Do you want to select this inspection address?</h1>
+
+    <table class="govuk-table">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
-          <th class="govuk-table__header" scope="col">
-            Address
-          </th>
+          <th class="govuk-table__header" scope="col">Address</th>
         </tr>
       </thead>
       <tbody class="govuk-table__body">
         <tr class="govuk-table__row">
           <td class="govuk-table__cell">
-            {{ "Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH" | upper }}
+            {% if query.address == "0" %}
+            Top Lane, Peterborough, Cambridgeshire, PO5 7HY
+            {% elif query.address == "1" %}
+            Shoggins Farm, Turnip Row, Mordor, The Shire, ZI99 7YH
+            {% elif query.address == "2" %}
+            Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH
+            {% elif query.address == "3" %}
+            Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ
+            {% elif query.address == "4" %}
+            Goatacre Cricket Club, Hill Lane, Goatacre, Wiltshire, SN15 6YG
+            {% else %}
+            Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH
+            {% endif %}
           </td>
         </tr>
       </tbody>
     </table>
 
     <form method="post" novalidate>
+
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">
+          
           <div class="govuk-radios" data-module="govuk-radios">
+            
             <div class="govuk-radios__item">
-              {% if data.pheats_check == "yes" %}
-              <input class="govuk-radios__input" id="application_type_cancel" name="confirm_address" type="radio" value="yes~task-list">
-              {% elseif data.journey == "coc" %}
-              <input class="govuk-radios__input" id="application_type_cancel" name="confirm_address" type="radio" value="yes~contact-details-simple-coc">
-              {% else %}
-              <input class="govuk-radios__input" id="application_type_cancel" name="confirm_address" type="radio" value="yes~contact-details-simple-short">
-              {% endif %}
-              <label class="govuk-label govuk-radios__label" for="application_type_cancel">
-                Yes, select this inspection address
-              </label>
+              <input class="govuk-radios__input" id="confirm_address_yes" name="confirm_address" type="radio" value="yes~{% if data.pheats_check == 'yes' %}task-list{% elif data.journey == 'coc' %}contact-details-simple-coc{% else %}contact-details-simple-short{% endif %}">
+              <label class="govuk-label govuk-radios__label" for="confirm_address_yes">Yes, select this inspection address</label>
             </div>
+
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="application_type_return" name="confirm_address" type="radio" value="no~inspection-addresses">
-              <label class="govuk-label govuk-radios__label" for="application_type_return">
-                No, don't select this inspection address
-              </label>
+              <input class="govuk-radios__input" id="confirm_address_no" name="confirm_address" type="radio" value="no~{% if data.pheats_check == 'yes' %}pheats-inspection-addresses{% else %}inspection-addresses{% endif %}">
+              <label class="govuk-label govuk-radios__label" for="confirm_address_no">No, don't select this inspection address</label>
             </div>
+
           </div>
+
         </fieldset>
       </div>
-      <button class="govuk-button govuk-!-margin-top-6 govuk-!-margin-bottom-9" data-module="govuk-button">
-        Continue
-      </button>
 
+      <button class="govuk-button govuk-!-margin-bottom-9" type="submit" data-module="govuk-button">Continue</button>
     </form>
+    {% endif %}
+
   </div>
+
 </div>
 {% endblock %}

@@ -19,13 +19,11 @@
 
   {% if data.build == "ux" %}
   <div class="govuk-grid-column-two-thirds">
-    
-    {% else %}
-    <div class="govuk-grid-column-three-quarters">
-
+  {% else %}
+  <div class="govuk-grid-column-three-quarters">
   {% endif %}
 
-    <form method="post" class="form">
+    <form action="{{query.return_url or 'inspection-addresses'}}" method="post">
 
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset" aria-describedby="pheats-hint">
@@ -46,16 +44,15 @@
           </div>
           {% endif %}
 
-
           <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
             
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="pheats-check-yes" name="pheats_check" type="radio" value="yes~inspection-addresses" data-aria-controls="conditional-how-contacted-conditional">
+              <input class="govuk-radios__input" id="pheats-check-yes" name="pheats_check" type="radio" value="yes~pheats-inspection-addresses" data-aria-controls="conditional-how-contacted-conditional" {% if data.pheats_check == 'yes' %}checked{% endif %}>
               <label class="govuk-label govuk-radios__label" for="pheats-check-yes">Yes, I want to apply under PHEATS</label>
             </div>
 
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="pheats-check-no" name="pheats_check" type="radio" value="no~inspection-addresses" data-aria-controls="conditional-how-contacted-conditional">
+              <input class="govuk-radios__input" id="pheats-check-no" name="pheats_check" type="radio" value="no~inspection-addresses" data-aria-controls="conditional-how-contacted-conditional" {% if data.pheats_check == 'no' %}checked{% endif %}>
               <label class="govuk-label govuk-radios__label" for="pheats-check-no">No, I don't want to apply under PHEATS</label>
             </div>
 
@@ -70,7 +67,6 @@
       }) }}
 
       {% include "../modules/_save-continue-later.html" %}
-
     </form>
 
   </div>

@@ -1,6 +1,10 @@
 // There might be a better way to use this data.
+
+// Data sources (located in the 'app/data' root folder)
 var applications = require('./data/applications.json')
+var applicationsv2 = require('./data/applications-v2.json')
 var sample = require('./data/sample.json')
+
 module.exports = function (env) {
   /**
    * Instantiate object used to store the methods registered as a
@@ -10,14 +14,35 @@ module.exports = function (env) {
    */
   var filters = {}
 
-
-  // get application information
+  // Get application information
+  // All prototype versions up to v1-34
   filters.appInfo = function (id, key) {
+    
     var app = {};
+    
     applications.forEach(function (item) {
+      
       if (item.index == id) {
         app = item;
       }
+
+    })
+
+    return app[key];
+  }
+
+  // Get application information (v2)
+  // Prototype versions 1-35 onward
+  filters.appInformation = function (id, key) {
+    
+    var app = {};
+    
+    applicationsv2.forEach(function (item) {
+      
+      if (item.index == id) {
+        app = item;
+      }
+
     })
 
     return app[key];

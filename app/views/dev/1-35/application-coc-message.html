@@ -51,7 +51,7 @@ Manage application - {{serviceName}} - GOV.UK
 {% block content %}
 <div class="govuk-grid-row govuk-!-margin-bottom-6">
   <div class="govuk-grid-column-two-thirds govuk-!-margin-bottom-6">
-    <h1 class="govuk-heading-xl">Manage application <span style="white-space: nowrap;">{{query.id | appInfo('applicationID')}}</span></h1>
+    <h1 class="govuk-heading-xl">Manage application <span style="white-space: nowrap;">{{query.id | appInformation('applicationID')}}</span></h1>
 
     <div class="app-alert app-alert--info">
       <p class="govuk-body">This application has been amended. You must resubmit your application using the 'Update this application link' for these changes to appear on your certificate.</p>
@@ -65,8 +65,8 @@ Manage application - {{serviceName}} - GOV.UK
           Status
         </dt>
         <dd class="govuk-summary-list__value">
-          <div class="app-status-tag app-status-tag--{{query.id | appInfo('tag')}}">
-            {{query.id | appInfo('status')}}
+          <div class="app-status-tag app-status-tag--{{query.id | appInformation('tag')}}">
+            {{query.id | appInformation('status')}}
           </div>
         </dd>
       </div>
@@ -75,7 +75,7 @@ Manage application - {{serviceName}} - GOV.UK
           {% if data.build == "ux" %}Your reference{% else %}Reference{% endif %}
         </dt>
         <dd class="govuk-summary-list__value">
-          {% if (query.id | appInfo('reference')) == "" %}<span class="govuk-hint">Not set</span>{%else%}{{query.id | appInfo('reference')}}{%endif%}
+          {% if (query.id | appInformation('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformation('reference')}}{% endif %}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -92,7 +92,7 @@ Manage application - {{serviceName}} - GOV.UK
           Destination country
         </dt>
         <dd class="govuk-summary-list__value">
-          {{query.id | appInfo('destination')}}
+          {{query.id | appInformation('destination')}}
         </dd>
       </div>
       <!--<div class="govuk-summary-list__row">
@@ -100,7 +100,7 @@ Manage application - {{serviceName}} - GOV.UK
           Consignee
         </dt>
         <dd class="govuk-summary-list__value">
-          {{query.id | appInfo('consignee') or "XYZ Trading Limited"}}
+          {{query.id | appInformation('consignee') or "XYZ Trading Limited"}}
         </dd>
       </div>-->
       {% endif %}
@@ -119,17 +119,17 @@ Manage application - {{serviceName}} - GOV.UK
 
     <ul class="govuk-list govuk-!-margin-top-6 govuk-!-margin-bottom-6 noprint">
       <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-viewonly">View application details</a></li>
-      {% if (query.id | appInfo('status')) == 'draft' %}
+      {% if (query.id | appInformation('status')) == 'draft' %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="certificate/check-your-progress?certificate=ehc2849">Edit and submit this application</a></li>
       {% endif %}
       <!--<li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{ query.is_group }}">Copy as new phytosanitary certificate application</a></li>
       <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{ query.is_group }}">Copy as new certificate of conformity application</a></li>-->
-      {% if (query.id | appInfo('status')) == 'submitted' or (query.id | appInfo('status')) == 'processing' or (query.id | appInfo('status')) == 'with inspector' or (query.id | appInfo('status')) == 'scheduled' or (query.id | appInfo('status')) == 'exporter action' or (query.id | appInfo('status')) == 'preparing phyto' or (query.id | appInfo('status')) == 'returned' %}
+      {% if (query.id | appInformation('status')) == 'submitted' or (query.id | appInformation('status')) == 'processing' or (query.id | appInformation('status')) == 'with inspector' or (query.id | appInformation('status')) == 'scheduled' or (query.id | appInformation('status')) == 'exporter action' or (query.id | appInformation('status')) == 'preparing phyto' or (query.id | appInformation('status')) == 'returned' %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="cancel">Cancel this application</a></li>
-      {% endif%}
-      {% if (query.id | appInfo('status')) == 'draft' %}
+      {% endif %}
+      {% if (query.id | appInformation('status')) == 'draft' %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="delete">Delete this application</a></li>
-      {% endif%}
+      {% endif %}
     </ul>
 
   </div>

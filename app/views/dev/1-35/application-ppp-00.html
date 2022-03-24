@@ -37,7 +37,7 @@
   %}
 
 {% block pageTitle %}
-  Manage {% if query.is_block == "yes" %}block application{% elseif query.is_group == "yes" %}group application{% else %}application{% endif %} {% if (query.id | appInfo('applicationID')) %}{{query.id | appInfo('applicationID')}}{% elif data.reference_num %}{{data.reference_num or "SS" }}{% else %}&nbsp;{% endif %} - {{serviceName}} - GOV.UK
+  {% if data.build == "ux" %}Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %}{% else %}{% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %}{% endif %} {{query.id | appInformation('applicationID')}} - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -53,6 +53,7 @@
 <a href="javascript:history.back()" class="govuk-back-link">Return to your applications</a>
 <style media="screen">
 
+  /* Needs extracting and adding to the external Sass or CSS */
   .govuk-width-three-tenths {
     width: 15% !important;
   }
@@ -106,7 +107,7 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">Manage {% if query.is_block == "yes" %}block application{% elseif query.is_group == "yes" %}group application{% else %}application{% endif %} {% if (query.id | appInfo('applicationID')) %}{{query.id | appInfo('applicationID')}}{% elif data.reference_num %}{{data.reference_num or "SS" }}{% else %}&nbsp;{% endif %}</h1>
+    <h1 class="govuk-heading-xl">{% if data.build == "ux" %}Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %}{% else %}{% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %}{% endif %} {{query.id | appInformation('applicationID')}}</h1>
   </div>
 
 </div>
@@ -120,8 +121,8 @@
           Status
         </dt>
         <dd class="govuk-summary-list__value">
-          <div class="app-status-tag app-status-tag--{{query.id | appInfo('tag')}}">
-            {{query.id | appInfo('status')}}
+          <div class="app-status-tag app-status-tag--{{query.id | appInformation('tag')}}">
+            {{query.id | appInformation('status')}}
           </div>
         </dd>
       </div>
@@ -130,13 +131,13 @@
           {% if data.build == "ux" %}Your reference{% else %}Reference{% endif %}
         </dt>
         <dd class="govuk-summary-list__value">
-          {% if (query.id | appInfo('reference')) == "" %}<span class="govuk-hint">Not set</span>{%else%}{{query.id |
-          appInfo('reference')}}{%endif%}
+          {% if (query.id | appInformation('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id |
+          appInformation('reference')}}{% endif %}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          {% if query.id == 6 %}Application{% else %}Certificate{% endif %}
+          {% if data.build == "ux" %}Type{% else %}Certificate{% endif %}
         </dt>
         <dd class="govuk-summary-list__value">
           Phytosanitary certificate for plants and fresh produce
@@ -145,18 +146,18 @@
       {% if query.id != 6 %}
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Destination country
+          {% if data.build == "ux" %}Destination country{% else %}Destination{% endif %}
         </dt>
         <dd class="govuk-summary-list__value">
-          {{query.id | appInfo('destination')}}
+          {{query.id | appInformation('destination')}}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          Consignee
+          {% if data.build == "ux" %}Consignee{% else %}Customer{% endif %}
         </dt>
         <dd class="govuk-summary-list__value">
-          {{query.id | appInfo('exporter') or "XYZ Trading Limited"}}
+          {{query.id | appInformation('exporter') or "XYZ Trading Limited"}}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -164,7 +165,7 @@
           Sample reference
         </dt>
         <dd class="govuk-summary-list__value">
-          {{query.id | appInfo('sampleReference')}}
+          {{query.id | appInformation('sampleReference')}}
         </dd>
       </div>
       {% endif %}
@@ -177,8 +178,6 @@
     </div>
     
   </div>
-
-
 
   <div class="govuk-grid-column-one-half govuk-!-margin-bottom-4">
     <h2 class="govuk-heading-m">Your certificate</h2>
@@ -193,7 +192,7 @@
 
 </div>
 
-<div class="govuk-grid-row govuk-!-margin-bottom-6">
+<div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
 <!--     <h2 class="govuk-heading-m govuk-!-margin-top-4">
@@ -202,7 +201,7 @@
     <ul class="govuk-list govuk-!-margin-bottom-9 noprint">
       <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-viewonly">View
           application details</a></li>
-      {% if (query.id | appInfo('status')) == 'complete' %}
+      {% if (query.id | appInformation('status')) == 'complete' %}
       <li><a class="govuk-link govuk-link--no-visited-state"
           href="certificate/check-your-progress?certificate=ehc2849">Edit and submit this application</a></li>
       {% endif %}
@@ -213,21 +212,21 @@
       <li><a class="govuk-link govuk-link--no-visited-state"
           href="clone?id={{query.id or 0}}&is_group={{ query.is_group }}">Copy this application to create a new
           phytosanitary certificate</a></li>
-      {% if (query.id | appInfo('status')) == 'submitted' or (query.id | appInfo('status')) == 'processing' or (query.id
+      {% if (query.id | appInformation('status')) == 'submitted' or (query.id | appInformation('status')) == 'processing' or (query.id
       |
-      appInfo('status')) == 'with inspector' or (query.id | appInfo('status')) == 'scheduled' or (query.id |
-      appInfo('status')) == 'exporter action' or (query.id | appInfo('status')) == 'preparing phyto' or (query.id |
-      appInfo('status')) == 'returned' %}
+      appInformation('status')) == 'with inspector' or (query.id | appInformation('status')) == 'scheduled' or (query.id |
+      appInformation('status')) == 'exporter action' or (query.id | appInformation('status')) == 'preparing phyto' or (query.id |
+      appInformation('status')) == 'returned' %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="cancel">Cancel this application</a></li>
-      {% endif%}
-      {% if (query.id | appInfo('status')) == 'draft' %}
+      {% endif %}
+      {% if (query.id | appInformation('status')) == 'draft' %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="delete">Delete this application</a></li>
-      {% endif%}
+      {% endif %}
     </ul>
   </div>
 </div>
 
-<div class="govuk-grid-row govuk-!-margin-bottom-6">
+<div class="govuk-grid-row">
 <div class="govuk-grid-column-full">
   <h2 class="govuk-heading-m">Commodities in this application</h2>
 
@@ -238,7 +237,7 @@
   {% endif %}
 
   {% set stock = stocks[ref] %}
-  <table class="govuk-table govuk-!-margin-bottom-9">
+  <table class="govuk-table">
     <thead class="govuk-table__head">
       <tr class="govuk-table__row">
         <th class="govuk-table__header govuk-width-one-fifth" scope="col">

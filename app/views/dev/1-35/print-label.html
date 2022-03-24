@@ -8,7 +8,7 @@ Application details - GOV UK
 {% block content %}
 <div class="govuk-grid-row govuk-!-margin-bottom-6">
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl"> View {% if query.is_block == "yes" %}block application{%elseif query.is_group == "yes" %}group application{%else%}application{%endif%} <span style="white-space: nowrap;">{{query.id | appInfo('reference')}}</span>
+    <h1 class="govuk-heading-xl"> View {% if query.is_block == "yes" %}block application{%elseif query.is_group == "yes" %}group application{% else %}application{% endif %} <span style="white-space: nowrap;">{{query.id | appInformation('reference')}}</span>
     </h1>
     {% if query.is_block == "yes" %}
     <p class="govuk-body">This is a block application of 100 certificates</p>
@@ -34,10 +34,10 @@ Application details - GOV UK
     <dl class="govuk-summary-list govuk-summary-list--no-border">
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          APHA reference
+          <abbr title="Animal and Plant Health Agency">APHA</abbr> reference
         </dt>
         <dd class="govuk-summary-list__value">
-          {{(query.id | appInfo('applicationID'))}}
+          {{(query.id | appInformation('applicationID'))}}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -45,7 +45,7 @@ Application details - GOV UK
           Your reference
         </dt>
         <dd class="govuk-summary-list__value">
-          {% if (query.id | appInfo('reference')) == ""%}<span class="govuk-hint">Not set</span>{%else%}{{query.id | appInfo('reference')}}{%endif%}
+          {% if (query.id | appInformation('reference')) == ""%}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformation('reference')}}{% endif %}
         </dd>
       </div>
 
@@ -55,7 +55,7 @@ Application details - GOV UK
         </dt>
         <dd class="govuk-summary-list__value">
           Common hazelnut
-          {{query.id | appInfo('commodity_plants')}}
+          {{query.id | appInformation('commodity_plants')}}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -63,7 +63,7 @@ Application details - GOV UK
           Destination
         </dt>
         <dd class="govuk-summary-list__value">
-          {{query.id | appInfo('destination')}}
+          {{query.id | appInformation('destination')}}
         </dd>
       </div>-->
 
@@ -72,12 +72,12 @@ Application details - GOV UK
           Exporter name
         </dt>
         <dd class="govuk-summary-list__value">
-          {% set exporter = query.id | appInfo('exporter')%}
+          {% set exporter = query.id | appInformation('exporter')%}
           {% if exporter %}
           {{exporter}}
           {% else %}
           <span class="govuk-hint">Not entered</span>
-          {% endif%}
+          {% endif %}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -85,12 +85,12 @@ Application details - GOV UK
           Exporter address
         </dt>
         <dd class="govuk-summary-list__value">
-          {% set exporter = query.id | appInfo('exporter')%}
+          {% set exporter = query.id | appInformation('exporter')%}
           {% if exporter %}
           ABC LIMITED, 27 The Crescent, NORTH WEST LONDON, NW7 0HX
           {% else %}
           <span class="govuk-hint">Not entered</span>
-          {% endif%}
+          {% endif %}
         </dd>
       </div>
       <div class="govuk-summary-list__row">

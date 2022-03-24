@@ -36,7 +36,7 @@ Manage application - {{serviceName}} - GOV.UK
 {% block content %}
 <div class="govuk-grid-row govuk-!-margin-bottom-6">
   <div class="govuk-grid-column-one-half">
-    <h1 class="govuk-heading-xl">Manage {% if query.is_block == "yes" %}block appication{%elseif query.is_group == "yes" %}group application{%else%}application{%endif%} <span style="white-space: nowrap;">{{query.id | appInfo('reference')}}</span>
+    <h1 class="govuk-heading-xl">Manage {% if query.is_block == "yes" %}block appication{%elseif query.is_group == "yes" %}group application{% else %}application{% endif %} <span style="white-space: nowrap;">{{query.id | appInformation('reference')}}</span>
     </h1>
 
     <dl class="govuk-summary-list govuk-summary-list--no-border">
@@ -45,8 +45,8 @@ Manage application - {{serviceName}} - GOV.UK
           Status
         </dt>
         <dd class="govuk-summary-list__value">
-          <div class="app-status-tag app-status-tag--{{query.id | appInfo('tag')}}">
-            {{query.id | appInfo('status')}}
+          <div class="app-status-tag app-status-tag--{{query.id | appInformation('tag')}}">
+            {{query.id | appInformation('status')}}
           </div>
         </dd>
       </div>
@@ -55,7 +55,7 @@ Manage application - {{serviceName}} - GOV.UK
           Reference
         </dt>
         <dd class="govuk-summary-list__value">
-          {% if (query.id | appInfo('reference')) == ""%}<span class="govuk-hint">Not set</span>{%else%}{{query.id | appInfo('applicationID')}}{%endif%}
+          {% if (query.id | appInformation('reference')) == ""%}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformation('applicationID')}}{% endif %}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -95,17 +95,17 @@ Manage application - {{serviceName}} - GOV.UK
     </div>
 
     <ul class="govuk-list govuk-!-margin-top-6 govuk-!-margin-bottom-6 noprint">
-      {% if (query.id | appInfo('status')) == 'submitted' or (query.id | appInfo('status')) == 'processing' or (query.id | appInfo('status')) == 'with inspector' or (query.id | appInfo('status')) == 'scheduled' or (query.id | appInfo('status')) == 'exporter action' or (query.id | appInfo('status')) == 'preparing phyto' or (query.id | appInfo('status')) == 'returned' or (query.id | appInfo('status')) == 'awaiting decision'%}
+      {% if (query.id | appInformation('status')) == 'submitted' or (query.id | appInformation('status')) == 'processing' or (query.id | appInformation('status')) == 'with inspector' or (query.id | appInformation('status')) == 'scheduled' or (query.id | appInformation('status')) == 'exporter action' or (query.id | appInformation('status')) == 'preparing phyto' or (query.id | appInformation('status')) == 'returned' or (query.id | appInformation('status')) == 'awaiting decision'%}
       <li><a class="govuk-link govuk-link--no-visited-state" href="#">Update this application</a></li>
       <li><a class="govuk-link govuk-link--no-visited-state" href="application/gsi/create/check-your-answers-3-viewonly">View this application</a></li>
       <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{ query.is_group }}">Copy as new application</a></li>
       <li><a class="govuk-link govuk-link--no-visited-state" href="cancel-reason">Cancel this application</a></li>
-      {% endif%}
-      {% if (query.id | appInfo('status')) == 'draft' %}
+      {% endif %}
+      {% if (query.id | appInformation('status')) == 'draft' %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="certificate/check-your-progress?certificate=ehc2849">Edit and submit this application</a></li>
       <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{ query.is_group }}">Copy as new application</a></li>
       <li><a class="govuk-link govuk-link--no-visited-state" href="delete">Delete this application</a></li>
-      {% endif%}
+      {% endif %}
     </ul>
 
     {% if (query.id == 10) %}
@@ -145,21 +145,21 @@ Manage application - {{serviceName}} - GOV.UK
     <!--<p class="govuk-body">
       {% if query.application_status == 'draft' %}
       <a class="govuk-button govuk-!-margin-right-4" href="certificate/check-your-progress">Edit and submit</a>
-      {% endif%}
+      {% endif %}
       <a class="govuk-button govuk-button--secondary " href="clone">Clone as new application</a>
       {% if query.application_status == 'draft' %}
       <a class="govuk-link govuk-link--no-visited-state" href="delete">Delete application</a>
-      {% endif%}
+      {% endif %}
     </p>-->
 
     <!--<ul class="govuk-list  govuk-!-margin-bottom-6">
-      {% if (query.id | appInfo('status')) == 'draft' %}
+      {% if (query.id | appInformation('status')) == 'draft' %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="certificate/check-your-progress?certificate=ehc2849">Edit and submit this application</a></li>
-      {% endif%}
+      {% endif %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{ query.is_group }}">Clone as new application</a></li>
-      {% if (query.id | appInfo('status')) == 'draft' %}
+      {% if (query.id | appInformation('status')) == 'draft' %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="delete">Delete this application</a></li>
-      {% endif%}
+      {% endif %}
     </ul>-->
 
   </div>

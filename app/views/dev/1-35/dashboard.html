@@ -99,6 +99,7 @@
   .govuk-details__summary:before {
     display: none;
   }
+
   .app-status-tag--indigo {
     color: #1a237e;
     background: #e7b9ff;
@@ -121,20 +122,25 @@
     border: 3px solid #000000;
     color: #000000;
   }
+
   .client-ref{
     display: inline-block;
     margin-top: 4px;
   }
+
   .govuk-width-one-tenth {
     width: 10% !important;
   }
+
   .govuk-table__cell--numeric {
     text-align: right !important;
   }
+
   /* Chris Harding (16.03.22) - Styles for new filters */
   .searchable-filters-heading {
     margin-bottom: 10px;
   }
+
   .app-c-option-select {
     background-color: #f3f2f1;
     padding-top: 0px !important;
@@ -152,6 +158,11 @@
   .app-c-option-select__container-inner {
     padding-right: 0px;
     padding-left: 0px;
+  }
+
+  /* Chris Harding (24.03.22) - After splitting APHA references into 3 sets of 4 digits (e.g. to improve readability) styling to stop links spanning across more than 1 line */
+  .link-no-break {
+    white-space: nowrap;
   }
 
 </style>
@@ -193,7 +204,7 @@
   <div class="govuk-grid-column-one-third">
 
     <div class="defra-filter--action" style="display: none;">
-      <button id="defra-filter--button" class="govuk-button govuk-button--secondary govuk-!-margin-top-6 {% if (data.has_filter == 'yes' and data.certificate != 'any') or (data.filter_name and data.filter_name != 'any')%}defra-filter-button--active{% endif%}" type="button" aria-expanded="false">
+      <button id="defra-filter--button" class="govuk-button govuk-button--secondary govuk-!-margin-top-6 {% if (data.has_filter == 'yes' and data.certificate != 'any') or (data.filter_name and data.filter_name != 'any')%}defra-filter-button--active{% endif %}" type="button" aria-expanded="false">
         <span class="defra-filter--button-content">Show filters</span>
         <span class="defra-filter__icon"></span>
       </button>
@@ -217,7 +228,7 @@
 
             <div class="govuk-form-group">
               <fieldset class="govuk-fieldset">
-                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Filter by certificate</legend>
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Filter by type</legend>
                 
                 <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
                   
@@ -414,13 +425,13 @@
           Chris Harding (15.03.22) - New table sorting has been defined to make finding applications simpler. The new sorting rules are:
           1) Submitted date (most recent first)
           2) Destination country (a-z)
-          3) Certificate (a-z)
+          3) Type (a-z)
         -->
         <table class="govuk-table responsive-table">
           <thead class="govuk-table__head govuk-body-s">
             <tr class="govuk-table__row">
-              <th class="govuk-table__header govuk-!-width-one-fifth" scope="col"><abbr title="Animal and Plant Health Agency">APHA</abbr> reference</th>
-              <th class="govuk-table__header govuk-!-width-one-fifth" scope="col">Certificate</th>
+              <th class="govuk-table__header" scope="col"><abbr title="Animal and Plant Health Agency">APHA</abbr> reference</th>
+              <th class="govuk-table__header govuk-!-width-one-fifth" scope="col">Type</th>
               <th class="govuk-table__header" scope="col">Destination country</th>
               <th class="govuk-table__header" scope="col">Your reference</th>
               <th class="govuk-table__header govuk-!-width-one-fifth" scope="col">Submitted date</th>
@@ -433,13 +444,12 @@
             {% if data.application_submission_data == "draft" %}
             <tr class="govuk-table__row result">
               <td class="govuk-table__cell applicationRef-column table-header" scope="row">
-                <a href="application-ss?application_submission_data=draft" class="govuk-link govuk-link--no-visited-state"><span class="table-heading table-heading-full" aria-hidden="true">APHA reference</span> 1721148004809</a>
+                <a href="application-ss?application_submission_data=draft" class="govuk-link govuk-link--no-visited-state link-no-break"><span class="table-heading table-heading-full" aria-hidden="true">APHA reference</span> 1721148004809</a>
                 <!-- <br>
                 <span class="table-heading table-heading-full" aria-hidden="true">Customer reference</span><span class="client-ref">{% if data.reference_num %}{{data.reference_num or "REFERENCE"}}{% else %}&nbsp;{% endif %}</span> -->
               </td>
               <td class="govuk-table__cell submitted-column" scope="row">
-                <span class="table-heading" aria-hidden="true">Certificate</span>
-                Soil sampling
+                <span class="table-heading" aria-hidden="true">Type</span> Soil sampling
               </td>
               <td class="govuk-table__cell submitted-column" scope="row">
                 <span class="table-heading" aria-hidden="true">Destination country</span> {% if data.destinationcountries %}{{data.destinationcountries or "USA" }}{% else %}&nbsp;{% endif %}
@@ -465,12 +475,12 @@
             {% elif data.application_submission_data == "submitted" %}
             <tr class="govuk-table__row result">
               <td class="govuk-table__cell applicationRef-column table-header" scope="row">
-                <a href="application-ss?application_submission_data=submitted" class="govuk-link govuk-link--no-visited-state"><span class="table-heading table-heading-full" aria-hidden="true">APHA reference</span></span> 1721148004809</a>
+                <a href="application-ss?application_submission_data=submitted" class="govuk-link govuk-link--no-visited-state link-no-break"><span class="table-heading table-heading-full" aria-hidden="true">APHA reference</span> 1721148004809</a>
                 <!-- <br>
                 <span class="table-heading table-heading-full" aria-hidden="true">Customer reference</span><span class="client-ref">{% if data.reference_num %}{{data.reference_num or "REFERENCE"}}{% else %}&nbsp;{% endif %}</span> -->
               </td>
               <td class="govuk-table__cell submitted-column" scope="row">
-                <span class="table-heading" aria-hidden="true">Certificate</span> Soil sampling
+                <span class="table-heading" aria-hidden="true">Type</span> Soil sampling
               </td>
               <td class="govuk-table__cell submitted-column" scope="row">
                 <span class="table-heading" aria-hidden="true">Destination country</span> {% if data.destinationcountries %}{{data.destinationcountries or "USA" }}{% else %}&nbsp;{% endif %}
@@ -494,7 +504,7 @@
               </td>
             </tr>
             {% endif %}
-            {% for app in data.applications %}
+            {% for app in data.applicationsv2 %}
               {% if (data.show_applications_by == "me" and app.name == logged_in_as) or (data.show_applications_by == "me" or not data.show_applications_by) or ((app.name | upper) in (data.filter_name | upper) or data.filter_name == "All users") %}
                 {% if (data.has_filter != "yes" or data.filter_status == "any") or app.status in data.filter_status %}
                   {%
@@ -511,11 +521,11 @@
                         <tr class="govuk-table__row result">
                           <td id="{{app.applicationID}}-appRef" class="govuk-table__cell applicationRef-column table-header" scope="row">
                             {% if app.index == "6" %}
-                            <a href="application-amend?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            <a href="application-amend?id={{app.index}}" class="govuk-link govuk-link--no-visited-state link-no-break">
                             {% else %}
-                            <a href="application?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            <a href="application?id={{app.index}}" class="govuk-link govuk-link--no-visited-state link-no-break">
                             {% endif %}
-                            <!--  <a href="application?id=0" class="govuk-link govuk-link--no-visited-state"> -->
+                            <!--  <a href="application?id=0" class="govuk-link govuk-link--no-visited-state link-no-break"> -->
                             <span class="table-heading table-heading-full" aria-hidden="true">APHA reference</span> {{app.applicationID}}</a>
                             {% if app.status != "draft" %}
                             <!-- <br>
@@ -523,8 +533,7 @@
                             {% endif %}
                           </td>
                           <td id="{{app.applicationID}}-submitted" class="govuk-table__cell submitted-column" scope="row">
-                            <span class="table-heading" aria-hidden="true">Certificate</span>
-                            {{app.cert_info}}
+                            <span class="table-heading" aria-hidden="true">Type</span> {{app.cert_info}}
                           </td>
                           <td id="{{app.applicationID}}-submitted" class="govuk-table__cell submitted-column" scope="row">
                             <!-- {% if (app.cert_info != "Conformity") and (app.status != "draft") %}
@@ -564,55 +573,55 @@
                         <tr class="govuk-table__row result">
                           <td id="{{app.applicationID}}-appRef" class="govuk-table__cell applicationRef-column table-header" scope="row">
                             {% if app.index == "0" or app.index == "8" or app.index == "10" %}
-                            <a href="application-amend?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            <a href="application-amend?id={{app.index}}" class="govuk-link govuk-link--no-visited-state link-no-break">
                             {% elseif app.index == "1" %}
-                            <a href="application-plant-products?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            <a href="application-plant-products?id={{app.index}}" class="govuk-link govuk-link--no-visited-state link-no-break">
                             {% elseif app.index == "3" %}
-                            <a href="application-ssdd?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            <a href="application-ssdd?id={{app.index}}" class="govuk-link govuk-link--no-visited-state link-no-break">
                             {% elseif app.index == "4" %}
-                            <a href="application-amend?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            <a href="application-amend?id={{app.index}}" class="govuk-link govuk-link--no-visited-state link-no-break">
                             {% elseif app.index == "7" %}
-                            <a href="application-coc?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            <a href="application-coc?id={{app.index}}" class="govuk-link govuk-link--no-visited-state link-no-break">
                             {% elseif app.index == "9" %}
-                            <a href="application-phy?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            <a href="application-phy?id={{app.index}}" class="govuk-link govuk-link--no-visited-state link-no-break">
                               
                             <!-- Soil sampling applications (START) -->
                             {% elseif app.index == "16" %}
-                            <a href="application-ss?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            <a href="application-ss?id={{app.index}}" class="govuk-link govuk-link--no-visited-state link-no-break">
                             {% elseif app.index == "17" %}
-                            <a href="application-ss?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            <a href="application-ss?id={{app.index}}" class="govuk-link govuk-link--no-visited-state link-no-break">
                             {% elseif app.index == "18" %}
-                            <a href="application-ss?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            <a href="application-ss?id={{app.index}}" class="govuk-link govuk-link--no-visited-state link-no-break">
                             {% elseif app.index == "19" %}
-                            <a href="application-ss?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            <a href="application-ss?id={{app.index}}" class="govuk-link govuk-link--no-visited-state link-no-break">
                             {% elseif app.index == "26" %}
-                            <a href="application-ss?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            <a href="application-ss?id={{app.index}}" class="govuk-link govuk-link--no-visited-state link-no-break">
                             {% elseif app.index == "27" %}
-                            <a href="application-ss?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            <a href="application-ss?id={{app.index}}" class="govuk-link govuk-link--no-visited-state link-no-break">
                             {% elseif app.index == "28" %}
-                            <a href="application-ss?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            <a href="application-ss?id={{app.index}}" class="govuk-link govuk-link--no-visited-state link-no-break">
                             <!-- Soil sampling applications (END) -->
                             {% elseif app.index == "21" %}
-                            <a href="application-ssdd-coc?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            <a href="application-ssdd-coc?id={{app.index}}" class="govuk-link govuk-link--no-visited-state link-no-break">
                             
                             <!-- GSI  -->
                             {% elseif app.index == "25" %}
-                            <a href="application-gsi?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            <a href="application-gsi?id={{app.index}}" class="govuk-link govuk-link--no-visited-state link-no-break">
                             {% elseif app.index == "33" %}
-                            <a href="application-seeds-gsi?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            <a href="application-seeds-gsi?id={{app.index}}" class="govuk-link govuk-link--no-visited-state link-no-break">
                             
                             {% elseif app.index == "30" %}
-                            <a href="application-seed-sample-table?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            <a href="application-seed-sample-table?id={{app.index}}" class="govuk-link govuk-link--no-visited-state link-no-break">
                             {% elseif app.index == "32" %}
-                            <a href="application-seed-sample-table?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            <a href="application-seed-sample-table?id={{app.index}}" class="govuk-link govuk-link--no-visited-state link-no-break">
                             {% elseif app.index == "31" %}
-                            <a href="application-phy-bulbs?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            <a href="application-phy-bulbs?id={{app.index}}" class="govuk-link govuk-link--no-visited-state link-no-break">
                             
                             <!-- Plant products phyto reuse sampling applications  -->
                             {% elseif app.index == "34" %}
-                            <a href="application-ppp-00?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            <a href="application-ppp-00?id={{app.index}}" class="govuk-link govuk-link--no-visited-state link-no-break">
                             {% else %}
-                            <a href="application?id={{app.index}}" class="govuk-link govuk-link--no-visited-state">
+                            <a href="application?id={{app.index}}" class="govuk-link govuk-link--no-visited-state link-no-break">
                             {% endif %}
                             <span class="table-heading table-heading-full" aria-hidden="true">APHA reference</span> {{app.applicationID}}</a>
                             {% if app.status != "draft" %}
@@ -622,7 +631,7 @@
                             <!-- <br> -->
                           </td>
                           <td id="{{app.applicationID}}-submitted" class="govuk-table__cell submitted-column" scope="row">
-                            <span class="table-heading" aria-hidden="true">Certificate</span> {{app.cert_info}}
+                            <span class="table-heading" aria-hidden="true">Type</span> {{app.cert_info}}
                           </td>
                           <td id="{{app.applicationID}}-submitted" class="govuk-table__cell submitted-column" scope="row">
                             <!-- {% if (app.cert_info == "Conformity") or (app.cert_info == "Seed sampling") %}
@@ -729,7 +738,7 @@
   <div class="govuk-grid-column-one-third">
 
     <div class="defra-filter--action" style="display: none;">
-      <button id="defra-filter--button" class="govuk-button govuk-button--secondary govuk-!-margin-top-6 {% if (data.has_filter == 'yes' and data.filter_status != 'any') or (data.filter_name and data.filter_name != 'any')%}defra-filter-button--active{% endif%}" type="button" aria-expanded="false">
+      <button id="defra-filter--button" class="govuk-button govuk-button--secondary govuk-!-margin-top-6 {% if (data.has_filter == 'yes' and data.filter_status != 'any') or (data.filter_name and data.filter_name != 'any')%}defra-filter-button--active{% endif %}" type="button" aria-expanded="false">
         <span class="defra-filter--button-content">Show filters</span>
         <span class="defra-filter__icon"></span>
       </button>
@@ -959,7 +968,7 @@
                     <select class="govuk-select govuk-!-width-full" id="filter_name" name="filter_name">
                       <option value="All users" {% if not data.filter_name or data.filter_name == "All users" %}selected{% endif %}>All users</option>
                       {% set list = [] %}
-                      {% for cert in data.applications %}
+                      {% for cert in data.applicationsv2 %}
                       {% if not cert.name in list %}
                       <option value="{{cert.name}}" {% if cert.name == data.filter_name %}selected{% endif %}>{{cert.name}}{% if logged_in_as == cert.name %} <strong>(you)</strong>{% endif %}</option>
                       {{list.push(cert.name)}}
@@ -999,7 +1008,7 @@
     
     <div class="filter-tag--wrapper govuk-!-margin-bottom-6" data-module="track-click">
       <p class="govuk-body govuk-!-margin-bottom-2">
-        Showing <span id="js-case-count">&nbsp;</span> applications
+        Showing <span id="js-case-count">&nbsp;</span> applications with status <b>Any</b>
         {% if data.has_filter == "yes" and data.filter_status != 'any' %}
         with status <strong>{{data.filter_status | capitalize or "Any"}}</strong>
         {% endif %}
@@ -1045,7 +1054,7 @@
             </tr>
           </thead>
           {% if data.route != "new" %}
-          <tbody class="govuk-body-s">
+          <tbody>
             {% if data.application_submission_data == "draft" %}
             <tr class="govuk-table__row result">
               <td class="govuk-table__cell applicationRef-column table-header" scope="row">
@@ -1111,7 +1120,7 @@
               </td>
             </tr>
             {% endif %}
-            {% for app in data.applications %}
+            {% for app in data.applicationsv2 %}
               {% if (data.show_applications_by == "me" and app.name == logged_in_as) or (data.show_applications_by == "me" or not data.show_applications_by) or ((app.name | upper) in (data.filter_name | upper) or data.filter_name == "All users") %}
                 {% if (data.has_filter != "yes" or data.filter_status == "any") or app.status in data.filter_status %}
                   {%
