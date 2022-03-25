@@ -35,8 +35,18 @@ Display question - Exports application - GOV.UK
         {% if data.journey != "coc" %}
           <div class="govuk-form-group">
             <label class="{{label_class}}" for="consignment-value">
+              {% if data.build == "ux" %}
               Value of your consignment (pounds)
+              {% else %}
+              Value of consignment 
+              {% endif %}
             </label>
+            <span id="value-hint" class="govuk-hint">
+              {% if data.build == "ux" %}
+              {% else %}
+              This information helps us improve the service we provide to exporters 
+              {% endif %}
+            </span>
             <input class="govuk-input govuk-input--width-10" id="consignment-value" name="consignment_value" type="text" aria-describedby="value-hint">
 
           </div>
@@ -110,11 +120,7 @@ Display question - Exports application - GOV.UK
         <div class="govuk-form-group">
           <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend {{label_class}}">
-              {% if data.commodity == "potatoes" %}
-              Select Mode of Transport
-              {% else %}
               How will the consignment be transported?
-              {% endif %}
             </legend>
             <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
               <div class="govuk-radios__item">
