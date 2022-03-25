@@ -7,7 +7,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  Manage {% if query.is_block == "yes" %}block application{% elseif query.is_group == "yes" %}group application{% else %}application{% endif %} {% if (query.id | appInfo('applicationID')) %}{{query.id | appInfo('applicationID')}}{% elif data.reference_num %}{{data.reference_num or "SS" }}{% else %}&nbsp;{% endif %} - {{serviceName}} - GOV.UK
+  {% if data.build == "ux" %}Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %}{% else %}{% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %}{% endif %} {{query.id | appInformation('applicationID')}} - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -23,6 +23,7 @@
 <a href="javascript:history.back()" class="govuk-back-link">Return to your applications</a>
 <style media="screen">
 
+  /* Needs extracting and adding to the external Sass or CSS */
   .govuk-width-one-fifth {
     width: 20% !important;
   }
@@ -46,7 +47,7 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">{% if data.build == "ux" %}Manage application{% else %}Application{% endif %} {{query.id | appInfo('applicationID')}}</h1>
+    <h1 class="govuk-heading-xl">{% if data.build == "ux" %}Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %}{% else %}{% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %}{% endif %} {{query.id | appInformation('applicationID')}}</h1>
   </div>
 
 </div>
@@ -60,8 +61,8 @@
           Status
         </dt>
         <dd class="govuk-summary-list__value">
-          <div class="app-status-tag app-status-tag--{{query.id | appInfo('tag')}}">
-            {{query.id | appInfo('status')}}
+          <div class="app-status-tag app-status-tag--{{query.id | appInformation('tag')}}">
+            {{query.id | appInformation('status')}}
           </div>
         </dd>
       </div>
@@ -70,13 +71,13 @@
           {% if data.build == "ux" %}Your reference{% else %}Reference{% endif %}
         </dt>
         <dd class="govuk-summary-list__value">
-          {% if (query.id | appInfo('reference')) == "" %}<span class="govuk-hint">Not set</span>{%else%}{{query.id |
-          appInfo('reference')}}{%endif%}
+          {% if (query.id | appInformation('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id |
+          appInformation('reference')}}{% endif %}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          {% if query.id == 30 %}Application{% else %}Certificate{% endif %}
+          {% if data.build == "ux" %}Type{% else %}Certificate{% endif %}
         </dt>
         <dd class="govuk-summary-list__value">
           Seed sampling application
@@ -89,7 +90,7 @@
           Sampled on
         </dt>
         <dd class="govuk-summary-list__value">
-          {{query.id | appInfo('date')}}
+          {{query.id | appInformation('date')}}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -129,7 +130,7 @@
 
 </div>
 
-<div class="govuk-grid-row govuk-!-margin-bottom-6">
+<div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
     <ul class="govuk-list govuk-!-margin-bottom-9 noprint">
