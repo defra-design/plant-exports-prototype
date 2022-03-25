@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  Manage {% if query.is_block == "yes" %}block application{% elseif query.is_group == "yes" %}group application{% else %}application{% endif %} {{query.id | appInfo('applicationID')}} - {{serviceName}} - GOV.UK
+  {% if data.build == "ux" %}Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %}{% else %}{% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %}{% endif %} {{query.id | appInformation('applicationID')}} - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -17,6 +17,7 @@
 <a href="dashboard" class="govuk-back-link">Return to your applications</a>
 <style>
 
+  /* Needs extracting and adding to the external Sass or CSS */
   .govuk-status--warning {
     width: auto !important;
     text-align: center;
@@ -47,8 +48,8 @@
 {% endblock%}
 
 {% block content %}
-{% if (query.id | appInfo('cert_info')) == 'Soil sampling' %}
-<div class="govuk-grid-row govuk-!-margin-bottom-6">
+{% if (query.id | appInformation('cert_info')) == 'Soil sampling' %}
+<div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
 
@@ -56,7 +57,7 @@
       <p class="govuk-body">You have successfully cancelled this application. We'll update this page soon.</p>
     </div>
 
-    <h1 class="govuk-heading-xl">{% if query.is_block == "yes" %}Block application{% elseif query.is_group == "yes" %}Group application{% else %}Application{% endif %} <span style="white-space: nowrap;">{{query.id | appInfo('applicationID')}}</span></h1>
+    <h1 class="govuk-heading-xl">{% if data.build == "ux" %}Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %}{% else %}{% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %}{% endif %} {{query.id | appInformation('applicationID')}}</h1>
     {% if query.is_block == "yes" %}
     <p class="govuk-body">This is a block application of 100 certificates</p>
     {% endif %}
@@ -83,12 +84,12 @@
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">{% if data.build == "ux" %}Your reference{% else %}reference{% endif %}</dt>
         <dd class="govuk-summary-list__value">
-          {% if (query.id | appInfo('reference')) == "" %}<span class="govuk-hint">Not set</span>{% else %}{{query.id | appInfo('reference')}}{% endif %}
+          {% if (query.id | appInformation('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformation('reference')}}{% endif %}
         </dd>
       </div>
 
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">{% if data.build == "ux" %}Application{% else %}Certificate{% endif %}</dt>
+        <dt class="govuk-summary-list__key">{% if data.build == "ux" %}Type{% else %}Certificate{% endif %}</dt>
         <dd class="govuk-summary-list__value">Soil sampling for {{data.commodity or "crops"}}</dd>
       </div>
 
@@ -100,14 +101,14 @@
       {% endif %}
 
     </dl>
-    <ul class="govuk-list govuk-!-margin-top-6 govuk-!-margin-bottom-6 noprint">
+    <ul class="govuk-list govuk-!-margin-top-6 noprint">
       <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{query.is_group}}">Copy as new application</a></li>
     </ul>
   </div>
 
 </div>
 {% else %}
-<div class="govuk-grid-row govuk-!-margin-bottom-6">
+<div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
 
@@ -115,8 +116,7 @@
       <p class="govuk-body">You have successfully cancelled this application. We'll update this page soon.</p>
     </div>
 
-    <h1 class="govuk-heading-xl">{% if query.is_block == "yes" %}Block appication{%elseif query.is_group == "yes" %}Group application{% else %}Application{% endif %} <span style="white-space: nowrap;">{{query.id | appInfo('reference') or '1760969182500'}}</span>
-    </h1>
+    <h1 class="govuk-heading-xl">{% if data.build == "ux" %}Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %}{% else %}{% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %}{% endif %} {{query.id | appInformation('applicationID')}}</h1>
     {% if query.is_block == "yes" %}
     <p class="govuk-body">This is a block application of 100 certificates</p>
     {% endif %}
@@ -140,14 +140,14 @@
         </dd>
       </div>
 
-<!--       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">APHA reference</dt>
+      <!-- <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key"><abbr title="Animal and Plant Health Agency">APHA</abbr> reference</dt>
         <dd class="govuk-summary-list__value">246215835711</dd>
       </div> -->
 
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Reference</dt>
-        <dd class="govuk-summary-list__value">PO 24477 UAE</dd>
+        <dt class="govuk-summary-list__key">{% if data.build == "ux" %}Your reference{% else %}Reference{% endif %}</dt>
+        <dd class="govuk-summary-list__value">{{query.id | appInformation('reference') or "PO 24477 UAE"}}</dd>
       </div>
 
       <!-- <div class="govuk-summary-list__row">
@@ -155,26 +155,26 @@
           Commodity
         </dt>
         <dd class="govuk-summary-list__value">
-          {{query.id | appInfo('commodity_plants')}}
+          {{query.id | appInformation('commodity_plants')}}
         </dd>
       </div> -->
 
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Certificate</dt>
+        <dt class="govuk-summary-list__key">{% if data.build == "ux" %}Type{% else %}Certificate{% endif %}</dt>
         <dd class="govuk-summary-list__value">Phytosanitary certificate for used farm machinery</dd>
       </div>
 
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Destination country</dt>
-        <dd class="govuk-summary-list__value">UAE</dd>
+        <dt class="govuk-summary-list__key">{% if data.build == "ux" %}Destination country{% else %}Destination{% endif %}</dt>
+        <dd class="govuk-summary-list__value">{{query.id | appInformation('destination') or "UAE"}}</dd>
       </div>
 
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Customer</dt>
-        <dd class="govuk-summary-list__value">GLUKGLUK LTD</dd>
+        <dt class="govuk-summary-list__key">{% if data.build == "ux" %}Consignee{% else %}Customer{% endif %}</dt>
+        <dd class="govuk-summary-list__value">{{query.id | appInformation('importer') or "GLUKGLUK LTD"}}</dd>
       </div>
 
-<!--       <div class="govuk-summary-list__row">
+      <!-- <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key govuk-summary-list__40">Loading date</dt>
         <dd class="govuk-summary-list__value govuk-summary-list__40">6 September 2020</dd>
       </div> -->
@@ -198,15 +198,14 @@
       </div> -->
 
     </dl>
-
-    <ul class="govuk-list govuk-!-margin-top-6 govuk-!-margin-bottom-6 noprint">
-      {% if (query.id | appInfo('status')) == 'draft' %}
+    <ul class="govuk-list govuk-!-margin-top-8 noprint">
+      {% if (query.id | appInformation('status')) == 'draft' %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="certificate/check-your-progress?certificate=ehc2849">Edit and submit this application</a></li>
-      {% endif%}
+      {% endif %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{query.is_group}}">Copy as new application</a></li>
-      {% if (query.id | appInfo('status')) == 'draft' %}
+      {% if (query.id | appInformation('status')) == 'draft' %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="delete">Delete this application</a></li>
-      {% endif%}
+      {% endif %}
     </ul>
 
     {% if (query.id == 10) %}
@@ -231,7 +230,7 @@
       </tbody>
     </table>
 
-    <p class="govuk-body govuk-!-margin-bottom-9"><a href="print-label-print?id=10" class="govuk-link govuk-link-no-visited-state">Print the information</a> you'll need to send along with your samples.</p>
+    <p class="govuk-body"><a href="print-label-print?id=10" class="govuk-link govuk-link-no-visited-state">Print the information</a> you'll need to send along with your samples.</p>
     {% endif %}
     <!-- <p class="govuk-body">Plant Clinic<br>
       Block 4<br>
@@ -243,26 +242,24 @@
     <p class="govuk-body">
       {% if query.application_status == 'draft' %}
       <a class="govuk-button govuk-!-margin-right-4" href="certificate/check-your-progress">Edit and submit</a>
-      {% endif%}
+      {% endif %}
       <a class="govuk-button govuk-button--secondary " href="clone">Clone as new application</a>
       {% if query.application_status == 'draft' %}
       <a class="govuk-link govuk-link--no-visited-state" href="delete">Delete application</a>
-      {% endif%}
+      {% endif %}
     </p>
 
     <ul class="govuk-list  govuk-!-margin-bottom-6">
-      {% if (query.id | appInfo('status')) == 'draft' %}
+      {% if (query.id | appInformation('status')) == 'draft' %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="certificate/check-your-progress?certificate=ehc2849">Edit and submit this application</a></li>
-      {% endif%}
+      {% endif %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{ query.is_group }}">Clone as new application</a></li>
-      {% if (query.id | appInfo('status')) == 'draft' %}
+      {% if (query.id | appInformation('status')) == 'draft' %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="delete">Delete this application</a></li>
-      {% endif%}
+      {% endif %}
     </ul> -->
-
   </div>
 
 </div>
-
 {% endif %}
 {% endblock %}

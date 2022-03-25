@@ -38,15 +38,17 @@ Display question - Exports application - GOV.UK
               {% if data.build == "ux" %}
               Value of your consignment (pounds)
               {% else %}
-              Value of consignment
+              Value of consignment 
               {% endif %}
             </label>
-            {% if data.build == "ux" %}
+            <span id="value-hint" class="govuk-hint">
+              {% if data.build == "ux" %}
+              {% else %}
+              This information helps us improve the service we provide to exporters 
+              {% endif %}
+            </span>
             <input class="govuk-input govuk-input--width-10" id="consignment-value" name="consignment_value" type="text" aria-describedby="value-hint">
-            {% else %}
-              <span class="govuk-hint" id="transport-hint">This information helps us improve the service we provide to exporters</span>
-              <input class="govuk-input" id="consignment-value" name="consignment_value" type="text" aria-describedby="value-hint">
-            {% endif %}
+
           </div>
         {% endif %}
 
@@ -65,13 +67,7 @@ Display question - Exports application - GOV.UK
             <span id="waste-hint" class="govuk-hint">
               Enter the port or airport where the consignment will arrive
             </span>
-            {% if data.build == "ux" %}
-            <input class="govuk-input govuk-input--width-20" id="reference_num" name="port_entry" value="{% if query.change=='yes'%}{{ data.point_of_entry }}{%endif%}" type="text" data-qa-id="Question-7006EHC-1">
-            {% else %}
-            <input class="govuk-input" id="reference_num" name="port_entry" value="{% if query.change=='yes'%}{{ data.point_of_entry }}{%endif%}" type="text" data-qa-id="Question-7006EHC-1">
-            {% endif %}
-
-
+            <input class="govuk-input govuk-input--width-20" id="reference_num" name="port_entry" value="{% if query.change=='yes'%}{{ data.point_of_entry }}{% endif %}" type="text" data-qa-id="Question-7006EHC-1">
           </div>
         {% endif %}
 
@@ -124,11 +120,7 @@ Display question - Exports application - GOV.UK
         <div class="govuk-form-group">
           <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend {{label_class}}">
-              {% if data.commodity == "potatoes" %}
-              Select Mode of Transport
-              {% else %}
               How will the consignment be transported?
-              {% endif %}
             </legend>
             <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
               <div class="govuk-radios__item">
@@ -177,19 +169,10 @@ Display question - Exports application - GOV.UK
         {% endif %}
         
         {% if data.commodity == "potatoes" %}
-        {% if data.build == "ux" %}
         <div class="govuk-form-group">
           <label class="govuk-label" for="container_num">Container number</label>
-          <input class="govuk-input govuk-input--width-20" id="container_num" name="container_num" value="{% if query.change=='yes'%}{{ data.container_num }}{%endif%}" type="text">
+          <input class="govuk-input govuk-input--width-20" id="container_num" name="container_num" value="{% if query.change=='yes'%}{{ data.container_num }}{% endif %}" type="text">
         </div>
-        {% else %}
-        <div class="govuk-form-group">
-          <label class="govuk-label govuk-!-font-weight-bold" for="container_num">Container number</label>
-          <span class="govuk-hint" id="transport-hint">container number</span>
-          <input class="govuk-input" id="container_num" name="container_num" value="{% if query.change=='yes'%}{{ data.container_num }}{%endif%}" type="text">
-        </div>
-        {% endif %}
-
         {% endif %}
 
       </fieldset>

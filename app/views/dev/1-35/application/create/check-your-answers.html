@@ -47,7 +47,17 @@ Review Answers - Exports application - GOV.UK
             {% elseif data.journey == "coc" %}
               Certificate of conformity
             {% else %}
-              Phytosanitary certificate for {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}
+              Phytosanitary certificate for 
+              {% if data.build == "ux" %}
+                {% if data.commodity == "plants" %}plants and fresh produce
+                {% else %}
+                {{data.commodity or 'plant products'}}{% endif %}
+              {% else %}
+                {% if data.commodity == "plants" %}plants and fresh produce
+                {% elif data.commodity == "plant products" %}processed plant products
+                {% else %}
+                {{data.commodity or 'plant products'}}{% endif %}
+              {% endif %}
             {% endif %}
           {% else %}
               Phytosanitary certificate (PHEATS)
@@ -247,7 +257,14 @@ Review Answers - Exports application - GOV.UK
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">Description</th>
             {% if data.commodity != "seeds" %}
-            <th class="govuk-table__header" scope="col">{% if data.commodity == "plant products"%}Primary country where grown{% else %}Country of origin{% endif %}</th>
+            <th class="govuk-table__header" scope="col">
+              {% if data.build == "ux" %}
+                {% if data.commodity == "plant products"%}Primary country where grown{% else %}Country of origin{% endif %}
+              {% else %}
+                Country of origin
+              {% endif %}
+            
+            </th>
             {% endif %}
             <th class="govuk-table__header" scope="col">Quantity</th>
             <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
@@ -350,6 +367,7 @@ Review Answers - Exports application - GOV.UK
 
       </dl>
       {% else %}
+      {% if data.build == "ux" %}
       <h2 class="govuk-heading-m govuk-!-margin-top-9">Inspection details</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
@@ -424,6 +442,9 @@ Review Answers - Exports application - GOV.UK
         {% else %}
         {% endif %}
       </dl>
+      {% else %}
+
+      {% endif %}
       {% endif %}
 
       <!-- Transportation -->
@@ -456,7 +477,7 @@ Review Answers - Exports application - GOV.UK
           {% if data.build == "ux" %}
           <dt class="govuk-summary-list__key">How will the consignment be transported?</dt>
           {% else %}
-            {% if data.commodity == "potatoes" %}
+            {% if data.commodity == "potatoes" or data.commodity == "plant products" %}
             <dt class="govuk-summary-list__key">Select Mode of Transport </dt>
             {% else %}
             <dt class="govuk-summary-list__key">How will the consignment be transported?</dt>
@@ -510,11 +531,7 @@ Review Answers - Exports application - GOV.UK
         </div>
 
         <div class="govuk-summary-list__row">
-          {% if data.build == "ux" %}
           <dt class="govuk-summary-list__key">Address of the consignee</dt>
-          {% else %}
-          <dt class="govuk-summary-list__key">Consignee Address</dt>
-          {% endif %}
           <dd class="govuk-summary-list__value">{{data.consignee_address or 'XYZ China Imports Ltd, Kaiser Centre, Phase III, 9-11 Hok Yuen St., Kowloon, China'}}</dd>
           <dd class="govuk-summary-list__actions">
             <a class="govuk-link" href="destination-consignee?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">the address of the consignee</span></a>
@@ -529,7 +546,17 @@ Review Answers - Exports application - GOV.UK
           </dd>
         </div>
         {% else %}
+        {% if data.commodity == "plant products" %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Import permit number</dt>
+          <dd class="govuk-summary-list__value">{{data.import_permit_number or '2244668800'}}</dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="destination-consignee?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">the import permit number</span></a>
+          </dd>
+        </div>
         {% endif %}
+        {% endif %}
+
       </dl>
 
       <h2 class="govuk-heading-m">Supporting documents</h2>

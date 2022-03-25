@@ -26,30 +26,30 @@
     <dl class="govuk-summary-list govuk-summary-list--no-border">
       
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">{% if data.build == "ux" %}APHA reference{% else %}Application{% endif %}</dt>
-        <!-- appInfo() can be found in app/filters.js -->
-        <dd class="govuk-summary-list__value">{{query.id | appInfo('applicationID')}}</dd>
+        <dt class="govuk-summary-list__key">{% if data.build == "ux" %}<abbr title="Animal and Plant Health Agency">APHA</abbr> reference{% else %}Application{% endif %}</dt>
+        <!-- appInformation() can be found in app/filters.js -->
+        <dd class="govuk-summary-list__value">{{query.id | appInformation('applicationID')}}</dd>
       </div>
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">{% if data.build == "ux" %}Your reference{% else %}Reference{% endif %}</dt>
-        <dd class="govuk-summary-list__value">{{query.id | appInfo('reference')}}</dd>
+        <dd class="govuk-summary-list__value">{{query.id | appInformation('reference')}}</dd>
       </div>
 
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">{% if data.build == "ux" %}Application{% else %}Certificate{% endif %} name</dt>
-        <dd class="govuk-summary-list__value">
-          {% if (query.id | appInfo('cert_info')) == 'Conformity' %}
+        <dt class="govuk-summary-list__key">{% if data.build == "ux" %}Type{% else %}Certificate name{% endif %}</dt>
+        <dd class="govuk-summary-list__value">          
+          {% if (query.id | appInformation('cert_info')) == 'Conformity' %}
           Certificate of conformity for {{data.commodity or "crops"}}
-          {% elif (query.id | appInfo('cert_info')) == 'Growing season inspection' %}
+          {% elif (query.id | appInformation('cert_info')) == 'Growing season inspection' %}
           Growing season inspection for {{data.commodity or "crops"}}
-          {% elif (query.id | appInfo('cert_info')) == 'Seed sampling' %}
+          {% elif (query.id | appInformation('cert_info')) == 'Seed sampling' %}
           Seed sampling for {{data.commodity or "crops"}}
-          {% elif (query.id | appInfo('cert_info')) == 'Soil sampling' %}
+          {% elif (query.id | appInformation('cert_info')) == 'Soil sampling' %}
           Soil sampling for {{data.commodity or "crops"}}
-          {% elif (query.id | appInfo('cert_info')) == 'Phytosanitary' %}
+          {% elif (query.id | appInformation('cert_info')) == 'Phytosanitary' %}
           Phytosanitary certificate for {{data.commodity or "crops"}}
-          {% elif (query.id | appInfo('cert_info')) == 'Re-forwarding' %}
+          {% elif (query.id | appInformation('cert_info')) == 'Re-forwarding' %}
           Re-forwarding phytosanitary certificate for {{data.commodity or "crops"}}
           {% else %}
           Phytosanitary certificate for commodity
@@ -57,22 +57,22 @@
         </dd>
       </div>
 
-      {% if (query.id | appInfo('cert_info')) == 'Growing season inspection' %}
+      {% if (query.id | appInformation('cert_info')) == 'Growing season inspection' %}
 
-      {% elif (query.id | appInfo('cert_info')) == 'Seed sampling' %}
+      {% elif (query.id | appInformation('cert_info')) == 'Seed sampling' %}
 
-      {% elif (query.id | appInfo('cert_info')) == 'Soil sampling' %}
+      {% elif (query.id | appInformation('cert_info')) == 'Soil sampling' %}
       
       {% else %}
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Destination country</dt>
-        <dd class="govuk-summary-list__value">{{query.id | appInfo('destination')}}</dd>
+        <dt class="govuk-summary-list__key">{% if data.build == "ux" %}Destination country{% else %}Destination{% endif %}</dt>
+        <dd class="govuk-summary-list__value">{{query.id | appInformation('destination')}}</dd>
       </div>
       {% endif %}
 
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Customer</dt>
-        <dd class="govuk-summary-list__value">{{query.id | appInfo('exporter')}}</dd>
+        <dt class="govuk-summary-list__key">{% if data.build == "ux" %}Consignee{% else %}Customer{% endif %}</dt>
+        <dd class="govuk-summary-list__value">{{query.id | appInformation('exporter')}}</dd>
       </div>
 
     </dl>
@@ -97,7 +97,7 @@
             </div>
             {% else %}
             <div class="govuk-radios__item">
-              {% if (query.id | appInfo('reference')) != "" %}
+              {% if (query.id | appInformation('reference')) != "" %}
               <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~reuse-ref?id={{query.id or 1}}&is_group={{query.is_group}}">
               {% else %}
               <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/create/check-your-answers-copy">
@@ -105,12 +105,12 @@
               <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application</label>
             </div>
             {% endif %} -->
-            {% if (query.id | appInfo('cert_info')) == 'Conformity' %}
+            {% if (query.id | appInformation('cert_info')) == 'Conformity' %}
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&journey=coc&cloned=yes">
               <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application</label>
             </div>
-            {% elif (query.id | appInfo('cert_info')) == 'Growing season inspection' %}
+            {% elif (query.id | appInformation('cert_info')) == 'Growing season inspection' %}
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/gsi/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes">
               <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application{% if data.commodity == "seeds" %} including the commodities{% endif %}</label>
@@ -122,7 +122,7 @@
               <label class="govuk-label govuk-radios__label" for="application_type_clone_no_data">Yes, copy this application but delete the commodities</label>
             </div>
             {% endif %}
-            {% elif (query.id | appInfo('cert_info')) == 'Seed sampling' %}
+            {% elif (query.id | appInformation('cert_info')) == 'Seed sampling' %}
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/seeds/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes">
               <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application including the commodities</label>
@@ -132,12 +132,12 @@
               <input class="govuk-radios__input" id="application_type_clone_no_data" name="application_type" type="radio" value="yes~application/seeds/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes">
               <label class="govuk-label govuk-radios__label" for="application_type_clone_no_data">Yes, copy this application but delete the commodities</label>
             </div>
-            {% elif (query.id | appInfo('cert_info')) == 'Soil sampling' %}
+            {% elif (query.id | appInformation('cert_info')) == 'Soil sampling' %}
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/soil/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes">
               <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application</label>
             </div>
-            {% elif (query.id | appInfo('cert_info')) == 'Phytosanitary' %}
+            {% elif (query.id | appInformation('cert_info')) == 'Phytosanitary' %}
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes">
               <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application{% if data.commodity == "seeds" %} including the commodities{% endif %}</label>
@@ -149,7 +149,7 @@
               <label class="govuk-label govuk-radios__label" for="application_type_clone_no_data">Yes, copy this application but delete the commodities</label>
             </div>
             {% endif %}
-            {% elif (query.id | appInfo('cert_info')) == 'Re-forwarding' %}
+            {% elif (query.id | appInformation('cert_info')) == 'Re-forwarding' %}
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&reforwarding=1&cloned=yes">
               <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application{% if data.commodity == "seeds" %} including the commodities{% endif %}</label>
