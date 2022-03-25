@@ -1,0 +1,117 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Commodity list - {{serviceName}} - GOV UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{{ govukBackLink({
+text: "Back",
+href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <div class="app-alert app-alert--warning">
+      <p class="govuk-body">
+        This CSV could not be uploaded as it has more than 500 commodities. You should edit the file so that it contains
+        only 500 commodities. You will need to create a new application if you want to add more than 500 commodities.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="govuk-width-container">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <form method="post">
+
+        {% set commodity = data.commodity or "products" %}
+
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+
+            {% if data.build == "ux" %}
+            <h1 class="govuk-heading-xl govuk-!-margin-top-4">Seeds to be sampled</h1>
+            {% else %}
+            <h1 class="govuk-heading-xl govuk-!-margin-top-4">Your commodities</h1>
+            {% endif %}
+            <h2 class="govuk-heading-m">Commodity summary</h1>
+
+              <!--               <p class="govuk-body">You can add a maximum of 500 commodities to this consignment.</p> -->
+
+              <dl class="govuk-summary-list">
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    Number of commodity records
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    500
+                  </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    Total quantity
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    109,100 seeds <br />10.35Kg<br />and 15 tonnes
+                  </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    Destination countries
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    <p class="govuk-body">Belgium, France, Israel, New Zealand, Spain </br>
+                    </p>
+                  </dd>
+                </div>
+              </dl>
+          </div>
+        </div>
+
+        <ul class="govuk-list govuk-!-margin-top-4 govuk-!-margin-bottom-8 noprint">
+          <li>
+            <a class="govuk-link" href="commodity-list-seeds-100-check">
+              View all commodities
+            </a>
+          </li>
+          <li></li>
+          <a class="govuk-link" href="confirm-delete-all">
+            Delete all commodities
+          </a>
+          </li>
+        </ul>
+
+
+        {{ govukButton({
+        text: "Save and continue"
+        }) }}
+
+
+      </form>
+
+      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+      <ul class="govuk-list govuk-list govuk-!-margin-top-9">
+        <li>
+          <a href="upload-completed-bulk" class="govuk-link govuk-link-no-visited-state">File upload complete</a>
+        </li>
+        <li>
+          <a href="commodity-list-seeds-summary-max" class="govuk-link govuk-link-no-visited-state">Commodity list summary with 500 max</a>
+        </li>
+        <li>
+          <a href="commodity-list-seeds-summary-upload-max" class="govuk-link govuk-link-no-visited-state">Commodity list summary with CSV upload message</a>
+        </li>
+        <li>
+          <a href="commodity-list-seeds" class="govuk-link govuk-link-no-visited-state">Commodity list with 30 rows</a>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
