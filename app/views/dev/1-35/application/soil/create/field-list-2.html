@@ -18,6 +18,18 @@
 {% endblock %}
 
 {% block content %}
+<style>
+
+  .force-content-break {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -ms-word-break: break-all;
+    word-break: break-all;
+    word-break: break-word;
+  }
+
+</style>
+
 <div class="govuk-grid-row">
   
   <div class="govuk-grid-column-three-quarters">
@@ -29,7 +41,7 @@
       <table class="govuk-table govuk-!-margin-bottom-4">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Location</th>
+            <th class="govuk-table__header govuk-!-width-one-third" scope="col">Location</th>
             <th class="govuk-table__header govuk-table__header--numeric" scope="col">Inspection area (hectares)</th>
             <th class="govuk-table__header" scope="col">Field map</th>
             <th class="govuk-table__header" scope="col"></th>
@@ -40,7 +52,11 @@
             <td class="govuk-table__cell">
               {{data.nurseryplotno2 or "Bottom field"}}
               <br>
+              {% if data.build == "ux" %}
+              <span class="force-content-break">{% if data.addfielddetails2 == "Google Maps" %}{{data.navigation_googlemaps2 or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails2 == "iacs" %}{{data.navigation_iacs2 or "NF 1234 1234"}}{% elif data.addfielddetails2 == "gridgps" %}{{data.navigation_gridgps2 or "NX 509 582"}}{% elif data.addfielddetails2 == "what3words" %}///{{data.navigation_what3words2 or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}</span>
+              {% else %}
               {% if data.addfielddetails2 == "Google Maps" %}{{data.navigation_googlemaps2 or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails2 == "iacs" %}{{data.navigation_iacs2 or "NF 1234 1234"}}{% elif data.addfielddetails2 == "gridgps" %}{{data.navigation_gridgps2 or "NX 509 582"}}{% elif data.addfielddetails2 == "what3words" %}///{{data.navigation_what3words2 or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}
+              {% endif %}
             </td>
             <td class="govuk-table__cell govuk-table__cell--numeric">{{data.areaoffield2 or "20"}}</td>
             <td class="govuk-table__cell">{% if data.send_inspector_map2 == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload2 or "Another filename.jpg"}}</a>{% else %}You choose to send the map by post{% endif %}</td>
@@ -54,7 +70,11 @@
             <td class="govuk-table__cell">
               {{data.nurseryplotno or "Top field"}}
               <br>
+              {% if data.build == "ux" %}
+              <span class="force-content-break">{% if data.addfielddetails == "Google Maps" %}{{data.navigation_googlemaps or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails == "iacs" %}{{data.navigation_iacs or "NF 1234 1234"}}{% elif data.addfielddetails == "gridgps" %}{{data.navigation_gridgps or "NX 509 582"}}{% elif data.addfielddetails == "what3words" %}///{{data.navigation_what3words or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}</span>
+              {% else %}
               {% if data.addfielddetails == "Google Maps" %}{{data.navigation_googlemaps or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails == "iacs" %}{{data.navigation_iacs or "NF 1234 1234"}}{% elif data.addfielddetails == "gridgps" %}{{data.navigation_gridgps or "NX 509 582"}}{% elif data.addfielddetails == "what3words" %}///{{data.navigation_what3words or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}
+              {% endif %}
             </td>
             <td class="govuk-table__cell govuk-table__cell--numeric">{{data.areaoffield or "3.5"}}</td>
             <td class="govuk-table__cell">{% if data.send_inspector_map == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload or "Filename.jpg"}}</a>{% else %}You choose to send the map by post{% endif %}</td>
