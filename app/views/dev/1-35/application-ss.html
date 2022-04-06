@@ -197,9 +197,16 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
-  {% if (query.id | appInformation('status')) == 'submitted' or (query.id | appInformation('status')) == 'processing' or (query.id | appInformation('status')) == 'with inspector' or (query.id | appInformation('status')) == 'scheduled' or (query.id | appInformation('status')) == 'exporter action' or (query.id | appInformation('status')) == 'preparing phyto' or (query.id | appInformation('status')) == 'returned' or (query.id | appInformation('status')) == 'awaiting decision'%}
+  {% if (query.id | appInformation('status')) == 'processing' or (query.id | appInformation('status')) == 'with inspector' or (query.id | appInformation('status')) == 'scheduled' or (query.id | appInformation('status')) == 'exporter action' or (query.id | appInformation('status')) == 'preparing phyto' or (query.id | appInformation('status')) == 'returned' or (query.id | appInformation('status')) == 'awaiting decision'%}
   <ul class="govuk-list govuk-!-margin-top-6 noprint">
     <li><a class="govuk-link govuk-link--no-visited-state" href="#">Update this application</a></li>
+    <li><a class="govuk-link govuk-link--no-visited-state" href="application/soil/create/view-your-answers?id={{query.id or 1}}&is_group={{query.is_group}}">View this application</a></li>
+    <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{query.is_group}}">Copy as new application</a></li>
+    <li><a class="govuk-link govuk-link--no-visited-state" href="cancel-reason?id={{query.id or 1}}&is_group={{query.is_group}}">Cancel this application</a></li>
+  </ul>
+  {% elif (query.id | appInformation('status')) == 'submitted' %}
+  <ul class="govuk-list govuk-!-margin-top-6 noprint">
+    {% if data.build == "ux" %}<li><a class="govuk-link govuk-link--no-visited-state" href="#">Update this application</a></li>{% else %}{% endif %}
     <li><a class="govuk-link govuk-link--no-visited-state" href="application/soil/create/view-your-answers?id={{query.id or 1}}&is_group={{query.is_group}}">View this application</a></li>
     <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{query.is_group}}">Copy as new application</a></li>
     <li><a class="govuk-link govuk-link--no-visited-state" href="cancel-reason?id={{query.id or 1}}&is_group={{query.is_group}}">Cancel this application</a></li>
@@ -222,6 +229,11 @@
     <li><a class="govuk-link govuk-link--no-visited-state" href="application/soil/create/view-your-answers">View this application</a></li>
     <li><a class="govuk-link govuk-link--no-visited-state" href="clone">Copy as new application</a></li>
     <li><a class="govuk-link govuk-link--no-visited-state" href="delete">Cancel this application</a></li>
+  </ul>
+  {% elif (query.id | appInformation('status')) == 'cancelled' %}
+  <ul class="govuk-list govuk-!-margin-top-6 noprint">
+    {% if data.build == "ux" %}<li><a class="govuk-link govuk-link--no-visited-state" href="#">View this application</a></li>{% else %}{% endif %}
+    <li><a class="govuk-link govuk-link--no-visited-state" href="#">Copy as new application</a></li>
   </ul>
   {% else %}
   <ul class="govuk-list govuk-!-margin-top-6 noprint">
