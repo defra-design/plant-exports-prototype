@@ -1,11 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.build == "ux" %}
-  What do you need to do? - {{serviceName}} - GOV.UK
-  {% else %}
-  Health Certificate Type - GOV.UK
-  {% endif %}
+  {% if data.build == "ux" %}What do you need to do? - {{serviceName}} - GOV.UK{% else %}Health Certificate Type - GOV.UK{% endif %}
 {% endblock %}
 
 {% block beforeContent %}
@@ -41,8 +37,15 @@
           <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
 
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="how-contacted-conditional-phyto" name="has_reference" type="radio" value="phyto~{{query.return_url or 'what-country'}}" data-aria-controls="conditional-how-contacted-conditional-phyto">
+              <input class="govuk-radios__input" id="how-contacted-conditional-phyto" name="has_reference" type="radio" value="phyto~{{query.return_url or 'what-country'}}" aria-describedby="how-contacted-conditional-phyto-hint">
               <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-phyto">Apply for a phytosanitary certificate</label>
+
+              {% if data.commodity == "seeds" %}
+              <div id="how-contacted-conditional-phyto-hint" class="govuk-hint govuk-radios__hint">
+                Only apply for a phytosanitary certificate when your seed sampling application status says 'Certificate Issued'.
+              </div>
+              {% endif %}
+
             </div>
 
             {% if data.journey == "both" %}
@@ -67,10 +70,10 @@
             {% if data.commodity != "grain" and data.commodity != "plant products" and data.commodity != "used farm machinery" %}
             {% if data.commodity == "plants" %}
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="how-contacted-conditional-coc" name="has_reference" type="radio" value="coc~{{query.return_url or 'what-country'}}" data-aria-controls="conditional-how-contacted-conditional-coc">
+              <input class="govuk-radios__input" id="how-contacted-conditional-coc" name="has_reference" type="radio" value="coc~{{query.return_url or 'what-country'}}" aria-describedby="how-contacted-conditional-coc-hint">
               <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-coc">Apply for a certificate of conformity</label>
             
-              <div id="how-contacted-conditional-1-hint" class="govuk-hint govuk-radios__hint">
+              <div id="how-contacted-conditional-coc-hint" class="govuk-hint govuk-radios__hint">
                 If you also plan to apply for a phytosanitary certificate for this consignment, do the phytosanitary application first.
               </div>
 
@@ -90,10 +93,10 @@
             </div>
             {% elseif data.commodity == "potatoes" %}
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="how-contacted-conditional-soil-sampling" name="has_reference" type="radio" value="soil sampling~{{query.return_url or '../soil/create/reference'}}" data-aria-controls="conditional-how-contacted-conditional-soil-sampling">
+              <input class="govuk-radios__input" id="how-contacted-conditional-soil-sampling" name="has_reference" type="radio" value="soil sampling~{{query.return_url or '../soil/create/reference'}}" aria-describedby="how-contacted-conditional-soil-sampling-hint">
               <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-soil-sampling">Arrange soil sampling for ware potatoes</label>
 
-              <div id="more-detail-hint" class="govuk-hint govuk-radios__hint">
+              <div id="how-contacted-conditional-soil-sampling-hint" class="govuk-hint govuk-radios__hint">
                 If you need soil sampling for seed potatoes, you must use the <a href="https://www.gov.uk/guidance/the-seed-potato-classification-scheme" class="govuk-link">Seed Potato Classification Scheme</a>.
               </div>
 
