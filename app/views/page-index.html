@@ -1,26 +1,28 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  Page index for version {{data.version}}
+  Page index for version {{data.version}} - GOV.UK
 {% endblock %}
 
 {% block content %}
-<h1 class="govuk-heading-xl">Page index for version {{data.version}}</h1>
-
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-one-half">
+
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-xl">Page index for version {{data.version}}</h1>
+
     <form id="version-update" method="get">
+
       <div class="govuk-form-group">
-        <label class="govuk-label" for="sort">
-          Version
-        </label>
+        <label class="govuk-label" for="sort">Version</label>
         <select class="govuk-select" id="sort" name="version" onchange="updateversion()">
           {% for v in data.version_list %}
           <option value="{{v}}" {% if data.version == v %}selected{% endif %}>Version {{v}} {% if data.version == v %}{% endif %}</option>
           {% endfor %}
         </select>
       </div>
+
     </form>
+
     <p class="govuk-body"><strong>Current commodity:</strong> {{data.commodity or "None"}} <a class="govuk-footer__link" href="/dev/{{data.version}}/application/setup/what-export?change=yes&return_url={{data.currentURL}}">Change</a></p>
 
     <h2 class="govuk-heading-m">Sign in and sign up</h2>
