@@ -3,7 +3,7 @@
 {% set items = [
   {
   date: '18 Jan 2022',
-  application_number: '241118522888',
+  application_number: '2411 1852 2888',
   description: 'Vegetable oil',
   details: '',
   sample_reference: '444555666',
@@ -14,7 +14,7 @@
   },
   {
   date: '19 Jan 2022',
-  application_number: '241118522999',
+  application_number: '2411 1852 2999',
   description: 'Vegetable oil',
   details: '',
   sample_reference: '444555666',
@@ -23,23 +23,22 @@
   amount: '5 tonnes',
   total: '5 tonnes'
   }
-  ]
-  %}
-
-  {% set stocks = [
-    {
-    description: 'Vegetable oil',
-    variety: '',
-    reference: 'Store 3',
-    sample_reference: '444555666',
-    amount: '10 tonnes',
-    total: '20 tonnes'
-    }
-  ]
-  %}
+]
+%}
+{% set stocks = [
+  {
+  description: 'Vegetable oil',
+  variety: '',
+  reference: 'Store 3',
+  sample_reference: '444555666',
+  amount: '10 tonnes',
+  total: '20 tonnes'
+  }
+]
+%}
 
 {% block pageTitle %}
-Stock details - {{serviceName}} - GOV.UK
+  Stock details - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -56,28 +55,29 @@ Stock details - {{serviceName}} - GOV.UK
   }
 
 </style>
-{% endblock%}
+{% endblock %}
 
 {% block content %}
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">Stock details
-    </h1>
+    <h1 class="govuk-heading-xl">Stock details</h1>
   </div>
+
 </div>
-  {% if query.stock %}
-  {% set ref = query.stock %}
-  {% else %}
-  {% set ref = 0 %}
-  {% endif %}
 
-  {% set stock = stocks[ref] %}
+{% if query.stock %}
+{% set ref = query.stock %}
+{% else %}
+{% set ref = 0 %}
+{% endif %}
+{% set stock = stocks[ref] %}
 
-<div class="govuk-grid-row govuk-!-margin-bottom-6">
+<div class="govuk-grid-row">
 
   <div class="govuk-grid-column-three-quarters">
     <dl class="govuk-summary-list govuk-summary-list--no-border">
+      
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Sample reference
@@ -85,7 +85,8 @@ Stock details - {{serviceName}} - GOV.UK
         <dd class="govuk-summary-list__value">
             {{stock.sample_reference}}
         </dd>
-      </div> 
+      </div>
+
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Description
@@ -94,6 +95,7 @@ Stock details - {{serviceName}} - GOV.UK
           {{stock.description}}
         </dd>
       </div>
+
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Variety
@@ -102,6 +104,7 @@ Stock details - {{serviceName}} - GOV.UK
           {{stock.variety}}
         </dd>
       </div>
+
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Location
@@ -110,6 +113,7 @@ Stock details - {{serviceName}} - GOV.UK
           {{stock.reference}}
         </dd>
       </div>
+
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Inspected on
@@ -118,6 +122,7 @@ Stock details - {{serviceName}} - GOV.UK
           10 January 2022
         </dd>
       </div>
+
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Valid until
@@ -146,58 +151,38 @@ Stock details - {{serviceName}} - GOV.UK
       </div>
 
     </dl>
+    {% if query.expired == "true" %}
+    <p class="govuk-body">This stock has expired and can no longer to be used for stock draw down.</p>
+    {% endif %}
+  </div>
 
-
-  {% if query.expired == "true" %}
-  <p class="govuk-body">
-    This stock has expired and can no longer to be used for stock draw down.
-  </p>
-  {% endif %}
-</div>
 </div>
 
+<div class="govuk-grid-row">
 
-<div class="govuk-grid-row govuk-!-margin-bottom-6">
-<div class="govuk-grid-column-two-thirds">
-    <h2 class="govuk-heading-m govuk-!-margin-top-4">
-      History of draw downs
-    </h2>
-    <p class="govuk-body">
-      Some of this stock has been used for draw downs in the past. These are the details of those draw downs.
-    </p>
-
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-m govuk-!-margin-top-4">History of draw downs</h2>
+    <p class="govuk-body">Some of this stock has been used for draw downs in the past. These are the details of those draw downs.</p>
 
     <table class="govuk-table responsive-table">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
           <th class="govuk-table__header" scope="col">Submitted date</th>
-          <th class="govuk-table__header" scope="col">Application reference</th>
+          <th class="govuk-table__header" scope="col">{% if data.build == "ux" %}<abbr title="Animal and Plant Health Agency">APHA</abbr> reference{% else %}Application reference{% endif %}</th>
           <th class="govuk-table__header" scope="col">Status</th>
           <th class="govuk-table__header" scope="col">Quantity</th>
         </tr>
       </thead>
-
       <tbody>
         {% for item in items %}
         <tr class="govuk-table__row result">
-          <td class="govuk-table__cell" scope="row">{{ item.date }}
-          </td>
-          <td class="govuk-table__cell" scope="row">
-            <a href="../../application-ssdd-single?id={{loop.index}}&reference={{item.application_number }}" class="govuk-link govuk-link--no-visited-state">
-              {{ item.application_number }}
-            </a>
-          </td>
-          <td class="govuk-table__cell " scope="row">
-            <strong class="govuk-tag {{item.status | tagColour }}">{{ item.status }}</strong>
-            
-          </td>
-
-          <td class="govuk-table__cell" scope="row">{{ item.amount }}
-          </td>
+          <td class="govuk-table__cell" scope="row">{{item.date}}</td>
+          <td class="govuk-table__cell" scope="row"><a href="../../application-ssdd-single?id={{loop.index}}&reference={{item.application_number}}" class="govuk-link govuk-link--no-visited-state">{{item.application_number}}</a></td>
+          <td class="govuk-table__cell" scope="row"><strong class="govuk-tag {{item.status | tagColour}}">{{item.status}}</strong></td>
+          <td class="govuk-table__cell" scope="row">{{item.amount}}</td>
         </tr>
         {% endfor %}
       </tbody>
-
     </table>
 
     {% if query.expired == "true" %}
@@ -209,8 +194,7 @@ Stock details - {{serviceName}} - GOV.UK
     }) }}
     {% endif %}
 
+  </div>
 
 </div>
-</div>
-
 {% endblock %}
