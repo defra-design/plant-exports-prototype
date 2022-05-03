@@ -10,13 +10,13 @@
   {% endfor %}
 </ul>
 
-<div id="commoditiy-botanical-lookup" class="govuk-form-group" style="display: none;" data-default="{% if data.botanical_name %}{{data.botanical_name}}{% endif %}">
+<div id="commoditiy-botanical-lookup" class="govuk-form-group" style="display: none;" data-default="{% if data.botanical_name3 %}{{data.botanical_name3}}{% endif %}">
   <fieldset class="govuk-fieldset">
-    
+
     <div class="govuk-form-group autocomplete-wrapper" style="max-width: 54ex;">
       <label class="govuk-label govuk-visually-hidden" for="sort">Find botanical</label>
       <!-- <span class="govuk-hint">Find by genus, species or a common name</span> -->
-      
+
       <div id="tt-customTemplates" class="autocomplete-wrapper">
 
       </div>
@@ -32,10 +32,10 @@
   window.addEventListener('load', function() {
 
     function getResults() {
-      
+        
       var list = $('.data-list--item')
       var r = []
-  
+
       $('.data-list--item').each(function() {
         var obj={
           "genus":$(this).find('.data-genus').text(),
@@ -46,20 +46,21 @@
         }
         r.push(obj)
       })
-  
+
       return r
     }
 
     var results = getResults()
 
     function customSuggest (query, syncResults) {
-
       syncResults(query
         ? results.filter(function (result) {
+
             var genusContains = result.genus.toLowerCase().indexOf(query.toLowerCase()) !== -1
             var speciesContains = result.species.toLowerCase().indexOf(query.toLowerCase()) !== -1
             var eppocodeContains = result.eppocode.toLowerCase().indexOf(query.toLowerCase()) !== -1
             var commonContains = result.common.toLowerCase().indexOf(query.toLowerCase()) !== -1
+            
             return genusContains || speciesContains || eppocodeContains || commonContains
           })
         : []
@@ -83,7 +84,7 @@
       element: element,
       id: id,
       defaultValue: $('#commoditiy-botanical-lookup').attr('data-default'),
-      name: "botanical_name",
+      name: "botanical_name3",
       source: customSuggest,
       templates: {
         inputValue: inputValueTemplate,
