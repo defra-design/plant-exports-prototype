@@ -21,7 +21,6 @@
     </div>
     {% endif %}
 
-    {% if data.build == "ux" %}
 		{% if data.reference_num %}<span class="govuk-caption-xl">{{data.reference_num}}</span>{% endif %}
 		<h1 class="govuk-heading-xl">Your application for re-usable batch sampling</h1>
 		<p class="govuk-hint govuk-!-margin-bottom-7">Complete these details to apply for re-usable batch sampling</p>
@@ -52,31 +51,31 @@
           {% endif %}
           {% endif %}
           <li class="app-task-list__item">
-            <span class="app-task-list__task-name"><a href="{{url}}" aria-describedby="sampling-site-details">Re-usable batches to be sampled</a></span>
+            <!-- <span class="app-task-list__task-name"><a href="{{url}}" aria-describedby="sampling-site-details">Re-usable batches to be sampled</a></span>
             {% if data.commodities and (data.commodities | length) > 0  or data.stock_number or data.how-to-identify or data.has_botanicial_name %}
             <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Complete</strong>
             {% else %}
             <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="list-convictions-status">Not started</strong>
-            {% endif %}
-						<!-- {% if data.field_task_list_data == "Not Completed" %}
+            {% endif %} -->
+						{% if data.commodity_task_list_data == "Not Completed" %}
 						<span class="app-task-list__task-name"><a href="{{url}}" aria-describedby="sampling-site-details">Re-usable batches to be sampled</a></span>
 						<strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="sampling-site-details">Not started</strong>
-						{% elif data.field_task_list_data %}
-						<span class="app-task-list__task-name"><a href="{{data.field_task_list_data or 'field'}}" aria-describedby="sampling-site-details">Re-usable batches to be sampled</a></span>
+						{% elif data.commodity_task_list_data %}
+						<span class="app-task-list__task-name"><a href="{{data.commodity_task_list_data or 'commodity-list'}}" aria-describedby="sampling-site-details">Re-usable batches to be sampled</a></span>
 						<strong class="govuk-tag app-task-list__tag" id="sampling-site-details">Complete</strong>
 						{% else %}
-						<span class="app-task-list__task-name"><a href="{{data.field_task_list_data or 'field'}}" aria-describedby="sampling-site-details">Re-usable batches to be sampled</a></span>
+						<span class="app-task-list__task-name"><a href="{{data.commodity_task_list_data or 'commodity-list'}}" aria-describedby="sampling-site-details">Re-usable batches to be sampled</a></span>
 						<strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="sampling-site-details">Not started</strong>
-						{% endif %} -->
+						{% endif %}
 					</li>
-          <li class="app-task-list__item">
+          <!-- <li class="app-task-list__item">
 						<span class="app-task-list__task-name"><a href="{% if data.inspection_task_list_data == 'Complete' %}inspection-addresses?change=yes{% else %}inspection-addresses{% endif %}" aria-describedby="inspection-details">Inspection details</a></span>
 						{% if data.inspection_task_list_data == 'Complete' %}
 						<strong class="govuk-tag app-task-list__tag" id="inspection-details">Complete</strong>
 						{% else %}
 						<strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="inspection-details">Not started</strong>
 						{% endif %}
-					</li>
+					</li> -->
 				</ul>
 			</li>
       <li>
@@ -99,7 +98,7 @@
         <h2 class="app-task-list__section"><span class="app-task-list__section-number">3. </span>Check and submit your application</h2>
         <ul class="app-task-list__items">
           <li class="app-task-list__item">
-            {% if data.inspection_task_list_data == 'Complete' and data.commodity_task_list_data %}
+            {% if data.commodity_task_list_data %}
             <span class="app-task-list__task-name"><a href="check-your-answers" aria-describedby="check-your-answers">Check your answers and submit your application</a></span>
             <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="check-your-answers">Not started</strong>
             {% else %}
@@ -113,111 +112,6 @@
 	      </ul>
 	    </li>
 	  </ol>
-    {% else %}
-    {% if data.reference_num %}<span class="govuk-caption-xl">{{data.reference_num}}</span>{% endif %}
-    <h1 class="govuk-heading-xl">Your application for re-usable batch sampling</h1>
-    <p class="govuk-body govuk-!-margin-bottom-7">Enter the details about your seeds to complete your application</p>
-    <ol class="app-task-list">
-      <li>
-        <h2 class="app-task-list__section">
-          <span class="app-task-list__section-number">1. </span> Application details
-        </h2>
-        <ul class="app-task-list__items">
-          <li class="app-task-list__item">
-            <span class="app-task-list__task-name">
-              <a href="reference?return_url=../create/task-list&change=yes" aria-describedby="eligibility-status">
-                Create a reference
-              </a>
-            </span>
-            <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Complete</strong>
-          </li>
-          {% set url="input-method" %}
-          {% if data.restart == "true" %}
-          {% set url="input-method?restart=false&upload=0" %}
-          {% else %}
-          {% if data.upload > 0 %}
-          {% set url="commodity-list-summary?return_url=task-list" %}
-          {% elseif data.commodities and (data.commodities | length) > 0 %}
-          {% set url="commodity-list" %}
-          {% elif data.commodity_task_list_data %}
-          {% set url=data.commodity_task_list_data %}
-          {% else %}
-          {% set url="input-method?restart=false" %}
-          {% endif %}
-          {% endif %}
-          <li class="app-task-list__item">
-            <span class="app-task-list__task-name"><a href="{{url}}" aria-describedby="contact-details-status">Seeds to be sampled</a></span>
-            {% if data.commodities and ( data.commodities | length ) > 0  or data.stock_number or data.how-to-identify or data.has_botanicial_name %}
-            <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Complete</strong>
-            {% else %}
-            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="list-convictions-status">Not started</strong>
-            {% endif %}
-          </li>
-          <li class="app-task-list__item">
-            <span class="app-task-list__task-name">
-              <a href="inspection-addresses" aria-describedby="eligibility-status">
-                Inspection details
-              </a>
-            </span>
-            {% if data.inspection or data.contact_name %}
-            <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Complete</strong>
-            {% else %}
-            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="list-convictions-status">Not started</strong>
-            {% endif %}
-          </li>
-        </ul>
-      </li>
-      <li>
-        <h2 class="app-task-list__section">
-          <span class="app-task-list__section-number">2. </span>Upload supporting documents (optional)
-        </h2>
-        <ul class="app-task-list__items">
-          <li class="app-task-list__item" style="border-top: none;">
-            Upload packing lists, schedules and other supporting documents to attach to your application.
-          </li>
-          <li class="app-task-list__item">
-            <span class="app-task-list__task-name">
-              <a href="attachments" aria-describedby="list-convictions-status">
-                Supporting documents
-              </a>
-            </span>
-            {% if data.file %}
-            <strong class="govuk-tag app-task-list__tag" id="medical-information-status">1 file attached</strong>
-            {% elif data.upload_documents_task_list_data %}
-            <strong class="govuk-tag app-task-list__tag" id="medical-information-status">1 file attached</strong>
-            {% else %}
-            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="medical-information-status">None added</strong>
-            {% endif %}
-          </li>
-        </ul>
-      </li>
-      <li>
-        <h2 class="app-task-list__section">
-          <span class="app-task-list__section-number">3. </span> Check and submit your application
-        </h2>
-        <ul class="app-task-list__items">
-          <li class="app-task-list__item">
-            <span class="task-list-submit-disabled">
-              <span class="app-task-list__task-name">
-                <a href="check-your-answers" aria-describedby="list-convictions-status">
-                  Check your answers and submit your application
-                </a>
-              </span>
-              <!-- <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="submit-pay-status">Cannot start yet</strong> -->
-            </span>
-            <span class="task-list-submit-enabled" style="display: none;">
-              <span class="app-task-list__task-name">
-                <a href="check-your-answers" aria-describedby="list-convictions-status">
-                  Check and submit your application
-                </a>
-              </span>
-              <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="submit-pay-status">Not started</strong>
-            </span>
-          </li>
-        </ul>
-      </li>
-    </ol>
-    {% endif %}
     
     {% block continueLater %}
     {% include "../../modules/_save-continue-later.html" %}
