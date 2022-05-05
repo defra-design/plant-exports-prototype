@@ -1,0 +1,350 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.build == "ux" %}Check your answers - One sample for multiple phytosanitary certificates - {{serviceName}} - GOV.UK{% else %}Review Answers - Exports application - GOV.UK{% endif %}
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../../../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<style>
+
+  /* Needs extracting and adding to the external Sass or CSS */
+  .no-padding {
+    padding: 0px !important;
+  }
+
+</style>
+
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-three-quarters">
+
+    <form action="../submit/submit-date" method="post">
+      {% if data.build == "ux" %}
+      <h1 class="govuk-heading-xl">Check your answers</h1>
+      <h2 class="govuk-heading-m">Application details</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+        
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Application type</dt>
+          <dd class="govuk-summary-list__value">Phytosanitary certificate for {{data.commodity or "crops"}}</dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Who is the applicant?</dt>
+          <dd class="govuk-summary-list__value">ABC LIMITED, 27 The Crescent, NORTH WEST LONDON, NW7 0HX, 020 123 4567</dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
+        </div>
+        
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Your reference</dt>
+          <dd class="govuk-summary-list__value">{% if data.reference_num %}{{data.reference_num or "REFERENCE" }}{% else %}&nbsp;{% endif %}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="reference?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> your reference</span></a></dd>
+        </div>
+
+      </dl>
+      {% else %}
+      <h1 class="govuk-heading-xl">Review your answers</h1>
+      
+      <div class="govuk-inset-text govuk-!-font-weight-bold">
+        Your application is now ready to be submitted.<br><br>
+        Please check that the answers you've provided are correct.
+      </div>
+      
+      <h2 class="govuk-heading-m">Application summary</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Certificate</dt>
+          <dd class="govuk-summary-list__value">Phytosanitary certificate for plant products</dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Your reference</dt>
+          <dd class="govuk-summary-list__value">{{data.reference_num or "12345"}}</dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="../setup/what-country?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">your reference for this application</span></a>
+          </dd>
+        </div>
+
+      </dl>
+
+      <h2 class="govuk-heading-m">Exporter Details</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+        
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Name</dt>
+          <dd class="govuk-summary-list__value">ABC TRADING LTD</dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Address</dt>
+          <dd class="govuk-summary-list__value">Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH</dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Phone number</dt>
+          <dd class="govuk-summary-list__value">024 546 7069</dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
+        </div>
+
+      </dl>
+      {% endif %}
+
+      <h2 class="govuk-heading-m">Your consignment</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+
+        {% if data.commodityForExport == "1" %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">{% if data.has_botanicial_name3 == "use_description" %}{{data.description_details3 or "Cat nip" }}{% else %}{{data.botanical_name3 or "Lophospermum atrosanguineum (RHWAT)"}}{% endif %}</dt>
+          <dd class="govuk-summary-list__value">
+            Destination: Canada
+            <br>
+            Amount: {{data.amountForExport or "100t"}}
+            <br>
+            Remaining quantity: {{data.quantity3 or "1,460"}}{% if data.units3 == "Grams" %}g{% elif data.units3 == "Kilograms" %}kg{% elif data.units3 == "Litres" %}l{% elif data.units3 == "Millilitres" %}ml{% elif data.units3 == "Tonnes" %}t{% else %}t{% endif %}
+            <br>
+            Distinguishing marks: {% if data.distinguishing_marks %}{{data.distinguishing_marks or "N/A"}}{% else %}&nbsp;{% endif %}
+          </dd>          
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="consignment?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> {% if data.has_botanicial_name3 == "use_description" %}{{data.description_details3 or "Cat nip" }}{% else %}{{data.botanical_name3 or "Lophospermum atrosanguineum (RHWAT)"}}{% endif %}</span></a></dd>
+        </div>
+        {% elif data.commodityForExport == "2" %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">{% if data.has_botanicial_name2 == "use_description" %}{{data.description_details2 or "Tea leaves" }}{% else %}{{data.botanical_name2 or "Alsophila latebrosa (ASWLA)"}}{% endif %}</dt>
+          <dd class="govuk-summary-list__value">
+            Destination: {{data.countryForExport or "Ghana"}}
+            <br>
+            Amount: {{data.amountForExport or "20"}}g
+            <br>
+            Remaining quantity: {{data.quantity2 or "30"}}{% if data.units2 == "Grams" %}g{% elif data.units2 == "Kilograms" %}kg{% elif data.units2 == "Litres" %}l{% elif data.units2 == "Millilitres" %}ml{% elif data.units2 == "Tonnes" %}t{% else %}g{% endif %}
+            <br>
+            Distinguishing marks: {% if data.distinguishing_marks %}{{data.distinguishing_marks or "N/A"}}{% else %}&nbsp;{% endif %}
+          </dd>          
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="consignment?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> {% if data.has_botanicial_name3 == "use_description" %}{{data.description_details3 or "Cat nip" }}{% else %}{{data.botanical_name3 or "Lophospermum atrosanguineum (RHWAT)"}}{% endif %}</span></a></dd>
+        </div>
+        {% else %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">{% if data.has_botanicial_name2 == "use_description" %}{{data.description_details2 or "Tea leaves" }}{% else %}{{data.botanical_name2 or "Alsophila latebrosa (ASWLA)"}}{% endif %}</dt>
+          <dd class="govuk-summary-list__value">
+            Destination: {{data.countryForExport or "Ghana"}}
+            <br>
+            Amount: {{data.amountForExport or "20g"}}
+            <br>
+            Remaining quantity: {{data.quantity2 or "30"}}{% if data.units2 == "Grams" %}g{% elif data.units2 == "Kilograms" %}kg{% elif data.units2 == "Litres" %}l{% elif data.units2 == "Millilitres" %}ml{% elif data.units2 == "Tonnes" %}t{% else %}g{% endif %}
+            <br>
+            Distinguishing marks: {% if data.distinguishing_marks %}{{data.distinguishing_marks or "N/A"}}{% else %}&nbsp;{% endif %}
+          </dd>          
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="consignment?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> {% if data.has_botanicial_name3 == "use_description" %}{{data.description_details3 or "Cat nip" }}{% else %}{{data.botanical_name3 or "Lophospermum atrosanguineum (RHWAT)"}}{% endif %}</span></a></dd>
+        </div>
+        {% endif %}
+
+      </dl>
+
+      <!-- <h2 class="govuk-heading-m">Inspection details</h2>
+      {% if data.build == "ux" %}
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Where are the {{data.commodity or "plant products"}}?</dt>
+          <dd class="govuk-summary-list__value">{{data.select_address or "Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH"}}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="inspection-addresses?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> where the inspection will take place</span></a></dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Who is the contact for this application?</dt>
+          <dd class="govuk-summary-list__value">
+            {% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}
+            Bill Shoggins
+            <br>
+            01234 567890
+            <br>
+            bill.shoggins@acmeltd.com
+            {% else %}
+            {{data.contact_name or "Bill Shoggins"}}
+            <br>
+            {{data.address_phone or "01234 567890"}}
+            <br>
+            {{data.email_address or "bill.shoggins@acmeltd.com"}}
+            {% endif %}
+          </dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> who the main contact for this application</span></a></dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">When will the {{data.commodity or "plant products"}} be ready for sampling?</dt>
+          <dd class="govuk-summary-list__value">{{data.submit_date or "December 2021"}}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="inspection-dates?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> when the fields will be ready for inspection</span></a></dd>
+        </div>
+
+      </dl> -->
+      <!-- {% else %}
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Address</dt>
+          <dd class="govuk-summary-list__value">{{data.select_address or "Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH"}}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="inspection-addresses?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> where the inspection will take place</span></a></dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Contact name</dt>
+          <dd class="govuk-summary-list__value">{% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}Bill Shoggins{% else %}{{data.contact_name or "Bill Shoggins"}}{% endif %}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> who the main contact for this application</span></a></dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Phone number</dt>
+          <dd class="govuk-summary-list__value">{% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}01234 567890{% else %}{{data.address_phone or "01234 567890"}}{% endif %}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> who the main contact for this application</span></a></dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Email address</dt>
+          <dd class="govuk-summary-list__value">{% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}bill.shoggins@acmeltd.com{% else %}{{data.email_address or "bill.shoggins@acmeltd.com"}}{% endif %}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> who the main contact for this application</span></a></dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">When will the fields be ready for inspection?</dt>
+          <dd class="govuk-summary-list__value">{{data.submit_date or "December 2021"}}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="inspection-dates?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> when the fields will be ready for inspection</span></a></dd>
+        </div>
+
+      </dl>
+      {% endif %} -->
+
+      {% if data.build == "ux" %}
+      <h2 class="govuk-heading-m govuk-!-margin-top-9">Transportation</h2>
+      {% else %} 
+      <h2 class="govuk-heading-m govuk-!-margin-top-9">How will the consignment be transported?</h2>
+      {% endif %}
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+        
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Value of consignment</dt>
+          <dd class="govuk-summary-list__value">{{data.value or "10000"}}</dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="shipping?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">the value of consignment</span></a>
+          </dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Point of entry into the destination country</dt>
+          <dd class="govuk-summary-list__value">{{data.point_of_entry or "Calais"}}</dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="shipping?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">the point of entry into the destination country</span></a>
+          </dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          {% if data.build == "ux" %}
+          <dt class="govuk-summary-list__key">How will the consignment be transported?</dt>
+          {% else %}
+          <dt class="govuk-summary-list__key">How will the consignment be transported?</dt>
+          {% endif %}
+          <dd class="govuk-summary-list__value">{{data.transport_method or "Air"}}</dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="shipping?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">how the consignment will be transported</span></a>
+          </dd>
+        </div>
+
+      </dl>
+
+      <h2 class="govuk-heading-m">Who will receive this consignment?</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+        
+        <div class="govuk-summary-list__row">
+          {% if data.build == "ux" %}
+          <dt class="govuk-summary-list__key">Name of consignee</dt>
+          {% else %} 
+          <dt class="govuk-summary-list__key">Name of the consignee</dt>
+          {% endif %}
+          <dd class="govuk-summary-list__value">{{data.consignee or 'Consignee name'}}</dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="destination-consignee?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">who will receive this consignment</span></a>
+          </dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Address of the consignee</dt>
+          <dd class="govuk-summary-list__value">{{data.consignee_address or 'XYZ China Imports Ltd, Kaiser Centre, Phase III, 9-11 Hok Yuen St., Kowloon, China'}}</dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="destination-consignee?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">the address of the consignee</span></a>
+          </dd>
+        </div>
+
+        {% if data.build == "ux" %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Import permit number</dt>
+          <dd class="govuk-summary-list__value">{{data.import_permit_number or '2244668800'}}</dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="destination-consignee?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">the import permit number</span></a>
+          </dd>
+        </div>
+        {% else %}
+        {% if data.commodity == "plant products" %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Import permit number</dt>
+          <dd class="govuk-summary-list__value">{{data.import_permit_number or '2244668800'}}</dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="destination-consignee?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">the import permit number</span></a>
+          </dd>
+        </div>
+        {% endif %}
+        {% endif %}
+
+      </dl>
+
+      <h2 class="govuk-heading-m">Supporting documents</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+        
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            File name
+            <br>
+            File description
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {% if data.file %}
+            <a href="#"><strong>{{data.file}}</strong></a>
+            <br>
+            <a href="#"><strong>{{data.description}}</strong></a>
+            {% elif data.upload_documents_task_list_data %}
+            <a href="#"><strong>{{data.fileUpload1 or "Document.docx"}}</strong></a>
+            <br>
+            {{data.description or "Commodity details"}}
+            {% else %}
+            No documents uploaded
+            {% endif %}
+          </dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="attachments?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> when the fields will be ready for inspection</span></a></dd>
+        </div>
+
+      </dl>
+
+      {% if data.build == "ux" %}
+      <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_blank">what fees you need to pay (opens in new tab)</a> for this application.</p>
+      {% else %} 
+      <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_blank">what fees you need to pay</a> for this application (opens in a new window).</p>
+      {% endif %}
+
+      <div class="govuk-button-group govuk-!-margin-top-9">
+        <input type="hidden" name="answers-checked" value="true">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Continue</button>
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

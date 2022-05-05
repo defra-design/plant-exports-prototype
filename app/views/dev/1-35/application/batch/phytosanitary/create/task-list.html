@@ -6,8 +6,8 @@
 
 {% block beforeContent %}
 {{super()}}
-{% include "../../modules/_account-banner.html" %}
-<a href="../../../dashboard" class="govuk-back-link">Return to your applications</a>
+{% include "../../../modules/_account-banner.html" %}
+<a href="../../../../dashboard" class="govuk-back-link">Return to your applications</a>
 {% endblock %}
 
 {% block content %}
@@ -23,10 +23,10 @@
 
 		{% if data.reference_num %}<span class="govuk-caption-xl">{{data.reference_num}}</span>{% endif %}
 		<h1 class="govuk-heading-xl">Your application</h1>
-		<!-- <p class="govuk-hint govuk-!-margin-bottom-7">Complete these details to apply for re-usable batch sampling</p> -->
+		<p class="govuk-caption-l govuk-!-margin-bottom-8">Enter the details about your consignment to complete your application for a phytosanitary certificate</p>
 		<ol class="app-task-list">
 			<li>
-				<h2 class="app-task-list__section"><span class="app-task-list__section-number">1. </span> Application details</h2>
+				<h2 class="app-task-list__section"><span class="app-task-list__section-number">1. </span>Tell us about your consignment</h2>
 				<ul class="app-task-list__items">
 					<li class="app-task-list__item">
 						<span class="app-task-list__task-name"><a href="reference?change=yes" aria-describedby="create-a-reference">Create a reference</a></span>
@@ -36,49 +36,34 @@
 						<strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="inspection-details">Not added</strong>
 						{% endif %}
 					</li>
-          {% set url="input-method" %}
-          {% if data.restart == "true" %}
-          {% set url="input-method?restart=false&upload=0" %}
-          {% else %}
-          {% if data.upload > 0 %}
-          {% set url="commodity-list-summary?return_url=task-list" %}
-          {% elif data.commodities and (data.commodities | length) > 0 %}
-          {% set url="commodity-list" %}
-          {% elif data.commodity_task_list_data %}
-          {% set url=data.commodity_task_list_data %}
-          {% else %}
-          {% set url="input-method?restart=false" %}
-          {% endif %}
-          {% endif %}
           <li class="app-task-list__item">
-            <!-- <span class="app-task-list__task-name"><a href="{{url}}" aria-describedby="sampling-site-details">Commodity details</a></span>
-            {% if data.commodities and (data.commodities | length) > 0  or data.stock_number or data.how-to-identify or data.has_botanicial_name %}
-            <strong class="govuk-tag app-task-list__tag" id="eligibility-status">Complete</strong>
-            {% else %}
-            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="list-convictions-status">Not started</strong>
-            {% endif %} -->
-						{% if data.commodity_task_list_data %}
-						<span class="app-task-list__task-name"><a href="{{url}}" aria-describedby="sampling-site-details">Commodity details</a></span>
+						<span class="app-task-list__task-name"><a href="consignment?change=yes" aria-describedby="sampling-site-details">What's in your consignment?</a></span>
+						<strong class="govuk-tag app-task-list__tag" id="sampling-site-details">Complete</strong>
+					</li>
+          <li class="app-task-list__item">
+            {% if data.transported_task_list_data == "Complete" %}
+						<span class="app-task-list__task-name"><a href="shipping?change=yes" aria-describedby="sampling-site-details">How will this consignment be transported?</a></span>
 						<strong class="govuk-tag app-task-list__tag" id="sampling-site-details">Complete</strong>
 						{% else %}
-						<span class="app-task-list__task-name"><a href="{{url}}" aria-describedby="sampling-site-details">Commodity details</a></span>
+						<span class="app-task-list__task-name"><a href="shipping" aria-describedby="sampling-site-details">How will this consignment be transported?</a></span>
 						<strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="sampling-site-details">Not started</strong>
 						{% endif %}
 					</li>
-          <!-- <li class="app-task-list__item">
-						<span class="app-task-list__task-name"><a href="{% if data.inspection_task_list_data == 'Complete' %}inspection-addresses?change=yes{% else %}inspection-addresses{% endif %}" aria-describedby="inspection-details">Inspection details</a></span>
-						{% if data.inspection_task_list_data == 'Complete' %}
-						<strong class="govuk-tag app-task-list__tag" id="inspection-details">Complete</strong>
+          <li class="app-task-list__item">
+            {% if data.consignee_task_list_data == "Complete" %}
+						<span class="app-task-list__task-name"><a href="destination-consignee?change=yes" aria-describedby="sampling-site-details">Who will receive this consignment?</a></span>
+						<strong class="govuk-tag app-task-list__tag" id="sampling-site-details">Complete</strong>
 						{% else %}
-						<strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="inspection-details">Not started</strong>
+						<span class="app-task-list__task-name"><a href="destination-consignee" aria-describedby="sampling-site-details">Who will receive this consignment?</a></span>
+						<strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="sampling-site-details">Not started</strong>
 						{% endif %}
-					</li> -->
+					</li>
 				</ul>
 			</li>
       <li>
-        <h2 class="app-task-list__section"><span class="app-task-list__section-number">2. </span>Additional documents (optional)</h2>
+        <h2 class="app-task-list__section"><span class="app-task-list__section-number">2. </span>Upload supporting documents (optional)</h2>
         <ul class="app-task-list__items">
-          <!-- <li class="app-task-list__item" style="border-top: none;">Upload packing lists, schedules and other supporting documents to attach to your application</li> -->
+          <li class="app-task-list__item" style="border-top: none;">Upload packing lists, schedules and other supporting documents to attach to your application</li>
           <li class="app-task-list__item">
             <span class="app-task-list__task-name"><a href="attachments" aria-describedby="list-convictions-status">Supporting documents</a></span>
             {% if data.file %}
@@ -95,7 +80,7 @@
         <h2 class="app-task-list__section"><span class="app-task-list__section-number">3. </span>Check and submit your application</h2>
         <ul class="app-task-list__items">
           <li class="app-task-list__item">
-            {% if data.commodity_task_list_data %}
+            {% if (data.transported_task_list_data == "Complete") and (data.consignee_task_list_data == "Complete") %}
             <span class="app-task-list__task-name"><a href="check-your-answers" aria-describedby="check-your-answers">Check your answers and submit your application</a></span>
             <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="check-your-answers">Not started</strong>
             {% else %}
@@ -111,7 +96,7 @@
 	  </ol>
     
     {% block continueLater %}
-    {% include "../../modules/_save-continue-later.html" %}
+    {% include "../../../modules/_save-continue-later.html" %}
     {% endblock %}
   </div>
 

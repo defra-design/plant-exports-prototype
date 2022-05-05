@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.build == "ux" %}Who will receive this consignment? - One sample for multiple phytosanitary certificates - {{serviceName}} - GOV.UK{% else %}Display question - Exports application - GOV.UK{% endif %}
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../../../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{# set label as bold #}
+{% set label_class = "govuk-label govuk-!-font-weight-bold" %}
+{% if data.build == "ux" %}
+{% set label_class = "govuk-label" %}
+{% endif %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <form action="{{query.return_url or 'task-list'}}" method="post">
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
+          <h1 class="govuk-fieldset__heading">Who will receive this consignment?</h1>
+        </legend>
+        {% if data.build == "ux" %}
+        <p class="govuk-body">The consignee is the importer or customer who receives your consignment when it arrives in the destination country.</p>
+        {% else %}
+        <p class="govuk-body">The consignee is the importer or customer who receives your<br>consignment when it arrives in the destination country.</p>
+        {% endif %}
+
+        <div class="govuk-form-group">
+          <label class="{{label_class}}" for="consignee-name">Name of the consignee</label>
+          <input class="govuk-input" id="consignee-name" name="consignee-name" type="text">
+        </div>
+
+        <div class="govuk-form-group">
+          {% if data.build == "ux" %}
+          <label class="{{label_class}}" for="consignee-address">Address of the consignee</label>
+          {% else %}
+          <label class="{{label_class}}" for="consignee-address">Address of the consignee</label>
+          {% endif %}
+          <textarea class="govuk-textarea" id="consignee-address" name="consignee-address" rows="5"></textarea>
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="{{label_class}}" for="consignee-import-permit">Import permit number{% if data.build == "ux" %} (optional){% endif %}</label>
+          <span id="consignee-import-permit-hint" class="govuk-hint">
+            {% if data.build == "ux" %}
+            If you have been given an import permit by the destination country, enter the number here. You can upload the import permit as a supporting document later on in this application. 
+            {% else %}
+            If you have been given an import permit by the destination country, enter the number here.
+            {% endif %}
+          </span>
+          <input class="govuk-input" id="consignee-import-permit" name="consignee-import-permit" type="text" aria-describedby="consignee-import-permit-hint">
+        </div>
+
+      </fieldset>
+
+      <div class="govuk-button-group govuk-!-margin-top-3 govuk-!-margin-bottom-8">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      </div>
+
+      <!-- Session data hook to update the task list so that this section is marked as 'COMPLETED' -->
+      <div class="govuk-form-group" hidden>
+        <label class="govuk-label" for="consignee_task_list_data">Task list section URL</label>
+        <input class="govuk-input" id="consignee_task_list_data" name="consignee_task_list_data" type="text" value="Complete">
+      </div>
+
+    </form>
+
+    {% block continueLater %}
+    {% include "../../../modules/_save-continue-later.html" %}
+    {% endblock %}
+  </div>
+
+</div>
+{% endblock %}

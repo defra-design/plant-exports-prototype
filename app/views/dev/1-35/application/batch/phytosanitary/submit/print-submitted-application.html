@@ -1,39 +1,63 @@
-{% extends "layout.html" %}
+{% extends "layout_unbranded.html" %}
 
 {% block pageTitle %}
-  Application submitted - One sample for multiple phytosanitary certificates - {{serviceName}} - GOV.UK
+  Sampling reference information - One sample for multiple phytosanitary certificates - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
-{{super()}}
-{% include "../../modules/_account-banner.html" %}
-{% endblock %}
+<style media="screen">
+
+  .govuk-phase-banner {
+    display: none !important;
+  }
+
+</style>
+{% endblock%}
 
 {% block content %}
 <div class="govuk-grid-row">
 
-  <div class="govuk-grid-column-three-quarters">
-
-    <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-6">
-      <h1 class="govuk-panel__title">Application submitted</h1>
-
-      <div class="govuk-panel__body">
-        Your <abbr title="Animal and Plant Health Agency">APHA</abbr> sample references are listed below
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">Sampling reference information</span></h1>
+    <p class="govuk-body">You must label each sample with its sample reference.</p>
+    <dl class="govuk-summary-list govuk-summary-list--no-border">
+      
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key govuk-!-padding-top-1 govuk-!-padding-bottom-1"><abbr title="Animal and Plant Health Agency">APHA</abbr> reference</dt>
+        <dd class="govuk-summary-list__value govuk-!-padding-top-1 govuk-!-padding-bottom-1">1721 14800 4809</dd>
       </div>
 
-    </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key govuk-!-padding-top-1 govuk-!-padding-bottom-1">Your reference</dt>
+        <dd class="govuk-summary-list__value govuk-!-padding-top-1 govuk-!-padding-bottom-1">{% if (query.id | appInformation('reference')) %}{{query.id | appInformation('reference')}}{% elif data.reference_num %}{{data.reference_num or "PO 10028 G" }}{% else %}&nbsp;{% endif %}</dd>
+      </div>
+      
+      <!-- <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key govuk-!-padding-top-1 govuk-!-padding-bottom-1">Import permit</dt>
+        <dd class="govuk-summary-list__value govuk-!-padding-top-1 govuk-!-padding-bottom-1">ABCD1234</dd>
+      </div> -->
 
-    <div class="govuk-warning-text">
-      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-      <strong class="govuk-warning-text__text">
-        <span class="govuk-warning-text__assistive">Warning</span>
-          Label your samples using the <abbr title="Animal and Plant Health Agency">APHA</abbr> sample references and send them to the address below. Include any relevant copies of your import permits if you have any. If you do not do this your application may be rejected.
-      </strong>
-    </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key govuk-!-padding-top-1 govuk-!-padding-bottom-1">Destination countries</dt>
+        <dd class="govuk-summary-list__value govuk-!-padding-top-1 govuk-!-padding-bottom-1">
+          {% if data.commodity_task_list_data %}
+          {% if data.filter_demo3 %}{% for param in data.filter_demo3 %}{{param}}, {% endfor %}{% else %}Canada, {% endif %}
+          {% if data.filter_demo2 %}{% for param in data.filter_demo2 %}{{param}}, {% endfor %}{% else %}China, {% endif %}
+          {% if data.filter_demo %}{% for param in data.filter_demo %}{{param}}{% if not loop.last %}, {% endif %}{% endfor %}{% else %}France{% endif %}
+          {% else %}
+          China, France
+          {% endif %}
+        </dd>
+      </div>
 
-    <h2 class="govuk-heading-m">Commodity details including <abbr title="Animal and Plant Health Agency">APHA</abbr> sample references</h2>
+    </dl>
+
+    <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-top-9 govuk-!-margin-bottom-9">
+
+    <!-- <h2 class="govuk-heading-l govuk-!-margin-top-9">Sampling reference information</h2> -->
 
     <table class="govuk-table">
+      <caption class="govuk-table__caption govuk-heading-m">Sampling reference information</caption>
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
           <th class="govuk-table__header" scope="col">Description</th>
@@ -96,7 +120,7 @@
       </tbody>
     </table>
 
-    <h3 class="govuk-heading-s">Where to send your samples</h3>
+    <p class="govuk-body govuk-!-padding-top-4">Send your samples for inspection to:</p>
     <p class="govuk-body">
       Plant Clinic
       <br>
@@ -110,46 +134,6 @@
       <br>
       YO41 1LZ
     </p>
-    <p class="govuk-body"><a href="print-submitted-application" class="govuk-link govuk-link-no-visited-state" target="_blank">See, print or copy this information (opens in new tab)</a></p>
-    <h2 class="govuk-heading-m">What you need to do</h2>
-    <ol class="govuk-list govuk-list--number">
-      <li>Label your samples using the <abbr title="Animal and Plant Health Agency">APHA</abbr> sample references above.</li>
-      <li>Send your labelled samples to the address above. You must send in any relevant copies of your import permits with your samples.</li>
-      <li>Check your application status has changed to ‘report issued’. This is usually within 7 days. The application will show the sample results.</li>
-      <li>Apply for phytosanitary certificates for this commodity using these sample results.</li>
-      <li>You can apply for more phytosanitary certificates using the same sample. You can apply for the amount you have in stock for this batch of the commodity. If you receive more of this commodity you need to send in samples for it.</li>
-    </ol>
-
-    <p class="govuk-body govuk-!-padding-bottom-2">We'll only contact you if there is a problem with your application.</p>
-
-    {{ govukButton({
-    text: "View your applications",
-    href: "../../../dashboard"
-    }) }}
-
-    <p class="govuk-body govuk-!-padding-top-2">Find out <a
-        href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees"
-        class="govuk-link" target="_self">
-        {% if data.build == "ux" %}
-        what fees you will pay
-        {% else %}
-        what fees you need to pay
-        {% endif %}
-      </a> for this application.</p>
-
-    <h2 class="govuk-heading-m">If you need help</h2>
-    <p class="govuk-body">Contact us quoting your <abbr title="Animal and Plant Health Agency">APHA</abbr> reference <strong {% if data.build == "ux" %}id="applicationFormId2">1721 14800 4809</strong>{% else %}id="applicationFormId2">1721 1480 04809</strong>{% endif %}:</p>
-    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-8">
-      <li><span id="phoneNumber">0300 1000 313</span>, Monday to Sunday 7am to 7pm</li>
-      <li><a href="mailto:planthealth.info@apha.gov.uk" class="govuk-link" id="emailLink">planthealth.info@apha.gov.uk</a></li>
-    </ul>
-
-    <div class="govuk-!-margin-top-6" style="padding: 20px; background-color: #f3f2f1; border-left-color: #666;">
-      <h2 class="govuk-heading-m">Give feedback on this service</h2>
-      <p class="govuk-body-m">Take a 3 minute survey about your application so that we can improve the service. The survey will open in a new window.</p>
-      <p class="govuk-body-m"><a href="https://defragroup.eu.qualtrics.com/jfe/form/SV_1RDraVxZ03Ja2qy" target="_blank" class="govuk-link">Give feedback</a></p>
-    </div>
-
   </div>
 
 </div>

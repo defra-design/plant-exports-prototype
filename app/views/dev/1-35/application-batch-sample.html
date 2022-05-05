@@ -1,13 +1,7 @@
-/* 
- The development build hides:
- the inspected quantities,
- a sample list csv download
- a searchable/paginated table of commodities
-*/
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.build == "ux" %}Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %}{% else %}{% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %}{% endif %} {{query.id | appInformation('applicationID')}} - {{serviceName}} - GOV.UK
+  {% if data.build == "ux" %}Manage application{% else %}Application{% endif %} {{query.id | appInformation('applicationID')}} - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -47,161 +41,187 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">{% if data.build == "ux" %}Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %}{% else %}{% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %}{% endif %} {{query.id | appInformation('applicationID')}}</h1>
-  </div>
-
-</div>
-
-<div class="govuk-grid-row govuk-!-margin-bottom-2">
-
-  <div class="govuk-grid-column-one-half">
-    <dl class="govuk-summary-list govuk-summary-list--no-border">
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Status
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <div class="app-status-tag app-status-tag--{{query.id | appInformation('tag')}}">
-            {{query.id | appInformation('status')}}
-          </div>
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          {% if data.build == "ux" %}Your reference{% else %}Reference{% endif %}
-        </dt>
-        <dd class="govuk-summary-list__value">
-          {% if (query.id | appInformation('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id |
-          appInformation('reference')}}{% endif %}
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          {% if data.build == "ux" %}Type{% else %}Certificate{% endif %}
-        </dt>
-        <dd class="govuk-summary-list__value">
-          Seed sampling application
-        </dd>
-      </div>
-
-      {% if data.build == "ux" %}
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Sampled on
-        </dt>
-        <dd class="govuk-summary-list__value">
-          {{query.id | appInformation('date')}}
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Quantity inspected 
-        </dt>
-        <dd class="govuk-summary-list__value">
-          109,000 seeds
-        </dd>
-      </div>
-      {% endif %}
-    </dl>
-  </div>
-
-
-
-  <div class="govuk-grid-column-one-half govuk-!-margin-bottom-9">
-    <h2 class="govuk-heading-m">Your documents</h2>
-    <p class="govuk-body">
-      The sampling report shows the test results for the commodities in this application.
-    </p>
-    <ul class="govuk-list  noprint">
-    <li><p class="doc-icon"><a href="/public/images/seeds-sampling-report.csv" class="govuk-link govuk-link--no-visited-state">Sampling report (csv)</a>
-    </p></li>      
-    </ul>
-    {% if data.build == "ux" %}
-    <p class="govuk-body">
-      Download the data.
-    </p>
-    <ul class="govuk-list  noprint">
-    <li><p class="doc-icon"><a href="#" class="govuk-link govuk-link--no-visited-state">Stock list {{todaysDate}} (csv)</a>
-    </p></li>  
-    </ul>
-    {% endif %}
-
+    <h1 class="govuk-heading-xl">{% if data.build == "ux" %}Manage application{% else %}Application{% endif %} {{query.id | appInformation('applicationID')}}</h1>
   </div>
 
 </div>
 
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
 
-    <ul class="govuk-list govuk-!-margin-bottom-9 noprint">
-      <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-seeds-viewonly">View application details</a>
-      </li>      
+  <div class="govuk-grid-column-one-half">
+    <dl class="govuk-summary-list govuk-summary-list--no-border">
       
-      <li><a class="govuk-link govuk-link--no-visited-state"
-          href="clone?id={{query.id or 0}}&is_group={{ query.is_group }}">Use this application to create a new phytosanitary certificate</a>
-      </li>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Status</dt>
+        <dd class="govuk-summary-list__value">
+         
+          <div class="app-status-tag app-status-tag--{{query.id | appInformation('tag')}}">
+            {{query.id | appInformation('status')}}
+          </div>
 
-    </ul>
-  </div>
-</div>
-
-
-{% if data.build == "ux" %}
-<div class="govuk-grid-row govuk-!-margin-bottom-6">
- <div class="govuk-grid-column-two-thirds">
-  <h2 class="govuk-heading-m">Commodities in this application</h2>
-  <div class="search-wrapper govuk-form-group ">
-    <label for="search-reservations" class="govuk-label">
-      Search by commodity, variety or sample reference destination
-    </label>
-
-    <div class="search-input-wrapper">
-      <input type="search" value="{{query.search or ''}}" id="search-reservations" name="search" title="Search" class="govuk-input">
-      
-      <div class="search-input-submit-wrapper">
-        <button type="submit" class="search-submit">Search</button>
+        </dd>
       </div>
 
-    </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">{% if data.build == "ux" %}Your reference{% else %}Reference{% endif %}</dt>
+        <dd class="govuk-summary-list__value">{% if (query.id | appInformation('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformation('reference')}}{% endif %}</dd>
+      </div>
 
-  </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">{% if data.build == "ux" %}Type{% else %}Certificate{% endif %}</dt>
+        <dd class="govuk-summary-list__value">One sample for multiple phytos</dd>
+      </div>
+      {% if (query.id | appInformation('status')) == "report issued" %}
+      {% if data.build == "ux" %}
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Sampled on</dt>
+        <dd class="govuk-summary-list__value">{{query.id | appInformation('date')}}</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Quantity inspected </dt>
+        <dd class="govuk-summary-list__value">840 grams</dd>
+      </div>
+      {% endif %}
+      {% endif %}
+
+    </dl>
   </div>
 
-  <div class="govuk-grid-column-full">
-  <table class="govuk-table govuk-!-margin-bottom-9">
+  <div class="govuk-grid-column-one-half govuk-!-margin-bottom-9">
+    <h2 class="govuk-heading-m">Your documents</h2>
+    <p class="govuk-body">The sampling report shows the test results for the commodities in this application.</p>
+    <ul class="govuk-list noprint">
+      <li><p class="doc-icon"><a href="#" class="govuk-link govuk-link--no-visited-state">Sampling report (csv)</a></p></li>      
+    </ul>
+    {% if (query.id | appInformation('status')) == "completed" %}
+    {% if data.build == "ux" %}
+    <p class="govuk-body">Download the data.</p>
+    <ul class="govuk-list  noprint">
+      <li><p class="doc-icon"><a href="#" class="govuk-link govuk-link--no-visited-state">Stock list {{todaysDate}} (csv)</a></p></li>  
+    </ul>
+    {% endif %}
+    {% endif %}
+  </div>
+
+</div>
+
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+    <ul class="govuk-list govuk-!-margin-bottom-9 noprint">
+      <li><a class="govuk-link govuk-link--no-visited-state" href="application/batch/create/view-your-answers?id={{query.id or 0}}&is_group={{query.is_group}}">View application details</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="application/batch/phytosanitary/setup/what-exporting?id={{query.id or 0}}&is_group={{query.is_group}}">Use this application to create a new phytosanitary certificate</a></li>
+    </ul>
+  </div>
+
+</div>
+
+<div class="govuk-grid-row">
+
+ <div class="govuk-grid-column-full">
+  <h2 class="govuk-heading-m">Application history</h2>
+  
+  <table class="govuk-table">
+    <caption class="govuk-table__caption govuk-visually-hidden">Sampling reference information</caption>
     <thead class="govuk-table__head">
       <tr class="govuk-table__row">
-        <th class="govuk-table__header govuk-width-one-fifth" scope="col">
-          Commodity
-        </th>
-        <th class="govuk-table__header" scope="col">
-          Variety
-        </th>
-        <th class="govuk-table__header" scope="col">
-          Sample reference
-        </th>
-        <th class="govuk-table__header govuk-table__header--numeric" scope="col">
-          Quantity
-        </th>
-        <th class="govuk-table__header govuk-table__header--numeric" scope="col">
-          Remaining
-        </th>
+        <th scope="col" class="govuk-table__header">Description</th>
+        <th scope="col" class="govuk-table__header">Distinguishing marks</th>
+        <th scope="col" class="govuk-table__header">Total quantity</th>
+        <th scope="col" class="govuk-table__header">Remaining quantity</th>
+        <th scope="col" class="govuk-table__header">Country</th>
+        <th scope="col" class="govuk-table__header"><abbr title="Animal and Plant Health Agency">APHA</abbr> sample reference</th>
+        <th scope="col" class="govuk-table__header">Results</th>
       </tr>
     </thead>
     <tbody class="govuk-table__body">
-      {% include "./application/modules/_summary-seeds-draw-down-30.html" %}
+      <tr class="govuk-table__row">
+        <td scope="row" class="govuk-table__cell">{% if data.has_botanicial_name3 == "use_description" %}{{data.description_details3 or "Cat nip" }}{% else %}{{data.botanical_name3 or "Lophospermum atrosanguineum (RHWAT)"}}{% endif %}</td>
+        <td class="govuk-table__cell">{% if data.distinguishing_marks3 %}{{data.distinguishing_marks3 or "Earl Grey"}}{% else %}&nbsp;{% endif %}</td>
+        <td class="govuk-table__cell">{{data.quantity3 or "1,460"}}{% if data.units3 == "Grams" %}g{% elif data.units3 == "Kilograms" %}kg{% elif data.units3 == "Litres" %}l{% elif data.units3 == "Millilitres" %}ml{% elif data.units3 == "Tonnes" %}t{% else %}t{% endif %}</td>
+        <td class="govuk-table__cell">{{data.quantity3 or "1,460"}}{% if data.units3 == "Grams" %}g{% elif data.units3 == "Kilograms" %}kg{% elif data.units3 == "Litres" %}l{% elif data.units3 == "Millilitres" %}ml{% elif data.units3 == "Tonnes" %}t{% else %}t{% endif %}</td>
+        <td class="govuk-table__cell">Canada</td>
+        <td class="govuk-table__cell">10009347</td>
+        <td class="govuk-table__cell">Pass</td>
+      </tr>
+      <tr class="govuk-table__row">
+        <td scope="row" class="govuk-table__cell">{% if data.has_botanicial_name3 == "use_description" %}{{data.description_details3 or "Cat nip" }}{% else %}{{data.botanical_name3 or "Lophospermum atrosanguineum (RHWAT)"}}{% endif %}</td>
+        <td class="govuk-table__cell">{% if data.distinguishing_marks3 %}{{data.distinguishing_marks3 or "Earl Grey"}}{% else %}&nbsp;{% endif %}</td>
+        <td class="govuk-table__cell">{{data.quantity3 or "1,460"}}{% if data.units3 == "Grams" %}g{% elif data.units3 == "Kilograms" %}kg{% elif data.units3 == "Litres" %}l{% elif data.units3 == "Millilitres" %}ml{% elif data.units3 == "Tonnes" %}t{% else %}t{% endif %}</td>
+        <td class="govuk-table__cell">{{data.quantity3 or "1,460"}}{% if data.units3 == "Grams" %}g{% elif data.units3 == "Kilograms" %}kg{% elif data.units3 == "Litres" %}l{% elif data.units3 == "Millilitres" %}ml{% elif data.units3 == "Tonnes" %}t{% else %}t{% endif %}</td>
+        <td class="govuk-table__cell">Norway</td>
+        <td class="govuk-table__cell">10009347</td>
+        <td class="govuk-table__cell">Fail</td>
+      </tr>
+      <tr class="govuk-table__row">
+        <td scope="row" class="govuk-table__cell">{% if data.has_botanicial_name2 == "use_description" %}{{data.description_details2 or "Tea leaves" }}{% else %}{{data.botanical_name2 or "Alsophila latebrosa (ASWLA)"}}{% endif %}</td>
+        <td class="govuk-table__cell">{% if data.distinguishing_marks2 %}{{data.distinguishing_marks2 or "PG Tips"}}{% else %}Ground coffee{% endif %}</td>
+        <td class="govuk-table__cell">{{data.quantity2 or "30"}}{% if data.units2 == "Grams" %}g{% elif data.units2 == "Kilograms" %}kg{% elif data.units2 == "Litres" %}l{% elif data.units2 == "Millilitres" %}ml{% elif data.units2 == "Tonnes" %}t{% else %}g{% endif %}</td>
+        <td class="govuk-table__cell">{{data.quantity2 or "30"}}{% if data.units2 == "Grams" %}g{% elif data.units2 == "Kilograms" %}kg{% elif data.units2 == "Litres" %}l{% elif data.units2 == "Millilitres" %}ml{% elif data.units2 == "Tonnes" %}t{% else %}g{% endif %}</td>
+        <td class="govuk-table__cell">China</td>
+        <td class="govuk-table__cell">10009348</td>
+        <td class="govuk-table__cell">Fail</td>
+      </tr>
+      <tr class="govuk-table__row">
+        <td scope="row" class="govuk-table__cell">{% if data.has_botanicial_name2 == "use_description" %}{{data.description_details2 or "Tea leaves" }}{% else %}{{data.botanical_name2 or "Alsophila latebrosa (ASWLA)"}}{% endif %}</td>
+        <td class="govuk-table__cell">{% if data.distinguishing_marks2 %}{{data.distinguishing_marks2 or "PG Tips"}}{% else %}Ground coffee{% endif %}</td>
+        <td class="govuk-table__cell">{{data.quantity2 or "30"}}{% if data.units2 == "Grams" %}g{% elif data.units2 == "Kilograms" %}kg{% elif data.units2 == "Litres" %}l{% elif data.units2 == "Millilitres" %}ml{% elif data.units2 == "Tonnes" %}t{% else %}g{% endif %}</td>
+        <td class="govuk-table__cell">{{data.quantity2 or "30"}}{% if data.units2 == "Grams" %}g{% elif data.units2 == "Kilograms" %}kg{% elif data.units2 == "Litres" %}l{% elif data.units2 == "Millilitres" %}ml{% elif data.units2 == "Tonnes" %}t{% else %}g{% endif %}</td>
+        <td class="govuk-table__cell">Ghana</td>
+        <td class="govuk-table__cell">10009348</td>
+        <td class="govuk-table__cell">Pass</td>
+      </tr>
+      <tr class="govuk-table__row">
+        <td scope="row" class="govuk-table__cell">{% if data.has_botanicial_name2 == "use_description" %}{{data.description_details2 or "Tea leaves" }}{% else %}{{data.botanical_name2 or "Alsophila latebrosa (ASWLA)"}}{% endif %}</td>
+        <td class="govuk-table__cell">{% if data.distinguishing_marks2 %}{{data.distinguishing_marks2 or "PG Tips"}}{% else %}Ground coffee{% endif %}</td>
+        <td class="govuk-table__cell">{{data.quantity2 or "30"}}{% if data.units2 == "Grams" %}g{% elif data.units2 == "Kilograms" %}kg{% elif data.units2 == "Litres" %}l{% elif data.units2 == "Millilitres" %}ml{% elif data.units2 == "Tonnes" %}t{% else %}g{% endif %}</td>
+        <td class="govuk-table__cell">{{data.quantity2 or "30"}}{% if data.units2 == "Grams" %}g{% elif data.units2 == "Kilograms" %}kg{% elif data.units2 == "Litres" %}l{% elif data.units2 == "Millilitres" %}ml{% elif data.units2 == "Tonnes" %}t{% else %}g{% endif %}</td>
+        <td class="govuk-table__cell">Latvia</td>
+        <td class="govuk-table__cell">10009348</td>
+        <td class="govuk-table__cell">Pass</td>
+      </tr>
+      <tr class="govuk-table__row">
+        <td scope="row" class="govuk-table__cell">{% if data.has_botanicial_name2 == "use_description" %}{{data.description_details2 or "Tea leaves" }}{% else %}{{data.botanical_name2 or "Alsophila latebrosa (ASWLA)"}}{% endif %}</td>
+        <td class="govuk-table__cell">{% if data.distinguishing_marks2 %}{{data.distinguishing_marks2 or "PG Tips"}}{% else %}Ground coffee{% endif %}</td>
+        <td class="govuk-table__cell">{{data.quantity2 or "30"}}{% if data.units2 == "Grams" %}g{% elif data.units2 == "Kilograms" %}kg{% elif data.units2 == "Litres" %}l{% elif data.units2 == "Millilitres" %}ml{% elif data.units2 == "Tonnes" %}t{% else %}g{% endif %}</td>
+        <td class="govuk-table__cell">{{data.quantity2 or "30"}}{% if data.units2 == "Grams" %}g{% elif data.units2 == "Kilograms" %}kg{% elif data.units2 == "Litres" %}l{% elif data.units2 == "Millilitres" %}ml{% elif data.units2 == "Tonnes" %}t{% else %}g{% endif %}</td>
+        <td class="govuk-table__cell">Tunisia</td>
+        <td class="govuk-table__cell">10009348</td>
+        <td class="govuk-table__cell">Pass</td>
+      </tr>
+      <tr class="govuk-table__row">
+        <td scope="row" class="govuk-table__cell">{% if data.has_botanicial_name == "use_description" %}{{data.description_details or "Coffee beans" }}{% else %}{{data.botanical_name or "Corylus (1CYLG)"}}{% endif %}</td>
+        <td class="govuk-table__cell">{% if data.distinguishing_marks %}{{data.distinguishing_marks or "N/A"}}{% else %}&nbsp;{% endif %}</td>
+        <td class="govuk-table__cell">{{data.quantity or "10"}}{% if data.units == "Grams" %}g{% elif data.units == "Kilograms" %}kg{% elif data.units == "Litres" %}l{% elif data.units == "Millilitres" %}ml{% elif data.units == "Tonnes" %}t{% else %}kg{% endif %}</td>
+        <td class="govuk-table__cell">{{data.quantity or "10"}}{% if data.units == "Grams" %}g{% elif data.units == "Kilograms" %}kg{% elif data.units == "Litres" %}l{% elif data.units == "Millilitres" %}ml{% elif data.units == "Tonnes" %}t{% else %}kg{% endif %}</td>
+        <td class="govuk-table__cell">France</td>
+        <td class="govuk-table__cell">10009349</td>
+        <td class="govuk-table__cell">Fail</td>
+      </tr>
     </tbody>
   </table>
-  
-  <div class="app-example-page govuk-!-margin-bottom-9">
-    <nav class="defra-pagination" id="pagination-label">
-      <p class="govuk-visually-hidden" aria-labelledby="pagination-label">Pagination navigation</p>
-      <p class="defra-pagination__results" style="float: left;"><a href="#" style=" text-decoration:none;"><b>1</b></a></p>
-      <p class="defra-pagination__results" style="float: right;">Showing <b>1</b> to <b><span class="js-case-count">30</span></b> of <b><span class="js-case-count">225</span></b> results</p>
-    </nav>
-  </div>
-  {% endif %}
-</div> 
-</div>
 
+  {% if (query.id | appInformation('status')) == "completed" or "report issued" %}
+  {% else %}
+  <p class="govuk-body">Send your samples to:</p>
+    <p class="govuk-body">
+      Plant Clinic
+      <br>
+      Block 4
+      <br>
+      National Agri-Food Campus
+      <br>
+      Sand Hutton
+      <br>
+      York
+      <br>
+      YO41 1LZ
+    </p>
+    <p class="govuk-body"><a href="print-application-details?id={{query.id or 0}}&is_group={{query.is_group}}" class="govuk-link govuk-link-no-visited-state" target="_blank">Print the information (opens in new tab)</a> you'll need to send along with your samples.</a></p>
+    {% endif %}
+  </div>
+
+</div>
 {% endblock %}
