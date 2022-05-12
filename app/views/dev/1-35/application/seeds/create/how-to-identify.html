@@ -219,39 +219,57 @@ Seeds to be sampled - Seed sampling - {{serviceName}} - GOV.UK
             </label>
           </div>
         </div>
+
+        <!-- <div class="govuk-checkboxes__item govuk-!-margin-top-6 govuk-!-margin-bottom-6">
+          <input class="govuk-checkboxes__input" type="checkbox"  name="confirm" id="confirm" value="Yes" {% if data.confirm == 'Yes' %}checked{% else %}{% endif %}>
+          <label class="govuk-checkboxes__label" for="confirm">This sample requires non-destructive testing</label>
+        </div> -->
+
+        {% set country_module_label = "Country where grown"%}
+        {% set module_name = "country_grown"%}
+        {% block country %}
+        {% include "../../modules/_country-select.html" %}
+        {% endblock %}
+
+        {% set country_module_label2 = "Destination country"%}
+        {% set module_name2 = "destination_country"%}
+        {% include "../modules/_multi-select.html" %}
       </fieldset>
+      {% endif %}        
+
+      {% if query.updateApplication == "yes" %}
+      <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+          <span class="govuk-details__summary-text">Why can't I update some information?</span>
+        </summary>
+
+        <div class="govuk-details__text">
+          Some information can't be updated after submission.
+        </div>
+
+      </details>
       {% endif %}
 
-<!--       <div class="govuk-checkboxes__item govuk-!-margin-top-6 govuk-!-margin-bottom-6">
-        <input class="govuk-checkboxes__input" type="checkbox"  name="confirm" id="confirm" value="Yes" {% if data.confirm == 'Yes' %}checked{% else %}{% endif %}>
-        <label class="govuk-checkboxes__label" for="confirm">This sample requires non-destructive testing</label>
-      </div> -->
+      <div class="govuk-form-group govuk-!-margin-top-7 govuk-!-margin-bottom-6">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      </div>
 
-
-      {% set country_module_label = "Country where grown"%}
-      {% set module_name = "country_grown"%}
-      {% block country %}{% include "../../modules/_country-select.html" %}{% endblock %}
-
-      {% set country_module_label2 = "Destination country"%}
-      {% set module_name2 = "destination_country"%}
-      {% include "../modules/_multi-select.html" %}
- 
-      </fieldset>
-
-      <input class="govuk-button govuk-!-margin-top-6" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
-
+      {% block continueLater %}
+      {% include "../../modules/_save-continue-later.html" %}
+      {% endblock %}
     </form>
-    {% block continueLater %}{% include "../../modules/_save-continue-later.html" %}{% endblock %}
 
   </div>
+
 </div>
 
 <script type="text/javascript">
+
   window.addEventListener('load', function() {
     $("#commodity-botanical_name").hide()
     $("#commoditiy-botanical-lookup").show()
     $("#commodity-lookup--manual").show()
   })
-</script>
 
+</script>
 {% endblock %}

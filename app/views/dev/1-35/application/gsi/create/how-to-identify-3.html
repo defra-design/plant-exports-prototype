@@ -296,26 +296,44 @@ Add your products - Growing season inspection - {{serviceName}} - GOV.UK
         }
       }) }}
  -->
- {% block country2 %}
- <h3 class="govuk-heading-s">Destination countries</h3>
- {% include "../modules/_multi-select-3.html" %}
- {% endblock %}
+      {% block country2 %}
+      <h3 class="govuk-heading-s">Destination countries</h3>
+      {% include "../modules/_multi-select-3.html" %}
+      {% endblock %}
 
+      {% if query.updateApplication == "yes" %}
+      <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+          <span class="govuk-details__summary-text">Why can't I update some information?</span>
+        </summary>
 
-      {{ govukButton({
-        text: "Save and continue"
-      }) }}
+        <div class="govuk-details__text">
+          Some information can't be updated after submission.
+        </div>
 
+      </details>
+      {% endif %}
+
+      <div class="govuk-form-group govuk-!-margin-top-7 govuk-!-margin-bottom-6">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      </div>
+
+      {% block continueLater %}
+      {% include "../modules/_save-continue-later.html" %}
+      {% endblock %}
     </form>
+
   </div>
+  
 </div>
 
 <script type="text/javascript">
+
   window.addEventListener('load', function() {
     $("#commodity-botanical_name").hide()
     $("#commoditiy-botanical-lookup").show()
     $("#commodity-lookup--manual").show()
   })
-</script>
 
+</script>
 {% endblock %}
