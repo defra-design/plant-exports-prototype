@@ -1,0 +1,164 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+When do you need the certificate? - {{serviceName}} - GOV.UK
+{% endblock %}
+{% block beforeContent%}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      When do you need the <br>{% if data.reforwarding %}re-forwarding{% endif %} certificate?
+    </h1>
+    {% if data.commodity == "grain" %}
+    <p class="govuk-body">Enter a date before your consignment is due to arrive at the destination country.</p>
+    {% else %}
+    <p class="govuk-body">This might be the date you are loading your consignment, or the date it will be dispatched.
+    </p>
+    {% endif %}
+    {% if data.journey != "coc" %}
+
+    {% endif %}
+
+    <!--<form  action="{{query.return_url or '../submit/declaration'}}" method="POST">-->
+    {% if data.journey != "coc" %}
+    <form action="{{query.return_url or 'declaration-amend'}}" method="POST">
+      {% else %}
+      <form action="{{query.return_url or '../create/task-list'}}" method="POST">
+        {% endif %}
+
+
+          <div class="govuk-form-group">
+            <fieldset class="govuk-fieldset">
+<!--               <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                <h1 class="govuk-fieldset__heading">
+                  Date needed
+                </h1>
+              </legend>
+              <div id="contact-hint" class="govuk-hint">
+                Select one option.
+              </div> -->
+              <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="date_range" name="date_range" type="radio" value="any" {%if (data.date_range and data.date_range=="any" ) or not data.date_range %}checked="checked" {% endif %}>
+                  <label class="govuk-label govuk-radios__label" for="date_range">
+                    As soon as possible
+                  </label>
+                  <div id="sign-in-item-hint" class="govuk-hint govuk-radios__hint">
+                    You should receive your certificate within 4 working days.
+                  </div>
+                </div>
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="date_range-4" name="date_range" type="radio" value="custom" {%if data.date_range and data.date_range=="custom" %}checked="checked" {% endif %} data-aria-controls="conditional-how-contacted-conditional-2">
+                  <label class="govuk-label govuk-radios__label" for="date_range-4">
+                    Specific date
+                  </label>
+                  <div id="sign-in-item-hint" class="govuk-hint govuk-radios__hint">
+                    You can ask to get a certificate on a date you choose. It must be at least 4 days in the future.
+                  </div>
+                </div>
+                <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional-2">
+                  <div class="govuk-grid-row">
+
+                    <div class="govuk-form-group">
+                      <fieldset class="govuk-fieldset" role="group" aria-describedby="passport-issued-hint">
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                          <h1 class="govuk-fieldset__heading">
+                            Specific date needed
+                          </h1>
+                        </legend>
+                        <span id="submit-date-hint" class="govuk-hint">
+                          Enter a date at least 4 days in the future
+                        </span>
+                        <div class="govuk-date-input" id="submit-date">
+                          <div class="govuk-date-input__item">
+                            <div class="govuk-form-group">
+                              <label class="govuk-label govuk-date-input__label" for="submit-date-day">
+                                Day
+                              </label>
+                              <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="submit-date-day" name="submit-date-day" type="text" pattern="[0-9]*" inputmode="numeric">
+                            </div>
+                          </div>
+                          <div class="govuk-date-input__item">
+                            <div class="govuk-form-group">
+                              <label class="govuk-label govuk-date-input__label" for="submit-date-month">
+                                Month
+                              </label>
+                              <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="submit-date-month" name="submit-date-month" type="text" pattern="[0-9]*" inputmode="numeric">
+                            </div>
+                          </div>
+                          <div class="govuk-date-input__item">
+                            <div class="govuk-form-group">
+                              <label class="govuk-label govuk-date-input__label" for="submit-date-year">
+                                Year
+                              </label>
+                              <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="submit-date-year" name="submit-date-year" type="text" pattern="[0-9]*" inputmode="numeric">
+                            </div>
+                          </div>
+                        </div>
+                      </fieldset>
+                    </div>
+
+                  </div>
+                  <div class="govuk-grid-row govuk-!-margin-top-3">
+                    {% if data.commodity == "potatoes" %}
+                    <fieldset class="govuk-fieldset" aria-describedby="applicant-conditional-hint">
+                      <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                        <h1 class="govuk-fieldset__heading">
+                          Expected time of load collection
+                        </h1>
+                      </legend>
+                      <span id="submit-date-hint" class="govuk-hint">
+                        For example, 9:30am or 2:50pm
+                      </span>
+                      <div class="govuk-date-input" id="submit-date">
+                        <div class="govuk-date-input__item">
+                          <div class="govuk-form-group">
+                            <label class="govuk-label govuk-date-input__label" for="submit-date-day">
+                              Hour
+                            </label>
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="submit-date-day" name="export_time_hour" type="text" pattern="[0-9]*" inputmode="numeric">
+                          </div>
+                        </div>
+            
+                        <div class="govuk-date-input__item">
+                          <div class="govuk-form-group">
+                            <label class="govuk-label govuk-date-input__label" for="submit-date-month">
+                              Minute
+                            </label>
+                            <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="submit-date-month" name="export_time_minute" type="text" pattern="[0-9]*" inputmode="numeric">
+                          </div>
+                        </div>
+                        <div class="govuk-date-input__item">
+                          <div class="govuk-form-group">
+                            <label class="govuk-label" for="sort">
+                              am or pm
+                            </label>
+                            <select class="govuk-select govuk-input--width-" id="sort" name="export_time_period">
+                              <option value="empty"></option>
+                              <option value="am">am</option>
+                              <option value="pm">pm</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </fieldset>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+
+
+        <div class="govuk-form-group">
+          <input class="govuk-button" type="submit" name="saveAndContinue" value="Continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+        </div>
+      </form>
+
+  </div>
+</div>
+{% endblock %}

@@ -1,11 +1,8 @@
 module.exports = function(router) {
   // Load helper functions
 
-
   // ADD extra routing here if needed.
   // require('./start-page.js')(router)
-
-
 
   // CHANGE VERSION each time you create a new version
   const version = 'alpha1'
@@ -14,7 +11,6 @@ module.exports = function(router) {
 
   // Load any certificate within "app/data/certificates" folder
   const db = []
-
 
   // MIDDLEWARE: Called every time a page is rendered
   router.use(function(req, res, next) {

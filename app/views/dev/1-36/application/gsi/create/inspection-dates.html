@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+When will the fields be ready for inspection? - Growing season inspection - {{serviceName}} - GOV.UK
+{% endblock %}
+{% block beforeContent%}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <!--<h1 class="govuk-heading-xl">
+      Inspection dates
+    </h1>-->
+    <!--<p class="govuk-body">Enter the address of your business premises where the inspector will check your consignment</p>-->
+
+    <form action="{{query.return_url or '../create/task-list'}}" method="POST">
+      <fieldset class="govuk-fieldset" aria-describedby="applicant-conditional-hint">
+        {{ govukInput({
+          label: {
+            text: "When will the crop be ready for a growing season inspection?",
+            classes: "govuk-label--xl",
+            isPageHeading: true
+          },
+          hint: {
+            text: "For example, early October 2020 or Week 34"
+            },
+          id: "submit-date",
+          name: "submit-date",
+          classes: "govuk-!-width-one-half"
+        }) }}
+      </fieldset>
+      <input class="govuk-button govuk-!-margin-top-6" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+    </form>
+    {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+
+  </div>
+</div>
+
+{% endblock %}

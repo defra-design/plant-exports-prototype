@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+GOV.UK Prototype Kit
+{% endblock %}
+{% block beforeContent%}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
+        What is the import permit number?
+      </h1>
+      <p class="govuk-body">If you do not have an import permit, skip this question</p>
+      <form  action="{{query.return_url or '../create/task-list'}}" method="POST">
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="reference_num">Import permit number (optional)</label>
+          <p class="govuk-hint">If you have an import permit, you must upload it in part 4 of this application</p>
+          <input class="govuk-input govuk-input--width-10" id="reference_num" name="import_permit" value="{% if query.change=='yes'%}{{ data.point_of_entry }}{% endif %}" type="text" data-qa-id="Question-7006EHC-1">
+        </div>
+        <div class="govuk-form-group">
+          <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+        </div>
+      </form>
+      {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+    </div>
+  </div>
+{% endblock %}

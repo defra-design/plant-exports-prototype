@@ -1,0 +1,101 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Does your organisation legally own these premises? - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new" id="Nav-DisplayName">Prototype user</li>
+    <li class="login-nav__list-item-new">Manage account</li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
+  </ul>
+</div>
+{% endblock%}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <form method="POST">
+      {% set yesHtml %}
+      {{ govukInput({
+        id: "legal-owner-name",
+        name: "legal-owner-name",
+        type: "text",
+        spellcheck: false,
+        classes: "govuk-!-width-two-thirds",
+        label: {
+          text: "Name"
+        }
+      }) }}
+      {{ govukInput({
+        id: "legal-owner-email",
+        name: "legal-owner-email",
+        type: "email",
+        spellcheck: false,
+        classes: "govuk-!-width-two-thirds",
+        label: {
+          text: "Email address"
+        }
+      }) }}
+      {{ govukInput({
+        id: "legal-owner-phone",
+        name: "legal-owner-phone",
+        type: "text",
+        spellcheck: false,
+        classes: "govuk-!-width-one-half",
+        label: {
+          text: "Phone number (optional)"
+        }
+      }) }}
+      {{ govukInput({
+        id: "legal-owner-mobile",
+        name: "legal-owner-mobile",
+        type: "text",
+        spellcheck: false,
+        classes: "govuk-!-width-one-half",
+        label: {
+          text: "Mobile number (optional)"
+        }
+      }) }}
+
+      {% endset -%}
+
+      {{ govukRadios({
+        idPrefix: "contact",
+        name: "contact",
+        fieldset: {
+          legend: {
+            text: "Does your organisation legally own these premises?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--xl"
+          }
+        },
+        hint: {
+          text: "If you answer yes, we'll ask you for the contact details of the person who will be held legally responsible in the event of a biosecurity incident related to these premises."
+        },
+        items: [
+          {
+            value: "yes~inspection-addresses-added",
+            text: "Yes",
+            conditional: {
+              html: yesHtml
+            }
+          },
+          {
+            value: "no~not-legal",
+            text: "No"
+          }
+        ]
+      }) }}
+
+      {{ govukButton({
+        text: "Continue"
+      }) }}
+    </form>
+  </div>
+</div>
+{% endblock %}

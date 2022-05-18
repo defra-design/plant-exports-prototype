@@ -1,0 +1,269 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+There is a problem - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-width-container">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+          <h2 class="govuk-error-summary__title" id="error-summary-title">
+            There is a problem
+          </h2>
+          <h3 class="govuk-heading-s">
+            There are 198 errors in your file
+          </h3>
+          <div class="govuk-error-summary__body">
+            <ul class="govuk-list govuk-error-summary__list">
+              <li>
+                <a href="#file-upload-1">Correct the problems with your file and then upload the file again.</a>
+              </li>
+            </ul>
+            <ul class="govuk-list  govuk-list--bullet">
+              <li>The destination countries field is missing some information (60 lines)</li>
+              <li>The information in the variety field is too long (45 lines)</li>
+              <li>The quantity units field is missing some information (33 lines)</li>
+              <li>The information in the genus field is too long (24 lines)</li>
+              <li>The information in the country of origin field is not in the expected format (8 lines)</li>
+              <li>The quantity field is missing some information (8 lines)</li>
+              <li>The information in the quantity field is not in the expected format (27 lines)</li>
+              <li>The information in the quantity field is too long (42 lines)</li>
+              <li>The information in the number of packages field is not in the expected format (12 lines)</li>
+            </ul>
+            <details class="govuk-details" data-module="govuk-details">
+              <summary class="govuk-details__summary">
+                <span class="govuk-details__summary-text">
+                  Further details of the errors
+                </span>
+              </summary>
+              <div class="govuk-details__text">
+                <ul class="govuk-list govuk-error-summary__list">
+                  <li>Line 2: Add at least one destination country</li>
+                  <li>Line 4: Add the quantity units</li>
+                  <li>Line 5: The information in the genus field is too long. It should be 50 characters or less</li>
+                  <li>Line 5: Add the quantity units</li>
+                  <li>Line 8: The information in the potato type field is not in the expected format. Make sure you have used either Ware or Seed.</li>
+                  <li>Line 9: The information in the potato type field is not in the expected format. Make sure you have used either Ware or Seed.</li>
+                  <li>Line 15: The information in the quantity field is not in the expected format</li>
+                  <li>Line 16: The information in the number of packages field is not in the expected format</li>
+                  <li>Line 29: Add at least one destination country</li>
+                  <li>Line 29: The information in the number of packages field is not in the expected format</li>
+                  <li>Line 32: Add at least one destination country</li>
+                  <li>Line 34: Add the quantity units</li>
+                  <li>Line 35: The information in the genus field is too long. It should be 50 characters or less</li>
+                  <li>Line 35: Add the quantity units</li>
+                  <li>Line 48: The information in the potato type field is not in the expected format. Make sure you have used either Ware or Seed.</li>
+                  <li>Line 49: The information in the potato type field is not in the expected format. Make sure you have used either Ware or Seed.</li>
+                  <li>Line 55: The information in the quantity field is not in the expected format</li>
+                  <li>Line 16: The information in the number of packages field is not in the expected format</li>
+                  <li>Line 59: Add at least one destination country</li>
+                  <li>Line 59: The information in the number of packages field is not in the expected format</li>
+                  <li>Line 6: Add at least one destination country</li>
+                  <li>Line 64: Add the quantity units</li>
+                  <li>Line 65: The information in the genus field is too long. It should be 50 characters or less</li>
+                  <li>Line 65: Add the quantity units</li>
+                  <li>Line 69: The information in the potato type field is not in the expected format. Make sure you have used either Ware or Seed.</li>
+                  <li>Line 75: The information in the quantity field is not in the expected format</li>
+                  <li>Line 76: The information in the number of packages field is not in the expected format</li>
+                  <li>Line 89: Add at least one destination country</li>
+                  <li>Line 89: The information in the number of packages field is not in the expected format</li>
+                </ul>
+              </div>
+            </details>
+          </div>
+
+        </div>
+        <form method="post">
+
+
+          {# add template, additional bullets and details based on commodity #}
+
+          {% set commodity = data.commodity or "products" %}
+          {% set exampleTemplate = "example-seeds.csv" %}
+  
+          {% if data.commodity == "plants" %}
+            {% set template = "template-plants.csv" %}
+            {% set exampleTemplate = "example-plant.csv" %}
+            {% set step2 = "<li>You must enter either an EPPO code or genus</li>" %}
+            {% set extraSteps = "<li>For Quantity units and Packaging type, you must choose from the  options listed and delete the rest of the options</li>" %}
+            {% set details2 = "<li>make sure you have entered either an EPPO code or genus for each line</li>"%}
+            {% set extraDetails = "<li>for Quantity units and Packaging type, make sure you have used only the options provided without changing them</li>
+            <li>for Quantity units and Packaging type, make sure that you have deleted any options you have not used</li>" %}
+  
+  
+          {% elseif data.commodity == "plant products" %}
+            {% set commodity = "products" %}
+            {% set template = "template-plant-products.csv" %}
+            {% set exampleTemplate = "example-plant-products.csv" %}
+            {% set extraSteps = "<li>For Product type, Class, Packaging type and Is the packaging reusable or reclaimed, you must choose from the  options listed and delete the rest of the options</li>
+            <li>Enter the net weight up to 1 decimal place</li>" %}
+            {% set extraDetails = "<li>for Product type, Packaging type and Is the packaging reusable or reclaimed, make sure you have used only the options provided without changing them</li>
+            <li>for Product type, Packaging type and Is the packaging reusable or reclaimed, make sure that you have deleted any options you have not used</li>" %}
+  
+          {% elseif data.commodity == "used farm machines" %}
+            {% set commodity = "used farm machines" %}
+            {% set template = "template-used-farm-machinery.csv" %}
+            {% set exampleTemplate = "example-used-farm-machinery.csv" %}
+  
+          {% elseif data.commodity == "potatoes" %}
+            {% set template = "template-potatoes.csv" %}
+            {% set exampleTemplate = "example-potatoes.csv" %}
+            {% set extraSteps = "<li>For Potato type, Variety, Quantity units and Packaging type you must choose from the options listed and delete the rest of the options.</li>
+            <li>For Growing season inspection number, your should enter a growing season inspection number unless the growing season inspection was done on eDomero. If your growing season inspection was done using eDomero, just enter the word eDomero.</li>" %}
+            {% set extraDetails = "<li>for Potato type, Variety, Quantity units and Packaging type, make sure you have used only the options provided without changing them</li>
+            <li>for Potato type, Variety, Quantity units and Packaging type, make sure that you have deleted any options you have not used</li>
+            <li>for Growing season inspection number make sure your have entered either a growing season inspection number or just the word eDomero</li>" %}
+  
+          {% elseif data.commodity == "seeds" %}
+            {% set template = "template-seeds.csv" %}
+            {% set exampleTemplate = "example-seeds.csv" %}
+            {% set step2 = "<li>You should enter an EPPO code together with both a genus and species. If you cannot enter an EPPO code, genus and species then you should enter a description</li>" %}
+            {% set extraSteps = "<li>For Quantity units you must choose from the options listed and delete the rest of the options</li>
+            <li>For Packaging type you must choose from the options listed and delete the rest of the options</li>
+            <li>For Is the packaging reusable or reclaimed, you must enter either yes or no</li>" %}
+            {% set extraDetails = "<li>for Quantity unit and Packaging type, make sure you have used only the options provided without changing them</li>
+            <li>for Quantity unit and Packaging type, make sure that you have deleted any options you have not used</li>
+            <li>for Is the packaging reusable or reclaimed, check you have only entered either yes or no</li>" %}
+  
+          {% elseif data.commodity == "grain" %}
+            {% set template = "template-grain.csv" %}
+            {% set exampleTemplate = "example-grain.csv" %}
+            
+            {% set step2 = "<li>You must enter either an EPPO code or genus (preferably with species, and optionally with variety)</li>" %}
+  
+            {% set extraSteps = "<li>For Packaging type, you must choose from the packaging options listed and delete the rest of the packaging options.</li>
+            <li>For Quantity units you must choose from the options listed and delete the rest of the options</li>" %}
+  
+            {% set details2 = "<li>make sure you have entered either an EPPO code or genus for each line</li>" %}
+  
+            {% set extraDetails = "<li>for Quantity unit and Packaging type, make sure you have used only the options provided without changing them</li>
+            <li>for Quantity unit and Packaging type, make sure that you have deleted any options you have not used</li>" %}
+  
+          {% else %}
+            {% set template = "template-plants.csv" %}
+            {% set exampleTemplate = "example-plants.csv" %}
+            {% set step2 = "" %}
+            {% set extraSteps = "" %}
+            {% set details2 = "" %}
+            {% set extraDetails = "" %}
+  
+          {% endif %}
+  
+          {% if data.journey == "coc" %}
+            {% set template = "template-hmi.csv" %}
+            {% set exampleTemplate = "example-hmi.csv" %}
+          {% endif %}
+  
+  
+          <div class="govuk-form-group  govuk-!-margin-bottom-9">
+            <fieldset class="govuk-fieldset">
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">
+                  Upload a file
+                </h1>
+              </legend>
+            </fieldset>
+  
+            <p class="govuk-body">
+              Download the <a href="/public/templates/{{template}}" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>.
+            </p>
+  
+            <p class="govuk-body govuk-!-margin-bottom-6">
+              Open the file in whatever software program you use to edit comma-separated values (CSV) files. Fill in the template using the guidance notes below, then save and upload it.
+            </p>
+  
+            <h2 class="govuk-heading-m">How to edit the file</h2>
+           
+            <ol class="govuk-list govuk-list--number">
+              <li>You must complete all fields that are marked mandatory.</li>
+  
+              {{ step2 | safe }}
+  
+              {% if data.commodity != "potatoes" %}
+              <li>You must use the country code for the country of origin - you can find the 2 letter country code here: (opens in new tab)<br/>
+                <a href="https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes" target="_blank">https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes</a> 
+                <br/>
+                The only exceptions are Northern Ireland and Palestine. If the country of origin is Northern Ireland, use GB-NIR. If it is Palestine, use PS.</li>
+              {% endif %}
+                
+              {{ extraSteps | safe }}
+  
+              <li>Do not enter more than 500 rows of data.</li>
+              <li>Save your completed file as a .CSV file and upload it</li>
+  
+            </ol>
+  
+            <details class="govuk-details" data-module="govuk-details">
+              <summary class="govuk-details__summary">
+                <span class="govuk-details__summary-text">
+                  Further advice and example template 
+                </span>
+              </summary>
+              <div class="govuk-details__text">
+                <h3 class="govuk-heading-s">If you are having problems with the upload</h3>
+                <ul class="govuk-list govuk-list--bullet">
+                  <li>make sure you have made entries in all fields that are mandatory</li>
+                  {{ details2 | safe }}
+                  <li>make sure you have not changed or deleted any columns or headers from the template</li>
+                  <li>make sure the headers are consistently capitalised</li>
+                  <li>check that you have not added extra commas</li>
+                  <li>if you have edited the template using the Numbers application, be aware that this program sometimes adds extra columns to the file. If there are any empty columns without headers in your file, you should delete these columns completely</li>
+                  <li>check that when you edited the template, your software didn't add extra commas into your CSV file</li>
+  
+                  {% if data.commodity != "potatoes" %}
+                  <li>use GB-NIR as the country code for Northern Ireland</li>
+                  <li>use PS as the country code for Palestine</li>
+                  {% endif %}
+  
+                  {{ extraDetails | safe }} 
+  
+                </ul>
+                <p>You may find it helpful to compare your file against this <a href="/public/templates/{{exampleTemplate}}" class="govuk-link govuk-link--no-visited-state" title="CSV template">example template</a>.</p>
+              </div>
+            </details>
+            
+          </div>
+
+          {{ govukFileUpload({
+            id: "file-upload-1",
+            name: "file-upload-1",
+            errorMessage: {
+            text: "Correct the problems with your file and then upload the file again."
+            }
+          }) }}
+
+          {{ govukButton({
+            text: "Re-upload your file",
+            href: "upload-in-progress"
+          }) }}
+
+        </form>
+      </div>
+    </div>
+    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible" />
+    <ul class="govuk-list govuk-list">
+      <li>
+        <a href="upload-validation-errors-summary-with-details" class="govuk-link govuk-link-no-visited-state">Summary with details</a>
+      </li>
+      <li>
+        <a href="upload-validation-errors-summary" class="govuk-link govuk-link-no-visited-state">Summary</a>
+      </li>
+      <li>
+        <a href="upload-validation-errors-summary-with-rows" class="govuk-link govuk-link-no-visited-state">Summary with row details</a>
+      </li>
+      <li>
+        <a href="upload-expt-guidance" class="govuk-link govuk-link-no-visited-state">Revised upload page</a>
+      </li>
+    </ul>
+</div>
+{% endblock %}

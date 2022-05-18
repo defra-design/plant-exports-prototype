@@ -1,0 +1,312 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+Add commodities to your consignment - {{serviceName}} - GOV.UK
+{% endblock %}
+{% block beforeContent%}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+<style media="screen">
+  .app-result-list li{
+    padding: 15px 0;
+    border-top:1px solid #b1b4b6;
+    position:relative;
+
+  }
+  .app-result-list{
+    padding-bottom: 0;
+    border-bottom:1px solid #b1b4b6;
+  }
+  .app-result-list li .govuk-button--secondary{
+    position:absolute;
+    right:0;
+    top:20px;
+
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <form method="post" action="commodity-list-copy-as-coc-done">
+      <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
+          Add commodities to your consignment
+        </legend>
+
+        {% if data.commodity == "cidre" or data.commodity == "lacsc" or data.commodity == "lacsp" %}
+
+
+          {% block cidreVariety %}
+          
+          {% set citrus_subtype_module_label = "Select your commodity" %}
+          {% include "../modules/_cidre-variety-select.html" %}
+          {% endblock %}
+
+        {% elseif data.commodity == "apples" or data.commodity == "grapes" or data.commodity == "pears" or data.commodity == "cidre" %}
+          <p class="govuk-body govuk-!-font-weight-bold" for="how-contacted-conditional">
+             What variety are your {{data.commodity or "apples"}}?
+           </p>
+          <div class="govuk-form-group">
+            <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="how-contacted-conditional" name="has_botanicial_name" type="radio" value="yes" data-aria-controls="conditional-how-contacted-conditional" checked>
+                <label class="govuk-label govuk-radios__label" for="how-contacted-conditional">
+                  Variety
+                </label>
+              </div>
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional">
+                {% if data.show_manual_input != "yes"%}
+                  {% if data.commodity == "apples" %}
+                    {% block appleVariety %}
+                    {% include "../modules/_apples-variety-select-with-value.html" %}
+                    {% endblock %}
+                  {% elseif data.commodity == "grapes" %}
+                    {% block grapesVariety %}{% include "../modules/_grapes-variety-select.html" %}{% endblock %}            
+                  {% else %}
+                    {% block pearsVariety %}{% include "../modules/_pears-variety-select.html" %}{% endblock %}
+                  {% endif %}
+                {% else %}
+                  <div class="govuk-form-group">
+                    <label class="govuk-label" for="commodity_host_species">
+                      Variety
+                    </label>
+                    <input class="govuk-input govuk-input--width-20" id="commodity_genus" name="genus" type="text" value="{% if query.has_commodity %}{{query.genus}}{% endif %}">
+                  </div>
+                {% endif %}
+              </div>
+
+              <div class="govuk-radios__divider">or</div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="how-contacted-conditional-3" name="has_botanicial_name" type="radio" value="use_description" data-aria-controls="conditional-how-contacted-conditional-3" {% if data.has_botanicial_name == "use_description"%}checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-3">
+                  Other
+                </label>
+                <div id="how-contacted-conditional-hint" class="govuk-hint govuk-radios__hint">
+                  If you can't find the variety by searching in the field above, select other and enter the variety.
+                </div>
+              </div>
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional-3">
+                <div class="govuk-form-group">
+                  <label class="govuk-visually-hidden" for="passport-number">
+                    Variety
+                  </label>
+                  <input class="govuk-input" id="plant-identify--description" name="commodity_description" aria-describedby="more-detail-hint">
+                </div>
+              </div>
+            </div>
+          </div>
+
+        {% elseif data.commodity == "peaches" %}
+
+          {{ govukRadios({
+            idPrefix: "type",
+            name: "type",
+            fieldset: {
+              legend: {
+                text: "What type are the peaches?",
+                isPageHeading: false,
+                classes: "govuk-fieldset__legend--s"
+              }
+            },
+            items: [
+              {
+                value: "white flesh",
+                text: "white flesh"
+              },
+              {
+                value: "yellow flesh",
+                text: "yellow flesh"
+              },
+              {
+                value: "unknown",
+                text: "unknown"
+              }
+            ]
+          }) }}
+
+          {% elseif data.commodity == "nectarines" %}
+
+            {{ govukRadios({
+              idPrefix: "type",
+              name: "type",
+              fieldset: {
+                legend: {
+                  text: "What type are the nectarines?",
+                  isPageHeading: false,
+                  classes: "govuk-fieldset__legend--s"
+                }
+              },
+              items: [
+                {
+                  value: "white flesh",
+                  text: "white flesh"
+                },
+                {
+                  value: "yellow flesh",
+                  text: "yellow flesh"
+                },
+                {
+                  value: "unknown",
+                  text: "unknown"
+                }
+              ]
+            }) }}
+
+            {% elseif data.commodity == "tomatoes" %}
+
+              {% set tomatoesOtherHtml %}
+                {{ govukInput({
+                id: "tomatoes_variety",
+                name: "tomatoes_variety",
+                type: "text",
+                classes: "govuk-!-width-one-third",
+                label: {
+                  text: "Enter another type"
+                }
+                }) }}
+              {% endset -%}
+
+              {{ govukRadios({
+                idPrefix: "type",
+                name: "type",
+                fieldset: {
+                  legend: {
+                    text: "What type are the tomatoes?",
+                    isPageHeading: false,
+                    classes: "govuk-fieldset__legend--s"
+                  }
+                },
+                items: [
+                  {
+                    value: "cherry",
+                    text: "cherry"
+                  },
+                  {
+                    value: "field-grown",
+                    text: "field-grown"
+                  },
+                  {
+                    value: "glasshouse",
+                    text: "glasshouse"
+                  },
+                  {
+                    value: "on-the-vine",
+                    text: "on-the-vine"
+                  },
+                  {
+                    value: "plum",
+                    text: "plum"
+                  },
+                  {
+                    value: "round",
+                    text: "round"
+                  },
+                  {
+                    value: "other",
+                    text: "other",
+                    conditional: {
+                      html: tomatoesOtherHtml
+                    }
+                  },
+                  {
+                    value: "unknown",
+                    text: "unknown"
+                  }
+                ]
+              }) }}
+
+        {% endif %}
+
+        {{ govukRadios({
+          idPrefix: "class",
+          name: "class",
+          fieldset: {
+            legend: {
+              text: "What quality class is your commodity?",
+              isPageHeading: false,
+              classes: "govuk-fieldset__legend--s"
+            }
+          },
+          items: [
+          {
+            value: "extra",
+            text: "Extra"
+          },
+          {
+            value: "class I",
+            text: "Class I"
+          },
+          {
+            value: "class II",
+            text: "Class II"
+          }
+          ]
+        }) }}
+
+        {% set country_module_label = "Country of origin"%}
+        {% set module_name = "country_origin"%}
+        {% block country %}{% include "../modules/_country-select-bold-with-value.html" %}{% endblock %}
+
+        <!--<div class="govuk-form-group">
+          <label class="govuk-label govuk-!-font-weight-bold" for="total_weight">
+            Total net weight, in kilograms
+          </label>
+          <div class="govuk-input__wrapper" style="display:flex;">
+            <input class="govuk-input govuk-input--width-5" id="total_weight" name="total_weight" type="number" spellcheck="false">
+            <div class="govuk-input__suffix" style="box-sizing:border-box; background-color:#f3f2f1; border:2px solid #0b0b0c; padding:5px; font-family:'GDS Transport',arial,sans-serif; height:2.5rem; min-width:2.5rem; text-align:center; font-size:1.2rem;" aria-hidden="true">kg</div>
+          </div>
+        </div>-->
+
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-!-font-weight-bold" for="weight">
+            Net weight per package, in kilograms
+          </label>
+          <div class="govuk-input__wrapper" style="display:flex;">
+            <input class="govuk-input govuk-input--width-5" id="weight" name="weight" type="number" spellcheck="false" value="2">
+            <div class="govuk-input__suffix" style="box-sizing:border-box; background-color:#f3f2f1; border:2px solid #0b0b0c; padding:5px; font-family:'GDS Transport',arial,sans-serif; height:2.5rem; min-width:2.5rem; text-align:center; font-size:1.2rem;" aria-hidden="true">kg</div>
+          </div>
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label govuk-!-font-weight-bold" for="number_of_packages">
+            Number of packages
+          </label>
+          <input class="govuk-input govuk-input--width-5" id="number_of_packages" name="number_of_packages" type="packaging_type" aria-describedby="passport-number-hint" value="100">
+        </div>
+
+        {% set country_module_label = "Packaging type"%}
+        {% block packing %}{% include "../modules/_packaging-with-value.html" %}{% endblock %}
+
+        <fieldset class="govuk-fieldset" >
+          <legend class="govuk-fieldset__legend ">
+            <h1 class="govuk-fieldset__heading">
+              Is the packaging reusable or reclaimed?
+            </h1>
+          </legend>
+          <div class="govuk-form-group">
+          <div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="how-contacted-conditional" name="exit" type="radio" value="yes" data-aria-controls="conditional-how-contacted-conditional">
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional">
+                Yes
+              </label>
+            </div>
+      
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="how-contacted-conditional-2" name="exit" type="radio" value="no" data-aria-controls="conditional-how-contacted-conditional-2">
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-2">
+                No
+              </label>
+            </div>
+          </div>
+          </div>
+          </fieldset>
+
+      </fieldset>
+      <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+    </form>
+    {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

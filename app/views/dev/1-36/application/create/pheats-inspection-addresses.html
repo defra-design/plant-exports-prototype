@@ -1,0 +1,100 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.pheats_check == "yes" or data.reforwarding %}Select the inspection address{% else %}Where will the inspection take place?{% endif %} - Phytosanitary certificate - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock%}
+
+{% block content %}
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-two-thirds">
+
+    <form action="task-list" method="post">
+    
+      {% if query.addressAdded == "yes" %}
+      <div class="app-alert app-alert--info">
+        <p class="govuk-body">New PHEATS addresses will not be listed until they have been approved.</p>
+      </div>
+      {% endif %}
+
+      <div class="govuk-form-group">
+        {% if data.pheats_check == "yes" %}
+        <h1 class="govuk-heading-xl">Select the inspection address</h1>
+        <p class="govuk-body">All addresses that are approved for PHEATs are shown here. If there are no addresses here, you will need to add one.</p>
+        {% elif data.reforwarding %}
+        <h1 class="govuk-heading-xl">Select the inspection address</h1>
+        <p class="govuk-body">Your inspector will decide whether your consignment can be re-forwarded without undergoing a further inspection. You should supply an inspection address in case it is needed.</p>
+        {% endif %}
+        <!-- You can <a href="../../account/inspection-addresses" class="govuk-link" id="Link-ManageAccount">edit your addresses</a> or <a class="govuk-link" href="../../account/add-inspection-address-phyto">add a new address</a>. -->
+        <p class="govuk-body">You can <a href="../../account/inspection-addresses" class="govuk-link" id="Link-ManageAccount">manage your addresses</a> or <a class="govuk-link" href="../../account/address-lookup?return_url=/dev/{{data.version}}/application/create/pheats-inspection-addresses">add a new address</a>.</p>
+        <p class="govuk-body">If you add a new PHEATS address, it will need to be approved before you can use it.</p>
+      </div>
+      
+      {% if data.build == "ux" %}
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          
+          <div class="govuk-radios" data-module="govuk-radios">
+            
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="address_1" name="select_address" type="radio" value="Shoggins Farm, Turnip Row, Mordor, The Shire, ZI99 7YH" {% if data.select_address == 'Shoggins Farm, Turnip Row, Mordor, The Shire, ZI99 7YH' %}checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="address_1">Shoggins Farm, Turnip Row, Mordor, The Shire, ZI99 7YH</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="address_4" name="select_address" type="radio" value="Goatacre Cricket Club, Hill Lane, Goatacre, Wiltshire, SN15 6YG" {% if data.select_address == 'Goatacre Cricket Club, Hill Lane, Goatacre, Wiltshire, SN15 6YG' %}checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="address_4">Goatacre Cricket Club, Hill Lane, Goatacre, Wiltshire, SN15 6YG</label>
+            </div>
+
+          </div>
+
+        </fieldset>
+      </div>
+
+      <button class="govuk-button govuk-!-margin-bottom-9" type="submit" data-module="govuk-button">Save and continue</button>
+      {% else %}
+      <table class="govuk-table govuk-!-margin-bottom-9">
+        <caption class="govuk-table__caption govuk-visually-hidden">Your inspection addresses</caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Address</th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Shoggins Farm, Turnip Row, Mordor, The Shire, ZI99 7YH</td>
+            
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              <a href="confirm-inspection-address?address=1" class="govuk-link govuk-link--no-visited-state">Select</a>
+            </td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Goatacre Cricket Club, Hill Lane, Goatacre, Wiltshire, SN15 6YG</td>
+            
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              <a href="confirm-inspection-address?address=4" class="govuk-link govuk-link--no-visited-state">Select</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      {% endif %}
+
+      {% block continueLater %}
+      {% include "../modules/_save-continue-later.html" %}
+      {% endblock %}
+    </form>
+
+    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible govuk-!-margin-top-9">
+    <p class="govuk-body"><a href="no-inspection-addresses" class="govuk-link govuk-link-no-visited-state">Scenario: no inspection addresses exist</a></p>
+
+  </div>
+
+</div>
+{% endblock %}

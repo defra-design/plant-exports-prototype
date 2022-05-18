@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Are you sure you want to delete this commodity? - Soil inspection - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new" id="Nav-DisplayName">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="../../../account" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
+  </ul>
+</div>
+
+<a href="{{page.content.prev or 'javascript:history.back()'}}" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <form action="how-to-identify" method="post">
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+            <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-7">Are you sure you want to delete this commodity?</h1>
+          </legend>
+          <dl class="govuk-summary-list govuk-summary-list--no-border">
+    
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Description</dt>
+              <dd class="govuk-summary-list__value">{% if data.has_botanicial_name3 == "use_description" %}{{data.description_details3 or "Cat nip" }}{% else %}{{data.botanical_name3 or "Lophospermum atrosanguineum (RHWAT)"}}{% endif %}</dd>
+              <dd class="govuk-summary-list__actions">&nbsp;</dd>
+            </div>
+      
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Quantity</dt>
+              <dd class="govuk-summary-list__value">{{data.quantity3 or "1,460"}}{% if data.units3 == "Grams" %}g{% elif data.units3 == "Kilograms" %}kg{% elif data.units3 == "Litres" %}l{% elif data.units3 == "Millilitres" %}ml{% elif data.units3 == "Tonnes" %}t{% else %}t{% endif %}</dd>
+              <dd class="govuk-summary-list__actions">&nbsp;</dd>
+            </div>
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Destination</dt>
+              <dd class="govuk-summary-list__value">{% if data.filter_demo3 %}{% for param in data.filter_demo3 %}{{param}}{% if not loop.last %}, {% endif %}{% endfor %}{% else %}Canada{% endif %}</dd>
+              <dd class="govuk-summary-list__actions">&nbsp;</dd>
+            </div>
+
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Distinguishing marks</dt>
+              <dd class="govuk-summary-list__value">{% if data.distinguishing_marks3 %}{{data.distinguishing_marks3 or "Earl Grey"}}{% else %}&nbsp;{% endif %}</dd>
+              <dd class="govuk-summary-list__actions">&nbsp;</dd>
+            </div>
+      
+          </dl>
+          
+          <div class="govuk-radios" data-module="govuk-radios">
+            
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="delete_yes" name="delete" type="radio" value="Yes~commodity-list-2?has_botanicial_name3=&botanical_name3=&description_details3=&origin_other3=&quantity3=&filter_demo3=&distinguishing_marks3=">
+              <label class="govuk-label govuk-radios__label govuk-radios-long-label" for="delete_yes">Yes, delete</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="delete_no" name="delete" type="radio" value="No~commodity-list-3">
+              <label class="govuk-label govuk-radios__label govuk-radios-long-label" for="delete_no">Cancel and go back</label>
+            </div>
+
+          </div>
+
+        </fieldset>
+      </div>
+
+      <button class="govuk-button" type="submit" data-module="govuk-button">Confirm</button>
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

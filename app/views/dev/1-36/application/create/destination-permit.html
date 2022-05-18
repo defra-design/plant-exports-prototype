@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+GOV.UK Prototype Kit
+{% endblock %}
+{% block beforeContent%}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <!-- <p class="govuk-body">If you do not have an import permit, skip this question</p> -->
+      <form  action="{{query.return_url or '../create/task-list'}}" method="POST">
+        <fieldset class="govuk-fieldset" aria-describedby="applicant-conditional-hint">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-6">
+            <h1 class="govuk-fieldset__heading">
+                Do you have an import permit?
+            </h1>
+          </legend>
+          <p class="govuk-body">
+            You may need an import permit to export your consignment. These permits are issued by the competent authority (the equivalent of Defra) in the destination country.
+          </p>
+          <div class="govuk-form-group">
+          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="applicant-conditional" name="has_import_permit" type="radio" value="yes~upload-permit" data-aria-controls="has-permit-conditional" {% if data.has_import_permit == 'yes'%}checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="applicant-conditional">
+                Yes
+              </label>
+            </div>
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="has-permit-conditional">
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="import_permit">Enter the import permit number</label>
+                <p class="govuk-hint">You will need to upload a copy of the permit in the next step</p>
+                <input class="govuk-input govuk-input--width-10" id="import_permit" name="import_permit" value="{% if query.change=='yes'%}{{ data.import_permit }}{% endif %}" type="text" data-qa-id="Question-7006EHC-1">
+              </div>
+              </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="applicant-conditional-2" name="has_import_permit" type="radio" value="no~task-list" data-aria-controls="conditional-applicant-conditional-2">
+              <label class="govuk-label govuk-radios__label" for="applicant-conditional-2">
+                No
+              </label>
+            </div>
+          </div>
+          </div>
+        </fieldset>
+        <div class="govuk-form-group">
+          <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+        </div>
+      </form>
+      {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+    </div>
+  </div>
+{% endblock %}
