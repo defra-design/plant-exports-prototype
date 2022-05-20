@@ -32,7 +32,7 @@
     <table class="govuk-table govuk-!-margin-bottom-9">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
-          <th class="govuk-table__header" scope="col">Botanical name/ Description</th>
+          <th class="govuk-table__header" scope="col">Botanical name or description</th>
           <th class="govuk-table__header" scope="col">Distinguishing marks</th>
           <th class="govuk-table__header" scope="col">Amount</th>
           <th class="govuk-table__header" scope="col">Remaining quantity</th>
@@ -43,8 +43,8 @@
         <tr class="govuk-table__row">
           <td class="govuk-table__cell">{{data.commodityForExport or "Lophospermum atrosanguineum (RHWAT)"}}</td>
           <td class="govuk-table__cell">{% if data.distinguishing_marks4 %}{{data.distinguishing_marks4 or "N/A"}}{% else %}&nbsp;{% endif %}</td>
-          <td class="govuk-table__cell">{{data.amountForExport or "10"}}{% if data.units == "Grams" %}g{% elif data.units == "Kilograms" %}kg{% elif data.units == "Litres" %}l{% elif data.units == "Millilitres" %}ml{% elif data.units == "Tonnes" %}t{% else %}kg{% endif %}</td>
-          <td class="govuk-table__cell">{{data.quantity or "10"}}{% if data.units == "Grams" %}g{% elif data.units == "Kilograms" %}kg{% elif data.units == "Litres" %}l{% elif data.units == "Millilitres" %}ml{% elif data.units == "Tonnes" %}t{% else %}kg{% endif %}</td>
+          <td class="govuk-table__cell">{{data.amountForExport or "10"}}{% if data.commodityForExport == "Lophospermum atrosanguineum (RHWAT)" %}t{% elif data.commodityForExport == "Alsophila latebrosa (ASWLA)" %}g{% else %}kg{% endif %}</td>
+          <td class="govuk-table__cell">{% if data.commodityForExport == "Lophospermum atrosanguineum (RHWAT)" %}1,460t{% elif data.commodityForExport == "Alsophila latebrosa (ASWLA)" %}30g{% else %}10kg{% endif %}</td>
           <td class="govuk-table__cell">
             <a href="consignment" class="govuk-link govuk-link--no-visited-state">Change</a>
             <br>
@@ -93,7 +93,7 @@
     </form>
 
     {% block continueLater %}
-    {% include "../../../modules/_save-continue-later.html" %}
+    {% include "../../modules/_save-continue-later.html" %}
     {% endblock %}
   </div>
 
