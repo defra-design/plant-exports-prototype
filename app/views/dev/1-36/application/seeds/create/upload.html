@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-Add commodities by uploading a file - GOV UK
+  {% if data.build == "development" %}Exports application - GOV.UK{% else %}Upload a file - Phytosanitary certificate - {{serviceName}} - GOV.UK{% endif %}
 {% endblock %}
 
 {% block beforeContent %}
@@ -13,78 +13,77 @@ Add commodities by uploading a file - GOV UK
 {% endblock %}
 
 {% block content %}
-<div class="govuk-width-container">
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-two-thirds">
-        <form action="/form-handler" method="post" novalidate>
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-two-thirds">
+      
+    <form method="post" novalidate>
 
-          {% set commodity = data.commodity or "products" %}
+      <div class="govuk-form-group govuk-!-margin-bottom-9">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+            <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-6">Upload a file</h1>
+          </legend>
+        </fieldset>
+        <p class="govuk-body">Download the <a href="/public/templates/template-seeds-sampling.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>.</p>
+        <p class="govuk-body govuk-!-margin-bottom-6">Open the file in whatever software program you use to edit comma-separated values (CSV) files. Fill in the template using the guidance notes on how to edit the file, then save and upload it.</p>
+        <h2 class="govuk-heading-m">Guidance on how to edit the file</h2>
+        <ol class="govuk-list govuk-list--number">
+          <li>You must complete all fields that are mandatory.</li>
+          <li>If you do not know the botanical name, or your product is made of many species, enter a description instead.</li>
+          <li>You must enter a lot reference. You can enter a growing season inspection (GSI) reference.</li>
+          <li>For quantity units and chemically treated you must choose from the options listed and delete any options you do not use.</li>
+          <li>
+            You must use the correct country code for the country where the seed was grown and the destination countries. You must separate these only with spaces, do not use commas. You can find the 2 letter country code at <a href="https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes" class="govuk-link" rel="noreferrer noopener" target="_blank">https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes (opens in new tab)</a>. The only exceptions are if the country of origin is one of these countries, in which case you must enter it as it appears in this list: Aland Islands, Alaska, Azores, Bolivia, Bonaire, British Virgin Islands, Myanmar, Canary Islands, Cape Verde, Cocos Islands, Cote d'Ivoire, Curacao, Falkland Islands, Hawaii, Republic of Ireland, Kosovo, Madeira, Netherlands Antilles, Northern Ireland - use GB-NIR, Palestine - use PS, Reunion, Ross dependency, Saba, Sabah, St Barthelemy, St Eustatius, Taiwan, Wallis and Futuna Islands.
+          </li>
+          <li>Do not enter more than 500 rows of data.</li>
+          <li>Save your completed file as a .CSV file and upload it.</li>
+        </ol>
+        <details class="govuk-details" data-module="govuk-details">
+          <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">Further advice and example template</span>
+          </summary>
 
-          {% if data.commodity == "plant products" %}
-
-          {% set commodity = "products" %}
-
-          {% elseif data.commodity == "Used farm machinery" %}
-
-          {% set commodity = "used farm machines" %}
-
-          {% endif %}
-
-          <div class="govuk-form-group  govuk-!-margin-bottom-9">
-            <fieldset class="govuk-fieldset">
-              <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-                <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">
-                    Upload details for multiple commodities at the same time
-                </h1>
-              </legend>
-            </fieldset>
-
-            <p class="govuk-body">
-                <!--Use our <a href="/public/images/plant-product-commodity-template.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a> to upload details for multiple {{commodity or " products"}} at the same time.-->
-            </p>
-            <!--<ul class="govuk-list govuk-list--bullet  govuk-!-margin-bottom-9">
-                <li>The file must be </li>
-                <li>The file can't contain these</li>
-                <li>The file can't be bigger than this</li>
-              </ul>-->
-            <p class="govuk-body">
-              {% if data.commodity == "plants" %}
-              Download and fill in the <a href="/public/images/APHA_phytosanitary_certificate_csv_template - PLANTS.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
-              {% elseif data.commodity == "seeds" %}
-              Download and fill in the <a href="/public/images/template-seeds-sample.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
-              {% else %}
-              Download and fill in the <a href="/public/images/APHA_phytosanitary_certificate_csv_template.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.
-              {% endif %}
-              <!--The csv template shows you what details you will need to include.-->
-            </p>
-            <p class="govuk-body govuk-!-margin-bottom-6">
-                <!--Find out more about <a href="#" class="govuk-link govuk-link--no-visited-state" title="Bulk upload specification document">uploading a csv file</a>.-->
-                Open the csv file in Excel or whatever you use to edit spreadsheets. When you have finished, save the file and select Comma Separated Values (.csv) as the file format.
-            </p>
-
-            {{ govukFileUpload({
-              id: "file-upload-1",
-              name: "file-upload-1",
-              label: {
-                text: "Upload your completed csv file"
-              }
-            }) }}
-
+          <div class="govuk-details__text">
+            <!-- <h3 class="govuk-heading-s">If you are having problems with the upload</h3> -->
+            <p class="govuk-body">If you are having problems with the upload</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>make sure that you have used the correct country code to enter countries</li>
+              <li>make sure you have not changed or deleted any columns or headers from the template</li>
+              <li>make sure the headers are consistently capitalised</li>
+              <li>check that you have not added extra commas</li>
+              <li>if you have edited the template using the Numbers application, be aware that this program sometimes adds extra columns to the file. If there are any empty columns without headers in your file, you should delete these columns completely.</li>
+              <li>check that when you edited the template, your software didn't add extra commas into your CSV file</li>
+              <li>for quantity units and chemically treated, make sure you have used only the options provided without changing them</li>
+              <li>for quantity units and chemically treated, make sure that you have deleted any options you have not used</li>
+            </ul>
+            <p class="govuk-body">You may find it helpful to compare your file against this <a href="/public/templates/example-seeds-sampling.csv" class="govuk-link govuk-link--no-visited-state" title="CSV template">example template</a>.</p>
           </div>
 
-          {{ govukButton({
-            text: "Upload",
-            href: "upload-in-progress"
-          }) }}
+        </details>
 
+        {{ govukFileUpload({
+          id: "file-upload-1",
+          name: "file-upload-1",
+          label: {
+            text: "Upload your completed CSV file"
+          }
+        }) }}
 
-          <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-          <p class="govuk-body govuk-!-margin-top-9">
-            <a href="upload-error" class="govuk-link govuk-link-no-visited-state">View Upload screen with file type error</a>
-          </p>
-
-        </form>
       </div>
-    </div>
+
+      {{ govukButton({
+        text: "Upload",
+        href: "upload-in-progress"
+      }) }}
+
+      {% if query.extras == "yes" %}
+      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+      <p class="govuk-body govuk-!-margin-top-9"><a href="upload-error" class="govuk-link govuk-link-no-visited-state">View Upload screen with file type error</a></p>
+      {% endif %}
+    </form>
+
+  </div>
+
 </div>
 {% endblock %}
