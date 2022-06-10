@@ -34,25 +34,16 @@ You have successfully submitted your application - {{serviceName}} - GOV.UK
 
         <p class="govuk-body govuk-!-padding-bottom-2">We'll only contact you if there is a problem with your application.</p>
 
-        {% if data.route == "new" %}
-        <!--<p>
-          <a href="../../dashboard-one?filter_status=&has_filter=&date_range=&filter_name=&show_applications_by=me" class="govuk-link">View your applications</a>
-
-          to check progress.</p>-->
-            {{ govukButton({
-              text: "View your applications",
-              href: "../../dashboard-one?filter_status=&has_filter=&date_range=&filter_name=&show_applications_by=me"
-            }) }}
-          {% else %}
-          <!--<p>
-            <a href="../../dashboard?filter_status=&has_filter=&date_range=&filter_name=&show_applications_by=me" class="govuk-link">View your applications</a>
-
-            to check progress.</p>-->
-            {{ govukButton({
-              text: "View your applications",
-              href: "../../dashboard?filter_status=&has_filter=&date_range=&filter_name=&show_applications_by=me"
-            }) }}
-          {% endif %}
+        <form action="{% if data.route == 'new' %}../../dashboard-one{% else %}../../dashboard{% endif %}" method="post">
+          <button class="govuk-button govuk-!-margin-top-2 govuk-!-margin-bottom-7" data-module="govuk-button">View your applications</button>
+    
+          <!-- Session data hook to update the dashboard so that it knows a new application has been submitted -->
+          <div class="govuk-form-group" hidden>
+            <label class="govuk-label" for="application_submission_data">Application submission status</label>
+            <input class="govuk-input" id="application_submission_data" name="application_submission_data" type="text" value="submitted">
+          </div>
+    
+        </form>
 
           <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_self">what fees you will pay</a> for this application.</p>
 
