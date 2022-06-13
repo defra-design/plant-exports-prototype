@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.build == "development" %}Add commodities by uploading a file - GOV.UK{% else %}Upload in progress... - Phytosanitary certificate - {{serviceName}} - GOV.UK{% endif %}
+  Error: There is a problem - Phytosanitary certificate - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -17,11 +17,26 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
-     
-     <!-- UX VERSION -->
-    {% if data.build == "ux" %}
-    <div aria-live="assertive" class="app-alert app-alert--info">
-      <p class="govuk-body">Upload in progress...</p>
+
+    <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+      <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
+      <h3 class="govuk-heading-s">There are 250 errors in your file</h3>
+
+      <div class="govuk-error-summary__body">
+        <ul class="govuk-list govuk-error-summary__list">
+          <li><a href="#file-upload-1">Correct the problems with your file and then upload the file again</a></li>
+        </ul>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>Genus is missing (row 9)</li>
+          <li>Commodity type is missing (100 rows)</li>
+          <li>Country of origin is missing (60 rows)</li>
+          <li>Number of packages is missing (row 28)</li>
+          <li>Packaging type is missing (7 rows)</li>
+          <li>Quantity is missing (7 rows)</li>
+          <li>EPPO code does not match any of the expected values (row 39)</li>
+        </ul>
+      </div>
+
     </div>
 
     <form method="post" novalidate>
@@ -478,6 +493,9 @@
           name: "file-upload-1",
           label: {
             text: "Upload your completed CSV file"
+          },
+          errorMessage: {
+            text: "Correct the problems with your file and then upload the file again"
           }
         }) }}
 
@@ -487,124 +505,38 @@
         text: "Upload",
         href: "upload-in-progress"
       }) }}
+
+      {% if query.extras == "yes" %}
+      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+      <h3 class="govuk-heading-s">Bulk upload templates</h3>
+      <span class="govuk-body">Phytosanitary certificate</span>
+      <ul class="govuk-list govuk-list">
+        <li><a href="/public/templates/template-bulbs.csv" class="govuk-link govuk-link-no-visited-state">Bulbs</a> | <a href="/public/templates/example-bulbs.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
+        <li><a href="/public/templates/template-plants.csv" class="govuk-link govuk-link-no-visited-state">Plants and fresh produce</a> | <a href="/public/templates/example-plant.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
+        <li><a href="/public/templates/template-potatoes.csv" class="govuk-link govuk-link-no-visited-state">Potatoes</a> | <a href="/public/templates/example-potatoes.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
+        <li><a href="/public/templates/template-plant-products.csv" class="govuk-link govuk-link-no-visited-state">Processed plant products</a> | <a href="/public/templates/example-plant-products.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
+        <li><a href="/public/templates/template-seeds.csv" class="govuk-link govuk-link-no-visited-state">Seeds for planting</a> | <a href="/public/templates/example-seeds.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
+        <li><a href="/public/templates/template-grain.csv" class="govuk-link govuk-link-no-visited-state">Unprocessed cereal grains</a> | <a href="/public/templates/example-grain.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
+        <li><a href="/public/templates/template-used-farm-machinery.csv" class="govuk-link govuk-link-no-visited-state">Used farm machinery</a> | <a href="/public/templates/example-used-farm-machinery.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
+      </ul>
+      <span class="govuk-body">Certificate of conformity</span>
+      <ul class="govuk-list govuk-list">
+        <li><a href="/public/templates/template-sms.csv" class="govuk-link govuk-link-no-visited-state">SMS</a> | <a href="/public/templates/example-sms.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
+        <li><a href="/public/templates/template-gms.csv" class="govuk-link govuk-link-no-visited-state">GMS</a> | <a href="/public/templates/example-gms.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>       
+      </ul>
+      <ul class="govuk-list govuk-list">
+        <li><a href="/public/templates/template-seeds-sampling.csv" class="govuk-link govuk-link-no-visited-state">Seed sampling</a> | <a href="/public/templates/example-seeds-sampling.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>      
+      </ul>
+      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+      <h3 class="govuk-heading-s">Error handling</h3>
+      <ul class="govuk-list govuk-list">
+        <li><a href="upload-validation-errors-summary" class="govuk-link govuk-link-no-visited-state">View error summary of unique errors (occurences and rows listed)</a></li>
+      </ul>
+      {% endif %}
       {% endif %}
     </form>
-    {% else %}
-    <form method="post" novalidate>
 
-      {% set commodity = data.commodity or "products" %}
-
-      {% if data.commodity == "plants" %}
-        {% set template = "template-plants.csv" %}
-      {% elseif data.commodity == "plant products" %}
-        {% set commodity = "products" %}
-        {% set template = "template-plant-products.csv" %}
-      {% elseif data.commodity == "used farm machines" %}
-        {% set commodity = "used farm machines" %}
-        {% set template = "template-used-farm-machinery.csv" %}
-      {% elseif data.commodity == "potatoes" %}
-        {% set template = "template-potatoes.csv" %}
-      {% elseif data.commodity == "seeds" %}
-        {% set template = "APHA_phytosanitary_certificate_csv_template - SEEDS.csv" %}
-      {% elseif data.commodity == "grain" %}
-        {% set template = "template-grain.csv" %}
-      {% elseif data.commodity == "bulbs" %}
-        {% set template = "template-bulbs.csv" %}
-      {% else %}
-        {% set template = "APHA_phytosanitary_certificate_csv_template.csv" %}
-      {% endif %}
-
-      {% if data.journey == "coc" %}
-        {% set template = "template-hmi.csv" %}
-      {% endif %}
-
-      <div class="govuk-form-group govuk-!-margin-bottom-7">
-        <fieldset class="govuk-fieldset">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-            <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">Upload details for multiple commodities at the same time</h1>
-          </legend>
-        </fieldset>
-        <p class="govuk-body">Download and fill in the <a href="/public/images/{{template}}" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.</p>
-        <p class="govuk-body govuk-!-margin-bottom-6">Open the csv file in Excel or whatever you use to edit spreadsheets. When you have finished, save the file and select Comma Separated Values (.csv) as the file format.</p>
-
-        {{ govukFileUpload({
-          id: "file-upload-1",
-          name: "file-upload-1",
-          label: {
-          text: "Upload your completed csv file"
-        }
-        }) }}
-
-      </div>
-
-      <div class="govuk-form-group govuk-!-margin-bottom-6">
-        {{ govukButton({
-          text: "Upload",
-          href: "upload-in-progress"
-        }) }}
-      </div>
-
-    </form>
-    {% endif %}
-
-    <ul class="govuk-list govuk-list">
-      <li>
-        {% if data.journey == "coc" or data.journey == "both"%}
-        <a href="commodity-list-split" class="govuk-link govuk-link-no-visited-state">Skip</a>
-        {% elseif data.commodity == "seeds"%}
-        <a href="commodity-list-summary" class="govuk-link govuk-link-no-visited-state">Skip</a>
-        {% else %}
-        <a href="commodity-list" class="govuk-link govuk-link-no-visited-state">Skip</a>
-        {% endif %}
-        (page reloads after 10 seconds)
-      </li>
-    </ul>
-
-    {% if query.extras == "yes" %}
-    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-    <h3 class="govuk-heading-s">Bulk upload templates</h3>
-    <span class="govuk-body">Phytosanitary certificate</span>
-    <ul class="govuk-list govuk-list">
-      <li><a href="/public/templates/template-bulbs.csv" class="govuk-link govuk-link-no-visited-state">Bulbs</a> | <a href="/public/templates/example-bulbs.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
-      <li><a href="/public/templates/template-plants.csv" class="govuk-link govuk-link-no-visited-state">Plants and fresh produce</a> | <a href="/public/templates/example-plant.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
-      <li><a href="/public/templates/template-potatoes.csv" class="govuk-link govuk-link-no-visited-state">Potatoes</a> | <a href="/public/templates/example-potatoes.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
-      <li><a href="/public/templates/template-plant-products.csv" class="govuk-link govuk-link-no-visited-state">Processed plant products</a> | <a href="/public/templates/example-plant-products.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
-      <li><a href="/public/templates/template-seeds.csv" class="govuk-link govuk-link-no-visited-state">Seeds for planting</a> | <a href="/public/templates/example-seeds.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
-      <li><a href="/public/templates/template-grain.csv" class="govuk-link govuk-link-no-visited-state">Unprocessed cereal grains</a> | <a href="/public/templates/example-grain.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
-      <li><a href="/public/templates/template-used-farm-machinery.csv" class="govuk-link govuk-link-no-visited-state">Used farm machinery</a> | <a href="/public/templates/example-used-farm-machinery.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
-    </ul>
-    <span class="govuk-body">Certificate of conformity</span>
-    <ul class="govuk-list govuk-list">
-      <li><a href="/public/templates/template-sms.csv" class="govuk-link govuk-link-no-visited-state">SMS</a> | <a href="/public/templates/example-sms.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
-      <li><a href="/public/templates/template-gms.csv" class="govuk-link govuk-link-no-visited-state">GMS</a> | <a href="/public/templates/example-gms.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>       
-    </ul>
-    <ul class="govuk-list govuk-list">
-      <li><a href="/public/templates/template-seeds-sampling.csv" class="govuk-link govuk-link-no-visited-state">Seed sampling</a> | <a href="/public/templates/example-seeds-sampling.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>      
-    </ul>
-    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-    <h3 class="govuk-heading-s">Error handling</h3>
-    <ul class="govuk-list govuk-list">
-      <li><a href="upload-error-summary" class="govuk-link govuk-link-no-visited-state">View error summary of unique errors (occurences and rows listed)</a></li>
-    </ul>
-    {% endif %}
   </div>
 
 </div>
-{% endblock %}
-
-{% block pageScripts %}
-<script>
-
-   var timer = setTimeout(function() {
-    {% if data.journey == "coc" %}
-    window.location='commodity-list-split'
-    {% elseif data.commodity == "seeds" %}
-    window.location='commodity-list-summary'
-    {% else %}
-    window.location='commodity-list'
-    {% endif %}
-      
-  }, 10000);
-
-</script>
 {% endblock %}
