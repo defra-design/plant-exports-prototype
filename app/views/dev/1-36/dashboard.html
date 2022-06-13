@@ -468,23 +468,33 @@
     
     <div class="filter-tag--wrapper govuk-!-margin-bottom-6" data-module="track-click">
       <p class="govuk-body govuk-!-margin-bottom-2">
-        {% if query.search %}
-        Showing 0 applications matching <strong>{{data.search or "search term"}}</strong>
+        {% if data.search %}
+          {% if data.filter_applied %}
+          Showing 0 applications matching <strong>{{data.search or "search term"}}</strong> or these filters.
+          {% else %}
+          Showing 0 applications matching <strong>{{data.search or "search term"}}</strong>
+          {% endif %}
+        {% elif data.filter_applied %}
+          {% if data.filter_demo %}
+          Showing 0 applications matching these filters.
+          {% else %}
+          Showing <span id="js-case-count">&nbsp;</span> applications matching these filters.
+          {% endif %}
         {% else %}
         Showing <span id="js-case-count">&nbsp;</span> applications
         {% endif %}
         {% if data.filter_applied %}
-        {% if data.certificate %} with type <strong>{% if data.certificate %}{% for param in data.certificate %}{{param}}{% if not loop.last %}, {% endif %}{% endfor %}{% else %}Soil sampling{% endif %}</strong>{% endif %}
-        {% if data.filter_demo %} with destination country <strong>{% if data.filter_demo %}{% for param in data.filter_demo %}{{param}}{% if not loop.last %}, {% endif %}{% endfor %}{% else %}Algeria{% endif %}</strong>{% endif %}
-        {% if data.filter_status %} with type <strong>{% if data.filter_status %}{% for param in data.filter_status %}{{param}}{% if not loop.last %}, {% endif %}{% endfor %}{% else %}Processing{% endif %}</strong>{% endif %}
-        {% if data.filter_name %} with type <strong>{% if data.filter_name %}{% for param in data.filter_name %}{{param}}{% if not loop.last %}, {% endif %}{% endfor %}{% else %}Cornelius Longbottom{% endif %}</strong>{% endif %}
+        {% if data.certificate %}Type is {% if data.certificate %}{% for param in data.certificate %}<strong>{{param}}</strong>{% if not loop.last %} or {% endif %}{% endfor %}{% else %}Soil sampling{% endif %}.{% endif %}
+        {% if data.filter_demo %}Destination country is {% if data.filter_demo %}{% for param in data.filter_demo %}<strong>{{param}}</strong>{% if not loop.last %} or {% endif %}{% endfor %}{% else %}Algeria{% endif %}.{% endif %}
+        {% if data.filter_status %}Status is {% if data.filter_status %}{% for param in data.filter_status %}<strong>{{param}}</strong>{% if not loop.last %} or {% endif %}{% endfor %}{% else %}Processing{% endif %}.{% endif %}
+        {% if data.filter_name %}User is {% if data.filter_name %}{% for param in data.filter_name %}<strong>{{param}}</strong>{% if not loop.last %} or {% endif %}{% endfor %}{% else %}Cornelius Longbottom{% endif %}.{% endif %}
         {% endif %}
       </p>
-      {% if data.filter_applied or data.search %}
+      {% if data.search or data.filter_applied %}
       <p class="govuk-body">
         <a href="?search=&certificate=&filter_demo=&filter_status=&filter_name=&show_applications_by=&filter_applied=#submitted" class="govuk-link govuk-link--no-visited-state govuk-!-font-size-19" data-module="govuk-button">
           Clear
-          {% if data.filter_applied and data.search %}
+          {% if data.search and data.filter_applied %}
           search and filters
           {% elif data.filter_applied %}
           filters
@@ -500,15 +510,32 @@
 
       <div class="govuk-grid-column-full">
 
-        {% if query.search %}
+        {% if data.search and data.filter_applied %}
         <div class="no-results">
           <p class="govuk-body govuk-!-font-weight-bold">There are no matching applications.</p>
           <p class="govuk-body">Improve your results by:</p>
           <ul class="govuk-list govuk-list--bullet govuk-list-no-padding-bottom">
-            <li>removing filters</li>
-            <li>double-checking your spelling</li>
-            <li>using fewer keywords</li>
-            <li>searching for something less specific</li>
+            <li>double-checking the reference number or date you searched for</li>
+            <li>searching by either a date or reference number, not both</li>
+            <li>trying different filters</li>
+          </ul>
+        </div>
+        {% elif data.search %}
+        <div class="no-results">
+          <p class="govuk-body govuk-!-font-weight-bold">There are no matching applications.</p>
+          <p class="govuk-body">Improve your results by:</p>
+          <ul class="govuk-list govuk-list--bullet govuk-list-no-padding-bottom">
+            <li>double-checking the reference number or date you searched for</li>
+            <li>searching by either a date or reference number, not both</li>
+          </ul>
+        </div>
+        {% elif data.filter_demo %}
+        <div class="no-results">
+          <p class="govuk-body govuk-!-font-weight-bold">There are no matching applications.</p>
+          <p class="govuk-body">Improve your results by:</p>
+          <ul class="govuk-list govuk-list--bullet govuk-list-no-padding-bottom">
+            <li>trying different filters</li>
+            <li>searching by reference or submitted date instead</li>
           </ul>
         </div>
         {% else %}
