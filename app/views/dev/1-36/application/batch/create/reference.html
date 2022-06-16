@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  Create a reference - Seed sampling - {{serviceName}} - GOV.UK
+  Create a reference for one time testing - One time testing - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -14,42 +14,39 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">Create a reference for your batch sampling</h1>    
+    <h1 class="govuk-heading-xl">Create a reference for one time testing</h1>    
     <p class="govuk-body">
       {% if query.change == 'yes' %}
-      You can enter your own reference for this batch sampling. References can be up to 20 letters or numbers long.
+      Change your reference for this one time testing application.
       {% else %}
-      {% if data.build == "ux" %}
-      You can enter your own reference for this application. Your reference will not be printed on your phytosanitary certificate but it will be on your invoice.
-      {% else %}
-      You may find it helpful to enter your own reference such as an invoice number or consignee name. References can be up to 20 letters or numbers long.
-      {% endif %}
+      You can enter your own reference for this application for one time testing. References can be up to 20 letters or numbers long.
       {% endif %}
     </p>
 
-    <form action="{{query.return_url or '../create/task-list'}}" method="post">
+    <form action="{{query.return_url or 'task-list'}}" method="post">
         
       <div class="govuk-form-group">
-				<label class="govuk-label" for="reference_num">Your reference for this batch (optional)</label>
+				<label class="govuk-label" for="reference_num">Your reference for this test (optional)</label>
 				<input class="govuk-input govuk-input--width-20" id="reference_num" name="reference_num" value="{% if query.change == 'yes' %}{{data.reference_num}}{% endif %}" type="text">
 			</div>
 
-			{% if query.change == 'yes' or query.saveContinueLater == 'yes' %}
+			{% if query.change == 'yes' %}
 			<div class="govuk-button-group govuk-!-margin-bottom-7">
 				<button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
 			</div>
+
+			{% block continueLater %}
+			{% include "../modules/_save-continue-later.html" %}
+			{% endblock %}
 			{% else %}
-			<div class="govuk-button-group govuk-!-margin-bottom-7">
-				<button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
-				<a class="govuk-link app-button--link" href="../../dashboard">Cancel</a>
+			<div class="govuk-button-group">
+				<button class="govuk-button" type="submit" data-module="govuk-button">Continue</button>
+				<a class="govuk-link app-button--link" href="../../../dashboard">Cancel</a>
 			</div>
 			{% endif %}
 
     </form>
 
-    {% block continueLater %}
-    {% include "../modules/_save-continue-later.html" %}
-    {% endblock %}
   </div>
 
 </div>
