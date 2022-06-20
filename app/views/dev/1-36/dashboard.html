@@ -466,6 +466,7 @@
 
   <div class="govuk-grid-column-full">
     
+    {% if data.route != "new" %}
     <div class="filter-tag--wrapper govuk-!-margin-bottom-6" data-module="track-click">
       <p class="govuk-body govuk-!-margin-bottom-2">
         {% if data.search %}
@@ -505,6 +506,23 @@
       </p>
       {% endif %}
     </div>
+    {% else %}
+    <p class="govuk-body govuk-!-margin-bottom-2">Showing 0 applications</p>
+    {% if data.search or data.filter_applied %}
+    <p class="govuk-body">
+      <a href="?search=&certificate=&filter_demo=&filter_status=&filter_name=&show_applications_by=&filter_applied=#submitted" class="govuk-link govuk-link--no-visited-state govuk-!-font-size-19" data-module="govuk-button">
+        Clear
+        {% if data.search and data.filter_applied %}
+        search and filters
+        {% elif data.filter_applied %}
+        filters
+        {% else %}
+        search
+        {% endif %}
+      </a>
+    </p>
+    {% endif %}
+    {% endif %}
 
     <div class="govuk-grid-row">
 
@@ -549,6 +567,7 @@
           2) Destination (a-z)
           3) Type (a-z)
         -->
+        {% if data.route != "new" %}
         <table class="govuk-table responsive-table">
           <thead class="govuk-table__head govuk-body-s">
             <tr class="govuk-table__row rowCounter">
@@ -561,7 +580,6 @@
               <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
             </tr>
           </thead>
-          {% if data.route != "new" %}
           <tbody class="govuk-body-s">
             {% if data.application_submission_data == "draft" %}
             <tr class="govuk-table__row rowCounter result">
@@ -958,7 +976,8 @@
           </tbody>
           {% endif %}
         </table>
-        
+
+        {% if data.route != "new" %}
         <div class="govuk-form-block">
           <nav class="defra-pagination" id="pagination-label">
             <p class="govuk-visually-hidden" aria-labelledby="pagination-label">Pagination navigation</p>
@@ -976,6 +995,9 @@
             <p class="defra-pagination__results govuk-body">Showing <strong>1</strong> to <strong>30</strong> of <strong>{% if data.application_submission_data == "draft" or data.application_submission_data == "submitted" %}36{% else %}35{% endif %}</strong> results</p>
           </nav>
         </div>
+        {% else %}
+        
+        {% endif %}
         <!-- Chris Harding (10.06.22) - Show page 1 (1 to 30 of 35 results) (END) -->
 
         <!-- Chris Harding (10.06.22) - Show page 2 (31 to 35 of 35 results) (START) -->
@@ -986,6 +1008,7 @@
           2) Destination (a-z)
           3) Type (a-z)
         -->
+        {% if data.route != "new" %}
         <table class="govuk-table responsive-table">
           <thead class="govuk-table__head govuk-body-s">
             <tr class="govuk-table__row rowCounter">
@@ -998,7 +1021,6 @@
               <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
             </tr>
           </thead>
-          {% if data.route != "new" %}
           <tbody class="govuk-body-s">
             {% for app in data.applicationsv2 %}
             {% if app.status != "draft" %}
@@ -1263,6 +1285,7 @@
           {% endif %}
         </table>
 
+        {% if data.route != "new" %}
         <div class="govuk-form-block">
           <nav class="defra-pagination" id="pagination-label">
             <p class="govuk-visually-hidden" aria-labelledby="pagination-label">Pagination navigation</p>
@@ -1280,6 +1303,9 @@
             <p class="defra-pagination__results govuk-body">Showing <strong>31</strong> to <strong>{% if data.application_submission_data == "draft" or data.application_submission_data == "submitted" %}36{% else %}35{% endif %}</strong> of <strong>{% if data.application_submission_data == "draft" or data.application_submission_data == "submitted" %}36{% else %}35{% endif %}</strong> results</p>
           </nav>
         </div>
+        {% else %}
+
+        {% endif %}
         {% endif %}
         <!-- Chris Harding (10.06.22) - Show page 2 (31 to 35) of the 35 results (END) -->
         {% endif %}

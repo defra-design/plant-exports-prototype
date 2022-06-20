@@ -288,6 +288,182 @@
 
 <div class="govuk-grid-row">
 
+  <div class="govuk-grid-column-two-thirds">
+    
+    <form method="get" novalidate>
+
+      <div class="search-wrapper govuk-form-group">
+        <label for="search-applications" class="govuk-label">Search by <abbr title="Animal and Plant Health Agency">APHA</abbr> reference, your reference or submitted date</label>
+
+        <div class="search-input-wrapper">
+          <input type="search" value="{{data.search or ''}}" id="search-applications" name="search" title="Search" class="govuk-input">
+          
+          <div class="search-input-submit-wrapper">
+            <button type="submit" class="search-submit">Search</button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </form>
+
+  </div>
+
+  <div class="govuk-grid-column-one-third">
+
+    <div class="defra-filter--action" style="display: none;">
+      <button id="defra-filter--button" class="govuk-button govuk-button--secondary govuk-!-margin-top-6{% if query.filter_applied == 'yes' %} defra-filter-button--active{% endif %}" type="button" aria-expanded="false">
+        <span class="defra-filter--button-content">Show filters</span>
+        <span class="defra-filter__icon"></span>
+      </button>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-full">
+
+    <div class="defra-filter--content">
+
+      <form method="get" novalidate>
+        
+        <div class="govuk-grid-row govuk-!-margin-top-3">
+
+          <div class="govuk-grid-column-one-third">
+
+            <div class="govuk-form-group">
+              <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Filter by type</legend>
+                
+                <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">                  
+
+                  <div class="govuk-checkboxes__item">
+                    <input class="govuk-checkboxes__input" id="certificate_1" name="certificate" type="checkbox" value="Batch"{% for param in data.certificate %}{% if param == 'Batch' %} checked{% endif %}{% endfor %}>
+                    <label class="govuk-label govuk-checkboxes__label" for="certificate_1">Batch</label>
+                  </div>
+                  
+                  <div class="govuk-checkboxes__item">
+                    <input class="govuk-checkboxes__input" id="certificate_2" name="certificate" type="checkbox" value="Certificate of conformity"{% for param in data.certificate %}{% if param == 'Certificate of conformity' %} checked{% endif %}{% endfor %}>
+                    <label class="govuk-label govuk-checkboxes__label" for="certificate_2">Certificate of conformity</label>
+                  </div>
+
+                  <div class="govuk-checkboxes__item">
+                    <input class="govuk-checkboxes__input" id="certificate_3" name="certificate" type="checkbox" value="Growing season inspection"{% for param in data.certificate %}{% if param == 'Growing season inspection' %} checked{% endif %}{% endfor %}>
+                    <label class="govuk-label govuk-checkboxes__label" for="certificate_3">Growing season inspection</label>
+                  </div>
+
+                  <div class="govuk-checkboxes__item">
+                    <input class="govuk-checkboxes__input" id="certificate_4" name="certificate" type="checkbox" value="Phytosanitary certificate"{% for param in data.certificate %}{% if param == 'Phytosanitary certificate' %} checked{% endif %}{% endfor %}>
+                    <label class="govuk-label govuk-checkboxes__label" for="certificate_4">Phytosanitary certificate</label>
+                  </div>
+
+                  <div class="govuk-checkboxes__item">
+                    <input class="govuk-checkboxes__input" id="certificate_5" name="certificate" type="checkbox" value="Re-forwarding phytosanitary certificate"{% for param in data.certificate %}{% if param == 'Re-forwarding phytosanitary certificate' %} checked{% endif %}{% endfor %}>
+                    <label class="govuk-label govuk-checkboxes__label" for="certificate_5">Re-forwarding phytosanitary certificate</label>
+                  </div>
+
+                  <div class="govuk-checkboxes__item">
+                    <input class="govuk-checkboxes__input" id="certificate_6" name="certificate" type="checkbox" value="Seed sampling"{% for param in data.certificate %}{% if param == 'Seed sampling' %} checked{% endif %}{% endfor %}>
+                    <label class="govuk-label govuk-checkboxes__label" for="certificate_6">Seed sampling</label>
+                  </div>
+
+                  <div class="govuk-checkboxes__item">
+                    <input class="govuk-checkboxes__input" id="certificate_7" name="certificate" type="checkbox" value="Soil sampling"{% for param in data.certificate %}{% if param == 'Soil sampling' %} checked{% endif %}{% endfor %}>
+                    <label class="govuk-label govuk-checkboxes__label" for="certificate_7">Soil sampling</label>
+                  </div>
+
+                </div>
+
+              </fieldset>
+            </div>
+
+          </div>
+
+          <div class="govuk-grid-column-one-third govuk-grid-column-one-third-searchable-checkboxes-section">
+
+            {% block destinationCountry %}
+            {% include "./modules/_destination-country.html" %}
+            {% endblock %}
+
+          </div>
+
+          <div class="govuk-grid-column-one-third govuk-grid-column-one-third-searchable-checkboxes-section">
+
+            {% block status %}
+            {% include "./modules/_status.html" %}
+            {% endblock %}
+
+          </div>
+
+        </div>
+
+        {% if query.multi_user == "yes" %}
+        <div class="govuk-grid-row">
+
+          <div class="govuk-grid-column-one-third">
+        
+            <div class="govuk-form-group">
+              <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Filter by user</legend>
+                <p class="govuk-body">Show applications created by:</p>
+                
+                <div class="govuk-radios govuk-radios--small govuk-radios--conditional" data-module="govuk-radios">
+                  
+                  <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="show_applications_by_me" name="show_applications_by" type="radio" value="me" {% if (data.show_applications_by and data.show_applications_by == "me" ) or not data.show_applications_by %}checked="checked"{% endif %}>
+                    <label class="govuk-label govuk-radios__label" for="show_applications_by_me">Me</label>
+                  </div>
+
+                  <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="show_applications_by_everyone" name="show_applications_by" type="radio" value="everyone" {% if data.show_applications_by and data.show_applications_by == "everyone" %}checked="checked"{% endif %} data-aria-controls="conditional-how-contacted-conditional-3">
+                    <label class="govuk-label govuk-radios__label" for="show_applications_by_everyone">Someone else</label>
+                  </div>
+
+                  <div class=" govuk-form-group govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional-3">
+                    {% set logged_in_as = "Cornelius Longbottom" %}
+                    <select class="govuk-select govuk-!-width-full" id="filter_name" name="filter_name">
+                      <option value="All users"{% if not data.filter_name or data.filter_name == "All users" %} selected{% endif %}>All users</option>
+                      {% set list = [] %}
+                      {% for cert in data.applicationsv2 %}
+                      {% if not cert.name in list %}
+                      <option value="{{cert.name}}"{% if cert.name == data.filter_name %} selected{% endif %}>{{cert.name}}{% if logged_in_as == cert.name %} <strong>(you)</strong>{% endif %}</option>
+                      {{list.push(cert.name)}}
+                      {% endif %}
+                      {% endfor %}
+                    </select>
+                  </div>
+
+                </div>
+
+              </fieldset>
+            </div>
+
+          </div>
+
+        </div>
+        {% endif %}
+
+        <div class="govuk-grid-row">
+
+          <div class="govuk-grid-column-full govuk-button-group govuk-!-margin-bottom-1">
+            <button class="govuk-button" type="submit" data-module="govuk-button" name="filter_applied" value="yes">Apply filters</button>
+            {% if data.filter_applied %}
+            <a href="?certificate=&filter_demo=&filter_status=&filter_name=&show_applications_by=&filter_applied=#submitted" class="govuk-link app-button--link">Clear filters</a>
+            {% endif %}
+          </div>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
   <div class="govuk-grid-column-full">
 
     <div class="filter-tag--wrapper govuk-!-margin-bottom-6">
@@ -406,6 +582,55 @@
           </td>
           <td id="actions-1" class="govuk-table__cell govuk-table__cell--numeric" scope="row">
             <a href="#" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate 1721 14800 4809</span></a>
+          </td>
+        </tr>
+      </tbody>
+      {% else %}
+      <tbody class="govuk-body-s">
+        <tr class="govuk-table__row rowCounter result">
+          <td id="apha-reference-1" class="govuk-table__cell table-header" scope="row">
+            <a href="{% if data.has_reference == 'gsi' %}application-gsi{% elif data.has_reference == 'soil sampling' %}application-ss{% else %}application{% endif %}?application_submission_data=draft" class="govuk-link govuk-link--no-visited-state link-no-break"><span class="table-heading table-heading-full" aria-hidden="true">APHA reference</span> 1721 14800 4809</a>
+          </td>
+          <td id="your-reference-1" class="govuk-table__cell" scope="row">
+            <span class="table-heading" aria-hidden="true">Your reference</span> {% if data.reference_num %}{{data.reference_num or "REFERENCE"}}{% else %}&nbsp;{% endif %}
+          </td>
+          <td id="type-1" class="govuk-table__cell" scope="row">
+            <span class="table-heading" aria-hidden="true">Type</span> 
+            {% if data.has_reference == 'phyto' %}
+            Phytosanitary
+            {% elif data.has_reference == 'donotneed' %}
+            Re-forwarding
+            {% elif data.has_reference == 'coc' %}
+            Conformity
+            {% elif data.has_reference == 'gsi' %}
+            Growing season inspection
+            {% elif data.has_reference == 'seed sampling' %}
+            Seed sampling
+            {% elif data.has_reference == 'soil sampling' %}
+            Soil sampling
+            {% elif data.has_reference == 'batch' %}
+            Batch
+            {% else %}
+            Phytosanitary
+            {% endif %}
+          </td>
+          <td id="destination-country-1" class="govuk-table__cell" scope="row">
+            <span class="table-heading" aria-hidden="true">Destination</span> {% if data.destinationcountries %}{{data.destinationcountries or "USA" }}{% else %}&nbsp;{% endif %}
+          </td>
+          <td id="submitted-date-1" class="govuk-table__cell" scope="row">
+            <span class="table-heading" aria-hidden="true">Submitted date</span> &nbsp;
+          </td>
+          <td id="status-1" class="govuk-table__cell" scope="row">
+            <span class="table-heading" aria-hidden="true">Status</span>
+            
+            <div class="app-status-tag app-status-tag--grey">
+              draft
+            </div>
+
+          </td>
+          <td id="actions-1" class="govuk-table__cell govuk-table__cell--numeric responsive-table-draft-actions-td" scope="row">
+            <a class="draft-actions-copy" href="clone" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate 1721 14800 4809</span></a>
+            <a class="draft-actions-delete" href="delete" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> certificate 1721 14800 4809</span></a>
           </td>
         </tr>
       </tbody>
