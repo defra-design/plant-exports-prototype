@@ -8,6 +8,9 @@ module.exports = function(router) {
 
   // ADD extra routing here if needed.
   require('./dev_v36.js')(router)
+  require('./dev_v35.js')(router)
+  require('./dev_v34.js')(router)
+  require('./dev_v33.js')(router)
 
   // CHANGE VERSION each time you create a new version
   const version = 'dev'
