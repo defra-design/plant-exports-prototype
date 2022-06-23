@@ -24,9 +24,9 @@
 
         <div id="countries-hint" class="govuk-hint govuk-!-margin-bottom-6">
           {% if data.build == "ux" %}
-          Select what you need to export {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}
+          Select what you need to do to export plant products {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}
           {% else %}
-          Select what you need to export {% if data.commodity == "plants" %}plants and fresh produce
+          Select what you need to do to export plant products {% if data.commodity == "plants" %}plants and fresh produce
           {% elif data.commodity == "plant products" %}processed plant products{% else %}{{data.commodity or 'processed plant products'}}{% endif %}
           {% endif %}
         </div>
@@ -35,21 +35,11 @@
 
           <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
 
-            {% if data.commodity == "plant products" and query.design != "b" %}
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="how-contacted-conditional-one-time-setup" name="has_reference" type="radio" value="one time setup~{{query.return_url or '../batch/create/introduction'}}">
-              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-one-time-setup">One time testing step 1: set up one time testing</label>
-            </div>
-
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="how-contacted-conditional-one-time-phyto" name="has_reference" type="radio" value="batch~{{query.return_url or '../batch/phytosanitary/setup/destination-country'}}">
-              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-one-time-phyto">One time testing step 2: apply for a phytosanitary certificate</label>
-            </div>
-           {% endif %}
+           
 
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="how-contacted-conditional-phyto" name="has_reference" type="radio" value="phyto~{{query.return_url or 'what-country'}}" aria-describedby="how-contacted-conditional-phyto-hint">
-              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-phyto">Apply for a phytosanitary certificate</label>
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-phyto">Apply for a phytosanitary certificate</label> 
 
               {% if data.commodity == "seeds" %}
               <div id="how-contacted-conditional-phyto-hint" class="govuk-hint govuk-radios__hint">
@@ -66,10 +56,25 @@
             </div>
             {% endif %}
 
-            <div class="govuk-radios__item">
+             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="how-contacted-conditional-re-forwarding" name="has_reference" type="radio" value="donotneed~{{query.return_url or 'what-country'}}?reforwarding=1" data-aria-controls="conditional-how-contacted-conditional-re-forwarding">
               <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-re-forwarding">Apply for a re-forwarding phytosanitary certificate</label>
-            </div>
+            </div>  
+
+            {% if data.commodity == "plant products" and query.design != "b" %}
+           
+           
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="how-contacted-conditional-one-time-setup" name="has_reference" type="radio" value="one time setup~{{query.return_url or '../batch/create/introduction'}}">
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-one-time-setup">One time testing step 1: set up one time testing</label>
+            </div> 
+
+             <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="how-contacted-conditional-one-time-phyto" name="has_reference" type="radio" value="batch~{{query.return_url or '../batch/phytosanitary/setup/destination-country'}}">
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-one-time-phyto">One time testing step 2: apply for a phytosanitary certificate</label>
+            </div> 
+           {% endif %}
+
 
             {% if data.commodity == "plant products" and query.design == "b" %}
             <div class="govuk-radios__item">
