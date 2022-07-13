@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  Send the inspector a map - Soil inspection - {{serviceName}} - GOV.UK
+  Send the inspector a map - Growing season inspection - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -37,13 +37,17 @@
         name: "map_upload"
       }) }}
 
-      <div class="govuk-form-group govuk-!-margin-bottom-6">
+      {% if data.build == "development" %}
+      <button class="govuk-button" type="submit" data-module="govuk-button">Upload map</button>
+      {% else %}
+      <div class="govuk-form-group">
         <button class="govuk-button" type="submit" data-module="govuk-button">Upload map</button>
       </div>
 
       {% block continueLater %}
       {% include "../modules/_save-continue-later.html" %}
       {% endblock %}
+      {% endif %}
     </form>
 
   </div>

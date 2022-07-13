@@ -1,42 +1,51 @@
 {% extends "layout.html" %}
+
 {% block pageTitle %}
-When will the fields be ready for inspection? - Growing season inspection - {{serviceName}} - GOV.UK
+  When will the crop be ready for a growing season inspection? - Growing season inspection - {{serviceName}} - GOV.UK
 {% endblock %}
-{% block beforeContent%}
+
+{% block beforeContent %}
 {{super()}}
 {% include "../modules/_account-banner.html" %}
 <a href="javascript:history.back()" class="govuk-back-link">Back</a>
-{% endblock %}
+{% endblock%}
 
 {% block content %}
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <!--<h1 class="govuk-heading-xl">
-      Inspection dates
-    </h1>-->
-    <!--<p class="govuk-body">Enter the address of your business premises where the inspector will check your consignment</p>-->
 
-    <form action="{{query.return_url or '../create/task-list'}}" method="POST">
-      <fieldset class="govuk-fieldset" aria-describedby="applicant-conditional-hint">
-        {{ govukInput({
-          label: {
-            text: "When will the crop be ready for a growing season inspection?",
-            classes: "govuk-label--xl",
-            isPageHeading: true
+  <div class="govuk-grid-column-two-thirds">
+
+    <form action="{{query.return_url or 'task-list'}}" method="post">
+      
+      {{ govukInput({
+        label: {
+          text: "When will the crop be ready for a growing season inspection?",
+          classes: "govuk-label--xl govuk-!-margin-bottom-8",
+          isPageHeading: true
+        },
+        hint: {
+          text: "For example, early October 2020 or Week 34"
           },
-          hint: {
-            text: "For example, early October 2020 or Week 34"
-            },
-          id: "submit-date",
-          name: "submit-date",
-          classes: "govuk-!-width-one-half"
-        }) }}
-      </fieldset>
-      <input class="govuk-button govuk-!-margin-top-6" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+        id: "submit_date",
+        name: "submit_date",
+        classes: "govuk-!-width-one-half",
+        value: data.submit_date or ""
+      }) }}
+
+      <button class="govuk-button govuk-!-margin-bottom-9" data-module="govuk-button">Save and continue</button>
+      {% block continueLater %}
+      {% include "../modules/_save-continue-later.html" %}
+      {% endblock %}
+
+      <!-- Session data hook to update the task list so that this section is marked as 'COMPLETED' -->
+      <div class="govuk-form-group" hidden>
+        <label class="govuk-label" for="inspection_task_list_data">Task list section URL</label>
+        <input class="govuk-input" id="inspection_task_list_data" name="inspection_task_list_data" type="text" value="Complete">
+      </div>
+
     </form>
-    {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
 
   </div>
-</div>
 
+</div>
 {% endblock %}

@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  Send the inspector a map - Soil inspection - {{serviceName}} - GOV.UK
+  Send the inspector a map - Growing season inspection - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -24,7 +24,7 @@
     
     <form action="field-upload-wip-2" method="post">
       <h1 class="govuk-heading-xl">Send the inspector a map</h1>
-      <p class="govuk-body">Upload a map to show your inspector where they will carry out their inspection, including the access point.</p>
+      <p class="govuk-body">Upload a map to show your inspector where they will carry out their inspection, including how to access the field and where to park.</p>
       <p class="govuk-body">If you prefer to post a map to your inspector, you should contact them to ask what address to send it to. You should include the <abbr title="Animal and Plant Health Agency">APHA</abbr> reference number for this application with your map. You will be given the <abbr title="Animal and Plant Health Agency">APHA</abbr> reference number at the end of this application.</p>
       <p class="govuk-body">Any file you upload must:</p>
       <ul class="govuk-list govuk-list--bullet">
@@ -37,13 +37,17 @@
         name: "map_upload"
       }) }}
 
-      <div class="govuk-form-group govuk-!-margin-bottom-6">
+      {% if data.build == "development" %}
+      <button class="govuk-button" type="submit" data-module="govuk-button">Upload map</button>
+      {% else %}
+      <div class="govuk-form-group">
         <button class="govuk-button" type="submit" data-module="govuk-button">Upload map</button>
       </div>
 
       {% block continueLater %}
       {% include "../modules/_save-continue-later.html" %}
       {% endblock %}
+      {% endif %}
     </form>
 
   </div>
