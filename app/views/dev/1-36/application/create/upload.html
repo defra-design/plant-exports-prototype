@@ -7,10 +7,7 @@
 {% block beforeContent %}
 {{super()}}
 {% include "../modules/_account-banner.html" %}
-{{ govukBackLink({
-  text: "Back",
-  href: "javascript: window.history.go(-1)"
-}) }}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
 {% endblock %}
 
 {% block content %}
@@ -19,84 +16,7 @@
   <div class="govuk-grid-column-two-thirds">
       
     <form method="post" novalidate>
-    
-      {% if data.build == "development" %}
-      {% set commodity = data.commodity or "products" %}
 
-      {% if data.commodity == "plants" %}
-        {% set template = "template-plants.csv" %}
-      {% elif data.commodity == "plant products" %}
-        {% set commodity = "products" %}
-        {% set template = "template-plant-products.csv" %}
-      {% elif data.commodity == "used farm machines" %}
-        {% set commodity = "used farm machines" %}
-        {% set template = "template-used-farm-machinery.csv" %}
-      {% elif data.commodity == "potatoes" %}
-        {% set template = "template-potatoes.csv" %}
-      {% elif data.commodity == "seeds" %}
-        {% set template = "APHA_phytosanitary_certificate_csv_template - SEEDS.csv" %}
-      {% elif data.commodity == "grain" %}
-        {% set template = "template-grain.csv" %}
-      {% elif data.commodity == "bulbs" %}
-        {% set template = "template-bulbs.csv" %}
-      {% else %}
-        {% set template = "APHA_phytosanitary_certificate_csv_template.csv" %}
-      {% endif %}
-
-      {% if data.journey == "coc" %}
-        {% set template = "template-hmi.csv" %}
-      {% endif %}
-
-      <div class="govuk-form-group govuk-!-margin-bottom-7">
-        <fieldset class="govuk-fieldset">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-            <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-6">Upload details for multiple commodities at the same time</h1>
-          </legend>
-        </fieldset>
-        <p class="govuk-body">Download and fill in the <a href="/public/images/{{template}}" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.</p>
-        <p class="govuk-body govuk-!-margin-bottom-6">Open the csv file in Excel or whatever you use to edit spreadsheets. When you have finished, save the file and select Comma Separated Values (.csv) as the file format.</p>
-        {{ govukFileUpload({
-          id: "file-upload-1",
-          name: "file-upload-1",
-          label: {
-            text: "Upload your completed csv file"
-          }
-        }) }}
-      </div>
-
-      <div class="govuk-form-group govuk-!-margin-bottom-6">
-        {{ govukButton({
-          text: "Upload",
-          href: "upload-in-progress"
-        }) }}
-      </div>
-
-      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-      <h3 class="govuk-heading-s">Templates</h3>
-      <ul class="govuk-list govuk-list">
-        <li><a href="/public/images/template-bulbs.csv" class="govuk-link govuk-link-no-visited-state">Bulbs</a></li>
-        <li><a href="/public/images/template-plants.csv" class="govuk-link govuk-link-no-visited-state">Plants</a></li>
-        <li><a href="/public/images/template-sms.csv" class="govuk-link govuk-link-no-visited-state">SMS</a></li>
-        <li><a href="/public/images/template-gms.csv" class="govuk-link govuk-link-no-visited-state">GMS</a></li>
-        <li><a href="/public/images/template-plant-products.csv" class="govuk-link govuk-link-no-visited-state">Plant products</a></li>
-        <li><a href="/public/images/template-used-farm-machinery.csv" class="govuk-link govuk-link-no-visited-state">Used farm machinery</a></li>
-        <li><a href="/public/images/template-potatoes.csv" class="govuk-link govuk-link-no-visited-state">Potatoes</a></li>
-        <li><a href="/public/images/template-seeds-sample-blank.csv" class="govuk-link govuk-link-no-visited-state">Seeds sampling</a></li>
-        <li><a href="/public/images/template-seeds-phyto-blank.csv" class="govuk-link govuk-link-no-visited-state">Seeds phyto</a></li>
-        <li><a href="/public/images/APHA_phytosanitary_certificate_csv_template - SEEDS.csv" class="govuk-link govuk-link-no-visited-state">Seeds phyto (original version)</a></li>
-        <li><a href="/public/images/template-grain.csv" class="govuk-link govuk-link-no-visited-state">Grain</a></li>
-        <li><a href="/public/images/APHA_phytosanitary_certificate_csv_template.csv" class="govuk-link govuk-link-no-visited-state">Generic <abbr title="Animal and Plant Health Agency">APHA</abbr> template</a></li>
-      </ul>
-
-      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-      <p class="govuk-body"><a href="upload-validation-errors-summary" class="govuk-link govuk-link-no-visited-state">View upload screen with error summary</a></p>      
-      <p class="govuk-body"><a href="upload-validation-errors-summary-with-rows" class="govuk-link govuk-link-no-visited-state">View upload screen with error summary (fewer errors)</a></p>
-      <p class="govuk-body govuk-!-margin-top-7"><a href="upload-validation-errors" class="govuk-link govuk-link-no-visited-state">Existing Upload screen with validation errors</a></p>
-      <p class="govuk-body"><a href="upload-completed-with-errors-seeds" class="govuk-link govuk-link-no-visited-state">View upload screen with errors and table</a></p>
-      <p class="govuk-body"><a href="upload-completed-with-errors-seeds-generic" class="govuk-link govuk-link-no-visited-state">View upload screen with generic and table</a></p>
-      <p class="govuk-body"><a href="upload-validation-error-singular" class="govuk-link govuk-link-no-visited-state">View upload screen with single validation error</a></p>
-      <p class="govuk-body"><a href="upload-error" class="govuk-link govuk-link-no-visited-state">View upload screen with file type error</a></p>
-      {% else %}
       <!--
         Chris Harding (06.06.22) - Here we set:
           a) template
@@ -133,12 +53,6 @@
         {% set template = "template-plants.csv" %}
         {% set exampleTemplate = "example-plant.csv" %}
       {% endif %}
-
-      <!-- USE IN THE NEW COPY OF THIS PAGE -->
-      <!-- {% if data.journey == "coc" %}
-        {% set template = "template-hmi.csv" %}
-        {% set exampleTemplate = "example-hmi.csv" %}
-      {% endif %} -->
 
       <div class="govuk-form-group govuk-!-margin-bottom-9">
         <fieldset class="govuk-fieldset">
@@ -502,7 +416,6 @@
       <ul class="govuk-list govuk-list">
         <li><a href="upload-error-summary" class="govuk-link govuk-link-no-visited-state">View error summary of unique errors (occurences and rows listed)</a></li>
       </ul>
-      {% endif %}
       {% endif %}
     </form>
 

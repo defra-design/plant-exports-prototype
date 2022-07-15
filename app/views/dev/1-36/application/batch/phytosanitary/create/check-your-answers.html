@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.build == "ux" %}Check your answers - Phytosanitary certificate using one time testing - {{serviceName}} - GOV.UK{% else %}Review Answers - Exports application - GOV.UK{% endif %}
+  Check your answers - Phytosanitary certificate using one time testing - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -25,7 +25,6 @@
   <div class="govuk-grid-column-three-quarters">
 
     <form action="../submit/submit-date" method="post">
-      {% if data.build == "ux" %}
       <h1 class="govuk-heading-xl">Check your answers</h1>
       <h2 class="govuk-heading-m">Application details</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
@@ -49,56 +48,6 @@
         </div>
 
       </dl>
-      {% else %}
-      <h1 class="govuk-heading-xl">Review your answers</h1>
-      
-      <div class="govuk-inset-text govuk-!-font-weight-bold">
-        Your application is now ready to be submitted.<br><br>
-        Please check that the answers you've provided are correct.
-      </div>
-      
-      <h2 class="govuk-heading-m">Application summary</h2>
-      <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
-
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Certificate</dt>
-          <dd class="govuk-summary-list__value">Phytosanitary certificate for plant products</dd>
-          <dd class="govuk-summary-list__actions">&nbsp;</dd>
-        </div>
-
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Your reference</dt>
-          <dd class="govuk-summary-list__value">{{data.reference_num or "12345"}}</dd>
-          <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="../setup/what-country?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">your reference for this application</span></a>
-          </dd>
-        </div>
-
-      </dl>
-
-      <h2 class="govuk-heading-m">Exporter Details</h2>
-      <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
-        
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Name</dt>
-          <dd class="govuk-summary-list__value">ABC TRADING LTD</dd>
-          <dd class="govuk-summary-list__actions">&nbsp;</dd>
-        </div>
-
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Address</dt>
-          <dd class="govuk-summary-list__value">Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH</dd>
-          <dd class="govuk-summary-list__actions">&nbsp;</dd>
-        </div>
-
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Phone number</dt>
-          <dd class="govuk-summary-list__value">024 546 7069</dd>
-          <dd class="govuk-summary-list__actions">&nbsp;</dd>
-        </div>
-
-      </dl>
-      {% endif %}
 
       <h2 class="govuk-heading-m">Your consignment</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
@@ -119,11 +68,7 @@
         
       </dl>
 
-      {% if data.build == "ux" %}
       <h2 class="govuk-heading-m govuk-!-margin-top-9">Transportation</h2>
-      {% else %} 
-      <h2 class="govuk-heading-m govuk-!-margin-top-9">How will the consignment be transported?</h2>
-      {% endif %}
       <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
         
         <div class="govuk-summary-list__row">
@@ -143,11 +88,7 @@
         </div>
 
         <div class="govuk-summary-list__row">
-          {% if data.build == "ux" %}
           <dt class="govuk-summary-list__key">How will the consignment be transported?</dt>
-          {% else %}
-          <dt class="govuk-summary-list__key">How will the consignment be transported?</dt>
-          {% endif %}
           <dd class="govuk-summary-list__value">{{data.transport_method or "Air"}}</dd>
           <dd class="govuk-summary-list__actions">
             <a class="govuk-link" href="shipping?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">how the consignment will be transported</span></a>
@@ -160,11 +101,7 @@
       <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
         
         <div class="govuk-summary-list__row">
-          {% if data.build == "ux" %}
           <dt class="govuk-summary-list__key">Name of consignee</dt>
-          {% else %} 
-          <dt class="govuk-summary-list__key">Name of the consignee</dt>
-          {% endif %}
           <dd class="govuk-summary-list__value">{{data.consigneeName or 'ACME Ltd'}}</dd>
           <dd class="govuk-summary-list__actions">
             <a class="govuk-link" href="destination-consignee?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">who will receive this consignment</span></a>
@@ -179,7 +116,6 @@
           </dd>
         </div>
 
-        {% if data.build == "ux" %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Import permit number</dt>
           <dd class="govuk-summary-list__value">{{data.consigneeImportPermit or '2244668800'}}</dd>
@@ -187,17 +123,6 @@
             <a class="govuk-link" href="destination-consignee?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">the import permit number</span></a>
           </dd>
         </div>
-        {% else %}
-        {% if data.commodity == "plant products" %}
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Import permit number</dt>
-          <dd class="govuk-summary-list__value">{{data.consigneeImportPermit or '2244668800'}}</dd>
-          <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="destination-consignee?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">the import permit number</span></a>
-          </dd>
-        </div>
-        {% endif %}
-        {% endif %}
 
       </dl>
 
@@ -228,11 +153,7 @@
 
       </dl>
 
-      {% if data.build == "ux" %}
       <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_blank">what fees you need to pay (opens in new tab)</a> for this application.</p>
-      {% else %} 
-      <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_blank">what fees you need to pay</a> for this application (opens in a new window).</p>
-      {% endif %}
 
       <div class="govuk-button-group govuk-!-margin-top-9">
         <input type="hidden" name="answers-checked" value="true">

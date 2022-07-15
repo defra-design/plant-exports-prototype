@@ -7,10 +7,7 @@
 {% block beforeContent %}
 {{super()}}
 {% include "../modules/_account-banner.html" %}
-{{ govukBackLink({
-  text: "Back",
-  href: "javascript: window.history.go(-1)"
-}) }}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
 {% endblock %}
 
 {% block content %}
@@ -18,8 +15,63 @@
 
   <div class="govuk-grid-column-two-thirds">
      
-     <!-- UX VERSION -->
-    {% if data.build == "ux" %}
+    {% if data.build == "development" %}
+    <form method="post" novalidate>
+
+      {% set commodity = data.commodity or "products" %}
+
+      {% if data.commodity == "plants" %}
+        {% set template = "template-plants.csv" %}
+      {% elseif data.commodity == "plant products" %}
+        {% set commodity = "products" %}
+        {% set template = "template-plant-products.csv" %}
+      {% elseif data.commodity == "used farm machines" %}
+        {% set commodity = "used farm machines" %}
+        {% set template = "template-used-farm-machinery.csv" %}
+      {% elseif data.commodity == "potatoes" %}
+        {% set template = "template-potatoes.csv" %}
+      {% elseif data.commodity == "seeds" %}
+        {% set template = "APHA_phytosanitary_certificate_csv_template - SEEDS.csv" %}
+      {% elseif data.commodity == "grain" %}
+        {% set template = "template-grain.csv" %}
+      {% elseif data.commodity == "bulbs" %}
+        {% set template = "template-bulbs.csv" %}
+      {% else %}
+        {% set template = "APHA_phytosanitary_certificate_csv_template.csv" %}
+      {% endif %}
+
+      {% if data.journey == "coc" %}
+        {% set template = "template-hmi.csv" %}
+      {% endif %}
+
+      <div class="govuk-form-group govuk-!-margin-bottom-7">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+            <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">Upload details for multiple commodities at the same time</h1>
+          </legend>
+        </fieldset>
+        <p class="govuk-body">Download and fill in the <a href="/public/images/{{template}}" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.</p>
+        <p class="govuk-body govuk-!-margin-bottom-6">Open the csv file in Excel or whatever you use to edit spreadsheets. When you have finished, save the file and select Comma Separated Values (.csv) as the file format.</p>
+
+        {{ govukFileUpload({
+          id: "file-upload-1",
+          name: "file-upload-1",
+          label: {
+          text: "Upload your completed csv file"
+        }
+        }) }}
+
+      </div>
+
+      <div class="govuk-form-group govuk-!-margin-bottom-6">
+        {{ govukButton({
+          text: "Upload",
+          href: "upload-in-progress"
+        }) }}
+      </div>
+
+    </form>
+    {% else %}
     <div aria-live="assertive" class="app-alert app-alert--info">
       <p class="govuk-body">Upload in progress...</p>
     </div>
@@ -482,62 +534,6 @@
         href: "upload-in-progress"
       }) }}
       {% endif %}
-    </form>
-    {% else %}
-    <form method="post" novalidate>
-
-      {% set commodity = data.commodity or "products" %}
-
-      {% if data.commodity == "plants" %}
-        {% set template = "template-plants.csv" %}
-      {% elseif data.commodity == "plant products" %}
-        {% set commodity = "products" %}
-        {% set template = "template-plant-products.csv" %}
-      {% elseif data.commodity == "used farm machines" %}
-        {% set commodity = "used farm machines" %}
-        {% set template = "template-used-farm-machinery.csv" %}
-      {% elseif data.commodity == "potatoes" %}
-        {% set template = "template-potatoes.csv" %}
-      {% elseif data.commodity == "seeds" %}
-        {% set template = "APHA_phytosanitary_certificate_csv_template - SEEDS.csv" %}
-      {% elseif data.commodity == "grain" %}
-        {% set template = "template-grain.csv" %}
-      {% elseif data.commodity == "bulbs" %}
-        {% set template = "template-bulbs.csv" %}
-      {% else %}
-        {% set template = "APHA_phytosanitary_certificate_csv_template.csv" %}
-      {% endif %}
-
-      {% if data.journey == "coc" %}
-        {% set template = "template-hmi.csv" %}
-      {% endif %}
-
-      <div class="govuk-form-group govuk-!-margin-bottom-7">
-        <fieldset class="govuk-fieldset">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-            <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">Upload details for multiple commodities at the same time</h1>
-          </legend>
-        </fieldset>
-        <p class="govuk-body">Download and fill in the <a href="/public/images/{{template}}" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>. There are instructions in the template to show you what you need to include.</p>
-        <p class="govuk-body govuk-!-margin-bottom-6">Open the csv file in Excel or whatever you use to edit spreadsheets. When you have finished, save the file and select Comma Separated Values (.csv) as the file format.</p>
-
-        {{ govukFileUpload({
-          id: "file-upload-1",
-          name: "file-upload-1",
-          label: {
-          text: "Upload your completed csv file"
-        }
-        }) }}
-
-      </div>
-
-      <div class="govuk-form-group govuk-!-margin-bottom-6">
-        {{ govukButton({
-          text: "Upload",
-          href: "upload-in-progress"
-        }) }}
-      </div>
-
     </form>
     {% endif %}
 

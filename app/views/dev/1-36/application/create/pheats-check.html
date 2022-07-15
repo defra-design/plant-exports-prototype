@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.build == "ux" %}
-  Are you applying as part of the Plant Health Exports Audited Trader Scheme? - Phytosanitary certificate - {{serviceName}} - GOV UK
-  {% else %}
+  {% if data.build == "development" %}
   Pheats Check - Exports application - GOV.UK
+  {% else %}
+  Are you applying as part of the Plant Health Exports Audited Trader Scheme? - Phytosanitary certificate - {{serviceName}} - GOV UK
   {% endif %}
 {% endblock %}
 
@@ -17,10 +17,10 @@
 {% block content %}
 <div class="govuk-grid-row">
 
-  {% if data.build == "ux" %}
-  <div class="govuk-grid-column-two-thirds">
-  {% else %}
+  {% if data.build == "development" %}
   <div class="govuk-grid-column-three-quarters">
+  {% else %}
+  <div class="govuk-grid-column-two-thirds">
   {% endif %}
 
     <form action="{{query.return_url or 'inspection-addresses'}}" method="post">
@@ -31,16 +31,16 @@
             <h1 class="govuk-fieldset__heading">Do you want to apply under the plant health exports audited trader scheme (PHEATS)?</h1>
           </legend>
 
-          {% if data.build == "ux" %}
+          {% if data.build == "development" %}
+          <div id="pheats-hint" class="govuk-hint govuk-!-margin-top-7">
+            If you're not a PHEATS member yet, you will need to join the scheme first. If you choose to apply under PHEATS, you'll need a PHEATS-approved inspection address. You'll be able to select or add an address later on.
+          </div>
+          {% else %}
           <div id="pheats-hint" class="govuk-hint govuk-!-margin-top-7">
             The consignment must already have been officially inspected by an authorised person at an approved PHEATS site.
             <br>
             <br>
             You can select or add an PHEATS-approved address later on.
-          </div>
-          {% else %}
-          <div id="pheats-hint" class="govuk-hint govuk-!-margin-top-7">
-            If you're not a PHEATS member yet, you will need to join the scheme first. If you choose to apply under PHEATS, you'll need a PHEATS-approved inspection address. You'll be able to select or add an address later on.
           </div>
           {% endif %}
 
@@ -62,7 +62,7 @@
       </div>
 
       {{ govukButton({
-        classes: "govuk-!-margin-top-4",
+        classes: "govuk-!-margin-top-4 govuk-!-margin-bottom-9",
         text: "Save and continue"
       }) }}
 

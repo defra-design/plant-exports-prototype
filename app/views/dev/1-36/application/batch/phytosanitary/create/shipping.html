@@ -1,14 +1,12 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.build == "ux" %}How will this consignment be transported? - Phytosanitary certificate using one time testing - {{serviceName}} - GOV.UK{% else %}Display question - Exports application - GOV.UK{% endif %}
+  How will this consignment be transported? - Phytosanitary certificate using one time testing - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {# set label as bold #}
 {% set label_class = "govuk-label govuk-!-font-weight-bold" %}
-{% if data.build == "ux" %}
 {% set label_class = "govuk-label" %}
-{% endif %}
 
 {% block beforeContent %}
 {{super()}}
@@ -20,14 +18,13 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">How will {% if data.build == "ux" %}this{% else %}the{% endif %} consignment be transported?</h1>
+    <h1 class="govuk-heading-xl">How will this consignment be transported?</h1>
     
     <form action="{{query.return_url or 'task-list'}}" method="post">
       <fieldset class="govuk-fieldset">
 
         <div class="govuk-form-group">
-          <label class="{{label_class}}" for="consignment-value">{% if data.build == "ux" %}Value of your consignment (pounds){% else %}Value of consignment{% endif %}</label>
-          <span id="value-hint" class="govuk-hint">{% if data.build == "ux" %}{% else %}This information helps us improve the service we provide to exporters{% endif %}</span>
+          <label class="{{label_class}}" for="consignment-value">Value of your consignment (pounds)</label>
           <input class="govuk-input govuk-input--width-10" id="consignment-value" name="consignment_value" type="text" aria-describedby="value-hint" value="{% if data.consignment_value %}{{data.consignment_value}}{% endif %}">
         </div>
 
@@ -57,13 +54,6 @@
                 <input class="govuk-radios__input" id="rail" name="transportMethod" type="radio" value="Rail"{% if data.transportMethod == 'Rail' %} checked{% endif %}>
                 <label class="govuk-label govuk-radios__label" for="rail">Rail</label>
               </div>
-
-              {% if data.build != "ux" %}
-              <div class="govuk-radios__divider">
-                or
-              </div>
-              {% else %}
-              {% endif %}
 
               <div class="govuk-radios__item">
                 <input class="govuk-radios__input" id="road" name="transportMethod" type="radio" value="Road"{% if data.transportMethod == 'Road' %} checked{% endif %}>

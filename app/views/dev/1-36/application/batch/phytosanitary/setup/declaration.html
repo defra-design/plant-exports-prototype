@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.build == "ux" %}Regulations for processed plant products to {% if data.countryForExport == "United Kingdom (Northern Ireland)" %}Northern Ireland{% else %}{{data.countryForExport or "China"}}{% endif %} - {{serviceName}} - GOV.UK{% else %}Confirm regulations - Exports application - GOV.UK{% endif %}
+  Regulations for processed plant products to {% if data.countryForExport == "United Kingdom (Northern Ireland)" %}Northern Ireland{% else %}{{data.countryForExport or "China"}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -40,11 +40,7 @@
         {% else %}
         export
         {% endif %}
-        {% if data.build == "ux" %}
-        {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %} 
-        {% else %}
-        {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'processed plant products'}}{% endif %} 
-        {% endif %}        
+        {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}        
         to 
         {% if (data.countryForExport == "United Kingdom (Northern Ireland)") %}
         Northern Ireland
@@ -74,13 +70,7 @@
       {% else %}
       export
       {% endif %}
-      {% if data.build == "ux" %}
-      {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %} 
-      {% else %}
-      {% if data.commodity == "plants" %}plants and fresh produce
-      {% elif data.commodity == "plant products" %}processed plant products
-      {% else %}{{data.commodity or 'processed plant products'}}{% endif %} 
-      {% endif %}
+      {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}
       to
       {% if (data.countryForExport == "United Kingdom (Northern Ireland)") %}
       Northern Ireland
@@ -148,11 +138,7 @@
             <input class="govuk-checkboxes__input" type="checkbox" autofocus="autofocus" name="confirm" id="confirm">
 
             <label class="govuk-checkboxes__label govuk-!-font-weight-bold govuk-checkboxes-long-label" for="confirm">
-              {% if data.build == "ux" %}
               I confirm that I have understood and followed the {%if data.reforwarding == 1%}re-forwarding{% endif %} regulations for this commodity
-              {% else %}
-              I confirm that I have understood and followed the {%if data.reforwarding == 1%}re-forwarding {% else %}exporting{% endif %} regulations for this commodity
-              {% endif %}
             </label>
 
           </div>
