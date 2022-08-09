@@ -1,0 +1,87 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Upload a file - Phytosanitary certificate - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+      
+    <form method="post" novalidate>
+
+      <!-- Chris Harding (09.08.22) - Set for user research of bulk upload error messaging -->
+      {% set template = "bulk-ur-design-1.csv" %}
+      {% set exampleTemplate = "example-plant.csv" %}
+
+      <div class="govuk-form-group govuk-!-margin-bottom-9">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+            <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-6">Upload a file</h1>
+          </legend>
+        </fieldset>
+        <p class="govuk-body">Download the <a href="/public/templates/{{template}}" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>.</p>
+        <p class="govuk-body govuk-!-margin-bottom-6">Open the file in whatever software program you use to edit comma-separated values (CSV) files. Fill in the template using the guidance notes on how to edit the file, then save and upload it.</p>
+        <h2 class="govuk-heading-m">Guidance on how to edit the file</h2>
+        <ol class="govuk-list govuk-list--number">
+          <li>You must complete all fields that are mandatory.</li>
+          <li>
+            You must use the correct country code for the country of origin - you can find the 2 letter country code here:
+            <br>
+            <a href="https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes" class="govuk-link" rel="noreferrer noopener" target="_blank">https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes (opens in new tab)</a>
+            <br>
+            The only exceptions to this list are: Northern Ireland and Palestine. For Northern Ireland, use GB-NIR, for Palestine use PS.
+          </li>
+          <li>For commodity type, quantity units, and packaging type you must choose from the options listed and delete any options you do not use.</li>
+          <li>Do not enter more than 500 rows of data.</li>
+          <li>Save your completed file as a .CSV file and upload it.</li>
+        </ol>
+        <details class="govuk-details" data-module="govuk-details">
+          <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">Further advice and example template</span>
+          </summary>
+
+          <div class="govuk-details__text">
+            <!-- <h3 class="govuk-heading-s">If you are having problems with the upload</h3> -->
+            <p class="govuk-body">If you are having problems with the upload</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>make sure that you have used the correct country code for the country of origin</li>
+              <li>make sure you have not changed or deleted any columns or headers from the template</li>
+              <li>make sure the headers are consistently capitalised</li>
+              <li>check that you have not added extra commas</li>
+              <li>if you have edited the template using the Numbers application, be aware that this program sometimes adds extra columns to the file. If there are any empty columns without headers in your file, you should delete these columns completely.</li>
+              <li>check that when you edited the template, your software didn't add extra commas into your CSV file</li>
+              <li>for quantity units and packaging type, make sure you have used only the options provided without changing them</li>
+              <li>for quantity units and packaging type, make sure that you have deleted any options you have not used</li>
+            </ul>
+            <p class="govuk-body">You may find it helpful to compare your file against this <a href="/public/templates/{{exampleTemplate}}" class="govuk-link govuk-link--no-visited-state" title="CSV template">example template</a>.</p>
+          </div>
+
+        </details>
+
+        {{ govukFileUpload({
+          id: "file-upload-1",
+          name: "file-upload-1",
+          label: {
+            text: "Upload your completed CSV file"
+          }
+        }) }}
+      </div>
+
+      {{ govukButton({
+        text: "Upload",
+        href: "upload-in-progress-ur-design-1"
+      }) }}
+    </form>
+
+  </div>
+      
+</div>
+{% endblock %}
