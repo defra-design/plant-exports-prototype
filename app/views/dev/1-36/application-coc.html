@@ -57,7 +57,7 @@
   }
 
 </style>
-{% endblock%}
+{% endblock %}
 
 {% block content %}
 <div class="govuk-grid-row govuk-!-margin-bottom-6">
@@ -66,7 +66,7 @@
     <h1 class="govuk-heading-xl">{% if data.build == "ux" %}Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %}{% else %}{% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %}{% endif %} {{query.id | appInformation('applicationID')}}</h1>
   </div>
 
-  <div class="govuk-grid-column-one-half">
+  <div class="{% if (query.id | appInformation('status')) == 'report issued' or (query.id | appInformation('status')) == 'completed' %}govuk-grid-column-one-half{% else %}govuk-grid-column-two-thirds{% endif %}">
     <dl class="govuk-summary-list govuk-summary-list--no-border">
       
       <div class="govuk-summary-list__row">
@@ -150,19 +150,17 @@
 
   </div>
 
+  {% if (query.id | appInformation('status')) == 'report issued' or (query.id | appInformation('status')) == 'completed' %}
   <div class="govuk-grid-column-one-half govuk-!-margin-bottom-9">
     <h2 class="govuk-heading-m">Your certificate</h2>
-    <p class="govuk-body">
-      Not all your commodities passed inspection. Your certificate of conformity is only for those commodities that met the relevant marketing standards.
-    </p>
+    <p class="govuk-body">Not all your commodities passed inspection. Your certificate of conformity is only for those commodities that met the relevant marketing standards.</p>
     <ul class="govuk-list  noprint">
-    <li><p class="doc-icon"><a href="#" class="govuk-link govuk-link--no-visited-state">Certificate of conformity (pdf)</a>
-    </p></li>  
-      
-<!--     <li><p class="doc-icon"><a href="#" class="govuk-link govuk-link--no-visited-state">Certificate of non-conformity (pdf)</a></p></li> -->
+      <li><p class="doc-icon"><a href="#" class="govuk-link govuk-link--no-visited-state">Certificate of conformity (pdf)</a></li>        
+      <!-- <li><p class="doc-icon"><a href="#" class="govuk-link govuk-link--no-visited-state">Certificate of non-conformity (pdf)</a></p></li> -->
     </ul>
-
   </div>
+  {% endif %}
+  
   </div>
   <div class="govuk-grid-row govuk-!-margin-bottom-6">
   <div class="govuk-grid-column-full-width" style="padding: 0 15px;">

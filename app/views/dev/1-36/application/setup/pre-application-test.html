@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.build == "ux" %}What do you need to do? - {{serviceName}} - GOV.UK{% else %}Health Certificate Type - GOV.UK{% endif %}
+  {% if data.build == "development" %}Health Certificate Type - GOV.UK{% else %}What do you need to do? - {{serviceName}} - GOV.UK{% endif %}
 {% endblock %}
 
 {% block beforeContent %}
@@ -23,11 +23,10 @@
         </legend>
 
         <div id="countries-hint" class="govuk-hint govuk-!-margin-bottom-6">
-          {% if data.build == "ux" %}
-          Select what you need to do to export {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}
+          {% if data.build == "development" %}
+          Select what you need to export {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% else %}{{data.commodity or 'processed plant products'}}{% endif %}
           {% else %}
-          Select what you need to do to export {% if data.commodity == "plants" %}plants and fresh produce
-          {% elif data.commodity == "plant products" %}processed plant products{% else %}{{data.commodity or 'processed plant products'}}{% endif %}
+          Select what you need to do to export {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% else %}{{data.commodity or 'processed plant products'}}{% endif %}
           {% endif %}
         </div>
 

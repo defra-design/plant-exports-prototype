@@ -1,11 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-{% if data.build == "ux" %}
-Create a reference - Phytosanitary certificate - {{serviceName}} - GOV.UK
-{% else %}
-Applicant Reference - Exports application -  GOV.UK
-{% endif %}
+  Create a reference - Phytosanitary certificate - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -23,11 +19,7 @@ Applicant Reference - Exports application -  GOV.UK
       {% if query.change == 'yes' %}
       Change your reference for this {% if data.has_reference == 'phyto' %}phytosanitary certificate{% elif data.has_reference == 'donotneed' %}re-forwarding phytosanitary certificate{% elif data.has_reference == 'coc' %}certificate of comformity{% else %}phytosanitary certificate{% endif %}.
       {% else %}
-      {% if data.build == "ux" %}
       You can enter your own reference for this application. Your reference will not be printed on your phytosanitary certificate but it will be on your invoice.
-      {% else %}
-      You may find it helpful to enter your own reference such as an invoice number or consignee name. References can be up to 20 letters or numbers long.
-      {% endif %}
       {% endif %}
     </p>
 
@@ -36,29 +28,19 @@ Applicant Reference - Exports application -  GOV.UK
       <div class="govuk-form-group">
 				<label class="govuk-label" for="reference_num">Your reference for this application (optional)</label>
 				<input class="govuk-input govuk-input--width-20" id="reference_num" name="reference_num" value="{% if query.change == 'yes' %}{{data.reference_num}}{% endif %}" type="text">
-			</div>
-
-			{% if query.change == 'yes' or query.saveContinueLater == 'yes' %}
-			<div class="govuk-button-group govuk-!-margin-bottom-7">
-				<button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
-			</div>
+			</div>      
+      
+      <div class="govuk-button-group govuk-!-margin-bottom-7">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+        {% if query.change == 'yes' or query.saveContinueLater == 'yes' %}
+        {% else %}
+        <a class="govuk-link app-button--link" href="../../dashboard">Cancel</a>
+        {% endif %}
+      </div>
 
       {% block continueLater %}
 			{% include "../modules/_save-continue-later.html" %}
 			{% endblock %}
-
-      {% else %}
-			
-      <div class="govuk-button-group">
-				<button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
-				<a class="govuk-link app-button--link" href="../../dashboard">Cancel</a>
-			</div>
-
-			{% include "../modules/_save-continue-later.html" %}
-    
-			{% endif %}
-      
-
     </form>
 
   </div>

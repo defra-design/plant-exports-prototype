@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  Supporting documents - Phytosanitary certificate - {{serviceName}} - GOV.UK
+  {% if data.build == "development" %}Exports application - GOV.UK{% else %}Supporting documents - Phytosanitary certificate - {{serviceName}} - GOV.UK{% endif %}  
 {% endblock %}
 
-{% block beforeContent%}
+{% block beforeContent %}
 {{super()}}
 {% include "../modules/_account-banner.html" %}
 <a href="javascript:history.back()" class="govuk-back-link">Back</a>
@@ -15,19 +15,18 @@
 
   <div class="govuk-grid-column-two-thirds">
     {% if query.delete_file == 'yes' %}
+    
     <div class="defra-alert defra-alert--success">
       <p class="govuk-body govuk-!-margin-bottom-0">Succesfully deleted file {{data.file}}</p>
     </div>
-    {% endif %}
-  
+
+    {% endif %}  
     <h1 id="supplementary-documents" class="govuk-heading-xl">Supporting documents</h1>
-    </div>
+  </div>
 
-    {% if data.build == "ux" %}
-
-    <div class="govuk-grid-column-two-thirds">
-      <p class="govuk-body">If you wish to attach any supporting documents to your application, you can upload them here. Otherwise, please click 'Save and continue' to skip this section.</p>
-
+  {% if data.build == "ux" %}
+  <div class="govuk-grid-column-two-thirds">
+    <p class="govuk-body">If you wish to attach any supporting documents to your application, you can upload them here. Otherwise, please click 'Save and continue' to skip this section.</p>
     <p class="govuk-body">You can only upload one at a time. Each file must:</p>
     <ul class="govuk-list govuk-list--bullet">
       <li>be in PDF, Word, Excel or JPEG format</li>
@@ -36,14 +35,12 @@
       <li>upload with a file description</li>
     </ul>
   </div>
+  {% else %}
+  <div class="govuk-grid-column-full">
+    <p class="govuk-body">If you wish to attach any supporting documents to your application, you can upload them here. Otherwise, please click 'Save and continue' to skip this section.</p>
+  </div>
 
-    {% else %}
-
-    <div class="govuk-grid-column-full">
-      <p class="govuk-body">If you wish to attach any supporting documents to your application, you can upload them here. Otherwise, please click 'Save and continue' to skip this section.</p>
-    </div>
-
-    <div class="govuk-grid-column-two-thirds">
+  <div class="govuk-grid-column-two-thirds">
     <p class="govuk-body">You can only upload one at a time. Each file must:</p>
     <ul class="govuk-list govuk-list--bullet">
       <li>be in PDF, Word, Excel or JPEG format</li>
@@ -52,7 +49,6 @@
       <li>uploaded with a file description</li>
     </ul>
   </div>
-
   {% endif %}
 
 </div>
@@ -60,7 +56,7 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-full">
-    <!--<h2 class="govuk-heading-m">{% if not data.file %}<span class="file_count">0</span> files{% else %}<span class="file_count">1</span> file{% endif %} uploaded</h2>-->
+    <!-- <h2 class="govuk-heading-m">{% if not data.file %}<span class="file_count">0</span> files{% else %}<span class="file_count">1</span> file{% endif %} uploaded</h2> -->
     <h2 class="govuk-heading-m">{% if not data.file %}{% else %}<span class="file_count">1</span> file uploaded{% endif %}</h2>
 
     <table class="govuk-table">

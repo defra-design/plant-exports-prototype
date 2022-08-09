@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.build == "ux" %}What do you need to do? - {{serviceName}} - GOV.UK{% else %}Health Certificate Type - GOV.UK{% endif %}
+  {% if data.build == "development" %}Health Certificate Type - GOV.UK{% else %}What do you need to do? - {{serviceName}} - GOV.UK{% endif %}
 {% endblock %}
 
 {% block beforeContent %}
@@ -23,11 +23,10 @@
         </legend>
 
         <div id="countries-hint" class="govuk-hint govuk-!-margin-bottom-6">
-          {% if data.build == "ux" %}
-          Select what you need to export {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}
+          {% if data.build == "development" %}
+          Select what you need to export {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% else %}{{data.commodity or 'processed plant products'}}{% endif %}
           {% else %}
-          Select what you need to export {% if data.commodity == "plants" %}plants and fresh produce
-          {% elif data.commodity == "plant products" %}processed plant products{% else %}{{data.commodity or 'processed plant products'}}{% endif %}
+          Select what you need to do to export {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% else %}{{data.commodity or 'processed plant products'}}{% endif %}
           {% endif %}
         </div>
 
@@ -37,7 +36,7 @@
 
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="how-contacted-conditional-phyto" name="has_reference" type="radio" value="phyto~{{query.return_url or 'what-country'}}" aria-describedby="how-contacted-conditional-phyto-hint">
-              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-phyto">Apply for a phytosanitary certificate</label>
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-phyto">Apply for a phytosanitary certificate</label> 
 
               {% if data.commodity == "seeds" %}
               <div id="how-contacted-conditional-phyto-hint" class="govuk-hint govuk-radios__hint">
@@ -54,24 +53,38 @@
             </div>
             {% endif %}
 
-            <div class="govuk-radios__item">
+             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="how-contacted-conditional-re-forwarding" name="has_reference" type="radio" value="donotneed~{{query.return_url or 'what-country'}}?reforwarding=1" data-aria-controls="conditional-how-contacted-conditional-re-forwarding">
               <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-re-forwarding">Apply for a re-forwarding phytosanitary certificate</label>
-            </div>
+            </div>  
 
             {% if data.commodity == "plant products" %}
+            {% if query.design == "b" %}
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="how-contacted-conditional-batch-sampling" name="has_reference" type="radio" value="batch~{{query.return_url or '../batch/create/reference'}}" data-describedby="how-contacted-conditional-batch-sampling-hint">
-              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-batch-sampling">Send one sample of a commodity for multiple phytosanitary certificates</label>
+              <input class="govuk-radios__input" id="how-contacted-conditional-batch-sampling" name="has_reference" type="radio" value="batch~{{query.return_url or '../batch/create/introduction'}}" data-describedby="how-contacted-conditional-batch-sampling-hint">
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-batch-sampling">
+                Set up one time testing <strong class="govuk-tag">new</strong>
+              </label>
 
               <div id="how-contacted-conditional-batch-sampling-hint" class="govuk-hint govuk-radios__hint">
-                You won’t need to send in more samples of the commodity. This applies to one batch of a commodity. You still need to apply for phytosanitary certificates.
+                One time testing lets you re-use sample results to apply for multiple phytosanitary certificates.
               </div>
 
             </div>
-           {% endif %}
+            {% else %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="how-contacted-conditional-one-time-setup" name="has_reference" type="radio" value="one time setup~{{query.return_url or '../batch/create/introduction'}}">
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-one-time-setup">One time testing step 1: set up one time testing</label>
+            </div> 
 
-            {% if data.commodity != "grain" and data.commodity != "plant products" and data.commodity != "used farm machinery" %}
+             <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="how-contacted-conditional-one-time-phyto" name="has_reference" type="radio" value="batch~{{query.return_url or '../batch/phytosanitary/setup/destination-country'}}">
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-one-time-phyto">One time testing step 2: apply for a phytosanitary certificate</label>
+            </div> 
+            {% endif %}
+            {% endif %}
+
+            {% if data.commodity != "biological control agents and clay" and data.commodity != "grain" and data.commodity != "plant products" and data.commodity != "used farm machinery" %}
             {% if data.commodity == "plants" %}
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="how-contacted-conditional-coc" name="has_reference" type="radio" value="coc~{{query.return_url or 'what-country'}}" aria-describedby="how-contacted-conditional-coc-hint">
@@ -125,7 +138,7 @@
       </fieldset>
 
       <div class="govuk-button-group">
-        <button class="govuk-button" type="submit" id="Button-saveAndContinue" name="saveAndContinue" data-qa-id="Button-saveAndContinue" data-module="govuk-button">Continue</button>
+        <button class="govuk-button" type="submit" data-module="govuk-button">Continue</button>
         <a class="govuk-link app-button--link" href="../../dashboard">Cancel</a>
       </div>
 

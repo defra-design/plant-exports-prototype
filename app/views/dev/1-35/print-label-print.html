@@ -1,24 +1,27 @@
 {% extends "layout_unbranded.html" %}
+
 {% block pageTitle %}
-Application details - GOV UK
+  Sampling reference information - {{serviceName}} - GOV.UK
 {% endblock %}
+
 {% block beforeContent %}
-<style media="screen">
+<style>
+
   .govuk-phase-banner {
     display: none !important;
   }
+
 </style>
-{% endblock%}
+{% endblock %}
+
 {% block content %}
-<div class="govuk-grid-row govuk-!-margin-bottom-6">
+<div class="govuk-grid-row">
+
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">Sampling reference information</span>
-    </h1>
-
+    <h1 class="govuk-heading-xl">Sampling reference information</h1>
     <p class="govuk-body">You must label each sample with its sample reference.</p>
-
-
     <dl class="govuk-summary-list govuk-summary-list--no-border">
+
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key govuk-!-padding-top-1 govuk-!-padding-bottom-1">
           <abbr title="Animal and Plant Health Agency">APHA</abbr> reference
@@ -27,88 +30,70 @@ Application details - GOV UK
           1721 1480 04809
         </dd>
       </div>
+
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key govuk-!-padding-top-1 govuk-!-padding-bottom-1">
-          Your reference
-        </dt>
-        <dd class="govuk-summary-list__value govuk-!-padding-top-1 govuk-!-padding-bottom-1">
-          {% if (query.id | appInformation('reference')) == ""%}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformation('reference')}}{% endif %}
-        </dd>
+        <dt class="govuk-summary-list__key govuk-!-padding-top-1 govuk-!-padding-bottom-1">Your reference</dt>
+        <dd class="govuk-summary-list__value govuk-!-padding-top-1 govuk-!-padding-bottom-1">{% if (query.id | appInformation('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformation('reference')}}{% endif %}</dd>
       </div>
 
-  
-  
-      
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key govuk-!-padding-top-1 govuk-!-padding-bottom-1">
-          Import permit
-        </dt>
-        <dd class="govuk-summary-list__value govuk-!-padding-top-1 govuk-!-padding-bottom-1">
-          ABCD1234
-        </dd>
+        <dt class="govuk-summary-list__key govuk-!-padding-top-1 govuk-!-padding-bottom-1">Import permit</dt>
+        <dd class="govuk-summary-list__value govuk-!-padding-top-1 govuk-!-padding-bottom-1">ABCD1234</dd>
       </div>
+
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key govuk-!-padding-top-1 govuk-!-padding-bottom-1">
-          Destination country
-        </dt>
-        <dd class="govuk-summary-list__value govuk-!-padding-top-1 govuk-!-padding-bottom-1">
-          New Zealand
-        </dd>
+        <dt class="govuk-summary-list__key govuk-!-padding-top-1 govuk-!-padding-bottom-1">Destination country</dt>
+        <dd class="govuk-summary-list__value govuk-!-padding-top-1 govuk-!-padding-bottom-1">New Zealand</dd>
       </div>
+
     </dl>
-
     <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-9">
+    <!-- <h2 class="govuk-heading-l govuk-!-margin-top-9">Sampling reference information</h2> -->
 
-    <!--<h2 class="govuk-heading-l govuk-!-margin-top-9">
-      Sampling reference information
-    </h2>-->
-
-    <table class='govuk-table'>
+    <table class="govuk-table">
       <caption class="govuk-table__caption govuk-heading-m">Sampling reference information</caption>
-      <thead class='govuk-table__head'>
+      <thead class="govuk-table__head">
         <tr class='govuk-table__row'>
           <th scope="col" class="govuk-table__header">Description</th>
           <th scope="col" class="govuk-table__header">Weight</th>
           <th scope="col" class="govuk-table__header ">Distinguishing marks</th>
-          <th scope="col" class="govuk-table__header">Sample<br/>reference</th>
+          <th scope="col" class="govuk-table__header"><abbr title="Animal and Plant Health Agency">APHA</abbr> sample <br> reference</th>
         </tr>
       </thead>
-      <tbody class='govuk-table__body'>
+      <tbody class="govuk-table__body">
         {% set items = [
-          {ref:1, description:"Quercus acuta", country:"Denmark", quantity:"55Kg", marks:"SCU 23422"},
-          {ref:2, description:"Quercus acuta", country:"Denmark", quantity:"55Kg", marks:"SCU 23423"},
-          {ref:3, description:"Pinus albicaulis", country:"Denmark", quantity:"55Kg", marks:"SCU 23424"},
-          {ref:4, description:"Pinus albicaulis", country:"Denmark", quantity:"55Kg", marks:"SCU 23425"},
-          {ref:5, description:"Pinus albicaulis", country:"Germany", quantity:"105Kg", marks:"SCU 23426"}
-          ]
-          %}
+          {ref:1, description:"Quercus acuta", country:"Denmark", quantity:"55kg", marks:"SCU 23422"},
+          {ref:2, description:"Quercus acuta", country:"Denmark", quantity:"55kg", marks:"SCU 23423"},
+          {ref:3, description:"Pinus albicaulis", country:"Denmark", quantity:"55kg", marks:"SCU 23424"},
+          {ref:4, description:"Pinus albicaulis", country:"Denmark", quantity:"55kg", marks:"SCU 23425"},
+          {ref:5, description:"Pinus albicaulis", country:"Germany", quantity:"105kg", marks:"SCU 23426"}
+        ] %}
         {% for item in items %}
         <tr class="govuk-table__row">
           <td class="govuk-table__cell">{{item.description}}</td>
           <td class="govuk-table__cell govuk-table__cell--numeric">{{item.quantity}}</td>
           <td class="govuk-table__cell">{{item.marks}}</td>
-          <td scope="row" class="govuk-table__cell ">{{ 10009346 + item.ref}}</td>
+          <td scope="row" class="govuk-table__cell">{{10009346 + item.ref}}</td>
         </tr>
         {% endfor %}
       </tbody>
     </table>
 
-
-
-    <p class="govuk-body govuk-!-padding-top-4">
-      Send your samples for inspection to:
+    <p class="govuk-body govuk-!-padding-top-4">Send your samples for inspection to:</p>
+    <p class="govuk-body">
+      Plant Clinic
+      <br>
+      Block 4
+      <br>
+      National Agri-Food Campus
+      <br>
+      Sand Hutton
+      <br>
+      York
+      <br>
+      YO41 1LZ
     </p>
-
-    <p class="govuk-body">Plant Clinic<br>
-      Block 4<br>
-      National Agri-Food Campus<br>
-      Sand Hutton<br>
-      York<br>
-      YO41 1LZ<br>
-    </p>
-
-
-
   </div>
+
 </div>
 {% endblock %}
