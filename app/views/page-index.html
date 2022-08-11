@@ -1,363 +1,1198 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  Page index for version {{data.version}} - GOV.UK
+  Find a page - GOV.UK
 {% endblock %}
 
 {% block content %}
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-full">
-    <h1 class="govuk-heading-xl">Page index for version {{data.version}}</h1>
+    <h1 class="govuk-heading-xl">Find a page</h1>
+    <h2 class="govuk-heading-l">External services</h2>
 
-    <form id="version-update" method="get">
+    <div class="govuk-form-group">
+      <h2 class="govuk-heading-m">Registration and sign in</h2>
+      <ul class="govuk-list">
+        <li><a href="dev/1-36/start-page">Service start page</a></li>
+        <li><a href="dev/1-36/start-page-multi">Service start page (multi account)</a></li>
+        <li><a href="dev/1-3/start-page-v3">Service start (certificate of conformity)</a></li>
+        <li><a href="dev/1-36/gateway/gov-sign-in">Government Gateway sign in</a></li>
+      </ul>
+
+      <h2 class="govuk-heading-m">Customer Extensions</h2>
+      <ul class="govuk-list">
+        <li><a href="dev/1-36/account">Manage account</a></li>
+      </ul>
+    </div>
+
+    <h2 class="govuk-heading-l">{{serviceName}}</h2>
+    <p class="govuk-body">Choose a commodity below to see all designed user journeys available.</p>
+    <form id="commodity-update" method="get">
 
       <div class="govuk-form-group">
-        <label class="govuk-label" for="sort">Version</label>
-        <select class="govuk-select" id="sort" name="version" onchange="updateversion()">
-          {% for v in data.version_list %}
-          <option value="{{v}}" {% if data.version == v %}selected{% endif %}>Version {{v}} {% if data.version == v %}{% endif %}</option>
-          {% endfor %}
+        <label class="govuk-label" for="commodity">Commodity</label>
+        <select class="govuk-select" id="commodity" name="commodity" onchange="updateCommodity()">
+          <option value="" selected></option>
+          <option value="biological control agents and clay"{% if data.commodity == "biological control agents and clay" %} selected{% endif %}>Biological control agents and clay</option>
+          <option value="bulbs"{% if data.commodity == "bulbs" %} selected{% endif %}>Bulbs</option>
+          <option value="plants"{% if data.commodity == "plants" %} selected{% endif %}>Plants and fresh produce</option>
+          <option value="potatoes"{% if data.commodity == "potatoes" %} selected{% endif %}>Potatoes</option>
+          <option value="plant products"{% if data.commodity == "plant products" %} selected{% endif %}>Processed plant products</option>
+          <option value="seeds"{% if data.commodity == "seeds" %} selected{% endif %}>Seeds for planting</option>
+          <option value="grain"{% if data.commodity == "grain" %} selected{% endif %}>Unprocessed cereal grains</option>
+          <option value="used farm machinery"{% if data.commodity == "used farm machinery" %} selected{% endif %}>Used farm machinery</option>
         </select>
       </div>
 
     </form>
 
-    <!-- <p class="govuk-body"><strong>Current commodity:</strong> {{data.commodity or "None"}} <a class="govuk-footer__link" href="/dev/{{data.version}}/application/setup/what-export?change=yes&return_url={{data.currentURL}}">Change</a></p> -->
-
     <div class="govuk-form-group">
-      <h2 class="govuk-heading-m">Registration and sign in</h2>
+      <h2 class="govuk-heading-m">Dashboards and application management</h2>
       <ul class="govuk-list">
-        <li><a href="dev/{{data.version}}/start-page">Service start page</a></li>
-        <li><a href="dev/{{data.version}}/start-page-multi">Service start page (multi account)</a></li>
-        <li><a href="dev/{{data.version}}/gateway/gov-sign-in">Government Gateway sign in</a></li>
+        <li><a href="dev/1-36/dashboard-one">Dashboard (one application)</a></li>
+        <li><a href="dev/1-36/dashboard">Dashboard (many applications)</a></li>
+        <li><a href="dev/1-36/clone?id=4">Copy application</a></li>
+        <li><a href="dev/1-36/delete?id=4">Delete application</a></li>
       </ul>
 
-      <h2 class="govuk-heading-m">Customer Extensions</h2>
-      <ul class="govuk-list">
-        <li><a href="dev/{{data.version}}/account">Manage account</a></li>
-      </ul>
-      <h2 class="govuk-heading-m">Dashboards and application details</h2>
-      <ul class="govuk-list">
-        <li><a href="dev/{{data.version}}/dashboard">Dashboard multiple</a></li>
-        <li><a href="dev/{{data.version}}/dashboard-one">Dashboard one application</a></li>
-        <li><a href="dev/{{data.version}}/application?id=4&commodity=plant products">Summary page</a></li>
-        <li><a href="dev/{{data.version}}/application?id=10&commodity=plant products">Summary page with sample references</a></li>
-        <li><a href="dev/{{data.version}}/clone?id=4&commodity=plant products">Copy page</a></li>
-      </ul>
-
-      <h2 class="govuk-heading-m">Phytosanitary certificate</h2>
+      {% if data.commodity == "biological control agents and clay" %}
+      <h3 class="govuk-heading-m">
+        Phytosanitary certificate
+        <strong class="govuk-tag govuk-tag--grey">BCA and clay</strong>
+        <strong class="govuk-tag govuk-tag--blue">Bulbs</strong>
+        <strong class="govuk-tag govuk-tag--purple">Plants</strong>
+        <strong class="govuk-tag govuk-tag--orange">Potatoes</strong>
+        <strong class="govuk-tag">Plant products</strong>
+        <strong class="govuk-tag govuk-tag--pink">Seeds</strong>
+        <strong class="govuk-tag govuk-tag--yellow">Grains</strong>
+        <strong class="govuk-tag govuk-tag--green">Used farm machinery</strong>
+      </h3>
       <ul class="govuk-list">
         <li>Set up</li>
-        <li><a href="dev/{{data.version}}/application/setup/what-export">What are you exporting?</a></li>
-        <li><a href="dev/{{data.version}}/application/setup/pre-application-test">What do you need to do?</a></li>
-        <li><a href="dev/{{data.version}}/application/setup/what-country">What country are you exporting to?</a></li>
-        <li><a href="dev/{{data.version}}/application/setup/declaration">Confirm you have checked regulations</a></li>
-        <li><a href="dev/{{data.version}}/application/setup/declaration-used-farm-machinery">Confirm you have checked regulations</a> <strong class="govuk-tag govuk-tag--blue">Farm</strong> </li>
-        <li><a href="dev/{{data.version}}/application/setup/reference">Add a reference</a></li>
+        <li><a href="dev/1-36/application/setup/what-export">What are you exporting?</a></li>
+        <li><a href="dev/1-36/application/setup/pre-application-test">What do you need to do?</a></li>
+        <li><a href="dev/1-36/application/setup/what-country">Destination country</a></li>
+        <li><a href="dev/1-36/application/setup/declaration">Confirm you have checked regulations</a></li>
+        <li><a href="dev/1-36/application/setup/reference">Create a reference</a></li>
       </ul>
       <ul class="govuk-list">
         <li>Task list</li>
-        <li><a href="dev/{{data.version}}/application/create/task-list">Task list </a></li>
-        <!-- <li><a href="/dev/{{data.version}}/application/create/exporter">Exporter details</a></li> -->
-        <li><a href="/dev/1-1/application/create/agent?commodity=grain">Who is the agent?</a> <strong class="govuk-tag govuk-tag--yellow">Grain</strong> </li>
-        <li><a href="/dev/{{data.version}}/application/create/input-method">How do you want to add commodities?</a></li>
-        <li><a href="/dev/{{data.version}}/application/create/upload">Add commodities by uploading a file (bulk upload)</a></li>
-        <li><a href="/dev/{{data.version}}/application/create/upload-validation-errors">Error messages for bulk upload</a></li>
-        <li><a href="/dev/{{data.version}}/application/create/how-to-identify">Your consignment</a> </li>
-        <li><a href="/dev/{{data.version}}/application/create/commodity-page">Your consignment</a> <strong class="govuk-tag govuk-tag--blue">Potatoes</strong></li>
-        <li><a href="/dev/{{data.version}}/application/create/commodity-page-bulbs">Bulb stock numbers</a> <strong class="govuk-tag govuk-tag--orange">bulbs</strong></li>
-        <li><a href="/dev/{{data.version}}/application/create/commodity-list">Commodity list</a></li>
-        <li><a href="/dev/{{data.version}}/application/create/commodity-list">Are you applying under PHEATS?</a> <strong class="govuk-tag govuk-tag--turquoise">Plants</strong></li>
-        <li><a href="/dev/{{data.version}}/application/create/inspection-addresses">Inspection details</a> <strong class="govuk-tag govuk-tag--turquoise">Plants</strong> <strong class="govuk-tag govuk-tag--orange">bulbs</strong> <strong class="govuk-tag govuk-tag--blue">Farm</strong> </li>
-        <li><a href="/dev/{{data.version}}/application/create/shipping">Transportation</a></li>
-        <li><a href="/dev/{{data.version}}/application/create/destination-consignee">Who will receive this consignment?</a></li>
-        <!-- <li><a href="/dev/{{data.version}}/application/create/destination-permit">Do you have inport permit?</a></li>
-        <li><a href="/dev/{{data.version}}/application/create/upload-permit">Do you want to upload a permit?</a></li> -->
-        <li><a href="/dev/{{data.version}}/application/create/attachments">Attachments</a></li>
+        <li><a href="dev/1-36/application/create/task-list">Task list</a></li>
+        <li><a href="/dev/1-36/application/create/input-method">How do you want to add commodities to your consignment?</a></li>
+        <li><a href="/dev/1-36/application/create/how-to-identify">Add commodities to your consignment (manual)</a></li>
+        <li><a href="/dev/1-36/application/create/upload">Upload a file (bulk upload)</a></li>
+        <li><a href="/dev/1-36/application/create/upload-error-summary">Error messages for bulk upload</a></li>
+        <li><a href="/dev/1-36/application/create/commodity-list">Commodity list</a></li>
+        <li><a href="/dev/1-36/application/create/shipping">How will this consignment be transported?</a></li>
+        <li><a href="/dev/1-36/application/create/destination-consignee">Who will receive this consignment?</a></li>
+        <li><a href="/dev/1-36/application/create/attachments">Supporting documents</a></li>
       </ul>
       <ul class="govuk-list">
         <li>Submit</li>
-        <li><a href="dev/{{data.version}}/application/create/check-your-answers">Check your answers</a></li>
-        <li><a href="dev/{{data.version}}/application/submit/submit-date">When do you need the certificate?</a></li>
-        <li><a href="dev/{{data.version}}/application/submit/declaration">Final declaration</a></li>
+        <li><a href="dev/1-36/application/create/check-your-answers">Check your answers</a></li>
+        <li><a href="dev/1-36/application/submit/submit-date">When do you need the certificate?</a></li>
+        <li><a href="dev/1-36/application/submit/declaration">Final declaration</a></li>
       </ul>
       <ul class="govuk-list">
         <li>Confirmation page</li>
-        <li><a href="dev/{{data.version}}/application/submit/confirmation-plant-products-hh91">Plant products - confirmation</a></li>
-        <li><a href="dev/{{data.version}}/application/submit/confirmation-bulbs-ko1">Bulbs - confirmation</a></li>
-        <li><a href="dev/{{data.version}}/application/submit/confirmation-grain-hh93">Grain - confirmation</a></li>
-        <li><a href="dev/{{data.version}}/application/submit/confirmation-plants-phe36">Plants - confirmation</a></li>
-        <li><a href="dev/{{data.version}}/application/submit/confirmation-potatoes-phe60">Potatoes - confirmation</a></li>
-        <li><a href="dev/{{data.version}}/application/submit/confirmation-seeds-phe90">Seeds - confirmation</a></li>
-        <li><a href="dev/{{data.version}}/application/submit/confirmation-machinery-HH36A">Farm machinery - confirmation</a></li>
+        <li><a href="dev/1-36/application/submit/confirmation-bca-and-clay">You have successfully submitted your application</a></li>
       </ul>
       <ul class="govuk-list">
-        <li>Single stock draw down (SSDD)</li>
-        <li><a href="dev/{{data.version}}/application-ssdd?id=21">Application Summary for original application</a></li>
-        <li><a href="dev/{{data.version}}/application-ssdd-single?id=21">Application Summary for actual <abbr title="Single stock draw down">SSDD</abbr></a></li>
-        <li><a href="dev/{{data.version}}/application-ssdd-coc?id=21">Application Summary (HMI / CoC)</a></li>
-        <li><a href="dev/{{data.version}}/application-ssdd-sample?id=3">Application Summary (samples)</a></li>
-      </ul>
-      <ul class="govuk-list">
-        <li><abbr title="Single stock draw down">SSDD</abbr> separate application</li>
-        <li><a href="dev/{{data.version}}/dashboard-ssdd-tab">As tabbed option</a></li>
-        <li><a href="dev/{{data.version}}/dashboard-ssdd-link">As link option</a></li>
-        <li><a href="dev/{{data.version}}/dashboard-ssdd-filter">As filter option</a></li>
-        <li><a href="dev/{{data.version}}/application-ssdd-stock?id=3">Separate <abbr title="Single stock draw down">SSDD</abbr> Application Summary</a></li>
+        <li>Application management</li>
+        <li><a href="dev/1-36/application?id=6">Draft application summary</a></li>
+        <li><a href="dev/1-36/application?id=34">Submitted application summary</a></li>
+        <li><a href="dev/1-36/application/confirm_save_and_exit">Confirm save and continue later</a></li>
       </ul>
 
-      <h2 class="govuk-heading-m">Re-forwarding phytosanitary certificate</h2>
+      <h2 class="govuk-heading-m">
+        Re-forwarding phytosanitary certificate
+        <strong class="govuk-tag govuk-tag--grey">BCA and clay</strong>
+        <strong class="govuk-tag govuk-tag--blue">Bulbs</strong>
+        <strong class="govuk-tag govuk-tag--purple">Plants</strong>
+        <strong class="govuk-tag govuk-tag--orange">Potatoes</strong>
+        <strong class="govuk-tag">Plant products</strong>
+        <strong class="govuk-tag govuk-tag--pink">Seeds</strong>
+        <strong class="govuk-tag govuk-tag--yellow">Grains</strong>
+        <strong class="govuk-tag govuk-tag--green">Used farm machinery</strong>
+      </h2>
       <ul class="govuk-list">
         <li>Set up</li>
-        <li><a href="dev/{{data.version}}/application/setup/what-export">What are you exporting?</a></li>
-        <li><a href="dev/{{data.version}}/application/setup/pre-application-test">What do you need to do?</a></li>
+        <li><a href="dev/1-36/application/setup/declaration?reforwarding=1">Confirm you have checked regulations</a></li>
       </ul>
       <ul class="govuk-list">
         <li>Task list</li>
-        <li><a href="dev/{{data.version}}/application/create/task-list">Task list</a></li>
-        <li><a href="dev/{{data.version}}/application/create/import-details">What are the import details?</a></li>
+        <li><a href="dev/1-36/application/create/task-list?reforwarding=1">Task list</a></li>
+        <li><a href="dev/1-36/application/create/import-details?reforwarding=1">What are the import details of this consignment?</a></li>
       </ul>
       <ul class="govuk-list">
         <li>Submit</li>
-        <li><a href="dev/{{data.version}}/application/create/check-your-answers">Check your answers</a></li>
+        <li><a href="dev/1-36/application/create/check-your-answers?reforwarding=1">Check your answers</a></li>
       </ul>
-
-      <h2 class="govuk-heading-m">Growing season inspection <strong class="govuk-tag govuk-tag--turquoise">Plants</strong> <strong class="govuk-tag govuk-tag--blue">Potatoes</strong> <strong class="govuk-tag govuk-tag--orange">bulbs</strong>  <strong class="govuk-tag govuk-tag--green">seeds</strong></h2>
+      {% elif data.commodity == "bulbs" %}
+      <h3 class="govuk-heading-m">
+        Phytosanitary certificate
+        <strong class="govuk-tag govuk-tag--grey">BCA and clay</strong>
+        <strong class="govuk-tag govuk-tag--blue">Bulbs</strong>
+        <strong class="govuk-tag govuk-tag--purple">Plants</strong>
+        <strong class="govuk-tag govuk-tag--orange">Potatoes</strong>
+        <strong class="govuk-tag">Plant products</strong>
+        <strong class="govuk-tag govuk-tag--pink">Seeds</strong>
+        <strong class="govuk-tag govuk-tag--yellow">Grains</strong>
+        <strong class="govuk-tag govuk-tag--green">Used farm machinery</strong>
+      </h3>
       <ul class="govuk-list">
         <li>Set up</li>
-        <li><a href="dev/{{data.version}}/application/setup/what-export">What are you exporting?</a></li>
-        <li><a href="dev/{{data.version}}/application/setup/pre-application-test">What do you need to do?</a></li>
-        <li><a href="dev/{{data.version}}/application/gsi/create/reference">Your reference</a></li>
+        <li><a href="dev/1-36/application/setup/what-export">What are you exporting?</a></li>
+        <li><a href="dev/1-36/application/setup/pre-application-test">What do you need to do?</a></li>
+        <li><a href="dev/1-36/application/setup/what-country">Destination country</a></li>
+        <li><a href="dev/1-36/application/setup/usda">Do the crops need a <abbr title="United States Department of Agriculture">USDA</abbr>-<abbr title="Animal and Plant Health Inspection Service">APHIS</abbr> pre-clearance inspection?</a></li>
+        <li><a href="dev/1-36/application/setup/ko1">You need to use another service (<abbr title="United States Department of Agriculture">USDA</abbr>-<abbr title="Animal and Plant Health Inspection Service">APHIS</abbr> pre-clearance needed)</a></li>
+        <li><a href="dev/1-36/application/setup/declaration">Confirm you have checked regulations</a></li>
+        <li><a href="dev/1-36/application/setup/reference">Create a reference</a></li>
       </ul>
       <ul class="govuk-list">
         <li>Task list</li>
-        <li><a href="dev/{{data.version}}/application/gsi/create/task-list">Task list</a></li>
-        <li><a href="dev/{{data.version}}/application/gsi/create/inspection-addresses">Inspection details</a></li>
-        <li><a href="dev/{{data.version}}/application/gsi/create/field">Crop location</a></li>
-        <li><a href="dev/{{data.version}}/application/gsi/create/field-2">Crop location - multiple fields view</a></li>
-        <li><a href="dev/{{data.version}}/application/gsi/create/how-to-identify">Your crops</a></li>
+        <li><a href="dev/1-36/application/create/task-list">Task list</a></li>
+        <li><a href="/dev/1-36/application/create/input-method">How do you want to add commodities to your consignment?</a></li>
+        <li><a href="/dev/1-36/application/create/how-to-identify">Add commodities to your consignment (manual)</a></li>
+        <li><a href="/dev/1-36/application/create/upload">Upload a file (bulk upload)</a></li>
+        <li><a href="/dev/1-36/application/create/upload-error-summary">Error messages for bulk upload</a></li>
+        <li><a href="/dev/1-36/application/create/commodity-list">Commodity list</a></li>
+        <li><a href="/dev/1-36/application/create/inspection-addresses">Where will the inspection take place?</a></li>
+        <li><a href="/dev/1-36/application/create/contact-details-simple-short">Who is the main contact for this application?</a></li>
+        <li><a href="/dev/1-36/application/create/inspection-dates">When will the consignment be ready?</a></li>
+        <li><a href="/dev/1-36/application/create/shipping">How will this consignment be transported?</a></li>
+        <li><a href="/dev/1-36/application/create/destination-consignee">Who will receive this consignment?</a></li>
+        <li><a href="/dev/1-36/application/create/attachments">Supporting documents</a></li>
       </ul>
       <ul class="govuk-list">
         <li>Submit</li>
-        <li><a href="dev/{{data.version}}/application/gsi/create/check-your-answers">Check your answers</a></li>
-        <li><a href="dev/{{data.version}}/application/gsi/create/check-your-answers-2">Check your answers - multiple fields</a></li>
-        <li><a href="dev/{{data.version}}/application/gsi/submit/confirmation-gsi">Confirmation</a></li>
+        <li><a href="dev/1-36/application/create/check-your-answers">Check your answers</a></li>
+        <li><a href="dev/1-36/application/submit/submit-date">When do you need the certificate?</a></li>
+        <li><a href="dev/1-36/application/submit/declaration">Final declaration</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Confirmation page</li>
+        <li><a href="dev/1-36/application/submit/confirmation-bulbs">You have successfully submitted your application</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Application management</li>
+        <li><a href="dev/1-36/application?id=6">Draft application summary</a></li>
+        <li><a href="dev/1-36/application?id=34">Submitted application summary</a></li>
+        <li><a href="dev/1-36/application/confirm_save_and_exit">Confirm save and continue later</a></li>
       </ul>
 
-      <h2 class="govuk-heading-m">Soil sampling <strong class="govuk-tag govuk-tag--blue">Potatoes</strong></h2>
+      <h2 class="govuk-heading-m">
+        Re-forwarding phytosanitary certificate
+        <strong class="govuk-tag govuk-tag--grey">BCA and clay</strong>
+        <strong class="govuk-tag govuk-tag--blue">Bulbs</strong>
+        <strong class="govuk-tag govuk-tag--purple">Plants</strong>
+        <strong class="govuk-tag govuk-tag--orange">Potatoes</strong>
+        <strong class="govuk-tag">Plant products</strong>
+        <strong class="govuk-tag govuk-tag--pink">Seeds</strong>
+        <strong class="govuk-tag govuk-tag--yellow">Grains</strong>
+        <strong class="govuk-tag govuk-tag--green">Used farm machinery</strong>
+      </h2>
       <ul class="govuk-list">
         <li>Set up</li>
-        <li><a href="dev/{{data.version}}/application/setup/what-export">What are you exporting?</a></li>
-        <li><a href="dev/{{data.version}}/application/setup/pre-application-test?commodity=potatoes">What do you need to do?</a></li>
-        <li><a href="dev/{{data.version}}/application/soil/create/reference">Your reference</a></li>
+        <li><a href="dev/1-36/application/setup/declaration?reforwarding=1">Confirm you have checked regulations</a></li>
       </ul>
       <ul class="govuk-list">
         <li>Task list</li>
-        <li><a href="dev/{{data.version}}/application/soil/create/task-list">Task list</a></li>
-        <li><a href="dev/{{data.version}}/application/soil/create/inspection-addresses">What's the address for this inspection?</a></li>
-        <li><a href="dev/{{data.version}}/application/soil/create/contact-details">Who is the main contact for this application?</a></li>
-        <li><a href="dev/{{data.version}}/application/soil/create/inspection-dates">When will the fields be ready for inspection?</a></li>
-        <li><a href="dev/{{data.version}}/application/soil/create/field">Field location</a></li>
-        <li><a href="dev/{{data.version}}/application/soil/create/send-inspector-map">Send the inspector a map</a></li>
-        <li><a href="dev/{{data.version}}/application/soil/create/field-upload-wip">Upload field location map</a></li>
-        <li><a href="dev/{{data.version}}/application/soil/create/field-upload-completed">Upload completed</a></li>
-        <li><a href="dev/{{data.version}}/application/soil/create/how-to-identify?commodity=potatoes">Add your ware potatoes to field location</a></li>
-        <li><a href="dev/{{data.version}}/application/soil/create/commodity-list?commodity=potatoes">Your fields and ware potatoes for inspection</a></li>
-        <li><a href="dev/{{data.version}}/application/soil/create/delete-field?commodity=potatoes">Delete field location</a></li>
-        <li><a href="dev/{{data.version}}/application/soil/create/delete-crop?commodity=potatoes">Delete variety of ware potato</a></li>
+        <li><a href="dev/1-36/application/create/task-list?reforwarding=1">Task list</a></li>
+        <li><a href="dev/1-36/application/create/import-details?reforwarding=1">What are the import details of this consignment?</a></li>
       </ul>
       <ul class="govuk-list">
         <li>Submit</li>
-        <li><a href="dev/{{data.version}}/application/soil/create/check-your-answers?commodity=potatoes">Check your answers</a></li>
-        <li><a href="dev/{{data.version}}/application/soil/submit/declaration?commodity=potatoes">Declaration</a></li>
-        <li><a href="dev/{{data.version}}/application/soil/submit/confirmation">Confirmation</a></li>
+        <li><a href="dev/1-36/application/create/check-your-answers?reforwarding=1">Check your answers</a></li>
       </ul>
 
-      <h2 class="govuk-heading-m">Seed sampling <strong class="govuk-tag govuk-tag--green">Seeds</strong></h2>
+      <h2 class="govuk-heading-m">
+        Growing season inspection
+        <strong class="govuk-tag govuk-tag--blue">Bulbs</strong>
+        <strong class="govuk-tag govuk-tag--purple">Plants</strong>
+        <strong class="govuk-tag govuk-tag--orange">Potatoes</strong>
+        <strong class="govuk-tag govuk-tag--pink">Seeds</strong>
+      </h2>
       <ul class="govuk-list">
         <li>Set up</li>
-        <li><a href="dev/{{data.version}}/application/setup/what-export">What are you exporting?</a></li>
-        <li><a href="dev/{{data.version}}/application/setup/pre-application-test">What do you need to do?</a></li>
-        <li><a href="dev/{{data.version}}/application/seeds/create/reference">Your reference</a></li>
+        <li><a href="dev/1-36/application/setup/what-export">What are you exporting?</a></li>
+        <li><a href="dev/1-36/application/setup/pre-application-test">What do you need to do?</a></li>
+        <li><a href="dev/1-36/application/gsi/create/reference">Create a reference</a></li>
       </ul>
       <ul class="govuk-list">
         <li>Task list</li>
-        <li><a href="dev/{{data.version}}/application/seeds/create/task-list">Task list</a></li>
-        <li><a href="dev/{{data.version}}/application/seeds/create/inspection">Sampling site details</a></li>
-        <li><a href="/dev/{{data.version}}/application/seeds/create/input-method">How do you want to add seeds? - bulk upload</a></li>
-        <li><a href="dev/{{data.version}}/application/seeds/create/how-to-identify">Seeds to be sampled</a></li>
-        <li><a href="dev/{{data.version}}/application/seeds/create/commodity-list">Seed details</a></li>
+        <li><a href="dev/1-36/application/gsi/create/task-list">Task list</a></li>
+        <li><a href="dev/1-36/application/gsi/create/inspection-addresses">Where will the inspection take place?</a></li>
+        <li><a href="dev/1-36/application/gsi/create/contact-details-simple">Who is the main contact for this application?</a></li>
+        <li><a href="dev/1-36/application/gsi/create/inspection-dates">When will the crop be ready for a growing season inspection?</a></li>
+        <li><a href="dev/1-36/application/gsi/create/field">Crop location</a></li>
+        <li><a href="dev/1-36/application/gsi/create/send-inspector-map">Send the inspector a map</a></li>
+        <li><a href="dev/1-36/application/gsi/create/field-upload-completed">Do you want to keep this map?</a></li>
+        <li><a href="dev/1-36/application/gsi/create/how-to-identify">Your crops</a></li>
+        <li><a href="dev/1-36/application/gsi/create/gsi-commodity-list">Your fields and plants for inspection</a></li>
+        <li><a href="dev/1-36/application/gsi/create/delete-field-2">Delete field</a></li>
+        <li><a href="dev/1-36/application/gsi/create/delete-crop">Delete crop</a></li>
       </ul>
       <ul class="govuk-list">
         <li>Submit</li>
-        <li><a href="dev/{{data.version}}/application/seeds/create/check-your-answers">Check your answers</a></li>
-        <li><a href="dev/{{data.version}}/application/seeds/submit/confirmation">Confirmation</a></li>
+        <li><a href="dev/1-36/application/gsi/create/check-your-answers-3">Check your answers</a></li>
+        <li><a href="dev/1-36/application/gsi/create/check-your-answers-2">Check your answers (multiple fields)</a></li>
+        <li><a href="dev/1-36/application/gsi/submit/declaration-gsi">Declaration</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Confirmation page</li>
+        <li><a href="dev/1-36/application/gsi/submit/confirmation-gsi">Your inspection request is submitted</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Application management</li>
+        <li><a href="dev/1-36/application/gsi/confirm_save_and_exit">Confirm save and continue later</a></li>
       </ul>
 
-      <h2 class="govuk-heading-m">Dry bulb inspection <strong class="govuk-tag govuk-tag--orange">Bulbs</strong></h2>
+      <h2 class="govuk-heading-m">
+        Soil sampling
+        <strong class="govuk-tag govuk-tag--blue">Bulbs</strong>
+        <strong class="govuk-tag govuk-tag--purple">Plants</strong>
+        <strong class="govuk-tag govuk-tag--orange">Potatoes</strong>
+      </h2>
       <ul class="govuk-list">
         <li>Set up</li>
-        <li><a href="dev/{{data.version}}/application/setup/what-export">What are you exporting?</a></li>
-        <li><a href="dev/{{data.version}}/application/setup/pre-application-test">What do you need to do?</a></li>
-        <li><a href="dev/{{data.version}}/application/dry-bulb/create/reference">Your reference</a></li>
+        <li><a href="dev/1-36/application/setup/what-export">What are you exporting?</a></li>
+        <li><a href="dev/1-36/application/setup/pre-application-test">What do you need to do?</a></li>
+        <li><a href="dev/1-36/application/soil/create/reference">Create a reference</a></li>
       </ul>
       <ul class="govuk-list">
         <li>Task list</li>
-        <li><a href="dev/{{data.version}}/application/dry-bulb/create/task-list">Task list</a></li>
-        <li><a href="dev/{{data.version}}/application/dry-bulb/create/inspection">Sampling site details</a></li>
-        <li><a href="dev/{{data.version}}/application/dry-bulb/create/how-to-identify">Bulbs to be sampled</a></li>
-        <li><a href="dev/{{data.version}}/application/dry-bulb/create/commodity-list">Your bulbs</a></li>
+        <li><a href="dev/1-36/application/soil/create/task-list">Task list</a></li>
+        <li><a href="dev/1-36/application/soil/create/inspection-addresses">What's the address for this inspection?</a></li>
+        <li><a href="dev/1-36/application/soil/create/contact-details">Who is the main contact for this application?</a></li>
+        <li><a href="dev/1-36/application/soil/create/inspection-dates">When will the fields be ready for inspection?</a></li>
+        <li><a href="dev/1-36/application/soil/create/field">Field location</a></li>
+        <li><a href="dev/1-36/application/soil/create/send-inspector-map">Send the inspector a map</a></li>
+        <li><a href="dev/1-36/application/soil/create/field-upload-completed">Do you want to keep this map?</a></li>
+        <li><a href="dev/1-36/application/soil/create/field-list">Your fields for inspection</a></li>
+        <li><a href="dev/1-36/application/soil/create/delete-field">Delete field</a></li>
       </ul>
       <ul class="govuk-list">
         <li>Submit</li>
-        <li><a href="dev/{{data.version}}/application/dry-bulb/create/check-your-answers">Check your answers</a></li>
-        <li><a href="dev/{{data.version}}/application/seeds/submit/confirmation">Confirmation</a></li>
+        <li><a href="dev/1-36/application/soil/create/check-your-answers">Check your answers</a></li>
+        <li><a href="dev/1-36/application/soil/submit/declaration">Declaration</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Confirmation page</li>
+        <li><a href="dev/1-36/application/soil/submit/confirmation">You have successfully submitted your application</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Application management</li>
+        <li><a href="dev/1-36/application/soil/confirm_save_and_exit">Confirm save and continue later</a></li>
+      </ul>
+      {% elif data.commodity == "plants" %}
+      <h3 class="govuk-heading-m">
+        Phytosanitary certificate
+        <strong class="govuk-tag govuk-tag--grey">BCA and clay</strong>
+        <strong class="govuk-tag govuk-tag--blue">Bulbs</strong>
+        <strong class="govuk-tag govuk-tag--purple">Plants</strong>
+        <strong class="govuk-tag govuk-tag--orange">Potatoes</strong>
+        <strong class="govuk-tag">Plant products</strong>
+        <strong class="govuk-tag govuk-tag--pink">Seeds</strong>
+        <strong class="govuk-tag govuk-tag--yellow">Grains</strong>
+        <strong class="govuk-tag govuk-tag--green">Used farm machinery</strong>
+      </h3>
+      <ul class="govuk-list">
+        <li>Set up</li>
+        <li><a href="dev/1-36/application/setup/what-export">What are you exporting?</a></li>
+        <li><a href="dev/1-36/application/setup/pre-application-test">What do you need to do?</a></li>
+        <li><a href="dev/1-36/application/setup/what-country">Destination country</a></li>
+        <li><a href="dev/1-36/application/setup/declaration">Confirm you have checked regulations</a></li>
+        <li><a href="dev/1-36/application/setup/reference">Create a reference</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Task list</li>
+        <li><a href="dev/1-36/application/create/task-list">Task list</a></li>
+        <li><a href="/dev/1-36/application/create/input-method">How do you want to add commodities to your consignment?</a></li>
+        <li><a href="/dev/1-36/application/create/how-to-identify">Add commodities to your consignment (manual)</a></li>
+        <li><a href="/dev/1-36/application/create/upload">Upload a file (bulk upload)</a></li>
+        <li><a href="/dev/1-36/application/create/upload-error-summary">Error messages for bulk upload</a></li>
+        <li><a href="/dev/1-36/application/create/commodity-list">Commodity list</a></li>
+        <li><a href="/dev/1-36/application/create/commodity-list">Do you want to apply under the plant health exports audited trader scheme (PHEATS)?</a></li>
+        <li><a href="/dev/1-36/application/create/inspection-addresses">Where will the inspection take place?</a></li>
+        <li><a href="/dev/1-36/application/create/contact-details-simple-short">Who is the main contact for this application?</a></li>
+        <li><a href="/dev/1-36/application/create/inspection-dates">When will the consignment be ready?</a></li>
+        <li><a href="/dev/1-36/application/create/shipping">How will this consignment be transported?</a></li>
+        <li><a href="/dev/1-36/application/create/destination-consignee">Who will receive this consignment?</a></li>
+        <li><a href="/dev/1-36/application/create/attachments">Supporting documents</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Submit</li>
+        <li><a href="dev/1-36/application/create/check-your-answers">Check your answers</a></li>
+        <li><a href="dev/1-36/application/submit/submit-date">When do you need the certificate?</a></li>
+        <li><a href="dev/1-36/application/submit/declaration">Final declaration</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Confirmation page</li>
+        <li><a href="dev/1-36/application/submit/confirmation-plants-phe36">You have successfully submitted your application</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Application management</li>
+        <li><a href="dev/1-36/application?id=6">Draft application summary</a></li>
+        <li><a href="dev/1-36/application?id=34">Submitted application summary</a></li>
+        <li><a href="dev/1-36/application?id=10">Submitted application summary with sample references</a></li>
+        <li><a href="dev/1-36/application/confirm_save_and_exit">Confirm save and continue later</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Single stock draw down (SSDD) separate application</li>
+        <li><a href="dev/1-36/dashboard-ssdd-tab">As tabbed option</a></li>
+        <li><a href="dev/1-36/dashboard-ssdd-link">As link option</a></li>
+        <li><a href="dev/1-36/dashboard-ssdd-filter">As filter option</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li><abbr title="Single stock draw down">SSDD</abbr> application management </li>
+        <li><a href="dev/1-36/application-ssdd-stock?id=3">Separate <abbr title="Single stock draw down">SSDD</abbr> application summary</a></li>
+        <li><a href="dev/1-36/application-ssdd?id=21">Submitted application summary for original application</a></li>
+        <li><a href="dev/1-36/application-ssdd-single?id=21">Submitted application summary for actual <abbr title="Single stock draw down">SSDD</abbr></a></li>
+        <li><a href="dev/1-36/application-ssdd-coc?id=21">Submitted application summary (HMI/CoC)</a></li>
+        <li><a href="dev/1-36/application-ssdd-sample?id=3">Submitted application summary (samples)</a></li>
       </ul>
 
-      <h2 class="govuk-heading-m">Amendments <strong class="govuk-tag govuk-tag--blue">Potatoes</strong></h2>
+      <h2 class="govuk-heading-m">
+        Re-forwarding phytosanitary certificate
+        <strong class="govuk-tag govuk-tag--grey">BCA and clay</strong>
+        <strong class="govuk-tag govuk-tag--blue">Bulbs</strong>
+        <strong class="govuk-tag govuk-tag--purple">Plants</strong>
+        <strong class="govuk-tag govuk-tag--orange">Potatoes</strong>
+        <strong class="govuk-tag">Plant products</strong>
+        <strong class="govuk-tag govuk-tag--pink">Seeds</strong>
+        <strong class="govuk-tag govuk-tag--yellow">Grains</strong>
+        <strong class="govuk-tag govuk-tag--green">Used farm machinery</strong>
+      </h2>
       <ul class="govuk-list">
-        <li><a href="dev/{{data.version}}/dashboard">Dashboard</a> - use the first application (status 'COMPLETED')</li>
+        <li>Set up</li>
+        <li><a href="dev/1-36/application/setup/declaration?reforwarding=1">Confirm you have checked regulations</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Task list</li>
+        <li><a href="dev/1-36/application/create/task-list?reforwarding=1">Task list</a></li>
+        <li><a href="dev/1-36/application/create/import-details?reforwarding=1">What are the import details of this consignment?</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Submit</li>
+        <li><a href="dev/1-36/application/create/check-your-answers?reforwarding=1">Check your answers</a></li>
       </ul>
 
-      <h2 class="govuk-heading-m">Plant health export services <strong class="govuk-tag govuk-tag--turquoise">Plants</strong></h2>
+      <h2 class="govuk-heading-m">
+        Certificate of conformity
+        <strong class="govuk-tag govuk-tag--purple">Plants</strong>
+      </h2>
       <ul class="govuk-list">
-        <li><a href="dev/{{data.version}}/start-page?journey=phyto">Start page - apply for a phytosanitary certificate</a></li>
-        <li><a href="dev/{{data.version}}/start-page-phes">Archived: start page - phytosanitary pre v1-25</a>
-        <li><a href="dev/{{data.version}}/start-page?journey=coc">Start page - certificate of conformity</a></li>
-        <li><a href="dev/{{data.version}}/start-page-coc-phes">Archived: start page - conformity pre v1-25</a>
-        <li><a href="dev/{{data.version}}/pre-application">Which certificates do you want to apply for?</a></li>
+        <li>Task list</li>
+        <li><a href="dev/1-36/application/create/task-list">Task list</a></li>
+        <li><a href="dev/1-36/application/create/contact-details-simple-coc?has_reference=coc">Who is the contact for this application?</a></li>
+        <li><a href="dev/1-36/application/create/inspection-dates-coc?has_reference=coc">When and where will the consignment be ready?</a></li>
+        <li><a href="dev/1-36/application/create/packer?has_reference=coc">What are the packing details as they appear on the packaging?</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Application management</li>
+        <li><a href="dev/1-36/application-coc?id=7">Submitted application summary</a></li>
       </ul>
 
-      <h2 class="govuk-heading-m">Certificate of conformity <strong class="govuk-tag govuk-tag--turquoise">Plants</strong></h2>
+      <h2 class="govuk-heading-m">
+        Growing season inspection
+        <strong class="govuk-tag govuk-tag--blue">Bulbs</strong>
+        <strong class="govuk-tag govuk-tag--purple">Plants</strong>
+        <strong class="govuk-tag govuk-tag--orange">Potatoes</strong>
+        <strong class="govuk-tag govuk-tag--pink">Seeds</strong>
+      </h2>
       <ul class="govuk-list">
-        <li><a href="dev/{{data.version}}/start-page-v3">Start page covering certificate of conformity</a></li>
-        <li><a href="dev/{{data.version}}/application-coc?id=7">Application summary - certificate of conformity</a></li>
-        <li><a href="dev/{{data.version}}/application-coc?id=7">Application summary - Phytosanitary certificate</a></li>
-        <li><a href="dev/{{data.version}}/application/setup/pre-application-test">What do you need to do? (certificate of conformity version)</a></li>
-        <li><a href="dev/{{data.version}}/application/create/packer">What are the packing details...?</a></li>
-        <li><a href="dev/{{data.version}}/application/create/contact-details-simple">Who is the contact for this application?</a></li>
-        <!-- <li><a href="dev/{{data.version}}/application/setup/pre-application-test-plant-conformity">What do you need to do? (early certificate of conformity version)</a></li>
-        <li><a href="dev/{{data.version}}/application/create/complete-phyto">Complete a phytosanitary application (using certificate of conformity data)</a></li> -->
+        <li>Set up</li>
+        <li><a href="dev/1-36/application/setup/what-export">What are you exporting?</a></li>
+        <li><a href="dev/1-36/application/setup/pre-application-test">What do you need to do?</a></li>
+        <li><a href="dev/1-36/application/gsi/create/reference">Create a reference</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Task list</li>
+        <li><a href="dev/1-36/application/gsi/create/task-list">Task list</a></li>
+        <li><a href="dev/1-36/application/gsi/create/inspection-addresses">Where will the inspection take place?</a></li>
+        <li><a href="dev/1-36/application/gsi/create/contact-details-simple">Who is the main contact for this application?</a></li>
+        <li><a href="dev/1-36/application/gsi/create/inspection-dates">When will the crop be ready for a growing season inspection?</a></li>
+        <li><a href="dev/1-36/application/gsi/create/field">Crop location</a></li>
+        <li><a href="dev/1-36/application/gsi/create/send-inspector-map">Send the inspector a map</a></li>
+        <li><a href="dev/1-36/application/gsi/create/field-upload-completed">Do you want to keep this map?</a></li>
+        <li><a href="dev/1-36/application/gsi/create/how-to-identify">Your crops</a></li>
+        <li><a href="dev/1-36/application/gsi/create/gsi-commodity-list">Your fields and plants for inspection</a></li>
+        <li><a href="dev/1-36/application/gsi/create/delete-field-2">Delete field</a></li>
+        <li><a href="dev/1-36/application/gsi/create/delete-crop">Delete crop</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Submit</li>
+        <li><a href="dev/1-36/application/gsi/create/check-your-answers-3">Check your answers</a></li>
+        <li><a href="dev/1-36/application/gsi/create/check-your-answers-2">Check your answers (multiple fields)</a></li>
+        <li><a href="dev/1-36/application/gsi/submit/declaration-gsi">Declaration</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Confirmation page</li>
+        <li><a href="dev/1-36/application/gsi/submit/confirmation-gsi">Your inspection request is submitted</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Application management</li>
+        <li><a href="dev/1-36/application/gsi/confirm_save_and_exit">Confirm save and continue later</a></li>
       </ul>
 
-      <h2 class="govuk-heading-m">Phytosanitary journey combined with certificate of conformity <strong class="govuk-tag govuk-tag--turquoise">Plants</strong></h2>
+      <h2 class="govuk-heading-m">
+        Soil sampling
+        <strong class="govuk-tag govuk-tag--blue">Bulbs</strong>
+        <strong class="govuk-tag govuk-tag--purple">Plants</strong>
+        <strong class="govuk-tag govuk-tag--orange">Potatoes</strong>
+      </h2>
       <ul class="govuk-list">
-        <li><a href="dev/{{data.version}}/start-page">Start page</a></li>
-        <li><a href="dev/{{data.version}}/dashboard">Dashboard - copy (only from a phytosanitary certificate)</a></li>
-        <li><a href="dev/{{data.version}}/application-phy?id=3">Application summary - phytosanitary certificate</a></li>
-        <li><a href="dev/{{data.version}}/application/submit/confirmation-plants-phe36">Confirmation - Plants and fresh produce</a></li>
+        <li>Set up</li>
+        <li><a href="dev/1-36/application/setup/what-export">What are you exporting?</a></li>
+        <li><a href="dev/1-36/application/setup/pre-application-test">What do you need to do?</a></li>
+        <li><a href="dev/1-36/application/soil/create/reference">Create a reference</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Task list</li>
+        <li><a href="dev/1-36/application/soil/create/task-list">Task list</a></li>
+        <li><a href="dev/1-36/application/soil/create/inspection-addresses">What's the address for this inspection?</a></li>
+        <li><a href="dev/1-36/application/soil/create/contact-details">Who is the main contact for this application?</a></li>
+        <li><a href="dev/1-36/application/soil/create/inspection-dates">When will the fields be ready for inspection?</a></li>
+        <li><a href="dev/1-36/application/soil/create/field">Field location</a></li>
+        <li><a href="dev/1-36/application/soil/create/send-inspector-map">Send the inspector a map</a></li>
+        <li><a href="dev/1-36/application/soil/create/field-upload-completed">Do you want to keep this map?</a></li>
+        <li><a href="dev/1-36/application/soil/create/field-list">Your fields for inspection</a></li>
+        <li><a href="dev/1-36/application/soil/create/delete-field">Delete field</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Submit</li>
+        <li><a href="dev/1-36/application/soil/create/check-your-answers">Check your answers</a></li>
+        <li><a href="dev/1-36/application/soil/submit/declaration">Declaration</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Confirmation page</li>
+        <li><a href="dev/1-36/application/soil/submit/confirmation">You have successfully submitted your application</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Application management</li>
+        <li><a href="dev/1-36/application/soil/confirm_save_and_exit">Confirm save and continue later</a></li>
+      </ul>
+      {% elif data.commodity == "potatoes" %}
+      <h3 class="govuk-heading-m">
+        Phytosanitary certificate
+        <strong class="govuk-tag govuk-tag--grey">BCA and clay</strong>
+        <strong class="govuk-tag govuk-tag--blue">Bulbs</strong>
+        <strong class="govuk-tag govuk-tag--purple">Plants</strong>
+        <strong class="govuk-tag govuk-tag--orange">Potatoes</strong>
+        <strong class="govuk-tag">Plant products</strong>
+        <strong class="govuk-tag govuk-tag--pink">Seeds</strong>
+        <strong class="govuk-tag govuk-tag--yellow">Grains</strong>
+        <strong class="govuk-tag govuk-tag--green">Used farm machinery</strong>
+      </h3>
+      <ul class="govuk-list">
+        <li>Set up</li>
+        <li><a href="dev/1-36/application/setup/what-export">What are you exporting?</a></li>
+        <li><a href="dev/1-36/application/setup/pre-application-test">What do you need to do?</a></li>
+        <li><a href="dev/1-36/application/setup/what-country">Destination country</a></li>
+        <li><a href="dev/1-36/application/setup/declaration">Confirm you have checked regulations</a></li>
+        <li><a href="dev/1-36/application/setup/reference">Create a reference</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Task list</li>
+        <li><a href="dev/1-36/application/create/task-list">Task list</a></li>
+        <li><a href="/dev/1-36/application/create/input-method">How do you want to add commodities to your consignment?</a></li>
+        <li><a href="/dev/1-36/application/create/commodity-page">Add commodities to your consignment (manual)</a></li>
+        <li><a href="/dev/1-36/application/create/upload">Upload a file (bulk upload)</a></li>
+        <li><a href="/dev/1-36/application/create/upload-error-summary">Error messages for bulk upload</a></li>
+        <li><a href="/dev/1-36/application/create/commodity-list">Commodity list</a></li>
+        <li><a href="/dev/1-36/application/create/inspection-addresses">Where will the inspection take place?</a></li>
+        <li><a href="/dev/1-36/application/create/contact-details-simple-short">Who is the main contact for this application?</a></li>
+        <li><a href="/dev/1-36/application/create/inspection-dates">When will the consignment be ready?</a></li>
+        <li><a href="/dev/1-36/application/create/shipping">How will this consignment be transported?</a></li>
+        <li><a href="/dev/1-36/application/create/destination-consignee">Who will receive this consignment?</a></li>
+        <li><a href="/dev/1-36/application/create/attachments">Supporting documents</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Submit</li>
+        <li><a href="dev/1-36/application/create/check-your-answers">Check your answers</a></li>
+        <li><a href="dev/1-36/application/submit/submit-date">When do you need the certificate?</a></li>
+        <li><a href="dev/1-36/application/submit/declaration">Final declaration</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Confirmation page</li>
+        <li><a href="dev/1-36/application/submit/confirmation-plants-phe36">You have successfully submitted your application</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Application management</li>
+        <li><a href="dev/1-36/application?id=6">Draft application summary</a></li>
+        <li><a href="dev/1-36/application?id=34">Submitted application summary</a></li>
+        <li><a href="dev/1-36/application?id=10">Submitted application summary with sample references</a></li>
+        <li><a href="dev/1-36/application/confirm_save_and_exit">Confirm save and continue later</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Single stock draw down (SSDD) separate application</li>
+        <li><a href="dev/1-36/dashboard-ssdd-tab">As tabbed option</a></li>
+        <li><a href="dev/1-36/dashboard-ssdd-link">As link option</a></li>
+        <li><a href="dev/1-36/dashboard-ssdd-filter">As filter option</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li><abbr title="Single stock draw down">SSDD</abbr> application management </li>
+        <li><a href="dev/1-36/application-ssdd-stock?id=3">Separate <abbr title="Single stock draw down">SSDD</abbr> application summary</a></li>
+        <li><a href="dev/1-36/application-ssdd?id=21">Submitted application summary for original application</a></li>
+        <li><a href="dev/1-36/application-ssdd-single?id=21">Submitted application summary for actual <abbr title="Single stock draw down">SSDD</abbr></a></li>
+        <li><a href="dev/1-36/application-ssdd-coc?id=21">Submitted application summary (HMI/CoC)</a></li>
+        <li><a href="dev/1-36/application-ssdd-sample?id=3">Submitted application summary (samples)</a></li>
+      </ul>
+
+      <h2 class="govuk-heading-m">
+        Re-forwarding phytosanitary certificate
+        <strong class="govuk-tag govuk-tag--grey">BCA and clay</strong>
+        <strong class="govuk-tag govuk-tag--blue">Bulbs</strong>
+        <strong class="govuk-tag govuk-tag--purple">Plants</strong>
+        <strong class="govuk-tag govuk-tag--orange">Potatoes</strong>
+        <strong class="govuk-tag">Plant products</strong>
+        <strong class="govuk-tag govuk-tag--pink">Seeds</strong>
+        <strong class="govuk-tag govuk-tag--yellow">Grains</strong>
+        <strong class="govuk-tag govuk-tag--green">Used farm machinery</strong>
+      </h2>
+      <ul class="govuk-list">
+        <li>Set up</li>
+        <li><a href="dev/1-36/application/setup/declaration?reforwarding=1">Confirm you have checked regulations</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Task list</li>
+        <li><a href="dev/1-36/application/create/task-list?reforwarding=1">Task list</a></li>
+        <li><a href="dev/1-36/application/create/import-details?reforwarding=1">What are the import details of this consignment?</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Submit</li>
+        <li><a href="dev/1-36/application/create/check-your-answers?reforwarding=1">Check your answers</a></li>
+      </ul>
+
+      <h2 class="govuk-heading-m">
+        Growing season inspection
+        <strong class="govuk-tag govuk-tag--blue">Bulbs</strong>
+        <strong class="govuk-tag govuk-tag--purple">Plants</strong>
+        <strong class="govuk-tag govuk-tag--orange">Potatoes</strong>
+        <strong class="govuk-tag govuk-tag--pink">Seeds</strong>
+      </h2>
+      <ul class="govuk-list">
+        <li>Set up</li>
+        <li><a href="dev/1-36/application/setup/what-export">What are you exporting?</a></li>
+        <li><a href="dev/1-36/application/setup/pre-application-test">What do you need to do?</a></li>
+        <li><a href="dev/1-36/application/gsi/create/reference">Create a reference</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Task list</li>
+        <li><a href="dev/1-36/application/gsi/create/task-list">Task list</a></li>
+        <li><a href="dev/1-36/application/gsi/create/inspection-addresses">Where will the inspection take place?</a></li>
+        <li><a href="dev/1-36/application/gsi/create/contact-details-simple">Who is the main contact for this application?</a></li>
+        <li><a href="dev/1-36/application/gsi/create/inspection-dates">When will the crop be ready for a growing season inspection?</a></li>
+        <li><a href="dev/1-36/application/gsi/create/field">Crop location</a></li>
+        <li><a href="dev/1-36/application/gsi/create/send-inspector-map">Send the inspector a map</a></li>
+        <li><a href="dev/1-36/application/gsi/create/field-upload-completed">Do you want to keep this map?</a></li>
+        <li><a href="dev/1-36/application/gsi/create/how-to-identify">Your crops</a></li>
+        <li><a href="dev/1-36/application/gsi/create/gsi-commodity-list">Your fields and plants for inspection</a></li>
+        <li><a href="dev/1-36/application/gsi/create/delete-field-2">Delete field</a></li>
+        <li><a href="dev/1-36/application/gsi/create/delete-crop">Delete crop</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Submit</li>
+        <li><a href="dev/1-36/application/gsi/create/check-your-answers-3">Check your answers</a></li>
+        <li><a href="dev/1-36/application/gsi/create/check-your-answers-2">Check your answers (multiple fields)</a></li>
+        <li><a href="dev/1-36/application/gsi/submit/declaration-gsi">Declaration</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Confirmation page</li>
+        <li><a href="dev/1-36/application/gsi/submit/confirmation-gsi">Your inspection request is submitted</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Application management</li>
+        <li><a href="dev/1-36/application/gsi/confirm_save_and_exit">Confirm save and continue later</a></li>
+      </ul>
+
+      <h2 class="govuk-heading-m">
+        Soil sampling
+        <strong class="govuk-tag govuk-tag--blue">Bulbs</strong>
+        <strong class="govuk-tag govuk-tag--purple">Plants</strong>
+        <strong class="govuk-tag govuk-tag--orange">Potatoes</strong>
+      </h2>
+      <ul class="govuk-list">
+        <li>Set up</li>
+        <li><a href="dev/1-36/application/setup/what-export">What are you exporting?</a></li>
+        <li><a href="dev/1-36/application/setup/pre-application-test">What do you need to do?</a></li>
+        <li><a href="dev/1-36/application/soil/create/reference">Create a reference</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Task list</li>
+        <li><a href="dev/1-36/application/soil/create/task-list">Task list</a></li>
+        <li><a href="dev/1-36/application/soil/create/inspection-addresses">What's the address for this inspection?</a></li>
+        <li><a href="dev/1-36/application/soil/create/contact-details">Who is the main contact for this application?</a></li>
+        <li><a href="dev/1-36/application/soil/create/inspection-dates">When will the fields be ready for inspection?</a></li>
+        <li><a href="dev/1-36/application/soil/create/field">Field location</a></li>
+        <li><a href="dev/1-36/application/soil/create/send-inspector-map">Send the inspector a map</a></li>
+        <li><a href="dev/1-36/application/soil/create/field-upload-completed">Do you want to keep this map?</a></li>
+        <li><a href="dev/1-36/application/soil/create/how-to-identify">Add your ware potatoes to field location</a></li>
+        <li><a href="dev/1-36/application/soil/create/commodity-list">Your fields and ware potatoes for inspection</a></li>
+        <li><a href="dev/1-36/application/soil/create/delete-field">Delete field location</a></li>
+        <li><a href="dev/1-36/application/soil/create/delete-crop">Delete variety of ware potato</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Submit</li>
+        <li><a href="dev/1-36/application/soil/create/check-your-answers">Check your answers</a></li>
+        <li><a href="dev/1-36/application/soil/submit/declaration">Declaration</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Confirmation page</li>
+        <li><a href="dev/1-36/application/soil/submit/confirmation">You have successfully submitted your application</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Application management</li>
+        <li><a href="dev/1-36/application/soil/confirm_save_and_exit">Confirm save and continue later</a></li>
+      </ul>
+      {% elif data.commodity == "plant products" %}
+      <h3 class="govuk-heading-m">
+        Phytosanitary certificate
+        <strong class="govuk-tag govuk-tag--grey">BCA and clay</strong>
+        <strong class="govuk-tag govuk-tag--blue">Bulbs</strong>
+        <strong class="govuk-tag govuk-tag--purple">Plants</strong>
+        <strong class="govuk-tag govuk-tag--orange">Potatoes</strong>
+        <strong class="govuk-tag">Plant products</strong>
+        <strong class="govuk-tag govuk-tag--pink">Seeds</strong>
+        <strong class="govuk-tag govuk-tag--yellow">Grains</strong>
+        <strong class="govuk-tag govuk-tag--green">Used farm machinery</strong>
+      </h3>
+      <ul class="govuk-list">
+        <li>Set up</li>
+        <li><a href="dev/1-36/application/setup/what-export">What are you exporting?</a></li>
+        <li><a href="dev/1-36/application/setup/pre-application-test">What do you need to do?</a></li>
+        <li><a href="dev/1-36/application/setup/what-country">Destination country</a></li>
+        <li><a href="dev/1-36/application/setup/declaration">Confirm you have checked regulations</a></li>
+        <li><a href="dev/1-36/application/setup/reference">Create a reference</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Task list</li>
+        <li><a href="dev/1-36/application/create/task-list">Task list</a></li>
+        <li><a href="/dev/1-36/application/create/input-method">How do you want to add commodities to your consignment?</a></li>
+        <li><a href="/dev/1-36/application/create/how-to-identify">Add commodities to your consignment (manual)</a></li>
+        <li><a href="/dev/1-36/application/create/upload">Upload a file (bulk upload)</a></li>
+        <li><a href="/dev/1-36/application/create/upload-error-summary">Error messages for bulk upload</a></li>
+        <li><a href="/dev/1-36/application/create/commodity-list">Commodity list</a></li>
+        <li><a href="/dev/1-36/application/create/shipping">How will this consignment be transported?</a></li>
+        <li><a href="/dev/1-36/application/create/destination-consignee">Who will receive this consignment?</a></li>
+        <li><a href="/dev/1-36/application/create/attachments">Supporting documents</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Submit</li>
+        <li><a href="dev/1-36/application/create/check-your-answers">Check your answers</a></li>
+        <li><a href="dev/1-36/application/submit/submit-date">When do you need the certificate?</a></li>
+        <li><a href="dev/1-36/application/submit/declaration">Final declaration</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Confirmation page</li>
+        <li><a href="dev/1-36/application/submit/confirmation-plant-products-hh91">You have successfully submitted your application</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Application management</li>
+        <li><a href="dev/1-36/application?id=6">Draft application summary</a></li>
+        <li><a href="dev/1-36/application-plant-products?id=1">Submitted application summary</a></li>
+        <li><a href="dev/1-36/application/confirm_save_and_exit">Confirm save and continue later</a></li>
+      </ul>
+
+      <h3 class="govuk-heading-m">
+        Phytosanitary certificate (via one time testing)
+        <strong class="govuk-tag">Plant products</strong>
+      </h3>
+      <ul class="govuk-list">
+        <li>Set up</li>
+        <li><a href="dev/1-36/application/batch/phytosanitary/setup/destination-country">Where are you exporting to?</a></li>
+        <li><a href="dev/1-36/application/batch/phytosanitary/setup/declaration">Confirm you have checked regulations</a></li>
+        <li><a href="dev/1-36/application/batch/phytosanitary/setup/reference">Create a reference</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Task list</li>
+        <li><a href="dev/1-36/application/batch/phytosanitary/create/task-list">Task list</a></li>
+        <li><a href="/dev/1-36/application/batch/phytosanitary/create/what-exporting">What are you exporting?</a></li>
+        <li><a href="/dev/1-36/application/batch/phytosanitary/create/consignment">Tell us about your consignment</a></li>
+        <li><a href="/dev/1-36/application/batch/phytosanitary/create/commodity-list">Your consignment</a></li>
+        <li><a href="/dev/1-36/application/batch/phytosanitary/create/shipping">How will this consignment be transported?</a></li>
+        <li><a href="/dev/1-36/application/batch/phytosanitary/create/destination-consignee">Who will receive this consignment?</a></li>
+        <li><a href="/dev/1-36/application/batch/phytosanitary/create/attachments">Supporting documents</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Submit</li>
+        <li><a href="dev/1-36/application/batch/phytosanitary/create/check-your-answers">Check your answers</a></li>
+        <li><a href="dev/1-36/application/batch/phytosanitary/submit/submit-date">When do you need the certificate?</a></li>
+        <li><a href="dev/1-36/application/batch/phytosanitary/submit/declaration">Final declaration</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Confirmation page</li>
+        <li><a href="dev/1-36/application/batch/phytosanitary/submit/confirmation">One time testing step 2: Phytosanitary application submitted</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Application management</li>
+        <li><a href="dev/1-36/application/batch/confirm_save_and_exit">Confirm save and continue later</a></li>
+      </ul>
+
+      <h2 class="govuk-heading-m">
+        Re-forwarding phytosanitary certificate
+        <strong class="govuk-tag govuk-tag--grey">BCA and clay</strong>
+        <strong class="govuk-tag govuk-tag--blue">Bulbs</strong>
+        <strong class="govuk-tag govuk-tag--purple">Plants</strong>
+        <strong class="govuk-tag govuk-tag--orange">Potatoes</strong>
+        <strong class="govuk-tag">Plant products</strong>
+        <strong class="govuk-tag govuk-tag--pink">Seeds</strong>
+        <strong class="govuk-tag govuk-tag--yellow">Grains</strong>
+        <strong class="govuk-tag govuk-tag--green">Used farm machinery</strong>
+      </h2>
+      <ul class="govuk-list">
+        <li>Set up</li>
+        <li><a href="dev/1-36/application/setup/declaration?reforwarding=1">Confirm you have checked regulations</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Task list</li>
+        <li><a href="dev/1-36/application/create/task-list?reforwarding=1">Task list</a></li>
+        <li><a href="dev/1-36/application/create/import-details?reforwarding=1">What are the import details of this consignment?</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Submit</li>
+        <li><a href="dev/1-36/application/create/check-your-answers?reforwarding=1">Check your answers</a></li>
+      </ul>
+
+      <h3 class="govuk-heading-m">
+        One time testing
+        <strong class="govuk-tag">Plant products</strong>
+      </h3>
+      <ul class="govuk-list">
+        <li>Set up</li>
+        <li><a href="dev/1-36/application/batch/create/introduction">Set up one time testing</a></li>
+        <li><a href="dev/1-36/application/batch/create/reference">Create a reference for one time testing</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Task list</li>
+        <li><a href="dev/1-36/application/batch/create/task-list">Task list</a></li>
+        <li><a href="/dev/1-36/application/batch/create/how-to-identify">Tell us about the commodity you are sampling</a></li>
+        <li><a href="/dev/1-36/application/batch/create/commodity-list">Commodities for sampling</a></li>
+        <li><a href="/dev/1-36/application/batch/create/attachments">Supporting information</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Submit</li>
+        <li><a href="dev/1-36/application/batch/create/check-your-answers">Check your answers</a></li>
+        <li><a href="dev/1-36/application/batch/submit/declaration">Declaration</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Confirmation page</li>
+        <li><a href="dev/1-36/application/batch/submit/confirmation">You’ve set up one time testing</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Application management</li>
+        <li><a href="dev/1-36/application-batch-sample?id=35">Submitted application summary</a></li>
+        <li><a href="dev/1-36/application/batch/confirm_save_and_exit">Confirm save and continue later</a></li>
+      </ul>
+      {% elif data.commodity == "seeds" %}
+      <h3 class="govuk-heading-m">
+        Phytosanitary certificate
+        <strong class="govuk-tag govuk-tag--grey">BCA and clay</strong>
+        <strong class="govuk-tag govuk-tag--blue">Bulbs</strong>
+        <strong class="govuk-tag govuk-tag--purple">Plants</strong>
+        <strong class="govuk-tag govuk-tag--orange">Potatoes</strong>
+        <strong class="govuk-tag">Plant products</strong>
+        <strong class="govuk-tag govuk-tag--pink">Seeds</strong>
+        <strong class="govuk-tag govuk-tag--yellow">Grains</strong>
+        <strong class="govuk-tag govuk-tag--green">Used farm machinery</strong>
+      </h3>
+      <ul class="govuk-list">
+        <li>Set up</li>
+        <li><a href="dev/1-36/application/setup/what-export">What are you exporting?</a></li>
+        <li><a href="dev/1-36/application/setup/pre-application-test">What do you need to do?</a></li>
+        <li><a href="dev/1-36/application/setup/what-country">Destination country</a></li>
+        <li><a href="dev/1-36/application/setup/declaration">Confirm you have checked regulations</a></li>
+        <li><a href="dev/1-36/application/setup/reference">Create a reference</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Task list</li>
+        <li><a href="dev/1-36/application/create/task-list">Task list</a></li>
+        <li><a href="/dev/1-36/application/create/input-method">How do you want to add commodities to your consignment?</a></li>
+        <li><a href="/dev/1-36/application/create/how-to-identify">Add commodities to your consignment (manual)</a></li>
+        <li><a href="/dev/1-36/application/create/upload">Upload a file (bulk upload)</a></li>
+        <li><a href="/dev/1-36/application/create/upload-error-summary">Error messages for bulk upload</a></li>
+        <li><a href="/dev/1-36/application/create/commodity-list">Commodity list</a></li>
+        <li><a href="/dev/1-36/application/create/shipping">How will this consignment be transported?</a></li>
+        <li><a href="/dev/1-36/application/create/destination-consignee">Who will receive this consignment?</a></li>
+        <li><a href="/dev/1-36/application/create/attachments">Supporting documents</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Submit</li>
+        <li><a href="dev/1-36/application/create/check-your-answers">Check your answers</a></li>
+        <li><a href="dev/1-36/application/submit/submit-date">When do you need the certificate?</a></li>
+        <li><a href="dev/1-36/application/submit/declaration">Final declaration</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Confirmation page</li>
+        <li><a href="dev/1-36/application/submit/confirmation-plant-products-hh91">You have successfully submitted your application</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Application management</li>
+        <li><a href="dev/1-36/application?id=6">Draft application summary</a></li>
+        <li><a href="dev/1-36/application/confirm_save_and_exit">Confirm save and continue later</a></li>
+      </ul>
+
+      <h2 class="govuk-heading-m">
+        Re-forwarding phytosanitary certificate
+        <strong class="govuk-tag govuk-tag--grey">BCA and clay</strong>
+        <strong class="govuk-tag govuk-tag--blue">Bulbs</strong>
+        <strong class="govuk-tag govuk-tag--purple">Plants</strong>
+        <strong class="govuk-tag govuk-tag--orange">Potatoes</strong>
+        <strong class="govuk-tag">Plant products</strong>
+        <strong class="govuk-tag govuk-tag--pink">Seeds</strong>
+        <strong class="govuk-tag govuk-tag--yellow">Grains</strong>
+        <strong class="govuk-tag govuk-tag--green">Used farm machinery</strong>
+      </h2>
+      <ul class="govuk-list">
+        <li>Set up</li>
+        <li><a href="dev/1-36/application/setup/declaration?reforwarding=1">Confirm you have checked regulations</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Task list</li>
+        <li><a href="dev/1-36/application/create/task-list?reforwarding=1">Task list</a></li>
+        <li><a href="dev/1-36/application/create/import-details?reforwarding=1">What are the import details of this consignment?</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Submit</li>
+        <li><a href="dev/1-36/application/create/check-your-answers?reforwarding=1">Check your answers</a></li>
+      </ul>
+
+      <h2 class="govuk-heading-m">
+        Growing season inspection
+        <strong class="govuk-tag govuk-tag--blue">Bulbs</strong>
+        <strong class="govuk-tag govuk-tag--purple">Plants</strong>
+        <strong class="govuk-tag govuk-tag--orange">Potatoes</strong>
+        <strong class="govuk-tag govuk-tag--pink">Seeds</strong>
+      </h2>
+      <ul class="govuk-list">
+        <li>Set up</li>
+        <li><a href="dev/1-36/application/setup/what-export">What are you exporting?</a></li>
+        <li><a href="dev/1-36/application/setup/pre-application-test">What do you need to do?</a></li>
+        <li><a href="dev/1-36/application/gsi/create/reference">Create a reference</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Task list</li>
+        <li><a href="dev/1-36/application/gsi/create/task-list">Task list</a></li>
+        <li><a href="dev/1-36/application/gsi/create/inspection-addresses">Where will the inspection take place?</a></li>
+        <li><a href="dev/1-36/application/gsi/create/contact-details-simple">Who is the main contact for this application?</a></li>
+        <li><a href="dev/1-36/application/gsi/create/inspection-dates">When will the crop be ready for a growing season inspection?</a></li>
+        <li><a href="dev/1-36/application/gsi/create/field">Crop location</a></li>
+        <li><a href="dev/1-36/application/gsi/create/send-inspector-map">Send the inspector a map</a></li>
+        <li><a href="dev/1-36/application/gsi/create/field-upload-completed">Do you want to keep this map?</a></li>
+        <li><a href="dev/1-36/application/gsi/create/how-to-identify">Your crops</a></li>
+        <li><a href="dev/1-36/application/gsi/create/gsi-commodity-list">Your fields and plants for inspection</a></li>
+        <li><a href="dev/1-36/application/gsi/create/delete-field-2">Delete field</a></li>
+        <li><a href="dev/1-36/application/gsi/create/delete-crop">Delete crop</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Submit</li>
+        <li><a href="dev/1-36/application/gsi/create/check-your-answers-3">Check your answers</a></li>
+        <li><a href="dev/1-36/application/gsi/create/check-your-answers-2">Check your answers (multiple fields)</a></li>
+        <li><a href="dev/1-36/application/gsi/submit/declaration-gsi">Declaration</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Confirmation page</li>
+        <li><a href="dev/1-36/application/gsi/submit/confirmation-gsi">Your inspection request is submitted</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Application management</li>
+        <li><a href="dev/1-36/application/gsi/confirm_save_and_exit">Confirm save and continue later</a></li>
+      </ul>
+
+      <h2 class="govuk-heading-m">
+        Seed sampling
+        <strong class="govuk-tag govuk-tag--pink">Seeds</strong>
+      </h2>
+      <ul class="govuk-list">
+        <li>Set up</li>
+        <li><a href="dev/1-36/application/setup/what-export">What are you exporting?</a></li>
+        <li><a href="dev/1-36/application/setup/pre-application-test">What do you need to do?</a></li>
+        <li><a href="dev/1-36/application/seeds/create/reference">Create a reference</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Task list</li>
+        <li><a href="dev/1-36/application/seeds/create/task-list">Task list</a></li>
+        <li><a href="/dev/1-36/application/seeds/create/input-method">How do you want to add commodities to your consignment?</a></li>
+        <li><a href="/dev/1-36/application/seeds/create/how-to-identify">Describe the seeds to be sampled (manual)</a></li>
+        <li><a href="/dev/1-36/application/seeds/create/upload">Upload a file (bulk upload)</a></li>
+        <li><a href="/dev/1-36/application/seeds/create/upload-error-summary">Error messages for bulk upload</a></li>
+        <li><a href="/dev/1-36/application/seeds/create/commodity-list">Seeds to be sampled</a></li>
+        <li><a href="dev/1-36/application/seeds/create/inspection-addresses">Where are the seeds?</a></li>
+        <li><a href="dev/1-36/application/seeds/create//contact-details-simple-short">Who is the contact for this application?</a></li>
+        <li><a href="dev/1-36/application/seeds/create/inspection-dates">When will the seeds be ready for sampling?</a></li>
+        <li><a href="dev/1-36/application/seeds/create/attachments">Supporting documents</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Submit</li>
+        <li><a href="dev/1-36/application/seeds/create/check-your-answers">Check your answers</a></li>
+        <li><a href="dev/1-36/application/seeds/submit/declaration">Declaration</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Confirmation page</li>
+        <li><a href="dev/1-36/application/seeds/submit/confirmation">You have successfully submitted your application</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Application management</li>
+        <li><a href="dev/1-36/application/seeds/confirm_save_and_exit">Confirm save and continue later</a></li>
+      </ul>
+      {% elif data.commodity == "grain" %}
+      <h3 class="govuk-heading-m">
+        Phytosanitary certificate
+        <strong class="govuk-tag govuk-tag--grey">BCA and clay</strong>
+        <strong class="govuk-tag govuk-tag--blue">Bulbs</strong>
+        <strong class="govuk-tag govuk-tag--purple">Plants</strong>
+        <strong class="govuk-tag govuk-tag--orange">Potatoes</strong>
+        <strong class="govuk-tag">Plant products</strong>
+        <strong class="govuk-tag govuk-tag--pink">Seeds</strong>
+        <strong class="govuk-tag govuk-tag--yellow">Grains</strong>
+        <strong class="govuk-tag govuk-tag--green">Used farm machinery</strong>
+      </h3>
+      <ul class="govuk-list">
+        <li>Set up</li>
+        <li><a href="dev/1-36/application/setup/what-export">What are you exporting?</a></li>
+        <li><a href="dev/1-36/application/setup/pre-application-test">What do you need to do?</a></li>
+        <li><a href="dev/1-36/application/setup/what-country">Destination country</a></li>
+        <li><a href="dev/1-36/application/setup/declaration">Confirm you have checked regulations</a></li>
+        <li><a href="dev/1-36/application/setup/reference">Create a reference</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Task list</li>
+        <li><a href="dev/1-36/application/create/task-list">Task list</a></li>
+        <li><a href="/dev/1-36/application/create/input-method">How do you want to add commodities to your consignment?</a></li>
+        <li><a href="/dev/1-36/application/create/how-to-identify">Add commodities to your consignment (manual)</a></li>
+        <li><a href="/dev/1-36/application/create/upload">Upload a file (bulk upload)</a></li>
+        <li><a href="/dev/1-36/application/create/upload-error-summary">Error messages for bulk upload</a></li>
+        <li><a href="/dev/1-36/application/create/commodity-list">Commodity list</a></li>
+        <li><a href="/dev/1-36/application/create/shipping">How will this consignment be transported?</a></li>
+        <li><a href="/dev/1-36/application/create/destination-consignee">Who will receive this consignment?</a></li>
+        <li><a href="/dev/1-36/application/create/attachments">Supporting documents</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Submit</li>
+        <li><a href="dev/1-36/application/create/check-your-answers">Check your answers</a></li>
+        <li><a href="dev/1-36/application/submit/submit-date">When do you need the certificate?</a></li>
+        <li><a href="dev/1-36/application/submit/declaration">Final declaration</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Confirmation page</li>
+        <li><a href="dev/1-36/application/submit/confirmation-grain-hh93">You have successfully submitted your application</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Application management</li>
+        <li><a href="dev/1-36/application?id=6">Draft application summary</a></li>
+        <li><a href="dev/1-36/application?id=34">Submitted application summary</a></li>
+        <li><a href="dev/1-36/application/confirm_save_and_exit">Confirm save and continue later</a></li>
+      </ul>
+
+      <h2 class="govuk-heading-m">
+        Re-forwarding phytosanitary certificate
+        <strong class="govuk-tag govuk-tag--grey">BCA and clay</strong>
+        <strong class="govuk-tag govuk-tag--blue">Bulbs</strong>
+        <strong class="govuk-tag govuk-tag--purple">Plants</strong>
+        <strong class="govuk-tag govuk-tag--orange">Potatoes</strong>
+        <strong class="govuk-tag">Plant products</strong>
+        <strong class="govuk-tag govuk-tag--pink">Seeds</strong>
+        <strong class="govuk-tag govuk-tag--yellow">Grains</strong>
+        <strong class="govuk-tag govuk-tag--green">Used farm machinery</strong>
+      </h2>
+      <ul class="govuk-list">
+        <li>Set up</li>
+        <li><a href="dev/1-36/application/setup/declaration?reforwarding=1">Confirm you have checked regulations</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Task list</li>
+        <li><a href="dev/1-36/application/create/task-list?reforwarding=1">Task list</a></li>
+        <li><a href="dev/1-36/application/create/import-details?reforwarding=1">What are the import details of this consignment?</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Submit</li>
+        <li><a href="dev/1-36/application/create/check-your-answers?reforwarding=1">Check your answers</a></li>
+      </ul>
+      {% elif data.commodity == "used farm machinery" %}
+      <h3 class="govuk-heading-m">
+        Phytosanitary certificate
+        <strong class="govuk-tag govuk-tag--grey">BCA and clay</strong>
+        <strong class="govuk-tag govuk-tag--blue">Bulbs</strong>
+        <strong class="govuk-tag govuk-tag--purple">Plants</strong>
+        <strong class="govuk-tag govuk-tag--orange">Potatoes</strong>
+        <strong class="govuk-tag">Plant products</strong>
+        <strong class="govuk-tag govuk-tag--pink">Seeds</strong>
+        <strong class="govuk-tag govuk-tag--yellow">Grains</strong>
+        <strong class="govuk-tag govuk-tag--green">Used farm machinery</strong>
+      </h3>
+      <ul class="govuk-list">
+        <li>Set up</li>
+        <li><a href="dev/1-36/application/setup/what-export">What are you exporting?</a></li>
+        <li><a href="dev/1-36/application/setup/pre-application-test">What do you need to do?</a></li>
+        <li><a href="dev/1-36/application/setup/what-country">Destination country</a></li>
+        <li><a href="dev/1-36/application/setup/declaration">Confirm you have checked regulations</a></li>
+        <li><a href="dev/1-36/application/setup/reference">Create a reference</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Task list</li>
+        <li><a href="dev/1-36/application/create/task-list">Task list</a></li>
+        <li><a href="/dev/1-36/application/create/input-method">How do you want to add commodities to your consignment?</a></li>
+        <li><a href="/dev/1-36/application/create/commodity-page-machinery">Farm machinery details (manual)</a></li>
+        <li><a href="/dev/1-36/application/create/upload">Upload a file (bulk upload)</a></li>
+        <li><a href="/dev/1-36/application/create/upload-error-summary">Error messages for bulk upload</a></li>
+        <li><a href="/dev/1-36/application/create/commodity-list">Commodity list</a></li>
+        <li><a href="/dev/1-36/application/create/inspection-addresses">Where will the inspection take place?</a></li>
+        <li><a href="/dev/1-36/application/create/contact-details-simple-short">Who is the main contact for this application?</a></li>
+        <li><a href="/dev/1-36/application/create/inspection-dates">When will the consignment be ready?</a></li>
+        <li><a href="/dev/1-36/application/create/shipping">How will this consignment be transported?</a></li>
+        <li><a href="/dev/1-36/application/create/destination-consignee">Who will receive this consignment?</a></li>
+        <li><a href="/dev/1-36/application/create/attachments">Supporting documents</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Submit</li>
+        <li><a href="dev/1-36/application/create/check-your-answers">Check your answers</a></li>
+        <li><a href="dev/1-36/application/submit/submit-date">When do you need the certificate?</a></li>
+        <li><a href="dev/1-36/application/submit/declaration">Final declaration</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Confirmation page</li>
+        <li><a href="dev/1-36/application/submit/confirmation-machinery-HH36A">You have successfully submitted your application</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Application management</li>
+        <li><a href="dev/1-36/application?id=6">Draft application summary</a></li>
+        <li><a href="dev/1-36/application?id=34">Submitted application summary</a></li>
+        <li><a href="dev/1-36/application/confirm_save_and_exit">Confirm save and continue later</a></li>
+      </ul>
+
+      <h2 class="govuk-heading-m">
+        Re-forwarding phytosanitary certificate
+        <strong class="govuk-tag govuk-tag--grey">BCA and clay</strong>
+        <strong class="govuk-tag govuk-tag--blue">Bulbs</strong>
+        <strong class="govuk-tag govuk-tag--purple">Plants</strong>
+        <strong class="govuk-tag govuk-tag--orange">Potatoes</strong>
+        <strong class="govuk-tag">Plant products</strong>
+        <strong class="govuk-tag govuk-tag--pink">Seeds</strong>
+        <strong class="govuk-tag govuk-tag--yellow">Grains</strong>
+        <strong class="govuk-tag govuk-tag--green">Used farm machinery</strong>
+      </h2>
+      <ul class="govuk-list">
+        <li>Set up</li>
+        <li><a href="dev/1-36/application/setup/declaration?reforwarding=1">Confirm you have checked regulations</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Task list</li>
+        <li><a href="dev/1-36/application/create/task-list?reforwarding=1">Task list</a></li>
+        <li><a href="dev/1-36/application/create/import-details?reforwarding=1">What are the import details of this consignment?</a></li>
+      </ul>
+      <ul class="govuk-list">
+        <li>Submit</li>
+        <li><a href="dev/1-36/application/create/check-your-answers?reforwarding=1">Check your answers</a></li>
+      </ul>
+      {% else %}
+      <h3 class="govuk-heading-m">
+        Phytosanitary certificate
+        <strong class="govuk-tag govuk-tag--grey">BCA and clay</strong>
+        <strong class="govuk-tag govuk-tag--blue">Bulbs</strong>
+        <strong class="govuk-tag govuk-tag--purple">Plants</strong>
+        <strong class="govuk-tag govuk-tag--orange">Potatoes</strong>
+        <strong class="govuk-tag">Plant products</strong>
+        <strong class="govuk-tag govuk-tag--pink">Seeds</strong>
+        <strong class="govuk-tag govuk-tag--yellow">Grains</strong>
+        <strong class="govuk-tag govuk-tag--green">Used farm machinery</strong>
+      </h3>
+      <p class="govuk-body">Choose a commodity <a href="#commodity">above</a> to see all designed user journeys available.</p>
+
+      <h3 class="govuk-heading-m">
+        Phytosanitary certificate (via one time testing)
+        <strong class="govuk-tag">Plant products</strong>
+      </h3>
+      <p class="govuk-body">Choose a commodity <a href="#commodity">above</a> to see all designed user journeys available.</p>
+
+      <h2 class="govuk-heading-m">
+        Re-forwarding phytosanitary certificate
+        <strong class="govuk-tag govuk-tag--grey">BCA and clay</strong>
+        <strong class="govuk-tag govuk-tag--blue">Bulbs</strong>
+        <strong class="govuk-tag govuk-tag--purple">Plants</strong>
+        <strong class="govuk-tag govuk-tag--orange">Potatoes</strong>
+        <strong class="govuk-tag">Plant products</strong>
+        <strong class="govuk-tag govuk-tag--pink">Seeds</strong>
+        <strong class="govuk-tag govuk-tag--yellow">Grains</strong>
+        <strong class="govuk-tag govuk-tag--green">Used farm machinery</strong>
+      </h2>
+      <p class="govuk-body">Choose a commodity <a href="#commodity">above</a> to see all designed user journeys available.</p>
+
+      <h2 class="govuk-heading-m">
+        Certificate of conformity
+        <strong class="govuk-tag govuk-tag--purple">Plants</strong>
+      </h2>
+      <p class="govuk-body">Choose a commodity <a href="#commodity">above</a> to see all designed user journeys available.</p>
+
+      <h2 class="govuk-heading-m">
+        Growing season inspection
+        <strong class="govuk-tag govuk-tag--blue">Bulbs</strong>
+        <strong class="govuk-tag govuk-tag--purple">Plants</strong>
+        <strong class="govuk-tag govuk-tag--orange">Potatoes</strong>
+        <strong class="govuk-tag govuk-tag--pink">Seeds</strong>
+      </h2>
+      <p class="govuk-body">Choose a commodity <a href="#commodity">above</a> to see all designed user journeys available.</p>
+
+      <h2 class="govuk-heading-m">
+        Soil sampling
+        <strong class="govuk-tag govuk-tag--blue">Bulbs</strong>
+        <strong class="govuk-tag govuk-tag--purple">Plants</strong>
+        <strong class="govuk-tag govuk-tag--orange">Potatoes</strong>
+      </h2>
+      <p class="govuk-body">Choose a commodity <a href="#commodity">above</a> to see all designed user journeys available.</p>
+
+      <h2 class="govuk-heading-m">
+        Seed sampling
+        <strong class="govuk-tag govuk-tag--pink">Seeds</strong>
+      </h2>
+      <p class="govuk-body">Choose a commodity <a href="#commodity">above</a> to see all designed user journeys available.</p>
+
+      <h3 class="govuk-heading-m">
+        One time testing
+        <strong class="govuk-tag">Plant products</strong>
+      </h3>
+      <p class="govuk-body">Choose a commodity <a href="#commodity">above</a> to see all designed user journeys available.</p>
+      {% endif %}
+
+      <h2 class="govuk-heading-m">Bulk upload templates</h2>
+      <span class="govuk-body">Phytosanitary certificate</span>
+      <ul class="govuk-list govuk-list">
+        <li><a href="/public/templates/template-bulbs.csv" class="govuk-link govuk-link-no-visited-state">Bulbs</a> | <a href="/public/templates/example-bulbs.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
+        <li><a href="/public/templates/template-plants.csv" class="govuk-link govuk-link-no-visited-state">Plants and fresh produce</a> | <a href="/public/templates/example-plant.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
+        <li><a href="/public/templates/template-potatoes.csv" class="govuk-link govuk-link-no-visited-state">Potatoes</a> | <a href="/public/templates/example-potatoes.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
+        <li><a href="/public/templates/template-plant-products.csv" class="govuk-link govuk-link-no-visited-state">Processed plant products</a> | <a href="/public/templates/example-plant-products.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
+        <li><a href="/public/templates/template-seeds.csv" class="govuk-link govuk-link-no-visited-state">Seeds for planting</a> | <a href="/public/templates/example-seeds.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
+        <li><a href="/public/templates/template-grain.csv" class="govuk-link govuk-link-no-visited-state">Unprocessed cereal grains</a> | <a href="/public/templates/example-grain.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
+        <li><a href="/public/templates/template-used-farm-machinery.csv" class="govuk-link govuk-link-no-visited-state">Used farm machinery</a> | <a href="/public/templates/example-used-farm-machinery.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
+      </ul>
+      <span class="govuk-body">Certificate of conformity</span>
+      <ul class="govuk-list govuk-list">
+        <li><a href="/public/templates/template-sms.csv" class="govuk-link govuk-link-no-visited-state">SMS</a> | <a href="/public/templates/example-sms.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
+        <li><a href="/public/templates/template-gms.csv" class="govuk-link govuk-link-no-visited-state">GMS</a> | <a href="/public/templates/example-gms.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>       
+      </ul>
+      <span class="govuk-body">Seed sampling</span>
+      <ul class="govuk-list govuk-list">
+        <li><a href="/public/templates/template-seeds-sampling.csv" class="govuk-link govuk-link-no-visited-state">Seed sampling</a> | <a href="/public/templates/example-seeds-sampling.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>      
       </ul>
 
       <h2 class="govuk-heading-m">Other pages</h2>
       <ul class="govuk-list">
-        <li><a href="dev/{{data.version}}/application/create/how-to-identify-part-error">Amend details - weight validation</a></li>
-        <li><a href="dev/{{data.version}}/application/create/check-your-answers-pre-inspect-amend">Amend details (pre-inspection)</a></li>
-        <li><a href="dev/{{data.version}}/inspector/dashboard">Expt - Inspector dashboard / time entry</a></li>
         <li><a href="accessibility-statement">Accessibility statement</a></li>
-        <li><a href="dev/{{data.version}}/application/submit/give-feedback">Give feedback</a></li>
+        <li><a href="archive">Archive</a></li>
         <li><a href="status-tags">Status tags</a></li>
-        <li><a href="dev/{{data.version}}/application/setup/pre-application-test">Have you completed GSI?</a> <strong class="govuk-tag govuk-tag--grey">experimental</strong></li>
-        <li><a href="dev/{{data.version}}/application/setup/what-inspection">What are you applying for?</a> <strong class="govuk-tag govuk-tag--grey">experimental</strong></li>
-        <li><a href="dev/0-5/application/create/plant-lookup">Plant look-up (version 0-5)</a> <strong class="govuk-tag govuk-tag--grey">experimental</strong></li>
-        <li><a href="dev/0-5/application/create/exporter">Address look-up (version 0-5)</a> <strong class="govuk-tag govuk-tag--grey">experimental</strong></li>
       </ul>
-
-      <h2 class="govuk-heading-m">Bulk upload templates</h2>
-      <ul class="govuk-list govuk-list">
-        <li><a href="/public/images/template-plants.csv" class="govuk-link govuk-link-no-visited-state">Plants</a></li>
-        <li><a href="/public/images/template-hmi.csv" class="govuk-link govuk-link-no-visited-state">HMI</a></li>
-        <li><a href="/public/images/template-sms.csv" class="govuk-link govuk-link-no-visited-state">SMS</a></li>
-        <li><a href="/public/images/template-gms.csv" class="govuk-link govuk-link-no-visited-state">GMS</a></li>
-        <li><a href="/public/images/template-plant-products.csv" class="govuk-link govuk-link-no-visited-state">Plant products</a> </li>
-        <li><a href="/public/images/template-used-farm-machinery.csv" class="govuk-link govuk-link-no-visited-state">Used farm machinery</a</li>
-        <li><a href="/public/images/template-seeds.csv" class="govuk-link govuk-link-no-visited-state">Seeds Template</a></li>
-        <li><a href="/public/images/template-potatoes.csv" class="govuk-link govuk-link-no-visited-state">Potatoes</a></li>
-        <li><a href="/public/images/template-grain.csv" class="govuk-link govuk-link-no-visited-state">Grain</a></li>
-        <li><a href="/public/images/APHA_phytosanitary_certificate_csv_template.csv" class="govuk-link govuk-link-no-visited-state">Generic APHA template</a></li>
-      </ul>
-      <!-- experimental
-      <ul class="govuk-list govuk-list">
-        <li>
-          <a href="/public/templates/template-plants.csv" class="govuk-link govuk-link-no-visited-state">Plants</a> | 
-          <a href="/public/templates/example-plants.csv" class="govuk-link govuk-link-no-visited-state">Example data</a>
-        </li>
-        <li>
-          <a href="/public/templates/template-hmi.csv" class="govuk-link govuk-link-no-visited-state">HMI</a> | 
-          <a href="/public/templates/example-hmi.csv" class="govuk-link govuk-link-no-visited-state">Example data</a>
-        </li>
-        <li>
-          <a href="/public/templates/template-sms.csv" class="govuk-link govuk-link-no-visited-state">SMS</a> | 
-          <a href="/public/templates/example-sms.csv" class="govuk-link govuk-link-no-visited-state">Example data</a>
-        </li>
-        <li>
-          <a href="/public/templates/template-gms.csv" class="govuk-link govuk-link-no-visited-state">GMS</a> | 
-          <a href="/public/templates/example-gms.csv" class="govuk-link govuk-link-no-visited-state">Example data</a>
-        </li>
-        <li>
-          <a href="/public/templates/template-hmi.csv" class="govuk-link govuk-link-no-visited-state">Combined</a> | 
-          <a href="/public/templates/example-hmi.csv" class="govuk-link govuk-link-no-visited-state">Example data</a>
-        </li>
-        <li>
-          <a href="/public/templates/template-plant-products.csv" class="govuk-link govuk-link-no-visited-state">Plant
-            products</a> | 
-          <a href="/public/templates/example-plant-products.csv" class="govuk-link govuk-link-no-visited-state">Example data</a>
-        </li>
-        <li>
-          <a href="/public/templates/template-used-farm-machinery.csv" class="govuk-link govuk-link-no-visited-state">Used
-            farm machinery</a> | 
-          <a href="/public/templates/example-used-farm-machinery.csv" class="govuk-link govuk-link-no-visited-state">Example data</a>
-        </li>
-        <li>
-          <a href="/public/templates/template-seeds.csv"
-            class="govuk-link govuk-link-no-visited-state">Seeds Template</a> | 
-          <a href="/public/templates/example-seeds.csv"
-            class="govuk-link govuk-link-no-visited-state">Example data</a>
-        </li>
-        <li>
-          <a href="/public/templates/template-potatoes.csv" class="govuk-link govuk-link-no-visited-state">Potatoes</a> | 
-          <a href="/public/templates/example-potatoes.csv" class="govuk-link govuk-link-no-visited-state">Example data</a>
-        </li>
-
-        <li>
-          <a href="/public/templates/template-grain.csv" class="govuk-link govuk-link-no-visited-state">Grain</a> | 
-          <a href="/public/templates/example-grain.csv" class="govuk-link govuk-link-no-visited-state">Example data</a>
-        </li>
-        <li>
-          <a href="/public/images/APHA_phytosanitary_certificate_csv_template.csv"
-            class="govuk-link govuk-link-no-visited-state">Generic APHA template</a>
-        </li>
-      </ul> -->
     </div>
 
   </div>
 
 </div>
 
-<div class="govuk-grid-row">
-
-  <div class="govuk-grid-column-full">
-    <h1 class="govuk-heading-l">Archived pages</h1>
-    <h2 class="govuk-heading-m">Registration and sign in (archived v1-25)</h2>
-    <ul class="govuk-list">
-      <li><a href="dev/{{data.version}}/start-page">Start page</a> | <a href="dev/{{data.version}}/start-page-v1">version 1</a> | <a href="dev/{{data.version}}/start-page-v2">version 2</a> | <a href="dev/{{data.version}}/start-page-v3">version 3</a></li>
-      <li><a href="dev/{{data.version}}/start-page-alt">Start page - alt</a></li>
-      <li><a href="dev/{{data.version}}/start-page-coc">Start page - certificate of conformity (v1-19)</a></li>
-      <li><a href="dev/{{data.version}}/start-page-pheats">Start page - PHEATS</a></li>
-      <li><a href="dev/{{data.version}}/gateway/gov-sign-in">Government Gateway sign in</a></li>
-    </ul>
-    <ul class="govuk-list">
-      <li><a href="dev/{{data.version}}/start-page-phes">Start page - phytosanitary </a>
-      <li><a href="dev/{{data.version}}/start-page-coc-phes">Start page - conformity</a>
-    </ul>
-  </div>
-
-</div>
-
 <script type="text/javascript">
   
-  function updateversion() {
-    document.getElementById("version-update").submit();
+  function updateCommodity() {
+    document.getElementById("commodity-update").submit();
   }
 
 </script>
