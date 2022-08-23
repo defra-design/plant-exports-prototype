@@ -1,14 +1,14 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.build == "ux" %}Who is the main contact for this application?{% else %}Who is the contact for this application?{% endif %} - Growing season inspection - {{serviceName}} - GOV.UK
+  Who is the {% if data.build == "development" %}{% else %}main{% endif %} contact for this application? - Growing season inspection - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
 {{super()}}
 {% include "../modules/_account-banner.html" %}
 <a href="javascript:history.back()" class="govuk-back-link">Back</a>
-{% endblock%}
+{% endblock %}
 
 {% block content %}
 <div class="govuk-grid-row">
@@ -20,7 +20,7 @@
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset" aria-describedby="contact-details-hint">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-            <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-7">{% if data.build == "ux" %}Who is the main contact for this application?{% else %}Who is the contact for this application?{% endif %}</h1>
+            <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-7">Who is the {% if data.build == "development" %}{% else %}main{% endif %} contact for this application?</h1>
           </legend>
           <!-- <p class="govuk-body">Enter the address of your business premises where the inspector will check your consignment</p> -->
           
@@ -28,7 +28,22 @@
             The inspector may contact this person about the application
           </div>
 
-          {% if data.build == "ux" %}
+          {% if data.build == "development" %}
+          <div class="govuk-form-group">
+            <label class="govuk-label govuk-!-font-weight-bold" for="contact_name">Contact name</label>
+            <input class="govuk-input govuk-input--width-20" id="contact_name" name="contact_name" type="text" spellcheck="false" autocomplete="name" value="{{data.contact_name or ''}}">
+          </div>
+
+          <div class="govuk-form-group">
+            <label class="govuk-label govuk-!-font-weight-bold" for="address_phone">Phone number</label>
+            <input class="govuk-input govuk-input--width-20" id="address_phone" name="address_phone" type="tel" autocomplete="tel" value="{{data.address_phone or ''}}">
+          </div>
+
+          <div class="govuk-form-group">
+            <label class="govuk-label govuk-!-font-weight-bold" for="email_address">Email address (optional)</label>
+            <input class="govuk-input govuk-input--width-20" id="email_address" name="email_address" type="email" spellcheck="false" autocomplete="email" value="{{data.email_address or ''}}">
+          </div>
+          {% else %}
           <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
 
             <div class="govuk-radios__item">
@@ -60,22 +75,7 @@
 
             </div>
 
-          </div>
-          {% else %}
-          <div class="govuk-form-group">
-            <label class="govuk-label govuk-!-font-weight-bold" for="contact_name">Contact name</label>
-            <input class="govuk-input govuk-input--width-20" id="contact_name" name="contact_name" type="text" spellcheck="false" autocomplete="name" value="{{data.contact_name or ''}}">
-          </div>
-
-          <div class="govuk-form-group">
-            <label class="govuk-label govuk-!-font-weight-bold" for="address_phone">Phone number</label>
-            <input class="govuk-input govuk-input--width-20" id="address_phone" name="address_phone" type="tel" autocomplete="tel" value="{{data.address_phone or ''}}">
-          </div>
-
-          <div class="govuk-form-group">
-            <label class="govuk-label govuk-!-font-weight-bold" for="email_address">Email address (optional)</label>
-            <input class="govuk-input govuk-input--width-20" id="email_address" name="email_address" type="email" spellcheck="false" autocomplete="email" value="{{data.email_address or ''}}">
-          </div>
+          </div>          
           {% endif %}
       
         </fieldset>

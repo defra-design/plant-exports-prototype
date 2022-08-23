@@ -1,8 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.build == "ux" %}Regulations for exporting bulbs to {{data.countrySelect[0] or 'China'}} GOV.UK Prototype Kit - {{serviceName}} - GOV.UK{% else %}Confirm regulations - Exports application - GOV.UK
-{% endif %}
+  {% if data.build == "development" %}Confirm regulations - Exports application{% else %}Regulations for exporting bulbs to {{data.countrySelect[0] or 'China'}} - {{serviceName}}{% endif %} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -57,7 +56,7 @@
       {% endif %}
     </h1>
     {% if data.reforwarding %}
-    <p class="govuk-body" lang="en">Before you start this application, check if the 
+    <p class="govuk-body">Before you start this application, check if the 
       {% if (data.countrySelect[0] == "United Kingdom (Northern Ireland)") %}
       <a href="https://www.daera-ni.gov.uk">competent authority in Northern Ireland</a>
       {% else %}
@@ -72,10 +71,10 @@
         {% else %}
         export
         {% endif %}
-        {% if data.build == "ux" %}
-        {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %} 
+        {% if data.build == "development" %}
+        {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'processed plant products'}}{% endif %}
         {% else %}
-        {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'processed plant products'}}{% endif %} 
+        {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}          
         {% endif %}        
         to 
         {% if (data.countrySelect[0] == "United Kingdom (Northern Ireland)") %}
@@ -87,10 +86,10 @@
       <li>allows you to re-forward this commodity</li>
     </ul>
     {% if data.commodity == "biological control agents and clay" or data.commodity == "bulbs" or data.commodity == "grain" or data.commodity == "plants" or data.commodity == "plant products" or data.commodity == "seeds" %}
-    <p class="govuk-body" lang="en">You should also check if you need to describe your consignment using the botanical name (genus and species).</p>
+    <p class="govuk-body">You should also check if you need to describe your consignment using the botanical name (genus and species).</p>
     {% endif %}
     {% else %}
-    <p class="govuk-body" lang="en">Before you start this application, check if the  
+    <p class="govuk-body">Before you start this application, check if the  
       {% if (data.countrySelect[0] == "United Kingdom (Northern Ireland)") %}
       <a href="https://www.daera-ni.gov.uk">competent authority in Northern Ireland</a>
       {% else %}
@@ -105,12 +104,10 @@
       {% else %}
       export
       {% endif %}
-      {% if data.build == "ux" %}
-      {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %} 
+      {% if data.build == "development" %}
+      {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% else %}{{data.commodity or 'processed plant products'}}{% endif %}
       {% else %}
-      {% if data.commodity == "plants" %}plants and fresh produce
-      {% elif data.commodity == "plant products" %}processed plant products
-      {% else %}{{data.commodity or 'processed plant products'}}{% endif %} 
+      {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %} 
       {% endif %}
       to
       {% if (data.countrySelect[0] == "United Kingdom (Northern Ireland)") %}
@@ -134,9 +131,9 @@
     </ul>
     {% if data.commodity == "plant products" %}
     {% if data.pheats == 1 %}
-    <p class="govuk-body" lang="en">You’ll need to do your own phytosanitary inspection. You’ll be told where to send any samples at the end of this application.</p>
+    <p class="govuk-body">You’ll need to do your own phytosanitary inspection. You’ll be told where to send any samples at the end of this application.</p>
     {% else %}
-    <p class="govuk-body" lang="en">You’ll need to send a sample of your commodity for inspection before we can issue a phytosanitary certificate. You’ll see the address of where to send your sample at the end of this application.</p>
+    <p class="govuk-body">You’ll need to send a sample of your commodity for inspection before we can issue a phytosanitary certificate. You’ll see the address of where to send your sample at the end of this application.</p>
     {% endif %}
     {% endif %}
     {% if data.commodity == "biological control agents and clay" or data.commodity == "plants" or data.commodity == "bulbs" or data.commodity == "potatoes" or data.commodity == "seeds" %}
@@ -178,10 +175,10 @@
             <input class="govuk-checkboxes__input" type="checkbox" autofocus="autofocus" name="confirm" id="confirm">
 
             <label class="govuk-checkboxes__label govuk-!-font-weight-bold govuk-checkboxes-long-label" for="confirm">
-              {% if data.build == "ux" %}
-              I confirm that I have understood and followed the {%if data.reforwarding == 1%}re-forwarding{% endif %} regulations for this commodity
-              {% else %}
+              {% if data.build == "development" %}
               I confirm that I have understood and followed the {%if data.reforwarding == 1%}re-forwarding {% else %}exporting{% endif %} regulations for this commodity
+              {% else %}
+              I confirm that I have understood and followed the {%if data.reforwarding == 1%}re-forwarding{% endif %} regulations for this commodity
               {% endif %}
             </label>
 

@@ -1,11 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.build == "ux" %}
-    Your application - Phytosanitary certificate - {{serviceName}} - GOV.UK
-  {% else %}
-    Exports application - GOV.UK
-  {% endif %}
+  {% if data.build == "development" %}Exports application - GOV.UK{% else %}Your application - Phytosanitary certificate - {{serviceName}} - GOV.UK{% endif %}  
 {% endblock %}
 
 {% block beforeContent %}
@@ -15,17 +11,18 @@
 {% endblock %}
 
 {% block content %}
-{% if data.build == "ux" %}
-{# do nothing #}
-{% else %}
-{# overwrite tag style to replicate production #}
+{% if data.build != "development" %}
 <style>
+
+  /* Needs extracting and adding to the external Sass or CSS */
   .govuk-tag--grey {
-  background-color: white;
-  border: solid 1px #cbcbcb;
+    background-color: white;
+    border: solid 1px #cbcbcb;
   }
+
 </style>
 {% endif %}
+
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
@@ -36,8 +33,8 @@
     </div>
     {% endif %}
 
-    {% if data.build == "ux" %}
-      {% if data.reference_num %}<span class="govuk-caption-xl">{{data.reference_num}}</span>{% endif %}
+    {% if data.build != "development" %}
+    {% if data.reference_num %}<span class="govuk-caption-xl">{{data.reference_num}}</span>{% endif %}
     {% endif %}
     <h1 class="govuk-heading-xl govuk-!-margin-bottom-3">Your {% if data.reforwarding%}re-forwarding{% endif %} application</h1>
     <p class="govuk-caption-l govuk-!-margin-bottom-8">
@@ -55,11 +52,7 @@
       <li>
         <h2 class="app-task-list__section">
           <span class="app-task-list__section-number">1. </span> 
-          {% if data.build == "ux" %}
-            Tell us about your consignment
-          {% else %}
-            About your application 
-          {% endif %}
+          {% if data.build == "development" %}About your application{% else %}Tell us about your consignment{% endif %}
         </h2>
         <ul class="app-task-list__items">
           <li class="app-task-list__item">
@@ -121,7 +114,7 @@
           {% endif %}
           <li class="app-task-list__item">
             <span class="app-task-list__task-name">
-              <a href="shipping" aria-describedby="status-1.4">How will {% if data.build == "ux" %}this {% else %}the {% endif %}consignment be transported?</a>
+              <a href="shipping" aria-describedby="status-1.4">How will {% if data.build == "development" %}the {% else %}this {% endif %}consignment be transported?</a>
             </span>
             {% if data.shipping_task_list_data or data.port_entry or data.port_export or data.transport_method %}
             <strong class="govuk-tag app-task-list__tag" id="status-1.4">Complete</strong>
@@ -159,11 +152,7 @@
       <li>
         <h2 class="app-task-list__section">
           <span class="app-task-list__section-number">2. </span> 
-          {% if data.build == "ux" %}
-            Upload supporting documents (optional)
-          {% else %}
-            Additional documents (optional) 
-          {% endif %}
+          {% if data.build == "development" %}Additional documents{% else %}Upload supporting documents{% endif %} (optional)
         </h2>
         <ul class="app-task-list__items">
           <li class="app-task-list__item" style="border-top: none;">

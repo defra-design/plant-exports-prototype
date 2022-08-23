@@ -8,32 +8,20 @@
 {{super()}}
 <div class="login-nav login-border">
   <ul class="login-nav__list">
-    <li class="login-nav__list-item-new" id="Nav-DisplayName">Prototype user</li>
-    <li class="login-nav__list-item-new"><a href="../../../account" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a></li>
-    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
+    <li class="login-nav__list-item-new">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="../../../account" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
   </ul>
 </div>
 
 <a href="javascript:history.back()" class="govuk-back-link">Back</a>
-{% endblock%}
+{% endblock %}
 
 {% block content %}
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
-    {% if data.build == "ux" %}
-    <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-      
-      <div class="govuk-notification-banner__header">
-        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">Important</h2>
-      </div>
-
-      <div class="govuk-notification-banner__content">
-        <p class="govuk-notification-banner__heading">This page is not part of the UX build of the service. <a class="govuk-notification-banner__link" href="../../../config?change=yes&return_url=/{{data.version}}/application/soil/create/confirm-inspection-address">Switch to the development build</a> to view this page.</p>
-      </div>
-
-    </div>
-    {% else %}
+    {% if data.build == "development" %}
     <h1 class="govuk-heading-xl">Do you want to select this inspection address?</h1>
 
     <table class="govuk-table">
@@ -81,6 +69,18 @@
 
       <button class="govuk-button govuk-!-margin-bottom-9" type="submit" data-module="govuk-button">Continue</button>
     </form>
+    {% else %}
+    <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+      
+      <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">Important</h2>
+      </div>
+
+      <div class="govuk-notification-banner__content">
+        <p class="govuk-notification-banner__heading">This page is not part of the UX build of the service. <a class="govuk-notification-banner__link" href="../../../config?change=yes&return_url=/{{data.version}}/application/soil/create/confirm-inspection-address">Switch to the development build</a> to view this page.</p>
+      </div>
+
+    </div>
     {% endif %}
 
   </div>

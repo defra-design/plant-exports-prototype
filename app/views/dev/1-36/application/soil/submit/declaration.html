@@ -8,9 +8,9 @@
 {{super()}}
 <div class="login-nav login-border">
   <ul class="login-nav__list">
-    <li class="login-nav__list-item-new" id="Nav-DisplayName">Prototype user</li>
-    <li class="login-nav__list-item-new"><a href="../../../account?returnURL=application" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a></li>
-    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
+    <li class="login-nav__list-item-new">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="../../../account?returnURL=application" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
   </ul>
 </div>
 
@@ -29,18 +29,14 @@
 
 <div class="govuk-grid-row">
   
-  <div class="{% if data.build == 'ux' %}govuk-grid-column-two-thirds{% else %}govuk-grid-column-full{% endif %}">
+  <div class="{% if data.build == 'development' %}govuk-grid-column-full{% else %}govuk-grid-column-two-thirds{% endif %}">
     <h1 class="govuk-heading-xl">Declaration</h1>
     {% if data.pheats_check != "yes" %}
     <p class="govuk-body">By submitting this application form, you are agreeing that to the best of your knowledge and belief the statements made in this {% if data.reforwarding %}re-forwarding{% endif %} application are true and complete.</p>
     {% else %}
     <p class="govuk-body">By submitting this application form, you are agreeing that a PHEATS Authorised Person has carried out the official inspection of the consignment, and only those commodities that have passed this inspection have been entered in this application.</p>
     {% endif %}
-    {% if data.build == 'ux' %}
-    <p class="govuk-body">Date of declaration: <span data-qa-id="TextDisplay-DateOfDeclaration">{{todaysDate}}</span></p>
-    {% else %}
-    <p class="govuk-body">Date of declaration: <span data-qa-id="TextDisplay-DateOfDeclaration">17th March 2022</span></p>
-    {% endif %}
+    <p class="govuk-body">Date of declaration: {% if data.build == "development" %}17th March 2022{% else %}{{todaysDate}}{% endif %}</p>
 
     <form action="confirmation" method="post" novalidate>
 
@@ -57,10 +53,7 @@
 
       </div>
 
-      <input type="hidden" name="crumb_csrf_token" value="-OFEIl7HkGmNi3ZbrlI4BeayEl-1-jTpR6CRsveyix5">
-      <input name="submissionDate" type="hidden" value="15 Mar 2021">
-      {{data.CountrySelect[0]}}
-      <a href="confirmation" role="button" draggable="false" class="govuk-button" data-module="govuk-button">Submit {% if data.build == "ux" %}soil sampling application{% else %}application{% endif %}</a>
+      <a href="confirmation" role="button" draggable="false" class="govuk-button" data-module="govuk-button">Submit {% if data.build == "development" %}application{% else %}soil sampling application{% endif %}</a>
     </form>
     
   </div>

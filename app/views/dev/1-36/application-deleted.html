@@ -1,16 +1,20 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.build == "ux" %}Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %}{% else %}{% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %}{% endif %} {{query.id | appInformation('applicationID')}} - {{serviceName}} - GOV.UK
+  {% if data.build == "development" %}
+  {% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %} {{query.id | appInformation('applicationID')}} - {{serviceName}} - GOV.UK
+  {% else %}
+  Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %} {{query.id | appInformation('applicationID')}} - {{serviceName}} - GOV.UK
+  {% endif %}
 {% endblock %}
 
 {% block beforeContent %}
 {{super()}}
 <div class="login-nav login-border">
   <ul class="login-nav__list">
-    <li class="login-nav__list-item-new" id="Nav-DisplayName">Prototype user</li>
-    <li class="login-nav__list-item-new"><a href="account?returnURL=dashboard" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a></li>
-    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
+    <li class="login-nav__list-item-new">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="account?returnURL=dashboard" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
   </ul>
 </div>
 
@@ -45,7 +49,7 @@
   }
 
 </style>
-{% endblock%}
+{% endblock %}
 
 {% block content %}
 {% if (query.id | appInformation('cert_info')) == 'Soil sampling' %}
@@ -94,7 +98,7 @@
       </div>
 
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">{% if data.build == "ux" %}<abbr title="Animal and Plant Health Agency">APHA</abbr> reference{% else %}Application reference{% endif %}</dt>
+        <dt class="govuk-summary-list__key">{% if data.build == "development" %}Application reference{% else %}<abbr title="Animal and Plant Health Agency">APHA</abbr> reference{% endif %}</dt>
         <dd class="govuk-summary-list__value">
           {% if (query.id | appInformation('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformation('applicationID')}}{% endif %}
         </dd>
@@ -128,7 +132,13 @@
       <p class="govuk-body">You have successfully deleted this application. We'll update this page soon.</p>
     </div>
 
-    <h1 class="govuk-heading-xl">{% if data.build == "ux" %}Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %}{% else %}{% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %}{% endif %} {{query.id | appInformation('applicationID')}}</h1>
+    <h1 class="govuk-heading-xl">
+      {% if data.build == "development" %}
+      {% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %} {{query.id | appInformation('applicationID')}} - {{serviceName}} - GOV.UK
+      {% else %}
+      Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %} {{query.id | appInformation('applicationID')}} - {{serviceName}} - GOV.UK
+      {% endif %}
+    </h1>
     {% if query.is_block == "yes" %}
     <p class="govuk-body">This is a block application of 100 certificates</p>
     {% endif %}
@@ -153,7 +163,7 @@
       </div>
 
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">{% if data.build == "ux" %}<abbr title="Animal and Plant Health Agency">APHA</abbr> reference{% else %}Application reference{% endif %}</dt>
+        <dt class="govuk-summary-list__key">{% if data.build == "development" %}Application reference{% else %}<abbr title="Animal and Plant Health Agency">APHA</abbr> reference{% endif %}</dt>
         <dd class="govuk-summary-list__value">{{query.id | appInformation('applicationID') or "6666 6666 6666"}}</dd>
       </div>
 

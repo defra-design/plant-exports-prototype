@@ -8,7 +8,7 @@
 {{super()}}
 {% include "../modules/_account-banner.html" %}
 <a href="javascript:history.back()" class="govuk-back-link">Back</a>
-{% endblock%}
+{% endblock %}
 
 {% block content %}
 <div class="govuk-grid-row">
@@ -20,32 +20,10 @@
       <div class="govuk-form-group">
         <h1 class="govuk-heading-xl">Where will the inspection take place?</h1>
         <p class="govuk-body">Select the address where the inspector will inspect your crops. You will add further details of the crop location later on.</p>
-        <p class="govuk-body">You can <a href="../../../account/inspection-addresses" class="govuk-link" id="Link-ManageAccount">manage your addresses</a> or <a class="govuk-link" href="../../../account/address-lookup?return_url=/dev/{{data.version}}/application/gsi/create/inspection-address-added">add a new address</a>.</p>
+        <p class="govuk-body">You can <a href="../../../account/inspection-addresses" class="govuk-link">manage your addresses</a> or <a class="govuk-link" href="../../../account/address-lookup?return_url=/dev/{{data.version}}/application/gsi/create/inspection-address-added">add a new address</a>.</p>
       </div>
     
-      {% if data.build == "ux" %}    
-      <div class="govuk-form-group">
-        <fieldset class="govuk-fieldset">
-          
-          <div class="govuk-radios" data-module="govuk-radios">
-            
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="address_1" name="select_address" type="radio" value="Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH" {% if query.change == 'yes' and data.select_address == 'Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH' %}checked{% endif %}>
-              <label class="govuk-label govuk-radios__label" for="address_1">Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH</label>
-            </div>
-
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="address_2" name="select_address" type="radio" value="Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ" {% if query.change == 'yes' and data.select_address == 'Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ' %}checked{% endif %}>
-              <label class="govuk-label govuk-radios__label" for="address_2">Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ</label>
-            </div>
-
-          </div>
-
-        </fieldset>
-      </div>
-
-      <button class="govuk-button govuk-!-margin-bottom-9" type="submit" data-module="govuk-button">Save and continue</button>
-      {% else %}  
+      {% if data.build == "development" %}
       <table class="govuk-table govuk-!-margin-bottom-9">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
@@ -71,6 +49,28 @@
           {% endif %}
         </tbody>
       </table>
+      {% else %}    
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          
+          <div class="govuk-radios" data-module="govuk-radios">
+            
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="address_1" name="select_address" type="radio" value="Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH" {% if query.change == 'yes' and data.select_address == 'Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH' %}checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="address_1">Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="address_2" name="select_address" type="radio" value="Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ" {% if query.change == 'yes' and data.select_address == 'Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ' %}checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="address_2">Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ</label>
+            </div>
+
+          </div>
+
+        </fieldset>
+      </div>
+
+      <button class="govuk-button govuk-!-margin-bottom-9" type="submit" data-module="govuk-button">Save and continue</button>      
       {% endif %}
 
       {% block continueLater %}

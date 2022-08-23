@@ -8,9 +8,9 @@
 {{super()}}
 <div class="login-nav login-border">
   <ul class="login-nav__list">
-    <li class="login-nav__list-item-new" id="Nav-DisplayName">Prototype user</li>
-    <li class="login-nav__list-item-new"><a href="account?returnURL=dashboard" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a></li>
-    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
+    <li class="login-nav__list-item-new">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="account?returnURL=dashboard" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
   </ul>
 </div>
 
@@ -26,7 +26,7 @@
     <dl class="govuk-summary-list govuk-summary-list--no-border">
       
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">{% if data.build == "ux" %}<abbr title="Animal and Plant Health Agency">APHA</abbr> reference{% else %}Application{% endif %}</dt>
+        <dt class="govuk-summary-list__key">{% if data.build == "development" %}Application{% else %}<abbr title="Animal and Plant Health Agency">APHA</abbr> reference{% endif %}</dt>
         <!-- appInformation() can be found in app/filters.js -->
         <dd class="govuk-summary-list__value">{{query.id | appInformation('applicationID')}}</dd>
       </div>
@@ -37,7 +37,7 @@
       </div>
 
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">{% if data.build == "ux" %}Type{% else %}Certificate name{% endif %}</dt>
+        <dt class="govuk-summary-list__key">{% if data.build == "development" %}Certificate name{% else %}Type{% endif %}</dt>
         <dd class="govuk-summary-list__value">          
           {% if (query.id | appInformation('cert_info')) == 'Conformity' %}
           Certificate of conformity for {{data.commodity or "crops"}}
@@ -90,7 +90,16 @@
           
           <div class="govuk-radios" data-module="govuk-radios">
             
-            {% if data.build == "ux" %}
+            {% if data.build == "development" %}
+            <div class="govuk-radios__item">
+              {% if (query.id | appInformation('reference')) != "" %}
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~reuse-ref?id={{query.id or 1}}&is_group={{query.is_group}}">
+              {% else %}
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/create/check-your-answers-copy">
+              {% endif %}
+              <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application</label>
+            </div>
+            {% else %}
             {% if (query.id | appInformation('cert_info')) == 'Conformity' %}
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&journey=coc&cloned=yes">
@@ -153,15 +162,6 @@
               <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application</label>
             </div>
             {% endif %}
-            {% else %}
-            <div class="govuk-radios__item">
-              {% if (query.id | appInformation('reference')) != "" %}
-              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~reuse-ref?id={{query.id or 1}}&is_group={{query.is_group}}">
-              {% else %}
-              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/create/check-your-answers-copy">
-              {% endif %}
-              <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application</label>
-            </div>
             {% endif %}
 
             <div class="govuk-radios__item">

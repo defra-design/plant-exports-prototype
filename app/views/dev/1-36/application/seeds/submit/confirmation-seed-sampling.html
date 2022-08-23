@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.build == "ux" %}You have successfully submitted your application - Seed sampling - {{serviceName}} - GOV.UK{% else %}Confirmation - Exports application - GOV.UK{% endif %}
+  {% if data.build == "development" %}Confirmation - Exports application{% else %}You have successfully submitted your application - Seed sampling - {{serviceName}}{% endif %} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -9,6 +9,17 @@
 {% endblock %}
 
 {% block content %}
+<style>
+
+  /* Needs extracting and adding to the external Sass or CSS */
+  .govuk-feedback-box {
+    padding: 20px;
+    background-color: lightgray;
+    border-left-color: #666;
+  }
+
+</style>
+
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-three-quarters">
@@ -17,7 +28,7 @@
       <h1 class="govuk-panel__title">You have successfully submitted your application</h1>      
     </div>
 
-    {% if data.build == "ux" %}
+    {% if data.build != "development" %}
     <h2 class="govuk-heading-m">Label and send your samples</h2>
  
     <div class="govuk-warning-text">
@@ -66,53 +77,7 @@
         </tr>
         {% endfor %}
       </tbody>
-    </table>
-    {% else %}
-    <!-- 
-    <h2 class="govuk-heading-m">Now send your samples for inspection</h2>
-    <p class="govuk-body">Use the same packaging you would normally use to send samples to customers.</p>
-    <p class="govuk-body">You must write your sample reference number on each sample packet.</p>
-    <h3 class="govuk-heading-s">Use these reference numbers for your samples</h3>
-
-    {{ govukTable({
-      firstCellIsHeader: false,
-      head: [
-        {
-          text: "Description"
-        },
-        {
-          text: "Country of origin"
-        },
-        {
-          text: "Sample reference"
-        }
-      ],
-      rows: [
-        [
-          {
-            text: "Quercus acuta"
-          },
-          {
-            text: "Denmark"
-          },
-          {
-            text: "5903 4567"
-          }
-        ],
-        [
-          {
-            text: "Pinus albicaulis"
-          },
-          {
-            text: "Germany"
-          },
-          {
-            text: "5903 4568"
-          }
-        ]
-      ]
-    }) }}
-    -->
+    </table>    
     {% endif %}
 
     <p class="govuk-body">Send your samples to:</p>
@@ -129,7 +94,7 @@
       <br>
       YO41 1LZ
     </p>
-    {% if data.build == "ux" %}
+    {% if data.build != "development" %}
     <p class="govuk-body"><a href="../../print-label-print?id=10" class="govuk-link govuk-link-no-visited-state" target="_blank">See, print or copy this information (opens in new tab)</a></p>
     {% endif %}
     <h2 class="govuk-heading-m">What happens next</h2>
@@ -161,27 +126,18 @@
 
     </form>
 
-    <p class="govuk-body govuk-!-padding-top-2">Find out <a
-        href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees"
-        class="govuk-link" target="_self">
-        {% if data.build == "ux" %}
-        what fees you will pay
-        {% else %}
-        what fees you need to pay
-        {% endif %}
-      </a> for this application.</p>
-
+    <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_self">{% if data.build == "development" %}what fees you need to pay{% else %}what fees you will pay{% endif %}</a> for this application.</p>
     <h2 class="govuk-heading-m">If you need help</h2>
-    <p class="govuk-body">Contact us quoting your <abbr title="Animal and Plant Health Agency">APHA</abbr> reference <strong {% if data.build == "ux" %} id="applicationFormId2">1721 14800 4809</strong>{% else %}id="applicationFormId2">1721 1480 04809</strong>{% endif %}:</p>
+    <p class="govuk-body">Contact us quoting your <abbr title="Animal and Plant Health Agency">APHA</abbr> reference <strong>1721 14800 4809</strong>{% if data.build == "development" %}:{% else %} on:{% endif %}</p>
     <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-8">
-      <li><span id="phoneNumber">0300 1000 313</span>, Monday to Sunday 7am to 7pm</li>
-      <li><a href="mailto:planthealth.info@apha.gov.uk" class="govuk-link" id="emailLink">planthealth.info@apha.gov.uk</a></li>
+      <li>0300 1000 313, Monday to Sunday 7am to 7pm</li>
+      <li><a href="mailto:planthealth.info@apha.gov.uk" class="govuk-link">planthealth.info@apha.gov.uk</a></li>
     </ul>
 
-    <div class="govuk-!-margin-top-6" style="padding:20px; background-color:#f3f2f1; border-left-color:#666;">
+    <div class="govuk-feedback-box govuk-!-margin-top-6">
       <h2 class="govuk-heading-m">Give feedback on this service</h2>
-      <p class="govuk-body-m">Take a 3 minute survey about your application so that we can improve the service. The survey will open in a new window.</p>
-      <p class="govuk-body-m"><a href="https://defragroup.eu.qualtrics.com/jfe/form/SV_1RDraVxZ03Ja2qy" target="_blank" class="govuk-link">Give feedback</a></p>
+      <p class="govuk-body">Take a 3 minute survey about your application so that we can improve the service.{% if data.build == "development" %} The survey will open in a new tab.{% endif %}</p>
+      <p class="govuk-body"><a href="https://defragroup.eu.qualtrics.com/jfe/form/SV_1RDraVxZ03Ja2qy" class="govuk-link" target="_blank" class="govuk-link">Give feedback{% if data.build == "development" %}{% else %} (opens in new tab){% endif %}</a></p>
     </div>
 
   </div>

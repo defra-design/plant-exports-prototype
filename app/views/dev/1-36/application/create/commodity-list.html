@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.build == "ux" %}Your commodities - Phytosanitary certificate - {{serviceName}} - GOV.UK{% else %}List Commodity Details - Exports application - GOV.UK{% endif %}
+  {% if data.build == "development" %}List Commodity Details - Exports application{% else %}Your commodities - Phytosanitary certificate - {{serviceName}}{% endif %} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -16,14 +16,15 @@
   <div class="govuk-grid-column-three-quarters">
 
     {% if data.upload == 1 %}
-    {% if data.build == "ux" %}
+    {% if data.build == "development" %}
+    <div class="app-alert app-alert--success">
+      <p class="govuk-body"><strong>1 APHA_phytosanitary_certificate_csv_template - PLANTS 15112021.csv</strong> with 4 commodity records uploaded successfully</p>
+    </div>
+    {% else %}
     <div class="app-alert app-alert--info">
       <p class="govuk-body">File has been uploaded successfully</p>
-      {% else %}
-      <div class="app-alert app-alert--success">
-      <p class="govuk-body"><strong>1 APHA_phytosanitary_certificate_csv_template - PLANTS 15112021.csv</strong> with 4 commodity records uploaded successfully</p>
-      {% endif %}
-    </div>
+    </div>    
+    {% endif %}
     {% endif %}
     
     <h1 class="govuk-heading-xl">Your commodities </h1>
@@ -83,7 +84,7 @@
           <th class="govuk-table__header" scope="col">
             Country of origin
           </th>
-          {% if data.build == "ux" %}
+          {% if data.build != "development" %}
           <th class="govuk-table__header" scope="col">
             Sample reference
           </th>
@@ -106,7 +107,7 @@
           <th class="govuk-table__header" scope="col">
             Lot reference
           </th>
-          {% if data.build == "ux" %}
+          {% if data.build != "development" %}
           <th class="govuk-table__header" scope="col">
             Sample reference
           </th>
@@ -124,7 +125,7 @@
             Description
           </th>
           <th class="govuk-table__header" scope="col">
-            {% if data.build == "ux" %}Country where this machinery was last used{% else %}Country of last use{% endif %}
+            {% if data.build == "development" %}Country of last use{% else %}Country where this machinery was last used{% endif %}
           </th>
           <th class="govuk-table__header" scope="col">
             Unique ID
@@ -178,7 +179,7 @@
       <fieldset class="govuk-fieldset" aria-describedby="applicant-conditional-hint">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-!-margin-bottom-6">
           <h2 class="govuk-fieldset__heading">
-            {% if data.build == "ux" %}Do you want to add more commodities?{% else %}{% if data.commodity == "seeds" %}Do you want to add more seeds to your consignment?{% else %}Do you want to add more commodities?{% endif %}{% endif %}
+            {% if data.build == "development" %}{% if data.commodity == "seeds" %}Do you want to add more seeds to your consignment?{% else %}Do you want to add more commodities?{% endif %}{% else %}Do you want to add more commodities?{% endif %}
             <!-- Do you want to add more {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %} to your consignment? -->
           </h2>
         </legend>
@@ -219,21 +220,6 @@
                 No, I have finished adding commodities
               </label>
             </div>
-            <!-- {% if data.build == "ux" %}
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="add_more_commodities-no" name="add_more_commodities" type="radio" value="no~sample-reuse" data-aria-controls="conditional-applicant-conditional-3">
-              <label class="govuk-label govuk-radios__label" for="add_more_commodities-no">
-                No, I have finished adding commodities
-              </label>
-            </div>
-            {% else %}
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="add_more_commodities-no" name="add_more_commodities" type="radio" value="no~{% if data.commodity_group == 'produce' %}pheats-check{% elseif (data.commodity == 'plant products' or data.commodity == 'plants') %}task-list{% else %}task-list{% endif %}" data-aria-controls="conditional-applicant-conditional-3">
-              <label class="govuk-label govuk-radios__label" for="add_more_commodities-no">
-                No, I have finished adding commodities
-              </label>
-            </div>
-            {% endif %} -->
 
           </div>
 
@@ -241,18 +227,19 @@
 
       </fieldset>
       
-      {% if data.build == "ux" %}
+      {% if data.build == "development" %}
+      <div class="govuk-button-group">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      </div>
+      {% else %}
       <div class="govuk-form-group govuk-!-margin-bottom-6">
         <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
       </div>
       {% block continueLater %}
       {% include "../modules/_save-continue-later.html" %}
       {% endblock %}
-      {% else %}
-      <div class="govuk-button-group">
-        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
-      </div>
       {% endif %}
+      
       {% if query.extras == "yes" %}
       <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
       <ul class="govuk-list govuk-list">

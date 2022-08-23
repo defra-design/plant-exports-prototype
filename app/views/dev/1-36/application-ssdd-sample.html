@@ -53,7 +53,7 @@
   ] %}
 
 {% block pageTitle %}
-Manage application - {{serviceName}} - GOV.UK
+  {% if data.build == "development" %}Application{% else %}Manage application{% endif %} {{query.id | appInformation('applicationID')}} - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -68,7 +68,6 @@ Manage application - {{serviceName}} - GOV.UK
   .govuk-width-one-fifth {
     width: 20% !important;
   }
-
 
   .govuk-status--warning {
     width: auto !important;
@@ -108,14 +107,13 @@ Manage application - {{serviceName}} - GOV.UK
     box-shadow: 3px -3px 0 #fff, 6px -6px 0 #bfc1c3;
   }
 </style>
-{% endblock%}
+{% endblock %}
 
 {% block content %}
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">{% if data.build == "ux" %}Manage application{% else %}Application{% endif %} {{query.id |
-        appInformation('applicationID')}}</h1>
+    <h1 class="govuk-heading-xl">{% if data.build == "development" %}Application{% else %}Manage application{% endif %} {{query.id | appInformation('applicationID')}}</h1>
   </div>
 
 </div>

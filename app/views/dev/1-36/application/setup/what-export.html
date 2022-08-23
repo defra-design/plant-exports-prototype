@@ -25,8 +25,9 @@
         <fieldset class="govuk-fieldset">
 
           <div class="govuk-radios" data-module="govuk-radios">
+            {% if data.build == "development" %}
+            {% else %}
 
-            {% if data.build == "ux" %}
             <div class=" govuk-radios__item">
               <input class="govuk-radios__input" id="commodity_bca" name="commodity" type="radio" 
               {% if query.change == "yes" %}
@@ -38,8 +39,6 @@
               <label class="govuk-label govuk-radios__label" for="commodity_bca">Biological control agents and clay</label>
               <div id="commodity_bca-hint" class="govuk-hint govuk-radios__hint">Beneficial insects, bio pesticides, growth stimulants and nematodes</div>
             </div>
-            {% else %}
-            
             {% endif %}
             
             <div class=" govuk-radios__item">
@@ -50,12 +49,16 @@
               value="bulbs~pre-application-test?version={{data.version}}&build={{query.build}}&route={{query.route}}" 
               {% endif %}
               {% if query.change and data.commodity == "bulbs" %}checked="checked"{% endif %}>
-              <label class="govuk-label govuk-radios__label" for="commodity_bulbs">Bulbs</label>
-              {% if data.build == "ux" %}
-              <div id="commodity_bulbs-hint" class="govuk-hint govuk-radios__hint">Bulbs, corms, crowns, tuberous roots, tubers, rhizomes</div>
-              {% else %}
-              <div id="commodity_bulbs-hint" class="govuk-hint govuk-radios__hint">Includes tubers, rhizomes, corms and bulbs for planting, not for use as food </div>
-              {% endif %}
+              <label class="govuk-label govuk-radios__label" for="commodity_bulbs">Bulbs</label>              
+              
+              <div id="commodity_bulbs-hint" class="govuk-hint govuk-radios__hint">
+                {% if data.build == "development" %}
+                Includes tubers, rhizomes, corms and bulbs for planting, not for use as food
+                {% else %}
+                Bulbs, corms, crowns, tuberous roots, tubers, rhizomes
+                {% endif %}
+              </div>
+              
             </div>
 
             <div class=" govuk-radios__item">

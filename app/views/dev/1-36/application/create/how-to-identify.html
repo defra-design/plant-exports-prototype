@@ -1,11 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.build == "ux" %}
-  Add {% if data.pheats != 1 %}{% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your {% if data.reforwarding %}re-forwarding{% endif %} consignment - Phytosanitary certificate - {{serviceName}} - GOV.UK
-  {% else %}
-  {% if data.commodity == "plant products" %}Plant Products{% else %}{{data.commodity | capitalize or 'Plant Products' }}{% endif %} Details - Exports application - GOV.UK
-  {% endif %}
+  {% if data.build == "development" %}{% if data.commodity == "plant products" %}Plant Products{% else %}{{data.commodity | capitalize or 'Plant Products' }}{% endif %} Details - Exports application{% else %}Add {% if data.pheats != 1 %}{% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your {% if data.reforwarding %} re-forwarding{% endif %} consignment - Phytosanitary certificate - {{serviceName}}{% endif %} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -21,16 +17,8 @@
 
     <form method="post">
       <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
-        {% if data.build == "ux" %}
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">Add {% if data.pheats != 1 %}{% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your {% if data.reforwarding %}<br>re-forwarding{% endif %} consignment</legend>
-        {% else %}
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">Your commodity</legend>
-        {% endif %}
-        {% if data.build == "ux" %}
-        <p class="govuk-body govuk-!-margin-top-6" for="how-contacted-conditional">How do you want to describe your {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}?</p>
-        {% else %}
-        <p class="govuk-body govuk-!-margin-top-6" for="how-contacted-conditional">How do you want to describe your commodity?</p>
-        {% endif %}
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">{% if data.build == "development" %}Your commodity{% else %}Add {% if data.pheats != 1 %}{% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your{% if data.reforwarding %} re-forwarding{% endif %} consignment{% endif %}</legend>
+        <p class="govuk-body govuk-!-margin-top-6" for="how-contacted-conditional">{% if data.build == "development" %}commodity{% else %}{% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %}?</p>
 
         <div class="govuk-form-group">
 
@@ -136,8 +124,36 @@
         </div> -->
         {% endif %}
 
-        <!-- BULBS UX -->
-        {% if data.commodity == "bulbs" and data.build == "ux" %}
+        {% if data.commodity == "bulbs" and data.build == "development" %}
+        {{ govukRadios({
+          idPrefix: "commodity_type",
+          name: "commodity_type",
+          fieldset: {
+            legend: {
+              text: "Commodity type",
+              classes: "govuk-!-font-weight-bold"
+            }
+          },
+          items: [
+            {
+              value: "bulbs",
+              text: "Bulbs"
+            },
+            {
+              value: "corms",
+              text: "Corms"
+            },
+            {
+              value: "tubers",
+              text: "Tubers"
+            },
+            {
+              value: "rhizomes",
+              text: "Rhizomes"
+            }
+          ]
+        }) }}
+        {% elif data.commodity == "bulbs" %}
         {{ govukRadios({
           idPrefix: "commodity_type",
           name: "commodity_type",
@@ -173,49 +189,18 @@
               text: "Rhizomes"
             }
           ]
-        }) }}
-
-        <!-- BULBS -->
-        {% elseif data.commodity == "bulbs" %}
-        {{ govukRadios({
-          idPrefix: "commodity_type",
-          name: "commodity_type",
-          fieldset: {
-            legend: {
-              text: "Commodity type",
-              classes: "govuk-!-font-weight-bold"
-            }
-          },
-          items: [
-            {
-              value: "bulbs",
-              text: "Bulbs"
-            },
-            {
-              value: "corms",
-              text: "Corms"
-            },
-            {
-              value: "tubers",
-              text: "Tubers"
-            },
-            {
-              value: "rhizomes",
-              text: "Rhizomes"
-            }
-          ]
-        }) }}
+        }) }}        
         {% endif %}
 
         <!-- PLANTS AND FRESH PRODUCE --> 
         {% if data.commodity == "plants" %}
-        {% if data.build == "ux" %}
-          {% set class="" %}
-          {% set hint="If you plan to apply under PHEATS, you must select 'Produce (fruit, flowers or vegetables)'" %}
-          {% else %}
-          {% set class="govuk-!-font-weight-bold" %}
-          {% set hint="" %}
-          {% endif %}
+        {% if data.build == "development" %}
+        {% set class="govuk-!-font-weight-bold" %}
+        {% set hint="" %}
+        {% else %}
+        {% set class="" %}
+        {% set hint="If you plan to apply under PHEATS, you must select 'Produce (fruit, flowers or vegetables)'" %}  
+        {% endif %}
         {{ govukRadios({
           idPrefix: "commodity_type",
           name: "commodity_type",
@@ -297,7 +282,7 @@
         {% if data.commodity == "seeds" %}
         <div class="govuk-form-group govuk-!-margin-top-4">
           <label class="govuk-label" for="commodity_lot">Sample reference</label>
-          {% if data.build == "ux" %}
+          {% if data.build != "development" %}
           <span id="quantity-hint" class="govuk-hint">For example, 661234 or 2000012. You may also see this called the sample ID or SID number</span>
           {% endif %}
           <input class="govuk-input govuk-input--width-20" id="commodity_lot" name="commodity_lot" type="text">
@@ -305,31 +290,7 @@
         {% endif %}
         {% endif %}
 
-        {% if data.build == "ux" %}
-        <div class="govuk-form-group">
-          <fieldset class="govuk-fieldset" aria-describedby="quantity-hint">
-            <legend class="govuk-fieldset__legend">
-              <h1 class="govuk-body govuk-!-margin-bottom-0">Quantity and unit of measurement</h1>
-            </legend>
-            <span id="quantity-hint" class="govuk-hint">For example, 50 kilograms</span>
-            <input class="govuk-input govuk-input--width-5" id="quantity" name="quantity" type="text" aria-label="Quantity or weight per package" aria-describedby="quantity">
-            <select name="units" id="units" class="govuk-select govuk-!-margin-left-1" aria-label="Units of measurement">
-              <option value="" selected>Unit of measurement</option>
-              {% if data.commodity == "seeds" %}
-              <option value="Grams">Grams</option>
-              <option value="Kilograms">Kilograms</option>
-              <option value="Tonnes">Tonnes</option>
-              {% else %}
-              <option value="Grams">Grams</option>
-              <option value="Kilograms">Kilograms</option>
-              <option value="Litres">Litres</option>
-              <option value="Tonnes">Tonnes</option>
-              <option value="Units">Units</option>
-              {% endif %}
-            </select>
-          </fieldset>
-        </div>
-        {% else %}
+        {% if data.build == "development" %}
         <div class="govuk-form-group">
           <fieldset class="govuk-fieldset" aria-describedby="quantity-hint">
             <legend class="govuk-fieldset__legend">
@@ -353,6 +314,30 @@
             </select>
           </fieldset>
         </div>
+        {% else %}
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset" aria-describedby="quantity-hint">
+            <legend class="govuk-fieldset__legend">
+              <h1 class="govuk-body govuk-!-margin-bottom-0">Quantity and unit of measurement</h1>
+            </legend>
+            <span id="quantity-hint" class="govuk-hint">For example, 50 kilograms</span>
+            <input class="govuk-input govuk-input--width-5" id="quantity" name="quantity" type="text" aria-label="Quantity or weight per package" aria-describedby="quantity">
+            <select name="units" id="units" class="govuk-select govuk-!-margin-left-1" aria-label="Units of measurement">
+              <option value="" selected>Unit of measurement</option>
+              {% if data.commodity == "seeds" %}
+              <option value="Grams">Grams</option>
+              <option value="Kilograms">Kilograms</option>
+              <option value="Tonnes">Tonnes</option>
+              {% else %}
+              <option value="Grams">Grams</option>
+              <option value="Kilograms">Kilograms</option>
+              <option value="Litres">Litres</option>
+              <option value="Tonnes">Tonnes</option>
+              <option value="Units">Units</option>
+              {% endif %}
+            </select>
+          </fieldset>
+        </div>        
         {% endif %}
 
         <div class="govuk-form-group">
@@ -375,10 +360,10 @@
         <div class="govuk-form-group">
           <label class="govuk-label" for="distinguishing-marks">Distinguishing marks (optional)</label>
           <span id="distinguishing-mark-hint" class="govuk-hint">
-            {% if data.build == "ux" %}
-            For example, a container number or your own identification reference for this product
-            {% else %}
+            {% if data.build == "development" %}
             For example, container numbers, lot numbers 
+            {% else %}
+            For example, a container number or your own identification reference for this product
             {% endif %}
           </span>
           <input class="govuk-input govuk-input--width-20" id="distinguishing-marks" name="distinguishing_marks" type="text" aria-describedby="distinguishing-mark-hint">

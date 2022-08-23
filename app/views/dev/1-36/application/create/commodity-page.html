@@ -1,11 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.build == "ux" %}
-  Add {% if data.pheats != 1 %}{% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your {% if data.reforwarding %}re-forwarding{% endif %} consignment - Phytosanitary certificate - {{serviceName}} - GOV.UK
-  {% else %}
-  {% if data.commodity == "plant products" %}Plant Products{% else %}{{data.commodity | capitalize or 'Plant Products' }}{% endif %} Details - Exports application - GOV.UK
-  {% endif %}
+  {% if data.build == "development" %}{% if data.commodity == "plant products" %}Plant Products{% else %}{{data.commodity | capitalize or 'Plant Products' }}{% endif %} Details - Exports application{% else %}Add {% if data.pheats != 1 %}{% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your {% if data.reforwarding %} re-forwarding{% endif %} consignment - Phytosanitary certificate - {{serviceName}}{% endif %} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -36,22 +32,22 @@
             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-contact">
 
               <div class="govuk-form-group">
-                {% if data.build == "ux" %}
-                <label class="govuk-label" for="stock_number">Stock number</label>
-                <span id="quantity-hint" class="govuk-hint">Enter the stock number for stock that was soil sampled<br/> For ware potatoes grown in a seed certification scheme, enter "Seed"</span>
-                {% else %}
+                {% if data.build == "development" %}
                 <label class="govuk-label" for="stock_number">Soil sampling application number (optional)</label>
+                {% else %}
+                <label class="govuk-label" for="stock_number">Stock number</label>
+                <span id="quantity-hint" class="govuk-hint">Enter the stock number for stock that was soil sampled<br/> For ware potatoes grown in a seed certification scheme, enter "Seed"</span>                
                 {% endif %}
                 <input class="govuk-input govuk-!-width-one-half" id="stock_number" name="stock_number" type="text" spellcheck="false">
               </div>
 
               <div class="govuk-form-group">
-                {% if data.build == "ux" %}
-                <label class="govuk-label" for="lot_reference">Lot reference</label>
-                <span id="quantity-hint" class="govuk-hint">This is the number that will go on the bag labels.<br/> For ware potatoes grown in a seed certification scheme, enter the certification number</span>
-                {% else %}
+                {% if data.build == "development" %}
                 <label class="govuk-label" for="lot_reference">Lot reference (optional)</label>
                 <span id="quantity-hint" class="govuk-hint">This is the number that will go on the bag labels</span>
+                {% else %}
+                <label class="govuk-label" for="lot_reference">Lot reference</label>
+                <span id="quantity-hint" class="govuk-hint">This is the number that will go on the bag labels.<br/> For ware potatoes grown in a seed certification scheme, enter the certification number</span>
                 {% endif %}
                 <input class="govuk-input govuk-!-width-one-half" id="lot_reference" name="lot_reference" type="text" spellcheck="false">
               </div>
@@ -65,11 +61,11 @@
 
             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-contact-2">
               <div class="govuk-form-group">
-                {% if data.build == "ux" %}
-                <label class="govuk-label" for="stock_number">Certification number</label>
-                {% else %}
+                {% if data.build == "development" %}
                 <label class="govuk-label" for="stock_number">Stock number</label>
                 <span id="quantity-hint" class="govuk-hint">You may know this as the lot reference</span>
+                {% else %}
+                <label class="govuk-label" for="stock_number">Certification number</label>                
                 {% endif %}
                 <input class="govuk-input govuk-!-width-one-half" id="stock_number" name="stock_number" type="text">
               </div>
@@ -99,8 +95,7 @@
           </div>
 
           <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional">
-            {% if data.build == "ux" %}
-            {% else %}
+            {% if data.build == "development" %}
             <label class="govuk-label" for="stock_number">Search for a variety</label>
             {% endif %}
             {% if data.show_manual_input != "yes" %}
@@ -122,10 +117,10 @@
             <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-3">Other</label>
             
             <div id="how-contacted-conditional-hint" class="govuk-hint govuk-radios__hint">
-              {% if data.build == "ux" %}
-              If you can't find the variety by searching in the field above, select other and enter the variety
-              {% else %}
+              {% if data.build == "development" %}
               If you can't find the name of your variety, enter the variety name in the 'other' field instead
+              {% else %}
+              If you can't find the variety by searching in the field above, select other and enter the variety              
               {% endif %}
             </div>
 
@@ -149,10 +144,10 @@
         <label class="govuk-label" for="chemicals_used">Growing season inspection number</label>
 
         <div id="gsi_number-hint" class="govuk-hint govuk-input--width-20">
-          {% if data.build == "ux" %}
-          Enter the growing season inspection number.<br/>Enter ‘eDomero’ if the application for a growing season inspection was done using the eDomero system
-          {% else %}
+          {% if data.build == "development" %}
           Enter ‘eDomero’ if the application for a growing season inspection was done using the eDomero system
+          {% else %}
+          Enter the growing season inspection number.<br/>Enter ‘eDomero’ if the application for a growing season inspection was done using the eDomero system          
           {% endif %}
         </div>
 
@@ -175,11 +170,7 @@
       <fieldset class="govuk-fieldset" aria-describedby="contact-hint">
         
         <div class="govuk-form-group">
-          {% if data.build == "ux" %}
-          <label class="govuk-label" for="quantity">Quantity and unit of measurement</label>
-          {% else %}
-          <label class="govuk-label govuk-!-font-weight-bold" for="quantity">Quantity and unit of measurement</label>
-          {% endif %}
+          <label class="govuk-label{% if data.build == 'development' %} govuk-!-font-weight-bold{% endif %}" for="quantity">Quantity and unit of measurement</label>
           <span id="quantity-hint" class="govuk-hint">
             For example, 50 kilograms{% if data.commodity == "potatoes"%}. You can update this amount when you load your consignment{% endif %}
           </span>

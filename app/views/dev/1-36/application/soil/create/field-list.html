@@ -8,9 +8,9 @@
 {{super()}}
 <div class="login-nav login-border">
   <ul class="login-nav__list">
-    <li class="login-nav__list-item-new" id="Nav-DisplayName">Prototype user</li>
-    <li class="login-nav__list-item-new"><a href="../../../account" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile" id="Link-ManageAccount">Manage account</a></li>
-    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state" id="Link-SignOut">Sign out</a></li>
+    <li class="login-nav__list-item-new">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="../../../account" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
   </ul>
 </div>
 
@@ -53,10 +53,10 @@
             <td class="govuk-table__cell">
               {{data.nurseryplotno or "Top field"}}
               <br>
-              {% if data.build == "ux" %}
-              <span class="force-content-break">{% if data.addfielddetails == "Google Maps" %}{{data.navigation_googlemaps or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails == "iacs" %}{{data.navigation_iacs or "NF 1234 1234"}}{% elif data.addfielddetails == "gridgps" %}{{data.navigation_gridgps or "NX 509 582"}}{% elif data.addfielddetails == "what3words" %}///{{data.navigation_what3words or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}</span>
-              {% else %}
+              {% if data.build == "development" %}
               {% if data.addfielddetails == "Google Maps" %}{{data.navigation_googlemaps or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails == "iacs" %}{{data.navigation_iacs or "NF 1234 1234"}}{% elif data.addfielddetails == "gridgps" %}{{data.navigation_gridgps or "NX 509 582"}}{% elif data.addfielddetails == "what3words" %}///{{data.navigation_what3words or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}
+              {% else %}
+              <span class="force-content-break">{% if data.addfielddetails == "Google Maps" %}{{data.navigation_googlemaps or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails == "iacs" %}{{data.navigation_iacs or "NF 1234 1234"}}{% elif data.addfielddetails == "gridgps" %}{{data.navigation_gridgps or "NX 509 582"}}{% elif data.addfielddetails == "what3words" %}///{{data.navigation_what3words or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}</span>              
               {% endif %}
             </td>
             <td class="govuk-table__cell govuk-table__cell--numeric">{{data.areaoffield or "3.5"}}</td>
@@ -76,15 +76,9 @@
 
     <form action="{{query.return_url or 'task-list'}}" method="post">
       
-      {% if data.build == "ux" %}
-      <div class="govuk-button-group govuk-!-margin-top-7 govuk-!-margin-bottom-8">
+      <div class="govuk-form-group govuk-!-margin-top-7{% if data.build != 'development' %} govuk-!-margin-bottom-6{% endif %}">
         <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
       </div>
-      {% else %}
-      <div class="govuk-form-block govuk-!-margin-top-7">
-        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
-      </div>
-      {% endif %}
 
       <!-- Session data hook to update the task list so that this section is marked as 'COMPLETED' -->
       <div class="govuk-form-group" hidden>
@@ -94,11 +88,10 @@
 
     </form>
 
-    {% if data.build == "ux" %}
+    {% if data.build != "development" %}
     {% block continueLater %}
     {% include "../modules/_save-continue-later.html" %}
     {% endblock %}
-    {% else %}
     {% endif %}
   </div>
 
