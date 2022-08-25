@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">Sign in using Government Gateway</h1>
+
+    <form method="post" action="confirmation">
+      <input type="hidden" value="yourname@email.com" name="scpEmail">
+      
+      <div class="govuk-form-group">
+        <label for="user_id" class="govuk-label" aria-describedby="user_id-hint">Government Gateway user ID</label> 
+        
+        <div class="govuk-hint" id="user_id-hint">
+          This could be up to 12 characters.
+        </div> 
+
+        <input type="text" name="user_id" id="user_id" class="govuk-input govuk-!-width-one-half" value="" maxlength="22" aria-describedby="user_id-hint" autocomplete="username"> 
+      </div>
+
+      <div class="govuk-form-group"> <label for="password" class="govuk-label">Password</label> 
+        <input type="password" name="password" id="password" class="govuk-input govuk-!-width-three-quarters" autocomplete="current-password"> 
+      </div>
+
+      <!-- <a class="govuk-button" href="{% if data.route == 'new' %}../application/setup/what-export?version={{data.version}}&build={{data.build}}&route={{data.route}}{% else %}../dashboard?route={{data.route or 'existing'}}{% endif %}">Sign in</a> -->
+      <a class="govuk-button" href="../dashboard?route={{data.route or 'existing'}}">Sign in</a>
+      <p class="govuk-body"><a href="email?route=new" class="govuk-link">Create sign in details</a></p>
+      <br>
+      <br>
+      <h2 class="govuk-heading-m">Problems signing in</h2>
+      <ul class="govuk-list">
+        <li><a href="#" class="govuk-link">I have forgotten my password</a></li>
+        <li><a href="credential-recovery-enter-csid" class="govuk-link">I have forgotten my Government Gateway user ID</a></li>
+        <li><a href="credential-recovery-enter-csid" class="govuk-link">I have forgotten my Government Gateway user ID and password</a></li>
+        <br>
+      </ul>
+      <p class="govuk-body"><a href="#">Get help with this page</a></p>
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

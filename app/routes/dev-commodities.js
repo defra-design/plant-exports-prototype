@@ -157,8 +157,6 @@ module.exports = function(router) {
       }
     })
 
-
-
   });
 
   // **** POST TEMPLATE ***

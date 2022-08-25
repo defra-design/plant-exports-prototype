@@ -1,0 +1,177 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Application submitted - One time testing - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../../modules/_account-banner.html" %}
+{% endblock %}
+
+{% block content %}
+<style>
+
+  /* Needs extracting and adding to the external Sass or CSS */
+  .govuk-feedback-box {
+    padding: 20px;
+    background-color: lightgray;
+    border-left-color: #666;
+  }
+
+</style>
+
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-three-quarters">
+
+    <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-6">
+      <h1 class="govuk-panel__title">You’ve set up one time testing</h1>
+
+      <div class="govuk-panel__body">
+        Your <abbr title="Animal and Plant Health Agency">APHA</abbr> sample references are listed below
+      </div>
+
+    </div>
+
+    <div class="govuk-warning-text">
+      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+      <strong class="govuk-warning-text__text">
+        <span class="govuk-warning-text__assistive">Warning</span>
+        Your application may be rejected if you do not follow these instructions.
+      </strong>
+    </div>
+
+    <h2 class="govuk-heading-m">What you need to do</h2>
+    <ol class="govuk-list govuk-list--number">
+      <li>Label your samples using the <abbr title="Animal and Plant Health Agency">APHA</abbr> sample references.</li>
+      <li>Send your labelled samples to the address on this page. You must send in any relevant copies of your import permits with your samples.</li>
+      <li>Check your application status has changed to ‘report issued’. This usually happens within 7 days.</li>
+      <li>You can then apply for phytosanitary certificates for commodities that pass testing.</li>
+      <li>You can apply for more phytosanitary certificates using the same sample reference details until the commodity in your possession is used up.</li>
+    </ol>
+    <p class="govuk-body govuk-!-padding-bottom-2">We'll only contact you if there is a problem with your application.</p>
+
+    <h2 class="govuk-heading-m"><abbr title="Animal and Plant Health Agency">APHA</abbr> sample references</h2>
+
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">Description</th>
+          <th class="govuk-table__header" scope="col">Quantity</th>
+          <th class="govuk-table__header" scope="col">Destination</th>
+          <th class="govuk-table__header" scope="col">Distinguishing marks</th>
+          <th scope="col" class="govuk-table__header"><abbr title="Animal and Plant Health Agency">APHA</abbr> sample reference</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        {% if data.commodity_task_list_data %}
+        {% if data.commodity_task_list_data == "commodity-list-3" %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">{% if data.has_botanicial_name3 == "use_description" %}{{data.description_details3 or "Cat nip" }}{% else %}{{data.botanical_name3 or "Lophospermum atrosanguineum (RHWAT)"}}{% endif %}</td>
+          <td class="govuk-table__cell">{{data.quantity3 or "1,460"}}{% if data.units3 == "Grams" %}g{% elif data.units3 == "Kilograms" %}kg{% elif data.units3 == "Litres" %}l{% elif data.units3 == "Millilitres" %}ml{% elif data.units3 == "Tonnes" %}t{% else %}t{% endif %}</td>
+          <td class="govuk-table__cell">{% if data.filter_demo3 %}{% for param in data.filter_demo3 %}{{param}}{% if not loop.last %}, {% endif %}{% endfor %}{% else %}Canada{% endif %}</td>
+          <td class="govuk-table__cell">{% if data.distinguishing_marks3 %}{{data.distinguishing_marks3 or "Earl Grey"}}{% else %}&nbsp;{% endif %}</td>
+          <td scope="row" class="govuk-table__cell">10009347</td>
+        </tr>
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">{% if data.has_botanicial_name2 == "use_description" %}{{data.description_details2 or "Tea leaves" }}{% else %}{{data.botanical_name2 or "Alsophila latebrosa (ASWLA)"}}{% endif %}</td>
+          <td class="govuk-table__cell">{{data.quantity2 or "30"}}{% if data.units2 == "Grams" %}g{% elif data.units2 == "Kilograms" %}kg{% elif data.units2 == "Litres" %}l{% elif data.units2 == "Millilitres" %}ml{% elif data.units2 == "Tonnes" %}t{% else %}g{% endif %}</td>
+          <td class="govuk-table__cell">{% if data.filter_demo2 %}{% for param in data.filter_demo2 %}{{param}}{% if not loop.last %}, {% endif %}{% endfor %}{% else %}China{% endif %}</td>
+          <td class="govuk-table__cell">{% if data.distinguishing_marks2 %}{{data.distinguishing_marks2 or "PG Tips"}}{% else %}&nbsp;{% endif %}</td>
+          <td scope="row" class="govuk-table__cell">10009348</td>
+        </tr>
+        {% endif %}
+        {% if data.commodity_task_list_data == "commodity-list-2" %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">{% if data.has_botanicial_name2 == "use_description" %}{{data.description_details2 or "Tea leaves" }}{% else %}{{data.botanical_name2 or "Alsophila latebrosa (ASWLA)"}}{% endif %}</td>
+          <td class="govuk-table__cell">{{data.quantity2 or "30"}}{% if data.units2 == "Grams" %}g{% elif data.units2 == "Kilograms" %}kg{% elif data.units2 == "Litres" %}l{% elif data.units2 == "Millilitres" %}ml{% elif data.units2 == "Tonnes" %}t{% else %}g{% endif %}</td>
+          <td class="govuk-table__cell">{% if data.filter_demo2 %}{% for param in data.filter_demo2 %}{{param}}{% if not loop.last %}, {% endif %}{% endfor %}{% else %}China{% endif %}</td>
+          <td class="govuk-table__cell">{% if data.distinguishing_marks2 %}{{data.distinguishing_marks2 or "PG Tips"}}{% else %}&nbsp;{% endif %}</td>
+          <td scope="row" class="govuk-table__cell">10009348</td>
+        </tr>
+        {% endif %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">{% if data.has_botanicial_name == "use_description" %}{{data.description_details or "Coffee beans" }}{% else %}{{data.botanical_name or "Corylus (1CYLG)"}}{% endif %}</td>
+          <td class="govuk-table__cell">{{data.quantity or "10"}}{% if data.units == "Grams" %}g{% elif data.units == "Kilograms" %}kg{% elif data.units == "Litres" %}l{% elif data.units == "Millilitres" %}ml{% elif data.units == "Tonnes" %}t{% else %}kg{% endif %}</td>
+          <td class="govuk-table__cell">{% if data.filter_demo %}{% for param in data.filter_demo %}{{param}}{% if not loop.last %}, {% endif %}{% endfor %}{% else %}France{% endif %}</td>
+          <td class="govuk-table__cell">{% if data.distinguishing_marks %}{{data.distinguishing_marks or "N/A"}}{% else %}&nbsp;{% endif %}</td>
+          <td scope="row" class="govuk-table__cell">10009349</td>
+        </tr>
+        {% else %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">{% if data.has_botanicial_name2 == "use_description" %}{{data.description_details2 or "Tea leaves" }}{% else %}{{data.botanical_name2 or "Alsophila latebrosa (ASWLA)"}}{% endif %}</td>
+          <td class="govuk-table__cell">{{data.quantity2 or "30"}}{% if data.units2 == "Grams" %}g{% elif data.units2 == "Kilograms" %}kg{% elif data.units2 == "Litres" %}l{% elif data.units2 == "Millilitres" %}ml{% elif data.units2 == "Tonnes" %}t{% else %}g{% endif %}</td>
+          <td class="govuk-table__cell">{% if data.filter_demo2 %}{% for param in data.filter_demo2 %}{{param}}{% if not loop.last %}, {% endif %}{% endfor %}{% else %}China{% endif %}</td>
+          <td class="govuk-table__cell">{% if data.distinguishing_marks2 %}{{data.distinguishing_marks2 or "PG Tips"}}{% else %}&nbsp;{% endif %}</td>
+          <td scope="row" class="govuk-table__cell">10009348</td>
+        </tr>
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">{% if data.has_botanicial_name == "use_description" %}{{data.description_details or "Coffee beans" }}{% else %}{{data.botanical_name or "Corylus (1CYLG)"}}{% endif %}</td>
+          <td class="govuk-table__cell">{{data.quantity or "10"}}{% if data.units == "Grams" %}g{% elif data.units == "Kilograms" %}kg{% elif data.units == "Litres" %}l{% elif data.units == "Millilitres" %}ml{% elif data.units == "Tonnes" %}t{% else %}kg{% endif %}</td>
+          <td class="govuk-table__cell">{% if data.filter_demo %}{% for param in data.filter_demo %}{{param}}{% if not loop.last %}, {% endif %}{% endfor %}{% else %}France{% endif %}</td>
+          <td class="govuk-table__cell">{% if data.distinguishing_marks %}{{data.distinguishing_marks or "N/A"}}{% else %}&nbsp;{% endif %}</td>
+          <td scope="row" class="govuk-table__cell">10009349</td>
+        </tr>
+        {% endif %}
+      </tbody>
+    </table>
+
+    <h3 class="govuk-heading-s">Where to send your samples</h3>
+    <p class="govuk-body">
+      Plant Clinic
+      <br>
+      Block 4
+      <br>
+      National Agri-Food Campus
+      <br>
+      Sand Hutton
+      <br>
+      York
+      <br>
+      YO41 1LZ
+    </p>
+    <p class="govuk-body"><a href="print-submitted-application" class="govuk-link govuk-link-no-visited-state" target="_blank">See, print or copy this information (opens in new tab)</a></p>
+
+    <form action="{% if data.route == 'new' %}../../../dashboard-one{% else %}../../../dashboard{% endif %}" method="post">
+      <button class="govuk-button govuk-!-margin-top-2 govuk-!-margin-bottom-7" data-module="govuk-button">View your applications</button>
+
+      <!-- Session data hook to update the dashboard so that it knows a new application has been submitted -->
+      <div class="govuk-form-group" hidden>
+        <label class="govuk-label" for="application_submission_data">Application submission status</label>
+        <input class="govuk-input" id="application_submission_data" name="application_submission_data" type="text" value="submitted">
+      </div>
+
+    </form>
+
+    {% if data.build == "development" %}
+    <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_self">what fees you need to pay</a> for this application.</p>
+    {% else %}
+    <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_blank">what fees you will pay (opens in new tab)</a> for this application.</p>
+    {% endif %}
+    <h2 class="govuk-heading-m">If you need help</h2>
+    {% if data.build == "development" %}
+    <p class="govuk-body">Contact us quoting your <abbr title="Animal and Plant Health Agency">APHA</abbr> reference <strong id="applicationFormId2">1721 1480 04809</strong>:</p>
+    {% else %}
+    <p class="govuk-body">Contact us quoting your <abbr title="Animal and Plant Health Agency">APHA</abbr> reference number <strong id="applicationFormId2">1721 14800 4809</strong> on:</p>
+    {% endif %}
+    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-8">
+      <li>0300 1000 313, Monday to Sunday 7am to 7pm</li>
+      <li><a href="mailto:planthealth.info@apha.gov.uk" class="govuk-link">planthealth.info@apha.gov.uk</a></li>
+    </ul>
+
+    <div class="govuk-feedback-box govuk-!-margin-top-6">
+      <h2 class="govuk-heading-m">Give feedback on this service</h2>
+      {% if data.build == "development" %}
+      <p class="govuk-body">Take a 3 minute survey about your application so that we can improve the service. The survey will open in a new window.</p>
+      <p class="govuk-body"><a href="https://defragroup.eu.qualtrics.com/jfe/form/SV_1RDraVxZ03Ja2qy" class="govuk-link" target="_blank" class="govuk-link">Give feedback</a></p>
+      {% else %}
+      <p class="govuk-body">Take a 3 minute survey about your application so that we can improve the service.</p>
+      <p class="govuk-body"><a href="https://defragroup.eu.qualtrics.com/jfe/form/SV_1RDraVxZ03Ja2qy" class="govuk-link" target="_blank" class="govuk-link">Give feedback (opens in new tab)</a></p>
+      {% endif %}
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

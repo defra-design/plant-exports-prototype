@@ -1,0 +1,170 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+Your consignment - {{serviceName}} - GOV.UK
+{% endblock %}
+{% block beforeContent %}
+{{super()}}
+
+<style>
+.govuk-checkboxes__item {
+  top:-10px;
+}
+</style>
+<a href="{{page.content.prev or 'javascript:history.back()'}}" class="govuk-back-link">Back</a>
+{% endblock %}
+{% block content %}
+
+{% set url = query.return_url or "task-list" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-xl">
+      Your consignment
+    </h1>
+
+    <div class="">
+  
+      <div class="search-wrapper govuk-form-group ">
+        <label for="search-reservations" class="govuk-label">
+          Search by lot reference, sample reference, description or variety
+        </label>
+    
+        <div class="search-input-wrapper govuk-!-width-two-thirds">
+          <input type="search" value="{{query.search or ''}}" id="search-reservations" name="search" title="Search" class="govuk-input">
+          
+          <div class="search-input-submit-wrapper">
+            <button type="submit" class="search-submit">Search</button>
+          </div>
+    
+        </div>
+    
+      </div>
+    </div>
+
+
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+
+        <tr class="govuk-table__row">
+          <!-- <th class="govuk-table__header govuk-!-font-size-14" scope="col"> -->
+            <th class="govuk-table__header " scope="col">
+              <span class="govuk-visually-hidden">
+                Check box</span>
+            </th>
+            <th class="govuk-table__header " scope="col">
+              <span class="govuk-visually-hidden">
+                Line</span>
+            </th>
+          <th class="govuk-table__header " scope="col">
+            Description
+          </th>
+          {% if data.build != "development" %}
+          <th class="govuk-table__header " scope="col">
+            Variety
+          </th>
+          {% endif %}
+          <th class="govuk-table__header" scope="col">
+            Lot reference
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Sample reference
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Quantity
+          </th> 
+          <th class="govuk-table__header " scope="col" colspan="1">Actions</th>
+        </tr>
+        
+      </thead>
+      <tbody class="govuk-table__body govuk-!-font-size-16">
+        {% set isPhyto="true" %}
+        {% include "../modules/_summary-seeds-100-check.html" %}
+      </tbody>
+    </table>
+    <p class="defra-pagination__results" style="float: left;">
+      <a href="#" style=" text-decoration:none;"><b>1</b></a>
+      <a href="#" style=" text-decoration:none;"><b>2</b></a>
+      <a href="#" style=" text-decoration:none;"><b>3</b></a>
+      <a href="#" style=" text-decoration:none;"><b>4</b></a>
+    </p>
+    <p class="defra-pagination__results" style="float: right;">Showing <b>1</b> to <b><span class="js-case-count">100</span></b> of <b><span class="js-case-count">395</span></b> results</p>
+
+    <br/>
+    <p class="govuk-body govuk-!-margin-top-4 govuk-!-margin-bottom-9"style="clear:right;">
+      <a class="govuk-link" href="" id="selectAll">
+        Select all commodities
+      </a>
+      <br/>
+      <a class="govuk-link" href="confirm-delete-all">
+        Delete selected commodities</a> <span id="deleteAll">(0 selected)</span>
+    <p>
+
+    <form  method="POST">
+      <fieldset class="govuk-fieldset" aria-describedby="applicant-conditional-hint">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-!-margin-bottom-6">
+          <h3 class="govuk-fieldset__heading">
+            Do you want to add more {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %} to your consignment?
+          </h3>
+        </legend>
+        <div class="govuk-form-group">
+          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="add_more_commodities-yes" name="add_more_commodities" type="radio" value="yes~how-to-identify" data-aria-controls="conditional-applicant-conditional-2">
+              <label class="govuk-label govuk-radios__label" for="add_more_commodities-yes">
+                Yes, add one more commodity
+              </label>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="add_more_commodities-multi" name="add_more_commodities" type="radio" value="yes~upload" data-aria-controls="conditional-applicant-conditional-2">
+              <label class="govuk-label govuk-radios__label" for="add_more_commodities-multi">
+                Yes, upload multiple commodities
+              </label>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="add_more_commodities-no" name="add_more_commodities" type="radio" value="no~{{ url }}" data-aria-controls="conditional-applicant-conditional-2">
+              <label class="govuk-label govuk-radios__label" for="add_more_commodities-no">
+                No, I have finished adding to my consignment
+              </label>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+      <div class="govuk-!-margin-left-0 govuk-grid-column-one-quarter govuk-!-padding-0">
+        <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+      </div>
+      <div class="govuk-grid-row">
+      </div>
+    </form>
+    
+    
+    <script>
+      window.addEventListener('load', function() {
+        console.log('load');
+        var checkBoxes = $(".govuk-checkboxes__input");
+
+        checkBoxes.change(function(e) {
+          var len = $('.govuk-checkboxes__input:checked').length;
+          $("#deleteAll").text("(" + len + " selected)");
+        });
+
+        $("#selectAll").click(function(e) {
+          e.preventDefault();
+          
+          var txt = $("#selectAll").text();
+          if (txt == "Deselect all commodities on this page"){
+            $("#selectAll").text("Select all commodities on this page");
+            checkBoxes.prop("checked", false)
+          }else{
+            $("#selectAll").text("Deselect all commodities on this page");
+            checkBoxes.prop("checked", true)
+          }
+
+          var len = $('.govuk-checkboxes__input:checked').length;
+          $("#deleteAll").text("(" + len + " selected)");
+          
+        });
+
+      });
+      </script>
+  {% endblock %}
