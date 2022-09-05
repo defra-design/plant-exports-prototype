@@ -1,7 +1,7 @@
 {% extends "layout-option.html" %}
 
 {% block pageTitle %}
-  Your {% if data.route != "new" %}submitted {% else %}{% endif %}applications - {{serviceName}} - GOV.UK
+  Your applications - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -397,8 +397,13 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">Your {% if data.route != "new" %}submitted {% else %}{% endif %}applications</h1>
+    <h1 class="govuk-heading-xl">Your applications</h1>
+    {% if data.route != "new" %}
     <a class="govuk-button" href="application/setup/what-export?version={{data.version}}&build={{data.build}}&route={{data.route}}">Start a new application</a>
+    {% else %}
+    <p class="govuk-body">You have no applications.</p>
+    <a class="govuk-button" href="application/setup/what-export?version={{data.version}}&build={{data.build}}&route={{data.route}}">Start a new application</a>
+    {% endif %}    
   </div>
 
 </div>
@@ -1367,7 +1372,7 @@
 
     </div>
     {% else %}
-    <p class="govuk-body">You have no applications.</p>
+    
     {% endif %}
 
   </div>
