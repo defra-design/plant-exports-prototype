@@ -291,33 +291,106 @@
       {% endif %}
 
       {% if data.commodity == "plants" %}
-      {{ govukInput({
-        label: {
-          text: "Approximate hectarage of plot to be inspected",
-          classes: "govuk-label",
-          isPageHeading: false
-        },
-        hint: {
-          text: "If you do not answer this question you must give the number of pots or plants to be inspected"
-        },
-        id: "approxhectofplot3",
-        name: "approxhectofplot3",
-        classes: "govuk-input--width-4"
-      }) }}
+      {% if query.design == "1" %}
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" aria-describedby="how-much-to-be-inspected">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">How much is there to be inspected?</legend>
 
-      {{ govukInput({
-        label: {
-          text: "Number of pots or plants to be inspected",
-          classes: "govuk-label",
-          isPageHeading: false
-        },
-        hint: {
-          text: "If you do not answer this question you must give the approximate hectarage of plot"
-        },
-        id: "numberOfPots",
-        name: "numberOfPots",
-        classes: "govuk-input--width-4"
-      }) }}
+          <div id="how-much-to-be-inspected" class="govuk-hint">
+            Answer at least one
+          </div>
+        
+          <div class="govuk-form-group">
+            {{ govukInput({
+              label: {
+                text: "Approximate hectarage of plot to be inspected",
+                classes: "govuk-label",
+                isPageHeading: false
+              },
+              id: "approxhectofplot3",
+              name: "approxhectofplot3",
+              classes: "govuk-input--width-4"
+            }) }}
+          </div>
+        
+          <div class="govuk-form-group">
+            {{ govukInput({
+              label: {
+                text: "Number of pots or plants to be inspected",
+                classes: "govuk-label",
+                isPageHeading: false
+              },
+              id: "numberOfPots",
+              name: "numberOfPots",
+              classes: "govuk-input--width-4"
+            }) }}
+          </div>
+        
+        </fieldset>
+      </div>
+      {% else %}
+      <div class="govuk-form-group govuk-!-margin-bottom-4">
+        <fieldset class="govuk-fieldset" aria-describedby="contact-hint">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">How do you want to describe the amount you need inspected?</legend>
+      
+          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+          
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="amountToInspect-1" name="amountToInspect" type="radio" value="hectarage" aria-controls="conditional-amountToInspect-1" aria-expanded="false">
+              <label class="govuk-label govuk-radios__label" for="amountToInspect-1">Approximate hectarage of plot</label>
+            </div>
+              
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-amountToInspect-1">
+
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="hectarage-by-plot">Approximate hectarage of plot to be inspected</label>
+                <input class="govuk-input govuk-input--width-4" id="hectarage-by-plot" name="hectarage-by-plot" type="text">
+              </div>
+            
+            </div>
+              
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="amountToInspect-2" name="amountToInspect" type="radio" value="phone" aria-controls="conditional-amountToInspect-2" aria-expanded="false">
+              <label class="govuk-label govuk-radios__label" for="amountToInspect-2">Number of pots or plants</label>
+            </div>
+              
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-amountToInspect-2">
+
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="pots-or-plants">Number of pots or plants to be inspected</label>
+                <input class="govuk-input govuk-input--width-4" id="pots-or-plants" name="pots-or-plants" type="text">
+              </div>
+        
+            </div>
+
+            <div class="govuk-radios__divider">
+              or
+            </div>
+                
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="amountToInspect-3" name="amountToInspect" type="radio" value="text" aria-controls="conditional-amountToInspect-3" aria-expanded="false">
+              <label class="govuk-label govuk-radios__label" for="amountToInspect-3">Both</label>
+            </div>
+                
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-amountToInspect-3">
+                    
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="hectarage-by-plot">Approximate hectarage of plot to be inspected</label>
+                <input class="govuk-input govuk-input--width-4" id="hectarage-by-plot" name="hectarage-by-plot" type="text">
+              </div>
+              
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="pots-or-plants">Number of pots or plants to be inspected</label>
+                <input class="govuk-input govuk-input--width-4" id="pots-or-plants" name="pots-or-plants" type="text">
+              </div>
+        
+            </div>
+                
+          </div>
+      
+        </fieldset>
+      </div>
+      {% endif %}
       {% else %}
       {{ govukInput({
         label: {
