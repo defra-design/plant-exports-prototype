@@ -1,7 +1,7 @@
 {% extends "layout-option.html" %}
 
 {% block pageTitle %}
-  Add your {% if data.commodity == "potatoes" %}ware potatoes{% else %}{{data.commodity or "crops"}}{% endif %} to {{data.which_field or data.nurseryplotno or "Top field"}} - Growing season inspection - {{serviceName}} - GOV.UK
+  Add your {% if data.commodity == "potatoes" %}ware potatoes{% elif data.commodity == "plants" %}{{data.subCommodityType | lower or "plants"}}{% else %}{{data.commodity or "crops"}}{% endif %} to {{data.which_field or data.nurseryplotno or "Top field"}} - Growing season inspection - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -14,7 +14,7 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">Add your {% if data.commodity == "potatoes" %}ware potatoes{% else %}{{data.commodity or "crops"}}{% endif %} to {{data.which_field or data.nurseryplotno or "Top field"}}</h1>
+    <h1 class="govuk-heading-xl">Add your {% if data.commodity == "potatoes" %}ware potatoes{% elif data.commodity == "plants" %}{{data.subCommodityType | lower or "plants"}}{% else %}{{data.commodity or "crops"}}{% endif %} to {{data.which_field or data.nurseryplotno or "Top field"}}</h1>
     <p class="govuk-body">Describe a single crop for inspection at this location. Later, you'll be able to add further crops at this location if you want to.</p>
 
     {% if query.updateApplication == "yes" %}
@@ -123,7 +123,7 @@
 
       {% if data.commodity != "potatoes" %}
       <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
-        <legend class="govuk-fieldset__legend">How do you want to identify your {{data.commodity or 'crops'}}?</legend>
+        <legend class="govuk-fieldset__legend">How do you want to identify your {% if data.commodity == "plants" %}{{data.subCommodityType | lower or "plants"}}{% else %}{{data.commodity or "crops"}}{% endif %}?</legend>
 
         <div class="govuk-form-group">
           
@@ -214,7 +214,7 @@
 
         </div>
 
-        {% if data.commodity == "plants" %}
+        <!-- {% if data.commodity == "plants" %}
         {% if query.design == "1" or query.design == "2" or query.design == "3" %}
         {{ govukRadios({
           idPrefix: "commodity_type",
@@ -243,7 +243,6 @@
         {% else %}
         <div class="govuk-form-group govuk-!-margin-bottom-4">
           <fieldset class="govuk-fieldset">
-            <!-- <legend class="govuk-fieldset__legend">What commodity type and amount needs inspecting?</legend> -->
             <legend class="govuk-fieldset__legend">Commodity type</legend>
         
             <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
@@ -254,11 +253,6 @@
               </div>
                 
               <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-typeAndAmount-1">
-
-                <!-- <div class="govuk-form-group">
-                  <label class="govuk-label" for="micropropagatedAmount">Describe the amount</label>
-                  <input class="govuk-input govuk-!-width-one-half" id="micropropagatedAmount" name="micropropagatedAmount" type="text">
-                </div> -->
 
                 <div class="govuk-form-group">
                   <label class="govuk-label" for="micropropagatedAmount">Describe the amount</label>
@@ -299,7 +293,7 @@
         
           </fieldset>
         </div>
-        {% endif %}
+        {% endif %} -->
 
         <div class="govuk-form-group">
           <label class="govuk-label" for="ss_number">Soil sampling application number (optional)</label>
@@ -352,6 +346,45 @@
       {% endif %}
 
       {% if data.commodity == "plants" %}
+      {% if data.subCommodityType == "Micropropagation material" %}
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="quantity-containers">Number of containers to be inspected</label>
+        
+        <div id="quantity-containers-hint" class="govuk-hint">
+          Potential hint text (can delete Sophie if not needed)
+        </div>
+        
+        <input class="govuk-input govuk-input--width-4" id="quantity-containers" name="quantity-containers" type="text" aria-describedby="quantity-containers-hint">
+      </div>
+      {% elif data.subCommodityType == "Plants" %}
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="quantity-hectarage">Approximate hectarage of plot to be inspected</label>
+        <input class="govuk-input govuk-input--width-4" id="quantity-hectarage" name="quantity-hectarage" type="text">
+      </div>
+      
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="quantity-pots-or-plants">Number of pots or plants to be inspected (optional)</label>
+        <input class="govuk-input govuk-input--width-4" id="quantity-pots-or-plants" name="quantity-pots-or-plants" type="text">
+      </div>
+      {% elif data.subCommodityType == "Plants for the production of fruit, flowers or vegetables" %}
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="quantity-hectarage">Approximate hectarage of plot to be inspected</label>
+        <input class="govuk-input govuk-input--width-4" id="quantity-hectarage" name="quantity-hectarage" type="text">
+      </div>
+      {% else %}
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="quantity-hectarage">Approximate hectarage of plot to be inspected</label>
+        <input class="govuk-input govuk-input--width-4" id="quantity-hectarage" name="quantity-hectarage" type="text">
+      </div>
+      
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="quantity-pots-or-plants">Number of pots or plants to be inspected (optional)</label>
+        <input class="govuk-input govuk-input--width-4" id="quantity-pots-or-plants" name="quantity-pots-or-plants" type="text">
+      </div>
+      {% endif %}
+      {% endif %}
+
+      <!-- {% if data.commodity == "plants" %}
       {% if query.design == "1" %}
       <div class="govuk-form-group govuk-!-margin-bottom-4">
         <fieldset class="govuk-fieldset" aria-describedby="amountToInspect-hint">
@@ -506,7 +539,7 @@
         name: "approxhectofplot3",
         classes: "govuk-input--width-4"
       }) }}
-      {% endif %}
+      {% endif %} -->
 
       {% if data.commodity == "seeds" %}
       <div class="govuk-form-group">
