@@ -21,7 +21,7 @@
       Your application is now ready to be submitted.
       <br>
       <br>
-      Please check that the answers you've provided are correct.
+      {% if data.build == "development" %}Please check{% else %}Check{% endif %} that the answers you've provided are correct.
     </div>
    
     <h2 class="govuk-heading-m">Application summary</h2>
@@ -42,7 +42,7 @@
         </dd>
         {% endif %}
         <dd class="govuk-summary-list__actions">
-          <!--<a class="govuk-link" href="setup/reference?change=yes&return_url=../create/check-your-answers" data-qa-id="Link-ChangeAnswer" id="Link-ChangeAnswer-0">Change</a>-->
+          <!-- <a class="govuk-link" href="setup/reference?change=yes&return_url=../create/check-your-answers" data-qa-id="Link-ChangeAnswer" id="Link-ChangeAnswer-0">Change</a> F-->
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -50,7 +50,7 @@
           Your reference
         </dt>
         <dd class="govuk-summary-list__value">
-          {{data.reference_num or 'NM 1234 3212' }}
+          {{data.reference_num or 'NM 1234 3212'}}
         </dd>
         <dd class="govuk-summary-list__actions">
           <a class="govuk-link" href="setup/reference?change=yes&return_url=../create/check-your-answers" data-qa-id="Link-ChangeAnswer" id="Link-ChangeAnswer-0">Change</a>
@@ -160,58 +160,78 @@
       </div>
     </dl>
 
-    
-      <!--Your fields and crops-->
-      <h2 class="govuk-heading-m">Field and crop details</h2>
+      
+      <!-- Your fields and crops -->
+      <h2 class="govuk-heading-m">{% if data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}Location{% else %}Field{% endif %} and crop details</h2>
 
-      <!-- multiple commodity table starts -->
+      <!-- Multiple commodity table starts -->
       {% if commodity.has_botanicial_name == "yes" %}
-      {% set commodity_id_name = commodity.genus %}
+        {% set commodity_id_name = commodity.genus %}
       {% else %}
-      {% set commodity_id_name = commodity.commodity_common_name %}
+        {% set commodity_id_name = commodity.commodity_common_name %}
       {% endif %}
 
       <table class="govuk-table">
-      <tbody class="govuk-table__body">
-        <tr class="govuk-table__row">
-          <td class="govuk-table__cell govuk-summary-list__key govuk-!-width-one-quarter">{{data.nurseryplotno or "Top field"}}<br><!--<span class="govuk-body">20 hectares</span>--></td>
-          <td class="govuk-table__cell govuk-table__cell--numeric govuk-!-width-one-half" style="text-align:left;">
-            <p class="govuk-body">IACS or RLR number: {{data.navigation_iacs or "NF24681358"}}<br>Field map: <a class="govuk-link govuk-link--no-visited-state" href="#">{{ data.description or "topfield.jpg" }}</a></p>
-            <ul class="govuk-list govuk-list--bullet">
-                <li>{{ data['commodity_host_species'] or data['genus'] or data['commodity_common_name'] or data['commodity_type'] or data['commodity_variety'] or data['potatovarietySelect'] or 'Corylus avellana' }} - {{ data['approxhectofplot'] or 3.5 }} hectares <br>{{ data['filter_demo'] or Belize }}</li>
-                <li>{{ data['commodity_host_species'] or data['genus'] or data['commodity_common_name'] or data['commodity_type'] or data['commodity_variety'] or data['potatovarietySelect'] or 'Corylus avellana' }} - {{ data['approxhectofplot3'] or 1.5 }} hectares <br>{{ data['filter_demo3'] or Belgium }}</li>
+        <!-- Chris Harding (28.09.22) - Where the hell is the <thead> here!? This whole application needs fixing... -->
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-summary-list__key govuk-!-width-one-quarter">{{data.nurseryplotno or "Top field"}}</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric govuk-!-width-one-half" style="text-align: left;">
+              <p class="govuk-body">
+                IACS or RLR number: {{data.navigation_iacs or "NF24681358"}}
+                <br>
+                {% if data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}Map{% else %}Field map{% endif %}: <a class="govuk-link govuk-link--no-visited-state" href="#">{{data.description or "topfield.jpg"}}</a>
+              </p>
+              <ul class="govuk-list govuk-list--bullet">
+                <li>
+                  {{data['commodity_host_species'] or data['genus'] or data['commodity_common_name'] or data['commodity_type'] or data['commodity_variety'] or data['potatovarietySelect'] or 'Corylus avellana'}} - {% if data.commodity == "plants" %}{% if data.subCommodityType == "Micropropagation material" %}{{data.quantityContainers or "12"}} containers{% else %}{{data.quantityHectarage or "6"}} hectares{% endif %}{% else %}{{data.approxhectofplot or "3.5"}} hectares{% endif %}
+                  <br>
+                  {{data['filter_demo'] or "Belize"}}
+                </li>
+                <li>
+                  {{data['commodity_host_species'] or data['genus'] or data['commodity_common_name'] or data['commodity_type'] or data['commodity_variety'] or data['potatovarietySelect'] or 'Corylus avellana'}} - {% if data.commodity == "plants" %}{% if data.subCommodityType == "Micropropagation material" %}{{data.quantityContainers or "23"}} containers{% else %}{{data.quantityHectarage or "20"}} hectares{% endif %}{% else %}{{data.approxhectofplot3 or "1.5"}} hectares{% endif %}
+                  <br>
+                  {{data['filter_demo3'] or "Belgium"}}
+                </li>
               </ul>
             </td>
             <td class="govuk-table__cell govuk-table__cell govuk-!-width-one-quarter"></td>
-          <td class="govuk-table__cell govuk-table__cell govuk-!-width-one-quarter">
-            <a class="govuk-link govuk-link--no-visited-state" href="gsi-commodity-list-2-fields.html">Change</a>
-            <!--<br><a class="govuk-link govuk-link--no-visited-state" href="#">Delete</a>-->
-          </td>
-        </tr>
-        <tr class="govuk-table__row">
+            <td class="govuk-table__cell govuk-table__cell govuk-!-width-one-quarter">
+              <a class="govuk-link govuk-link--no-visited-state" href="gsi-commodity-list-2-fields.html">Change</a>
+            </td>
+          </tr>
+          <tr class="govuk-table__row">
             <td class="govuk-table__cell govuk-summary-list__key">{{data.nurseryplotno2 or "Bottom field"}}</td>
-            <td class="govuk-table__cell govuk-table__cell--numeric"  style="text-align:left">
-                <p class="govuk-body">IACS or RLR number: {{data.navigation_iacs2 or "NF24681361"}}<br>Field map: Not provided</p>
-            
-                <ul class="govuk-list govuk-list--bullet">
-                  <li>{{ data['commodity_host_species'] or data['genus'] or data['commodity_common_name'] or data['commodity_type'] or data['commodity_variety'] or data['potatovarietySelect'] or 'Corylus avellana' }} - {{ data['approxhectofplot2'] or 6 }} hectares <br>{{ data['filter_demo2'] or Spain }}</li>
+            <td class="govuk-table__cell govuk-table__cell--numeric" style="text-align: left;">
+              <p class="govuk-body">
+                IACS or RLR number: {{data.navigation_iacs2 or "NF24681361"}}
+                <br>
+                {% if data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}Map{% else %}Field map{% endif %}: Not provided
+              </p>
+              <ul class="govuk-list govuk-list--bullet">
+                <li>
+                  {{data['commodity_host_species'] or data['genus'] or data['commodity_common_name'] or data['commodity_type'] or data['commodity_variety'] or data['potatovarietySelect'] or 'Corylus avellana'}} - {% if data.commodity == "plants" %}{% if data.subCommodityType == "Micropropagation material" %}{{data.quantityContainers or "122"}} containers{% else %}{{data.quantityHectarage or "42"}} hectares{% endif %}{% else %}{{data.approxhectofplot2 or "6"}} hectares{% endif %}
+                  <br>
+                  {{data['filter_demo2'] or "Spain"}}
+                </li>
               </ul>
             </td>
             <td class="govuk-table__cell govuk-table__cell"></td>
             <td class="govuk-table__cell govuk-table__cell">
-                <a class="govuk-link govuk-link--no-visited-state" href="gsi-commodity-list-2-fields.html">Change</a>
+              <a class="govuk-link govuk-link--no-visited-state" href="gsi-commodity-list-2-fields.html">Change</a>
             </td>
           </tr>
         </tbody>
       </table>
 
-
     </div>
+
     <div class="govuk-grid-column-three-quarters govuk-!-margin-top-9">
       <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_blank">what fees you need to pay</a> for this application (opens in a new window).</p>
       <p class="govuk-body govuk-!-margin-top-9">
         <a href="../submit/declaration-gsi" class="govuk-button">Continue</a>
       </p>
-   </div>
+  </div>
+
 </div>
 {% endblock %}

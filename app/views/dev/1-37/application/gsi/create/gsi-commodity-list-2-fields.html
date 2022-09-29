@@ -1,7 +1,8 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-Your crops for inspection - Growing season inspection - {{serviceName}} - GOV.UK
+  Your crops for inspection - Growing season inspection - {{serviceName}} - GOV.UK
+  <!-- Your fields and {% if data.commodity == "potatoes" %}ware potatoes{% else %}{{data.commodity or "crops"}}{% endif %} for inspection - Growing season inspection - {{serviceName}} - GOV.UK -->
 {% endblock %}
 
 {% block beforeContent %}
@@ -12,245 +13,189 @@ Your crops for inspection - Growing season inspection - {{serviceName}} - GOV.UK
 
 {% block content %}
 <div class="govuk-grid-row">
+
   <div class="govuk-grid-column-three-quarters">
-    <h1 class="govuk-heading-xl">
-      Your fields and {% if data.commodity == "potatoes" %}ware potatoes{% else %}{{data.commodity or "crops"}}{% endif %} for inspection
-    </h1>
-    {% if query.message=="true" %}
+    <h1 class="govuk-heading-xl">Your crops for inspection</h1>
+    <!-- <h1 class="govuk-heading-xl">Your fields and {% if data.commodity == "potatoes" %}ware potatoes{% else %}{{data.commodity or "crops"}}{% endif %} for inspection</h1> -->
+
+    {% if query.message == "true" %}
     <div class="govuk-inset-text">
       You have added <strong>500</strong> commodities. This consignment is now full. <br/>If you have more than 500 commodities, you must add them to a new application.</p>
     </div>
     {% endif %}
-    <p class="govuk-body">
-      Here's what you currently have listed for growing season inspection. You can add more locations and more crops to each location.
-    </p>
 
+    <p class="govuk-body">Here's what you currently have listed for growing season inspection. You can add more locations and more crops to each location.</p>
     <h2 class="govuk-heading-l">Location{% if data.build == "development" %} 1{% endif %}: {{data['nurseryplotno'] or 'Top field'}}</h2>
-    <form action="post">
-    <dl class="govuk-summary-list govuk-summary-list--no-border">
-      <div class="govuk-summary-list__row">
+    
+    <form method="post" action="task-list">
+      <dl class="govuk-summary-list govuk-summary-list--no-border">
+      
+        <div class="govuk-summary-list__row">
           {% if data.addfielddetails == "gridgps" %}
-          <dt class="govuk-summary-list__key"> 
-            Grid reference or GPS reading
-          </dt>
+          <dt class="govuk-summary-list__key">Grid reference or GPS reading</dt>
           {% else %}
-          <dt class="govuk-summary-list__key">
-            IACS or RLR number
-          </dt>
+          <dt class="govuk-summary-list__key">IACS or RLR number</dt>
           {% endif %}
           {% if data.addfielddetails == "iacs" %}
-          <dd class="govuk-summary-list__value">
-            {{data.navigation_iacs or "NF24681358"}}
-          </dd>
+          <dd class="govuk-summary-list__value">{{data.navigation_iacs or "NF24681358"}}</dd>
           {% else %}
-          <dd class="govuk-summary-list__value">
-            {{data.gridgps or "NF 2468 1358"}}
-          </dd>
+          <dd class="govuk-summary-list__value">{{data.gridgps or "NF 2468 1358"}}</dd>
           {% endif %}
-        <dd class="govuk-summary-list__actions">
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Field area (hectares)
-        </dt>
-        <dd class="govuk-summary-list__value">
-          {{ data.areaoffield or "5" }}
-        </dd>
-        <dd class="govuk-summary-list__actions">
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Field map
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <a class="govuk-link govuk-link--no-visited-state" href="#">{{ data.description or "Filename.jpg" }}</a>
-        </dd>
-        <dd class="govuk-summary-list__actions">
-        </dd>
-      </div>
-    </dl>
-    <ul class="govuk-list govuk-list--no-bullet">
-      <li><a class="govuk-link govuk-link--no-visited-state" href="field-2-amend">Change this field</a></li>
-    <li><a class="govuk-link govuk-link--no-visited-state" href="delete-field-2.html">Delete this field</a></li>
-    </ul>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
+        </div>
 
-    {% if commodity.has_botanicial_name == "yes" %}
-    {% set commodity_id_name = commodity.genus %}
-    {% else %}
-    {% set commodity_id_name = commodity.commodity_common_name %}
-    {% endif %}
+        {% if data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}
 
-    <h2 class="govuk-heading-s govuk-!-margin-top-9">{% if data.commodity == "potatoes" %}2 crop varieties {% else %}2 crops{% endif %} added to {{data['nurseryplotno'] or 'Top field'}}</h2>
-    <table class="govuk-table govuk-!-margin-bottom-4">
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
-            Description
-          </th>
-          <th class="govuk-table__header govuk-table__header--numeric govuk-!-width-one-quarter" scope="col">
-            Inspection area (hectares)
-          </th>
-          <th class="govuk-table__header govuk-!-width-one-half" scope="col">
-            Destination countries
-          </th>
-          <th class="govuk-table__header" scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tbody class="govuk-table__body">
-        <tr class="govuk-table__row">
-          <td class="govuk-table__cell"> 
-            {{ data['commodity_host_species'] or data['genus'] or data['commodity_common_name'] or data['commodity_type'] or data['commodity_variety'] or data['potatovarietySelect'] or 'Corylus avellana' }}
-          </td>
-          <td class="govuk-table__cell govuk-table__cell--numeric">
-            {{ data.approxhectofplot or "3.5" }}
-          </td>
-          <td class="govuk-table__cell">
-            {{ data.filter_demo or "Belize" }}
-          </td>
-          <td class="govuk-table__cell">
-            <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">
-              Change
-            </a><br>
-            <a href="#" class="govuk-link govuk-link--no-visited-state">
-              Delete
-            </a>
-          </td>
-        </tr>
-        <tr class="govuk-table__row">
-          <td class="govuk-table__cell"> 
-            {{ data['commodity_host_species'] or data['genus'] or data['commodity_common_name'] or data['commodity_type'] or data['commodity_variety'] or data['potatovarietySelect'] or 'Corylus avellana' }}
-          </td>
-          <td class="govuk-table__cell govuk-table__cell--numeric">
-            {{ data.approxhectofplot3 or "1.5" }}
-          </td>
-          <td class="govuk-table__cell">
-            {{ data.filter_demo3 or "Spain" }}
-          </td>
-          <td class="govuk-table__cell">
-            <a href="how-to-identify-3" class="govuk-link govuk-link--no-visited-state">
-              Change
-            </a><br>
-            <a href="delete-crop?return_url=gsi-commodity-list-2-fields" class="govuk-link govuk-link--no-visited-state">
-              Delete
-            </a>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-      <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="">Add more crops to this location</a></p>
+        {% else %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Field area (hectares)</dt>
+          <dd class="govuk-summary-list__value">{{data.areaoffield or "5"}}</dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
+        </div>
+        {% endif %}
 
- 
-
-
-  <!-- LOCATION 2 -->
-  <h2 class="govuk-heading-l govuk-!-margin-top-9">Location{% if data.build == "development" %} 2{% endif %}: {{data['nurseryplotno2'] or 'Bottom field'}}</h2>
-    <form action="">
-    <dl class="govuk-summary-list govuk-summary-list--no-border">
-      <div class="govuk-summary-list__row">
-          {% if data.addfielddetails2 == "gridgps" %}
-          <dt class="govuk-summary-list__key"> 
-            Grid reference or GPS reading
-          </dt>
-          {% else %}
-          <dt class="govuk-summary-list__key">
-            IACS or RLR number
-          </dt>
-          {% endif %}
-          {% if data.addfielddetails2 == "iacs" %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">{% if data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}Map{% else %}Field map{% endif %}</dt>
           <dd class="govuk-summary-list__value">
-            {{data.navigation_iacs or "NF24681358"}}
+            <a class="govuk-link govuk-link--no-visited-state" href="#">{{data.description or "Filename.jpg" }}</a>
           </dd>
-          {% else %}
-          <dd class="govuk-summary-list__value">
-            {{data.gridgps2 or "NF 2468 1358"}}
-          </dd>
-          {% endif %}
-        <dd class="govuk-summary-list__actions">
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Field area (hectares)
-        </dt>
-        <dd class="govuk-summary-list__value">
-          {{ data.areaoffield2 or "6" }}
-        </dd>
-        <dd class="govuk-summary-list__actions">
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Field map
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <a class="govuk-link govuk-link--no-visited-state" href="#">{{ data.description or "Filename.jpg" }}</a>
-        </dd>
-        <dd class="govuk-summary-list__actions">
-        </dd>
-      </div>
-    </dl>
-    <ul class="govuk-list govuk-list--no-bullet">
-      <li><a class="govuk-link govuk-link--no-visited-state" href="#">Change this field</a></li>
-    <li><a class="govuk-link govuk-link--no-visited-state" href="delete-field.html">Delete this field</a></li>
-    </ul>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
+        </div>
+
+      </dl>
+      <ul class="govuk-list govuk-list--no-bullet">
+        <li><a class="govuk-link govuk-link--no-visited-state" href="field-2-amend">Change this {% if data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}location{% else %}field{% endif %}</a></li>
+        <li><a class="govuk-link govuk-link--no-visited-state" href="delete-field-2.html">Delete this {% if data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}location{% else %}field{% endif %}</a></li>
+      </ul>
 
       {% if commodity.has_botanicial_name == "yes" %}
-      {% set commodity_id_name = commodity.genus %}
+        {% set commodity_id_name = commodity.genus %}
       {% else %}
-      {% set commodity_id_name = commodity.commodity_common_name %}
+        {% set commodity_id_name = commodity.commodity_common_name %}
       {% endif %}
 
-      <h2 class="govuk-heading-s govuk-!-margin-top-9">{% if data.commodity == "potatoes" %}2 crop varieties {% else %}2 crops{% endif %} added to {{ data['nurseryplotno2'] or 'Bottom field' }}</h2>
+      <h2 class="govuk-heading-s govuk-!-margin-top-9">{% if data.commodity == "potatoes" %}2 crop varieties {% else %}2 crops{% endif %} added to {{data['nurseryplotno'] or 'Top field'}}</h2>
+
       <table class="govuk-table govuk-!-margin-bottom-4">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
-            <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
-              Description
-            </th>
-            <th class="govuk-table__header govuk-table__header--numeric govuk-!-width-one-quarter" scope="col">
-              Area to be inspected in hectares
-            </th>
-            <th class="govuk-table__header govuk-!-width-one-half" scope="col">
-              Destination countries
-            </th>
+            <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">Description</th>
+            <th class="govuk-table__header govuk-table__header--numeric govuk-!-width-one-quarter" scope="col">{% if data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}Number of containers{% else %}Inspection area (hectares){% endif %}</th>
+            <th class="govuk-table__header govuk-!-width-one-half" scope="col">Destination countries</th>
             <th class="govuk-table__header" scope="col">Actions</th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">
-            <tr class="govuk-table__row">
-              <td class="govuk-table__cell"> 
-                {{ data['commodity_host_species'] or data['genus'] or data['commodity_common_name'] or data['commodity_type'] or data['commodity_variety'] or data['potatovarietySelect'] or 'Corylus avellana' }}
-              </td>
-              <td class="govuk-table__cell govuk-table__cell--numeric">
-                {{ data.approxhectofplot2 or "6" }}
-              </td>
-              <td class="govuk-table__cell">
-                {{ data.filter_demo_2 or "Belgium" }}
-              </td>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">{{data['commodity_host_species'] or data['genus'] or data['commodity_common_name'] or data['commodity_type'] or data['commodity_variety'] or data['potatovarietySelect'] or 'Corylus avellana'}}</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{% if data.commodity == "plants" %}{% if data.subCommodityType == "Micropropagation material" %}{{data.quantityContainers or "12"}}{% else %}{{data.quantityHectarage or "6"}}{% endif %}{% else %}{{data.approxhectofplot or "3.5"}}{% endif %}</td>
+            <td class="govuk-table__cell">{{data.filter_demo or "Belize"}}</td>
             <td class="govuk-table__cell">
-              <a href="#" class="govuk-link govuk-link--no-visited-state">
-                Change
-              </a><br>
-              <a href="#" class="govuk-link govuk-link--no-visited-state">
-                Delete
-              </a>
+              <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">Change</a>
+              <br>
+              <a href="#" class="govuk-link govuk-link--no-visited-state">Delete</a>
             </td>
           </tr>
-          </tbody>
-        </table>
-        <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="#">Add more crops to this location</a></p>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">{{data['commodity_host_species'] or data['genus'] or data['commodity_common_name'] or data['commodity_type'] or data['commodity_variety'] or data['potatovarietySelect'] or 'Corylus avellana'}}</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{% if data.commodity == "plants" %}{% if data.subCommodityType == "Micropropagation material" %}{{data.quantityContainers or "23"}}{% else %}{{data.quantityHectarage or "20"}}{% endif %}{% else %}{{data.approxhectofplot3 or "1.5"}}{% endif %}</td>
+            <td class="govuk-table__cell">{{data.filter_demo3 or "Spain"}}</td>
+            <td class="govuk-table__cell">
+              <a href="how-to-identify-3" class="govuk-link govuk-link--no-visited-state">Change</a>
+              <br>
+              <a href="delete-crop?return_url=gsi-commodity-list-2-fields" class="govuk-link govuk-link--no-visited-state">Delete</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
+      <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="#">Add more crops to this location</a></p>
 
-    <div class="govuk-button-group govuk-!-margin-top-9">
-      {{ govukButton({
-        text: "Save and continue",
-        href: "task-list-2"
-      }) }}
-      <a class="govuk-link" href="field-two">Add another location</a>
-    </div>
+      <h2 class="govuk-heading-l govuk-!-margin-top-9">Location{% if data.build == "development" %} 2{% endif %}: {{data['nurseryplotno2'] or 'Bottom field'}}</h2>
+      <dl class="govuk-summary-list govuk-summary-list--no-border">
+
+        <div class="govuk-summary-list__row">
+          {% if data.addfielddetails2 == "gridgps" %}
+          <dt class="govuk-summary-list__key">Grid reference or GPS reading</dt>
+          {% else %}
+          <dt class="govuk-summary-list__key">IACS or RLR number</dt>
+          {% endif %}
+          {% if data.addfielddetails2 == "iacs" %}
+          <dd class="govuk-summary-list__value">{{data.navigation_iacs or "NF24681358"}}</dd>
+          {% else %}
+          <dd class="govuk-summary-list__value">{{data.gridgps2 or "NF 2468 1358"}}</dd>
+          {% endif %}
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
+        </div>
+
+        {% if data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}
+
+        {% else %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Field area (hectares)</dt>
+          <dd class="govuk-summary-list__value">{{data.areaoffield2 or "6"}}</dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
+        </div>
+        {% endif %}
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">{% if data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}Map{% else %}Field map{% endif %}</dt>
+          <dd class="govuk-summary-list__value">
+            <a class="govuk-link govuk-link--no-visited-state" href="#">{{data.description or "Filename.jpg" }}</a>
+          </dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
+        </div>
+
+      </dl>
+      <ul class="govuk-list govuk-list--no-bullet">
+        <li><a class="govuk-link govuk-link--no-visited-state" href="#">Change this {% if data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}location{% else %}field{% endif %}</a></li>
+        <li><a class="govuk-link govuk-link--no-visited-state" href="delete-field.html">Delete this {% if data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}location{% else %}field{% endif %}</a></li>
+      </ul>
+
+      {% if commodity.has_botanicial_name == "yes" %}
+        {% set commodity_id_name = commodity.genus %}
+      {% else %}
+        {% set commodity_id_name = commodity.commodity_common_name %}
+      {% endif %}
+
+      <h2 class="govuk-heading-s govuk-!-margin-top-9">{% if data.commodity == "potatoes" %}2 crop varieties {% else %}2 crops{% endif %} added to {{data['nurseryplotno2'] or 'Bottom field'}}</h2>
+
+      <table class="govuk-table govuk-!-margin-bottom-4">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">Description</th>
+            <th class="govuk-table__header govuk-table__header--numeric govuk-!-width-one-quarter" scope="col">{% if data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}Number of containers{% else %}Inspection area (hectares){% endif %}</th>
+            <th class="govuk-table__header govuk-!-width-one-half" scope="col">Destination countries</th>
+            <th class="govuk-table__header" scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">{{data['commodity_host_species'] or data['genus'] or data['commodity_common_name'] or data['commodity_type'] or data['commodity_variety'] or data['potatovarietySelect'] or 'Corylus avellana'}}</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">{% if data.commodity == "plants" %}{% if data.subCommodityType == "Micropropagation material" %}{{data.quantityContainers or "122"}}{% else %}{{data.quantityHectarage or "42"}}{% endif %}{% else %}{{data.approxhectofplot or "3.5"}}{% endif %}</td>
+            <td class="govuk-table__cell">{{data.filter_demo_2 or "Belgium"}}</td>
+            <td class="govuk-table__cell">
+              <a href="#" class="govuk-link govuk-link--no-visited-state">Change</a>
+              <br>
+              <a href="#" class="govuk-link govuk-link--no-visited-state">Delete</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+        
+      <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="#">Add more crops to this location</a></p>
+
+      <div class="govuk-button-group govuk-!-margin-top-9">
+        {{ govukButton({
+          text: "Save and continue",
+          href: "task-list-2"
+        }) }}
+        <a class="govuk-link" href="field-two">Add another location</a>
+      </div>
+
+    </form>
+  
   </div>
-</div>
 
-    {% endblock %}
+</div>
+{% endblock %}

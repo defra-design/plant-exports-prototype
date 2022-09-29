@@ -45,6 +45,13 @@
 
 </style>
 
+<!-- Chris Harding (29.09.22) - An easier way to reference the correct location content on this page, depending on the sub commodity (for 'Plants and fresh produce' only) -->
+{% if data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}
+  {% set locationReference = "location" %}
+{% else %}
+  {% set locationReference = "field" %}
+{% endif %}
+
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
@@ -121,6 +128,9 @@
         value: data.nurseryplotno or ""
       }) }}
 
+      {% if data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}
+      
+      {% else %}
       {{ govukInput({
         label: {
           text: "Area of whole field in hectares",
@@ -131,12 +141,13 @@
         classes: "govuk-input--width-4",
         value: data.areaoffield or ""
       }) }}
+      {% endif %}
 
       <div class="govuk-checkboxes govuk-!-margin-bottom-6">
         
         <div class="govuk-checkboxes__item">
           <input class="govuk-checkboxes__input" type="checkbox" name="confirm" id="confirm" value="Yes" {% if data.confirm == 'Yes' %}checked{% else %}{% endif %}>
-          <label class="govuk-checkboxes__label" for="confirm">I confirm that I have the land owner's consent to inspect this field</label>
+          <label class="govuk-checkboxes__label" for="confirm">I confirm that I have the land owner's consent to inspect this {{locationReference}}</label>
         </div>
 
       </div>
@@ -150,7 +161,7 @@
           isPageHeading: false
         },
         hint: {
-          text: "Tell the inspector how to access the field and where to park"
+          text: "Tell the inspector how to access the " + locationReference + " and where to park"
         }
       }) }}
 

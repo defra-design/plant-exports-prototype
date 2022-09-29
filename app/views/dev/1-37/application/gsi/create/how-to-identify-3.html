@@ -6,16 +6,16 @@
 
 {% block beforeContent %}
 {{super()}}
+{% include "../modules/_account-banner.html" %}
 <a href="javascript:history.back()" class="govuk-back-link">Back</a>
 {% endblock %}
 
 {% block content %}
 <div class="govuk-grid-row">
+
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">Add your {% if data.commodity == "potatoes" %}ware potatoes{% elif data.commodity == "plants" %}{{data.subCommodityType | lower or "plants"}}{% else %}{{data.commodity or "crops"}}{% endif %} to {{data.which_field or data.nurseryplotno or "Top field"}}</h1>
-    <p class="govuk-body">
-      Describe a single crop for inspection at this location. Later, you'll be able to add further crops at this location if you want to.
-    </p>
+    <p class="govuk-body">Describe a {% if data.commodity == "plants" %}single crop of {{data.subCommodityType | lower or "plants"}}{% else %}single crop{% endif %} for inspection at this location. Later, you'll be able to add further crops at this location if you want to.</p>
 
     {% if query.updateApplication == "yes" %}
     <div class="govuk-inset-text">
@@ -23,7 +23,7 @@
     </div>
     {% endif %}
    
-    <form method="POST" action="gsi-commodity-list-2-crops">
+    <form method="post" action="gsi-commodity-list-2-crops">
 
       {% if data.commodity == "potatoes" %}
       <div class="govuk-form-group">
@@ -344,40 +344,46 @@
       {% if data.commodity == "plants" %}
       {% if data.subCommodityType == "Micropropagation material" %}
       <div class="govuk-form-group">
-        <label class="govuk-label" for="quantity-containers">Number of containers to be inspected</label>
-        
-        <div id="quantity-containers-hint" class="govuk-hint">
-          Potential hint text (can delete Sophie if not needed)
-        </div>
-        
-        <input class="govuk-input govuk-input--width-4" id="quantity-containers" name="quantity-containers" type="text" aria-describedby="quantity-containers-hint">
+        <label class="govuk-label" for="quantity-containers">Number of containers to be inspected</label>        
+        <input class="govuk-input govuk-input--width-4" id="quantity-containers" name="quantityContainers" type="text">
       </div>
       {% elif data.subCommodityType == "Plants" %}
       <div class="govuk-form-group">
         <label class="govuk-label" for="quantity-hectarage">Approximate hectarage of plot to be inspected</label>
-        <input class="govuk-input govuk-input--width-4" id="quantity-hectarage" name="quantity-hectarage" type="text">
+        <input class="govuk-input govuk-input--width-4" id="quantity-hectarage" name="quantityHectarage" type="text">
       </div>
       
       <div class="govuk-form-group">
         <label class="govuk-label" for="quantity-pots-or-plants">Number of pots or plants to be inspected (optional)</label>
-        <input class="govuk-input govuk-input--width-4" id="quantity-pots-or-plants" name="quantity-pots-or-plants" type="text">
+        <input class="govuk-input govuk-input--width-4" id="quantity-pots-or-plants" name="quantityPotsOrPlants" type="text">
       </div>
       {% elif data.subCommodityType == "Plants for the production of fruit, flowers or vegetables" %}
       <div class="govuk-form-group">
         <label class="govuk-label" for="quantity-hectarage">Approximate hectarage of plot to be inspected</label>
-        <input class="govuk-input govuk-input--width-4" id="quantity-hectarage" name="quantity-hectarage" type="text">
+        <input class="govuk-input govuk-input--width-4" id="quantity-hectarage" name="quantityHectarage" type="text">
       </div>
       {% else %}
       <div class="govuk-form-group">
         <label class="govuk-label" for="quantity-hectarage">Approximate hectarage of plot to be inspected</label>
-        <input class="govuk-input govuk-input--width-4" id="quantity-hectarage" name="quantity-hectarage" type="text">
+        <input class="govuk-input govuk-input--width-4" id="quantity-hectarage" name="quantityHectarage" type="text">
       </div>
       
       <div class="govuk-form-group">
         <label class="govuk-label" for="quantity-pots-or-plants">Number of pots or plants to be inspected (optional)</label>
-        <input class="govuk-input govuk-input--width-4" id="quantity-pots-or-plants" name="quantity-pots-or-plants" type="text">
+        <input class="govuk-input govuk-input--width-4" id="quantity-pots-or-plants" name="quantityPotsOrPlants" type="text">
       </div>
       {% endif %}
+      {% else %}
+      {{ govukInput({
+        label: {
+          text: "Approximate hectarage of plot to be inspected",
+          classes: "govuk-label",
+          isPageHeading: false
+        },
+        id: "approxhectofplot3",
+        name: "approxhectofplot3",
+        classes: "govuk-input--width-4"
+      }) }}
       {% endif %}
 
       <!-- {% if data.commodity == "plants" %}
