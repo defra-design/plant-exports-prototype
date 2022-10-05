@@ -45,12 +45,13 @@
 
 </style>
 
-<!-- Chris Harding (29.09.22) - An easier way to reference the correct location content on this page, depending on the sub commodity (for 'Plants and fresh produce' only) -->
+<!-- Chris Harding (05.10.22) - An easier way to display the correct content on this page, depending on the sub commodity (for 'Plants and fresh produce' only) -->
 {% if data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}
-  {% set locationReference = "location" %}
+  {% set locationIdentifierHint = "For example, glasshouse or bench number" %}
 {% else %}
-  {% set locationReference = "field" %}
+  {% set locationIdentifierHint = "For example, location name or nursery plot number" %}
 {% endif %}
+{% set locationReference = "location" %}
 
 <div class="govuk-grid-row">
 
@@ -120,7 +121,7 @@
           isPageHeading: false
         },
         hint: {
-          text: "For example, field name or nursery plot number"
+          text: locationIdentifierHint
         },
         id: "nurseryplotno",
         name: "nurseryplotno",
@@ -173,7 +174,7 @@
 
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="send_inspector_map_yes" name="send_inspector_map" type="radio" value="Yes~send-inspector-map"{% if data.send_inspector_map == 'Yes' %} checked{% endif %}>
-              <label class="govuk-label govuk-radios__label" for="send_inspector_map_yes">Yes</label>
+              <label class="govuk-label govuk-radios__label" for="send_inspector_map_yes">Yes, I'll upload a map</label>
             </div>
 
             <div class="govuk-radios__item">
@@ -184,6 +185,7 @@
           </div>
       
         </fieldset>
+        <p class="govuk-body govuk-!-margin-top-6">If you prefer to post a map to your inspector, you should contact them to ask what address to send it to. You should include the <abbr title="Animal and Plant Health Agency">APHA</abbr> reference number for this application with your map. You will be given the <abbr title="Animal and Plant Health Agency">APHA</abbr> reference number at the end of this application.</p>
       </div>
 
       {% if data.build == "development" %}

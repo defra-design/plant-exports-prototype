@@ -1,7 +1,7 @@
 {% extends "layout-option.html" %}
 
 {% block pageTitle %}
-  Add your {% if data.commodity == "potatoes" %}ware potatoes{% elif data.commodity == "plants" %}{{data.subCommodityType | lower or "plants"}}{% else %}{{data.commodity or "crops"}}{% endif %} to {{data.which_field or data.nurseryplotno or "Top field"}} - Growing season inspection - {{serviceName}} - GOV.UK
+  Add your {% if data.commodity == "potatoes" %}ware potatoes{% elif data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}micropropagation material{% else %}{{data.commodity or "crops"}}{% endif %} to {{data.which_field or data.nurseryplotno or "Top field"}} - Growing season inspection - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -14,7 +14,7 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">Add your {% if data.commodity == "potatoes" %}ware potatoes{% elif data.commodity == "plants" %}{{data.subCommodityType | lower or "plants"}}{% else %}{{data.commodity or "crops"}}{% endif %} to {{data.which_field or data.nurseryplotno or "Top field"}}</h1>
+    <h1 class="govuk-heading-xl">Add your {% if data.commodity == "potatoes" %}ware potatoes{% elif data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}micropropagation material{% else %}{{data.commodity or "crops"}}{% endif %} to {{data.which_field or data.nurseryplotno or "Top field"}}</h1>
     <p class="govuk-body">Describe a {% if data.commodity == "plants" %}single crop of {{data.subCommodityType | lower or "plants"}}{% else %}single crop{% endif %} for inspection at this location. Later, you'll be able to add further crops at this location if you want to.</p>
 
     {% if query.updateApplication == "yes" %}
@@ -175,7 +175,7 @@
               {% if data.show_manual_input == "yes" %}
               <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display: none;">The botanical name needs to be spelled correctly, if you are not sure <a href="?show_manual_input=no&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">search for a botanical name</a></p>
               {% else %}
-              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display: none;">If you cannot find your {{data.commodity or "plant"}}, but you know the botanical name, <a href="?show_manual_input=yes&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">enter the botanical name manually</a></p>
+              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display: none;">If you cannot find the botanical name using the search, <a href="?show_manual_input=yes&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">enter the botanical name manually</a></p>
               {% endif %}
 
               {% if data.commodity == "plants" or data.commodity == "seeds" or data.commodity == "bulbs" %}
@@ -196,7 +196,7 @@
               <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-3">Description</label>
               
               <div id="how-contacted-conditional-hint" class="govuk-hint govuk-radios__hint">
-                If you cannot find the botanical name, or your product is made of many species, enter a description instead
+                If your product is made up of many species, enter a description instead
               </div>
 
             </div>
