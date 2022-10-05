@@ -25,7 +25,7 @@
   <div class="login-nav-section-right">
     <ul class="login-nav__list multi-org-login-nav__list">
       <li class="login-nav__list-item-new multi-org-login-nav__list-item-new">Prototype user</li>
-      <li class="login-nav__list-item-new multi-org-login-nav__list-item-new"><a href="account?returnURL=dashboard-draft" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+      <li class="login-nav__list-item-new multi-org-login-nav__list-item-new"><a href="account?returnURL=dashboard-submitted" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
       <li class="login-nav__list-item-new multi-org-login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
     </ul>
   </div>
@@ -35,7 +35,7 @@
 <div class="login-nav">
   <ul class="login-nav__list">
     <li class="login-nav__list-item-new">Prototype user</li>
-    <li class="login-nav__list-item-new"><a href="account?returnURL=dashboard-draft" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="account?returnURL=dashboard-submitted" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
     <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
   </ul>
 </div>
@@ -409,16 +409,16 @@
 
 </div>
 
+{% if data.route != "new" %}
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-full">
-
-    {% if data.route != "new" %}
+    
     <div class="govuk-tabs" data-module="govuk-tabs">
       <h2 class="govuk-tabs__title govuk-tabs-links-for-desktop">Your applications</h2>
       <ul class="govuk-tabs__list govuk-tabs-links-for-desktop">
-        <li class="govuk-tabs__list-item govuk-tabs__list-item--selected"><a class="govuk-tabs__tab" href="dashboard-draft">Draft</a></li>
         <li class="govuk-tabs__list-item"><a class="govuk-tabs__tab" href="dashboard-submitted">Submitted</a></li>
+        <li class="govuk-tabs__list-item govuk-tabs__list-item--selected"><a class="govuk-tabs__tab" href="dashboard-draft">Draft</a></li>
       </ul>
 
       <div class="govuk-form-group govuk-tabs-links-for-mobile">
@@ -428,273 +428,19 @@
       <div class="govuk-tabs__panel" id="draft">
 
         <div class="govuk-grid-row">
-
-          <div class="govuk-grid-column-two-thirds">
-            
-            <form method="get" novalidate>
-        
-              <div class="search-wrapper govuk-form-group">
-                <label for="search-applications" class="govuk-label">Search by <abbr title="Animal and Plant Health Agency">APHA</abbr> reference or your reference</label>
-        
-                <div class="search-input-wrapper">
-                  <input type="search" value="{{data.search or ''}}" id="search-applications" name="search" title="Search" class="govuk-input">
-                  
-                  <div class="search-input-submit-wrapper">
-                    <button type="submit" class="search-submit">Search</button>
-                  </div>
-        
-                </div>
-        
-              </div>
-        
-            </form>
-        
-          </div>
-        
-          <div class="govuk-grid-column-one-third">
-
-            <div class="defra-filter--action" style="display: none;">
-              <button id="defra-filter--button" class="govuk-button govuk-button--secondary govuk-!-margin-top-6{% if query.filter_applied == 'yes' %} defra-filter-button--active{% endif %}" type="button" aria-expanded="false">
-                <span class="defra-filter--button-content">Show filters</span>
-                <span class="defra-filter__icon"></span>
-              </button>
-            </div>
-        
-          </div>
-        
-        </div>
-
-        <div class="govuk-grid-row">
-      
-          <div class="govuk-grid-column-full">
-        
-            <div class="defra-filter--content">
-        
-              <form method="get" novalidate>
-                
-                <div class="govuk-grid-row govuk-!-margin-top-3">
-        
-                  <div class="govuk-grid-column-one-third">
-        
-                    <div class="govuk-form-group">
-                      <fieldset class="govuk-fieldset">
-                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Filter by type</legend>
-                        
-                        <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">                  
-        
-                          <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="certificate_1" name="certificate" type="checkbox" value="Batch"{% for param in data.certificate %}{% if param == 'Batch' %} checked{% endif %}{% endfor %}>
-                            <label class="govuk-label govuk-checkboxes__label" for="certificate_1">Batch</label>
-                          </div>
-                          
-                          <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="certificate_2" name="certificate" type="checkbox" value="Certificate of conformity"{% for param in data.certificate %}{% if param == 'Certificate of conformity' %} checked{% endif %}{% endfor %}>
-                            <label class="govuk-label govuk-checkboxes__label" for="certificate_2">Certificate of conformity</label>
-                          </div>
-        
-                          <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="certificate_3" name="certificate" type="checkbox" value="Growing season inspection"{% for param in data.certificate %}{% if param == 'Growing season inspection' %} checked{% endif %}{% endfor %}>
-                            <label class="govuk-label govuk-checkboxes__label" for="certificate_3">Growing season inspection</label>
-                          </div>
-        
-                          <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="certificate_4" name="certificate" type="checkbox" value="Phytosanitary certificate"{% for param in data.certificate %}{% if param == 'Phytosanitary certificate' %} checked{% endif %}{% endfor %}>
-                            <label class="govuk-label govuk-checkboxes__label" for="certificate_4">Phytosanitary certificate</label>
-                          </div>
-        
-                          <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="certificate_5" name="certificate" type="checkbox" value="Re-forwarding phytosanitary certificate"{% for param in data.certificate %}{% if param == 'Re-forwarding phytosanitary certificate' %} checked{% endif %}{% endfor %}>
-                            <label class="govuk-label govuk-checkboxes__label" for="certificate_5">Re-forwarding phytosanitary certificate</label>
-                          </div>
-        
-                          <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="certificate_6" name="certificate" type="checkbox" value="Seed sampling"{% for param in data.certificate %}{% if param == 'Seed sampling' %} checked{% endif %}{% endfor %}>
-                            <label class="govuk-label govuk-checkboxes__label" for="certificate_6">Seed sampling</label>
-                          </div>
-        
-                          <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" id="certificate_7" name="certificate" type="checkbox" value="Soil sampling"{% for param in data.certificate %}{% if param == 'Soil sampling' %} checked{% endif %}{% endfor %}>
-                            <label class="govuk-label govuk-checkboxes__label" for="certificate_7">Soil sampling</label>
-                          </div>
-        
-                        </div>
-        
-                      </fieldset>
-                    </div>
-        
-                  </div>
-        
-                  <div class="govuk-grid-column-one-third govuk-grid-column-one-third-searchable-checkboxes-section">
-        
-                    {% block destinationCountry %}
-                    {% include "./modules/_destination-country.html" %}
-                    {% endblock %}
-        
-                  </div>
-        
-                  {% if query.multi_user == "yes" %}
-                  <div class="govuk-grid-column-one-third">
-        
-                    <div class="govuk-form-group">
-                      <fieldset class="govuk-fieldset">
-                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Filter by user</legend>
-                        <p class="govuk-body">Show applications created by:</p>
-                        
-                        <div class="govuk-radios govuk-radios--small govuk-radios--conditional" data-module="govuk-radios">
-                          
-                          <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" id="show_applications_by_me" name="show_applications_by" type="radio" value="me" {% if (data.show_applications_by and data.show_applications_by == "me" ) or not data.show_applications_by %}checked="checked"{% endif %}>
-                            <label class="govuk-label govuk-radios__label" for="show_applications_by_me">Me</label>
-                          </div>
-
-                          <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" id="show_applications_by_everyone" name="show_applications_by" type="radio" value="everyone" {% if data.show_applications_by and data.show_applications_by == "everyone" %}checked="checked"{% endif %} data-aria-controls="conditional-how-contacted-conditional-3">
-                            <label class="govuk-label govuk-radios__label" for="show_applications_by_everyone">Someone else</label>
-                          </div>
-
-                          <div class=" govuk-form-group govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional-3">
-                            {% set logged_in_as = "Cornelius Longbottom" %}
-                            <select class="govuk-select govuk-!-width-full" id="filter_name" name="filter_name">
-                              <option value="All users"{% if not data.filter_name or data.filter_name == "All users" %} selected{% endif %}>All users</option>
-                              {% set list = [] %}
-                              {% for cert in data.applicationsv2 %}
-                              {% if not cert.name in list %}
-                              <option value="{{cert.name}}"{% if cert.name == data.filter_name %} selected{% endif %}>{{cert.name}}{% if logged_in_as == cert.name %} <strong>(you)</strong>{% endif %}</option>
-                              {{list.push(cert.name)}}
-                              {% endif %}
-                              {% endfor %}
-                            </select>
-                          </div>
-
-                        </div>
-
-                      </fieldset>
-                    </div>
-        
-                  </div>
-                  {% endif %}
-
-                </div>
-
-                <div class="govuk-grid-row">
-
-                  <div class="govuk-grid-column-full govuk-button-group govuk-!-margin-bottom-1">
-                    <button class="govuk-button" type="submit" data-module="govuk-button" name="filter_applied" value="yes">Apply filters</button>
-                    {% if data.filter_applied %}
-                    <a href="?certificate=&filter_demo=&filter_status=&filter_name=&show_applications_by=&filter_applied=" class="govuk-link app-button--link">Clear filters</a>
-                    {% endif %}
-                  </div>
-        
-                </div>
-        
-              </form>
-        
-            </div>
-        
-          </div>
-
-        </div>
-
-        <div class="govuk-grid-row">
       
           <div class="govuk-grid-column-full">
 
-            {% if data.route != "new" %}
             <div class="filter-tag--wrapper govuk-!-margin-bottom-6" data-module="track-click">
-              <p class="govuk-body govuk-!-margin-bottom-2">
-                {% if data.search %}
-                  {% if data.filter_applied %}
-                  Showing 0 applications matching <strong>{{data.search or "search term"}}</strong> and these filters:
-                  {% else %}
-                  Showing 0 applications matching <strong>{{data.search or "search term"}}</strong>
-                  {% endif %}
-                {% elif data.filter_applied %}
-                  {% if data.filter_demo %}
-                  Showing 0 applications matching these filters:
-                  {% else %}
-                  Showing {% if data.application_submission_data == "draft" %}4{% else %}3{% endif %} applications matching these filters:
-                  {% endif %}
-                {% else %}
-                Showing {% if data.application_submission_data == "draft" %}4{% else %}3{% endif %} applications
-                {% endif %}
-                {% if data.filter_applied %}
-                {% if data.certificate %}<br>Type is {% if data.certificate %}{% for param in data.certificate %}<strong>{{param}}</strong>{% if not loop.last %} or {% endif %}{% endfor %}{% else %}Soil sampling{% endif %}{% endif %}
-                {% if data.filter_demo %}<br>Destination country is {% if data.filter_demo %}{% for param in data.filter_demo %}<strong>{{param}}</strong>{% if not loop.last %} or {% endif %}{% endfor %}{% else %}Algeria{% endif %}{% endif %}
-                {% if data.filter_status %}<br>Status is {% if data.filter_status %}{% for param in data.filter_status %}<strong>{{param}}</strong>{% if not loop.last %} or {% endif %}{% endfor %}{% else %}Processing{% endif %}{% endif %}
-                {% if data.filter_name %}<br>User is {% if data.filter_name %}{% for param in data.filter_name %}<strong>{{param}}</strong>{% if not loop.last %} or {% endif %}{% endfor %}{% else %}Cornelius Longbottom{% endif %}{% endif %}
-                {% endif %}
-              </p>
-              {% if data.search or data.filter_applied %}
-              <p class="govuk-body">
-                <a href="?search=&certificate=&filter_demo=&filter_status=&filter_name=&show_applications_by=&filter_applied=" class="govuk-link govuk-link--no-visited-state govuk-!-font-size-19" data-module="govuk-button">
-                  Clear
-                  {% if data.search and data.filter_applied %}
-                  search and filters
-                  {% elif data.filter_applied %}
-                  filters
-                  {% else %}
-                  search
-                  {% endif %}
-                </a>
-              </p>
-              {% endif %}
+              <p class="govuk-body govuk-!-margin-bottom-2">Showing {% if data.application_submission_data == "draft" %}4{% else %}3{% endif %} applications</p>
             </div>
-            {% else %}
-            <p class="govuk-body govuk-!-margin-bottom-2">Showing 0 applications</p>
-            {% if data.search or data.filter_applied %}
-            <p class="govuk-body">
-              <a href="?search=&certificate=&filter_demo=&filter_status=&filter_name=&show_applications_by=&filter_applied=" class="govuk-link govuk-link--no-visited-state govuk-!-font-size-19" data-module="govuk-button">
-                Clear
-                {% if data.search and data.filter_applied %}
-                search and filters
-                {% elif data.filter_applied %}
-                filters
-                {% else %}
-                search
-                {% endif %}
-              </a>
-            </p>
-            {% endif %}
-            {% endif %}
       
-            {% if data.search and data.filter_applied %}
-            <div class="no-results">
-              <p class="govuk-body govuk-!-font-weight-bold">There are no applications matching your search.</p>
-              <p class="govuk-body">Improve your results by:</p>
-              <ul class="govuk-list govuk-list--bullet search-and-filters-no-results-list">
-                <li>double-checking the reference or date you searched for</li>
-                <li>searching by either a date or reference, not both</li>
-                <li>searching using dates in the format DD-MM-YYYY, for example 05-04-2022</li>
-                <li>trying different filters</li>
-              </ul>
-            </div>
-            {% elif data.search %}
-            <div class="no-results">
-              <p class="govuk-body govuk-!-font-weight-bold">There are no applications matching your search.</p>
-              <p class="govuk-body">Improve your results by:</p>
-              <ul class="govuk-list govuk-list--bullet search-and-filters-no-results-list">
-                <li>double-checking the reference or date you searched for</li>
-                <li>searching by either a date or reference, not both</li>
-                <li>searching using dates in the format DD-MM-YYYY, for example 05-04-2022</li>
-              </ul>
-            </div>
-            {% elif data.filter_demo %}
-            <div class="no-results">
-              <p class="govuk-body govuk-!-font-weight-bold">There are no applications matching your search.</p>
-              <p class="govuk-body">Improve your results by:</p>
-              <ul class="govuk-list govuk-list--bullet search-and-filters-no-results-list">
-                <li>trying different filters</li>
-                <li>searching by reference instead</li>
-              </ul>
-            </div>
-            {% else %}
             <!--
               Chris Harding (15.03.22) - New table sorting has been defined to make finding applications simpler. The new sorting rules are:
               1) Submitted date (most recent first)
               2) Destination (a-z)
               3) Type (a-z)
             -->
-            {% if data.route != "new" %}
             <table class="govuk-table responsive-table">
               <thead class="govuk-table__head govuk-body-s">
                 <tr class="govuk-table__row">
@@ -702,7 +448,6 @@
                   <th class="govuk-table__header" scope="col">Your reference</th>
                   <th class="govuk-table__header" scope="col">Type</th>
                   <th class="govuk-table__header" scope="col">Destination</th>
-                  <!-- <th class="govuk-table__header" scope="col">Status</th> -->
                   <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
                 </tr>
               </thead>
@@ -721,17 +466,9 @@
                   <td id="destination-country-1" class="govuk-table__cell" scope="row">
                     <span class="table-heading" aria-hidden="true">Destination</span> {% if data.destinationcountries %}{{data.destinationcountries or "USA" }}{% else %}&nbsp;{% endif %}
                   </td>
-                  <!-- <td id="status-1" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Status</span>
-                    
-                    <div class="govuk-tag govuk-tag--grey">
-                      draft
-                    </div>
-
-                  </td> -->
                   <td id="actions-1" class="govuk-table__cell govuk-table__cell--numeric responsive-table-draft-actions-td" scope="row">
-                    <a class="draft-actions-copy" href="clone?returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate 1721 14800 4809</span></a>
-                    <a class="draft-actions-delete" href="delete?returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> certificate 1721 14800 4809</span></a>
+                    <a class="draft-actions-copy" href="clone?returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate 1721 14800 4809</span></a>
+                    <a class="draft-actions-delete" href="delete?returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> certificate 1721 14800 4809</span></a>
                   </td>
                 </tr>
                 {% endif %}
@@ -740,9 +477,9 @@
                 <tr class="govuk-table__row result">
                   <td id="apha-reference-{{app.index}}" class="govuk-table__cell table-header" scope="row">
                     {% if app.index == "19" %}
-                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% else %}
-                    <a href="application?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% endif %}
                     <span class="table-heading table-heading-full" aria-hidden="true">APHA reference</span> {{app.applicationID}}</a>
                   </td>
@@ -755,36 +492,22 @@
                   <td id="destination-country-{{app.index}}" class="govuk-table__cell" scope="row">
                     <span class="table-heading" aria-hidden="true">Destination</span> {% if app.importer == "" %}&nbsp;{% else %}{{app.importer | title}}<br>{% endif %}{% if app.destination == "" %}&nbsp;{% else %}{{app.destination}}{% endif %}
                   </td>
-                  <!-- <td id="status-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Status</span>
-                    
-                    <div class="govuk-tag govuk-tag--{{app.tag | lower}}">
-                      {{app.status}}
-                    </div>
-
-                  </td> -->
                   <td id="actions-{{app.index}}" class="govuk-table__cell govuk-table__cell--numeric responsive-table-draft-actions-td" scope="row">
-                    <a class="draft-actions-copy" href="clone?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate {{app.applicationID}}</span></a>
-                    <a class="draft-actions-delete" href="delete?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> certificate {{app.applicationID}}</span></a>
+                    <a class="draft-actions-copy" href="clone?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate {{app.applicationID}}</span></a>
+                    <a class="draft-actions-delete" href="delete?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> certificate {{app.applicationID}}</span></a>
                   </td>
                 </tr>
                 {% endif %}
                 {% endfor %}
               </tbody>
-              {% endif %}
             </table>
 
-            {% if data.route != "new" %}
             <div class="govuk-form-block">
               <nav class="defra-pagination" id="pagination-label">
                 <p class="govuk-visually-hidden" aria-labelledby="pagination-label">Pagination navigation</p>
                 <p class="defra-pagination__results govuk-body">Showing <strong>1</strong> to <strong>{% if data.application_submission_data == "draft" %}4{% else %}3{% endif %}</strong> of <strong>{% if data.application_submission_data == "draft" %}4{% else %}3{% endif %}</strong> results</p>
               </nav>
             </div>
-            {% else %}
-
-            {% endif %}
-            {% endif %}
 
           </div>
 
@@ -793,114 +516,11 @@
       </div>
 
     </div>
-    {% else %}
-
-    {% endif %}
 
   </div>
 
 </div>
+{% else %}
 
-<!-- JavaScript (START) -->
-<script>
-
-  window.addEventListener('load', function() {
-    $(".clear-search-holder").hide()
-    $(".search-what-cont").hide()
-    $("#search").click(function(e) {
-      $(".search-what-text").text($("#search-input").val());
-      $(".search-what-cont").show();
-      $(".result").each(function(e) {
-        var text = $(this).text().toLowerCase();
-        if (text.indexOf($("#search-input").val().toLowerCase()) > -1) {
-          $(this).show();
-        } else {
-          $(this).hide();
-        }
-      });
-    });
-    $("#clear-search, .search-what-close").click(function(e) {
-      $(".clear-search-holder").show()
-      $(".search-what-text").text($("#search-input").val());
-      $(".search-what-cont").show()
-      clear - search - holder
-      $(".search-what-cont").hide();
-      $("#search-input").val("");
-      $(".result").each(function(e) {
-        $(this).show();
-      });
-      $(this).blur();
-    });
-  });
-
-</script>
-<script type="text/javascript">
-  
-  window.addEventListener('load', function() {
-    
-    var count = $('.rowCounter').length - 1;
-
-    // Show hide content
-    $('.defra-filter--content').hide();
-    $('.defra-filter--action').show();
-    $('#js-case-count').text(count);
-    $('.js-case-count').text(count);
-    
-    if (count == 0) {
-      $('.govuk-tbody').hide();
-    }
-
-    $('.defra-filter--content').hide();
-    $('#defra-filter--button').on("click", function() {
-      
-      if (!$('.defra-filter--action').hasClass('defra-filter--open')) {
-        $('.defra-filter--content').show().focus();
-        $('.defra-filter--action').addClass('defra-filter--open');
-        $('#defra-filter--button').attr('aria-expanded', 'true');
-        $(".defra-filter--button-content").text('Hide filters');
-      }
-      else {
-        $('.defra-filter--content').hide();
-        $('.defra-filter--action').removeClass('defra-filter--open');
-        $('#defra-filter--button').attr('aria-expanded', 'false');
-        $(".defra-filter--button-content").text('Show filters');
-      }
-
-    });
-  });
-  
-</script>
-<script>
-
-  document.addEventListener("DOMContentLoaded", function(event) {
-    if (document.querySelectorAll('.sm-daterange-component').length) {
-      SmDateRangePicker('#from', '#to').init();
-    }
-  });
-
-</script>
-<script type="text/javascript" src="/public/javascripts/accessible-autocomplete.min.js"></script>
-<script type="text/javascript">
-
-  // dropdownArrow: function (config) {
-  //   return '<svg class="' + config.className + '" style="top: 8px;" viewBox="0 0 512 512" ><path d="M256,298.3L256,298.3L256,298.3l174.2-167.2c4.3-4.2,11.4-4.1,15.8,0.2l30.6,29.9c4.4,4.3,4.5,11.3,0.2,15.5L264.1,380.9  c-2.2,2.2-5.2,3.2-8.1,3c-3,0.1-5.9-0.9-8.1-3L35.2,176.7c-4.3-4.2-4.2-11.2,0.2-15.5L66,131.3c4.4-4.3,11.5-4.4,15.8-0.2L256,298.3  z"/></svg>'
-  // },
-  selectEl = document.querySelector('#passport-location')
-  accessibleAutocomplete.enhanceSelectElement({
-    autoselect: false,
-    placeholder: "Select name",
-    showAllValues: true,
-    selectElement: selectEl,
-    defaultValue: '',
-    dropdownArrow: function(config) {
-      return '<svg class="' + config.className +
-        '" style="top: 8px; z-index:1" viewBox="0 0 512 512" ><path d="M256,298.3L256,298.3L256,298.3l174.2-167.2c4.3-4.2,11.4-4.1,15.8,0.2l30.6,29.9c4.4,4.3,4.5,11.3,0.2,15.5L264.1,380.9  c-2.2,2.2-5.2,3.2-8.1,3c-3,0.1-5.9-0.9-8.1-3L35.2,176.7c-4.3-4.2-4.2-11.2,0.2-15.5L66,131.3c4.4-4.3,11.5-4.4,15.8-0.2L256,298.3  z"/></svg>'
-    },
-  })
-
-  // var queryStringParameters = window.location.search
-  // var previouslySubmitted = queryStringParameters.length > 0
-
-</script>
-<!-- JavaScript (END) -->
+{% endif %}
 {% endblock %}

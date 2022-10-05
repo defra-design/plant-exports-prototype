@@ -25,7 +25,7 @@
   <div class="login-nav-section-right">
     <ul class="login-nav__list multi-org-login-nav__list">
       <li class="login-nav__list-item-new multi-org-login-nav__list-item-new">Prototype user</li>
-      <li class="login-nav__list-item-new multi-org-login-nav__list-item-new"><a href="account?returnURL=dashboard-draft" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+      <li class="login-nav__list-item-new multi-org-login-nav__list-item-new"><a href="account?returnURL=dashboard-submitted" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
       <li class="login-nav__list-item-new multi-org-login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
     </ul>
   </div>
@@ -35,7 +35,7 @@
 <div class="login-nav">
   <ul class="login-nav__list">
     <li class="login-nav__list-item-new">Prototype user</li>
-    <li class="login-nav__list-item-new"><a href="account?returnURL=dashboard-draft" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="account?returnURL=dashboard-submitted" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
     <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
   </ul>
 </div>
@@ -408,16 +408,16 @@
 
 </div>
 
+{% if data.route != "new" %}
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-full">
-
-    {% if data.route != "new" %}
+    
     <div class="govuk-tabs" data-module="govuk-tabs">
       <h2 class="govuk-tabs__title govuk-tabs-links-for-desktop">Your applications</h2>
       <ul class="govuk-tabs__list govuk-tabs-links-for-desktop">
-        <li class="govuk-tabs__list-item"><a class="govuk-tabs__tab" href="dashboard-draft">Draft</a></li>
         <li class="govuk-tabs__list-item govuk-tabs__list-item--selected"><a class="govuk-tabs__tab" href="dashboard-submitted">Submitted</a></li>
+        <li class="govuk-tabs__list-item"><a class="govuk-tabs__tab" href="dashboard-draft">Draft</a></li>
       </ul>
 
       <div class="govuk-form-group govuk-tabs-links-for-mobile">
@@ -724,7 +724,7 @@
                 {% if data.application_submission_data == "submitted" %}
                 <tr class="govuk-table__row rowCounter result">
                   <td id="apha-reference-1" class="govuk-table__cell table-header" scope="row">
-                    <a href="{% if data.has_reference == 'gsi' %}application-gsi{% elif data.has_reference == 'soil sampling' %}application-ss{% else %}application{% endif %}?application_submission_data=submitted&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break"><span class="table-heading table-heading-full" aria-hidden="true">APHA reference</span> 1721 14800 4809</a>
+                    <a href="{% if data.has_reference == 'gsi' %}application-gsi{% elif data.has_reference == 'soil sampling' %}application-ss{% else %}application{% endif %}?application_submission_data=submitted&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break"><span class="table-heading table-heading-full" aria-hidden="true">APHA reference</span> 1721 14800 4809</a>
                   </td>
                   <td id="your-reference-1" class="govuk-table__cell" scope="row">
                     <span class="table-heading" aria-hidden="true">Your reference</span> {% if data.reference_num %}{{data.reference_num or "REFERENCE"}}{% else %}&nbsp;{% endif %}
@@ -783,9 +783,9 @@
                 <tr class="govuk-table__row rowCounter result">
                   <td id="apha-reference-{{app.index}}" class="govuk-table__cell table-header" scope="row">
                     {% if app.index == "6" %}
-                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% else %}
-                    <a href="application?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% endif %}
                     <span class="table-heading table-heading-full" aria-hidden="true">APHA reference</span> {{app.applicationID}}</a>
                   </td>
@@ -810,7 +810,7 @@
 
                   </td>
                   <td id="actions-{{app.index}}" class="govuk-table__cell govuk-table__cell--numeric" scope="row">
-                    <a href="clone?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate {{app.applicationID}}</span></a>
+                    <a href="clone?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate {{app.applicationID}}</span></a>
                   </td>
                 </tr>
                 {% endif %}
@@ -818,53 +818,53 @@
                 <tr class="govuk-table__row rowCounter result">
                   <td id="apha-reference-{{app.index}}" class="govuk-table__cell table-header" scope="row">
                     {% if app.index == "0" or app.index == "8" or app.index == "10" %}
-                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "1" %}
-                    <a href="application-plant-products?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-plant-products?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "3" %}
-                    <a href="application-ssdd?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ssdd?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "4" %}
-                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "5" or app.index == "7" or app.index == "20" or app.index == "24" %}
-                    <a href="application-coc?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-coc?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "9" %}
-                    <a href="application-phy?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-phy?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- Soil sampling applications (START) -->
                     {% elseif app.index == "16" %}
-                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "17" %}
-                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "18" %}
-                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "19" %}
-                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "26" %}
-                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "27" %}
-                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "28" %}
-                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- Soil sampling applications (END) -->
                     {% elseif app.index == "21" %}
-                    <a href="application-ssdd-coc?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ssdd-coc?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- GSI (START) -->
                     {% elseif app.index == "25" %}
-                    <a href="application-gsi?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-gsi?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "33" %}
-                    <a href="application-seeds-gsi?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-seeds-gsi?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- GSI (END) -->
                     {% elseif app.index == "30" %}
-                    <a href="application-seed-sample-table?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-seed-sample-table?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "32" %}
-                    <a href="application-seed-sample-table?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-seed-sample-table?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "31" %}
-                    <a href="application-phy-bulbs?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-phy-bulbs?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- Re-usable batch sampling applications (START) -->
                     {% elseif app.index == "35" %}
-                    <a href="application-batch-sample?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-batch-sample?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- Re-usable batch sampling applications (END) -->
                     {% else %}
-                    <a href="application?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% endif %}
                     <span class="table-heading table-heading-full" aria-hidden="true">APHA reference</span> {{app.applicationID}}</a>
                   </td>
@@ -889,7 +889,7 @@
 
                   </td>
                   <td id="actions-{{app.index}}" class="govuk-table__cell govuk-table__cell--numeric" scope="row">
-                    <a href="clone?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate {{app.applicationID}}</span></a>
+                    <a href="clone?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate {{app.applicationID}}</span></a>
                   </td>
                 </tr>
                 {% endif %}
@@ -908,9 +908,9 @@
                 <tr class="govuk-table__row rowCounter result">
                   <td id="apha-reference-{{app.index}}" class="govuk-table__cell table-header" scope="row">
                     {% if app.index == "6" %}
-                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% else %}
-                    <a href="application?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% endif %}
                     <span class="table-heading table-heading-full" aria-hidden="true">APHA reference</span> {{app.applicationID}}</a>
                   </td>
@@ -935,7 +935,7 @@
 
                   </td>
                   <td id="actions-{{app.index}}" class="govuk-table__cell govuk-table__cell--numeric" scope="row">
-                    <a href="clone?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate {{app.applicationID}}</span></a>
+                    <a href="clone?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate {{app.applicationID}}</span></a>
                   </td>
                 </tr>
                 {% endif %}
@@ -943,53 +943,53 @@
                 <tr class="govuk-table__row rowCounter result">
                   <td id="apha-reference-{{app.index}}" class="govuk-table__cell table-header" scope="row">
                     {% if app.index == "0" or app.index == "8" or app.index == "10" %}
-                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "1" %}
-                    <a href="application-plant-products?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-plant-products?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "3" %}
-                    <a href="application-ssdd?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ssdd?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "4" %}
-                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "5" or app.index == "7" or app.index == "20" or app.index == "24" %}
-                    <a href="application-coc?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-coc?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "9" %}
-                    <a href="application-phy?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-phy?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- Soil sampling applications (START) -->
                     {% elseif app.index == "16" %}
-                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "17" %}
-                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "18" %}
-                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "19" %}
-                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "26" %}
-                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "27" %}
-                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "28" %}
-                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- Soil sampling applications (END) -->
                     {% elseif app.index == "21" %}
-                    <a href="application-ssdd-coc?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ssdd-coc?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- GSI (START) -->
                     {% elseif app.index == "25" %}
-                    <a href="application-gsi?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-gsi?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "33" %}
-                    <a href="application-seeds-gsi?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-seeds-gsi?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- GSI (END) -->
                     {% elseif app.index == "30" %}
-                    <a href="application-seed-sample-table?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-seed-sample-table?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "32" %}
-                    <a href="application-seed-sample-table?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-seed-sample-table?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "31" %}
-                    <a href="application-phy-bulbs?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-phy-bulbs?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- Re-usable batch sampling applications (START) -->
                     {% elseif app.index == "35" %}
-                    <a href="application-batch-sample?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-batch-sample?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- Re-usable batch sampling applications (END) -->
                     {% else %}
-                    <a href="application?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% endif %}
                     <span class="table-heading table-heading-full" aria-hidden="true">APHA reference</span> {{app.applicationID}}</a>
                   </td>
@@ -1014,7 +1014,7 @@
 
                   </td>
                   <td id="actions-{{app.index}}" class="govuk-table__cell govuk-table__cell--numeric" scope="row">
-                    <a href="clone?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate {{app.applicationID}}</span></a>
+                    <a href="clone?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate {{app.applicationID}}</span></a>
                   </td>
                 </tr>
                 {% endif %}
@@ -1091,9 +1091,9 @@
                 <tr class="govuk-table__row rowCounter result">
                   <td id="apha-reference-{{app.index}}" class="govuk-table__cell table-header" scope="row">
                     {% if app.index == "6" %}
-                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% else %}
-                    <a href="application?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% endif %}
                     <span class="table-heading table-heading-full" aria-hidden="true">APHA reference</span> {{app.applicationID}}</a>
                   </td>
@@ -1118,7 +1118,7 @@
 
                   </td>
                   <td id="actions-{{app.index}}" class="govuk-table__cell govuk-table__cell--numeric" scope="row">
-                    <a href="clone?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate {{app.applicationID}}</span></a>
+                    <a href="clone?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate {{app.applicationID}}</span></a>
                   </td>
                 </tr>
                 {% endif %}
@@ -1126,53 +1126,53 @@
                 <tr class="govuk-table__row rowCounter result">
                   <td id="apha-reference-{{app.index}}" class="govuk-table__cell table-header" scope="row">
                     {% if app.index == "0" or app.index == "8" or app.index == "10" %}
-                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "1" %}
-                    <a href="application-plant-products?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-plant-products?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "3" %}
-                    <a href="application-ssdd?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ssdd?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "4" %}
-                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "5" or app.index == "7" or app.index == "20" or app.index == "24" %}
-                    <a href="application-coc?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-coc?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "9" %}
-                    <a href="application-phy?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-phy?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- Soil sampling applications (START) -->
                     {% elseif app.index == "16" %}
-                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "17" %}
-                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "18" %}
-                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "19" %}
-                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "26" %}
-                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "27" %}
-                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "28" %}
-                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- Soil sampling applications (END) -->
                     {% elseif app.index == "21" %}
-                    <a href="application-ssdd-coc?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ssdd-coc?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- GSI (START) -->
                     {% elseif app.index == "25" %}
-                    <a href="application-gsi?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-gsi?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "33" %}
-                    <a href="application-seeds-gsi?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-seeds-gsi?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- GSI (END) -->
                     {% elseif app.index == "30" %}
-                    <a href="application-seed-sample-table?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-seed-sample-table?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "32" %}
-                    <a href="application-seed-sample-table?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-seed-sample-table?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "31" %}
-                    <a href="application-phy-bulbs?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-phy-bulbs?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- Re-usable batch sampling applications (START) -->
                     {% elseif app.index == "35" %}
-                    <a href="application-batch-sample?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-batch-sample?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- Re-usable batch sampling applications (END) -->
                     {% else %}
-                    <a href="application?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% endif %}
                     <span class="table-heading table-heading-full" aria-hidden="true">APHA reference</span> {{app.applicationID}}</a>
                   </td>
@@ -1197,7 +1197,7 @@
 
                   </td>
                   <td id="actions-{{app.index}}" class="govuk-table__cell govuk-table__cell--numeric" scope="row">
-                    <a href="clone?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate {{app.applicationID}}</span></a>
+                    <a href="clone?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate {{app.applicationID}}</span></a>
                   </td>
                 </tr>
                 {% endif %}
@@ -1216,9 +1216,9 @@
                 <tr class="govuk-table__row rowCounter result">
                   <td id="apha-reference-{{app.index}}" class="govuk-table__cell table-header" scope="row">
                     {% if app.index == "6" %}
-                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% else %}
-                    <a href="application?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% endif %}
                     <span class="table-heading table-heading-full" aria-hidden="true">APHA reference</span> {{app.applicationID}}</a>
                   </td>
@@ -1243,7 +1243,7 @@
 
                   </td>
                   <td id="actions-{{app.index}}" class="govuk-table__cell govuk-table__cell--numeric" scope="row">
-                    <a href="clone?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate {{app.applicationID}}</span></a>
+                    <a href="clone?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate {{app.applicationID}}</span></a>
                   </td>
                 </tr>
                 {% endif %}
@@ -1251,53 +1251,53 @@
                 <tr class="govuk-table__row rowCounter result">
                   <td id="apha-reference-{{app.index}}" class="govuk-table__cell table-header" scope="row">
                     {% if app.index == "0" or app.index == "8" or app.index == "10" %}
-                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "1" %}
-                    <a href="application-plant-products?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-plant-products?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "3" %}
-                    <a href="application-ssdd?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ssdd?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "4" %}
-                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "5" or app.index == "7" or app.index == "20" or app.index == "24" %}
-                    <a href="application-coc?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-coc?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "9" %}
-                    <a href="application-phy?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-phy?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- Soil sampling applications (START) -->
                     {% elseif app.index == "16" %}
-                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "17" %}
-                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "18" %}
-                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "19" %}
-                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "26" %}
-                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "27" %}
-                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "28" %}
-                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- Soil sampling applications (END) -->
                     {% elseif app.index == "21" %}
-                    <a href="application-ssdd-coc?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-ssdd-coc?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- GSI (START) -->
                     {% elseif app.index == "25" %}
-                    <a href="application-gsi?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-gsi?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "33" %}
-                    <a href="application-seeds-gsi?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-seeds-gsi?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- GSI (END) -->
                     {% elseif app.index == "30" %}
-                    <a href="application-seed-sample-table?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-seed-sample-table?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "32" %}
-                    <a href="application-seed-sample-table?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-seed-sample-table?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "31" %}
-                    <a href="application-phy-bulbs?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-phy-bulbs?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- Re-usable batch sampling applications (START) -->
                     {% elseif app.index == "35" %}
-                    <a href="application-batch-sample?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application-batch-sample?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- Re-usable batch sampling applications (END) -->
                     {% else %}
-                    <a href="application?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <a href="application?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% endif %}
                     <span class="table-heading table-heading-full" aria-hidden="true">APHA reference</span> {{app.applicationID}}</a>
                   </td>
@@ -1322,7 +1322,7 @@
 
                   </td>
                   <td id="actions-{{app.index}}" class="govuk-table__cell govuk-table__cell--numeric" scope="row">
-                    <a href="clone?id={{app.index}}&returnURL=dashboard-draft" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate {{app.applicationID}}</span></a>
+                    <a href="clone?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate {{app.applicationID}}</span></a>
                   </td>
                 </tr>
                 {% endif %}
@@ -1371,13 +1371,13 @@
       </div>
 
     </div>
-    {% else %}
-    
-    {% endif %}
 
   </div>
 
 </div>
+{% else %}
+    
+{% endif %}
 
 <!-- JavaScript (START) -->
 <script>
