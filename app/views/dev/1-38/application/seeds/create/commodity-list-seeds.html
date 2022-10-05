@@ -1,0 +1,87 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+Your consignment - {{serviceName}} - GOV.UK
+{% endblock %}
+{% block beforeContent %}
+{{super()}}
+<a href="{{page.content.prev or 'javascript:history.back()'}}" class="govuk-back-link">Back</a>
+{% endblock %}
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-xl">
+      Your consignment
+    </h1>
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+
+        <tr class="govuk-table__row">
+          <!-- <th class="govuk-table__header govuk-!-font-size-14" scope="col"> -->
+          <th class="govuk-table__header " scope="col">
+            
+          </th>
+          <th class="govuk-table__header " scope="col">
+            Description
+          </th>
+<!--           <th class="govuk-table__header " scope="col">
+            Variety
+          </th> -->
+          <th class="govuk-table__header" scope="col">
+            Lot reference
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Quantity
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Destination
+          </th>
+          <th class="govuk-table__header" scope="col" colspan="2">Actions</th>
+        </tr>
+        
+      </thead>
+      <tbody class="govuk-table__body">
+        {% include "../../modules/_summary-seeds-30.html" %}
+      </tbody>
+    </table>
+
+    <p class="govuk-body govuk-!-margin-bottom-9">
+      <a class="govuk-link" href="confirm-delete">
+        Delete all commodities
+      </a>
+    <p>
+
+    <form  method="POST">
+      {{ govukRadios({
+        idPrefix: "next",
+        name: "next",
+        fieldset:
+        {
+          legend:
+          {
+            text: "Do you want to add more seeds to your consignment?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--m govuk-!-margin-top-4"
+          }
+        },
+        items: [
+        {
+          value: "confirm~how-to-identify",
+          text: "Yes, add one more commodity"
+        },
+        {
+          value: "upload~upload",
+          text: "Yes, upload multiple commodities"
+        },
+        {
+          value: "upload~task-list",
+          text: "No, I have finished adding seeds"
+        }
+        ]
+      }) }}
+
+      {{ govukButton({
+        text: "Save and continue"
+      }) }}
+    </form>
+    {% endblock %}

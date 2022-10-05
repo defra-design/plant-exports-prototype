@@ -1,0 +1,355 @@
+{% extends "layout.html" %}
+
+{% set items = [
+  {
+  date: '23 Sep 2021',
+  application_number: '120664110369',
+  description: 'White cabbage',
+  details: 'Durham Early',
+  amount: '100kg',
+  total: '500kg'
+  },
+  {
+  date: '21 Sep 2021',
+  application_number: '120664110283',
+  description: 'White cabbage',
+  details: 'Durham Early',
+  amount: '50kg',
+  total: '400kg'
+  },
+  {
+  date: '19 Sep 2021',
+  application_number: '120664110233',
+  description: 'White cabbage',
+  details: 'Durham Early',
+  amount: '100kg',
+  total: '350kg'
+  },
+  {
+  date: '16 Sep 2021',
+  application_number: '120664110167',
+  description: 'White cabbage',
+  details: 'Durham Early',
+  amount: '100kg',
+  total: '250kg'
+  },
+  {
+  date: '14 Sep 2021',
+  application_number: '120664110123',
+  description: 'White cabbage',
+  details: 'Avon Crest',
+  amount: '50kg',
+  total: '150kg'
+  },
+  {
+  date: '12 Sep 2021',
+  application_number: '120664109150',
+  description: 'White cabbage',
+  details: 'Durham Early',
+  amount: '100kg',
+  total: '100kg'
+  }
+  
+  ] %}
+
+{% block pageTitle %}
+  {% if data.build == "development" %}Application{% else %}Manage application{% endif %} {{query.id | appInformation('applicationID')}} - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Return to your applications</a>
+<style>
+
+  .govuk-width-three-tenths {
+    width: 15% !important;
+  }
+
+  .govuk-width-one-fifth {
+    width: 20% !important;
+  }
+
+  .govuk-status--warning {
+    width: auto !important;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    padding-bottom: 1px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    display: inline-block;
+    color: #0b0c0c;
+    background: #FFBF47;
+    border: 3px solid #FFBF47;
+  }
+
+  .app-status-tag--white-tag-blue-border-and-text {
+    background-color: #ffffff;
+    width: 90px;
+    text-align: center;
+    display: inline-block;
+    font-size: 15px;
+    border: 3px solid #1d70b8;
+    color: #1d70b8;
+  }
+
+  .doc-icon::before {
+    content: '';
+    width: 1em;
+    height: 1.5em;
+    margin-right: 1em;
+    position: relative;
+    top: 0.5em;
+    display: inline-block;
+    background: #bfc1c3;
+    box-shadow: 3px -3px 0 #fff, 6px -6px 0 #bfc1c3;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">{% if data.build == "development" %}Application{% else %}Manage application{% endif %} {{query.id | appInformation('applicationID')}}</h1>
+  </div>
+
+</div>
+
+<div class="govuk-grid-row govuk-!-margin-bottom-6">
+
+  <div class="govuk-grid-column-one-half">
+    <dl class="govuk-summary-list govuk-summary-list--no-border">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Status
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <div class="app-status-tag app-status-tag--{{query.id | appInformation('tag')}}">
+            {{query.id | appInformation('status')}}
+          </div>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Your reference
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {% if (query.id | appInformation('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id |
+          appInformation('reference')}}{% endif %}
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          {% if query.id == 6 %}Application{% else %}Certificate{% endif %}
+        </dt>
+        <dd class="govuk-summary-list__value">
+          Phytosanitary certificate for plants and fresh produce
+        </dd>
+      </div>
+      {% if query.id != 6 %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Destination country
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{query.id | appInformation('destination')}}
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Consignee
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{query.id | appInformation('consignee') or "XYZ Trading Limited"}}
+        </dd>
+      </div>
+      {% endif %}
+    </dl>
+  </div>
+
+  <div class="govuk-grid-column-one-half govuk-!-margin-bottom-9">
+    <h2 class="govuk-heading-m">Your certificate</h2>
+
+    <ul class="govuk-list  noprint">
+      <li>
+        <p class="doc-icon"><a href="#" class="govuk-link govuk-link--no-visited-state">View phyto certificate (pdf)</a>
+        </p>
+      </li>
+    </ul>
+  </div>
+
+</div>
+
+<div class="govuk-grid-row govuk-!-margin-bottom-6">
+  <div class="govuk-grid-column-two-thirds">
+
+
+    <ul class="govuk-list govuk-!-margin-bottom-9 noprint">
+      <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-viewonly">View
+          application details</a></li>
+      {% if (query.id | appInformation('status')) == 'draft' %}
+      <li><a class="govuk-link govuk-link--no-visited-state"
+          href="certificate/check-your-progress?certificate=ehc2849">Edit and submit this application</a></li>
+      {% endif %}
+      <!-- 
+      {% if (query.id | appInformation('status')) == 'completed'  %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/reuse-ref-ssdd">Use this application for stock draw down</a></li>
+      {% endif %}
+ -->
+      <li><a class="govuk-link govuk-link--no-visited-state"
+          href="copy-as-coc?id={{query.id or 0}}&is_group={{query.is_group}}">Use this application to apply for a
+          certificate of conformity</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state"
+          href="clone?id={{query.id or 0}}&is_group={{query.is_group}}">Copy this application to create a new
+          phytosanitary certificate</a></li>
+      {% if (query.id | appInformation('status')) == 'submitted' or (query.id | appInformation('status')) == 'processing' or (query.id
+      |
+      appInformation('status')) == 'with inspector' or (query.id | appInformation('status')) == 'scheduled' or (query.id |
+      appInformation('status')) == 'exporter action' or (query.id | appInformation('status')) == 'preparing phyto' or (query.id |
+      appInformation('status')) == 'returned' %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="cancel">Cancel this application</a></li>
+      {% endif %}
+      {% if (query.id | appInformation('status')) == 'draft' %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="delete">Delete this application</a></li>
+      {% endif %}
+    </ul>
+  </div>
+</div>
+
+<div class="govuk-grid-row govuk-!-margin-bottom-6">
+<div class="govuk-grid-column-full">
+  <h2 class="govuk-heading-m">Stock draw down</h2>
+  <p class="govuk-body">
+    The stock in this application was sampled 03 October 2021. It can be used for single stock draw down until 02 November 2021.
+  </p>
+  <table class="govuk-table govuk-!-margin-bottom-9">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th class="govuk-table__header govuk-width-one-fifth" scope="col">
+          Commodity
+        </th>
+        <th class="govuk-table__header" scope="col">
+          Variety
+        </th>
+        <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
+          Quantity
+        </th>
+        <!--        <th class="govuk-table__header" scope="col">
+          Inspection status
+        </th> -->
+        <th class="govuk-table__header govuk-width-three-tenths" scope="col">
+          Action
+        </th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell">
+          Cabbage
+        </td>
+        <td class="govuk-table__cell">
+          Durham Early
+        </td>
+        <td class="govuk-table__cell">
+          557 tonnes
+        </td>
+        <!--         <td class="govuk-table__cell">
+          <div class="app-status-tag app-status-tag--green">
+            passed
+          </div>
+        </td> -->
+        <td class="govuk-table__cell">
+          <a class="govuk-link govuk-link--no-visited-state" href="application/create/reuse-ref-ssdd-skip">Draw down</a>
+        </td>
+      </tr>
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell">
+          Cabbage
+        </td>
+        <td class="govuk-table__cell">
+          Avon Crest
+        </td>
+        <td class="govuk-table__cell">
+          1035 tonnes
+        </td>
+        <!--         <td class="govuk-table__cell">
+          <div class="app-status-tag app-status-tag--blue">
+            pending
+          </div>
+        </td> -->
+        <td class="govuk-table__cell">
+          <a class="govuk-link govuk-link--no-visited-state" href="application/create/reuse-ref-ssdd-skip">Draw down</a>
+        </td>
+      </tr>
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell">
+          Cabbage
+        </td>
+        <td class="govuk-table__cell">
+          Durham Early
+        </td>
+        <td class="govuk-table__cell">
+          883 tonnes
+        </td>
+        <!--         <td class="govuk-table__cell">
+          <div class="app-status-tag app-status-tag--red">
+            failed
+          </div>
+        </td> -->
+        <td class="govuk-table__cell">
+          <a class="govuk-link govuk-link--no-visited-state" href="application/create/reuse-ref-ssdd-skip">Draw down</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+
+    <h2 class="govuk-heading-m govuk-!-margin-top-4">
+      Stock history
+    </h2>
+    <p class="govuk-body">
+      This stock has been used for the following applications
+    </p>
+
+    <table class="govuk-table responsive-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header govuk-width-one-fifth" scope="col">Date</th>
+          <th class="govuk-table__header" scope="col">Application reference</th>
+          <th class="govuk-table__header" scope="col">Commodity</th>
+          <th class="govuk-table__header" scope="col">Variety</th>
+          <th class="govuk-table__header s" scope="col">Quantity</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for item in items %}
+        <tr class="govuk-table__row result">
+          <td class="govuk-table__cell" scope="row">{{ item.date }}
+          </td>
+          <td class="govuk-table__cell" scope="row">
+            <a href="application-amend?id={{loop.index}}" class="govuk-link govuk-link--no-visited-state">
+              {{ item.application_number }}
+            </a>
+          </td>
+          <td class="govuk-table__cell" scope="row">{{ item.description }}
+          </td>
+          <td class="govuk-table__cell" scope="row">{{ item.details }}
+          </td>
+          <td class="govuk-table__cell" scope="row">{{ item.amount }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+
+    </table>
+
+
+
+</div>
+</div>
+
+{% endblock %}

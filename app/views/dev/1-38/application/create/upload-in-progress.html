@@ -1,0 +1,442 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.build == "development" %}Add commodities by uploading a file - GOV.UK{% else %}Upload in progress... - Phytosanitary certificate - {{serviceName}} - GOV.UK{% endif %}
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <div aria-live="assertive" class="app-alert app-alert--info">
+      <p class="govuk-body">Upload in progress...</p>
+    </div>
+
+    <form method="post" novalidate>
+    
+      <!--
+        Chris Harding (06.06.22) - Here we set:
+          a) template
+          b) example template
+        This is based on the commodity and application type provided.
+      -->
+
+      <!-- Default commodity value (e.g. if no commodity and application type exists) -->
+      {% set commodity = data.commodity or "plants" %}
+
+      <!-- Tailored values for template and example template based on based on commodity and application type -->
+      {% if data.commodity == "bulbs" %}
+        {% set template = "template-bulbs.csv" %}
+        {% set exampleTemplate = "example-bulbs.csv" %}
+      {% elif data.commodity == "plants" %}
+        {% set template = "template-plants.csv" %}
+        {% set exampleTemplate = "example-plant.csv" %}
+      {% elif data.commodity == "potatoes" %}
+        {% set template = "template-potatoes.csv" %}
+        {% set exampleTemplate = "example-potatoes.csv" %}
+      {% elif data.commodity == "plant products" %}
+        {% set template = "template-plant-products.csv" %}
+        {% set exampleTemplate = "example-plant-products.csv" %}
+      {% elif data.commodity == "seeds" %}
+        {% set template = "template-seeds.csv" %}
+        {% set exampleTemplate = "example-seeds.csv" %}
+      {% elif data.commodity == "used farm machinery" %}
+        {% set template = "template-used-farm-machinery.csv" %}
+        {% set exampleTemplate = "example-used-farm-machinery.csv" %}
+      {% else %}
+        {% set template = "template-plants.csv" %}
+        {% set exampleTemplate = "example-plant.csv" %}
+      {% endif %}
+
+      <div class="govuk-form-group govuk-!-margin-bottom-9">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+            <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-6">Upload a file</h1>
+          </legend>
+        </fieldset>
+        <p class="govuk-body">Download the <a href="/public/templates/{{template}}" class="govuk-link govuk-link--no-visited-state" title="CSV template">csv template</a>.</p>
+        <p class="govuk-body govuk-!-margin-bottom-6">Open the file in whatever software program you use to edit comma-separated values (CSV) files. Fill in the template using the guidance notes on how to edit the file, then save and upload it.</p>
+        <h2 class="govuk-heading-m">Guidance on how to edit the file</h2>
+        
+        <!-- Dynamic sections (START) -->
+        {% if data.commodity == "bulbs" %}
+        <ol class="govuk-list govuk-list--number">
+          <li>You must complete all fields that are mandatory.</li>
+          <li>You must give either the EPPO code or genus, or both.</li>
+          <li>
+            You must use the correct EPPO code to describe your commodity - you can find the EPPO code here:
+            <br>
+            <a href="https://gd.eppo.int/search" class="govuk-link" rel="noreferrer noopener" target="_blank">https://gd.eppo.int/search (opens in new tab)</a>
+          </li>
+          <li>
+            You must use the correct country code for the country of origin - you can find the 2 letter country code here:
+            <br>
+            <a href="https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes" class="govuk-link" rel="noreferrer noopener" target="_blank">https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes (opens in new tab)</a>
+            <br>
+            The only exceptions to this list are: Northern Ireland and Palestine. For Northern Ireland, use GB-NIR, for Palestine use PS.
+          </li>
+          <li>For commodity type, quantity units and packaging type you must choose from the options listed in the template and delete any options you do not use.</li>
+          <li>Do not enter more than 500 rows of data.</li>
+          <li>Save your completed file as a .CSV file and upload it.</li>
+        </ol>
+        <details class="govuk-details" data-module="govuk-details">
+          <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">Further advice</span>
+          </summary>
+
+          <div class="govuk-details__text">
+            <!-- <h3 class="govuk-heading-s">If you are having problems with the upload</h3> -->
+            <p class="govuk-body">If you are having problems with the upload</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>make sure that you have used the correct EPPO code</li>
+              <li>make sure you have provided either an EPPO code or  the genus, or both</li>
+              <li>make sure that you have used the correct country code for the country of origin</li>
+              <li>make sure you have not changed or deleted any columns or headers from the template</li>
+              <li>make sure the headers are consistently capitalised</li>
+              <li>check that you have not added extra commas</li>
+              <li>if you have edited the template using the Numbers application, be aware that this program sometimes adds extra columns to the file. If there are any empty columns without headers in your file, you should delete these columns completely.</li>
+              <li>check that when you edited the template, your software didn't add extra commas into your CSV file</li>
+              <li>for commodity type, quantity units and packaging type, make sure you have used only the options provided without changing them</li>
+              <li>for commodity type, quantity units and packaging type, make sure that you have deleted any options you have not used</li>
+            </ul>
+          </div>
+
+        </details>
+        {% elif data.commodity == "plants" %}
+        <ol class="govuk-list govuk-list--number">
+          <li>You must complete all fields that are mandatory.</li>
+          <li>You must give either the EPPO code or genus, or both.</li>
+          <li>
+            You must use the correct EPPO code to describe your commodity - you can find the EPPO code here:
+            <br>
+            <a href="https://gd.eppo.int/search" class="govuk-link" rel="noreferrer noopener" target="_blank">https://gd.eppo.int/search (opens in new tab)</a>
+          </li>
+          <li>
+            You must use the correct country code for the country of origin - you can find the 2 letter country code here:
+            <br>
+            <a href="https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes" class="govuk-link" rel="noreferrer noopener" target="_blank">https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes (opens in new tab)</a>
+            <br>
+            The only exceptions to this list are: Northern Ireland and Palestine. For Northern Ireland, use GB-NIR, for Palestine use PS.
+          </li>
+          <li>For commodity type, quantity units, and packaging type you must choose from the options listed in the template and delete any options you do not use.</li>
+          <li>Do not enter more than 500 rows of data.</li>
+          <li>Save your completed file as a .CSV file and upload it.</li>
+        </ol>
+        <details class="govuk-details" data-module="govuk-details">
+          <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">Further advice</span>
+          </summary>
+
+          <div class="govuk-details__text">
+            <!-- <h3 class="govuk-heading-s">If you are having problems with the upload</h3> -->
+            <p class="govuk-body">If you are having problems with the upload</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>make sure that you have used the correct EPPO code</li>
+              <li>make sure you have provided either an EPPO code or  the genus, or both</li>
+              <li>make sure that you have used the correct country code for the country of origin</li>
+              <li>make sure you have not changed or deleted any columns or headers from the template</li>
+              <li>make sure the headers are consistently capitalised</li>
+              <li>check that you have not added extra commas</li>
+              <li>if you have edited the template using the Numbers application, be aware that this program sometimes adds extra columns to the file. If there are any empty columns without headers in your file, you should delete these columns completely.</li>
+              <li>check that when you edited the template, your software didn't add extra commas into your CSV file</li>
+              <li>for commodity type, quantity units, and packaging type, make sure you have used only the options provided without changing them</li>
+              <li>for commodity type, quantity units, and packaging type, make sure that you have deleted any options you have not used</li>
+            </ul>
+          </div>
+
+        </details>
+        {% elif data.commodity == "potatoes" %}
+        <ol class="govuk-list govuk-list--number">
+          <li>You must complete all fields that are mandatory.</li>
+          <li>If you are unable to find your variety in the list of varieties provided in the template, you may enter your own name for the variety and delete any options you do not use.</li>
+          <li>If you have ware potatoes, you must enter the soil sampling application number and lot reference. If you have seed potatoes, enter the stock number - you may also know this as the lot reference.</li>
+          <li>
+            You must use the correct country code for the country of origin - you can find the 2 letter country code here:
+            <br>
+            <a href="https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes" class="govuk-link" rel="noreferrer noopener" target="_blank">https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes (opens in new tab)</a>
+            <br>
+            The only exceptions to this list are: Northern Ireland and Palestine. For Northern Ireland, use GB-NIR, for Palestine use PS.
+          </li>
+          <li>For potato type, quantity units, and packaging type you must choose from the options listed in the template and delete any options you do not use.</li>
+          <li>If the application for a growing season inspection number was done using the eDomero system, enter ‘eDomero’. If the growing season inspection was not done in eDomero, enter the growing season inspection number.</li>
+          <li>Do not enter more than 500 rows of data.</li>
+          <li>Save your completed file as a .CSV file and upload it.</li>
+        </ol>
+        <details class="govuk-details" data-module="govuk-details">
+          <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">Further advice</span>
+          </summary>
+
+          <div class="govuk-details__text">
+            <!-- <h3 class="govuk-heading-s">If you are having problems with the upload</h3> -->
+            <p class="govuk-body">If you are having problems with the upload</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>make sure that you have used the correct country code for the country of origin</li>
+              <li>make sure you have not changed or deleted any columns or headers from the template</li>
+              <li>make sure the headers are consistently capitalised</li>
+              <li>check that you have not added extra commas</li>
+              <li>if you have edited the template using the Numbers application, be aware that this program sometimes adds extra columns to the file. If there are any empty columns without headers in your file, you should delete these columns completely.</li>
+              <li>check that when you edited the template, your software didn't add extra commas into your CSV file</li>
+              <li>check you have entered the soil sampling application number and lot reference if you are exporting ware potatoes</li>
+              <li>check you have entered the stock number (lot reference) if you are exporting seed potatoes</li>
+              <li>for potato type, quantity units, and packaging type, make sure you have used only the options provided without changing them</li>
+              <li>for potato type, variety, quantity units, and packaging type, make sure that you have deleted any options you have not used</li>
+              <li>for the growing season inspection number make sure that you have entered either a growing season inspection number or the word eDomero and nothing else</li>
+            </ul>
+          </div>
+
+        </details>
+        {% elif data.commodity == "plant products" %}
+        <ol class="govuk-list govuk-list--number">
+          <li>You must complete all fields that are mandatory.</li>
+          <li>You must give either the EPPO code or genus, or both.</li>
+          <li>
+            Use the correct species EPPO code to describe your commodity - you can find the EPPO code for your species here:
+            <br>
+            <a href="https://gd.eppo.int/search" class="govuk-link" rel="noreferrer noopener" target="_blank">https://gd.eppo.int/search (opens in new tab)</a>
+          </li>
+          <li>If you do not know the botanical name, or your product is made of many species, enter a description or common name instead.</li>
+          <li>
+            You must use the correct country code for the primary country of origin. You can find the 2 letter country code here:
+            <br>
+            <a href="https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes" class="govuk-link" rel="noreferrer noopener" target="_blank">https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes (opens in new tab)</a>
+            <br>
+            The only exceptions to this list are: Northern Ireland and Palestine. For Northern Ireland, use GB-NIR, for Palestine use PS.
+          </li>
+          <li>For quantity units and packaging type you must choose from the options listed in the template and delete any options you do not use.</li>
+          <li>Do not enter more than 500 rows of data.</li>
+          <li>Save your completed file as a .CSV file and upload it.</li>
+        </ol>
+        <details class="govuk-details" data-module="govuk-details">
+          <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">Further advice</span>
+          </summary>
+
+          <div class="govuk-details__text">
+            <!-- <h3 class="govuk-heading-s">If you are having problems with the upload</h3> -->
+            <p class="govuk-body">If you are having problems with the upload</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>make sure that you have used the correct EPPO code</li>
+              <li>make sure you have provided either an EPPO code or  the genus, or both</li>
+              <li>make sure that you have used the correct country code to enter the primary country of origin</li>
+              <li>make sure you have not changed or deleted any columns or headers from the template</li>
+              <li>make sure the headers are consistently capitalised</li>
+              <li>check that you have not added extra commas</li>
+              <li>if you have edited the template using the Numbers application, be aware that this program sometimes adds extra columns to the file. If there are any empty columns without headers in your file, you should delete these columns completely.</li>
+              <li>check that when you edited the template, your software didn't add extra commas into your CSV file</li>
+              <li>for quantity units and packaging type, make sure you have used only the options provided without changing them</li>
+              <li>for quantity units and packaging type, make sure that you have deleted any options you have not used</li>
+            </ul>
+          </div>
+
+        </details>
+        {% elif data.commodity == "seeds" %}
+        <ol class="govuk-list govuk-list--number">
+          <li>You must complete all fields that are mandatory.</li>
+          <li>You must give either the EPPO code or genus, or both.</li>
+          <li>
+            Use the correct species EPPO code to describe your commodity - you can find the EPPO code for your species here:
+            <br>
+            <a href="https://gd.eppo.int/search" class="govuk-link" rel="noreferrer noopener" target="_blank">https://gd.eppo.int/search (opens in new tab)</a>
+          </li>
+          <li>If you do not know the botanical name, or your product is made of many species, enter a description instead.</li>
+          <li>
+            You must use the correct country code for the country of origin. You must separate these only with spaces, do not use commas. You can find the 2 letter country code here:
+            <br>
+            <a href="https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes" class="govuk-link" rel="noreferrer noopener" target="_blank">https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes (opens in new tab)</a>
+            <br>
+            The only exceptions to this list are: Northern Ireland and Palestine. For Northern Ireland, use GB-NIR, for Palestine use PS.
+          </li>
+          <li>You must enter a sample reference. You may also know this as the <abbr title="Animal and Plant Health Agency">APHA</abbr> sample reference number, sample ID or SID number.</li>
+          <li>For quantity units and packaging type you must choose from the options listed in the template and delete any options you do not use.</li>
+          <li>Do not enter more than 500 rows of data.</li>
+          <li>Save your completed file as a .CSV file and upload it.</li>
+        </ol>
+        <details class="govuk-details" data-module="govuk-details">
+          <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">Further advice</span>
+          </summary>
+
+          <div class="govuk-details__text">
+            <!-- <h3 class="govuk-heading-s">If you are having problems with the upload</h3> -->
+            <p class="govuk-body">If you are having problems with the upload</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>make sure that you have used the correct EPPO code</li>
+              <li>make sure you have provided either an EPPO code or  the genus, or both</li>
+              <li>make sure that you have used the correct country code for the country of origin</li>
+              <li>make sure you have not changed or deleted any columns or headers from the template</li>
+              <li>make sure the headers are consistently capitalised</li>
+              <li>check that you have not added extra commas</li>
+              <li>if you have edited the template using the Numbers application, be aware that this program sometimes adds extra columns to the file. If there are any empty columns without headers in your file, you should delete these columns completely.</li>
+              <li>check that when you edited the template, your software didn't add extra commas into your CSV file</li>
+              <li>for quantity units and packaging type, make sure you have used only the options provided without changing them</li>
+              <li>for quantity units and packaging type, make sure that you have deleted any options you have not used</li>
+            </ul>
+          </div>
+
+        </details>
+        {% elif data.commodity == "used farm machinery" %}
+        <ol class="govuk-list govuk-list--number">
+          <li>You must complete all fields.</li>
+          <li>
+            You must use the correct country code for the country where this machinery was last used - you can find the 2 letter country code here:
+            <br>
+            <a href="https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes" class="govuk-link" rel="noreferrer noopener" target="_blank">https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes (opens in new tab)</a>
+            <br>
+            The only exceptions to this list are: Northern Ireland and Palestine. For Northern Ireland, use GB-NIR, for Palestine use PS.
+          </li>
+          <li>For the unique ID field, enter the VIN or chassis number.</li>
+          <li>Do not enter more than 500 rows of data.</li>
+          <li>Save your completed file as a .CSV file and upload it.</li>
+        </ol>
+        <details class="govuk-details" data-module="govuk-details">
+          <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">Further advice</span>
+          </summary>
+
+          <div class="govuk-details__text">
+            <!-- <h3 class="govuk-heading-s">If you are having problems with the upload</h3> -->
+            <p class="govuk-body">If you are having problems with the upload</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>make sure that you have used the correct country code to enter the country where this machinery was last used</li>
+              <li>make sure you have not changed or deleted any columns or headers from the template</li>
+              <li>make sure the headers are consistently capitalised</li>
+              <li>check that you have not added extra commas</li>
+              <li>if you have edited the template using the Numbers application, be aware that this program sometimes adds extra columns to the file. If there are any empty columns without headers in your file, you should delete these columns completely.</li>
+              <li>check that when you edited the template, your software didn't add extra commas into your CSV file</li>
+            </ul>
+          </div>
+
+        </details>
+        {% else %}
+        <ol class="govuk-list govuk-list--number">
+          <li>You must complete all fields that are mandatory.</li>
+          <li>You must give either the EPPO code or genus, or both.</li>
+          <li>
+            You must use the correct EPPO code to describe your commodity - you can find the EPPO code here:
+            <br>
+            <a href="https://gd.eppo.int/search" class="govuk-link" rel="noreferrer noopener" target="_blank">https://gd.eppo.int/search (opens in new tab)</a>
+          </li>
+          <li>
+            You must use the correct country code for the country of origin - you can find the 2 letter country code here:
+            <br>
+            <a href="https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes" class="govuk-link" rel="noreferrer noopener" target="_blank">https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes (opens in new tab)</a>
+            <br>
+            The only exceptions to this list are: Northern Ireland and Palestine. For Northern Ireland, use GB-NIR, for Palestine use PS.
+          </li>
+          <li>For commodity type, quantity units, and packaging type you must choose from the options listed in the template and delete any options you do not use.</li>
+          <li>Do not enter more than 500 rows of data.</li>
+          <li>Save your completed file as a .CSV file and upload it.</li>
+        </ol>
+        <details class="govuk-details" data-module="govuk-details">
+          <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">Further advice</span>
+          </summary>
+
+          <div class="govuk-details__text">
+            <!-- <h3 class="govuk-heading-s">If you are having problems with the upload</h3> -->
+            <p class="govuk-body">If you are having problems with the upload</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>make sure that you have used the correct EPPO code</li>
+              <li>make sure you have provided either an EPPO code or  the genus, or both</li>
+              <li>make sure that you have used the correct country code for the country of origin</li>
+              <li>make sure you have not changed or deleted any columns or headers from the template</li>
+              <li>make sure the headers are consistently capitalised</li>
+              <li>check that you have not added extra commas</li>
+              <li>if you have edited the template using the Numbers application, be aware that this program sometimes adds extra columns to the file. If there are any empty columns without headers in your file, you should delete these columns completely.</li>
+              <li>check that when you edited the template, your software didn't add extra commas into your CSV file</li>
+              <li>for commodity type, quantity units, and packaging type, make sure you have used only the options provided without changing them</li>
+              <li>for commodity type, quantity units, and packaging type, make sure that you have deleted any options you have not used</li>
+            </ul>
+          </div>
+
+        </details>
+        {% endif %}
+        <!-- Dynamic sections (END) -->
+
+        {{ govukFileUpload({
+          id: "file-upload-1",
+          name: "file-upload-1",
+          label: {
+            text: "Upload your completed CSV file"
+          }
+        }) }}
+
+      </div>
+
+      {{ govukButton({
+        text: "Upload",
+        href: "upload-in-progress"
+      }) }}
+
+      <ul class="govuk-list govuk-list">
+        <li>
+          {% if data.journey == "coc" or data.journey == "both" %}
+          <a href="commodity-list-split" class="govuk-link govuk-link-no-visited-state">Skip</a>
+          {% elseif data.commodity == "seeds" %}
+          <a href="commodity-list-summary" class="govuk-link govuk-link-no-visited-state">Skip</a>
+          {% else %}
+          <a href="commodity-list" class="govuk-link govuk-link-no-visited-state">Skip</a>
+          {% endif %}
+          (page reloads after 10 seconds)
+        </li>
+      </ul>
+
+      {% if query.extras == "yes" %}
+      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+      <h3 class="govuk-heading-s">Bulk upload templates</h3>
+      <span class="govuk-body">Phytosanitary certificate</span>
+      <ul class="govuk-list govuk-list">
+        <li><a href="/public/templates/template-bulbs.csv" class="govuk-link govuk-link-no-visited-state">Bulbs</a> | <a href="/public/templates/example-bulbs.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
+        <li><a href="/public/templates/template-plants.csv" class="govuk-link govuk-link-no-visited-state">Plants and fresh produce</a> | <a href="/public/templates/example-plant.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
+        <li><a href="/public/templates/template-potatoes.csv" class="govuk-link govuk-link-no-visited-state">Potatoes</a> | <a href="/public/templates/example-potatoes.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
+        <li><a href="/public/templates/template-plant-products.csv" class="govuk-link govuk-link-no-visited-state">Processed plant products</a> | <a href="/public/templates/example-plant-products.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
+        <li><a href="/public/templates/template-seeds.csv" class="govuk-link govuk-link-no-visited-state">Seeds for planting</a> | <a href="/public/templates/example-seeds.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
+        <li><a href="/public/templates/template-grain.csv" class="govuk-link govuk-link-no-visited-state">Unprocessed cereal grains</a> | <a href="/public/templates/example-grain.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
+        <li><a href="/public/templates/template-used-farm-machinery.csv" class="govuk-link govuk-link-no-visited-state">Used farm machinery</a> | <a href="/public/templates/example-used-farm-machinery.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
+      </ul>
+      <span class="govuk-body">Certificate of conformity</span>
+      <ul class="govuk-list govuk-list">
+        <li><a href="/public/templates/template-sms.csv" class="govuk-link govuk-link-no-visited-state">SMS</a> | <a href="/public/templates/example-sms.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
+        <li><a href="/public/templates/template-gms.csv" class="govuk-link govuk-link-no-visited-state">GMS</a> | <a href="/public/templates/example-gms.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>       
+      </ul>
+      <span class="govuk-body">Seed sampling</span>
+      <ul class="govuk-list govuk-list">
+        <li><a href="/public/templates/template-seeds-sampling.csv" class="govuk-link govuk-link-no-visited-state">Seed sampling</a> | <a href="/public/templates/example-seeds-sampling.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>      
+      </ul>
+      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+      <h3 class="govuk-heading-s">Error handling</h3>
+      <ul class="govuk-list govuk-list">
+        <li><a href="upload-error-summary" class="govuk-link govuk-link-no-visited-state">View error summary of unique errors (occurences and rows listed)</a></li>
+      </ul>
+      {% endif %}
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}
+
+{% block pageScripts %}
+<script>
+
+   var timer = setTimeout(function() {
+    {% if data.journey == "coc" %}
+    window.location='commodity-list-split'
+    {% elseif data.commodity == "seeds" %}
+    window.location='commodity-list-summary'
+    {% else %}
+    window.location='commodity-list'
+    {% endif %}
+      
+  }, 10000);
+
+</script>
+{% endblock %}
