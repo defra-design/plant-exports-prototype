@@ -15,6 +15,18 @@
 
   <div class="govuk-grid-column-two-thirds">
 
+    {% if query.maxLimitReached == "yes" %}
+    <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+      <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
+      
+      <div class="govuk-error-summary__body">
+        <ul class="govuk-list govuk-error-summary__list">
+          <li><a href="#file-upload-1">This CSV could not be uploaded as it has more than 6,000 commodities. You should edit the file so that it contains only 6,000 commodities. You will need to create a new application if you want to add more than 6,000 commodities.</a></li>
+        </ul>
+      </div>
+
+    </div>
+    {% else %}
     <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
       <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
       <h3 class="govuk-heading-s">There are 202 errors in your file</h3>
@@ -23,19 +35,20 @@
         <ul class="govuk-list govuk-error-summary__list">
           <li><a href="#file-upload-1">Correct the problems with your file and then upload the file again</a></li>
         </ul>
-        <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-0">
-          <li>You must give either the EPPO code or genus, or both (row 9)</li>
-          <li>The commodity type field is missing some information (100 rows)</li>
-          <li>The country code for country of origin field is missing some information (60 rows)</li>
-          <li>The quantity field is missing some information (20 rows)</li>
-          <li>The information in the quantity field is not in the right format (row 1)</li>
-          <li>The information in the quantity field is too long (12 rows)</li>
-          <li>The number of packages field is missing some information (row 28)</li>
-          <li>The packaging type field is missing some information (7 rows)</li>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>Botanical name or description is missing (row 9)</li>
+          <li>Commodity type is missing (100 rows)</li>
+          <li>Country of origin is missing (60 rows)</li>
+          <li>Quantity is missing (20 rows)</li>
+          <li>Quantity does not match the expected type of Number (row 1)</li>
+          <li>Quantity is too long. It should be 8 characters or fewer, up to 3 decimal places (12 rows)</li>
+          <li>Number of packages is missing (row 28)</li>
+          <li>Packaging type is missing (7 rows)</li>
         </ul>
       </div>
 
     </div>
+    {% endif %}
 
     <form method="post" novalidate>
     
@@ -101,7 +114,7 @@
             The only exceptions to this list are: Northern Ireland and Palestine. For Northern Ireland, use GB-NIR, for Palestine use PS.
           </li>
           <li>For commodity type, quantity units and packaging type you must choose from the options listed in the template and delete any options you do not use.</li>
-          <li>Do not enter more than 500 rows of data.</li>
+          <li>Do not enter more than 6,000 rows of data.</li>
           <li>Save your completed file as a .CSV file and upload it.</li>
         </ol>
         <details class="govuk-details" data-module="govuk-details">
@@ -144,7 +157,7 @@
             The only exceptions to this list are: Northern Ireland and Palestine. For Northern Ireland, use GB-NIR, for Palestine use PS.
           </li>
           <li>For commodity type, quantity units, and packaging type you must choose from the options listed in the template and delete any options you do not use.</li>
-          <li>Do not enter more than 500 rows of data.</li>
+          <li>Do not enter more than 6,000 rows of data.</li>
           <li>Save your completed file as a .CSV file and upload it.</li>
         </ol>
         <details class="govuk-details" data-module="govuk-details">
@@ -184,7 +197,7 @@
           </li>
           <li>For potato type, quantity units, and packaging type you must choose from the options listed in the template and delete any options you do not use.</li>
           <li>If the application for a growing season inspection number was done using the eDomero system, enter ‘eDomero’. If the growing season inspection was not done in eDomero, enter the growing season inspection number.</li>
-          <li>Do not enter more than 500 rows of data.</li>
+          <li>Do not enter more than 6,000 rows of data.</li>
           <li>Save your completed file as a .CSV file and upload it.</li>
         </ol>
         <details class="govuk-details" data-module="govuk-details">
@@ -229,7 +242,7 @@
             The only exceptions to this list are: Northern Ireland and Palestine. For Northern Ireland, use GB-NIR, for Palestine use PS.
           </li>
           <li>For quantity units and packaging type you must choose from the options listed in the template and delete any options you do not use.</li>
-          <li>Do not enter more than 500 rows of data.</li>
+          <li>Do not enter more than 6,000 rows of data.</li>
           <li>Save your completed file as a .CSV file and upload it.</li>
         </ol>
         <details class="govuk-details" data-module="govuk-details">
@@ -274,7 +287,7 @@
           </li>
           <li>You must enter a sample reference. You may also know this as the <abbr title="Animal and Plant Health Agency">APHA</abbr> sample reference number, sample ID or SID number.</li>
           <li>For quantity units and packaging type you must choose from the options listed in the template and delete any options you do not use.</li>
-          <li>Do not enter more than 500 rows of data.</li>
+          <li>Do not enter more than 6,000 rows of data.</li>
           <li>Save your completed file as a .CSV file and upload it.</li>
         </ol>
         <details class="govuk-details" data-module="govuk-details">
@@ -311,7 +324,7 @@
             The only exceptions to this list are: Northern Ireland and Palestine. For Northern Ireland, use GB-NIR, for Palestine use PS.
           </li>
           <li>For the unique ID field, enter the VIN or chassis number.</li>
-          <li>Do not enter more than 500 rows of data.</li>
+          <li>Do not enter more than 6,000 rows of data.</li>
           <li>Save your completed file as a .CSV file and upload it.</li>
         </ol>
         <details class="govuk-details" data-module="govuk-details">
@@ -350,7 +363,7 @@
             The only exceptions to this list are: Northern Ireland and Palestine. For Northern Ireland, use GB-NIR, for Palestine use PS.
           </li>
           <li>For commodity type, quantity units, and packaging type you must choose from the options listed in the template and delete any options you do not use.</li>
-          <li>Do not enter more than 500 rows of data.</li>
+          <li>Do not enter more than 6,000 rows of data.</li>
           <li>Save your completed file as a .CSV file and upload it.</li>
         </ol>
         <details class="govuk-details" data-module="govuk-details">
@@ -401,7 +414,7 @@
       <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
       <h3 class="govuk-heading-s">Bulk upload templates</h3>
       <span class="govuk-body">Phytosanitary certificate</span>
-      <ul class="govuk-list govuk-list">
+      <ul class="govuk-list">
         <li><a href="/public/templates/template-bulbs.csv" class="govuk-link govuk-link-no-visited-state">Bulbs</a> | <a href="/public/templates/example-bulbs.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
         <li><a href="/public/templates/template-plants.csv" class="govuk-link govuk-link-no-visited-state">Plants and fresh produce</a> | <a href="/public/templates/example-plant.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
         <li><a href="/public/templates/template-potatoes.csv" class="govuk-link govuk-link-no-visited-state">Potatoes</a> | <a href="/public/templates/example-potatoes.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
@@ -411,19 +424,19 @@
         <li><a href="/public/templates/template-used-farm-machinery.csv" class="govuk-link govuk-link-no-visited-state">Used farm machinery</a> | <a href="/public/templates/example-used-farm-machinery.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
       </ul>
       <span class="govuk-body">Certificate of conformity</span>
-      <ul class="govuk-list govuk-list">
+      <ul class="govuk-list">
         <li><a href="/public/templates/template-sms.csv" class="govuk-link govuk-link-no-visited-state">SMS</a> | <a href="/public/templates/example-sms.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
         <li><a href="/public/templates/template-gms.csv" class="govuk-link govuk-link-no-visited-state">GMS</a> | <a href="/public/templates/example-gms.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>       
       </ul>
       <span class="govuk-body">Seed sampling</span>
-      <ul class="govuk-list govuk-list">
+      <ul class="govuk-list">
         <li><a href="/public/templates/template-seeds-sampling.csv" class="govuk-link govuk-link-no-visited-state">Seed sampling</a> | <a href="/public/templates/example-seeds-sampling.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>      
       </ul>
-      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+      <!-- <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
       <h3 class="govuk-heading-s">Error handling</h3>
-      <ul class="govuk-list govuk-list">
-        <li><a href="upload-validation-errors-summary" class="govuk-link govuk-link-no-visited-state">View error summary of unique errors (occurences and rows listed)</a></li>
-      </ul>
+      <ul class="govuk-list">
+        <li><a href="#" class="govuk-link govuk-link-no-visited-state">...</a></li>
+      </ul> -->
       {% endif %}
     </form>
 

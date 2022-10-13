@@ -1,52 +1,51 @@
 {% extends "layout.html" %}
+
 {% block pageTitle %}
-Your consignment - Seed sampling - {{serviceName}} - GOV.UK
+  {% if data.build == "developmemnt" %}Your commodities{% else %}Seeds to be sampled{% endif %} - Seed sampling - {{serviceName}} - GOV.UK
 {% endblock %}
+
 {% block beforeContent %}
 {{super()}}
-<a href="{{page.content.prev or 'javascript:history.back()'}}" class="govuk-back-link">Back</a>
+{% include "../../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
 {% endblock %}
+
 {% block content %}
 <div class="govuk-grid-row">
+
   <div class="govuk-grid-column-three-quarters">
-    <h1 class="govuk-heading-xl govuk-!-margin-top-4">{% if data.build == "developmemnt" %}Your commodities{% else %}Seeds to be sampled{% endif %}</h1>
-    <table class="govuk-table govuk-!-margin-bottom-9">
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th class="govuk-table__header" scope="col">
-            Description
-          </th>
-          <th class="govuk-table__header" scope="col">
-            Lot reference
-          </th>
-          <th class="govuk-table__header" scope="col">
-            Destination
-          </th>
-          <th class="govuk-table__header" scope="col">
-            Quantity 
-          </th>
-          <th class="govuk-table__header govuk-table__header--numeric" scope="col">
-            Actions
-          </th>
-        </tr>
-      </thead>
-      <tbody class="govuk-table__body">
 
-        {% block summaryGeneral %}{% include "../../modules/_summary-seed-sampling-countries.html" %}{% endblock %}
-      </tbody>
-    </table>
-
-    <form  method="POST">
+    <form action="{{query.return_url or 'task-list'}}" method="post">
+      <h1 class="govuk-heading-xl">{% if data.build == "developmemnt" %}Your commodities{% else %}Seeds to be sampled{% endif %}</h1>
+      
+      <table class="govuk-table govuk-!-margin-bottom-7">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Description</th>
+            <th class="govuk-table__header" scope="col">Lot reference</th>
+            <th class="govuk-table__header" scope="col">Destination</th>
+            <th class="govuk-table__header" scope="col">Quantity </th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          {% block summaryGeneral %}
+          {% include "../../modules/_summary-seed-sampling-countries.html" %}
+          {% endblock %}
+        </tbody>
+      </table>
+    
       {{ govukRadios({
         idPrefix: "next",
         name: "next",
+        classes: "govuk-!-margin-bottom-4",
         fieldset:
         {
           legend:
           {
             text: "Do you want to add more seeds to your consignment?",
             isPageHeading: true,
-            classes: "govuk-fieldset__legend--m govuk-!-margin-top-4"
+            classes: "govuk-fieldset__legend--m"
           }
         },
         items: [
@@ -65,24 +64,31 @@ Your consignment - Seed sampling - {{serviceName}} - GOV.UK
         ]
       }) }}
 
-      <div class="govuk-body govuk-!-margin-top-4">
-        <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+      <div class="govuk-form-group govuk-!-margin-bottom-6">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
       </div>
-    </form>
 
-    {% block continueLater %}{% include "../../modules/_save-continue-later.html" %}{% endblock %}
+      {% block continueLater %}
+      {% include "../../modules/_save-continue-later.html" %}
+      {% endblock %}
 
-    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible  govuk-!-margin-bottom-9">
+      <!-- Session data hook to update the task list so that this section is marked as 'COMPLETED' -->
+      <div class="govuk-form-group" hidden>
+        <label class="govuk-label" for="commodity_task_list_data">Task list section URL</label>
+        <input class="govuk-input" id="commodity_task_list_data" name="commodity_task_list_data" type="text" value="Manual">
+      </div>
+
+    </form>    
+
+    {% if query.extras == "yes" %}
+    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
     <ul class="govuk-list govuk-list--no-bullet">
-    <li class="govuk-body">
-      <a href="commodity-list" class="govuk-link govuk-link-no-visited-state">Commodity list: manual upload</a>
-    </li>
-    <li class="govuk-body ">
-      <a href="commodity-list-seeds-mvp" class="govuk-link govuk-link-no-visited-state">Commodity list: bulk upload</a>
-    </li>
-    <li class="govuk-body ">
-      <a href="commodity-list-seeds" class="govuk-link govuk-link-no-visited-state">Commodity list: 108 results</a>
-    </li>
-  </ul>
+      <li><a href="commodity-list" class="govuk-link govuk-link-no-visited-state">Commodity list (manual)</a></li>
+      <li><a href="commodity-list-summary" class="govuk-link govuk-link-no-visited-state">Commodity list summary (bulk upload)</a></li>
+      <li><a href="commodity-list-summary-max" class="govuk-link govuk-link-no-visited-state">Commodity list summary: maximum reached of 6,000 (bulk upload)</a></li>
+    </ul>
+    {% endif %}
+  </div>
 
-    {% endblock %}
+</div>
+{% endblock %}

@@ -1,29 +1,30 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-Supporting documents - Seed sampling - {{serviceName}} - GOV.UK
+  Supporting documents - Seed sampling - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
-<!-- call the same block in the main layout file -->
 {{super()}}
-<!-- add admin navbar from includes folder -->
-<!-- back button -->
-<div>
-  <a href="javascript:history.back()" class="govuk-back-link">Back</a>
-</div>
+{% include "../../modules/_account-banner.html" %}
+<a href="{{page.content.prev or 'javascript:history.back()'}}" class="govuk-back-link">Back</a>
 {% endblock %}
 
 {% block content %}
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
-    {% if query.delete_file == 'yes'%}
+    {% if query.delete_file == 'yes' %}
+    
     <div class="defra-alert defra-alert--success">
       <p class="govuk-body govuk-!-margin-bottom-0">Succesfully deleted file {{data.file}}</p>
     </div>
-    {% endif %}
+
+    {% endif %}  
     <h1 id="supplementary-documents" class="govuk-heading-xl">Supporting documents</h1>
+  </div>
+
+  <div class="govuk-grid-column-two-thirds">
     <p class="govuk-body">If you wish to attach any supporting documents to your application, you can upload them here. Otherwise, please click 'Save and continue' to skip this section.</p>
     <p class="govuk-body">You can only upload one at a time. Each file must:</p>
     <ul class="govuk-list govuk-list--bullet">
@@ -33,13 +34,17 @@ Supporting documents - Seed sampling - {{serviceName}} - GOV.UK
       <li>be uploaded with a file description</li>
     </ul>
   </div>
-</div>
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
-    <h3 class="govuk-heading-m"><span class="file_count">0</span> file{% if not data.file %}s{% endif %} uploaded</h3>
 
+</div>
+
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-full">
+    <!-- <h2 class="govuk-heading-m">{% if not data.file %}<span class="file_count">0</span> files{% else %}<span class="file_count">1</span> file{% endif %} uploaded</h2> -->
+    {% if not data.file %}{% else %}<h2 class="govuk-heading-m"><span class="file_count">1</span> file uploaded</h2>{% endif %}
+  
     <table class="govuk-table">
-      {% if data.file and query.delete_file != 'yes'%}
+      {% if data.file and query.delete_file != 'yes' %}
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
           <th scope="col" class="govuk-table__header app-custom-class govuk-!-width-one-half">File name</th>
@@ -49,8 +54,7 @@ Supporting documents - Seed sampling - {{serviceName}} - GOV.UK
       </thead>
       {% endif %}
       <tbody class="govuk-table__body">
-
-        {% if data.file and query.delete_file != 'yes'%}
+        {% if data.file and query.delete_file != 'yes' %}
         <tr class="govuk-table__row">
           <th scope="row" class="govuk-table__header"><a href="#"><span class="govuk-visually-hidden">view</span>{{data.file}}</a></th>
           <td class="govuk-table__cell">{{data.description}}</td>
@@ -62,11 +66,17 @@ Supporting documents - Seed sampling - {{serviceName}} - GOV.UK
         {% endif %}
       </tbody>
     </table>
+  
   </div>
+
 </div>
+
 <div class="govuk-grid-row">
+
   <div class="govuk-grid-column-full">
-    <form action="" method="get">
+
+    <form action="{{query.return_url or 'task-list'}}" method="post">
+
       <table class="govuk-table">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
@@ -77,25 +87,40 @@ Supporting documents - Seed sampling - {{serviceName}} - GOV.UK
         </thead>
         <tbody class="govuk-table__body">
           <tr class="govuk-table__row">
-            <td class="govuk-table__cell"><input class="govuk-file-upload" id="file-upload-1" name="file-upload-1" type="file"></td>
-            <td class="govuk-table__cell"><textarea rows="2" id="description" name="description" class="govuk-textarea margin-bottom-0" maxlength="100"></textarea></td>
-            <td class="govuk-table__cell"><a href="attachments" class="govuk-link govuk-link--no-visited-link">Upload</a></td>
+            <td class="govuk-table__cell">
+              <input class="govuk-file-upload" id="file" name="file" type="file">
+            </td>
+            <td class="govuk-table__cell">
+              <textarea rows="2" id="description" name="description" class="govuk-textarea margin-bottom-0" maxlength="100">{% if data.description %}{{data.description}}{% else %}{% endif %}</textarea>
+            </td>
+            <td class="govuk-table__cell">
+              <a href="#" class="govuk-link govuk-link--no-visited-link">Upload</a>
+            </td>
           </tr>
         </tbody>
       </table>
-    </form>
+      
+      <div class="govuk-button-group">
+        <input class="govuk-button" type="submit" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+      </div>
 
-    <form method="post" action="{{query.return_url or 'task-list'}}">
-      <input class="govuk-button" type="submit" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+      <!-- Session data hook to update the task list so that this section is marked as 'COMPLETED' -->
+      <div class="govuk-form-group" hidden>
+        <label class="govuk-label" for="supporting_documents_task_list_data">Task list section URL</label>
+        <input class="govuk-input" id="supporting_documents_task_list_data" name="supporting_documents_task_list_data" type="text" value="Complete">
+      </div>
+
     </form>
 
   </div>
+
 </div>
-<script type="text/javascript">
+
+<!-- <script type="text/javascript">
+  
   window.addEventListener('load', function() {
-
     $('.file_count').text($('tbody .govuk-table__row').length)
-  })
-</script>
+  });
 
+</script> -->
 {% endblock %}

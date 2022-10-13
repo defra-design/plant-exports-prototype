@@ -1,12 +1,14 @@
 {% extends "layout.html" %}
+
 {% block pageTitle %}
-Check your answers before sending your application - Seed sampling - {{serviceName}} - GOV.UK
-{% endblock %}
-{% block beforeContent %}
-{{super()}}
-<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+  Check your answers before sending your application - Seed sampling - {{serviceName}} - GOV.UK
 {% endblock %}
 
+{% block beforeContent %}
+{{super()}}
+{% include "../../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
 
 {% set items = [
   {
@@ -67,45 +69,32 @@ Check your answers before sending your application - Seed sampling - {{serviceNa
   ]
 %}
 
-
 {% block content %}
 <div class="govuk-grid-row">
+
   <div class="govuk-grid-column-three-quarters">
-    <h1 class="govuk-heading-xl">
-      Review your answers
-    </h1>
+
+    <form action="../submit/declaration" method="post">
+    <h1 class="govuk-heading-xl">Review your answers</h1>
+
     <h2 class="govuk-heading-m">Application summary</h2>
-    
-    <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+      
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Certificate
-        </dt>
-        <dd class="govuk-summary-list__value">
-          Seed sampling report
-        </dd>
-        <dd class="govuk-summary-list__actions">
-        </dd>
+        <dt class="govuk-summary-list__key">Certificate</dt>
+        <dd class="govuk-summary-list__value">Seed sampling report</dd>
+        <dd class="govuk-summary-list__actions">&nbsp;</dd>
       </div>
+
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Your reference
-        </dt>
-        <dd class="govuk-summary-list__value">
-          {{ data.reference_num or "12345" }}
-        </dd>
-        <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="../setup/what-country?change=yes">
-            Change<span class="govuk-visually-hidden">
-              Certification region</span>
-          </a>
-        </dd>
+        <dt class="govuk-summary-list__key">Your reference</dt>
+        <dd class="govuk-summary-list__value">{{data.reference_num or "12345"}}</dd>
+        <dd class="govuk-summary-list__actions"><a class="govuk-link" href="reference?return_url=check-your-answers&change=yes">Change<span class="govuk-visually-hidden"> certification region</span></a></dd>
       </div>
     </dl>
-    <!--Inspection details-->
 
     <h2 class="govuk-heading-m">Applicant details</h2>
-    <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
       
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Name</dt>
@@ -127,66 +116,49 @@ Check your answers before sending your application - Seed sampling - {{serviceNa
 
     </dl>
 
-    <!--Your consignment-->
     <h2 class="govuk-heading-m">Your consignment</h2>
-
     {% if data.upload == 1 %}
     <dl class="govuk-summary-list">
+      
       <div class="govuk-summary-list__row">
-       <dt class="govuk-summary-list__key">
-         Number of commodity&nbsp;records
-       </dt>
-       <dd class="govuk-summary-list__value">
-         395
-       </dd>
-       <dd class="govuk-summary-list__actions"><a class="govuk-link"
-        href="commodity-list-seeds-100-check?change=yes&return_url=check-your-answers?upload=1">Change<span class="govuk-visually-hidden">
-          commodity list</span></a></dd>
-     </div>
-     <div class="govuk-summary-list__row">
-       <dt class="govuk-summary-list__key">
-         Total quantity
-       </dt>
-       <dd class="govuk-summary-list__value">
-        10.35kg<br/>and 15 tonnes
-       </dd>
-       <dd class="govuk-summary-list__value">
-       </dd>
-     </div>
-     <div class="govuk-summary-list__row">
-       <dt class="govuk-summary-list__key">
-         Destination countries
-       </dt>
-       <dd class="govuk-summary-list__value">
-         <p class="govuk-body">Belgium, France, Israel, New Zealand, Spain </br>
-         </p>
-       </dd>
-       <dd class="govuk-summary-list__value">
-       </dd>
-     </div>
-   </dl>
+        <dt class="govuk-summary-list__key">Number of commodity records</dt>
+        <dd class="govuk-summary-list__value">395</dd>
+        <dd class="govuk-summary-list__actions"><a class="govuk-link" href="commodity-list-seeds-100-check?change=yes&return_url=check-your-answers?upload=1">Change<span class="govuk-visually-hidden"> commodity list</span></a></dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Total quantity</dt>
+        <dd class="govuk-summary-list__value">
+          10.35kg
+          <br>
+          and 15 tonnes
+        </dd>
+        <dd class="govuk-summary-list__value">&nbsp;</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Destination countries</dt>
+        <dd class="govuk-summary-list__value">Belgium, France, Israel, New Zealand, Spain</dd>
+        <dd class="govuk-summary-list__value">&nbsp;</dd>
+      </div>
+
+    </dl>
     {% else %}
     <table class="govuk-table govuk-!-margin-bottom-4">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
-          <th class="govuk-table__header" scope="col">
-            Description
-          </th>
-          <th class="govuk-table__header" scope="col">
-            Lot reference
-          </th>
-          <th class="govuk-table__header" scope="col">
-            Destination
-          </th>
-          <th class="govuk-table__header" scope="col">
-            Quantity
-          </th>
-          <th class="govuk-table__header" scope="col"></th>
+          <th class="govuk-table__header" scope="col">Description</th>
+          <th class="govuk-table__header" scope="col">Lot reference</th>
+          <th class="govuk-table__header" scope="col">Destination</th>
+          <th class="govuk-table__header" scope="col">Quantity</th>
+          <th class="govuk-table__header" scope="col">&nbsp;</th>
         </tr>
       </thead>
       <tbody class="govuk-table__body">
         {% for commodity in items %}
-        {% block summaryGeneral %}{% include "../../modules/_summary-seed-sampling-countries.html" %}{% endblock %}
+        {% block summaryGeneral %}
+        {% include "../../modules/_summary-seed-sampling-countries.html" %}
+        {% endblock %}
         {% endfor %}
       </tbody>
     </table>
@@ -194,74 +166,75 @@ Check your answers before sending your application - Seed sampling - {{serviceNa
 
     <p class="govuk-body"><a href="input-method?return_url=check-your-answers">Add more</a></p>
 
-
-    <!--Inspection details-->
     <h2 class="govuk-heading-m govuk-!-margin-top-8">Inspection details</h2>
     <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+      
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Address</dt>
         <dd class="govuk-summary-list__value">Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH</dd>
-        <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="inspection-addresses?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">address</span></a>
-        </dd>
+        <dd class="govuk-summary-list__actions"><a class="govuk-link" href="inspection-addresses?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">address</span></a></dd>
       </div>
+
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Contact name</dt>
         <dd class="govuk-summary-list__value">Sarah Philips</dd>
-        <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">contact name</span></a>
-        </dd>
+        <dd class="govuk-summary-list__actions"><a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">contact name</span></a></dd>
       </div>
+
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Phone number</dt>
         <dd class="govuk-summary-list__value">07123 456789</dd>
-        <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">phone number</span></a>
-        </dd>
+        <dd class="govuk-summary-list__actions"><a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">phone number</span></a></dd>
       </div>
+
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Email address</dt>
         <dd class="govuk-summary-list__value">email@domain.com</dd>
-        <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">email address</span></a>
-        </dd>
+        <dd class="govuk-summary-list__actions"><a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">email address</span></a></dd>
       </div>
+
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Date when your consignment will be ready for inspection</dt>
         <dd class="govuk-summary-list__value">15 Mar {{data.inpection_date_year or "2022"}}</dd>
-        <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="inspection-dates?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">date when your consignment will be ready for inspection</span></a>
-        </dd>
+        <dd class="govuk-summary-list__actions"><a class="govuk-link" href="inspection-dates?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">date when your consignment will be ready for inspection</span></a></dd>
       </div>
-      </dl>
+
+    </dl>
 
     <h3 class="govuk-heading-m govuk-!-margin-top-9">Supporting documents</h3>
-    <dl class="govuk-summary-list govuk-!-margin-bottom-9 ">
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+      
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
-          File name<br>
+          File name
+          <br>
           File description
         </dt>
         <dd class="govuk-summary-list__value">
           {% if data.file %}
-          <a href="#"><strong>{{data.file}}</strong></a><br>
+          <a href="#"><strong>{{data.file}}</strong></a>
+          <br>
           <a href="#"><strong>{{data.description}}</strong></a>
           {% else %}
           No documents uploaded
           {% endif %}
         </dd>
       </div>
+
     </dl>
 
+    <div class="govuk-form-group govuk-!-margin-top-9">
+      <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_blank">what fees you need to pay{% if data.build != "development" %} (opens in new tab){% endif %}</a> {% if data.build == "development" %}for this application (opens in a new window){% else %}for this application{% endif %}.</p>
+    </div>
+  
+    <div class="govuk-button-group govuk-!-margin-top-9">
+      <input type="hidden" name="answers-checked" value="true">
+      <button class="govuk-button" type="submit" data-module="govuk-button">Continue</button>
+    </div>
 
-    <p class="govuk-body">
-      Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees"
-        class="govuk-link" rel="noreferrer noopener" target="_blank">what fees you will pay (opens in new tab)</a> for this application.
-    </p>
+    </form>
 
-    <p class="govuk-body govuk-!-margin-top-6">
-      <a href="../submit/declaration" class="govuk-button">Submit</a>
-    </p>
   </div>
+
 </div>
 {% endblock %}
