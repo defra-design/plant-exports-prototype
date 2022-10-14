@@ -2,9 +2,9 @@
 
 {% block pageTitle %}
   {% if data.build == "development" %}
-  {% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %} {{query.id | appInformation('applicationID')}} - {{serviceName}} - GOV.UK
+  Application {{query.id | appInformation('applicationID')}} - {{serviceName}} - GOV.UK
   {% else %}
-  Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %} {{query.id | appInformation('applicationID')}} - {{serviceName}} - GOV.UK
+  Manage application {{query.id | appInformation('applicationID')}} - {{serviceName}} - GOV.UK
   {% endif %}
 {% endblock %}
 
@@ -24,6 +24,16 @@
   /* Needs extracting and adding to the external Sass or CSS */
   .govuk-width-one-fifth {
     width: 20% !important;
+  }
+
+  .app-status-tag--white-tag-blue-border-and-text {
+    background-color: #ffffff;
+    width: 90px;
+    text-align: center;
+    display: inline-block;
+    font-size: 15px;
+    border: 3px solid #1d70b8;
+    color: #1d70b8;
   }
 
   .doc-icon::before {
@@ -47,11 +57,11 @@
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">
       {% if data.build == "development" %}
-      {% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %} 
+      Application
       <br>
       {{query.id | appInformation('applicationID')}}
       {% else %}
-      Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %}
+      Manage application
       <br>
       {{query.id | appInformation('applicationID')}}
       {% endif %}
@@ -60,7 +70,59 @@
 
 </div>
 
-<div class="govuk-grid-row govuk-!-margin-bottom-2">
+{% if query.status == "submitted" %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+    <dl class="govuk-summary-list govuk-summary-list--no-border">
+      
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Status</dt>
+        <dd class="govuk-summary-list__value">
+          
+          <div class="app-status-tag app-status-tag--white-tag-blue-border-and-text">
+            submitted
+          </div>
+
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Your reference</dt>
+        <dd class="govuk-summary-list__value">{% if (query.id | appInformation('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id |
+          appInformation('reference')}}{% endif %}</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Type</dt>
+        <dd class="govuk-summary-list__value">Seed sampling application</dd>
+      </div>
+
+    </dl>
+
+    <div class="govuk-inset-text">
+      If this application contains a large number of seed samples, it may take longer to receive your report.
+    </div>
+
+  </div>
+
+</div>
+
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <ul class="govuk-list govuk-!-margin-top-6 noprint">
+      <li><a class="govuk-link govuk-link--no-visited-state" href="#">Update this application</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="#">View application details</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="#">Copy as new application</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="#">Cancel this application</a></li>
+    </ul>
+  </div>
+
+</div>
+{% else %}
+<div class="govuk-grid-row">
 
   <div class="govuk-grid-column-one-half">
     <dl class="govuk-summary-list govuk-summary-list--no-border">
@@ -96,7 +158,7 @@
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Quantity inspected</dt>
-        <dd class="govuk-summary-list__value">109,000 seeds</dd>
+        <dd class="govuk-summary-list__value">8 tonnes</dd>
       </div>
 
       {% endif %}
@@ -105,19 +167,15 @@
 
   <div class="govuk-grid-column-one-half govuk-!-margin-bottom-9">
     <h2 class="govuk-heading-m">Your documents</h2>
-    <p class="govuk-body">The sampling report shows the test results for the commodities in this application.</p>
+    <p class="govuk-body">Not all your commodities passed inspection. Your certificate is only for those commodities that met the relevant standards.</p>
     <ul class="govuk-list noprint">
-      <li><p class="doc-icon"><a href="/public/images/seeds-sampling-report.csv" class="govuk-link govuk-link--no-visited-state">Sampling report (csv)</a></p>
-      </li>      
+      <li><p class="doc-icon"><a href="/public/images/seeds-sampling-report.csv" class="govuk-link govuk-link--no-visited-state">Sampling report (csv)</a></p></li>      
     </ul>
-
-    {% if data.build == "development" %}
-    {% else %}
+    {% if data.build != "development" %}
     <p class="govuk-body">Download the data.</p>
     <ul class="govuk-list noprint">
       <li><p class="doc-icon"><a href="#" class="govuk-link govuk-link--no-visited-state">Stock list {{todaysDate}} (csv)</a></p></li>  
     </ul>
-
     {% endif %}
   </div>
 
@@ -138,30 +196,13 @@
 {% else %}
 <div class="govuk-grid-row">
 
-  <div class="govuk-grid-column-two-thirds">
-    <h2 class="govuk-heading-m">Commodities in this application</h2>
-    
-    <div class="search-wrapper govuk-form-group">
-      <label for="search-reservations" class="govuk-label">Search by commodity, variety or sample reference destination</label>
-
-      <div class="search-input-wrapper">
-        <input type="search" value="{{query.search or ''}}" id="search-reservations" name="search" title="Search" class="govuk-input">
-        
-        <div class="search-input-submit-wrapper">
-          <button type="submit" class="search-submit">Search</button>
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-
   <div class="govuk-grid-column-full">
+    <h2 class="govuk-heading-m">Commodities in this application</h2>
+
     <table class="govuk-table">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
-          <th class="govuk-table__header govuk-width-one-fifth" scope="col">Commodity</th>
+          <th class="govuk-table__header" scope="col">Commodity</th>
           <th class="govuk-table__header" scope="col">Variety</th>
           <th class="govuk-table__header" scope="col"><abbr title="Animal and Plant Health Agency">APHA</abbr> sample reference</th>
           <th class="govuk-table__header govuk-table__header--numeric" scope="col">Quantity</th>
@@ -169,20 +210,26 @@
         </tr>
       </thead>
       <tbody class="govuk-table__body">
-        {% include "./application/modules/_summary-seeds-draw-down-30.html" %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">Pisum sativum</td>
+          <td class="govuk-table__cell">Purple Magnolia Snap PPP A</td>
+          <td class="govuk-table__cell">12345</td>
+          <td class="govuk-table__cell govuk-table__cell--numeric">4.5 tonnes</td>
+          <td class="govuk-table__cell govuk-table__cell--numeric">3.2 tonnes</td>
+        </tr>
+         <tr class="govuk-table__row">
+          <td class="govuk-table__cell">Pisum sativum</td>
+          <td class="govuk-table__cell">Twinkle PPP A. B.GB40557 C.lot pkt</td>
+          <td class="govuk-table__cell">23456</td>
+          <td class="govuk-table__cell govuk-table__cell--numeric">3.5 tonnes</td>
+          <td class="govuk-table__cell govuk-table__cell--numeric">0.75 tonnes</td>
+        </tr>
       </tbody>
     </table>
-  
-    <div class="app-example-page">
-      <nav class="defra-pagination" id="pagination-label">
-        <p class="govuk-visually-hidden" aria-labelledby="pagination-label">Pagination navigation</p>
-        <p class="defra-pagination__results" style="float: left;"><a href="#" style=" text-decoration:none;"><b>1</b></a></p>
-        <p class="defra-pagination__results" style="float: right;">Showing <b>1</b> to <b><span class="js-case-count">30</span></b> of <b><span class="js-case-count">225</span></b> results</p>
-      </nav>
-    </div>
 
   </div>
 
 </div>
+{% endif %}
 {% endif %}
 {% endblock %}

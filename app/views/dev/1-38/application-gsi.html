@@ -60,9 +60,9 @@
 
 {% block pageTitle %}
   {% if data.build == "development" %}
-  {% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %} {{query.id | appInformation('applicationID')}} - {{serviceName}} - GOV.UK
+  Application {{query.id | appInformation('applicationID')}} - {{serviceName}} - GOV.UK
   {% else %}
-  Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %} {{query.id | appInformation('applicationID')}} - {{serviceName}} - GOV.UK
+  Manage application {{query.id | appInformation('applicationID')}} - {{serviceName}} - GOV.UK
   {% endif %}
 {% endblock %}
 
@@ -135,11 +135,11 @@
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">
       {% if data.build == "development" %}
-      {% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %} 
+      Application
       <br>
       {{query.id | appInformation('applicationID')}}
       {% else %}
-      Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %}
+      Manage application
       <br>
       {{query.id | appInformation('applicationID')}}
       {% endif %}
@@ -148,72 +148,116 @@
 
 </div>
 
-<div class="govuk-grid-row govuk-!-margin-bottom-2">
+{% if data.commodity == "plants" %}
+<div class="govuk-grid-row">
 
-  <div class="govuk-grid-column-one-half">
+  <div class="govuk-grid-column-two-thirds">
     <dl class="govuk-summary-list govuk-summary-list--no-border">
+      
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Status
-        </dt>
+        <dt class="govuk-summary-list__key">Status</dt>
         <dd class="govuk-summary-list__value">
+          
           <div class="app-status-tag app-status-tag--{{query.id | appInformation('tag')}}">
             {{query.id | appInformation('status')}}
           </div>
+
         </dd>
       </div>
+
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Your reference
-        </dt>
-        <dd class="govuk-summary-list__value">
-          {% if (query.id | appInformation('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id |
-          appInformation('reference')}}{% endif %}
-        </dd>
+        <dt class="govuk-summary-list__key">Your reference</dt>
+        <dd class="govuk-summary-list__value"><span class="govuk-hint">Not entered</span></dd>
       </div>
+
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Type
-        </dt>
+        <dt class="govuk-summary-list__key">Type</dt>
+        <dd class="govuk-summary-list__value">GSI report for {{data.subCommodityType | lower or "plants"}}</dd>
+      </div>
+
+    </dl>
+    
+  </div>
+
+</div>
+
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+    <ul class="govuk-list govuk-!-margin-top-6 govuk-!-margin-bottom-6 noprint">
+      {% if (query.id | appInformation('status')) == 'submitted' or (query.id | appInformation('status')) == 'processing' or (query.id | appInformation('status')) == 'with inspector' or (query.id | appInformation('status')) == 'scheduled' or (query.id | appInformation('status')) == 'exporter action' or (query.id | appInformation('status')) == 'preparing phyto' or (query.id | appInformation('status')) == 'returned' or (query.id | appInformation('status')) == 'awaiting decision'%}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="#">Update this application</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="application/gsi/create/check-your-answers-3-viewonly">View this application</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{query.is_group}}">Copy as new application</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="cancel-reason">Cancel this application</a></li>
+      {% endif %}
+      {% if (query.id | appInformation('status')) == 'draft' %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="certificate/check-your-progress?certificate=ehc2849">Edit and submit this application</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{query.is_group}}">Copy as new application</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="delete">Delete this application</a></li>
+      {% endif %}
+    </ul>
+  </div>
+
+</div>
+{% else %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-one-half">
+    <dl class="govuk-summary-list govuk-summary-list--no-border">
+      
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Status</dt>
         <dd class="govuk-summary-list__value">
-            GSI report for potatoes
+          
+          <div class="app-status-tag app-status-tag--{{query.id | appInformation('tag')}}">
+            {{query.id | appInformation('status')}}
+          </div>
+
         </dd>
       </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Your reference</dt>
+        <dd class="govuk-summary-list__value">{% if (query.id | appInformation('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformation('reference')}}{% endif %}</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Type</dt>
+        <dd class="govuk-summary-list__value">GSI report for potatoes</dd>
+      </div>
+
     </dl>
     
   </div>
 
   <div class="govuk-grid-column-one-half govuk-!-margin-bottom-4">
     <h2 class="govuk-heading-m">Your certificate</h2>
-
     <ul class="govuk-list noprint">
-      <li>
-        <p class="doc-icon"><a href="#" class="govuk-link govuk-link--no-visited-state">View GSI report (pdf)</a>
-        </p>
-      </li>
+      <li><p class="doc-icon"><a href="#" class="govuk-link govuk-link--no-visited-state">View GSI report (pdf)</a></p></li>
     </ul>
   </div>
 
 </div>
 
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
     <ul class="govuk-list govuk-!-margin-top-6 govuk-!-margin-bottom-6 noprint">
-        {% if (query.id | appInformation('status')) == 'submitted' or (query.id | appInformation('status')) == 'processing' or (query.id | appInformation('status')) == 'with inspector' or (query.id | appInformation('status')) == 'scheduled' or (query.id | appInformation('status')) == 'exporter action' or (query.id | appInformation('status')) == 'preparing phyto' or (query.id | appInformation('status')) == 'returned' or (query.id | appInformation('status')) == 'awaiting decision'%}
-        <li><a class="govuk-link govuk-link--no-visited-state" href="#">Update this application</a></li>
-        <li><a class="govuk-link govuk-link--no-visited-state" href="application/gsi/create/check-your-answers-3-viewonly">View this application</a></li>
-        <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{query.is_group}}">Copy as new application</a></li>
-        <li><a class="govuk-link govuk-link--no-visited-state" href="cancel-reason">Cancel this application</a></li>
-        {% endif %}
-        {% if (query.id | appInformation('status')) == 'draft' %}
-        <li><a class="govuk-link govuk-link--no-visited-state" href="certificate/check-your-progress?certificate=ehc2849">Edit and submit this application</a></li>
-        <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{query.is_group}}">Copy as new application</a></li>
-        <li><a class="govuk-link govuk-link--no-visited-state" href="delete">Delete this application</a></li>
-        {% endif %}
-      </ul>
-
+      {% if (query.id | appInformation('status')) == 'submitted' or (query.id | appInformation('status')) == 'processing' or (query.id | appInformation('status')) == 'with inspector' or (query.id | appInformation('status')) == 'scheduled' or (query.id | appInformation('status')) == 'exporter action' or (query.id | appInformation('status')) == 'preparing phyto' or (query.id | appInformation('status')) == 'returned' or (query.id | appInformation('status')) == 'awaiting decision'%}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="#">Update this application</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="application/gsi/create/check-your-answers-3-viewonly">View this application</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{query.is_group}}">Copy as new application</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="cancel-reason">Cancel this application</a></li>
+      {% endif %}
+      {% if (query.id | appInformation('status')) == 'draft' %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="certificate/check-your-progress?certificate=ehc2849">Edit and submit this application</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{query.is_group}}">Copy as new application</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="delete">Delete this application</a></li>
+      {% endif %}
+    </ul>
   </div>
-</div>
 
 </div>
-</div>
-
+{% endif %}
 {% endblock %}
