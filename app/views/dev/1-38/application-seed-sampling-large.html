@@ -84,6 +84,11 @@
     }
   }
 
+  /* Chris Harding (19.10.22) - Expansion on the GOV.UK table component to reduce font size for large tables in PHES (e.g. with 6+ columns) */
+  .govuk-table-large {
+    font-size: 16px;
+  }
+
 </style>
 {% endblock %}
 
@@ -180,13 +185,13 @@
 {% else %}
 <div class="govuk-grid-row">
 
-  <div class="govuk-grid-column-two-thirds">
+  <div class="govuk-grid-column-full">
     <h2 class="govuk-heading-m">Commodities in this application</h2>
     
     <div class="search-wrapper govuk-form-group">
-      <label for="search-commodities" class="govuk-label">Search by commodity, variety or <abbr title="Animal and Plant Health Agency">APHA</abbr> sample reference</label>
+      <label for="search-commodities" class="govuk-label">Search by description, variety, lot reference, destination or <abbr title="Animal and Plant Health Agency">APHA</abbr> sample reference</label>
 
-      <div class="search-input-wrapper">
+      <div class="search-input-wrapper govuk-!-width-two-thirds">
         <input type="search" value="{{query.search or ''}}" id="search-commodities" name="search" title="Search" class="govuk-input">
         
         <div class="search-input-submit-wrapper">
@@ -197,20 +202,18 @@
 
     </div>
 
-  </div>
-
-  <div class="govuk-grid-column-full">
     <table class="govuk-table">
-      <thead class="govuk-table__head">
+      <thead class="govuk-table__head govuk-table-large">
         <tr class="govuk-table__row">
-          <th class="govuk-table__header" scope="col">Commodity</th>
+          <th class="govuk-table__header" scope="col">Description</th>
           <th class="govuk-table__header" scope="col">Variety</th>
+          <th class="govuk-table__header" scope="col">Lot reference</th>
+          <th class="govuk-table__header" scope="col">Destination</th>
+          <th class="govuk-table__header" scope="col">Quantity</th>
           <th class="govuk-table__header" scope="col"><abbr title="Animal and Plant Health Agency">APHA</abbr> sample reference</th>
-          <th class="govuk-table__header govuk-table__header--numeric" scope="col">Quantity</th>
-          <th class="govuk-table__header govuk-table__header--numeric" scope="col">Remaining</th>
         </tr>
       </thead>
-      <tbody class="govuk-table__body">
+      <tbody class="govuk-table__body govuk-table-large">
         {% include "./application/modules/_summary-seeds-draw-down-30.html" %}
       </tbody>
     </table>
