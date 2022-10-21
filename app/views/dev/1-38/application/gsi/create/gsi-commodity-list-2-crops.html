@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-Your crops for inspection - Growing season inspection - {{serviceName}} - GOV.UK
+  Your {% if data.commodity == "potatoes" %}ware potatoes{% elif data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}micropropagation material{% else %}{{data.commodity or "crops"}}{% endif %} for inspection - Growing season inspection - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -12,17 +12,13 @@ Your crops for inspection - Growing season inspection - {{serviceName}} - GOV.UK
 
 {% block content %}
 <div class="govuk-grid-row">
+
   <div class="govuk-grid-column-three-quarters">
-    <h1 class="govuk-heading-xl">
-      Your fields and {% if data.commodity == "potatoes" %}ware potatoes{% else %}{{data.commodity or "crops"}}{% endif %} for inspection
-    </h1>
-    <p class="govuk-body">
-      Here's what you currently have listed for growing season inspection. You can add more locations and more crops to each location.
-    </p>
+    <h1 class="govuk-heading-xl">Your fields and {% if data.commodity == "potatoes" %}ware potatoes{% else %}{{data.commodity or "crops"}}{% endif %} for inspection</h1>
+    <p class="govuk-body">Here's what you currently have listed for growing season inspection. You can add more locations and more crops to each location.</p>
     <h2 class="govuk-heading-l">Location{% if data.build == "development" %} 1{% endif %}: {{data['nurseryplotno'] or 'Top field'}}</h2>
     
-    <form action="post">
-
+    <form method="post" action="task-list">
       <dl class="govuk-summary-list govuk-summary-list--no-border">
         <div class="govuk-summary-list__row">
             {% if data.addfielddetails == "gridgps" %}
@@ -79,19 +75,20 @@ Your crops for inspection - Growing season inspection - {{serviceName}} - GOV.UK
       {% endif %}
 
       <h2 class="govuk-heading-s govuk-!-margin-top-9">{% if data.commodity == "potatoes" %}2 crop varieties {% else %}2 crops{% endif %} added to {% if data.nurseryplotno or "Top Field" %}<span>{{data.nurseryplotno or "Top Field"}}</span>{% endif %}</h2>
+      
       <table class="govuk-table govuk-!-margin-bottom-4">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
               Description
             </th>
-            <th class="govuk-table__header govuk-table__header--numeric  govuk-!-width-one-quarter" scope="col">
+            <th class="govuk-table__header govuk-table__header--numeric govuk-!-width-one-quarter" scope="col">
               Inspection area (hectares)
             </th>
             <th class="govuk-table__header govuk-!-width-one-half" scope="col">
               Destination countries
             </th>
-            <th class="govuk-table__header" scope="col">Actions</th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">
@@ -105,7 +102,7 @@ Your crops for inspection - Growing season inspection - {{serviceName}} - GOV.UK
             <td class="govuk-table__cell">
               {{ data.filter_demo or "Belize" }}
             </td>
-            <td class="govuk-table__cell">
+            <td class="govuk-table__cell govuk-table__cell--numeric">
               <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">
                 Change
               </a><br>
@@ -124,7 +121,7 @@ Your crops for inspection - Growing season inspection - {{serviceName}} - GOV.UK
             <td class="govuk-table__cell">
               {{ data.filter_demo3 or "Spain" }}
             </td>
-            <td class="govuk-table__cell">
+            <td class="govuk-table__cell govuk-table__cell--numeric">
               <a href="how-to-identify-3" class="govuk-link govuk-link--no-visited-state">
                 Change
               </a><br>
