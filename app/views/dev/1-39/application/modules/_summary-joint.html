@@ -1,0 +1,121 @@
+
+{% set items = [
+  {
+  commodity: 'Apples',
+  variety: 'Braeburn',
+  class: 'Extra',
+  weight: '1200kg (12kg x 100 packages)'
+  },
+  {
+  commodity: 'Apples',
+  variety: 'Cripps pink',
+  class: 'Class II',
+  weight: '750kg (3kg x 250 packages)'
+  },
+  {
+  commodity: 'Apples',
+  variety: 'Jazz',
+  class: 'Class I',
+  weight: '500kg (1.5kg x 200 packages)'
+  },
+  {
+  commodity: 'Apples',
+  variety: 'Jazz',
+  class: 'Class II',
+  weight: '1000kg (2.5kg x 400 packages)'
+  },
+  {
+  commonname: 'Avocado',
+  variety: 'Hass',
+  eppo: 'PEBAM',
+  weight: '500kg (1kg x 500 packages)'
+  },
+  {
+  commonname: 'Avocado',
+  variety: '',
+  eppo: 'PEBAM',
+  weight: '1000kg (1kg x 1000 packages)'
+  }
+
+]
+%}
+<tr class="govuk-table__row">
+  {% for item in items %}
+  <tr class="govuk-table__row result">
+    <td class="govuk-table__cell" scope="row">{{ item.commodity }}
+    </td>
+    <td class="govuk-table__cell" scope="row">{{ item.variety }}
+    </td>
+    <td class="govuk-table__cell" scope="row">{{ item.class }}
+    </td>
+    <td class="govuk-table__cell" scope="row">{{ item.commonname }}
+    </td>
+    <td class="govuk-table__cell" scope="row">{{ item.eppo }}
+    </td>
+    <td class="govuk-table__cell" scope="row">{{ item.weight }}
+    </td>
+    <td class="govuk-table__cell" style="text-align:right;">
+      <a href="how-to-identify-coc?change=yes" class="govuk-link govuk-link--no-visited-state">
+        Change&nbsp;
+      </a><br>
+      <a href="#" class="govuk-link govuk-link--no-visited-state">
+        Delete
+      </a>
+    </td>
+    </td>
+  </tr>
+  {% endfor %}
+
+  <td class="govuk-table__cell">
+    {{data.commodity | capitalize or "Apples"}}
+  </td>
+  <td class="govuk-table__cell">
+    {% if data.commodity == "apples" %}
+      {{data.applevarietySelect[0]| capitalize or "Braeburn"}}
+    {% elseif data.commodity == "citrus" %}
+      Tangerine - murcott
+    {% elseif data.commodity == "grapes" %}
+      {{data.grapesvarietySelect[0]| capitalize or "Black seedless"}}
+    {% elseif data.commodity == "kiwi" %}
+      {{data.class| capitalize or "None stated"}}
+    {% elseif data.commodity == "lettuce" %}
+    {{data.lettucevarietySelect[0]| capitalize or "Iceberg"}}
+    {% elseif data.commodity == "nectarines" %}
+      {{data.type| capitalize or "White flesh"}}
+    {% elseif data.commodity == "peaches" %}
+      {{data.type| capitalize or "Yellow flesh"}}
+    {% elseif data.commodity == "pears" %}
+      {{data.pearsvarietySelect[0]| capitalize or "conference"}}
+    {% elseif data.commodity == "strawberries" %}
+      {{data.class| capitalize or "None stated"}}
+    {% elseif data.commodity == "sweet peppers" %}
+      {{data.class| capitalize or "None stated"}}
+    {% elseif data.commodity == "tomatoes" %}
+      {% if data.type == "other"%}
+        {{data.tomatoes_variety| capitalize or "Cherry"}}
+      {% else %}
+        {{data.type| capitalize or "Round"}}
+      {% endif %}
+    {% else %}
+      Braeburn
+    {% endif %}
+  </td>
+  <td class="govuk-table__cell govuk-table__cell">
+    Class I
+  </td>
+  <td class="govuk-table__cell govuk-table__cell">
+  </td>
+  <td class="govuk-table__cell govuk-table__cell">
+  </td>
+  <td class="govuk-table__cell govuk-table__cell">
+    {{data.weight * data.number_of_packages or "1000"}}kg ({{data.weight or "5"}}kg x {{data.number_of_packages or "200"}} packages)
+  </td>
+  <td class="govuk-table__cell" style="text-align:right;">
+    <a href="how-to-identify-coc?change=yes" class="govuk-link govuk-link--no-visited-state">
+      Change
+    </a><br>
+    <a href="#" class="govuk-link govuk-link--no-visited-state">
+      Delete
+    </a>
+  </td>
+</tr>

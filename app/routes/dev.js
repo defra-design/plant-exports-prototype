@@ -7,6 +7,7 @@ module.exports = function(router) {
   var client3 = new RestClient()
 
   // ADD extra routing here if needed.
+  require('./dev_v39.js')(router)
   require('./dev_v38.js')(router)
   require('./dev_v37.js')(router)
   require('./dev_v36.js')(router)
@@ -173,14 +174,14 @@ module.exports = function(router) {
     res.redirect(301, page);
   })
 
-  // **** Apply to How to identify for SEEDs, GRAIN, PLANTS and PLANT PRODUCTS ***
+  // **** Apply to how to identify for seeds, grain, plants and fresh produce and plant products ***
   router.post('/' + base_url + '*/application/create/how-to-identify*', function(req, res) {
     var page = req.query.return_url || '/' + base_url + req.params[0] + '/application/create/commodity-list'
     addCommodity(req.body, req.session.data.commodities)
     res.redirect(301, page);
   })
 
-  // **** Apply to How to identify for PLANTS and fresh produce ***
+  // **** Apply to how to identify for plants and fresh produce ***
   router.post('/' + base_url + '*/application/create/how-to-identify*', function(req, res) {
     var page = req.query.return_url || '/' + base_url + req.params[0] + '/application/create/commodity-list*'
     addCommodity(req.body, req.session.data.commodities)
@@ -194,14 +195,14 @@ module.exports = function(router) {
     res.redirect(301, page);
   })
 
-  // **** Soil specific ***
+  // **** Soil sampling specific ***
   router.post('/' + base_url + '*/application/soil/create/commodity-page*', function(req, res) {
     var page = req.query.return_url || '/' + base_url + req.params[0] + '/application/soil/create/commodity-list'
     addCommodity(req.body, req.session.data.commodities)
     res.redirect(301, page);
   })
 
-  // **** Soil specific ***
+  // **** Seeds specific ***
   router.post('/' + base_url + '*/application/seeds/create/how-to-identify*', function(req, res) {
     var page = req.query.return_url || '/' + base_url + req.params[0] + '/application/seeds/create/commodity-list'
     addCommodity(req.body, req.session.data.commodities)

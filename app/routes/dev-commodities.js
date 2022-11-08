@@ -7,7 +7,7 @@ module.exports = function(router) {
   var client3 = new RestClient()
 
   // ADD extra routing here if needed.
-  require('./dev_v36.js')(router)
+  require('./dev_v39.js')(router)
 
   // CHANGE VERSION each time you create a new version
   const version = 'dev'
@@ -20,17 +20,19 @@ module.exports = function(router) {
   function addCommodity(data, list) {
     console.log("adding commodity")
     var newCommodity = {}
+
     for (var k in data) {
       var o = {}
       var name = ""
       console.log(k)
+
       if (data.hasOwnProperty(k)) {
         var name = k;
-
       }
 
       newCommodity[name] = data[k]
     }
+
     list.push(newCommodity)
   }
 
@@ -166,7 +168,7 @@ module.exports = function(router) {
     res.redirect(301, page);
   })
 
-  // **** Apply to How to identify for SEEDs, GRAIN, PLANTS and PLANT PRODUCTS ***
+  // **** Apply to how to identify for seeds, grain, plants and fresh produce and plant products ***
   router.post('/' + base_url + '*/application/create/how-to-identify*', function(req, res) {
     var page = req.query.return_url || '/' + base_url + req.params[0] + '/application/create/commodity-list'
     addCommodity(req.body, req.session.data.commodities)
@@ -180,21 +182,19 @@ module.exports = function(router) {
     res.redirect(301, page);
   })
 
-  // **** Soil specific ***
-  router.post('/' + base_url + '*/application/soil/create/commodity-page*', function(req, res) {
-    var page = req.query.return_url || '/' + base_url + req.params[0] + '/application/soil/create/commodity-list'
-    addCommodity(req.body, req.session.data.commodities)
-    res.redirect(301, page);
-  })
-
-  // **** GSI specific ***
   router.post('/' + base_url + '*/application/gsi/create/how-to-identify*', function(req, res) {
     var page = req.query.return_url || '/' + base_url + req.params[0] + '/application/gsi/create/commodity-list'
     addCommodity(req.body, req.session.data.commodities)
     res.redirect(301, page);
   })
 
-  // **** Soil specific ***
+  // **** Soil sampling specific ***
+  router.post('/' + base_url + '*/application/soil/create/commodity-page*', function(req, res) {
+    var page = req.query.return_url || '/' + base_url + req.params[0] + '/application/soil/create/commodity-list'
+    addCommodity(req.body, req.session.data.commodities)
+    res.redirect(301, page);
+  })
+
   router.post('/' + base_url + '*/application/soil/create/how-to-identify*', function(req, res) {
     var page = req.query.return_url || '/' + base_url + req.params[0] + '/application/soil/create/commodity-list'
     addCommodity(req.body, req.session.data.commodities)
