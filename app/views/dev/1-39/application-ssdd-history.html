@@ -121,7 +121,7 @@ Manage application - {{serviceName}} - GOV.UK
 
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-xl">Manage application <span style="white-space: nowrap;">{{query.id |
-        appInformation('applicationID')}}</span></h1>
+        appInformationV3('applicationID')}}</span></h1>
   </div>
 
 </div>
@@ -135,8 +135,8 @@ Manage application - {{serviceName}} - GOV.UK
           Status
         </dt>
         <dd class="govuk-summary-list__value">
-          <div class="app-status-tag app-status-tag--{{query.id | appInformation('tag')}}">
-            {{query.id | appInformation('status')}}
+          <div class="app-status-tag app-status-tag--{{query.id | appInformationV3('tag')}}">
+            {{query.id | appInformationV3('status')}}
           </div>
         </dd>
       </div>
@@ -145,8 +145,8 @@ Manage application - {{serviceName}} - GOV.UK
           Your reference
         </dt>
         <dd class="govuk-summary-list__value">
-          {% if (query.id | appInformation('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id |
-          appInformation('reference')}}{% endif %}
+          {% if (query.id | appInformationV3('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id |
+          appInformationV3('reference')}}{% endif %}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -163,7 +163,7 @@ Manage application - {{serviceName}} - GOV.UK
           Destination country
         </dt>
         <dd class="govuk-summary-list__value">
-          {{query.id | appInformation('destination')}}
+          {{query.id | appInformationV3('destination')}}
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -171,7 +171,7 @@ Manage application - {{serviceName}} - GOV.UK
           Consignee
         </dt>
         <dd class="govuk-summary-list__value">
-          {{query.id | appInformation('consignee') or "XYZ Trading Limited"}}
+          {{query.id | appInformationV3('consignee') or "XYZ Trading Limited"}}
         </dd>
       </div>
       {% endif %}
@@ -198,12 +198,12 @@ Manage application - {{serviceName}} - GOV.UK
     <ul class="govuk-list govuk-!-margin-bottom-9 noprint">
       <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-viewonly">View
           application details</a></li>
-      {% if (query.id | appInformation('status')) == 'draft' %}
+      {% if (query.id | appInformationV3('status')) == 'draft' %}
       <li><a class="govuk-link govuk-link--no-visited-state"
           href="certificate/check-your-progress?certificate=ehc2849">Edit and submit this application</a></li>
       {% endif %}
       <!-- 
-      {% if (query.id | appInformation('status')) == 'completed'  %}
+      {% if (query.id | appInformationV3('status')) == 'completed'  %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/reuse-ref-ssdd">Use this application for stock draw down</a></li>
       {% endif %}
  -->
@@ -213,14 +213,14 @@ Manage application - {{serviceName}} - GOV.UK
       <li><a class="govuk-link govuk-link--no-visited-state"
           href="clone?id={{query.id or 0}}&is_group={{query.is_group}}">Copy this application to create a new
           phytosanitary certificate</a></li>
-      {% if (query.id | appInformation('status')) == 'submitted' or (query.id | appInformation('status')) == 'processing' or (query.id
+      {% if (query.id | appInformationV3('status')) == 'submitted' or (query.id | appInformationV3('status')) == 'processing' or (query.id
       |
-      appInformation('status')) == 'with inspector' or (query.id | appInformation('status')) == 'scheduled' or (query.id |
-      appInformation('status')) == 'exporter action' or (query.id | appInformation('status')) == 'preparing phyto' or (query.id |
-      appInformation('status')) == 'returned' %}
+      appInformationV3('status')) == 'with inspector' or (query.id | appInformationV3('status')) == 'scheduled' or (query.id |
+      appInformationV3('status')) == 'exporter action' or (query.id | appInformationV3('status')) == 'preparing phyto' or (query.id |
+      appInformationV3('status')) == 'returned' %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="cancel">Cancel this application</a></li>
       {% endif %}
-      {% if (query.id | appInformation('status')) == 'draft' %}
+      {% if (query.id | appInformationV3('status')) == 'draft' %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="delete">Delete this application</a></li>
       {% endif %}
     </ul>

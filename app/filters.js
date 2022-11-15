@@ -3,6 +3,7 @@
 // Data sources (located in the 'app/data' root folder)
 var applications = require('./data/applications.json')
 var applicationsv2 = require('./data/applications-v2.json')
+var applicationsv3 = require('./data/applications-v3.json')
 var sample = require('./data/sample.json')
 
 module.exports = function (env) {
@@ -48,6 +49,23 @@ module.exports = function (env) {
     return app[key];
   }
 
+  // Get application information (v3)
+  // Prototype versions 1-39 onward
+  filters.appInformationV3 = function (id, key) {
+    
+    var app = {};
+    
+    applicationsv3.forEach(function (item) {
+      
+      if (item.index == id) {
+        app = item;
+      }
+
+    })
+
+    return app[key];
+  }
+
   // show hide infomation based on search results
   filters.showHide = function (obj, text) {
     var query = text.split();
@@ -66,7 +84,6 @@ module.exports = function (env) {
     return num += 1;
   }
 
-
   filters.toMonth = function (x) {
     months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     if (x > 0) {
@@ -75,16 +92,18 @@ module.exports = function (env) {
       return x;
     }
   }
+
   filters.toMoney = function (x) {
     return ("£" + x);
-    //TO ADD - case to handle nothing being there
+    // TO ADD - case to handle nothing being there
   }
+
   filters.getCommodity = function (str, val) {
     console.log("looking up commodity: " + val)
     var regExp = /\(([^)]+)\)/;
     var matches = regExp.exec(str);
 
-    //matches[1] contains the value between the parentheses
+    // matches[1] contains the value between the parentheses
     console.log(matches[1]);
     for (key in sample) {
       console.log("found " + sample[key].eppocode);
@@ -93,6 +112,7 @@ module.exports = function (env) {
       }
     }
   }
+
   // Way of increasing a number in nunjucks
   filters.getRandomSerial = function (num) {
     let str= "";
@@ -101,6 +121,7 @@ module.exports = function (env) {
     }
     return str;
   }
+
   /* ------------------------------------------------------------------
     add your methods to the filters obj below this comment block:
     @example:
