@@ -35,7 +35,7 @@
         <div class="govuk-form-group">
           <label class="{{label_class}}" for="consignment-value">Value of your consignment (pounds)</label>
           <!-- <span id="value-hint" class="govuk-hint">This information helps us improve the service we provide to exporters</span> -->
-          <input class="govuk-input govuk-input--width-10" id="consignment-value" name="consignment_value" type="text" aria-describedby="value-hint">
+          <input class="govuk-input govuk-input--width-10" id="consignment-value" name="consignment_value" type="text" aria-describedby="value-hint" value="{% if query.change == 'yes' %}{{data.consignment_value}}{% endif %}">
         </div>
         {% endif %}
 
@@ -43,7 +43,7 @@
         <div class="govuk-form-group">
           <label class="{{label_class}}" for="reference_num">Point of entry into the destination country</label>
           <span id="waste-hint" class="govuk-hint">Enter the port or airport where the consignment will arrive</span>
-          <input class="govuk-input govuk-input--width-20" id="reference_num" name="port_entry" value="{% if query.change == 'yes' %}{{data.point_of_entry}}{% endif %}" type="text" data-qa-id="Question-7006EHC-1">
+          <input class="govuk-input govuk-input--width-20" id="reference_num" name="port_entry" value="{% if query.change == 'yes' %}{{data.port_entry}}{% endif %}" type="text">
         </div>
         {% endif %}
 
@@ -54,7 +54,7 @@
             <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
               
               <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="contact" name="transport-method" type="radio" value="Air" data-aria-controls="conditional-contact">
+                <input class="govuk-radios__input" id="contact" name="transport_method" type="radio" value="Air" data-aria-controls="conditional-contact"{% if data.transport_method == 'Air' %} checked{% endif %}>
                 <label class="govuk-label govuk-radios__label" for="contact">Air</label>
               </div>
 
@@ -68,7 +68,7 @@
               </div>
 
               <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="contact-2" name="transport-method" type="radio" value="Maritime" data-aria-controls="conditional-contact-2">
+                <input class="govuk-radios__input" id="contact-2" name="transport_method" type="radio" value="Maritime" data-aria-controls="conditional-contact-2"{% if data.transport_method == 'Maritime' %} checked{% endif %}>
                 <label class="govuk-label govuk-radios__label" for="contact-2">Maritime</label>
               </div>
 
@@ -79,12 +79,12 @@
               </div>
 
               <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="Rail" name="transport-method" type="radio" value="Rail" data-aria-controls="conditional-contact-3">
+                <input class="govuk-radios__input" id="Rail" name="transport_method" type="radio" value="Rail" data-aria-controls="conditional-contact-3"{% if data.transport_method == 'Rail' %} checked{% endif %}>
                 <label class="govuk-label govuk-radios__label" for="Rail">Rail</label>
               </div>
 
               <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="contact-3" name="transport-method" type="radio" value="Road" data-aria-controls="conditional-contact-4">
+                <input class="govuk-radios__input" id="contact-3" name="transport_method" type="radio" value="Road" data-aria-controls="conditional-contact-4"{% if data.transport_method == 'Road' %} checked{% endif %}>
                 <label class="govuk-label govuk-radios__label" for="contact-3">Road</label>
               </div>
 
@@ -100,17 +100,17 @@
             <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
               
               <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="Air" name="transport-method" type="radio" value="Air">
+                <input class="govuk-radios__input" id="Air" name="transport_method" type="radio" value="Air"{% if data.transport_method == 'Air' %} checked{% endif %}>
                 <label class="govuk-label govuk-radios__label" for="Air">Air</label>
               </div>
 
               <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="Maritime" name="transport-method" type="radio" value="Maritime" data-aria-controls="conditional-contact">
+                <input class="govuk-radios__input" id="Maritime" name="transport_method" type="radio" value="Maritime" data-aria-controls="conditional-contact"{% if data.transport_method == 'Maritime' %} checked{% endif %}>
                 <label class="govuk-label govuk-radios__label" for="Maritime">Maritime</label>
               </div>
 
               <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="Rail" name="transport-method" type="radio" value="Rail">
+                <input class="govuk-radios__input" id="Rail" name="transport_method" type="radio" value="Rail"{% if data.transport_method == 'Rail' %} checked{% endif %}>
                 <label class="govuk-label govuk-radios__label" for="Rail">Rail</label>
               </div>
 
@@ -119,7 +119,7 @@
               </div>
 
               <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="Road" name="transport-method" type="radio" value="Road">
+                <input class="govuk-radios__input" id="Road" name="transport_method" type="radio" value="Road"{% if data.transport_method == 'Road' %} checked{% endif %}>
                 <label class="govuk-label govuk-radios__label" for="Road">Road</label>
               </div>
 
@@ -153,7 +153,7 @@
         <div class="govuk-form-group">
           <label class="{{label_class}}" for="consignment-value">Value of consignment</label>
           <span id="value-hint" class="govuk-hint">This information helps us improve the service we provide to exporters</span>
-          <input class="govuk-input govuk-input--width-10" id="consignment-value" name="consignment_value" type="text" aria-describedby="value-hint">
+          <input class="govuk-input govuk-input--width-10" id="consignment-value" name="consignment_value" type="text" aria-describedby="value-hint" value="{% if query.change == 'yes' %}{{data.consignment_value}}{% endif %}">
         </div>
         {% endif %}
 
@@ -182,13 +182,13 @@
         {% if data.journey != "coc" %}
         <div class="govuk-form-group">
           <label class="{{label_class}}" for="consignment-value">Value of your consignment (pounds)</label>
-          <input class="govuk-input govuk-input--width-10" id="consignment-value" name="consignment_value" type="text" aria-describedby="value-hint">
+          <input class="govuk-input govuk-input--width-10" id="consignment-value" name="consignment_value" type="text" aria-describedby="value-hint" value="{% if query.change == 'yes' %}{{data.consignment_value}}{% endif %}">
         </div>
 
         <div class="govuk-form-group">
           <label class="{{label_class}}" for="reference_num">Point of entry into the destination country</label>
           <span id="waste-hint" class="govuk-hint">Enter the port or airport where the consignment will arrive</span>
-          <input class="govuk-input govuk-input--width-20" id="reference_num" name="port_entry" value="{% if query.change == 'yes' %}{{data.point_of_entry}}{% endif %}" type="text" data-qa-id="Question-7006EHC-1">
+          <input class="govuk-input govuk-input--width-20" id="reference_num" name="port_entry" value="{% if query.change == 'yes' %}{{data.port_entry}}{% endif %}" type="text">
         </div>
         {% endif %}
 
@@ -199,7 +199,7 @@
             <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
               
               <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="contact" name="transport-method" type="radio" value="Air" data-aria-controls="conditional-contact">
+                <input class="govuk-radios__input" id="contact" name="transport_method" type="radio" value="Air" data-aria-controls="conditional-contact"{% if data.transport_method == 'Air' %} checked{% endif %}>
                 <label class="govuk-label govuk-radios__label" for="contact">Air</label>
               </div>
 
@@ -213,7 +213,7 @@
               </div>
 
               <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="contact-2" name="transport-method" type="radio" value="Maritime" data-aria-controls="conditional-contact-2">
+                <input class="govuk-radios__input" id="contact-2" name="transport_method" type="radio" value="Maritime" data-aria-controls="conditional-contact-2"{% if data.transport_method == 'Maritime' %} checked{% endif %}>
                 <label class="govuk-label govuk-radios__label" for="contact-2">Maritime</label>
               </div>
 
@@ -224,12 +224,12 @@
               </div>
 
               <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="Rail" name="transport-method" type="radio" value="Rail" data-aria-controls="conditional-contact-3">
+                <input class="govuk-radios__input" id="Rail" name="transport_method" type="radio" value="Rail" data-aria-controls="conditional-contact-3"{% if data.transport_method == 'Rail' %} checked{% endif %}>
                 <label class="govuk-label govuk-radios__label" for="Rail">Rail</label>
               </div>
 
               <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="contact-3" name="transport-method" type="radio" value="Road" data-aria-controls="conditional-contact-4">
+                <input class="govuk-radios__input" id="contact-3" name="transport_method" type="radio" value="Road" data-aria-controls="conditional-contact-4"{% if data.transport_method == 'Road' %} checked{% endif %}>
                 <label class="govuk-label govuk-radios__label" for="contact-3">Road</label>
               </div>
 
@@ -245,22 +245,22 @@
             <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
               
               <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="Air" name="transport-method" type="radio" value="Air">
+                <input class="govuk-radios__input" id="Air" name="transport_method" type="radio" value="Air"{% if data.transport_method == 'Air' %} checked{% endif %}>
                 <label class="govuk-label govuk-radios__label" for="Air">Air</label>
               </div>
 
               <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="Maritime" name="transport-method" type="radio" value="Maritime" data-aria-controls="conditional-contact">
+                <input class="govuk-radios__input" id="Maritime" name="transport_method" type="radio" value="Maritime" data-aria-controls="conditional-contact"{% if data.transport_method == 'Maritime' %} checked{% endif %}>
                 <label class="govuk-label govuk-radios__label" for="Maritime">Maritime</label>
               </div>
 
               <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="Rail" name="transport-method" type="radio" value="Rail">
+                <input class="govuk-radios__input" id="Rail" name="transport_method" type="radio" value="Rail"{% if data.transport_method == 'Rail' %} checked{% endif %}>
                 <label class="govuk-label govuk-radios__label" for="Rail">Rail</label>
               </div>
 
               <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="Road" name="transport-method" type="radio" value="Road">
+                <input class="govuk-radios__input" id="Road" name="transport_method" type="radio" value="Road"{% if data.transport_method == 'Road' %} checked{% endif %}>
                 <label class="govuk-label govuk-radios__label" for="Road">Road</label>
               </div>
 
