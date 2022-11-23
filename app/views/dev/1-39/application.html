@@ -38,16 +38,6 @@
     border: 3px solid #FFBF47;
   }
 
-  .app-status-tag--white-tag-blue-border-and-text {
-      background-color: #ffffff;
-      width: 90px;
-      text-align: center;
-      display: inline-block;
-      font-size: 15px;
-      border: 3px solid #1d70b8;
-      color: #1d70b8;
-  }
-
   .doc-icon::before {
     content: '';
     width: 1em;
@@ -96,7 +86,7 @@
         <dt class="govuk-summary-list__key">Status</dt>
         <dd class="govuk-summary-list__value">
           
-          <div class="app-status-tag app-status-tag--{{query.id | appInformationV3('tag')}}">
+          <div class="govuk-tag govuk-tag--{{query.id | appInformationV3('tag')}}">
             {{query.id | appInformationV3('status')}}
           </div>
 
@@ -112,19 +102,19 @@
         <dt class="govuk-summary-list__key">Type</dt>
         <dd class="govuk-summary-list__value">
           {% if (query.id | appInformationV3('cert_info')) == 'Conformity' %}
-          Certificate of conformity for {{data.commodity or "crops"}}
+          Certificate of conformity for {{data.commodity or query.id | appInformationV3('commodity_info') or "crops"}}
           {% elif (query.id | appInformationV3('cert_info')) == 'Growing season inspection' %}
-          Growing season inspection for {{data.commodity or "crops"}}
+          Growing season inspection for {{data.commodity or query.id | appInformationV3('commodity_info') or "crops"}}
           {% elif (query.id | appInformationV3('cert_info')) == 'Seed sampling' %}
-          Seed sampling for {{data.commodity or "crops"}}
+          Seed sampling for {{data.commodity or query.id | appInformationV3('commodity_info') or "crops"}}
           {% elif (query.id | appInformationV3('cert_info')) == 'Soil sampling' %}
-          Soil sampling for {{data.commodity or "crops"}}
+          Soil sampling for {{data.commodity or query.id | appInformationV3('commodity_info') or "crops"}}
           {% elif (query.id | appInformationV3('cert_info')) == 'Phytosanitary' %}
-          Phytosanitary certificate for {{data.commodity or "crops"}}
+          Phytosanitary certificate for {{data.commodity or query.id | appInformationV3('commodity_info') or "crops"}}
           {% elif (query.id | appInformationV3('cert_info')) == 'Re-forwarding' %}
-          Re-forwarding phytosanitary certificate for {{data.commodity or "crops"}}
+          Re-forwarding phytosanitary certificate for {{data.commodity or query.id | appInformationV3('commodity_info') or "crops"}}
           {% else %}
-          Phytosanitary certificate for commodity
+          Phytosanitary certificate for crops
           {% endif %}
         </dd>
       </div>
@@ -137,7 +127,7 @@
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">{% if data.build == "development" %}Customer{% else %}Consignee{% endif %}</dt>
-        <dd class="govuk-summary-list__value">{{query.id | appInformationV3('exporter') or "Example consignee name"}}</dd>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV3('importer') | title or "Example consignee name"}}</dd>
       </div>
       {% endif %}
 
@@ -150,17 +140,14 @@
 
     </dl>
 
-    <ul class="govuk-list govuk-!-margin-top-6 govuk-!-margin-bottom-6 noprint">
+    <ul class="govuk-list noprint">
       {% if (query.id | appInformationV3('status')) == 'draft' %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="certificate/check-your-progress?certificate=ehc2849">{% if data.build == "development" %}Edit and submit{% else %}Continue{% endif %} this application</a></li>
       {% else %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-viewonly">View this application</a></li>
       {% endif %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{query.is_group}}">Copy as new application</a></li>
-      <!-- {% if (query.id | appInformationV3('status')) == 'phyto issued' or (query.id | appInformationV3('status')) == 'completed' %}
-      <li><a class="govuk-link govuk-link--no-visited-state" href="re-issue?id={{query.id or 1}}&is_group={{query.is_group}}">Ask for certificate to be re-issued</a></li>
-      {% endif %} -->
-      {% if (query.id | appInformationV3('status')) == 'submitted' or (query.id | appInformationV3('status')) == 'processing' or (query.id | appInformationV3('status')) == 'with inspector' or (query.id | appInformationV3('status')) == 'scheduled' or (query.id | appInformationV3('status')) == 'exporter action' or (query.id | appInformationV3('status')) == 'preparing phyto' or (query.id | appInformationV3('status')) == 'returned' %}
+      {% if (query.id | appInformationV3('status')) == 'submitted' or (query.id | appInformationV3('status')) == 'processing' or (query.id | appInformationV3('status')) == 'with inspector' or (query.id | appInformationV3('status')) == 'exporter action' or (query.id | appInformationV3('status')) == 'preparing certificate' or (query.id | appInformationV3('status')) == 'returned' %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="cancel-reason?id={{query.id or 1}}&is_group={{query.is_group}}">Cancel this application</a></li>
       {% endif %}
       {% if (query.id | appInformationV3('status')) == 'draft' %}
@@ -169,180 +156,8 @@
       {% if (query.id | appInformationV3('status')) == 'certificate issued' or (query.id | appInformationV3('status')) == 'certificate re-issued' %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="application/re-issue/introduction">Ask for certificate to be re-issued</a></li>
       {% endif %}
-    </ul>
-
-    {% if (query.id == 10) %}
-    <h2 class="govuk-heading-l govuk-!-margin-top-9">Samples for inspection</h2>
-
-    <table class='govuk-table govuk-!-margin-bottom-9'>
-      <thead class='govuk-table__head'>
-        <tr class='govuk-table__row'>
-          <th scope='col' class='govuk-table__header'>Commodity</th>
-          <th scope='col' class='govuk-table__header'><abbr title="Animal and Plant Health Agency">APHA</abbr> sample reference</th>
-        </tr>
-      </thead>
-      <tbody class='govuk-table__body'>
-        <tr class='govuk-table__row'>
-          <td scope='row' class='govuk-table__cell'>Quercus acuta</td>
-          <td class='govuk-table__cell'>590347</td>
-        </tr>
-        <tr class='govuk-table__row'>
-          <td scope='row' class='govuk-table__cell'>Pinus albicaulis</td>
-          <td class='govuk-table__cell'>590348</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <p class="govuk-body"><a href="print-label-print?id=10" class="govuk-link govuk-link-no-visited-state">Print the information</a> you'll need to send along with your samples.</p>
-    {% endif %}
-    <!-- <p class="govuk-body">Plant Clinic
-      <br>
-      Block 4
-      <br>
-      National Agri-Food Campus
-      <br>
-      Sand Hutton
-      <br>
-      York
-      <br>
-      YO41 1LZ
-      <br>
-    </p> -->
-    <!-- <p class="govuk-body">
-      {% if query.application_status == 'draft' %}
-      <a class="govuk-button govuk-!-margin-right-4" href="certificate/check-your-progress">Edit and submit</a>
-      {% endif %}
-      <a class="govuk-button govuk-button--secondary " href="clone">Clone as new application</a>
-      {% if query.application_status == 'draft' %}
-      <a class="govuk-link govuk-link--no-visited-state" href="delete">Delete application</a>
-      {% endif %}
-    </p> -->
-    <!-- <ul class="govuk-list  govuk-!-margin-bottom-6">
-      {% if (query.id | appInformationV3('status')) == 'draft' %}
-      <li><a class="govuk-link govuk-link--no-visited-state" href="certificate/check-your-progress?certificate=ehc2849">Edit and submit this application</a></li>
-      {% endif %}
-      <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{query.is_group}}">Clone as new application</a></li>
-      {% if (query.id | appInformationV3('status')) == 'draft' %}
-      <li><a class="govuk-link govuk-link--no-visited-state" href="delete">Delete this application</a></li>
-      {% endif %}
-    </ul> -->
+    </ul>    
   </div>
   
 </div>
-<!-- {% if (query.id | appInformationV3('status')) != 'draft' %}
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-full">
-    <h2 class="govuk-heading-l">{% if (query.id | appInformationV3('is_block')) == 'yes' or query.is_group == "yes"   %}5 certificates{% else %}Certificate{% endif %} </h2>
-      <table class="govuk-table">
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            {% if (query.id | appInformationV3('is_block')) == 'yes' or query.is_group =="yes"%}<th class="govuk-table__header">No.</th>{% endif %}
-            <th class="govuk-table__header">Certificate number</th>
-            <th class="govuk-table__header">Actual export date</th>
-            <th class="govuk-table__header">Certificate status</th>
-            <th class="govuk-table__header">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="govuk-table__row">
-            {% if (query.id | appInformationV3('is_block')) == 'yes' or query.is_group =="yes"%}
-            <td id="cert-counter" class="govuk-table__cell" scope="row">1</td>
-            {% endif %}
-            {% if (query.id | appInformationV3('is_block')) == 'yes' and query.is_group !="yes" and query.is_replaced %}
-            <td id="cert-num" class="govuk-table__cell" scope="row" style="width:30%;"><span class="govuk-status govuk-status--warning">Replaced</span>&nbsp;&nbsp;{{query.id | appInformationV3('certificate') }}<br>
-              <span class="govuk-hint govuk-!-margin-top-1 govuk-!-margin-bottom-0">Replaced by <a href="case-new">19/2/00872</a></span>
-            </td>
-            {% elseif (query.id | appInformationV3('is_block')) != 'yes' and query.is_group !="yes" and query.is_replacement %}
-            <td id="cert-num" class="govuk-table__cell" scope="row"><span class="govuk-tag govuk-tag--complete">Replacement</span>&nbsp;&nbsp; {{query.id | appInformationV3('certificate') }}
-              <br>
-              <span class="govuk-hint govuk-!-margin-top-1 govuk-!-margin-bottom-0">Replaced certificate <a href="application?has_cancelation=yes&is_block=yes&application_status=dispatched">19/2/00869 </a> on 02 Aug 2019</span>
-            </td>
-            {% elseif query.is_pending_replacement %}
-            <td id="cert-num" class="govuk-table__cell" scope="row"><span class="govuk-status govuk-status--warning">pending replacement</span>&nbsp;&nbsp;{{query.id | appInformationV3('certificate') }}<br>
-                <span class="govuk-hint govuk-!-margin-top-1 govuk-!-margin-bottom-0">Requested to cancel and replace on 2 Dec 2019</span>
-            </td>
-            {% else %}
-            <td id="cert-num" class="govuk-table__cell" scope="row">{% if (query.id | appInformationV3('status')) == 'submitted' %}Awaiting number{% else %}{{query.id | appInformationV3('certificate') }}{% endif %}</td>
-            {% endif %}
-            <td id="actual-export-date" class="govuk-table__cell" scope="row">
-              30 Nov 2019
-            </td>
-            <td id="status" class="govuk-table__cell" scope="row">
-              {% if not query.has_cancelation %}
-              {% if (query.id | appInformationV3('certificate')) == "completed"%}CERTIFIED{% else %}{{ ((query.id | appInformationV3('status'))|upper) or "DISPATCHED"}}{% endif %}
-
-              {% endif %}
-            </td>
-            <td id="actions" class="govuk-table__cell" scope="row">
-              <a id="view_cert_19/2/008722" href="/public/images/{{query.id | appInformationV3('PDF')}}" target="_blank">
-                 {% if query.application_status =="draft" or query.application_status =="submitted"  %}{% else %}View certificate{% endif %}
-              </a>
-            </td>
-          </tr>
-          {% if (query.id | appInformationV3('is_block')) == 'yes' or query.is_group =="yes"%}
-          <tr class="govuk-table__row">
-            <td id="cert-counter" class="govuk-table__cell" scope="row">2</td>
-            <td id="cert-num" class="govuk-table__cell" scope="row">19/2/022133</td>
-            <td id="actual-export-date" class="govuk-table__cell" scope="row">
-              30 Nov 2019
-            </td>
-            <td id="status" class="govuk-table__cell" scope="row">{% if query.is_group =="yes"%}{{query.application_status | upper}}{% else %}CERTIFIED{% endif %}
-            </td>
-            <td id="actions" class="govuk-table__cell" scope="row">
-              <a id="view_cert_19/2/008722" href="/public/images/ehc-6969ehc-8.1.pdf" target="_blank">
-                View certificate
-              </a>
-            </td>
-          </tr>
-          {% if query.has_cancelation %}
-          <tr class="govuk-table__row">
-            <td id="cert-counter" class="govuk-table__cell" scope="row">3</td>
-            <td id="cert-num" class="govuk-table__cell" scope="row" style="width:30%;"><span class="govuk-status govuk-status--warning">Replaced</span>&nbsp;&nbsp;19/2/00869<br>
-              <span class="govuk-hint govuk-!-margin-top-1 govuk-!-margin-bottom-0">Replaced by <a href="case-new">19/2/00872</a></span>
-            </td>
-            <td id="actual-export-date" class="govuk-table__cell" scope="row">
-              02 Aug 2019
-            </td>
-            <td id="status" class="govuk-table__cell" scope="row">CANCELLED
-            </td>
-            <td id="actions" class="govuk-table__cell" scope="row">
-
-            </td>
-          </tr>
-          {% endif %}
-          <tr class="govuk-table__row">
-            <td id="cert-counter" class="govuk-table__cell" scope="row">4</td>
-            <td id="cert-num" class="govuk-table__cell" scope="row">19/2/022135</td>
-            <td id="actual-export-date" class="govuk-table__cell" scope="row">
-              30 Nov 2019
-            </td>
-            <td id="status" class="govuk-table__cell" scope="row">{% if query.is_group =="yes"%}{{query.application_status | upper}}{% else %}DISPATCHED{% endif %}
-            </td>
-            <td id="actions" class="certificateActions govuk-table__cell" scope="row">
-              <a id="view_cert_19/2/022135" class="printViewCertificatePdfLink" href="/protected/application/1721147998437/ehc/c3ae2920-05f7-e911-a813-000d3ab0f933?printView=true" target="_blank">View certificate</a>
-            </td>
-          </tr>
-          <tr class="govuk-table__row">
-            <td id="cert-counter" class="govuk-table__cell" scope="row">5</td>
-            <td id="cert-num" class="govuk-table__cell" scope="row">19/2/022136</td>
-            <td id="actual-export-date" class="govuk-table__cell" scope="row">
-              30 Nov 2019
-            </td>
-            <td id="status" class="govuk-table__cell" scope="row">{% if query.is_group =="yes"%}{{query.application_status | upper}}{% else %}DISPATCHED{% endif %}
-            </td>
-            <td id="actions" class="certificateActions govuk-table__cell" scope="row">
-              <a id="view_cert_19/2/022136" class="printViewCertificatePdfLink" href="/protected/application/1721147998437/ehc/c4ae2920-05f7-e911-a813-000d3ab0f933?printView=true" target="_blank">View certificate</a>
-            </td>
-          </tr>
-          {% endif %}
-        </tbody>
-      </table>
-  </div>
-
-  <div class="govuk-grid-column-two-thirds">
-    <p class="govuk-body govuk-hint">{% if query.application_status=="completed" or query.is_block == 'yes' %}If you need to cancel and replace a certificate, contact your certifier to make the request.{% endif %}</p>
-  </div>
-  
-</div>
-{% endif %} -->
 {% endblock %}
