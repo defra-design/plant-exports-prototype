@@ -1,115 +1,118 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-Upload completed - {{serviceName}} - GOV UK
+  Your commodities - Phytosanitary certificate - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
 {{super()}}
-{{ govukBackLink({
-  text: "Back",
-  href: "javascript: window.history.go(-1)"
-}) }}
+{% include "../modules/_account-banner.html" %}
+<a href="{{page.content.prev or 'javascript:history.back()'}}" class="govuk-back-link">Back</a>
 {% endblock %}
 
 {% block content %}
-<div class="govuk-width-container">
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      <form method="post">
+{% if query.return_url != "task-list" %}
+<div class="govuk-grid-row">
+    
+  <div class="govuk-grid-column-two-thirds">
+      
+    <div class="app-alert app-alert--success">
+      <p class="govuk-body"><strong>21.09.16 XXXXXXX C154189.csv</strong> with 395 commodity records uploaded successfully</p>
+    </div>
 
-      {% set commodity = data.commodity or "products" %}
+  </div>
 
-        <div class="govuk-grid-row">
-          <div class="govuk-grid-column-two-thirds">
+</div>
+{% endif %}
 
+{% set commodity = data.commodity or "plants" %}
 
-            {% if query.return_url!="task-list" %}
-            <div class="app-alert app-alert--success">
-              <p class="govuk-body"><strong>21.09.16 XXXXXXX C154189.csv</strong> with 395 commodity records uploaded successfully</p>
-            </div>
-            {% endif %}
+<div class="govuk-grid-row">
+          
+  <div class="govuk-grid-column-two-thirds">
 
-            <h1 class="govuk-heading-xl govuk-!-margin-top-4">Your commodities</h1>
-            <h2 class="govuk-heading-m">Commodity summary</h1>
+    <form action="{{query.return_url or 'task-list'}}" method="post">
+      <h1 class="govuk-heading-xl govuk-!-margin-top-4">Your commodities</h1>
+      <h2 class="govuk-heading-m">Application summary</h1>
+      <!-- <p class="govuk-body">You can add a maximum of 500 commodities to this consignment.</p> -->
 
-              <dl class="govuk-summary-list">
-                 <div class="govuk-summary-list__row">
-                  <dt class="govuk-summary-list__key">
-                    Number of commodity records
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    395
-                  </dd>
-                </div>
-                <div class="govuk-summary-list__row">
-                  <dt class="govuk-summary-list__key">
-                    Total quantity
-                  </dt>
-                  <dd class="govuk-summary-list__value">
-                    10.35kg<br/>and 15 tonnes
-                  </dd>
-                </div>
-              </dl>
-          </div>
+      <dl class="govuk-summary-list">
+        
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Number of commodities</dt>
+          <dd class="govuk-summary-list__value">395</dd>
         </div>
 
-          <ul class="govuk-list govuk-!-margin-top-4 noprint">
-            <li>
-              <a class="govuk-link" href="commodity-list-seeds-100-check">
-                View all commodities
-              </a>
-            </li>
-              <li>
-              <a class="govuk-link" href="confirm-delete-all">
-                Delete all commodities
-              </a>
-            </li>
-          </ul>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Total quantity</dt>
+          <dd class="govuk-summary-list__value">
+            10.35kg
+            <br>
+            and 15 tonnes
+          </dd>
+        </div>
 
-        {{ govukRadios({
-          idPrefix: "next",
-          name: "next",
-          fieldset:
+      </dl>
+
+      <div class="govuk-form-group">
+        <ul class="govuk-list govuk-!-margin-top-4 govuk-!-margin-bottom-7 noprint">
+          <li><a class="govuk-link" href="commodity-list-seeds-100-check">View all commodities</a></li>
+          <li><a class="govuk-link" href="confirm-delete-all">Delete all commodities</a></li>
+        </ul>
+      </div>
+
+      {{ govukRadios({
+        idPrefix: "next",
+        name: "next",
+        classes: "govuk-!-margin-bottom-4",
+        fieldset:
+        {
+          legend:
           {
-            legend:
-            {
-              text: "Do you want to add more seeds to your consignment?",
-              isPageHeading: true,
-              classes: "govuk-fieldset__legend--m govuk-!-margin-top-4"
-            }
-          },
-          items: [
-          {
-            value: "confirm~how-to-identify",
-            text: "Yes, add one more commodity"
-          },
-          {
-            value: "upload~upload",
-            text: "Yes, upload multiple commodities"
-          },
-          {
-            value: "upload~task-list",
-            text: "No, I have finished adding seeds"
+            text: "Do you want to add more " + data.commodity + " to your consignment?",
+            isPageHeading: true,
+            classes: "govuk-fieldset__legend--m"
           }
-          ]
-        }) }}
-  
-        {{ govukButton({
-          text: "Save and continue"
-        }) }}
+        },
+        items: [
+        {
+          value: "confirm~how-to-identify",
+          text: "Yes, add one more commodity"
+        },
+        {
+          value: "upload~upload",
+          text: "Yes, upload multiple commodities"
+        },
+        {
+          value: "upload~task-list",
+          text: "No, I have finished adding commodities"
+        }
+        ]
+      }) }}
 
+      <div class="govuk-form-group govuk-!-margin-bottom-6">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      </div>
 
-      </form>
+      {% block continueLater %}
+      {% include "../modules/_save-continue-later.html" %}
+      {% endblock %}
 
-      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-      <ul class="govuk-list govuk-list govuk-!-margin-top-9">
-        <li>
-          <a href="commodity-list-seeds" class="govuk-link govuk-link-no-visited-state">Commodity list with 30 rows</a>
-        </li>
-      </ul>
+      <!-- Session data hook to update the task list so that this section is marked as 'COMPLETED' -->
+      <div class="govuk-form-group" hidden>
+        <label class="govuk-label" for="commodity_task_list_data">Task list section URL</label>
+        <input class="govuk-input" id="commodity_task_list_data" name="commodity_task_list_data" type="text" value="Bulk">
+      </div>
 
-    </div>
+    </form>
+
+    {% if query.extras == "yes" %}
+    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+    <ul class="govuk-list govuk-list--no-bullet">
+      <li><a href="commodity-list-seeds" class="govuk-link govuk-link-no-visited-state">Commodity list with 30 rows</a></li>
+    </ul>
+    {% endif %}
   </div>
+
 </div>
 {% endblock %}
