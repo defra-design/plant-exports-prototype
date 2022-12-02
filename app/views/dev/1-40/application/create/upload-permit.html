@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+GOV.UK Prototype Kit
+{% endblock %}
+{% block beforeContent %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      Upload a copy of the import permit
+    </h1>
+    <p class="govuk-body">You will need to upload a copy of the import permit <strong>{{data['consignee-import-permit']}}</strong> before submitting this application</p>
+    <form action="{{query.return_url or '../create/task-list'}}" method="POST">
+      <fieldset class="govuk-fieldset" aria-describedby="applicant-conditional-hint">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-!-margin-bottom-6">
+          Do you want to upload a copy now?
+        </legend>
+        <div class="govuk-form-group">
+          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="applicant-conditional" name="permit_uploaded" type="radio" value="yes~attachments" data-aria-controls="has-permit-conditional" {% if data.permit_uploaded=="yes" %}checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="applicant-conditional">
+                Yes, upload the permit now
+              </label>
+            </div>
+            <div class="govuk-radios__item">
+              <!-- use a null value for date.file to clear any uploaded files -->
+              <input class="govuk-radios__input" id="applicant-conditional-2" name="permit_uploaded" type="radio" value="no?file=~task-list" data-aria-controls="conditional-applicant-conditional-2" {% if data.permit_uploaded=="no" %}checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="applicant-conditional-2">
+                No, I will upload it later
+              </label>
+            </div>
+            {% if data.file %}
+            <div class="govuk-radios__divider">or</div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="applicant-conditional-2" name="permit_uploaded" type="radio" value="uploaded~task-list" data-aria-controls="conditional-applicant-conditional-2" {% if data.permit_uploaded=="uploaded"
+                %}checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="applicant-conditional-2">
+                I have already uploaded it
+              </label>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </fieldset>
+      <div class="govuk-form-group">
+        <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+      </div>
+    </form>
+    {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

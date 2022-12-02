@@ -1,0 +1,195 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.build == "development" %}List Commodity Details - Exports application{% else %}Your commodities - Phytosanitary certificate - {{serviceName}}{% endif %} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="{{page.content.prev or 'javascript:history.back()'}}" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-three-quarters">
+
+    <form action="{{query.return_url or 'task-list'}}" method="post">
+      
+      {% if data.upload == 1 %}
+      {% if data.build == "development" %}
+      <div class="app-alert app-alert--success">
+        <p class="govuk-body"><strong>1 APHA_phytosanitary_certificate_csv_template - PLANTS 15112021.csv</strong> with 4 commodity records uploaded successfully</p>
+      </div>
+      {% else %}
+      <div class="app-alert app-alert--info">
+        <p class="govuk-body">File has been uploaded successfully</p>
+      </div>
+      {% endif %}
+      {% endif %}
+
+      <h1 class="govuk-heading-xl">Your commodities</h1>
+
+      <table class="govuk-table govuk-!-margin-bottom-7">
+        <thead class="govuk-table__head">
+          {% if data.commodity == "bulbs" %}
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Description</th>
+            <th class="govuk-table__header" scope="col">Country of origin</th>
+            <th class="govuk-table__header" scope="col">Quantity</th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
+          </tr>
+          {% elseif data.commodity == "potatoes" %}
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Description</th>
+            <th class="govuk-table__header" scope="col">Stock number</th>
+            <th class="govuk-table__header" scope="col">Quantity</th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
+          </tr>
+          {% elseif data.commodity == "biological control agents and clay" or data.commodity == "grain" or data.commodity == "plants" %}
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Description</th>
+            <th class="govuk-table__header" scope="col">Country of origin</th>
+            <th class="govuk-table__header" scope="col">Quantity</th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
+          </tr>
+          {% elseif data.commodity == "plant products" %}
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Description</th>
+            <th class="govuk-table__header" scope="col">Country of origin</th>
+            {% if data.build != "development" %}
+            <th class="govuk-table__header" scope="col"><abbr title="Animal and Plant Health Agency">APHA</abbr> sample reference</th>
+            {% endif %}
+            <th class="govuk-table__header" scope="col">Quantity</th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
+          </tr>
+          {% elseif data.commodity == "seeds" %}
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Description</th>
+            <th class="govuk-table__header" scope="col">Lot reference</th>
+            {% if data.build != "development" %}
+            <th class="govuk-table__header" scope="col"><abbr title="Animal and Plant Health Agency">APHA</abbr> sample reference</th>
+            {% endif %}
+            <th class="govuk-table__header" scope="col">Quantity</th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
+          </tr>
+          {% else %}
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Description</th>
+            <th class="govuk-table__header" scope="col">{% if data.build == "development" %}Country of last use{% else %}Country where this machinery was last used{% endif %}</th>
+            <th class="govuk-table__header" scope="col">Unique ID</th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
+          </tr>
+          {% endif %}
+        </thead>
+        <tbody class="govuk-table__body">
+          <!-- PROCESSED PLANT PRODUCTS -->
+          {% if data.commodity == "plant products" %}
+          {% set commodity_page = "commodity-page-plant-products" %}
+          {% block summaryPlantProducts %}{% include "../modules/_summary-plant-products-check-answers.html" %}{% endblock %}
+          {% elseif data.commodity == "seeds" %}
+          {% set showChange = "true" %}
+          {% set showDelete = "true" %}
+          {% include "../modules/_summary-seed-cya.html" %}
+          {% elseif data.upload == 1 %}
+          {% include "../modules/_summary-bulk.html" %}
+          {% else %}
+          {% for commodity in data.commodities %}
+          {% if data.commodity == "bulbs" %}
+          <!-- BULBS -->
+          {% set commodity_page = "bulbs" %}
+          {% block summaryBulb %}{% include "../modules/_summary-bulbs.html" %}{% endblock %}
+          {% elseif data.commodity == "used farm machinery" %}
+          <!-- USED FARM MACHINERY -->
+          {% set commodity_page = "commodity-page-machinery" %}
+          {% block summaryMachinery %}{% include "../modules/_summary-machinery-check-answers.html" %}{% endblock %}
+          {% elseif data.commodity == "potatoes" %}
+          <!-- POTATOES -->
+          {% set commodity_page = "commodity-page" %}
+          {% block summaryPotatoes %}
+          {% include "../modules/_summary-potatoes-check-answers.html" %}
+          {% endblock %}
+          {% else %}
+          <!-- OTHER COMMODITES -->
+          {% set commodity_page = "commodity-page" %}
+          {% block summaryGeneral %}{% include "../modules/_summary-general-check-answers.html" %}{% endblock %}
+          {% endif %}
+          {% endfor %}
+          {% endif %}
+        </tbody>
+      </table>
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+            <h2 class="govuk-fieldset__heading">{% if data.build == "development" %}{% if data.commodity == "seeds" %}Do you want to add more seeds to your consignment?{% else %}Do you want to add more commodities?{% endif %}{% else %}Do you want to add more commodities?{% endif %}</h2>
+          </legend>
+
+          {% set url="how-to-identify" %}
+          {% if data.commodity == "bulbs" %}
+            {% set url="how-to-identify" %}
+          {% elseif data.commodity == "used farm machinery" %}
+            {% set url="commodity-page-machinery" %}
+          {% elseif data.commodity == "potatoes" %}
+            {% set url="commodity-page" %}
+          {% elseif data.commodity == "plant products" %}
+            {% set url="commodity-page-plant-products" %}
+          {% endif %}
+
+          <div class="govuk-radios govuk-!-margin-bottom-4" data-module="govuk-radios">
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="add_one_commodities-yes" name="add_more_commodities" type="radio" value="yes~{{url}}">
+              <label class="govuk-label govuk-radios__label" for="add_one_commodities-yes">Yes, add one more commodity </label>
+            </div>
+            
+            {% if data.commodity != "grain" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="add_multiple_commodities-yes" name="add_more_commodities" type="radio" value="yes~upload">
+              <label class="govuk-label govuk-radios__label" for="add_multiple_commodities-yes">Yes, upload multiple commodities </label>
+            </div>
+            {% endif %}
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="add_more_commodities-no" name="add_more_commodities" type="radio" value="no~{% if data.commodity_group == 'produce' %}pheats-check{% else %}task-list{% endif %}">
+              <label class="govuk-label govuk-radios__label" for="add_more_commodities-no">No, I have finished adding commodities</label>
+            </div>
+
+          </div>
+
+        </fieldset>
+      </div>
+      
+      {% if data.build == "development" %}
+      <div class="govuk-button-group">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      </div>
+      {% else %}
+      <div class="govuk-form-group govuk-!-margin-bottom-6">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      </div>
+
+      {% block continueLater %}
+      {% include "../modules/_save-continue-later.html" %}
+      {% endblock %}
+      {% endif %}
+
+      <!-- Session data hook to update the task list so that this section is marked as 'COMPLETED' -->
+      <div class="govuk-form-group" hidden>
+        <label class="govuk-label" for="commodity_task_list_data">Task list section URL</label>
+        <input class="govuk-input" id="commodity_task_list_data" name="commodity_task_list_data" type="text" value="Manual">
+      </div>
+
+    </form>
+      
+    {% if query.extras == "yes" %}
+    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+    <ul class="govuk-list govuk-list--no-bullet">
+      <li><a href="upload-validation-errors-summary-with-details" class="govuk-link govuk-link-no-visited-state">Error summary</a></li>
+    </ul>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

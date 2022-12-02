@@ -1,0 +1,186 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if query.design == "3" %}Re-issue reasons{% else %}Why do you need this certificate re-issued?{% endif %} - Re-issue a phytosanitary certificate - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+{% if query.design == "3" %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+        
+    <form action="submit-date" method="post" class="form">
+      <h1 class="govuk-heading-xl">Re-issue reasons</h1>
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend">Why do you need this certificate re-issued?</legend>
+
+          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="needsUpdate" name="reason" type="radio" value="I need to change details on the certificate">
+              <label class="govuk-label govuk-radios__label" for="needsUpdate">I need to change details on the certificate</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="neverArrived" name="reason" type="radio" value="It never arrived in the post">
+              <label class="govuk-label govuk-radios__label" for="neverArrived">It never arrived in the post</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="lost" name="reason" type="radio" value="The certificate arrived in the post but was afterwards lost or damaged">
+              <label class="govuk-label govuk-radios__label" for="lost">The certificate arrived in the post but was afterwards lost or damaged</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="expired" name="reason" type="radio" value="The date on the certificate has expired">
+              <label class="govuk-label govuk-radios__label" for="expired">The date on the certificate has expired</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="internalError" name="reason" type="radio" value="There is something wrong with the certificate that only an inspector can fix" data-aria-controls="conditional-internalError">
+              <label class="govuk-label govuk-radios__label" for="internalError">There is something wrong with the certificate that only an inspector can fix</label>
+            </div>
+
+            <div class="govuk-radios__divider">
+              or
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="somethingElse" name="reason" type="radio" value="Something else">
+              <label class="govuk-label govuk-radios__label" for="somethingElse">Something else</label>
+            </div>
+
+          </div>
+
+        </fieldset>
+      </div>
+
+      <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="200">
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="somethingElseDetail">Can you provide more detail?</label>
+          <textarea class="govuk-textarea govuk-js-character-count" id="somethingElseDetail" name="somethingElseDetail" rows="5" aria-describedby="somethingElseDetail-info"></textarea>
+        </div>
+      
+        <div id="somethingElseDetail-info" class="govuk-hint govuk-character-count__message">
+          You can enter up to 200 characters
+        </div>
+      
+      </div>
+
+      <div class="govuk-button-group govuk-!-margin-top-7">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Continue</button>
+        <a class="govuk-link app-button--link" href="../../dashboard-submitted">Cancel</a>
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+{% else %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+        
+    <form action="amend-your-certificate" method="post" class="form">
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
+            <h1 class="govuk-fieldset__heading">Why do you need this certificate re-issued?</h1>
+          </legend>
+
+          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="needsUpdate" name="reason" type="radio" value="I need to change details on the certificate~amend-your-certificate">
+              <label class="govuk-label govuk-radios__label" for="needsUpdate">I need to change details on the certificate</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="neverArrived" name="reason" type="radio" value="It never arrived in the post~submit-date">
+              <label class="govuk-label govuk-radios__label" for="neverArrived">It never arrived in the post</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="lost" name="reason" type="radio" value="The certificate arrived in the post but was afterwards lost or damaged~submit-date">
+              <label class="govuk-label govuk-radios__label" for="lost">The certificate arrived in the post but was afterwards lost or damaged</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="expired" name="reason" type="radio" value="The date on the certificate has expired~submit-date">
+              <label class="govuk-label govuk-radios__label" for="expired">The date on the certificate has expired</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="internalError" name="reason" type="radio" value="There is something wrong with the certificate that only an inspector can fix~submit-date" data-aria-controls="conditional-internalError">
+              <label class="govuk-label govuk-radios__label" for="internalError">There is something wrong with the certificate that only an inspector can fix</label>
+            </div>
+
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-internalError">
+
+              <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="500">
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="internalErrorDetail">What is wrong with the certificate?</label>
+                  <textarea class="govuk-textarea govuk-js-character-count" id="internalErrorDetail" name="internalErrorDetail" rows="5" aria-describedby="internalErrorDetail-info"></textarea>
+                </div>
+              
+                <div id="internalErrorDetail-info" class="govuk-hint govuk-character-count__message">
+                  You can enter up to 500 characters
+                </div>
+              
+              </div>
+
+            </div>
+
+            <div class="govuk-radios__divider">
+              or
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="somethingElse" name="reason" type="radio" value="Something else~submit-date" data-aria-controls="conditional-somethingElse">
+              <label class="govuk-label govuk-radios__label" for="somethingElse">Something else</label>
+            </div>
+
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-somethingElse">
+
+              <div class="govuk-character-count" data-module="govuk-character-count" data-maxlength="500">
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="somethingElseDetail">Why do you need this certificate re-issued?</label>
+                  <textarea class="govuk-textarea govuk-js-character-count" id="somethingElseDetail" name="somethingElseDetail" rows="5" aria-describedby="somethingElseDetail-info"></textarea>
+                </div>
+              
+                <div id="somethingElseDetail-info" class="govuk-hint govuk-character-count__message">
+                  You can enter up to 500 characters
+                </div>
+              
+              </div>
+
+            </div>
+
+          </div>
+
+        </fieldset>
+      </div>
+
+      <div class="govuk-button-group">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Continue</button>
+        <a class="govuk-link app-button--link" href="../../dashboard-submitted">Cancel</a>
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+{% endif %}
+{% endblock %}

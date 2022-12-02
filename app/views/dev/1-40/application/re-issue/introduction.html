@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Check whether you can apply for re-issue - Re-issue a phytosanitary certificate - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <div class="govuk-form-group">
+      <h1 class="govuk-heading-xl">Check whether you can apply for re-issue</h1>    
+      <p class="govuk-body">You can ask for a certificate to be re-issued if the original was lost or damaged. You may also get a re-issue if the certificate has expired or if the details printed on it are wrong.</p>
+      <p class="govuk-body">You will not be able to change all of the details on a re-issued certificate. For example, you cannot change the destination country or what's in your consignment.</p>
+      {% if (query.id | appInformationV3('cert_info')) != 'Conformity' %}
+      <p class="govuk-body">You will pay the <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_blank">normal fee (opens in new tab)</a> for a phytosanitary certificate. If you're asking for a re-issue because <abbr title="Animal and Plant Health Agency">APHA</abbr> made a mistake, you should not be charged.</p>
+      {% endif %}
+    </div>
+
+    <form action="{{query.return_url or 'reason'}}" method="post">
+        
+			<div class="govuk-button-group">
+				<button class="govuk-button" type="submit" data-module="govuk-button">Continue</button>
+				<a class="govuk-link app-button--link" href="../../dashboard-submitted">Cancel</a>
+			</div>
+
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

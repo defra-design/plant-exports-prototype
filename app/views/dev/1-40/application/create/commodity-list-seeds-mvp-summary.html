@@ -1,0 +1,137 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Upload completed - {{serviceName}} - GOV UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-width-container">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <form method="post">
+
+          {% set commodity = data.commodity or "products" %}
+
+          {% if data.commodity == "plant products" %}
+
+          {% set commodity = "products" %}
+
+          {% elseif data.commodity == "used farm machinery" %}
+
+          {% set commodity = "used farm machines" %}
+
+          {% endif %}
+
+
+        <div class="app-alert app-alert--success"><p class="govuk-body">108 commodity records uploaded successfully</p></div>
+
+
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+
+          <h1 class="govuk-heading-xl govuk-!-margin-top-4">Change uploaded file</h1>
+          <h2 class="govuk-heading-m">Upload summary</h1>
+
+          <dl class="govuk-summary-list">
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key govuk-!-width-two-thirds">
+                File
+              </dt>
+              <dd class="govuk-summary-list__value ">
+                <a href="/public/images/template-seeds-sample-example.csv">21.11.30 XXXXXXX C144158.csv</a>
+              </dd>
+<!--               <dd class="govuk-summary-list__actions">
+                <a class="govuk-link" href="#">
+                  Change<span class="govuk-visually-hidden"> file</span>
+                </a>
+              </dd> -->
+            </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Number of commodity records
+              </dt>
+              <dd class="govuk-summary-list__value">
+                108
+              </dd>
+<!--               <dd class="govuk-summary-list__actions">
+                <a class="govuk-link" href="#">
+                  Change<span class="govuk-visually-hidden"> date of birth</span>
+                </a>
+              </dd> -->
+            </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Total quantity
+              </dt>
+              <dd class="govuk-summary-list__value">
+                29.53kg
+              </dd>
+<!--               <dd class="govuk-summary-list__actions">
+                <a class="govuk-link" href="#">
+                  Change<span class="govuk-visually-hidden"> address</span>
+                </a>
+              </dd> -->
+            </div>
+            <div class="govuk-summary-list__row">
+<!--               <dt class="govuk-summary-list__key">
+                Destination countries
+              </dt>
+              <dd class="govuk-summary-list__value">
+                <p class="govuk-body">Belgium, France, Israel, New Zealand, Spain </br>
+                </p>
+              </dd> -->
+<!--               <dd class="govuk-summary-list__actions">
+                <a class="govuk-link" href="#">
+                  Change<span class="govuk-visually-hidden"> contact details</span>
+                </a>
+              </dd> -->
+            </div>
+          </dl>
+            </div>            
+          </div>
+
+
+        {{ govukRadios({
+          idPrefix: "next",
+          name: "next",
+          fieldset:
+          {
+            legend:
+            {
+              text: "Do you want to keep this file?",
+              isPageHeading: true,
+              classes: "govuk-fieldset__legend--m govuk-!-margin-top-4"
+            }
+          },
+          items: [
+          {
+            value: "confirm~task-list",
+            text: "Yes, keep this file"
+          },
+          {
+            value: "input-method~upload",
+            text: "No, upload a different file and delete this one"
+          }
+          ]
+        }) }}
+
+          {{ govukButton({
+            text: "Save and continue"
+          }) }}
+
+        </form>
+
+{% include "../modules/_expt-mix-menu.html"%}
+
+      </div>
+    </div>
+</div>
+{% endblock %}
