@@ -582,7 +582,7 @@
                             <select class="govuk-select govuk-!-width-full" id="filter_name" name="filter_name">
                               <option value="All users"{% if not data.filter_name or data.filter_name == "All users" %} selected{% endif %}>All users</option>
                               {% set list = [] %}
-                              {% for cert in data.applicationsv3 %}
+                              {% for cert in data.applicationsv4 %}
                               {% if not cert.name in list %}
                               <option value="{{cert.name}}"{% if cert.name == data.filter_name %} selected{% endif %}>{{cert.name}}{% if logged_in_as == cert.name %} <strong>(you)</strong>{% endif %}</option>
                               {{list.push(cert.name)}}
@@ -782,7 +782,7 @@
                   </td>
                 </tr>
                 {% endif %}
-                {% for app in data.applicationsv3 %}
+                {% for app in data.applicationsv4 %}
                 {% if app.status != "draft" %}
 
                 <!-- PAGINATED AT 30 (HACKED) RESULTS (START) -->
@@ -904,11 +904,23 @@
                     {% if app.index == "34" %}
                     {% if data.reissue_certificate_data == "submitted" %}
                     <div class="govuk-tag govuk-tag--white-tag-blue-border-and-text">
+                      Requested re-issue
+                    </div>
+                    {% elif data.reissue_certificate_data == "processing" %}
+                    <div class="govuk-tag govuk-tag--blue">
+                      Processing re-issue
+                    </div>
+                    {% elif data.reissue_certificate_data == "preparing" %}
+                    <div class="govuk-tag govuk-tag--indigo">
                       Preparing re-issue
                     </div>
                     {% elif data.reissue_certificate_data == "approved" %}
                     <div class="govuk-tag govuk-tag--green">
                       Certificate re-issued
+                    </div>
+                    {% elif data.reissue_certificate_data == "rejected" %}
+                    <div class="govuk-tag govuk-tag--red">
+                      Rejected re-issue
                     </div>
                     {% else %}
                     <div class="govuk-tag govuk-tag--{{app.tag | lower}}">
@@ -1049,11 +1061,23 @@
                     {% if app.index == "34" %}
                     {% if data.reissue_certificate_data == "submitted" %}
                     <div class="govuk-tag govuk-tag--white-tag-blue-border-and-text">
+                      Requested re-issue
+                    </div>
+                    {% elif data.reissue_certificate_data == "processing" %}
+                    <div class="govuk-tag govuk-tag--blue">
+                      Processing re-issue
+                    </div>
+                    {% elif data.reissue_certificate_data == "preparing" %}
+                    <div class="govuk-tag govuk-tag--indigo">
                       Preparing re-issue
                     </div>
                     {% elif data.reissue_certificate_data == "approved" %}
                     <div class="govuk-tag govuk-tag--green">
                       Certificate re-issued
+                    </div>
+                    {% elif data.reissue_certificate_data == "rejected" %}
+                    <div class="govuk-tag govuk-tag--red">
+                      Rejected re-issue
                     </div>
                     {% else %}
                     <div class="govuk-tag govuk-tag--{{app.tag | lower}}">
@@ -1130,7 +1154,7 @@
                 </tr>
               </thead>
               <tbody class="govuk-table__body govuk-body-s">
-                {% for app in data.applicationsv3 %}
+                {% for app in data.applicationsv4 %}
                 {% if app.status != "draft" %}
 
                 <!-- PAGINATED AT 5 OR 6 (HACKED) RESULTS (START) -->

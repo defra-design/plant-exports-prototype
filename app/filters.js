@@ -4,6 +4,7 @@
 var applications = require('./data/applications.json')
 var applicationsv2 = require('./data/applications-v2.json')
 var applicationsv3 = require('./data/applications-v3.json')
+var applicationsv4 = require('./data/applications-v4.json')
 var sample = require('./data/sample.json')
 
 module.exports = function (env) {
@@ -33,7 +34,7 @@ module.exports = function (env) {
   }
 
   // Get application information (v2)
-  // Prototype versions 1-35 onward
+  // Prototype versions 1-35 to 1-38
   filters.appInformation = function (id, key) {
     
     var app = {};
@@ -50,7 +51,7 @@ module.exports = function (env) {
   }
 
   // Get application information (v3)
-  // Prototype versions 1-39 onward
+  // Prototype version 1-39
   filters.appInformationV3 = function (id, key) {
     
     var app = {};
@@ -66,7 +67,24 @@ module.exports = function (env) {
     return app[key];
   }
 
-  // show hide infomation based on search results
+  // Get application information (v4)
+  // Prototype versions 1-40 onward
+  filters.appInformationV4 = function (id, key) {
+    
+    var app = {};
+    
+    applicationsv4.forEach(function (item) {
+      
+      if (item.index == id) {
+        app = item;
+      }
+
+    })
+
+    return app[key];
+  }
+
+  // Show hide infomation based on search results
   filters.showHide = function (obj, text) {
     var query = text.split();
     for (key in obj) {
