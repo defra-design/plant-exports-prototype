@@ -831,7 +831,7 @@
                 {% else %}
                 <tr class="govuk-table__row rowCounter result">
                   <td id="apha-reference-{{app.index}}" class="govuk-table__cell table-header" scope="row">
-                    {% if app.index == "0" or app.index == "8" or app.index == "10" %}
+                    {% if app.index == "8" or app.index == "10" %}
                     <a href="application-amend?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "1" %}
                     <a href="application-plant-products?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
@@ -878,7 +878,7 @@
                     <a href="application-batch-sample?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- Re-usable batch sampling applications (END) -->
                     <!-- Re-issue phytosanitary certificate (START) -->
-                    {% elseif app.index == "34" %}
+                    {% elseif app.index == "0" or app.index == "34" %}
                     <a href="application-re-issue?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- Re-issue phytosanitary certificate (END) -->
                     {% else %}
@@ -901,26 +901,52 @@
                   <td id="status-{{app.index}}" class="govuk-table__cell" scope="row">
                     <span class="table-heading" aria-hidden="true">Status</span>
                     
-                    {% if app.index == "34" %}
-                    {% if data.reissue_certificate_data == "submitted" %}
+                    {% if app.index == "0" %}
+                    {% if data.reissue_certificate_data_ppp == "submitted" %}
                     <div class="govuk-tag govuk-tag--white-tag-blue-border-and-text">
-                      Requested re-issue
+                      Re-issue requested
                     </div>
-                    {% elif data.reissue_certificate_data == "processing" %}
+                    {% elif data.reissue_certificate_data_ppp == "processing" %}
                     <div class="govuk-tag govuk-tag--blue">
                       Processing re-issue
                     </div>
-                    {% elif data.reissue_certificate_data == "preparing" %}
+                    {% elif data.reissue_certificate_data_ppp == "preparing" %}
                     <div class="govuk-tag govuk-tag--indigo">
                       Preparing re-issue
                     </div>
-                    {% elif data.reissue_certificate_data == "approved" %}
+                    {% elif data.reissue_certificate_data_ppp == "approved" %}
                     <div class="govuk-tag govuk-tag--green">
                       Certificate re-issued
                     </div>
-                    {% elif data.reissue_certificate_data == "rejected" %}
+                    {% elif data.reissue_certificate_data_ppp == "rejected" %}
                     <div class="govuk-tag govuk-tag--red">
-                      Rejected re-issue
+                      Re-issue denied
+                    </div>
+                    {% else %}
+                    <div class="govuk-tag govuk-tag--{{app.tag | lower}}">
+                      {{app.status}}
+                    </div>
+                    {% endif %}
+                    {% elif app.index == "34" %}
+                    {% if data.reissue_certificate_data_pfp == "submitted" %}
+                    <div class="govuk-tag govuk-tag--white-tag-blue-border-and-text">
+                      Re-issue requested
+                    </div>
+                    {% elif data.reissue_certificate_data_pfp == "processing" %}
+                    <div class="govuk-tag govuk-tag--blue">
+                      Processing re-issue
+                    </div>
+                    {% elif data.reissue_certificate_data_pfp == "preparing" %}
+                    <div class="govuk-tag govuk-tag--indigo">
+                      Preparing re-issue
+                    </div>
+                    {% elif data.reissue_certificate_data_pfp == "approved" %}
+                    <div class="govuk-tag govuk-tag--green">
+                      Certificate re-issued
+                    </div>
+                    {% elif data.reissue_certificate_data_pfp == "rejected" %}
+                    <div class="govuk-tag govuk-tag--red">
+                      Re-issue denied
                     </div>
                     {% else %}
                     <div class="govuk-tag govuk-tag--{{app.tag | lower}}">
@@ -988,7 +1014,7 @@
                 {% else %}
                 <tr class="govuk-table__row rowCounter result">
                   <td id="apha-reference-{{app.index}}" class="govuk-table__cell table-header" scope="row">
-                    {% if app.index == "0" or app.index == "8" or app.index == "10" %}
+                    {% if app.index == "8" or app.index == "10" %}
                     <a href="application-amend?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "1" %}
                     <a href="application-plant-products?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
@@ -1035,7 +1061,7 @@
                     <a href="application-batch-sample?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- Re-usable batch sampling applications (END) -->
                     <!-- Re-issue phytosanitary certificate (START) -->
-                    {% elseif app.index == "34" %}
+                    {% elseif app.index == "0" or app.index == "34" %}
                     <a href="application-re-issue?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- Re-issue phytosanitary certificate (END) -->
                     {% else %}
@@ -1058,26 +1084,52 @@
                   <td id="status-{{app.index}}" class="govuk-table__cell" scope="row">
                     <span class="table-heading" aria-hidden="true">Status</span>
                     
-                    {% if app.index == "34" %}
-                    {% if data.reissue_certificate_data == "submitted" %}
+                    {% if app.index == "0" %}
+                    {% if data.reissue_certificate_data_ppp == "submitted" %}
                     <div class="govuk-tag govuk-tag--white-tag-blue-border-and-text">
-                      Requested re-issue
+                      Re-issue requested
                     </div>
-                    {% elif data.reissue_certificate_data == "processing" %}
+                    {% elif data.reissue_certificate_data_ppp == "processing" %}
                     <div class="govuk-tag govuk-tag--blue">
                       Processing re-issue
                     </div>
-                    {% elif data.reissue_certificate_data == "preparing" %}
+                    {% elif data.reissue_certificate_data_ppp == "preparing" %}
                     <div class="govuk-tag govuk-tag--indigo">
                       Preparing re-issue
                     </div>
-                    {% elif data.reissue_certificate_data == "approved" %}
+                    {% elif data.reissue_certificate_data_ppp == "approved" %}
                     <div class="govuk-tag govuk-tag--green">
                       Certificate re-issued
                     </div>
-                    {% elif data.reissue_certificate_data == "rejected" %}
+                    {% elif data.reissue_certificate_data_ppp == "rejected" %}
                     <div class="govuk-tag govuk-tag--red">
-                      Rejected re-issue
+                      Re-issue denied
+                    </div>
+                    {% else %}
+                    <div class="govuk-tag govuk-tag--{{app.tag | lower}}">
+                      {{app.status}}
+                    </div>
+                    {% endif %}
+                    {% elif app.index == "34" %}
+                    {% if data.reissue_certificate_data_pfp == "submitted" %}
+                    <div class="govuk-tag govuk-tag--white-tag-blue-border-and-text">
+                      Re-issue requested
+                    </div>
+                    {% elif data.reissue_certificate_data_pfp == "processing" %}
+                    <div class="govuk-tag govuk-tag--blue">
+                      Processing re-issue
+                    </div>
+                    {% elif data.reissue_certificate_data_pfp == "preparing" %}
+                    <div class="govuk-tag govuk-tag--indigo">
+                      Preparing re-issue
+                    </div>
+                    {% elif data.reissue_certificate_data_pfp == "approved" %}
+                    <div class="govuk-tag govuk-tag--green">
+                      Certificate re-issued
+                    </div>
+                    {% elif data.reissue_certificate_data_pfp == "rejected" %}
+                    <div class="govuk-tag govuk-tag--red">
+                      Re-issue denied
                     </div>
                     {% else %}
                     <div class="govuk-tag govuk-tag--{{app.tag | lower}}">
@@ -1203,7 +1255,7 @@
                 {% else %}
                 <tr class="govuk-table__row rowCounter result">
                   <td id="apha-reference-{{app.index}}" class="govuk-table__cell table-header" scope="row">
-                    {% if app.index == "0" or app.index == "8" or app.index == "10" %}
+                    {% if app.index == "8" or app.index == "10" %}
                     <a href="application-amend?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "1" %}
                     <a href="application-plant-products?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
@@ -1250,7 +1302,7 @@
                     <a href="application-batch-sample?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- Re-usable batch sampling applications (END) -->
                     <!-- Re-issue phytosanitary certificate (START) -->
-                    {% elseif app.index == "34" %}
+                    {% elseif app.index == "0" or app.index == "34" %}
                     <a href="application-re-issue?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- Re-issue phytosanitary certificate (END) -->
                     {% else %}
@@ -1332,7 +1384,7 @@
                 {% else %}
                 <tr class="govuk-table__row rowCounter result">
                   <td id="apha-reference-{{app.index}}" class="govuk-table__cell table-header" scope="row">
-                    {% if app.index == "0" or app.index == "8" or app.index == "10" %}
+                    {% if app.index == "8" or app.index == "10" %}
                     <a href="application-amend?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% elseif app.index == "1" %}
                     <a href="application-plant-products?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
@@ -1379,7 +1431,7 @@
                     <a href="application-batch-sample?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- Re-usable batch sampling applications (END) -->
                     <!-- Re-issue phytosanitary certificate (START) -->
-                    {% elseif app.index == "34" %}
+                    {% elseif app.index == "0" or app.index == "34" %}
                     <a href="application-re-issue?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     <!-- Re-issue phytosanitary certificate (END) -->
                     {% else %}
