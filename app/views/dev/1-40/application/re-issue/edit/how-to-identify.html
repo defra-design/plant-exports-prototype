@@ -25,7 +25,7 @@
           <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
 
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="how-contacted-conditional" name="has_botanicial_name" type="radio" value="yes" data-aria-controls="conditional-how-contacted-conditional"{% if data.has_botanicial_name == "yes" %} checked{% endif %}>
+              <input class="govuk-radios__input" id="how-contacted-conditional" name="has_botanicial_name" type="radio" value="yes" data-aria-controls="conditional-how-contacted-conditional" aria-disabled="true" disabled{% if data.has_botanicial_name == "yes" %} checked{% endif %}>
               <label class="govuk-label govuk-radios__label" for="how-contacted-conditional">Botanical name</label>
               
               <div id="how-contacted-conditional-hint" class="govuk-hint govuk-radios__hint">
@@ -85,7 +85,7 @@
             </div>
 
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="how-contacted-conditional-3" name="has_botanicial_name" type="radio" value="use_description" data-aria-controls="conditional-how-contacted-conditional-3"{% if data.has_botanicial_name == "use_description" %} checked{% endif %}>
+              <input class="govuk-radios__input" id="how-contacted-conditional-3" name="has_botanicial_name" type="radio" value="use_description" data-aria-controls="conditional-how-contacted-conditional-3" aria-disabled="true" disabled{% if data.has_botanicial_name == "use_description" %} checked{% endif %}>
               <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-3">Description</label>
               
               <div id="how-contacted-conditional-hint" class="govuk-hint govuk-radios__hint">
@@ -216,16 +216,19 @@
           items: [
             {
               value: "micropropagated material",
-              text: "Micropropagated material"
+              text: "Micropropagated material",
+              disabled: true
             },
             {
               value: "plants",
               text: "Plants",
+              disabled: true,
               checked: true
             },
             {
               value: "produce",
-              text: "Produce (fruit, flowers or vegetables)"
+              text: "Produce (fruit, flowers or vegetables)",
+              disabled: true
             }
           ]
         }) }}
@@ -234,12 +237,12 @@
         {% if data.commodity == "bulbs" or data.commodity == "plants" or data.commodity == "potatoes" %}
         <div class="govuk-form-group">
           <label class="govuk-label" for="gsi_number">Growing season inspection number (optional)</label>
-          <input class="govuk-input govuk-!-width-one-half" id="gsi_number" name="gsi_number" type="text" spellcheck="false">
+          <input class="govuk-input govuk-!-width-one-half" id="gsi_number" name="gsi_number" type="text" spellcheck="false" aria-disabled="true" disabled>
         </div>
 
         <div class="govuk-form-group">
           <label class="govuk-label" for="ss_number">Soil sampling application number (optional)</label>
-          <input class="govuk-input govuk-!-width-one-half" id="ss_number" name="ss_number" type="text" spellcheck="false">
+          <input class="govuk-input govuk-!-width-one-half" id="ss_number" name="ss_number" type="text" spellcheck="false" aria-disabled="true" disabled>
         </div>
         {% elif data.commodity == "seeds" %}
         <div class="govuk-form-group">
@@ -247,19 +250,11 @@
           <input class="govuk-input govuk-!-width-one-half" id="gsi_number" name="gsi_number" type="text" spellcheck="false">
         </div>
         {% endif %}
-
-        {% if data.commodity == "plant products" %}
-        {% set country_module_label = "Primary country of origin" %}
-        {% elif data.build == "development" and data.commodity == "seeds" %}
-        {% set country_module_label = "Primary country of origin" %}
-        {% else %}
-        {% set country_module_label = "Country of origin" %}
-        {% endif %}
-        {% set module_name = "country_origin" %}
-    
-        {% block country %}
-        {% include "../../modules/_country-select.html" %}
-        {% endblock %}
+        
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="packing_material_used">{% if data.commodity == "plants" %}Country of origin{% else %}Primary country of origin{% endif %}</label>
+          <input class="govuk-input govuk-input--width-20" id="packing_material_used" name="packing_material_used" type="text" value="United Kingdom" aria-disabled="true" disabled>
+        </div>
 
         {% if data.commodity == "plant products" %}
         <div class="govuk-form-group">
@@ -341,10 +336,11 @@
           <input class="govuk-input govuk-input--width-5" id="number_of_packages" name="number_of_packages" type="packaging_type" aria-describedby="passport-number-hint" value="{% if query.change == 'yes' %}{{data.number_of_packages or '100'}}{% endif %}">
         </div>
 
-        {% set country_module_label = "Packaging type" %}
-        {% block packing %}
-        {% include "../../modules/_packaging_not_bold.html" %}
-        {% endblock %}
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="packing_material_used">Type of packaging</label>
+          <input class="govuk-input govuk-input--width-20" id="packing_material_used" name="packing_material_used" type="text" value="Bag" aria-disabled="true" disabled>
+        </div>
+
         {% if data.commodity != "grain" %}
         <div class="govuk-form-group">
           <label class="govuk-label" for="packing_material_used">Packing material (optional)</label>
