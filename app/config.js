@@ -1,6 +1,7 @@
-// Use this file to change prototype configuration.
-// Note: prototype config can be overridden using environment variables (eg on heroku)
+// Use this file to change prototype configuration
+// Note: prototype config can be overridden using environment variables (e.g. on Heroku)
 module.exports = {
+
   // Service name used in header. Eg: 'Renew your passport'
   serviceName: 'Apply for plant export certificates and inspections',
 
@@ -31,4 +32,5 @@ module.exports = {
 
   // Enable logging, options: true, false, get or post
   useLogging: 'true'
+
 }
