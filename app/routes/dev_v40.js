@@ -340,7 +340,7 @@ module.exports = function(router) {
 
     var page = base_url + req.params[0];
 
-    // Decide whether to redirect users to the USDA page when they are exporting bulbs to the United States
+    // Chris Harding - USDA Bulbs: Decide whether to redirect users to the USDA page when they are exporting bulbs to the United States
     if (baseDir === "/setup/bulbs-declaration") {
 
       var commodity = req.session.data.commodity;
@@ -350,16 +350,32 @@ module.exports = function(router) {
 
         if (countrySelect == "United States") {
           // Redirect users to the USDA page when they are exporting bulbs to the United States
-          page = base_url + "application/setup/usda";
+          return res.redirect("usda");
         }
         else {
           // Continue to the declaration page
-          page = base_url + "application/setup/declaration";
+          return res.redirect("declaration");
         }
 
       }
       else {
         // Don't do the USDA check or change the page parameter
+      }
+
+    }
+
+    // Chris Harding (06.01.23) - Copy application: Validate the copied date so we can either a) throw an error b) direct to the task list
+    if (baseDir === "/create/inspection-dates-validation") {
+
+      var day = req.session.data.inpection_date_day;
+      var month = req.session.data.inpection_date_month;
+      var year = req.session.data.inpection_date_year;
+      
+      if (year == "2022") {
+        return res.redirect("inspection-dates?error=true");
+      }
+      else {
+        return res.redirect("task-list");
       }
 
     }
@@ -390,7 +406,7 @@ module.exports = function(router) {
       if (err) {
         
         if (err.message.indexOf('template not found') !== -1) {
-          console.log("No page in directory.attempting to load from core");
+          console.log("No page in directory, attempting to load from core...");
           return res.render(file_url + baseDir, {
             "query": req.query,
             // and more data to push to every page

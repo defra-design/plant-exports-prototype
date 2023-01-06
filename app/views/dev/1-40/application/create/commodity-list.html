@@ -17,14 +17,14 @@
 
     <form action="{{query.return_url or 'task-list'}}" method="post">
       
-      {% if data.upload == 1 %}
+      {% if data.bulkUploadCompleted == "true" %}
       {% if data.build == "development" %}
       <div class="app-alert app-alert--success">
-        <p class="govuk-body"><strong>1 APHA_phytosanitary_certificate_csv_template - PLANTS 15112021.csv</strong> with 4 commodity records uploaded successfully</p>
+        <p class="govuk-body"><strong>{{data.fileUpload1 or "1 APHA_phytosanitary_certificate_csv_template - PLANTS 15112021.csv"}}</strong> with 4 commodity records uploaded successfully</p>
       </div>
-      {% else %}
-      <div class="app-alert app-alert--info">
-        <p class="govuk-body">File has been uploaded successfully</p>
+      {% else %}  
+      <div class="app-alert app-alert--success">
+        <p class="govuk-body"><strong>{{data.fileUpload1 or "21.01.23 XXXXXXX C154189.csv"}}</strong> with 4 commodity records uploaded successfully</p>
       </div>
       {% endif %}
       {% endif %}
@@ -91,8 +91,10 @@
           {% endif %}
         </thead>
         <tbody class="govuk-table__body">
+          {% if data.bulkUploadCompleted == "true" and data.id == "34" %}
+          {% block summaryBulkUploadAfterClone %}{% include "../modules/_summary-bulk-upload-after-clone.html" %}{% endblock %}
           <!-- PROCESSED PLANT PRODUCTS -->
-          {% if data.commodity == "plant products" %}
+          {% elif data.commodity == "plant products" %}
           {% set commodity_page = "commodity-page-plant-products" %}
           {% block summaryPlantProducts %}{% include "../modules/_summary-plant-products-check-answers.html" %}{% endblock %}
           <!-- SEEDS -->
@@ -131,7 +133,7 @@
           {% block summaryPotatoes2 %}{% include "../modules/_summary-potatoes.html" %}{% endblock %}
           {% else %}
           <tr class="govuk-table__row">
-            <td class="govuk-table__cell">{{data.commodity_host_species or data.genus or data.commodity_common_name or "Oxalis tuberosa"}}</td>
+            <td class="govuk-table__cell">{{data.commodity_host_species or data.genus or data.commodity_common_name or "Oxalis tuberosa (OXATU)"}}</td>
             <td class="govuk-table__cell">{{commodity.countryOfOriginSelect[0] or "United Kingdom"}}</td>
             <td class="govuk-table__cell govuk-table__cell">{{commodity.quantity or "100"}}{{commodity.unit or "kg"}}</td>
             <td class="govuk-table__cell" style="text-align: right;">

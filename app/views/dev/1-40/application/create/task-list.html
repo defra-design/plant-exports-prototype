@@ -105,7 +105,9 @@
             <span class="app-task-list__task-name">
               {% if data.commodity == "plants" and data.journey != "coc" %}<a href="pheats-check" aria-describedby="status-1.3">{% else %}<a href="inspection-addresses" aria-describedby="status-1.3">{% endif %}What are the inspection details?</a>
             </span>
-            {% if data.inspection_address_added or data.confirm_address or data.how-contacted %}
+            {% if data.inspection_address_added == "In progress" %}
+            <strong class="govuk-tag govuk-tag--blue app-task-list__tag" id="status-1.3">In progress</strong>
+            {% elif data.inspection_address_added == "Complete" or data.confirm_address or data.how-contacted %}
             <strong class="govuk-tag app-task-list__tag" id="status-1.3">Complete</strong>
             {% else %}
             <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="status-1.3">Not started</strong>
@@ -206,7 +208,7 @@
 						{% endif %}
             {% endif %}
             {% elif (data.id | appInformationV4('commodity_info')) == 'bulbs' or data.commodity == "bulbs" or (data.id | appInformationV4('commodity_info')) == 'plants and fresh produce' or data.commodity == "plants" or (data.id | appInformationV4('commodity_info')) == 'potatoes' or data.commodity == "potatoes" or (data.id | appInformationV4('commodity_info')) == 'used farm machinery' or data.commodity == "used farm machinery" %}
-            {% if (data.commodities and (data.commodities | length) > 0 or data.stock_number or data.upload or data.variety or data.number_of_packages or data.machinery_id) and (data.inspection_address_added or data.confirm_address or data.how-contacted) and (data.shipping_task_list_data == "Complete") and (data.consignee_task_list_data == "Complete") %}
+            {% if (data.commodities and (data.commodities | length) > 0 or data.stock_number or data.upload or data.variety or data.number_of_packages or data.machinery_id) and (data.inspection_address_added == "Complete" or data.confirm_address or data.how-contacted) and (data.shipping_task_list_data == "Complete") and (data.consignee_task_list_data == "Complete") %}
             <span class="app-task-list__task-name"><a href="check-your-answers" aria-describedby="check-your-answers">Check your answers and submit your application</a></span>
             <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="check-your-answers">Not started</strong>
             {% else %}
