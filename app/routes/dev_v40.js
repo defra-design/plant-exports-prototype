@@ -369,9 +369,9 @@ module.exports = function(router) {
 
       var day = req.session.data.inpection_date_day;
       var month = req.session.data.inpection_date_month;
-      var year = req.session.data.inpection_date_year;
+      var year = Number(req.session.data.inpection_date_year);
       
-      if (year == "2022") {
+      if (year < 2023) {
         return res.redirect("inspection-dates?error=true");
       }
       else {

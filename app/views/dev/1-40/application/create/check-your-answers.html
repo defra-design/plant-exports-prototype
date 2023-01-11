@@ -265,7 +265,7 @@
       {% else %}
       <h2 class="govuk-heading-m">Your consignment</h2>
       
-      <table class="govuk-table govuk-!-margin-bottom-4">
+      <table class="govuk-table govuk-!-margin-bottom-4" id="commodityTable">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">Description</th>
@@ -279,8 +279,10 @@
           </tr>
         </thead>
         <tbody class="govuk-table__body">
+          {% if data.id == "34" %}
+          {% block summaryBulkUploadAfterClone %}{% include "../modules/_summary-bulk-upload-after-clone-cya.html" %}{% endblock %}
           <!-- Smart commodity looping (START) - Added by a previous designer to always add another row to the commodity table each time a new commodity is added -->
-          {% if data.commodities and (data.commodities | length) > 0 %}
+          {% elif data.commodities and (data.commodities | length) > 0 %}
           {% for commodity in data.commodities %}
             {% block summaryGeneral %}
             {% include "../modules/_summary-general-check-answers.html" %}
@@ -289,7 +291,7 @@
           <!-- Smart commodity looping (END) - Added by a previous designer to always add another row to the commodity table each time a new commodity is added -->
           {% else %}
           <tr class="govuk-table__row">
-            <td class="govuk-table__cell">{{data.commodity_host_species or data.genus or data.commodity_common_name or "Oxalis tuberosa"}}</td>
+            <td class="govuk-table__cell">{{data.commodity_host_species or data.genus or data.commodity_common_name or "Oxalis tuberosa (OXATU)"}}</td>
             <td class="govuk-table__cell">{{commodity.countryOfOriginSelect[0] or "United Kingdom"}}</td>
             <td class="govuk-table__cell govuk-table__cell">{{commodity.quantity or "100"}}{{commodity.unit or "kg"}}</td>
             <td class="govuk-table__cell" style="text-align: right;">
@@ -827,4 +829,22 @@
   </div>
 
 </div>
+{% endblock %}
+
+{% block pageScripts %}
+<script>
+
+$(document).ready(function () {
+
+  var rowCount = $("#commodityTable tr").length -1;
+
+  $("a.delete-link").each(function() {
+    var $this = $(this);       
+    var _href = $this.attr("href"); 
+    $this.attr("href", _href + "&rowCount=" + rowCount);
+  });
+
+});
+
+</script>
 {% endblock %}

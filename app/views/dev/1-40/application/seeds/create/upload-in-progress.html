@@ -19,7 +19,7 @@
       <p class="govuk-body">Upload in progress...</p>
     </div>
 
-    <form action="upload-in-progress?bulkUploadCompleted=true" method="post" novalidate>
+    <form action="upload-in-progress" method="post" novalidate>
 
       <div class="govuk-form-group govuk-!-margin-bottom-9">
         <fieldset class="govuk-fieldset">
@@ -91,12 +91,12 @@
 
     <ul class="govuk-list">
       <li>
-        {% if data.journey == "coc" or data.journey == "both"%}
-        <a href="commodity-list-split" class="govuk-link govuk-link-no-visited-state">Skip</a>
-        {% elseif data.commodity == "seeds"%}
-        <a href="commodity-list-summary" class="govuk-link govuk-link-no-visited-state">Skip</a>
+        {% if data.journey == "coc" or data.journey == "both" %}
+        <a href="commodity-list-split?bulkUploadCompleted=true" class="govuk-link govuk-link-no-visited-state">Skip</a>
+        {% elif data.commodity == "seeds" %}
+        <a href="commodity-list-summary?bulkUploadCompleted=true" class="govuk-link govuk-link-no-visited-state">Skip</a>
         {% else %}
-        <a href="commodity-list" class="govuk-link govuk-link-no-visited-state">Skip</a>
+        <a href="commodity-list?bulkUploadCompleted=true" class="govuk-link govuk-link-no-visited-state">Skip</a>
         {% endif %}
         (page reloads after 10 seconds)
       </li>
@@ -137,8 +137,14 @@
 {% block pageScripts %}
 <script>
 
-  var timer = setTimeout(function() {
-    window.location='commodity-list-summary'
+var timer = setTimeout(function() {
+    {% if data.journey == "coc" %}
+    window.location='commodity-list-split?bulkUploadCompleted=true'
+    {% elif data.commodity == "seeds" %}
+    window.location='commodity-list-su?bulkUploadCompleted=truemmary'
+    {% else %}
+    window.location='commodity-list?bulkUploadCompleted=true'
+    {% endif %}
   }, 10000);
 
 </script>

@@ -17,7 +17,7 @@
 
     <form action="{{query.return_url or 'task-list'}}" method="post">
       
-      {% if data.bulkUploadCompleted == "true" %}
+      {% if query.bulkUploadCompleted == "true" %}
       {% if data.build == "development" %}
       <div class="app-alert app-alert--success">
         <p class="govuk-body"><strong>{{data.fileUpload1 or "1 APHA_phytosanitary_certificate_csv_template - PLANTS 15112021.csv"}}</strong> with 4 commodity records uploaded successfully</p>
@@ -31,7 +31,7 @@
 
       <h1 class="govuk-heading-xl">Your commodities</h1>
 
-      <table class="govuk-table govuk-!-margin-bottom-7">
+      <table class="govuk-table govuk-!-margin-bottom-7" id="commodityTable">
         <thead class="govuk-table__head">
           {% if data.commodity == "bulbs" %}
           <tr class="govuk-table__row">
@@ -91,7 +91,7 @@
           {% endif %}
         </thead>
         <tbody class="govuk-table__body">
-          {% if data.bulkUploadCompleted == "true" and data.id == "34" %}
+          {% if data.id == "34" %}
           {% block summaryBulkUploadAfterClone %}{% include "../modules/_summary-bulk-upload-after-clone.html" %}{% endblock %}
           <!-- PROCESSED PLANT PRODUCTS -->
           {% elif data.commodity == "plant products" %}
@@ -219,4 +219,22 @@
   </div>
 
 </div>
+{% endblock %}
+
+{% block pageScripts %}
+<script>
+
+$(document).ready(function () {
+
+  var rowCount = $("#commodityTable tr").length -1;
+
+  $("a.delete-link").each(function() {
+    var $this = $(this);       
+    var _href = $this.attr("href"); 
+    $this.attr("href", _href + "&rowCount=" + rowCount);
+  });
+
+});
+
+</script>
 {% endblock %}
