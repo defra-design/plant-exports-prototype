@@ -1,0 +1,88 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Do you want to select this inspection address? - Seed sampling - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../../modules/_account-banner.html" %}
+<a href="{{page.content.prev or 'javascript:history.back()'}}" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+    {% if data.build == "development" %}
+    <h1 class="govuk-heading-xl">Do you want to select this inspection address?</h1>
+
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">Address</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            {% if query.address == "0" %}
+            Top Lane, Peterborough, Cambridgeshire, PO5 7HY
+            {% elif query.address == "1" %}
+            Shoggins Farm, Turnip Row, Mordor, The Shire, ZI99 7YH
+            {% elif query.address == "2" %}
+            Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH
+            {% elif query.address == "3" %}
+            Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ
+            {% elif query.address == "4" %}
+            Goatacre Cricket Club, Hill Lane, Goatacre, Wiltshire, SN15 6YG
+            {% else %}
+            Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH
+            {% endif %}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <form method="post" novalidate>
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          
+          <div class="govuk-radios" data-module="govuk-radios">
+            
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="confirm_address_yes" name="confirm_address" type="radio" value="yes~contact-details-simple-short">
+              <label class="govuk-label govuk-radios__label" for="confirm_address_yes">Yes, select this inspection address</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="confirm_address_no" name="confirm_address" type="radio" value="no~inspection-addresses">
+              <label class="govuk-label govuk-radios__label" for="confirm_address_no">No, don't select this inspection address</label>
+            </div>
+
+          </div>
+
+        </fieldset>
+      </div>
+
+      <button class="govuk-button" type="submit" data-module="govuk-button">Continue</button>
+    </form>
+    {% else %}
+    <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+      
+      <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">Important</h2>
+      </div>
+
+      <div class="govuk-notification-banner__content">
+        <p class="govuk-notification-banner__heading">This page is not part of the UX build of the service. <a class="govuk-notification-banner__link" href="../../../config?change=yes&return_url=/{{data.version}}/application/seeds/create/confirm-inspection-address">Switch to the development build</a> to view this page.</p>
+      </div>
+
+    </div>
+    {% endif %}
+
+  </div>
+
+</div>
+{% endblock %}

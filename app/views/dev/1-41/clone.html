@@ -1,0 +1,243 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Are you sure you want to copy this application? - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="account?returnURL={{query.returnURL or 'dashboard-submitted'}}" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
+  </ul>
+</div>
+
+<a href="javascript:history.back()" class="govuk-back-link">Return to your applications</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">Are you sure you want to copy this application?</h1>
+    <p class="govuk-body">This makes a copy of the application. You can then change the copy to make a new application.</p>
+    <dl class="govuk-summary-list govuk-summary-list--no-border">
+      
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">{% if data.build == "development" %}Application{% else %}<abbr title="Animal and Plant Health Agency">APHA</abbr> reference{% endif %}</dt>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV4('applicationID')}}</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Your reference</dt>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV4('reference')}}</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">{% if data.build == "development" %}Certificate name{% else %}Type{% endif %}</dt>
+        <dd class="govuk-summary-list__value">          
+          {% if (query.id | appInformationV4('cert_info')) == 'Conformity' %}
+          Certificate of conformity for {{query.id | appInformationV4('commodity_info') or data.commodity or "crops"}}
+          {% elif (query.id | appInformationV4('cert_info')) == 'Growing season inspection' %}
+          Growing season inspection for {{query.id | appInformationV4('commodity_info') or data.commodity or "crops"}}
+          {% elif (query.id | appInformationV4('cert_info')) == 'Phytosanitary' %}
+          Phytosanitary certificate for {{query.id | appInformationV4('commodity_info') or data.commodity or "crops"}}
+          {% elif (query.id | appInformationV4('cert_info')) == 'Re-forwarding' %}
+          Re-forwarding phytosanitary certificate for {{query.id | appInformationV4('commodity_info') or data.commodity or "crops"}}
+          {% elif (query.id | appInformationV4('cert_info')) == 'Seed sampling' %}
+          Seed sampling for {{query.id | appInformationV4('commodity_info') or data.commodity or "crops"}}
+          {% elif (query.id | appInformationV4('cert_info')) == 'Soil sampling' %}
+          Soil sampling for {{query.id | appInformationV4('commodity_info') or data.commodity or "crops"}}
+          {% elif (query.id | appInformationV4('cert_info')) == 'Set up one time testing' %}
+          Set up one time testing for {{query.id | appInformationV4('commodity_info') or data.commodity or "crops"}}
+          {% else %}
+          Phytosanitary certificate for commodity
+          {% endif %}
+        </dd>
+      </div>
+
+      {% if (query.id | appInformationV4('cert_info')) == 'Conformity' or (query.id | appInformationV4('cert_info')) == 'Phytosanitary' or (query.id | appInformationV4('cert_info')) == 'Re-forwarding' %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Destination country</dt>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV4('destination')}}</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">{% if data.build == "development" %}Customer{% else %}Consignee{% endif %}</dt>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV4('importer') | title}}</dd>
+      </div>
+      {% endif %}
+
+    </dl>
+
+    {% if (query.id | appInformationV4('cert_info')) == 'Seed sampling' or data.commodity == "seeds" %}
+    <div class="govuk-inset-text">
+      Do not apply for a phytosanitary certificate until your seed sampling application status says 'Certificate Issued'. This is usually done within a week.
+    </div>
+    {% endif %}
+
+    <form method="post" novalidate>
+      
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          
+          <div class="govuk-radios" data-module="govuk-radios">
+            
+            {% if data.build == "development" %}
+            <div class="govuk-radios__item">
+              {% if (query.id | appInformationV4('reference')) != "" %}
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~reuse-ref?id={{query.id or 1}}&is_group={{query.is_group}}">
+              {% else %}
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/create/check-your-answers-copy">
+              {% endif %}
+              <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application</label>
+            </div>
+            {% else %}
+            {% if (query.id | appInformationV4('cert_info')) == 'Conformity' %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&journey=coc&cloned=yes">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application</label>
+            </div>
+            {% elif (query.id | appInformationV4('cert_info')) == 'Growing season inspection' %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/gsi/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application{% if data.commodity == "seeds" %} including the commodities{% endif %}</label>
+            </div>
+            {% if (query.id | appInformationV4('commodity_info')) == 'seeds for planting' or data.commodity == "seeds" %}
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone_no_data" name="application_type" type="radio" value="yes~application/gsi/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone_no_data">Yes, copy this application but delete the commodities</label>
+            </div>
+            {% endif %}
+            {% elif (query.id | appInformationV4('cert_info')) == 'Seed sampling' %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/seeds/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application including the commodities</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone_no_data" name="application_type" type="radio" value="yes~application/seeds/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone_no_data">Yes, copy this application but delete the commodities</label>
+            </div>
+            {% elif (query.id | appInformationV4('cert_info')) == 'Soil sampling' %}
+            {% if (query.id | appInformationV4('commodity_info')) == 'bulbs' %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/soil/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes&commodity=bulbs&reference_num={{query.id | appInformationV4('reference')}}&select_address=Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ&contact_details=Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)&submit_date=From 8th November 2022&addfielddetails=what3words&navigation_what3words=one%2Etwo%2Ethree&nurseryplotno=Orangery&totalareaoffield=10&areaoffield=10&confirm=Yes&more_detail=Call me if any issues&send_inspector_map=No&inspection_task_list_data=Complete&field_task_list_data=field%2Dlist">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application</label>
+            </div>
+            {% elif (query.id | appInformationV4('commodity_info')) == 'plants and fresh produce' %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/soil/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes&commodity=plants&reference_num={{query.id | appInformationV4('reference')}}&select_address=Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ&contact_details=Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)&submit_date=From 8th November 2022&addfielddetails=what3words&navigation_what3words=one%2Etwo%2Ethree&nurseryplotno=Orangery&totalareaoffield=10&areaoffield=10&confirm=Yes&more_detail=Call me if any issues&send_inspector_map=No&inspection_task_list_data=Complete&field_task_list_data=field%2Dlist">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application</label>
+            </div>
+            {% elif (query.id | appInformationV4('commodity_info')) == 'potatoes' %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/soil/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes&commodity=potatoes&reference_num={{query.id | appInformationV4('reference')}}&select_address=Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ&contact_details=Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)&submit_date=From 8th November 2022&addfielddetails=what3words&navigation_what3words=one%2Etwo%2Ethree&nurseryplotno=Orangery&totalareaoffield=10&confirm=Yes&more_detail=Call me if any issues&send_inspector_map=No&has_botanicial_name=Other&commodity_variety_other=King Smith&approxhectofplot=8&inspection_task_list_data=Complete&field_task_list_data=commodity%2Dlist">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application</label>
+            </div>
+            {% else %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/soil/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes&commodity=bulbs&reference_num={{query.id | appInformationV4('reference')}}&select_address=Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ&contact_details=Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)&submit_date=From 8th November 2022&addfielddetails=what3words&navigation_what3words=one%2Etwo%2Ethree&nurseryplotno=Orangery&totalareaoffield=10&areaoffield=10&confirm=Yes&more_detail=Call me if any issues&send_inspector_map=No&inspection_task_list_data=Complete&field_task_list_data=field%2Dlist">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application</label>
+            </div>
+            {% endif %}
+            {% elif (query.id | appInformationV4('cert_info')) == 'Phytosanitary' %}
+            {% if (query.id | appInformationV4('commodity_info')) == 'biological control agents and clay' or data.commodity == "biological control agents and clay" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes&commodity=biological control agents and clay&reference_num={{query.id | appInformationV4('reference')}}&input_method=manual&has_botanicial_name=use_description&commodity_description=Clay&countryOfOriginSelect=GB&commodity_lot=SD89438743GB&quantity=100&units=Kilograms&number_of_packages=10&packaging=BG&packing_material_used=Standard&distinguishing_marks=None&consignment_value=10,000&port_entry=Port National&transport_method=Maritime&consignee_name=ACME Ltd&consignee_address=Shoggins Farm, Shoggins Lane, {{query.id | appInformationV4('destination')}}&consignee_import_permit=123456789&shipping_task_list_data=Complete&consignee_task_list_data=Complete">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application</label>
+            </div>
+            {% elif (query.id | appInformationV4('commodity_info')) == 'bulbs' or data.commodity == "bulbs" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes&commodity=bulbs&reference_num={{query.id | appInformationV4('reference')}}&input_method=manual&has_botanicial_name=use_description&commodity_description=Flower bulbs&gsi_number=7654 87670 1245&countryOfOriginSelect=GB&quantity=100&units=Kilograms&number_of_packages=10&packaging=BG&packing_material_used=Standard&distinguishing_marks=None&commodity_type=bulbs&ss_number=5262 88810 3300&select_address=Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ&contact_details=Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)&inpection_date_day=12&inpection_date_month=11&inpection_date_year=2022&consignment_value=10,000&port_entry=Port National&transport_method=Maritime&consignee_name=ACME Ltd&consignee_address=Shoggins Farm, Shoggins Lane, {{query.id | appInformationV4('destination')}}&consignee_import_permit=123456789&inspection_address_added=Complete&shipping_task_list_data=Complete&consignee_task_list_data=Complete">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application</label>
+            </div>
+            {% elif (query.id | appInformationV4('commodity_info')) == 'plants and fresh produce' or data.commodity == "plants" %}
+            <!-- Chris Harding (05.01.23) - Added this different scenario for usability testing of the HPUI 'Clone' designs -->
+            {% if (query.id | appInformationV4('index')) == '34' or query.id == "34" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes&commodity=plants&reference_num={{query.id | appInformationV4('reference')}}&input_method=manual&has_botanicial_name=use_description&commodity_description=Oxalis tuberosa (OXATU)&gsi_number=7654 87670 1245&countryOfOriginSelect=GB&quantity=100&units=Kilograms&number_of_packages=10&packaging=BG&packing_material_used=Standard&distinguishing_marks=None&commodity_type=plants&ss_number=5262 88810 3300&row1=true&pheats_check=no&select_address=Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ&contact_details=Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)&inpection_date_day=12&inpection_date_month=11&inpection_date_year=2022&consignment_value=10,000&port_entry=Port National&transport_method=Maritime&consignee_name=ACME Ltd&consignee_address=Shoggins Farm, Shoggins Lane, {{query.id | appInformationV4('destination')}}&consignee_import_permit=123456789&inspection_address_added=In progress&shipping_task_list_data=Complete&consignee_task_list_data=Complete">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application</label>
+            </div>
+            {% else %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes&commodity=plants&reference_num={{query.id | appInformationV4('reference')}}&input_method=manual&has_botanicial_name=use_description&commodity_description=Carrots&gsi_number=7654 87670 1245&countryOfOriginSelect=GB&quantity=100&units=Kilograms&number_of_packages=10&packaging=BG&packing_material_used=Standard&distinguishing_marks=None&commodity_type=plants&ss_number=5262 88810 3300&pheats_check=no&select_address=Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ&contact_details=Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)&inpection_date_day=12&inpection_date_month=11&inpection_date_year=2022&consignment_value=10,000&port_entry=Port National&transport_method=Maritime&consignee_name=ACME Ltd&consignee_address=Shoggins Farm, Shoggins Lane, {{query.id | appInformationV4('destination')}}&consignee_import_permit=123456789&inspection_address_added=Complete&shipping_task_list_data=Complete&consignee_task_list_data=Complete">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application</label>
+            </div>
+            {% endif %}
+            {% elif (query.id | appInformationV4('commodity_info')) == 'potatoes' or data.commodity == "potatoes" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes&commodity=potatoes&reference_num={{query.id | appInformationV4('reference')}}&input_method=manual&potato=ware&stock_number=947234&lot_reference=ABD6282HO&has_botanicial_name=other&other_commodity_variety=Maris Royal&gsi_number=7654 87670 1245&countryOfOriginSelect=GB&quantity=100&units=Kilograms&number_of_packages=10&packaging=BG&packing_material_used=Standard&distinguishing_marks=None&chemicals_used=None&select_address=Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ&contact_details=Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)&inpection_date_day=12&inpection_date_month=11&inpection_date_year=2022&inspection_time_hour=9&inspection_time_minute=00&inspectionTimePeriod=am&consignment_value=10,000&port_entry=Port National&transport_method=Maritime&container_num=BCF32567LA&consignee_name=ACME Ltd&consignee_address=Shoggins Farm, Shoggins Lane, {{query.id | appInformationV4('destination')}}&consignee_import_permit=123456789&inspection_address_added=Complete&shipping_task_list_data=Complete&consignee_task_list_data=Complete">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application</label>
+            </div>
+            {% elif (query.id | appInformationV4('commodity_info')) == 'processed plant products' or data.commodity == "plant products" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes&commodity=plant products&reference_num={{query.id | appInformationV4('reference')}}&input_method=manual&has_botanicial_name=use_description&commodity_description=Powdered sunflowers&countryOfOriginSelect=GB&quantity=100&units=Kilograms&number_of_packages=10&packaging=BG&packing_material_used=Standard&distinguishing_marks=None&additional_countries_of_origin=None&consignment_value=10,000&port_entry=Port National&transport_method=Maritime&consignee_name=ACME Ltd&consignee_address=Shoggins Farm, Shoggins Lane, {{query.id | appInformationV4('destination')}}&consignee_import_permit=123456789&shipping_task_list_data=Complete&consignee_task_list_data=Complete">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application</label>
+            </div>
+            {% elif (query.id | appInformationV4('commodity_info')) == 'seeds for planting' or data.commodity == "seeds" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes&commodity=seeds&reference_num={{query.id | appInformationV4('reference')}}&input_method=manual&has_botanicial_name=use_description&commodity_description=Dried seeds&gsi_number=7654 87670 1245&countryOfOriginSelect=GB&commodity_lot=SD89438743GB&apha_sample_reference=S12345008&quantity=100&units=Kilograms&number_of_packages=10&packaging=BG&packing_material_used=Standard&distinguishing_marks=None&consignment_value=10,000&port_entry=Port National&transport_method=Maritime&consignee_name=ACME Ltd&consignee_address=Shoggins Farm, Shoggins Lane, {{query.id | appInformationV4('destination')}}&consignee_import_permit=123456789&shipping_task_list_data=Complete&consignee_task_list_data=Complete">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application including the commodities</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone_no_data" name="application_type" type="radio" value="yes~application/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes&commodity=seeds&reference_num={{query.id | appInformationV4('reference')}}&consignment_value=10,000&port_entry=Port National&transport_method=Maritime&consignee_name=ACME Ltd&consignee_address=Shoggins Farm, Shoggins Lane, {{query.id | appInformationV4('destination')}}&consignee_import_permit=123456789&shipping_task_list_data=Complete&consignee_task_list_data=Complete">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone_no_data">Yes, copy this application but delete the commodities</label>
+            </div>
+            {% elif (query.id | appInformationV4('commodity_info')) == 'unprocessed cereal grains' or data.commodity == "grain" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes&commodity=grain&reference_num={{query.id | appInformationV4('reference')}}&input_method=manual&has_botanicial_name=use_description&commodity_description=Cereal grain&countryOfOriginSelect=GB&quantity=100&units=Kilograms&number_of_packages=10&packaging=BG&consignment_value=10,000&port_entry=Port National&transport_method=Maritime&transport_maritime=HMS Shogginsville&port_export=Portsmouth&consignee_name=ACME Ltd&consignee_address=Shoggins Farm, Shoggins Lane, {{query.id | appInformationV4('destination')}}&consignee_import_permit=123456789&consignee_more_detail=None&shipping_task_list_data=Complete&consignee_task_list_data=Complete">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application</label>
+            </div>
+            {% elif (query.id | appInformationV4('commodity_info')) == 'used farm machinery' or data.commodity == "used farm machinery" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes&commodity=used farm machinery&reference_num={{query.id | appInformationV4('reference')}}&input_method=manual&machinery_type=Big farming XGJ679&machinery_make=JCB&machinery_model=1033-BBXX-222&machinery_id=732382YU&878932&countryOfOriginSelect=GB&select_address=Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ&contact_details=Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)&inpection_date_day=12&inpection_date_month=11&inpection_date_year=2022&consignment_value=10,000&port_entry=Port National&transport_method=Maritime&consignee_name=ACME Ltd&consignee_address=Shoggins Farm, Shoggins Lane, {{query.id | appInformationV4('destination')}}&consignee_import_permit=123456789&inspection_address_added=Complete&shipping_task_list_data=Complete&consignee_task_list_data=Complete">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application</label>
+            </div>
+            {% else %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes&commodity=plants&reference_num={{query.id | appInformationV4('reference')}}&input_method=manual&has_botanicial_name=use_description&commodity_description=Carrots&gsi_number=7654 87670 1245&countryOfOriginSelect=GB&quantity=100&units=Kilograms&number_of_packages=10&packaging=BG&packing_material_used=Standard&distinguishing_marks=None&commodity_type=plants&ss_number=5262 88810 3300&pheats_check=no&select_address=Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ&contact_details=Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)&inpection_date_day=12&inpection_date_month=11&inpection_date_year=2022&consignment_value=10,000&port_entry=Port National&transport_method=Maritime&consignee_name=ACME Ltd&consignee_address=Shoggins Farm, Shoggins Lane, {{query.id | appInformationV4('destination')}}&consignee_import_permit=123456789&inspection_address_added=Complete&shipping_task_list_data=Complete&consignee_task_list_data=Complete">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application</label>
+            </div>
+            {% endif %}
+            {% elif (query.id | appInformationV4('cert_info')) == 'Re-forwarding' %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&reforwarding=1&cloned=yes">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application{% if data.commodity == "seeds" %} including the commodities{% endif %}</label>
+            </div>
+
+            {% if (query.id | appInformationV4('commodity_info')) == 'seeds for planting' or data.commodity == "seeds" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone_no_data" name="application_type" type="radio" value="yes~application/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&reforwarding=1&cloned=yes">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone_no_data">Yes, copy this application but delete the commodities</label>
+            </div>
+            {% endif %}
+            {% else %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/create/task-list?id={{query.id or 1}}&is_group={{query.is_group}}&cloned=yes">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone">Yes, copy this application</label>
+            </div>
+            {% endif %}
+            {% endif %}
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_new" name="application_type" type="radio" value="no~{{query.returnURL or 'dashboard-submitted'}}">
+              <label class="govuk-label govuk-radios__label" for="application_type_new">Cancel and go back</label>
+            </div>
+
+          </div>
+
+        </fieldset>
+      </div>
+
+      <button class="govuk-button" data-module="govuk-button">Confirm</button>
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

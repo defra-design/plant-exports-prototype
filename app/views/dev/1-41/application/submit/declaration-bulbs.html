@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+GOV.UK Prototype Kit
+{% endblock %}
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <div>
+      <h1 class="govuk-heading-xl">Exporter declaration</h1>
+    </div>
+    {% if data.pheats_check != "yes" %}
+    <p class="govuk-body">
+      By submitting this application form, you are agreeing that to the best of your knowledge and belief the statements made in this {% if data.reforwarding %}re-forwarding{% endif %} application are true and complete.<!-- You will comply with the legal requirements of UK law, including payment for official controls, repossession of any consignment rejected after transit from the UK to another country or costs of destruction if necessary.-->
+    </p>
+    {% else %}
+    <p class="govuk-body">
+      By submitting this application form, you are agreeing that a PHEATS Authorised Person has carried out the official inspection of the consignment, and only those commodities that have passed this inspection have been entered in this application.
+    </p>
+    {% endif %}
+    <p class="govuk-body">Date of declaration: <span data-qa-id="TextDisplay-DateOfDeclaration">
+      {{todaysDate}}      
+    </span></p>
+
+    <form class="review-form" action="confirmation" method="POST">
+      <div class="govuk-form-group">
+        <div class="govuk-checkboxes">
+          <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" type="checkbox" autofocus="autofocus" name="confirm" id="confirm">
+            <label class="govuk-checkboxes__label govuk-!-font-weight-bold" for="confirm" style="margin-top: -10px;">
+              I confirm that the information I have provided is correct to the best of my knowledge
+            </label>
+          </div>
+        </div>
+
+      </div>
+      <input type="hidden" name="crumb_csrf_token" value="-OFEIl7HkGmNi3ZbrlI4BeayEl-1-jTpR6CRsveyix5">
+      <input name="submissionDate" type="hidden" value="15 Mar 2021">
+      {{data.CountrySelect[0]}}
+
+      {% if data.commodity == "plants" or (data.commodity == "bulbs" and data.countrySelect[0] != "United States") %}
+      <a class="govuk-button margin-top-30" href="confirmation-plants-phe36" value="Submit application" id="Button-SubmitApplication">Submit application</a>
+      {% elseif data.commodity == "bulbs" and data.countrySelect[0] == "United States" %}
+      <a class="govuk-button margin-top-30" href="confirmation-bulbs-ko1" value="Submit application" id="Button-SubmitApplication">Submit application</a>
+      {% elseif data.commodity == "grain"%}
+      <a class="govuk-button margin-top-30" href="confirmation-grain-hh93" value="Submit application" id="Button-SubmitApplication">Submit application</a>
+      {% elseif data.commodity == "seeds"%}
+      <a class="govuk-button margin-top-30" href="confirmation-seeds-phe90" value="Submit application" id="Button-SubmitApplication">Submit application</a>
+      {% elseif data.commodity == "potatoes"%}
+      <a class="govuk-button margin-top-30" href="confirmation-potatoes-phe60" value="Submit application" id="Button-SubmitApplication">Submit application</a>
+      {% elseif data.commodity == "used farm machinery"%}
+      <a class="govuk-button margin-top-30" href="confirmation-machinery-HH36A" value="Submit application" id="Button-SubmitApplication">Submit application</a>
+      {% elseif data.journey == "coc"%}
+      <a class="govuk-button margin-top-30" href="confirmation-coc" value="Submit application" id="Button-SubmitApplication">Submit application</a>
+      {% else %}
+      <a class="govuk-button margin-top-30" href="confirmation-plant-products-hh91" value="Submit application" id="Button-SubmitApplication">Submit application</a>
+      {% endif %}
+
+      <div class="govuk-grid-row">
+
+      </div>
+
+
+    </form>
+  </div>
+</div>
+
+{% endblock %}

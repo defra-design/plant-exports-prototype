@@ -1,0 +1,150 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.build == "development" %}Health Certificate Type - GOV.UK{% else %}What do you need to do? - {{serviceName}} - GOV.UK{% endif %}
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+  
+    <form action="{{query.return_url or 'declaration'}}" method="post">
+      <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+          <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">What do you need to do?</h1>
+        </legend>
+
+        <div id="countries-hint" class="govuk-hint govuk-!-margin-bottom-6">
+          {% if data.build == "development" %}
+          Select what you need to export {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% else %}{{data.commodity or 'processed plant products'}}{% endif %}
+          {% else %}
+          Select what you need to do to export {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% else %}{{data.commodity or 'processed plant products'}}{% endif %}
+          {% endif %}
+        </div>
+
+        <div class="govuk-form-group">
+
+          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+            
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="how-contacted-conditional-phyto" name="has_reference" type="radio" value="phyto~{% if data.route == 'new' %}first-application?return_url=what-country{% else %}what-country{% endif %}" aria-describedby="how-contacted-conditional-phyto-hint">
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-phyto">Apply for a phytosanitary certificate</label> 
+
+              {% if data.commodity == "seeds" %}
+              <div id="how-contacted-conditional-phyto-hint" class="govuk-hint govuk-radios__hint">
+                Only apply for a phytosanitary certificate when your seed sampling application status says 'Certificate Issued'.
+              </div>
+              {% endif %}
+
+            </div>
+
+            {% if data.journey == "both" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="how-contacted-conditional-both" name="has_reference" type="radio" value="both~{% if data.route == 'new' %}first-application?return_url=what-country{% else %}what-country{% endif %}" data-aria-controls="conditional-how-contacted-conditional-both">
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-both">Apply for a phytosanitary certificate and a certificate of conformity at the same time</label>
+            </div>
+            {% endif %}
+
+             <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="how-contacted-conditional-re-forwarding" name="has_reference" type="radio" value="donotneed~{% if data.route == 'new' %}first-application?return_url=what-country{% else %}what-country{% endif %}?reforwarding=1" data-aria-controls="conditional-how-contacted-conditional-re-forwarding">
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-re-forwarding">Apply for a re-forwarding phytosanitary certificate</label>
+            </div>  
+            
+            {% if data.commodity == "plant products" %}
+            {% if query.design == "b" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="how-contacted-conditional-batch-sampling" name="has_reference" type="radio" value="batch~{% if data.route == 'new' %}first-application?return_url=../batch/create/introduction{% else %}../batch/create/introduction{% endif %}" data-describedby="how-contacted-conditional-batch-sampling-hint">
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-batch-sampling">
+                Set up one time testing <strong class="govuk-tag">new</strong>
+              </label>
+
+              <div id="how-contacted-conditional-batch-sampling-hint" class="govuk-hint govuk-radios__hint">
+                One time testing lets you re-use sample results to apply for multiple phytosanitary certificates.
+              </div>
+
+            </div>
+            {% else %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="how-contacted-conditional-one-time-setup" name="has_reference" type="radio" value="one time setup~{% if data.route == 'new' %}first-application?return_url=../batch/create/introduction{% else %}../batch/create/introduction{% endif %}">
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-one-time-setup">One time testing step 1: set up one time testing</label>
+            </div> 
+
+             <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="how-contacted-conditional-one-time-phyto" name="has_reference" type="radio" value="batch~{% if data.route == 'new' %}first-application?return_url=../batch/phytosanitary/setup/destination-country{% else %}../batch/phytosanitary/setup/destination-country{% endif %}">
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-one-time-phyto">One time testing step 2: apply for a phytosanitary certificate</label>
+            </div> 
+            {% endif %}
+            {% endif %}
+
+            {% if data.commodity != "biological control agents and clay" and data.commodity != "grain" and data.commodity != "plant products" and data.commodity != "used farm machinery" %}
+            {% if data.commodity == "plants" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="how-contacted-conditional-coc" name="has_reference" type="radio" value="coc~{% if data.route == 'new' %}first-application?return_url=what-country{% else %}what-country{% endif %}" aria-describedby="how-contacted-conditional-coc-hint">
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-coc">Apply for a certificate of conformity</label>
+            
+              <div id="how-contacted-conditional-coc-hint" class="govuk-hint govuk-radios__hint">
+                If you also plan to apply for a phytosanitary certificate for this consignment, do the phytosanitary application first.
+              </div>
+
+            </div>
+            {% endif %}
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="how-contacted-conditional-gsi" name="has_reference" type="radio" value="gsi~{% if data.commodity == 'plants' %}{% if data.route == 'new' %}first-application?return_url=sub-commodity{% else %}sub-commodity{% endif %}{% else %}{% if data.route == 'new' %}first-application?return_url=../gsi/create/reference{% else %}../gsi/create/reference{% endif %}{% endif %}" data-aria-controls="conditional-how-contacted-conditional-gsi">
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-gsi">Arrange a growing season inspection</label>
+            </div>
+            {% endif %}
+
+            {% if data.commodity == "seeds" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="how-contacted-conditional-seed-sampling" name="has_reference" type="radio" value="seed sampling~{% if data.route == 'new' %}first-application?return_url=../seeds/create/reference{% else %}../seeds/create/reference{% endif %}" data-aria-controls="conditional-how-contacted-conditional-seed-sampling">
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-seed-sampling">Arrange seed sampling</label>
+            </div>
+            {% elseif data.commodity == "potatoes" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="how-contacted-conditional-soil-sampling" name="has_reference" type="radio" value="soil sampling~{% if data.route == 'new' %}first-application?return_url=../soil/create/reference{% else %}../soil/create/reference{% endif %}" aria-describedby="how-contacted-conditional-soil-sampling-hint">
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-soil-sampling">Arrange soil sampling for ware potatoes</label>
+
+              <div id="how-contacted-conditional-soil-sampling-hint" class="govuk-hint govuk-radios__hint">
+                If you need soil sampling for seed potatoes, you must use the <a href="https://www.gov.uk/guidance/the-seed-potato-classification-scheme" class="govuk-link">Seed Potato Classification Scheme</a>.
+              </div>
+
+            </div>
+            {% elseif data.commodity != "biological control agents and clay" and data.commodity != "grain" and data.commodity != "plant products" and data.commodity != "used farm machinery" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="how-contacted-conditional-soil-sampling" name="has_reference" type="radio" value="soil sampling~{% if data.route == 'new' %}first-application?return_url=../soil/create/reference{% else %}../soil/create/reference{% endif %}" data-aria-controls="conditional-how-contacted-conditional-soil-sampling">
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-soil-sampling">Arrange soil sampling</label>
+            </div>
+            {% endif %}
+            
+            <!-- {% if data.commodity == "bulbs" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="how-contacted-conditional-7" name="has_reference" type="radio" value="dry-bulb~{% if data.route == 'new' %}first-application?return_url=../dry-bulb/create/reference{% else %}../dry-bulb/create/reference{% endif %}" data-aria-controls="conditional-how-contacted-conditional-1">
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-7">Apply for a dry bulb inspection for exports to the United States</label>
+            </div>
+            {% endif %} -->
+
+          </div>
+          
+        </div>
+      </fieldset>
+
+      <div class="govuk-button-group">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Continue</button>
+        <a class="govuk-link app-button--link" href="../../dashboard-submitted">Cancel</a>
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}
