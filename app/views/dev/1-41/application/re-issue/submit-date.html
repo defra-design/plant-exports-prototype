@@ -14,96 +14,118 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">When do you need the{% if data.reforwarding %} re-forwarding{% endif %} certificate?</h1>
     
-    {% if data.journey != "coc" %}
-    <form action="{{query.return_url or 'declaration'}}" method="post">
-    {% else %}
-    <form action="{{query.return_url or '../create/task-list'}}" method="post">
-    {% endif %}
-      <fieldset class="govuk-fieldset" aria-describedby="applicant-conditional-hint">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-          <h1 class="govuk-fieldset__heading">Date needed</h1>
-        </legend>
-        <span id="submit-date-hint" class="govuk-hint">For example, 27 3 2020</span>
-        
-        <div class="govuk-date-input" id="submit-date">
+    <form action="declaration" method="post">
 
-          <div class="govuk-date-input__item">
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+            <h1 class="govuk-fieldset__heading">When do you need the{% if data.reforwarding %} re-forwarding{% endif %} certificate?</h1>
+          </legend>
+          <p class="govuk-body govuk-!-margin-top-6">Inspectors will prioritise certificate re-issues over other types of application.</p>
+
+
+          <div class="govuk-radios" data-module="govuk-radios">
             
-            <div class="govuk-form-group">
-              <label class="govuk-label govuk-date-input__label" for="submit-date-day">Day</label>
-              <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="submit-date-day" name="submit_date_day" type="text" pattern="[0-9]*" inputmode="numeric">
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="as_soon_as_possible" name="certificate_needed" type="radio" value="As soon as possible">
+              <label class="govuk-label govuk-radios__label" for="as_soon_as_possible">As soon as possible</label>
             </div>
 
-          </div>
-
-          <div class="govuk-date-input__item">
-            
-            <div class="govuk-form-group">
-              <label class="govuk-label govuk-date-input__label" for="submit-date-month">
-                Month
-              </label>
-              <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="submit-date-month" name="submit-date-month" type="text" pattern="[0-9]*" inputmode="numeric">
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="specific_date" name="certificate_needed" type="radio" value="At another date" data-aria-controls="conditional-specific_date">
+              <label class="govuk-label govuk-radios__label" for="specific_date">At another date</label>
             </div>
 
-          </div>
-
-          <div class="govuk-date-input__item">
-
-            <div class="govuk-form-group">
-              <label class="govuk-label govuk-date-input__label" for="submit-date-year">Year</label>
-              <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="submit-date-year" name="submit-date-year" type="text" pattern="[0-9]*" inputmode="numeric">
-            </div>
-
-          </div>
-
-        </div>
-
-      </fieldset>
-      {% if data.commodity == "potatoes" %}
-      <fieldset class="govuk-fieldset" aria-describedby="applicant-conditional-hint">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-          <h1 class="govuk-fieldset__heading">Expected time of load collection</h1>
-        </legend>
-        <span id="submit-date-hint" class="govuk-hint">For example, 9:30am or 2:50pm</span>
-
-        <div class="govuk-date-input" id="submit-date">
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-specific_date">
+              
+              <div class="govuk-form-group">
+                <fieldset class="govuk-fieldset" aria-describedby="certificate_date-hint">
+                  <legend class="govuk-fieldset__legend">Date needed</legend>
+                  <span id="certificate_date-hint" class="govuk-hint">For example, 27 3 2020</span>
+                  
+                  <div class="govuk-date-input" id="certificate_date">
           
-          <div class="govuk-date-input__item">
-
-            <div class="govuk-form-group">
-              <label class="govuk-label govuk-date-input__label" for="submit-date-day">Hour</label>
-              <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="submit-date-day" name="export_time_hour" type="text" pattern="[0-9]*" inputmode="numeric">
+                    <div class="govuk-date-input__item">
+                      
+                      <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" for="certificate_date_day">Day</label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="certificate_date_day" name="certificate_date_day" type="text" pattern="[0-9]*" inputmode="numeric">
+                      </div>
+          
+                    </div>
+          
+                    <div class="govuk-date-input__item">
+                      
+                      <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" for="certificate_date_month">Month</label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="certificate_date_month" name="certificate_date_month" type="text" pattern="[0-9]*" inputmode="numeric">
+                      </div>
+          
+                    </div>
+          
+                    <div class="govuk-date-input__item">
+          
+                      <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" for="certificate_date_year">Year</label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="certificate_date_year" name="certificate_date_year" type="text" pattern="[0-9]*" inputmode="numeric">
+                      </div>
+          
+                    </div>
+          
+                  </div>
+          
+                </fieldset>
+              </div>
+              {% if data.commodity == "potatoes" %}
+              <div class="govuk-form-group">
+                <fieldset class="govuk-fieldset" aria-describedby="certificate_time-hint">
+                  <legend class="govuk-fieldset__legend">Expected time of load collection</legend>
+                  <span id="certificate_time-hint" class="govuk-hint">For example, 9:30am or 2:50pm</span>
+          
+                  <div class="govuk-date-input" id="certificate_time">
+                    
+                    <div class="govuk-date-input__item">
+          
+                      <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" for="certificate_time_hour">Hour</label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="certificate_time_hour" name="certificate_time_hour" type="text" pattern="[0-9]*" inputmode="numeric">
+                      </div>
+          
+                    </div>
+          
+                    <div class="govuk-date-input__item">
+                      <div class="govuk-form-group">
+                        <label class="govuk-label govuk-date-input__label" for="certificate_time_minute">Minute</label>
+                        <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="certificate_time_minute" name="certificate_time_minute" type="text" pattern="[0-9]*" inputmode="numeric">
+                      </div>
+          
+                    </div>
+          
+                    <div class="govuk-date-input__item">
+          
+                      <div class="govuk-form-group">
+                        <label class="govuk-label" for="certificate_time_period">am or pm</label>
+                        <select class="govuk-select govuk-input--width-" id="certificate_time_period" name="certificate_time_period">
+                          <option value=""></option>
+                          <option value="am">am</option>
+                          <option value="pm">pm</option>
+                        </select>
+                      </div>
+          
+                    </div>
+          
+                  </div>
+          
+                </fieldset>
+              </div>
+              {% endif %}
             </div>
 
           </div>
 
-          <div class="govuk-date-input__item">
-            <div class="govuk-form-group">
-              <label class="govuk-label govuk-date-input__label" for="submit-date-month">Minute</label>
-              <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="submit-date-month" name="export_time_minute" type="text" pattern="[0-9]*" inputmode="numeric">
-            </div>
-
-          </div>
-
-          <div class="govuk-date-input__item">
-
-            <div class="govuk-form-group">
-              <label class="govuk-label" for="sort">am or pm</label>
-              <select class="govuk-select govuk-input--width-" id="sort" name="export_time_period">
-                <option value="empty"></option>
-                <option value="am">am</option>
-                <option value="pm">pm</option>
-              </select>
-            </div>
-
-          </div>
-
-        </div>
-
-      </fieldset>
-      {% endif %}
+        </fieldset>
+      </div>
 
       <div class="govuk-button-group">
         <a href="declaration?id={{query.id}}&is_group={{query.is_group}}" role="button" draggable="false" class="govuk-button" data-module="govuk-button">Continue</a>

@@ -380,20 +380,56 @@ module.exports = function(router) {
 
     }
 
+    // Chris Harding (18.01.23) - Error validation (how-to-identify) for the commodity page (re-issue)
+    if (baseDir === "/re-issue/edit/how-to-identify-validation") {
+
+      var return_url = req.session.data.return_url;
+      var quantity = Number(req.session.data.quantity);
+      var number_of_packages = Number(req.session.data.number_of_packages);
+      
+      if (quantity > 25 && number_of_packages > 100) {
+        return res.redirect("how-to-identify?change=yes&error=true&error1=true&error2=true");
+      }
+      else if (quantity > 25) {
+        return res.redirect("how-to-identify?change=yes&error=true&error1=true");
+      }
+      else if (number_of_packages > 100) {
+        return res.redirect("how-to-identify?change=yes&error=true&error2=true");
+      }
+      else {
+
+        if (return_url) {
+          return res.redirect(return_url);
+        }
+        else {
+          return res.redirect("../amend-your-certificate");
+        }
+
+      }
+
+    }
+
     // Decide whether to redirect to import permit upload if they enter a permit number
     console.log(baseDir);
     console.log(req.session.data['consignee-import-permit']);
+    
     // this is only triggered when the consignee page is submitted 
     if (baseDir === "/create/task-list") {
+
       if (req.session.data.build && req.session.data.build == "ux") {
+
         // only check when the consignee page is submitted
-        if (res.locals.prevURL && res.locals.prevURL.indexOf("destination-consignee")>-1) {
+        if (res.locals.prevURL && res.locals.prevURL.indexOf("destination-consignee") >- 1) {
+
           if (req.session.data['consignee-import-permit']) {
             // redirect the page to show true url 
             return res.redirect("upload-permit")
-          } 
-        } 
+          }
+
+        }
+
       }
+
     }
 
     // Attempt to render a page in the current folder
