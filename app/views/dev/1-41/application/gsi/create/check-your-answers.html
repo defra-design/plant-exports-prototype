@@ -1,354 +1,273 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-Check your answers before sending your application - Growing season inspection - {{serviceName}} - GOV.UK
+  {% if data.build == "development" %}Review your answers{% else %}Check your answers before sending your application{% endif %} - Growing season inspection - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
 {{super()}}
+{% include "../modules/_account-banner.html" %}
 <a href="javascript:history.back()" class="govuk-back-link">Back</a>
 {% endblock %}
 
 {% block content %}
+<style>
+
+  /* Needs extracting and adding to the external Sass or CSS */
+  .no-padding {
+    padding: 0px !important;
+  }
+
+</style>
+
 <div class="govuk-grid-row">
+  
   <div class="govuk-grid-column-three-quarters">
-    <h1 class="govuk-heading-xl">
-      Check your answers before sending your application
-    </h1>
-    <h2 class="govuk-heading-m">Application summary</h2>
-    {% set commodity = data.commodity or "potatoes" %}
 
-    <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Certificate
-        </dt>
-        <dd class="govuk-summary-list__value">
-          Growing season inspection for potatoes
-        </dd>
-        <dd class="govuk-summary-list__actions">
-          <!--<a class="govuk-link" href="setup/reference?change=yes&return_url=../create/check-your-answers" data-qa-id="Link-ChangeAnswer" id="Link-ChangeAnswer-0">Change</a>-->
-        </dd>
+    <form action="../submit/declaration" method="post">
+      {% if data.build == "development" %}
+      <h1 class="govuk-heading-xl">Review your answers</h1>
+      
+      <div class="govuk-inset-text govuk-!-font-weight-bold">
+        Your application is now ready to be submitted.
+        <br>
+        <br>
+        Please check that the answers you've provided are correct.
       </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Your reference
-        </dt>
-        <dd class="govuk-summary-list__value">
-          {{data.reference_num or 'NM123 4321234' }}
-        </dd>
-        <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="setup/reference?change=yes&return_url=../create/check-your-answers" data-qa-id="Link-ChangeAnswer" id="Link-ChangeAnswer-0">Change</a>
-        </dd>
-      </div>
-    </dl>
-    <h2 class="govuk-heading-m">Applicant details</h2>
-    <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
 
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Name
-        </dt>
-        <dd class="govuk-summary-list__value">
-          Mr. John Davies
-        </dd>
-        <dd class="govuk-summary-list__actions">
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Address
-        </dt>
-        <dd class="govuk-summary-list__value">
-          ABC Limited, 27 The Crescent, North West London, NW7 0HX
-        </dd>
-        <dd class="govuk-summary-list__actions">
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Phone number
-        </dt>
-        <dd class="govuk-summary-list__value">
-          07777 123456
-        </dd>
-        <dd class="govuk-summary-list__actions">
-        </dd>
-      </div>
-    </dl>
-
-    <h2 class="govuk-heading-m">Inspection details</h2>
-    <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Contact name
-        </dt>
-        <dd class="govuk-summary-list__value">
-          Mrs A. Jaye
-        </dd>
-        <dd class="govuk-summary-list__actions">
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Address
-        </dt>
-        <dd class="govuk-summary-list__value">
-          Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH
-        </dd>
-        <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="inspection-addresses?change=yes">
-            Change<span class="govuk-visually-hidden">
-              inspection details</span>
-          </a>
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Phone number
-        </dt>
-        <dd class="govuk-summary-list__value">
-          07888111222
-        </dd>
-        <dd class="govuk-summary-list__actions">
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Email address
-        </dt>
-        <dd class="govuk-summary-list__value">
-          ajaye@emailaddress.com
-        </dd>
-        <dd class="govuk-summary-list__actions">
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          When will the fields be ready for inspection?
-        </dt>
-        <dd class="govuk-summary-list__value">
-            {{data.inpection_date or "Early June 2021"}}
-        </dd>
-        <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="inspection-dates?change=yes">
-            Change<span class="govuk-visually-hidden">
-              inspection period</span>
-          </a>
-        </dd>
-      </div>
-    </dl>
-
-    <!--Your fields and crops-->
-      <h2 class="govuk-heading-m">Field and crop details</h2>
-      <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+      <h2 class="govuk-heading-m">Application summary</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+        
         <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Location: {{data.nurseryplotno or "Top field"}}
-          </dt>
-          <dd class="govuk-summary-list__value">
-
-          </dd>
-          <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="field?change=yes">
-              Change<span class="govuk-visually-hidden">
-                field</span>
-            </a><br>
-            <a href="delete-field" class="govuk-link govuk-link--no-visited-state">
-              Delete
-            </a>
-          </dd>
+          <dt class="govuk-summary-list__key">Certificate</dt>
+          <dd class="govuk-summary-list__value">GSI Report for {% if data.commodity == "potatoes" %}ware potatoes{% else %}{{data.commodity or "crops"}}{% endif %}</dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Your reference</dt>
+          <dd class="govuk-summary-list__value">{% if data.reference_num %}{{data.reference_num or "REFERENCE" }}{% else %}&nbsp;{% endif %}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="reference?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> your reference</span></a></dd>
+        </div>
+
       </dl>
 
-      <table class="govuk-table govuk-!-margin-bottom-4">
-        
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            {% if data.addfielddetails == "gridgps" %}
-            <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
-              Grid reference or GPS reading
-            </th>
-            {% else %}
-            <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
-              IACS or RLR number
-            </th>
-            {% endif %}
-            <th class="govuk-table__header govuk-table__header--numeric govuk-!-width-one-quarter" scope="col">
-              Field area<br>(hectares)
-            </th>
-            <th class="govuk-table__header govuk-!-width-one-half" scope="col">
-              Field map
-            </th>
-            <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-          </tr>
-        </thead>
+      <h2 class="govuk-heading-m">Applicant details</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
-        <tbody class="govuk-table__body">
-          <tr class="govuk-table__row">
-            {% if data.addfielddetails == "iacs" %}
-            <td class="govuk-table__cell">
-              {{data.iacs or "NF24681357"}}
-            </td>
-            {% else %}
-            <td class="govuk-table__cell">
-              {{data.gridgps or "NF 2468 1357"}}
-            </td>
-            {% endif %}
-            <td class="govuk-table__cell govuk-table__cell--numeric">
-              {{ data.areaoffield or "3.5" }}
-            </td>
-            <td class="govuk-table__cell govuk-table__cell">
-              <a class="govuk-link govuk-link--no-visited-state" href="#">{{ data.description or "Filename.jpg" }}</a>
-            </td>
-            <td class="govuk-table__cell govuk-table__cell">
-            </td>
-          </tr>
-          </tbody>
-        </table>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Name</dt>
+          <dd class="govuk-summary-list__value">Mr. John Davies</dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
+        </div>
 
-      <!-- multiple commodity table starts -->
-      {% if commodity.has_botanicial_name == "yes" %}
-      {% set commodity_id_name = commodity.genus %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Address</dt>
+          <dd class="govuk-summary-list__value">ABC Limited, 27 The Crescent, North West London, NW7 0HX</dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Phone number</dt>
+          <dd class="govuk-summary-list__value">07777 123456</dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
+        </div>
+
+      </dl>
       {% else %}
-      {% set commodity_id_name = commodity.commodity_common_name %}
+      <h1 class="govuk-heading-xl">Check your answers before sending your application</h1>
+      
+      <h2 class="govuk-heading-m">Application details</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+        
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Application type</dt>
+          <dd class="govuk-summary-list__value">Growing season inspection for {% if data.commodity == "potatoes" %}ware potatoes{% else %}{{data.commodity or "crops"}}{% endif %}</dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Who is the applicant?</dt>
+          <dd class="govuk-summary-list__value">ABC LIMITED, 27 The Crescent, NORTH WEST LONDON, NW7 0HX</dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
+        </div>
+        
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Your reference</dt>
+          <dd class="govuk-summary-list__value">{% if data.reference_num %}{{data.reference_num or "REFERENCE" }}{% else %}&nbsp;{% endif %}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="reference?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> your reference</span></a></dd>
+        </div>
+
+      </dl>      
       {% endif %}
 
-      <h2 class="govuk-heading-s govuk-!-margin-top-6">5 crops added to {{data.nurseryplotno or "Top field"}}</h2>
-      <table class="govuk-table govuk-!-margin-bottom-4">
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">
-              Description
-            </th>
-            <th class="govuk-table__header govuk-table__header--numeric govuk-!-width-one-quarter" scope="col">
-              Hectarage of plot
-            </th>
-            <th class="govuk-table__header govuk-!-width-one-half" scope="col">
-              Destination countries
-            </th>
-            <th class="govuk-table__header govuk-!-width-one-quarter" scope="col"></th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">
-              {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Corylus avellana'}}
-            </td>
-            <td class="govuk-table__cell govuk-table__cell--numeric">
-              5
-            </td>
-            <td class="govuk-table__cell">
-              Spain, Bolivia
-            </td>
-            <td class="govuk-table__cell">
-              <a class="govuk-link" href="how-to-identify-prepopulated?return_url=check-your-answers">
-                Change<span class="govuk-visually-hidden">
-                  crop details</span>
-                </a><br>
-                <a class="govuk-link" href="">
-                  Delete<span class="govuk-visually-hidden">
-                    Delete crop</span>
-                </a>
-            </td>
-          </tr>
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">
-              {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Rosa rugosa'}}
-            </td>
-            <td class="govuk-table__cell govuk-table__cell--numeric">
-              2
-            </td>
-            <td class="govuk-table__cell">
-              Spain
-            </td>
-            <td class="govuk-table__cell">
-              <a class="govuk-link" href="how-to-identify-prepopulated?return_url=check-your-answers">
-                Change<span class="govuk-visually-hidden">
-                  crop details</span>
-              </a><br>
-                <a class="govuk-link" href="">
-                  Delete<span class="govuk-visually-hidden">
-                    Delete crop</span>
-                </a>
-            </td>
-          </tr>
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">
-              {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Dianthus repens'}}
-            </td>
-            <td class="govuk-table__cell govuk-table__cell--numeric">
-              3
-            </td>
-            <td class="govuk-table__cell">
-              Bolivia
-            </td>
-            <td class="govuk-table__cell">
-              <a class="govuk-link" href="how-to-identify-prepopulated?return_url=check-your-answers">
-                Change<span class="govuk-visually-hidden">
-                  crop details</span>
-              </a><br>
-                <a class="govuk-link" href="">
-                  Delete<span class="govuk-visually-hidden">
-                    Delete crop</span>
-                </a>
-            </td>
-          </tr>
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">
-              {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Papaver alpinum'}}
-            </td>
-            <td class="govuk-table__cell govuk-table__cell--numeric">
-              1.5
-            </td>
-            <td class="govuk-table__cell">
-              Ghana
-            </td>
-            <td class="govuk-table__cell">
-              <a class="govuk-link" href="how-to-identify-prepopulated?return_url=check-your-answers">
-                Change<span class="govuk-visually-hidden">
-                  crop details</span>
-                </a><br>
-                <a class="govuk-link" href="">
-                  Delete<span class="govuk-visually-hidden">
-                    Delete crop</span>
-                </a>
-            </td>
-          </tr>
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">
-              {{data.commodity_host_species or data.genus or data.commodity_common_name or data.commodity_type or 'Agapanthus africanus'}}
-            </td>
-            <td class="govuk-table__cell govuk-table__cell--numeric">
-              1
-            </td>
-            <td class="govuk-table__cell">
-              Spain, Bolivia, Peru
-            </td>
-            <td class="govuk-table__cell">
-              <a class="govuk-link" href="how-to-identify-prepopulated?return_url=check-your-answers">
-                Change<span class="govuk-visually-hidden">
-                  crop details</span>
-              </a><br>
-              <a class="govuk-link" href="">
-                Delete<span class="govuk-visually-hidden">
-                  Delete crop</span>
-              </a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <!-- multiple commodity table ends -->
-      <p class="govuk-body"><a href="how-to-identify?return_url=check-your-answers" class="govuk-link govuk-link--no-visited-state">Add more crops</a></p>
+      <h2 class="govuk-heading-m">Inspection details</h2>
+      {% if data.build == "development" %}
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
-      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-      <p class="govuk-body"><a href="field-2?return_url=check-your-answers" class="govuk-link govuk-link--no-visited-state govuk-!-font-weight-regular">Add another field</a></p>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Address</dt>
+          <dd class="govuk-summary-list__value">{{data.select_address or "Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH"}}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="inspection-addresses?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> where the inspection will take place</span></a></dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Contact name</dt>
+          <dd class="govuk-summary-list__value">{% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}Bill Shoggins{% else %}{{data.contact_name or "Bill Shoggins"}}{% endif %}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> who the main contact for this application</span></a></dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Phone number</dt>
+          <dd class="govuk-summary-list__value">{% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}01234 567890{% else %}{{data.address_phone or "01234 567890"}}{% endif %}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> who the main contact for this application</span></a></dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Email address</dt>
+          <dd class="govuk-summary-list__value">{% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}bill.shoggins@acmeltd.com{% else %}{{data.email_address or "bill.shoggins@acmeltd.com"}}{% endif %}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> who the main contact for this application</span></a></dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">When will the fields be ready for inspection?</dt>
+          <dd class="govuk-summary-list__value">{{data.submit_date or "December 2021"}}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="inspection-dates?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> when the fields will be ready for inspection</span></a></dd>
+        </div>
+
+      </dl>
+      {% else %}
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Where will the inspection take place?</dt>
+          <dd class="govuk-summary-list__value">{{data.select_address or "Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH"}}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="inspection-addresses?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> where the inspection will take place</span></a></dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Who is the contact for this application?</dt>
+          <dd class="govuk-summary-list__value">
+            {% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}
+            Bill Shoggins
+            <br>
+            01234 567890
+            <br>
+            bill.shoggins@acmeltd.com
+            {% else %}
+            {{data.contact_name or "Bill Shoggins"}}
+            <br>
+            {{data.address_phone or "01234 567890"}}
+            <br>
+            {{data.email_address or "bill.shoggins@acmeltd.com"}}
+            {% endif %}
+          </dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> who the main contact for this application</span></a></dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">When will the fields be ready for inspection?</dt>
+          <dd class="govuk-summary-list__value">{{data.submit_date or "December 2021"}}</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="inspection-dates?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> when the fields will be ready for inspection</span></a></dd>
+        </div>
+
+      </dl>      
+      {% endif %}
+
+      <h2 class="govuk-heading-m">Location and crop details</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+
+        {% if data.location2 == "true" %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">{{data.nurseryplotno2 or "Bottom field"}}</dt>
+          <dd class="govuk-summary-list__value">
+            {% if data.addfielddetails2 == "Google Maps" %}Google Maps{% elif data.addfielddetails2 == "iacs" %}IACS or RLR number{% elif data.addfielddetails2 == "gridgps" %}Grid reference or GPS reading{% elif data.addfielddetails2 == "what3words" %}what3words address{% else %}Grid reference or GPS reading{% endif %}: {% if data.addfielddetails2 == "Google Maps" %}{{data.navigation_googlemaps2 or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails2 == "iacs" %}{{data.navigation_iacs2 or "NF 4321 0000"}}{% elif data.addfielddetails2 == "gridgps" %}{{data.navigation_gridgps2 or "NX 123 123"}}{% elif data.addfielddetails2 == "what3words" %}///{{data.navigation_what3words2 or "one.two.three"}}{% else %}NX 509 582{% endif %}
+            <br>
+            Map: {% if data.send_inspector_map2 == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload2 or "Another Filename.jpg"}}</a>{% else %}Not provided{% endif %}
+            <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
+              <li>
+                {% if data.commodity == "bulbs" %}
+                {% if data.has_botanicial_name3 == "use_description" %}{{data.commodity_description3 or "Bulbs" }}{% else %}{{data.botanical_name3 or "Androsace sp. (ANSSS)"}}{% if data.commodity_variety3 %} '{{data.commodity_variety3 or 'Batch 1'}}'{% endif %}{% endif %}
+                {% elif data.commodity == "plants" %}
+                {% if data.has_botanicial_name3 == "use_description" %}{{data.commodity_description3 or "Plants and fresh produce" }}{% else %}{{data.botanical_name3 or "Corylus avellana (CYLAV)"}}{% endif %}
+                {% elif data.commodity == "potatoes" %}
+                {% if data.has_botanicial_name3 == "use_description" %}{{data.commodity_variety_manual3 or "King Smith" }}{% else %}{{data.commodity_variety3[0] or 'Maris piper'}}{% endif %}
+                {% else %}
+                {% if data.has_botanicial_name3 == "use_description" %}{{data.commodity_description3 or "Plants and fresh produce" }}{% else %}{{data.botanical_name3 or "Corylus avellana (CYLAV)"}}{% endif %}
+                {% endif %}
+                <br>
+                {% if data.commodity == "plants" %}{% if data.subCommodityType == "Micropropagation material" %}{{data.quantityContainers3 or "2"}}{% else %}{{data.quantityHectarage3 or "4"}}{% endif %}{% else %}{{data.approxhectofplot3 or "12"}}{% endif %} {% if data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}containers{% else %}hectares{% endif %}
+                <br>
+                {% if data['filter_demo3'] %}{{data['filter_demo3']| join(", ")}}{% else %}France{% endif %}
+              </li>
+            </ul>            
+          </dd>          
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="{{data.field_task_list_data or 'commodity-list'}}?change=yes&return_url=check-your-answers#2">Change<span class="govuk-visually-hidden"> {{data.nurseryplotno2 or "Bottom field"}}</span></a></dd>
+        </div>
+        {% endif %}
+
+        {% if data.location1 == "true" %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">{{data.nurseryplotno or "Top field"}}</dt>
+          <dd class="govuk-summary-list__value">
+            {% if data.addfielddetails == "Google Maps" %}Google Maps{% elif data.addfielddetails == "iacs" %}IACS or RLR number{% elif data.addfielddetails == "gridgps" %}Grid reference or GPS reading{% elif data.addfielddetails == "what3words" %}what3words address{% else %}Grid reference or GPS reading{% endif %}: {% if data.addfielddetails == "Google Maps" %}{{data.navigation_googlemaps or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails == "iacs" %}{{data.navigation_iacs or "NF 1234 1234"}}{% elif data.addfielddetails == "gridgps" %}{{data.navigation_gridgps or "NX 509 582"}}{% elif data.addfielddetails == "what3words" %}///{{data.navigation_what3words or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}
+            <br>
+            Map: {% if data.send_inspector_map == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload or "Filename.jpg"}}</a>{% else %}Not provided{% endif %}
+            <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-3">
+              {% if data.location1Row2 == "true" %}
+              <li>
+                {% if data.commodity == "bulbs" %}
+                {% if data.has_botanicial_name2 == "use_description" %}{{data.commodity_description2 or "Bulbs" }}{% else %}{{data.botanical_name2 or "Androsace sp. (ANSSS)"}}{% if data.commodity_variety2 %} '{{data.commodity_variety2 or 'Batch 1'}}'{% endif %}{% endif %}
+                {% elif data.commodity == "plants" %}
+                {% if data.has_botanicial_name2 == "use_description" %}{{data.commodity_description2 or "Plants and fresh produce" }}{% else %}{{data.botanical_name2 or "Corylus avellana (CYLAV)"}}{% endif %}
+                {% elif data.commodity == "potatoes" %}
+                {% if data.has_botanicial_name2 == "use_description" %}{{data.commodity_variety_manual2 or "King Smith" }}{% else %}{{data.commodity_variety2[0] or 'Maris piper'}}{% endif %}
+                {% else %}
+                {% if data.has_botanicial_name2 == "use_description" %}{{data.commodity_description2 or "Plants and fresh produce" }}{% else %}{{data.botanical_name2 or "Corylus avellana (CYLAV)"}}{% endif %}
+                {% endif %}
+                <br>
+                {% if data.commodity == "plants" %}{% if data.subCommodityType == "Micropropagation material" %}{{data.quantityContainers2 or "2"}}{% else %}{{data.quantityHectarage2 or "4"}}{% endif %}{% else %}{{data.approxhectofplot2 or "12"}}{% endif %} {% if data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}containers{% else %}hectares{% endif %}
+                <br>
+                {% if data['filter_demo2'] %}{{data['filter_demo2']| join(", ")}}{% else %}Japan{% endif %}
+              </li>
+              {% endif %}
+              {% if data.location1Row1 == "true" %}
+              <li>
+                {% if data.commodity == "bulbs" %}
+                {% if data.has_botanicial_name == "use_description" %}{{data.commodity_description or "Bulbs" }}{% else %}{{data.botanical_name or "Androsace sp. (ANSSS)"}}{% if data.commodity_variety %} '{{data.commodity_variety or 'Batch 1'}}'{% endif %}{% endif %}
+                {% elif data.commodity == "plants" %}
+                {% if data.has_botanicial_name == "use_description" %}{{data.commodity_description or "Plants and fresh produce" }}{% else %}{{data.botanical_name or "Corylus avellana (CYLAV)"}}{% endif %}
+                {% elif data.commodity == "potatoes" %}
+                {% if data.has_botanicial_name == "use_description" %}{{data.commodity_variety_manual or "King Smith" }}{% else %}{{data.commodity_variety3[0] or 'Maris piper'}}{% endif %}
+                {% else %}
+                {% if data.has_botanicial_name == "use_description" %}{{data.commodity_description or "Plants and fresh produce" }}{% else %}{{data.botanical_name or "Corylus avellana (CYLAV)"}}{% endif %}
+                {% endif %}
+                <br>
+                {% if data.commodity == "plants" %}{% if data.subCommodityType == "Micropropagation material" %}{{data.quantityContainers or "12"}}{% else %}{{data.quantityHectarage or "6"}}{% endif %}{% else %}{{data.approxhectofplot or "3.5"}}{% endif %} {% if data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}containers{% else %}hectares{% endif %}
+                <br>
+                {% if data['filter_demo'] %}{{data['filter_demo']| join(", ")}}{% else %}Belize{% endif %}
+              </li>
+              {% endif %}
+            </ul>
+          </dd>          
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="{{data.field_task_list_data or 'commodity-list'}}?change=yes&return_url=check-your-answers#1">Change<span class="govuk-visually-hidden"> {{data.nurseryplotno or "Top field"}}</span></a></dd>
+        </div>
+        {% endif %}
+
+      </dl>
+
+      <div class="govuk-form-group govuk-!-margin-top-9">
+        <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_blank">what fees you need to pay{% if data.build != "development" %} (opens in new tab){% endif %}</a> {% if data.build == "development" %}for this application (opens in a new window){% else %}for a soil sampling inspection{% endif %}.</p>
+      </div>
+
+      <div class="govuk-button-group govuk-!-margin-top-9">
+        <input type="hidden" name="answers-checked" value="true">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Continue</button>
+      </div>
+
+    </form>
+
   </div>
-  <div class="govuk-grid-column-three-quarters govuk-!-margin-top-9">
-    <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_blank">what fees you need to pay</a> for a growing season inspection (opens in a new window).</p>
-    <p class="govuk-body govuk-!-margin-top-6">
-      <a href="../submit/declaration-gsi" class="govuk-button">Save and continue</a>
-    </p>
-  </div>
+
 </div>
 {% endblock %}

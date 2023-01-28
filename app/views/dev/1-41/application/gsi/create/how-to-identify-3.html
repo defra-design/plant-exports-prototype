@@ -1,7 +1,7 @@
 {% extends "layout-option.html" %}
 
 {% block pageTitle %}
-  Add your {% if data.commodity == "potatoes" %}ware potatoes{% elif data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}micropropagation material{% else %}{{data.commodity or "crops"}}{% endif %} to {{data.which_field or data.nurseryplotno or "Top field"}} - Growing season inspection - {{serviceName}} - GOV.UK
+  Add your {% if data.commodity == "potatoes" %}ware potatoes{% elif data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}micropropagation material{% else %}{{data.commodity or "crops"}}{% endif %} to {{data.nurseryplotno or "Bottom field"}} - Growing season inspection - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -14,7 +14,7 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">Add your {% if data.commodity == "potatoes" %}ware potatoes{% elif data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}micropropagation material{% else %}{{data.commodity or "crops"}}{% endif %} to {{data.which_field or data.nurseryplotno or "Top field"}}</h1>
+    <h1 class="govuk-heading-xl">Add your {% if data.commodity == "potatoes" %}ware potatoes{% elif data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}micropropagation material{% else %}{{data.commodity or "crops"}}{% endif %} to {{data.nurseryplotno or "Bottom field"}}</h1>
     <p class="govuk-body">Describe a {% if data.commodity == "plants" %}single crop of {{data.commodity or "plants"}}{% else %}single crop{% endif %} for inspection at this location. Later, you'll be able to add further crops at this location if you want to.</p>
 
     {% if query.updateApplication == "yes" %}
@@ -23,354 +23,224 @@
     </div>
     {% endif %}
    
-    <form method="post" action="gsi-commodity-list-2-crops">
-
+    <form method="post" action="commodity-list?location2=true&location2Row1=true">
       {% if data.commodity == "potatoes" %}
+
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">
-          <legend class="govuk-fieldset__legend">
-            Type of potato
-          </legend>
+          <legend class="govuk-fieldset__legend">Type of potato</legend>
+
           <div class="govuk-radios">
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="potato_1" name="potato" type="radio" value="ware">
-              <label class="govuk-label govuk-radios__label" for="potato_1">
-                Ware
-              </label>
+              <input class="govuk-radios__input" id="potato_1" name="potato3" type="radio" value="ware"{% if data.potato3== "ware" %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="potato_1">Ware</label>
             </div>
+
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="potato_2" name="potato" type="radio" value="seed">
-              <label class="govuk-label govuk-radios__label" for="potato_2">
-                Seed
-              </label>
+              <input class="govuk-radios__input" id="potato_2" name="potato3" type="radio" value="seed"{% if data.potato3== "seed" %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="potato_2">Seed</label>
             </div>
+
           </div>
+
         </fieldset>
       </div>
 
       <div class="govuk-form-group">
-        <label class="govuk-label" for="ss_number3">Soil sampling application or stock number (optional)</label>
-        <input class="govuk-input govuk-!-width-one-half" id="ss_number3" name="ss_number3" type="text" spellcheck="false">
+        <label class="govuk-label" for="ss_number">Soil sampling application or stock number (optional)</label>
+        <input class="govuk-input govuk-!-width-one-half" id="ss_number" name="ss_number3" type="text" spellcheck="false" value="{{data.ss_number3 or ''}}">
       </div>
 
-        <!-- These are the countries which require differnt information to be provided -->
-        {% if data.countrySelect == "Norway,NO" or data.countrySelect == "Iceland,IS" or data.countrySelect == "Canary Islands,CI" or data.countrySelect == "Nigeria,NG" or data.countrySelect == "Ghana,GH" or data.countrySelect == "Falkland Islands,FK" %}
-        {% endif %}
-
-        <!--<div class="govuk-form-group">
-          <label class="govuk-label" for="commodity_variety">
-            Variety
-          </label>
-          <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety" type="text">
-        </div>-->
-
-          <p class="govuk-body" for="how-contacted-conditional">
-            What variety are your potatoes?
-          </p>
-          <div class="govuk-form-group">
-            <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
-              <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="how-contacted-conditional" name="has_botanicial_name" type="radio" value="yes" data-aria-controls="conditional-how-contacted-conditional" {% if data.has_botanicial_name=="yes"%}checked{% endif %}>
-                <label class="govuk-label govuk-radios__label" for="how-contacted-conditional">
-                  Search for a variety
-                </label>
-              </div>
-              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional">
-                {% if data.show_manual_input != "yes"%}
-                  {% if data.commodity == "potatoes" %}
-                    {% block potatoVariety %}{% include "../../modules/_potatoes-variety-select-3.html" %}{% endblock %}
-                  {% endif %}
-                {% else %}
-                  <div class="govuk-form-group">
-                    <label class="govuk-label" for="commodity_host_species">
-                      Search for a variety
-                    </label>
-                    <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety" type="text" value="{% if query.has_commodity %}{{query.genus}}{% endif %}">
-                  </div>
-                {% endif %}
-              </div>
-
-              <div class="govuk-radios__divider">or</div>
-              <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="how-contacted-conditional-3" name="has_botanicial_name" type="radio" value="use_description" data-aria-controls="conditional-how-contacted-conditional-3" {% if data.has_botanicial_name == "use_description"%}checkjed{% endif %}>
-                <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-3">
-                  Enter the variety
-                </label>
-                <div id="how-contacted-conditional-hint" class="govuk-hint govuk-radios__hint">
-                  Use this option only if you can't find the variety through search
-                </div>
-              </div>
-              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional-3">
-                <div class="govuk-form-group">
-                  <label class="govuk-visually-hidden" for="plant-identify--description">
-                    Enter the variety
-                  </label>
-                  <input class="govuk-input" id="plant-identify--description" name="commodity_variety" aria-describedby="more-detail-hint">
-                </div>
-              </div>
-            </div>
-          </div>
-
-        <div class="govuk-form-group">
-          <label class="govuk-label" for="chemicals_used">
-            Chemical used on tubers (optional)
-          </label>
-          <input class="govuk-input govuk-input--width-20" id="chemicals_used" name="chemicals_used" type="text">
-        </div>
-
+      <!-- These are the countries which require different information to be provided -->
+      {% if data.countrySelect == "Norway,NO" or data.countrySelect == "Iceland,IS" or data.countrySelect == "Canary Islands,CI" or data.countrySelect == "Nigeria,NG" or data.countrySelect == "Ghana,GH" or data.countrySelect == "Falkland Islands,FK" %}
       {% endif %}
 
+      <p class="govuk-body" for="how-contacted-conditional">What variety are your potatoes?</p>
+      
+      <div class="govuk-form-group">
 
-      {% if data.commodity != "potatoes" %}
+        <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="how-contacted-conditional" name="has_botanicial_name3" type="radio" value="yes" data-aria-controls="conditional-how-contacted-conditional"{% if data.has_botanicial_name3== "yes" %} checked{% endif %}>
+            <label class="govuk-label govuk-radios__label" for="how-contacted-conditional">Search for a variety</label>
+          </div>
+
+          <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional">
+            
+            {% if data.show_manual_input != "yes" %}
+            {% block potatoVariety3 %}
+            {% include "../modules/_potatoes-variety-select-3.html" %}
+            {% endblock %}
+            {% else %}
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="commodity_host_species">Search for a variety</label>
+              <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety3" type="text" value="{% if query.has_commodity %}{{query.genus3}}{% endif %}">
+            </div>
+            {% endif %}
+
+          </div>
+
+          <div class="govuk-radios__divider">
+            or
+          </div>
+
+          <div class="govuk-radios__item">
+            <input class="govuk-radios__input" id="how-contacted-conditional-3" name="has_botanicial_name3" type="radio" value="use_description" data-aria-controls="conditional-how-contacted-conditional-3"{% if data.has_botanicial_name3 == "use_description" %} checked{% endif %}>
+            <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-3">Enter the variety</label>
+
+            <div id="how-contacted-conditional-hint" class="govuk-hint govuk-radios__hint">
+              Use this option only if you can't find the variety through search
+            </div>
+
+          </div>
+
+          <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional-3">
+            
+            <div class="govuk-form-group">
+              <label class="govuk-visually-hidden" for="plant-identify--description">Enter the variety</label>
+              <input class="govuk-input" id="plant-identify--description" name="commodity_variety_manual3" value="{{data.commodity_variety_manual3 or ''}}">
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="chemicals_used">Chemical used on tubers (optional)</label>
+        <input class="govuk-input govuk-input--width-20" id="chemicals_used" name="chemicals_used3" type="text" value="{{data.chemicals_used3 or ''}}">
+      </div>
+      {% else %}
       <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
         <legend class="govuk-fieldset__legend">How do you want to identify your {% if data.commodity == "plants" %}{{data.subCommodityType | lower or "plants"}}{% else %}{{data.commodity or "crops"}}{% endif %}?</legend>
+
         <div class="govuk-form-group">
+          
           <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="how-contacted-conditional" name="has_botanicial_name" type="radio" value="yes" data-aria-controls="conditional-how-contacted-conditional" {% if data.has_botanicial_name=="yes"%}checked{% endif %}>
-              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional">
-                Botanical name
-              </label>
+              <input class="govuk-radios__input" id="how-contacted-conditional" name="has_botanicial_name3" type="radio" value="yes" data-aria-controls="conditional-how-contacted-conditional"{% if data.has_botanicial_name3 == "yes" %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional">Botanical name</label>
+              
               <div id="how-contacted-conditional-hint" class="govuk-hint govuk-radios__hint">
-                <!--This is the species and genus-->
+                <!-- This is the species and genus -->
                 Search by genus, species or common name
               </div>
+
             </div>
+
             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional">
-              {% if data.show_manual_input != "yes"%}
-              {% block genus %}{% include "../modules/_genus.html" %}{% endblock %}
+              
+              {% if data.show_manual_input != "yes" %}
+              {% block genus3 %}
+              {% include "../modules/_genus-3.html" %}
+              {% endblock %}
               {% else %}
-                <div class="govuk-form-group">
-                  <label class="govuk-label" for="commodity_host_species">
-                    Genus
-                  </label>
-                  <input class="govuk-input govuk-input--width-20" id="commodity_genus" name="genus" type="text" value="{% if query.has_commodity %}{{query.genus}}{% endif %}">
-                </div>
-                <div class="govuk-form-group">
-                  <label class="govuk-label" for="commodity_host_species">
-                    Species
-                  </label>
-                  <input class="govuk-input govuk-input--width-20" id="commodity_host_species" name="commodity_host_species" type="text" value="{% if query.has_commodity %}{{query.species}}{% endif %}">
-                </div>
-              {% endif %}
-
-              <!-- This will only show if there is no javascript loaded -->
-              <div id="commodity-botanical_name">
-                <div class="govuk-form-group">
-                  <label class="govuk-label" for="commodity_host_species">
-                    Genus
-                  </label>
-                  <input class="govuk-input govuk-input--width-20" id="commodity_genus" name="genus" type="text" value="{% if query.has_commodity %}{{query.genus}}{% endif %}">
-                </div>
-                <div class="govuk-form-group">
-                  <label class="govuk-label" for="commodity_host_species">
-                    Species
-                  </label>
-                  <input class="govuk-input govuk-input--width-20" id="commodity_host_species" name="commodity_host_species" type="text" value="{% if query.has_commodity %}{{query.species}}{% endif %}">
-                </div>
-              </div>
-              {% if data.show_manual_input == "yes"%}
-              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display:none">The botanical name needs to be spelled correctly, if you are not sure <a href="?show_manual_input=no&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">search for a botanical name</a></p>
-              {% else %}
-              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display:none">If you cannot find the botanical name using the search, <a href="?show_manual_input=yes&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">enter the botanical name manually</a></p>
-              {% endif %}
-
-              {% if data.commodity == "plants" or data.commodity == "seeds" or data.commodity == "bulbs" %}
               <div class="govuk-form-group">
-                <label class="govuk-label" for="commodity_variety">
-                  Variety (optional)
-                </label>
-                <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety" type="text">
+                <label class="govuk-label" for="commodity_host_species">Genus</label>
+                <input class="govuk-input govuk-input--width-20" id="commodity_genus" name="genus3" type="text" value="{% if query.has_commodity %}{{query.genus3}}{% endif %}">
+              </div>
+
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="commodity_host_species">Species</label>
+                <input class="govuk-input govuk-input--width-20" id="commodity_host_species" name="commodity_host_species3" type="text" value="{% if query.has_commodity %}{{query.species3}}{% endif %}">
               </div>
               {% endif %}
+
+              <!-- This will only show if there is no JavaScript loaded -->
+              <div id="commodity-botanical_name">
+
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="commodity_host_species">Genus</label>
+                  <input class="govuk-input govuk-input--width-20" id="commodity_genus" name="genus3" type="text" value="{% if query.has_commodity %}{{query.genus3}}{% endif %}">
+                </div>
+
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="commodity_host_species">Species</label>
+                  <input class="govuk-input govuk-input--width-20" id="commodity_host_species" name="commodity_host_species3" type="text" value="{% if query.has_commodity %}{{query.species3}}{% endif %}">
+                </div>
+
+              </div>
+              {% if data.show_manual_input == "yes" %}
+              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display: none;">The botanical name needs to be spelled correctly, if you are not sure <a href="?show_manual_input=no&has_botanicial_name3=yes" class="govuk-link govuk-link--no-visited-state">search for a botanical name</a></p>
+              {% else %}
+              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display: none;">If you cannot find the botanical name using the search, <a href="?show_manual_input=yes&has_botanicial_name3=yes" class="govuk-link govuk-link--no-visited-state">enter the botanical name manually</a></p>
+              {% endif %}
+
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="commodity_variety">Variety (optional)</label>
+                <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety3" type="text" value="{{data.commodity_variety3 or ''}}">
+              </div>
 
             </div>
-            <div class="govuk-radios__divider">or</div>
+
+            <div class="govuk-radios__divider">
+              or
+            </div>
+
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="how-contacted-conditional-3" name="has_botanicial_name" type="radio" value="use_description" data-aria-controls="conditional-how-contacted-conditional-3" {% if data.has_botanicial_name == "use_description"%}checkjed{% endif %}>
-              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-3">
-                Description
-              </label>
+              <input class="govuk-radios__input" id="how-contacted-conditional-3" name="has_botanicial_name3" type="radio" value="use_description" data-aria-controls="conditional-how-contacted-conditional-3"{% if data.has_botanicial_name3 == "use_description" %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-3">Description</label>
+              
               <div id="how-contacted-conditional-hint" class="govuk-hint govuk-radios__hint">
                 If your product is made up of many species, enter a description instead
               </div>
+
             </div>
+
             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional-3">
               <div class="govuk-form-group">
-                <label class="govuk-visually-hidden" for="passport-number">
-                  Description of the {{data.commodity or "plant"}}
-                </label>
-                <!--<span class="govuk-hint">Only use this if you cannot enter the botanical name and you do not have an agreed common name</span>-->
-                <textarea class="govuk-textarea" id="plant-identify--description" name="commodity_description" rows="4" aria-describedby="more-detail-hint"></textarea>
+                <label class="govuk-visually-hidden" for="passport-number">Description of the {{data.commodity or "plant"}}</label>
+                <!-- <span class="govuk-hint">Only use this if you cannot enter the botanical name and you do not have an agreed common name</span> -->
+                <textarea class="govuk-textarea" id="plant-identify--description" name="commodity_description3" rows="4" aria-describedby="more-detail-hint">{{data.commodity_description3 or ''}}</textarea>
               </div>
+
             </div>
+
           </div>
-        </div>
 
-        <!-- {% if data.commodity == "plants" %}
-        {% if query.design == "1" or query.design == "2" or query.design == "3" %}
-        {{ govukRadios({
-          idPrefix: "commodity_type",
-          name: "commodity_type",
-          fieldset: {
-            legend: {
-              text: "Commodity type",
-              classes: "govuk-fieldset__legend--s"
-            }
-          },
-          items: [
-            {
-              value: "micropropagated material",
-              text: "Micropropagated material"
-            },
-            {
-              value: "plants",
-              text: "Plants"
-            },
-            {
-              value: "produce",
-              text: "Produce (fruit, flowers or vegetables)"
-            }
-          ]
-        }) }}
-        {% else %}
-        <div class="govuk-form-group govuk-!-margin-bottom-4">
-          <fieldset class="govuk-fieldset">
-            <legend class="govuk-fieldset__legend">Commodity type</legend>
-        
-            <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
-            
-              <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="typeAndAmount-1" name="typeAndAmount" type="radio" value="hectarage" aria-controls="conditional-typeAndAmount-1" aria-expanded="false">
-                <label class="govuk-label govuk-radios__label" for="typeAndAmount-1">Micropropagated material</label>
-              </div>
-                
-              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-typeAndAmount-1">
-
-                <div class="govuk-form-group">
-                  <label class="govuk-label" for="micropropagatedAmount">Describe the amount</label>
-                  <textarea class="govuk-textarea" id="micropropagatedAmount" name="micropropagatedAmount" rows="3"></textarea>
-                </div>
-              
-              </div>
-                
-              <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="typeAndAmount-2" name="typeAndAmount" type="radio" value="phone" aria-controls="conditional-typeAndAmount-2" aria-expanded="false">
-                <label class="govuk-label govuk-radios__label" for="typeAndAmount-2">Plants</label>
-              </div>
-                
-              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-typeAndAmount-2">
-  
-                <div class="govuk-form-group">
-                  <label class="govuk-label" for="pots-or-plants">Number of pots or plants to be inspected</label>
-                  <input class="govuk-input govuk-input--width-4" id="pots-or-plants" name="pots-or-plants" type="text" spellcheck="false" inputmode="numeric">
-                </div>
-          
-              </div>
-                  
-              <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="typeAndAmount-3" name="typeAndAmount" type="radio" value="text" aria-controls="conditional-typeAndAmount-3" aria-expanded="false">
-                <label class="govuk-label govuk-radios__label" for="typeAndAmount-3">Produce (fruit, flowers or vegetables)</label>
-              </div>
-                  
-              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-typeAndAmount-3">
-                      
-                <div class="govuk-form-group">
-                  <label class="govuk-label" for="hectarage-by-plot">Approximate hectarage of plot to be inspected</label>
-                  <input class="govuk-input govuk-input--width-4" id="hectarage-by-plot" name="hectarage-by-plot" type="text" spellcheck="false" inputmode="numeric">
-                </div>
-          
-              </div>
-                  
-            </div>
-        
-          </fieldset>
         </div>
-        {% endif %} -->
 
         <div class="govuk-form-group">
           <label class="govuk-label" for="ss_number">Soil sampling application number (optional)</label>
-          <input class="govuk-input govuk-!-width-one-half" id="ss_number" name="ss_number" type="text" spellcheck="false">
+          <input class="govuk-input govuk-!-width-one-half" id="ss_number" name="ss_number3" type="text" spellcheck="false" value="{{data.ss_number3 or ''}}">
         </div>
-        {% endif %}
 
-        {% if data.commodity == "potatoes" %}
-
-          {{ govukRadios({
-            idPrefix: "Type",
-            name: "commodity_type",
-            fieldset: {
-              legend: {
-                text: "Type",
-                isPageHeading: true,
-                classes: "govuk-fieldset__legend--s"
-              }
-            },
-            items: [
-              {
-                value: "Seed potatoes",
-                text: "Seed potatoes"
-              },
-              {
-                value: "Ware potatoes",
-                text: "Ware potatoes"
-              }
-            ]
-          }) }}
-
-          <div class="govuk-form-group govuk-!-margin-top-4">
-            <label class="govuk-label govuk-!-font-weight-bold" for="commodity_lot">
-              Lot reference (optional)
-            </label>
-            <input class="govuk-input govuk-input--width-20" id="commodity_lot" name="commodity_lot" type="text">
-          </div>
-          <div class="govuk-form-group">
-            <label class="govuk-label govuk-!-font-weight-bold" for="chemicals_used">
-              Chemical used on tubers (optional)
-            </label>
-            <input class="govuk-input govuk-input--width-30" id="chemicals_used" name="chemicals_used" type="text">
-          </div>
-        </fieldset>
-      {% endif %}
-      {% endif %}
-
-      {% if data.commodity == "bulbs" %}
-      <div class="govuk-form-group">
-        <label class="govuk-label" for="stock_number">Soil sampling application number (optional)</label>
-        <input class="govuk-input govuk-!-width-one-half" id="stock_number" name="stock_number" type="text" spellcheck="false">
-      </div>
+      </fieldset>
       {% endif %}
 
       {% if data.commodity == "plants" %}
       {% if data.subCommodityType == "Micropropagation material" %}
       <div class="govuk-form-group">
         <label class="govuk-label" for="quantity-containers">Number of containers to be inspected</label>        
-        <input class="govuk-input govuk-input--width-4" id="quantity-containers" name="quantityContainers" type="text">
+        <input class="govuk-input govuk-input--width-4" id="quantity-containers" name="quantityContainers3" type="text" value="{{data.quantityContainers3 or ''}}">
       </div>
       {% elif data.subCommodityType == "Plants" %}
       <div class="govuk-form-group">
         <label class="govuk-label" for="quantity-hectarage">Approximate hectarage of plot to be inspected</label>
-        <input class="govuk-input govuk-input--width-4" id="quantity-hectarage" name="quantityHectarage" type="text">
+        <input class="govuk-input govuk-input--width-4" id="quantity-hectarage" name="quantityHectarage3" type="text" value="{{data.quantityHectarage3 or ''}}">
       </div>
       
       <div class="govuk-form-group">
         <label class="govuk-label" for="quantity-pots-or-plants">Number of pots or plants to be inspected (optional)</label>
-        <input class="govuk-input govuk-input--width-4" id="quantity-pots-or-plants" name="quantityPotsOrPlants" type="text">
+        <input class="govuk-input govuk-input--width-4" id="quantity-pots-or-plants" name="quantityPotsOrPlants3" type="text" value="{{data.quantityPotsOrPlants3 or ''}}">
       </div>
       {% elif data.subCommodityType == "Plants for the production of fruit, flowers or vegetables" %}
       <div class="govuk-form-group">
         <label class="govuk-label" for="quantity-hectarage">Approximate hectarage of plot to be inspected</label>
-        <input class="govuk-input govuk-input--width-4" id="quantity-hectarage" name="quantityHectarage" type="text">
+        <input class="govuk-input govuk-input--width-4" id="quantity-hectarage" name="quantityHectarage3" type="text" value="{{data.quantityHectarage3 or ''}}">
       </div>
       {% else %}
       <div class="govuk-form-group">
         <label class="govuk-label" for="quantity-hectarage">Approximate hectarage of plot to be inspected</label>
-        <input class="govuk-input govuk-input--width-4" id="quantity-hectarage" name="quantityHectarage" type="text">
+        <input class="govuk-input govuk-input--width-4" id="quantity-hectarage" name="quantityHectarage3" type="text" value="{{data.quantityHectarage3 or ''}}">
       </div>
       
       <div class="govuk-form-group">
         <label class="govuk-label" for="quantity-pots-or-plants">Number of pots or plants to be inspected (optional)</label>
-        <input class="govuk-input govuk-input--width-4" id="quantity-pots-or-plants" name="quantityPotsOrPlants" type="text">
+        <input class="govuk-input govuk-input--width-4" id="quantity-pots-or-plants" name="quantityPotsOrPlants3" type="text" value="{{data.quantityPotsOrPlants3 or ''}}">
       </div>
       {% endif %}
       {% else %}
@@ -380,204 +250,16 @@
           classes: "govuk-label",
           isPageHeading: false
         },
-        id: "approxhectofplot3",
+        id: "approxhectofplot",
         name: "approxhectofplot3",
-        classes: "govuk-input--width-4"
+        classes: "govuk-input--width-4",
+        value: data.approxhectofplot3 or ''
       }) }}
       {% endif %}
 
-      <!-- {% if data.commodity == "plants" %}
-      {% if query.design == "1" %}
-      <div class="govuk-form-group govuk-!-margin-bottom-4">
-        <fieldset class="govuk-fieldset" aria-describedby="amountToInspect-hint">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">How do you want to describe the amount you need inspected?</legend>
-
-          <div id="amountToInspect-hint" class="govuk-hint">
-            Answer at least one
-          </div>
-
-          <div class="govuk-checkboxes" data-module="govuk-checkboxes">
-            
-            <div class="govuk-checkboxes__item">
-              <input class="govuk-checkboxes__input" id="amountToInspect" name="amountToInspect" type="checkbox" value="email" data-aria-controls="conditional-amountToInspect">
-              <label class="govuk-label govuk-checkboxes__label" for="amountToInspect">Approximate hectarage of plot</label>
-            </div>
-
-            <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-amountToInspect">
-              
-              <div class="govuk-form-group">
-                <label class="govuk-label" for="hectarage-by-plot">Approximate hectarage of plot to be inspected</label>
-                <input class="govuk-input govuk-input--width-4" id="hectarage-by-plot" name="hectarage-by-plot" type="text">
-              </div>
-      
-            </div>
-
-            <div class="govuk-checkboxes__item">
-              <input class="govuk-checkboxes__input" id="amountToInspect-2" name="amountToInspect" type="checkbox" value="phone" data-aria-controls="conditional-amountToInspect-2">
-              <label class="govuk-label govuk-checkboxes__label" for="amountToInspect-2">Number of pots or plants</label>
-            </div>
-
-            <div class="govuk-checkboxes__conditional govuk-checkboxes__conditional--hidden" id="conditional-amountToInspect-2">
-              
-              <div class="govuk-form-group">
-                <label class="govuk-label" for="pots-or-plants">Number of pots or plants to be inspected</label>
-                <input class="govuk-input govuk-input--width-4" id="pots-or-plants" name="pots-or-plants" type="text">
-              </div>
-      
-            </div>
-
-          </div>
-      
-        </fieldset>
-      </div>
-      {% elif query.design == "2" %}
-      <div class="govuk-form-group govuk-!-margin-bottom-4">
-        <fieldset class="govuk-fieldset">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">How do you want to describe the amount you need inspected?</legend>
-      
-          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
-          
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="amountToInspect-1" name="amountToInspect" type="radio" value="hectarage" aria-controls="conditional-amountToInspect-1" aria-expanded="false">
-              <label class="govuk-label govuk-radios__label" for="amountToInspect-1">Approximate hectarage of plot</label>
-            </div>
-              
-            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-amountToInspect-1">
-
-              <div class="govuk-form-group">
-                <label class="govuk-label" for="hectarage-by-plot">Approximate hectarage of plot to be inspected</label>
-                <input class="govuk-input govuk-input--width-4" id="hectarage-by-plot" name="hectarage-by-plot" type="text">
-              </div>
-            
-            </div>
-              
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="amountToInspect-2" name="amountToInspect" type="radio" value="phone" aria-controls="conditional-amountToInspect-2" aria-expanded="false">
-              <label class="govuk-label govuk-radios__label" for="amountToInspect-2">Number of pots or plants</label>
-            </div>
-              
-            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-amountToInspect-2">
-
-              <div class="govuk-form-group">
-                <label class="govuk-label" for="pots-or-plants">Number of pots or plants to be inspected</label>
-                <input class="govuk-input govuk-input--width-4" id="pots-or-plants" name="pots-or-plants" type="text">
-              </div>
-        
-            </div>
-
-            <div class="govuk-radios__divider">
-              or
-            </div>
-                
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="amountToInspect-3" name="amountToInspect" type="radio" value="text" aria-controls="conditional-amountToInspect-3" aria-expanded="false">
-              <label class="govuk-label govuk-radios__label" for="amountToInspect-3">Both</label>
-            </div>
-                
-            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-amountToInspect-3">
-                    
-              <div class="govuk-form-group">
-                <label class="govuk-label" for="hectarage-by-plot">Approximate hectarage of plot to be inspected</label>
-                <input class="govuk-input govuk-input--width-4" id="hectarage-by-plot" name="hectarage-by-plot" type="text">
-              </div>
-              
-              <div class="govuk-form-group">
-                <label class="govuk-label" for="pots-or-plants">Number of pots or plants to be inspected</label>
-                <input class="govuk-input govuk-input--width-4" id="pots-or-plants" name="pots-or-plants" type="text">
-              </div>
-        
-            </div>
-                
-          </div>
-      
-        </fieldset>
-      </div>      
-      {% elif query.design == "3" %}
-      <div class="govuk-form-group">
-        <fieldset class="govuk-fieldset" aria-describedby="how-much-to-be-inspected">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">How much is there to be inspected?</legend>
-
-          <div id="how-much-to-be-inspected" class="govuk-hint">
-            Answer at least one
-          </div>
-        
-          <div class="govuk-form-group">
-            {{ govukInput({
-              label: {
-                text: "Approximate hectarage of plot to be inspected",
-                classes: "govuk-label",
-                isPageHeading: false
-              },
-              id: "approxhectofplot3",
-              name: "approxhectofplot3",
-              classes: "govuk-input--width-4"
-            }) }}
-          </div>
-        
-          <div class="govuk-form-group">
-            {{ govukInput({
-              label: {
-                text: "Number of pots or plants to be inspected",
-                classes: "govuk-label",
-                isPageHeading: false
-              },
-              id: "numberOfPots",
-              name: "numberOfPots",
-              classes: "govuk-input--width-4"
-            }) }}
-          </div>
-        
-        </fieldset>
-      </div>      
-      {% endif %}
-      {% else %}
-      {{ govukInput({
-        label: {
-          text: "Approximate hectarage of plot to be inspected",
-          classes: "govuk-label",
-          isPageHeading: false
-        },
-        id: "approxhectofplot3",
-        name: "approxhectofplot3",
-        classes: "govuk-input--width-4"
-      }) }}
-      {% endif %} -->
-
-      <!-- {% if data.commodity == "seeds" %}
-      <div class="govuk-form-group">
-        <label class="govuk-label" for="ss_number">Seed sampling application number (optional)</label>
-        <input class="govuk-input govuk-!-width-one-half" id="ss_number" name="ss_number" type="text" spellcheck="false">
-      </div>
-      {% endif %} -->
-
-      <!-- 
-      {{ govukTextarea({
-        name: "destinationcountries3",
-        id: "destinationcountries3",
-        label: {
-          text: "Destination countries",
-          classes: "govuk-label--s",
-          isPageHeading: false
-        }
-      }) }}
-      -->
-      {% block country2 %}
-      <h3 class="govuk-heading-s">Destination countries</h3>
+      {% block country3 %}
       {% include "../modules/_multi-select-3.html" %}
       {% endblock %}
-
-      <!-- {% if query.updateApplication == "yes" %}
-      <details class="govuk-details" data-module="govuk-details">
-        <summary class="govuk-details__summary">
-          <span class="govuk-details__summary-text">Why can't I update some information?</span>
-        </summary>
-
-        <div class="govuk-details__text">
-          You can only amend some of the information on this page. This is because the application has already been submitted.
-        </div>
-
-      </details>
-      {% endif %} -->
 
       <div class="govuk-form-group govuk-!-margin-top-7 govuk-!-margin-bottom-6">
         <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
@@ -589,7 +271,7 @@
     </form>
 
   </div>
-  
+
 </div>
 
 <script type="text/javascript">

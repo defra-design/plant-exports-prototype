@@ -1,54 +1,132 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-GOV.UK Prototype Kit
+  Are you sure you want to delete this variety of {% if data.commodity == "potatoes" %}ware potato{% else %}{{data.commodity or "crops"}}{% endif %}? - Growing season inspection - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
 <a href="javascript:history.back()" class="govuk-back-link">Back</a>
 {% endblock %}
 
 {% block content %}
-
 <div class="govuk-grid-row">
+
   <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl">
-      Are you sure you want to delete {{ data['potatovariety3Select'] }}?
-    </h1>
 
-<!-- 
-    <p class="govuk-body">
-      You must complete this page to delete the chosen crop
-    </p>
- -->
+    <form action="how-to-identify" method="post">
 
-
-    <form method="post" novalidate>
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">
-            <div class="govuk-radios" data-module="govuk-radios">
-              <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="application_type_cancel" name="application_type" type="radio" value="0~gsi-commodity-list-crop-deleted?return_url=delete-crop">
-                <label class="govuk-label govuk-radios__label" for="application_type_cancel">
-                  Yes, delete {{ data['potatovariety3Select'] }}
-                </label>
-              </div>
-              <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="application_type_return" name="application_type" type="radio" value="1~gsi-commodity-list?return_url=delete-crop">
-                <label class="govuk-label govuk-radios__label" for="application_type_return">
-                  No
-                </label>
-              </div>
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+            <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-7">Are you sure you want to delete this variety of {% if data.commodity == "potatoes" %}ware potato{% else %}{{data.commodity or "crops"}}{% endif %}?</h1>
+          </legend>
+          <dl class="govuk-summary-list govuk-summary-list--no-border">
+    
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Description</dt>
+              <dd class="govuk-summary-list__value">
+                {% if query.deleteLocation2Row1 == "true" %}
+                {% if data.commodity == "bulbs" %}
+                {% if data.has_botanicial_name3 == "use_description" %}{{data.commodity_description3 or "Bulbs" }}{% else %}{{data.botanical_name3 or "Androsace sp. (ANSSS)"}}{% if data.commodity_variety3 %} '{{data.commodity_variety3 or 'Batch 1'}}'{% endif %}{% endif %}
+                {% elif data.commodity == "plants" %}
+                {% if data.has_botanicial_name3 == "use_description" %}{{data.commodity_description3 or "Plants and fresh produce" }}{% else %}{{data.botanical_name3 or "Corylus avellana (CYLAV)"}}{% endif %}
+                {% elif data.commodity == "potatoes" %}
+                {% if data.has_botanicial_name3 == "use_description" %}{{data.commodity_variety_manual3 or "King Smith" }}{% else %}{{data.commodity_variety3[0] or 'Maris piper'}}{% endif %}
+                {% else %}
+                {% if data.has_botanicial_name3 == "use_description" %}{{data.commodity_description3 or "Plants and fresh produce" }}{% else %}{{data.botanical_name3 or "Corylus avellana (CYLAV)"}}{% endif %}
+                {% endif %}
+                {% elif query.deleteLocation1Row2 == "true" %}
+                {% if data.commodity == "bulbs" %}
+                {% if data.has_botanicial_name2 == "use_description" %}{{data.commodity_description2 or "Bulbs" }}{% else %}{{data.botanical_name2 or "Androsace sp. (ANSSS)"}}{% if data.commodity_variety2 %} '{{data.commodity_variety2 or 'Batch 1'}}'{% endif %}{% endif %}
+                {% elif data.commodity == "plants" %}
+                {% if data.has_botanicial_name2 == "use_description" %}{{data.commodity_description2 or "Plants and fresh produce" }}{% else %}{{data.botanical_name2 or "Corylus avellana (CYLAV)"}}{% endif %}
+                {% elif data.commodity == "potatoes" %}
+                {% if data.has_botanicial_name2 == "use_description" %}{{data.commodity_variety_manual2 or "King Smith" }}{% else %}{{data.commodity_variety2[0] or 'Maris piper'}}{% endif %}
+                {% else %}
+                {% if data.has_botanicial_name2 == "use_description" %}{{data.commodity_description2 or "Plants and fresh produce" }}{% else %}{{data.botanical_name2 or "Corylus avellana (CYLAV)"}}{% endif %}
+                {% endif %}
+                {% elif query.deleteLocation1Row1 == "true" %}
+                {% if data.commodity == "bulbs" %}
+                {% if data.has_botanicial_name == "use_description" %}{{data.commodity_description or "Bulbs" }}{% else %}{{data.botanical_name or "Androsace sp. (ANSSS)"}}{% if data.commodity_variety %} '{{data.commodity_variety or 'Batch 1'}}'{% endif %}{% endif %}
+                {% elif data.commodity == "plants" %}
+                {% if data.has_botanicial_name == "use_description" %}{{data.commodity_description or "Plants and fresh produce" }}{% else %}{{data.botanical_name or "Corylus avellana (CYLAV)"}}{% endif %}
+                {% elif data.commodity == "potatoes" %}
+                {% if data.has_botanicial_name == "use_description" %}{{data.commodity_variety_manual or "King Smith" }}{% else %}{{data.commodity_variety3[0] or 'Maris piper'}}{% endif %}
+                {% else %}
+                {% if data.has_botanicial_name == "use_description" %}{{data.commodity_description or "Plants and fresh produce" }}{% else %}{{data.botanical_name or "Corylus avellana (CYLAV)"}}{% endif %}
+                {% endif %}
+                {% else %}
+                {% if data.commodity == "bulbs" %}
+                {% if data.has_botanicial_name == "use_description" %}{{data.commodity_description or "Bulbs" }}{% else %}{{data.botanical_name or "Androsace sp. (ANSSS)"}}{% if data.commodity_variety %} '{{data.commodity_variety or 'Batch 1'}}'{% endif %}{% endif %}
+                {% elif data.commodity == "plants" %}
+                {% if data.has_botanicial_name == "use_description" %}{{data.commodity_description or "Plants and fresh produce" }}{% else %}{{data.botanical_name or "Corylus avellana (CYLAV)"}}{% endif %}
+                {% elif data.commodity == "potatoes" %}
+                {% if data.has_botanicial_name == "use_description" %}{{data.commodity_variety_manual or "King Smith" }}{% else %}{{data.commodity_variety3[0] or 'Maris piper'}}{% endif %}
+                {% else %}
+                {% if data.has_botanicial_name == "use_description" %}{{data.commodity_description or "Plants and fresh produce" }}{% else %}{{data.botanical_name or "Corylus avellana (CYLAV)"}}{% endif %}
+                {% endif %}
+                {% endif %}
+              </dd>
+              <dd class="govuk-summary-list__actions">&nbsp;</dd>
             </div>
-          </fieldset>
+            
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">{% if data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}Number of containers{% else %}Inspection area (hectares){% endif %}</dt>
+              <dd class="govuk-summary-list__value">
+                {% if query.deleteLocation2Row1 == "true" %}
+                {% if data.commodity == "plants" %}{% if data.subCommodityType == "Micropropagation material" %}{{data.quantityContainers3 or "2"}}{% else %}{{data.quantityHectarage3 or "4"}}{% endif %}{% else %}{{data.approxhectofplot3 or "12"}}{% endif %}
+                {% elif query.deleteLocation1Row2 == "true" %}
+                {% if data.commodity == "plants" %}{% if data.subCommodityType == "Micropropagation material" %}{{data.quantityContainers2 or "2"}}{% else %}{{data.quantityHectarage2 or "4"}}{% endif %}{% else %}{{data.approxhectofplot2 or "12"}}{% endif %}
+                {% elif query.deleteLocation1Row1 == "true" %}
+                {% if data.commodity == "plants" %}{% if data.subCommodityType == "Micropropagation material" %}{{data.quantityContainers or "12"}}{% else %}{{data.quantityHectarage or "6"}}{% endif %}{% else %}{{data.approxhectofplot or "3.5"}}{% endif %}
+                {% else %}
+                {% if data.commodity == "plants" %}{% if data.subCommodityType == "Micropropagation material" %}{{data.quantityContainers or "12"}}{% else %}{{data.quantityHectarage or "6"}}{% endif %}{% else %}{{data.approxhectofplot or "3.5"}}{% endif %}
+                {% endif %}
+              </dd>
+              <dd class="govuk-summary-list__actions">&nbsp;</dd>
+            </div>
+      
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Destination countries</dt>
+              <dd class="govuk-summary-list__value">
+                {% if query.deleteLocation2Row1 == "true" %}
+                {% if data['filter_demo3'] %}{{data['filter_demo3']| join(", ")}}{% else %}France{% endif %}
+                {% elif query.deleteLocation1Row2 == "true" %}
+                {% if data['filter_demo2'] %}{{data['filter_demo2']| join(", ")}}{% else %}Japan{% endif %}
+                {% elif query.deleteLocation1Row1 == "true" %}
+                {% if data['filter_demo'] %}{{data['filter_demo']| join(", ")}}{% else %}Belize{% endif %}
+                {% else %}
+                {% if data['filter_demo'] %}{{data['filter_demo']| join(", ")}}{% else %}Belize{% endif %}
+                {% endif %}
+              </dd>
+              <dd class="govuk-summary-list__actions">&nbsp;</dd>
+            </div>
+      
+          </dl>
+          
+          <div class="govuk-radios" data-module="govuk-radios">
+            
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="delete_yes" name="delete" type="radio" value="Yes~{% if query.deleteLocation2Row1 == 'true' %}how-to-identify-3?{% elif data.location1Row1 == 'true' and data.location1Row2 == 'true' %}{{query.return_url or 'commodity-list'}}?{% else %}how-to-identify?{% endif %}{% if query.deleteLocation2Row1 == 'true' %}location2Row1=false&potato3=&commodity_variety_manual3=&has_botanicial_name3=&botanical_name3=&commodity_variety3=&commodity_description3=&chemicals_used3=&ss_number3=&quantityContainers3=&quantityHectarage3=&quantityPotsOrPlants3=&approxhectofplot3=&filter_demo3={% elif query.deleteLocation1Row2 == 'true' %}location1Row2=false&potato2=&commodity_variety_manual2=&has_botanicial_name2=&botanical_name2=&commodity_variety2=&commodity_description2=&chemicals_used2=&ss_number2=&quantityContainers2=&quantityHectarage2=&quantityPotsOrPlants2=&approxhectofplot2=&filter_demo2={% elif query.deleteLocation1Row1 == 'true' %}location1Row1=false&potato=&commodity_variety_manual=&has_botanicial_name=&botanical_name=&commodity_variety=&commodity_description=&chemicals_used=&ss_number=&quantityContainers=&quantityHectarage=&quantityPotsOrPlants=&approxhectofplot=&filter_demo={% else %}location1Row1=false&addfielddetails=&navigation_googlemaps=&navigation_gridgps=&navigation_iacs=&navigation_what3words=&nurseryplotno=&areaoffield=&confirm=&more_detail=&send_inspector_map=&map_upload=&potato=&commodity_variety_manual=&has_botanicial_name=&botanical_name=&commodity_variety=&commodity_description=&chemicals_used=&ss_number=&quantityContainers=&quantityHectarage=&quantityPotsOrPlants=&approxhectofplot=&filter_demo={% endif %}">
+              <label class="govuk-label govuk-radios__label govuk-radios-long-label" for="delete_yes">Yes, delete</label>
+            </div>
 
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="delete_no" name="delete" type="radio" value="No~commodity-list">
+              <label class="govuk-label govuk-radios__label govuk-radios-long-label" for="delete_no">Cancel and go back</label>
+            </div>
 
+          </div>
+
+        </fieldset>
       </div>
-      <button class="govuk-button govuk-!-margin-top-6" data-module="govuk-button">
-        Continue
-      </button>
-    </form>
-  </div>
-</div>
 
+      <button class="govuk-button" type="submit" data-module="govuk-button">Confirm</button>
+    </form>
+
+  </div>
+
+</div>
 {% endblock %}

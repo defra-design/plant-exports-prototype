@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  Create a reference - Phytosanitary certificate - {{serviceName}} - GOV.UK
+  {% if data.reissue == "yes" %}Make your changes - Re-issue a phytosanitary certificate{% else %}Create a reference - Phytosanitary certificate{% endif %} - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -14,7 +14,12 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
-	  <h1 class="govuk-heading-xl">Create a reference</h1>    
+    {% if data.reissue == "yes" %}
+    <span class="govuk-caption-xl">Your reference</span>
+    <h1 class="govuk-heading-xl">Make your changes</h1>
+    {% else %}
+	  <h1 class="govuk-heading-xl">Create a reference</h1>
+    {% endif %}
     <p class="govuk-body">
       {% if query.change == 'yes' %}
       Change your reference for this {% if data.has_reference == 'phyto' %}phytosanitary certificate{% elif data.has_reference == 'donotneed' %}re-forwarding phytosanitary certificate{% elif data.has_reference == 'coc' %}certificate of comformity{% else %}phytosanitary certificate{% endif %}.

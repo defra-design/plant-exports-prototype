@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.build == "development" %}{% if data.commodity == "plant products" %}Plant Products{% else %}{{data.commodity | capitalize or 'Plant Products' }}{% endif %} Details - Exports application{% else %}{% if query.error == "true" %}Error: {% endif %}Add {% if data.pheats != 1 %}{% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your {% if data.reforwarding %} re-forwarding{% endif %} consignment - Phytosanitary certificate - {{serviceName}}{% endif %} - GOV.UK
+  Make your changes - Re-issue a phytosanitary certificate - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -37,8 +37,11 @@
     {% endif %}
 
     <form action="how-to-identify-validation" method="post">
-      <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">{% if data.build == "development" %}Your commodity{% else %}Add {% if data.pheats != 1 %}{% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your{% if data.reforwarding %} re-forwarding{% endif %} consignment{% endif %}</legend>
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+          <span class="govuk-caption-xl">Corylus avellana</span>
+          Make your changes
+        </legend>
         
         <div class="govuk-form-group{% if query.error1 == 'true' %} govuk-form-group--error{% endif %} govuk-!-margin-top-6">
           <fieldset class="govuk-fieldset" aria-describedby="quantity-hint{% if query.error1 == 'true' %} quantity-input-error{% endif %}">
@@ -50,7 +53,7 @@
             <p id="quantity-input-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> You cannot increase the quantity, you can only decrease it</p>
             {% endif %}
             <input class="govuk-input{% if query.error1 == 'true' %} govuk-input--error{% endif %} govuk-input--width-5" id="quantity" name="quantity" type="text" aria-label="Quantity or weight per package" value="{% if query.change == 'yes' %}{{data.quantity or '25'}}{% endif %}">
-            <select name="units" id="units" class="govuk-select govuk-!-margin-left-1" aria-label="Units of measurement">
+            <select name="units" id="units" class="govuk-select govuk-!-margin-left-1" aria-label="Units of measurement" disabled aria-disabled="true">
               <option value="">Unit of measurement</option>
               {% if data.commodity == "seeds" %}
               <option value="Grams">Grams</option>

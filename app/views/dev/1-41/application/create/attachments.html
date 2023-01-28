@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.build == "development" %}Exports application - GOV.UK{% else %}Supporting documents - Phytosanitary certificate - {{serviceName}} - GOV.UK{% endif %}  
+  {% if data.reissue == "yes" %}Make your changes - Re-issue a phytosanitary certificate - {{serviceName}} - GOV.UK{% else %}{% if data.build == "development" %}Exports application - GOV.UK{% else %}Supporting documents - Phytosanitary certificate - {{serviceName}} - GOV.UK{% endif %}{% endif %}
 {% endblock %}
 
 {% block beforeContent %}
@@ -20,8 +20,13 @@
       <p class="govuk-body govuk-!-margin-bottom-0">Succesfully deleted file {{data.file}}</p>
     </div>
 
-    {% endif %}  
+    {% endif %}
+    {% if data.reissue == "yes" %}
+    <span class="govuk-caption-xl">Supporting documents</span>
+    <h1 class="govuk-heading-xl">Make your changes</h1>
+    {% else %}
     <h1 id="supplementary-documents" class="govuk-heading-xl">Supporting documents</h1>
+    {% endif %}
   </div>
 
   {% if data.build == "development" %}

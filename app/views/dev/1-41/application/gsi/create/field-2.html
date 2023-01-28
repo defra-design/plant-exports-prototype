@@ -1,151 +1,274 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-Field details - Growing season inspection - {{serviceName}} - GOV.UK
+  Crop location - Growing season inspection - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
 {{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="../../../account" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
+  </ul>
+</div>
+
 <a href="javascript:history.back()" class="govuk-back-link">Back</a>
 {% endblock %}
 
 {% block content %}
-<div class="govuk-width-container">
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      <form method="post" class="form">
-        <h1 class="govuk-heading-xl">
-          Crop location
-        </h1>
+<style>
 
-        {% set iacsHtml %}
-        {{ govukInput({
-          id: "iacs",
-          name: "navigation",
-          type: "text",
-          spellcheck: false,
-          classes: "govuk-!-width-one-third",
-          label: {
-            text: "Enter the IACS or RLR number eg NF 1234 1234"
-          }
-        }) }}
-        {% endset -%}
+  /* Needs extracting and adding to the external Sass or CSS */
+  .wrap-content {
+    word-break: break-all;
+  }
+  
+  /* what3words recommended CSS (https://developer.what3words.com/tutorial/ux-guidelines) */
+  .what3words-wrapper {
+    margin-bottom: 5px;
+  }
+  @media (min-width: 641px) {
+    .what3words-wrapper {
+      margin-bottom: 10px;
+    }
+  }
 
-        {% set gridHtml %}
-        {{ govukInput({
-          id: "gridgps",
-          name: "navigation",
-          type: "text",
-          spellcheck: false,
-          classes: "govuk-!-width-one-third",
-          label: {
-            text: "Enter the grid reference or GPS reading"
-          }
-        }) }}
-        {% endset -%}
+  .what3words {
+    color: #E11F26;
+  }
+  @media (min-width: 641px) {
+    .what3words {
+      margin-bottom: 10px;
+    }
+  }
 
-        {{ govukRadios({
-          idPrefix: "addfielddetails",
-          name: "addfielddetails",
-          fieldset: {
-            legend: {
-              text: "How do you want to provide the location?",
-              isPageHeading: true,
-              classes: "govuk-fieldset__legend--s"
-            }
-          },
-          items: [
-              {
-                value: "iacs",
-                text: "IACS or RLR number",
-                conditional: {
-                  html: iacsHtml
-                }
-              },
-              {
-                value: "gridgps",
-                text: "Grid reference or GPS reading",
-                conditional: {
-                  html: gridHtml
-                }
-            }
-          ]
-        }) }}
+</style>
 
-        {{ govukInput({
-          label: {
-            text: "Nursery plot number or field name",
-            classes: "govuk-label--s",
-            isPageHeading: false
-          },
-          id: "nurseryplotno",
-          name: "nurseryplotno",
-          classes: "govuk-input--width-20"
-        }) }}
+<!-- Chris Harding (05.10.22) - An easier way to display the correct content on this page, depending on the sub commodity (for 'Plants and fresh produce' only) -->
+{% if data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}
+  {% set locationIdentifierHint = "For example, glasshouse or bench number" %}
+{% else %}
+  {% set locationIdentifierHint = "For example, location name or nursery plot number" %}
+{% endif %}
+{% set locationReference = "location" %}
 
-        {{ govukInput({
-          label: {
-            text: "Area of whole field in hectares",
-            classes: "govuk-label--s",
-            isPageHeading: false
-          },
-          id: "areaoffield",
-          name: "areaoffield",
-          classes: "govuk-input--width-4"
-        }) }}
-        
-        <div class="govuk-checkboxes govuk-!-margin-bottom-4">
-          <div class="govuk-checkboxes__item">
-            <input class="govuk-checkboxes__input" type="checkbox" autofocus="autofocus" name="confirm" id="confirm">
-            <label class="govuk-checkboxes__label" for="confirm">
-              I confirm that I have the land owner's consent to inspect this field
-            </label>
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <form action="how-to-identify" method="post">
+      <h1 class="govuk-heading-xl">Crop location</h1>
+
+      <div class="govuk-form-group govuk-!-margin-bottom-1">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend">Add a location for inspection. You will be able to list multiple crops for inspection at this location if you want to.</legend>
+
+          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+
+            {% if data.build != "development" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="addfielddetails-1" name="addfielddetails2" type="radio" value="Google Maps" aria-controls="conditional-addfielddetails-1" aria-expanded="false"{% if data.addfielddetails2 == 'Google Maps' %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="addfielddetails-1">Drop a pin on Google Maps</label>
+            </div>
+              
+            <div class="govuk-radios__conditional" id="conditional-addfielddetails-1">
+
+              <div class="govuk-form-group">
+                <label class="govuk-label wrap-content" for="navigation_googlemaps">For example, https://www.google.com/maps/place/Natural+England/@53.0922428,-2.415669,17z/data=!4m6!3m5!1s0x0:0xa679866b86f4e67c!4b1!8m2!3d53.0917192!4d-2.4162063</label>
+                <textarea class="govuk-textarea govuk-!-width-three-quarters" id="navigation_googlemaps" name="navigation_googlemaps2" rows="3">{{data.navigation_googlemaps2 or ''}}</textarea>
+                <!-- <input class="govuk-input govuk-!-width-three-quarters" id="navigation_googlemaps" name="navigation_googlemaps2" type="text" spellcheck="false" value="{{data.navigation_googlemaps2 or ''}}"> -->
+              </div>
+            
+            </div>            
+            {% endif %}
+            
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="addfielddetails-2" name="addfielddetails2" type="radio" value="gridgps" aria-controls="conditional-addfielddetails-2" aria-expanded="false"{% if data.addfielddetails2 == 'gridgps' %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="addfielddetails-2">Grid reference or GPS reading</label>
+            </div>
+              
+            <div class="govuk-radios__conditional" id="conditional-addfielddetails-2">
+
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="navigation_gridgps">Enter the grid reference or GPS reading</label>
+                <input class="govuk-input govuk-!-width-one-half" id="navigation_gridgps" name="navigation_gridgps2" type="text" spellcheck="false" value="{{data.navigation_gridgps2 or ''}}">
+              </div>
+            
+            </div>
+            
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="addfielddetails-3" name="addfielddetails2" type="radio" value="iacs" aria-controls="conditional-addfielddetails-3" aria-expanded="false"{% if data.addfielddetails2 == 'iacs' %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="addfielddetails-3">IACS or RLR number</label>
+            </div>
+              
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-addfielddetails-3">
+            
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="navigation_iacs">Enter the IACS or RLR number, for example NF 1234 1234</label>
+                <input class="govuk-input govuk-!-width-one-third" id="navigation_iacs" name="navigation_iacs2" type="text" spellcheck="false" value="{{data.navigation_iacs2 or ''}}">
+              </div>
+            
+            </div>
+
+            {% if data.build != "development" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="addfielddetails-4" name="addfielddetails2" type="radio" value="what3words" aria-controls="conditional-addfielddetails-4" aria-expanded="false"{% if data.addfielddetails2 == 'what3words' %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="addfielddetails-4">what3words address</label>
+            </div>
+              
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-addfielddetails-4">
+
+              <div class="what3words-wrapper">
+                <label class="govuk-label" for="navigation_what3words">For example, ///reach.soils.cone</label>
+
+                <div class="govuk-input__wrapper">
+
+                  <div class="govuk-input__prefix what3words" aria-hidden="true">
+                    ///
+                  </div>
+
+                  <input class="govuk-input govuk-!-width-three-quarters" id="navigation_what3words" name="navigation_what3words2" type="text" spellcheck="false" value="{{data.navigation_what3words2 or ''}}">
+                </div>
+
+              </div>
+
+            </div>            
+            {% endif %}
+
+            {% if data.build == "development" %}
+            <br>
+            {% else %}
+            <details class="govuk-details" data-module="govuk-details">
+              <summary class="govuk-details__summary">
+                <span class="govuk-details__summary-text">Help with providing location</span>
+              </summary>
+            
+              <div class="govuk-details__text">
+                <h2 class="govuk-heading-s">How to find one of these location references</h2>
+                <ul class="govuk-list govuk-list--bullet">
+                  <li>Drop a pin on Google Maps by going to <a href="https://maps.google.co.uk" rel="noreferrer noopener" target="_blank">maps.google.co.uk (opens in new tab)</a>. Find the location you want and click or press on the exact point of the map where you want to drop a pin. The address or location will pop up at the bottom of the screen. You can then copy the web address and enter it as the location.</li>
+                  <li>You can find the grid reference number using the ‘where am I’ tool on MAGIC at <a href="https://magic.defra.gov.uk" rel="noreferrer noopener" target="_blank">magic.defra.gov.uk (opens in new tab)</a>.</li>
+                  <li>Not all land has an IACS number. If you rent your land, your landlord may be able to provide your IACS number.</li>
+                  <li>To find a rural land register (RLR) number, contact the rural payments agency on <a href="mailto:ruralpayments@defra.gov.uk">ruralpayments@defra.gov.uk</a> or 03000 200 301.</li>
+                  <li>You can find a what3words address by following the instructions at <a href="https://what3words.com" rel="noreferrer noopener" target="_blank">what3words.com (opens in new tab)</a>.</li>
+                </ul>
+              </div>
+            
+            </details>
+            {% endif %}
           </div>
+        
+        </fieldset>
+      </div>
+
+      {{ govukInput({
+        label: {
+          text: "Location identifier",
+          isPageHeading: false
+        },
+        hint: {
+          text: locationIdentifierHint
+        },
+        id: "nurseryplotno",
+        name: "nurseryplotno2",
+        classes: "govuk-input--width-20",
+        value: data.nurseryplotno2 or ""
+      }) }}
+
+      {% if data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}
+      
+      {% else %}
+      {{ govukInput({
+        label: {
+          text: "Area of whole field in hectares",
+          isPageHeading: false
+        },
+        id: "areaoffield",
+        name: "areaoffield2",
+        classes: "govuk-input--width-4",
+        value: data.areaoffield2 or ""
+      }) }}
+      {% endif %}
+
+      <div class="govuk-checkboxes govuk-!-margin-bottom-6">
+        
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input" type="checkbox" name="confirm2" id="confirm" value="Yes" {% if data.confirm2 == 'Yes' %}checked{% else %}{% endif %}>
+          <label class="govuk-checkboxes__label" for="confirm">I confirm that I have the land owner's consent to inspect this {{locationReference}}</label>
         </div>
 
-        {{ govukTextarea({
-          name: "more-detail",
-          id: "more-detail",
-          label: {
-            text: "Additional information (optional)",
-            classes: "govuk-label--s",
-            isPageHeading: true
-          },
-          hint: {
-            text: "For example, access points to the field"
-          }
-        }) }}
+      </div>
 
-        <h2 class="govuk-heading-s">Send the inspector a map (optional)</h2>
-        <p class="govuk-body">Upload a map to show your inspector where they will carry out their inspection, including the access point.</p>
-        <p class="govuk-body">The file must:</p>
-        <ul class="govuk-list govuk-list--bullet">
-          <li>be in JPEG, PNG,{% if data.build != "development" %} GIF,{% endif %} PDF or Word format</li>
-          <li>be smaller than 10 megabytes (10MB)</li>
-        </ul>
+      {{ govukTextarea({
+        name: "more_detail2",
+        id: "more_detail",
+        value: data.more_detail2 or "",
+        label: {
+          text: "Additional information",
+          isPageHeading: false
+        },
+        hint: {
+          text: "Tell the inspector how to access the " + locationReference + " and where to park"
+        }
+      }) }}
 
-        {{ govukFileUpload({
-          id: "map-upload",
-          name: "map-upload"
-        }) }}
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend">Would you like to upload a map to show the inspector where they will carry out their inspection?</legend>
+          
+          <div class="govuk-radios">
 
-        {{ govukButton({
-          text: "Upload map",
-          classes: "govuk-button--secondary",
-          href: "field-upload-wip"
-        }) }}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="send_inspector_map_yes" name="send_inspector_map2" type="radio" value="Yes~send-inspector-map-2"{% if data.send_inspector_map2 == 'Yes' %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="send_inspector_map_yes">Yes, I'll upload a map</label>
+            </div>
 
-        {%if data.commodities and ( data.commodities | length ) > 0 %}
-          {% set url = "gsi-commodity-list-2" %}
-        {% else %}
-          {% set url = "how-to-identify-2" %}
-        {% endif %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="send_inspector_map_no" name="send_inspector_map2" type="radio" value="No~how-to-identify-3"{% if data.send_inspector_map2 == 'No' %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="send_inspector_map_no">No</label>
+            </div>
 
-        <p class="govuk-body govuk-!-margin-top-4">
-          <a href="{{url}}" class="govuk-button">Save and continue</a>
-        </p>
-      </form>
-    </div>
+          </div>
+      
+        </fieldset>
+        <p class="govuk-body govuk-!-margin-top-6">If you prefer to post a map to your inspector, you should contact them to ask what address to send it to. You should include the <abbr title="Animal and Plant Health Agency">APHA</abbr> reference number for this application with your map. You will be given the <abbr title="Animal and Plant Health Agency">APHA</abbr> reference number at the end of this application.</p>
+      </div>
+
+      {% if data.build == "development" %}
+      <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      {% else %}
+      <div class="govuk-form-group">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      </div>
+
+      {% block continueLater %}
+      {% include "../modules/_save-continue-later.html" %}
+      {% endblock %}
+      {% endif %}
+    </form>
+
   </div>
+
 </div>
+
+<!-- JavaScript (START) -->
+<script type="text/javascript" src="/public/javascripts/jquery-3.6.0.js"></script>
+<script type="text/javascript">
+
+  // what3words styling to always add a '.' between each of the words.
+  $("#navigation_what3words").keydown(function (e) {
+      
+    if (e.keyCode == 32) {
+      // Append '.' to the input
+      $(this).val($(this).val() + "."); 
+      // Return false to prevent space from being added
+      return false; 
+    }
+
+  });
+
+</script>
+<!-- JavaScript (END) -->
 {% endblock %}

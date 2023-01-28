@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.build == "development" %}Display question - Exports application - GOV.UK{% else %}Who will receive this consignment? - {{serviceName}} - GOV.UK{% endif %}
+  {% if data.reissue == "yes" %}Make your changes - Re-issue a phytosanitary certificate - {{serviceName}} - GOV.UK{% else %}{% if data.build == "development" %}Display question - Exports application - GOV.UK{% else %}Who will receive this consignment? - {{serviceName}} - GOV.UK{% endif %}{% endif %}
 {% endblock %}
 
 {% block beforeContent %}
@@ -27,9 +27,16 @@
     <form action="{{query.return_url or '../create/task-list'}}" method="post">
     {% endif %}
       <fieldset class="govuk-fieldset">
+        {% if data.reissue == "yes" %}
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
+          <span class="govuk-caption-xl">Consignee details</span>
+          Make your changes
+        </legend>
+        {% else %}
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
           <h1 class="govuk-fieldset__heading">Who will receive this {% if data.reforwarding %}<br>re-forwarding{% endif %} consignment?</h1>
         </legend>
+        {% endif %}
         {% if data.build == "development" %}
         {% if data.commodity != "bulbs" %}
         <p class="govuk-hint">This is the consignee - the importer or customer who receives your consignment when it arrives in the importing country</p>

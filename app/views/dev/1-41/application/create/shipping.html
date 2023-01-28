@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.build == "development" %}Display question - Exports application - GOV.UK{% else %}How will the consignment be transported? - Phytosanitary certificate - {{serviceName}} - GOV.UK{% endif %}
+  {% if data.reissue == "yes" %}Make your changes - Re-issue a phytosanitary certificate - {{serviceName}} - GOV.UK{% else %}{% if data.build == "development" %}Display question - Exports application - GOV.UK{% else %}How will the consignment be transported? - Phytosanitary certificate - {{serviceName}} - GOV.UK{% endif %}{% endif %}
 {% endblock %}
 
 {# set label as bold #}
@@ -182,12 +182,17 @@
       {% include "../modules/_save-continue-later.html" %}
     </form>
     {% else %}
+    {% if data.reissue == "yes" %}
+    <span class="govuk-caption-xl">Transportation</span>
+    <h1 class="govuk-heading-xl">Make your changes</h1>
+    {% else %}
     <h1 class="govuk-heading-xl">
       How will this {% if data.reforwarding %}re-forwarding {% endif %}consignment be transported?
       {% if data.journey == "coc" %}
       <span class="govuk-hint govuk-!-margin-top-4" id="transport-hint">If your consignment is travelling by road and ferry, choose Road. If your consignment is being transported by deep sea freight, choose Maritime.</span>
       {% endif %}
     </h1>
+    {% endif %}
 
     <form action="{{query.return_url or '../create/task-list'}}" method="post">
       <fieldset class="govuk-fieldset" role="group">
