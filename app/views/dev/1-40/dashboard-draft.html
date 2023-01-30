@@ -478,10 +478,27 @@
                     <span class="table-heading" aria-hidden="true">Your reference</span> {% if data.reference_num %}{{data.reference_num or "REFERENCE"}}{% else %}&nbsp;{% endif %}
                   </td>
                   <td id="type-1" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Type</span> Soil sampling
+                    <span class="table-heading" aria-hidden="true">Type</span> 
+                    {% if data.has_reference == 'phyto' %}
+                    Phytosanitary
+                    {% elif data.has_reference == 'donotneed' %}
+                    Re-forwarding
+                    {% elif data.has_reference == 'coc' %}
+                    Conformity
+                    {% elif data.has_reference == 'gsi' %}
+                    Growing season inspection
+                    {% elif data.has_reference == 'seed sampling' %}
+                    Seed sampling
+                    {% elif data.has_reference == 'soil sampling' %}
+                    Soil sampling
+                    {% elif data.has_reference == 'batch' %}
+                    Set up one time testing
+                    {% else %}
+                    Phytosanitary
+                    {% endif %}
                   </td>
                   <td id="destination-country-1" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Destination</span> {% if data.destinationcountries %}{{data.destinationcountries or "USA" }}{% else %}&nbsp;{% endif %}
+                    <span class="table-heading" aria-hidden="true">Destination</span> {% if data.has_reference == 'phyto' or data.has_reference == 'donotneed' or data.has_reference == 'coc' %}{{data.consignee_name or "Acme Ltd"}}<br>{{data.countrySelect[0] or "France"}}{% else %}&nbsp;{% endif %}
                   </td>
                   <td id="actions-1" class="govuk-table__cell govuk-table__cell--numeric responsive-table-draft-actions-td" scope="row">
                     <a class="draft-actions-copy" href="clone?returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate 1721 14800 4809</span></a>
