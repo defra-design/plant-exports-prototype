@@ -16,17 +16,19 @@ Example usage:
 ============================================================================
 
 */
-var applications = require('./applications.json')
-var applicationsv2 = require('./applications-v2.json')
-var applicationsv3 = require('./applications-v3.json')
-var applicationsv4 = require('./applications-v4.json')
-var sample = require('./sample.json')
+var applications = require('./applications.json');
+var applicationsv2 = require('./applications-v2.json');
+var applicationsv3 = require('./applications-v3.json');
+var applicationsv4 = require('./applications-v4.json');
+var applicationsv5 = require('./applications-v5.json');
+var sample = require('./sample.json');
 
 module.exports = {
   "applications" : applications,
   "applicationsv2" : applicationsv2,
   "applicationsv3" : applicationsv3,
   "applicationsv4" : applicationsv4,
+  "applicationsv5" : applicationsv5,
   "commodities" : [],
   "id_count" : 1,
   "sample": sample,

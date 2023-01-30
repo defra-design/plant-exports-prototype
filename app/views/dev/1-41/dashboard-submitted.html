@@ -582,7 +582,7 @@
                             <select class="govuk-select govuk-!-width-full" id="filter_name" name="filter_name">
                               <option value="All users"{% if not data.filter_name or data.filter_name == "All users" %} selected{% endif %}>All users</option>
                               {% set list = [] %}
-                              {% for cert in data.applicationsv4 %}
+                              {% for cert in data.applicationsv5 %}
                               {% if not cert.name in list %}
                               <option value="{{cert.name}}"{% if cert.name == data.filter_name %} selected{% endif %}>{{cert.name}}{% if logged_in_as == cert.name %} <strong>(you)</strong>{% endif %}</option>
                               {{list.push(cert.name)}}
@@ -764,10 +764,10 @@
                     {% endif %}
                   </td>
                   <td id="destination-country-1" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Destination</span> {% if data.destinationcountries %}{{data.destinationcountries or "USA" }}{% else %}&nbsp;{% endif %}
+                    <span class="table-heading" aria-hidden="true">Destination</span> {% if data.has_reference == 'phyto' or data.has_reference == 'donotneed' or data.has_reference == 'coc' %}{{data.consignee_name or "Acme Ltd"}}<br>{{data.countrySelect[0] or "France"}}{% else %}&nbsp;{% endif %}
                   </td>
                   <td id="submitted-date-1" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Submitted date</span> {{todaysDate}}
+                    <span class="table-heading" aria-hidden="true">Submitted date</span> {{todaysDateShort}}
                   </td>
                   <td id="status-1" class="govuk-table__cell" scope="row">
                     <span class="table-heading" aria-hidden="true">Status</span>
@@ -782,7 +782,7 @@
                   </td>
                 </tr>
                 {% endif %}
-                {% for app in data.applicationsv4 %}
+                {% for app in data.applicationsv5 %}
                 {% if app.status != "draft" %}
 
                 <!-- PAGINATED AT 30 (HACKED) RESULTS (START) -->
@@ -1206,7 +1206,7 @@
                 </tr>
               </thead>
               <tbody class="govuk-table__body govuk-body-s">
-                {% for app in data.applicationsv4 %}
+                {% for app in data.applicationsv5 %}
                 {% if app.status != "draft" %}
 
                 <!-- PAGINATED AT 5 OR 6 (HACKED) RESULTS (START) -->

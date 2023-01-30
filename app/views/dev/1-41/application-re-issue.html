@@ -2,9 +2,9 @@
 
 {% block pageTitle %}
   {% if data.build == "development" %}
-  {% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %} {{query.id | appInformationV4('applicationID')}} - {{serviceName}} - GOV.UK
+  {% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %} {{query.id | appInformationV5('applicationID')}} - {{serviceName}} - GOV.UK
   {% else %}
-  Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %} {{query.id | appInformationV4('applicationID')}} - {{serviceName}} - GOV.UK
+  Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %} {{query.id | appInformationV5('applicationID')}} - {{serviceName}} - GOV.UK
   {% endif %}
 {% endblock %}
 
@@ -19,26 +19,6 @@
 </div>
 
 <a href="javascript:history.back()" class="govuk-back-link">Return to your applications</a>
-<style>
-
-  /* Needs extracting and adding to the external Sass or CSS */
-  .govuk-status--warning {
-    width: auto !important;
-    text-align: center;
-    font-size: 14px;
-    font-weight: 700;
-    text-transform: uppercase;
-    padding: 4px 8px;
-    padding-bottom: 1px;
-    letter-spacing: 1px;
-    text-decoration: none;
-    display: inline-block;
-    color: #0b0c0c;
-    background: #FFBF47;
-    border: 3px solid #FFBF47;
-  }
-  
-</style>
 {% endblock %}
 
 {% block content %}
@@ -51,11 +31,11 @@
       {% if data.build == "development" %}
       {% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %} 
       <br>
-      {{query.id | appInformationV4('applicationID')}}
+      {{query.id | appInformationV5('applicationID')}}
       {% else %}
       Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %}
       <br>
-      {{query.id | appInformationV4('applicationID')}}
+      {{query.id | appInformationV5('applicationID')}}
       {% endif %}
     </h1>
   </div>
@@ -107,22 +87,22 @@
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Your reference</dt>
-        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV4('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformationV4('reference')}}{% endif %}</dd>
+        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV5('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformationV5('reference')}}{% endif %}</dd>
       </div>
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Type</dt>
-        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV4('cert_info')) == 'Conformity' %}Certificate of conformity{% elif (query.id | appInformationV4('cert_info')) == 'Phytosanitary' %}Phytosanitary certificate{% elif (query.id | appInformationV4('cert_info')) == 'Re-forwarding' %}Re-forwarding phytosanitary certificate{% else %}Phytosanitary certificate{% endif %} for plants and fresh produce</dd>
+        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV5('cert_info')) == 'Conformity' %}Certificate of conformity{% elif (query.id | appInformationV5('cert_info')) == 'Phytosanitary' %}Phytosanitary certificate{% elif (query.id | appInformationV5('cert_info')) == 'Re-forwarding' %}Re-forwarding phytosanitary certificate{% else %}Phytosanitary certificate{% endif %} for plants and fresh produce</dd>
       </div>
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Destination country</dt>
-        <dd class="govuk-summary-list__value">{{query.id | appInformationV4('destination')}}</dd>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV5('destination')}}</dd>
       </div>
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">{% if data.build == "development" %}Customer{% else %}Consignee{% endif %}</dt>
-        <dd class="govuk-summary-list__value">{{query.id | appInformationV4('importer') | title or "Example consignee name"}}</dd>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV5('importer') | title or "Example consignee name"}}</dd>
       </div>
 
       {% if query.id == 0 %}
@@ -134,17 +114,17 @@
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Phytosanitary certificate number</dt>
-        <dd class="govuk-summary-list__value">UK/GB/E&W/{{query.id | appInformationV4('certificate') or "2022/123456"}}</dd>
+        <dd class="govuk-summary-list__value">UK/GB/E&W/{{query.id | appInformationV5('certificate') or "2022/123456"}}</dd>
       </div>
       
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Certificate issue date</dt>
-        <dd class="govuk-summary-list__value">{% if data.reissue_certificate_data_pfp == "approved" %}18 December 2022{% else %}{{query.id | appInformationV4('certificateIssueDate') or "01 January 2022"}}{% endif %}</dd>
+        <dd class="govuk-summary-list__value">{% if data.reissue_certificate_data_pfp == "approved" %}18 December 2022{% else %}{{query.id | appInformationV5('certificateIssueDate') or "01 January 2022"}}{% endif %}</dd>
       </div>
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Certificate expiry date</dt>
-        <dd class="govuk-summary-list__value">{{query.id | appInformationV4('certificateExpiryDate') or "15 January 2022"}}</dd>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV5('certificateExpiryDate') or "15 January 2022"}}</dd>
       </div>
 
     </dl>
@@ -247,11 +227,11 @@
       {% if data.build == "development" %}
       {% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %} 
       <br>
-      {{query.id | appInformationV4('applicationID')}}
+      {{query.id | appInformationV5('applicationID')}}
       {% else %}
       Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %}
       <br>
-      {{query.id | appInformationV4('applicationID')}}
+      {{query.id | appInformationV5('applicationID')}}
       {% endif %}
     </h1>
   </div>
@@ -303,22 +283,22 @@
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Your reference</dt>
-        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV4('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformationV4('reference')}}{% endif %}</dd>
+        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV5('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformationV5('reference')}}{% endif %}</dd>
       </div>
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Type</dt>
-        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV4('cert_info')) == 'Conformity' %}Certificate of conformity{% elif (query.id | appInformationV4('cert_info')) == 'Phytosanitary' %}Phytosanitary certificate{% elif (query.id | appInformationV4('cert_info')) == 'Re-forwarding' %}Re-forwarding phytosanitary certificate{% else %}Phytosanitary certificate{% endif %} for processed plant products</dd>
+        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV5('cert_info')) == 'Conformity' %}Certificate of conformity{% elif (query.id | appInformationV5('cert_info')) == 'Phytosanitary' %}Phytosanitary certificate{% elif (query.id | appInformationV5('cert_info')) == 'Re-forwarding' %}Re-forwarding phytosanitary certificate{% else %}Phytosanitary certificate{% endif %} for processed plant products</dd>
       </div>
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Destination country</dt>
-        <dd class="govuk-summary-list__value">{{query.id | appInformationV4('destination')}}</dd>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV5('destination')}}</dd>
       </div>
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">{% if data.build == "development" %}Customer{% else %}Consignee{% endif %}</dt>
-        <dd class="govuk-summary-list__value">{{query.id | appInformationV4('importer') | title or "Example consignee name"}}</dd>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV5('importer') | title or "Example consignee name"}}</dd>
       </div>
 
       {% if query.id == 0 %}
@@ -330,17 +310,17 @@
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Phytosanitary certificate number</dt>
-        <dd class="govuk-summary-list__value">UK/GB/E&W/{{query.id | appInformationV4('certificate') or "2022/123456"}}</dd>
+        <dd class="govuk-summary-list__value">UK/GB/E&W/{{query.id | appInformationV5('certificate') or "2022/123456"}}</dd>
       </div>
       
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Certificate issue date</dt>
-        <dd class="govuk-summary-list__value">{% if data.reissue_certificate_data_ppp == "approved" %}18 December 2022{% else %}{{query.id | appInformationV4('certificateIssueDate') or "01 January 2022"}}{% endif %}</dd>
+        <dd class="govuk-summary-list__value">{% if data.reissue_certificate_data_ppp == "approved" %}18 December 2022{% else %}{{query.id | appInformationV5('certificateIssueDate') or "01 January 2022"}}{% endif %}</dd>
       </div>
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Certificate expiry date</dt>
-        <dd class="govuk-summary-list__value">{{query.id | appInformationV4('certificateExpiryDate') or "15 January 2022"}}</dd>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV5('certificateExpiryDate') or "15 January 2022"}}</dd>
       </div>
 
     </dl>
@@ -369,11 +349,6 @@
     <ul class="govuk-list noprint">
       <li><a class="govuk-link govuk-link--no-visited-state" href="#">View application details</a></li>
       <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id}}&is_group={{query.is_group}}">Copy as new application</a></li>
-      {% if data.reissue_certificate_data_ppp == "submitted" or data.reissue_certificate_data_ppp == "processing" %}
-
-      {% else %}
-      <li><a class="govuk-link govuk-link--no-visited-state" href="application/re-issue/introduction?id={{query.id}}&is_group={{query.is_group}}">Ask for certificate to be re-issued</a></li>
-      {% endif %}
     </ul>
   </div>
   

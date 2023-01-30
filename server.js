@@ -171,9 +171,12 @@ app.locals.releaseVersion = 'v' + releaseVersion
 app.locals.serviceName = config.serviceName
 // extensionConfig sets up variables used to add the scripts and stylesheets to each page.
 app.locals.extensionConfig = extensions.getAppConfig()
-// date
-const now = moment().format('DD MMMM YYYY');
+// Date (full)
+const now = moment().format('D MMMM YYYY');
 app.locals.todaysDate = now;
+// Date (short - for tables)
+const nowShort = moment().format('D MMM YYYY');
+app.locals.todaysDateShort = nowShort;
 
 // Session uses service name to avoid clashes with other prototypes
 const sessionName = 'govuk-prototype-kit-' + (Buffer.from(config.serviceName, 'utf8')).toString('hex')

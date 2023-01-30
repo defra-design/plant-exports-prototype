@@ -8,6 +8,7 @@ module.exports = function(env) {
   var filters = {}
 
   /* ------------------------------------------------------------------
+    
     add your methods to the filters obj below this comment block:
     @example:
 
@@ -36,10 +37,7 @@ module.exports = function(env) {
     For more on filters and how to write them see the Nunjucks
     documentation.
 
-
-
   ------------------------------------------------------------------ */
-
 
   // filter for month implment on the page by using "| toMonth"
   filters.toMonth = function(x) {
@@ -94,12 +92,12 @@ module.exports = function(env) {
     return e.replace(/\,/g, '\n')
   }
 
-  // filter for replacing brackets with line breaks "| stripSqBrackets "
+  // filter for replacing brackets with line breaks "| stripSqBrackets"
   filters.stripSqBrackets = function(e) {
     return e.replace(/\[|\]/g, "")
   }
 
-  // filter for replacing quotes with line breaks "| stripQuotes "
+  // filter for replacing quotes with line breaks "| stripQuotes"
   filters.stripQuotes = function(e) {
     return e.replace(/\"/g, "")
   }
@@ -109,7 +107,7 @@ module.exports = function(env) {
     return e.replace(/\~/g, '\n')
   }
 
-  // filter for removing nulls "|removeNull"
+  // filter for removing nulls "| removeNull"
   filters.removeNull = function(e) {
     return e.replace(/null/g, '')
   }
@@ -139,7 +137,7 @@ module.exports = function(env) {
     }
   }
 
-  // set units to symbols"| symbols"
+  // set units to symbols "| symbols"
   filters.symbols = function(e) {
     if (e == "cubicMetresPerSecond") {
       return "m<sup>3</sup>/s"
@@ -222,7 +220,7 @@ module.exports = function(env) {
     return [...new Set(x)]
   }
 
-  // filter remove the first item in an array " |shift"
+  // filter remove the first item in an array " | shift"
   filters.shift = function(x) {
     return x.shift()
   }
