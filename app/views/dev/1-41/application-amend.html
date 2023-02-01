@@ -47,13 +47,17 @@
   <div class="govuk-grid-column-two-thirds">
 
     {% if data.state == "amended" %}
-    <div class="app-alert app-alert--info">
-      <p class="govuk-body">This application has been amended. You must resubmit your application for these changes to appear on your certificate.</p>
+    <div class="app-alert app-alert--info" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
+      <p class="govuk-body" id="govuk-notification-banner-message">This application has been amended. You must resubmit your application for these changes to appear on your certificate.</p>
     </div>
     {% elif data.state == "replaced" %}
-    <div class="app-alert app-alert--info ">
-      <h3 class="govuk-heading-s">1 certificate has been replaced</h3>
+    <div class="app-alert app-alert--info" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+      <h2 class="govuk-heading-s" id="govuk-notification-banner-title">1 certificate has been replaced</h2>
       <p class="govuk-body">You can still clone this certificate. We'll adapt the information from the old version to fit the new form, but there may be new changes or changed questions.</p>
+    </div>
+    {% else %}
+    <div class="app-alert app-alert--info" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
+      <p class="govuk-body" id="govuk-notification-banner-message">This application has been amended. You must resubmit your application for these changes to appear on your certificate.</p>
     </div>
     {% endif %}
 
@@ -114,10 +118,10 @@
       {% if (query.id | appInformationV5('status')) == 'exporter action' %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-pre-inspect-amend-message">Update this application</a></li>
       {% else %}
-      <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-pre-inspect-amend?is_amend=yes">Update this application</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-pre-inspect-amend?id={{query.id or 1}}&is_group={{query.is_group}}&is_amend=yes">Update this application</a></li>
       {% endif %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{query.is_group}}">Copy as new application</a></li>
-      <li><a class="govuk-link govuk-link--no-visited-state" href="cancel-reason">Cancel this application</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="cancel-reason?id={{query.id or 1}}&is_group={{query.is_group}}">Cancel this application</a></li>
     </ul>
   </div>
 
