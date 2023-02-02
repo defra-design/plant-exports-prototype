@@ -171,12 +171,19 @@ app.locals.releaseVersion = 'v' + releaseVersion
 app.locals.serviceName = config.serviceName
 // extensionConfig sets up variables used to add the scripts and stylesheets to each page.
 app.locals.extensionConfig = extensions.getAppConfig()
-// Date (full)
+// Date (full) plus 14 day expiry for certificates (plants and fresh produce)
 const now = moment().format('D MMMM YYYY');
 app.locals.todaysDate = now;
-// Date (short - for tables)
+// Date (short) for tables
 const nowShort = moment().format('D MMM YYYY');
 app.locals.todaysDateShort = nowShort;
+// Expiry dates (full) for phytosanitary certificates 
+// Processed plant products (6 months)
+const nowPlus6Months = moment().add(6, 'months').format('D MMMM YYYY');
+app.locals.todaysDateExpiry6Months = nowPlus6Months;
+// All other commodities (14 days)
+const nowPlus14Days = moment().add(14, 'days').format('D MMMM YYYY');
+app.locals.todaysDateExpiry14Days = nowPlus14Days;
 
 // Session uses service name to avoid clashes with other prototypes
 const sessionName = 'govuk-prototype-kit-' + (Buffer.from(config.serviceName, 'utf8')).toString('hex')

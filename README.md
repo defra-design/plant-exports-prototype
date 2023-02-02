@@ -2,7 +2,7 @@
 Plant exports prototype
 
 
-Deployed URL: https://defra-plant-exports.herokuapp.com/
+Deployed URL: https://defra-phes-prototype.herokuapp.com/
 
 ## Installation
 

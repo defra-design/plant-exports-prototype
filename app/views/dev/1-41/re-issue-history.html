@@ -15,45 +15,13 @@
 </div>
 
 <a href="javascript:history.back()" class="govuk-back-link">Back</a>
-<style>
-
-  /* Needs extracting and adding to the external Sass or CSS */
-  .govuk-status--warning {
-    width: auto !important;
-    text-align: center;
-    font-size: 14px;
-    font-weight: 700;
-    text-transform: uppercase;
-    padding: 4px 8px;
-    padding-bottom: 1px;
-    letter-spacing: 1px;
-    text-decoration: none;
-    display: inline-block;
-    color: #0b0c0c;
-    background: #FFBF47;
-    border: 3px solid #FFBF47;
-  }
-
-  .doc-icon::before {
-    content: '';
-    width: 1em;
-    height: 1.5em;
-    margin-right: 1em;
-    position: relative;
-    top: 0.5em;
-    display: inline-block;
-    background: #bfc1c3;
-    box-shadow: 3px -3px 0 #fff, 6px -6px 0 #bfc1c3;
-  }
-  
-</style>
 {% endblock %}
 
 {% block content %}
 <div class="govuk-grid-row">
   
   <div class="govuk-grid-column-full">
-    <span class="govuk-caption-xl">Phytosanitary certificate number UK/GB/E&W/{{query.id | appInformationV5('certificate') or "2022/4236522044833"}}</span>
+    <!-- <span class="govuk-caption-xl"><abbr title="Animal and Plant Health Agency">APHA</abbr> reference {{query.id | appInformationV5('applicationID')}}</span> -->
     <h1 class="govuk-heading-xl">Certificate issue history</h1>
     
     {% if query.id == 34 %}
@@ -71,15 +39,15 @@
       <tbody class="govuk-table__body">
         <tr class="govuk-table__row">
           <th scope="row" class="govuk-table__header">R1</th>
-          <td class="govuk-table__cell">18 December 2022</td>
-          <td class="govuk-table__cell">{{query.id | appInformationV5('certificateExpiryDate') or "15 January 2022"}}</td>
+          <td class="govuk-table__cell">{{todaysDate or "10 February 2023"}}</td>
+          <td class="govuk-table__cell">{{todaysDateExpiry14Days or "24 February 2023"}}</td>
           <td class="govuk-table__cell">I need to change details on the certificate</td>
           <td class="govuk-table__cell govuk-table__cell--numeric">£15.76</td>
         </tr>
         <tr class="govuk-table__row">
           <th scope="row" class="govuk-table__header">Original</th>
-          <td class="govuk-table__cell">{{query.id | appInformationV5('certificateIssueDate') or "01 January 2022"}}</td>
-          <td class="govuk-table__cell">{{query.id | appInformationV5('certificateExpiryDate') or "15 January 2022"}}</td>
+          <td class="govuk-table__cell">{{query.id | appInformationV5('certificateIssueDate') or "10 January 2023"}}</td>
+          <td class="govuk-table__cell">{{query.id | appInformationV5('certificateExpiryDate') or "24 January 2023"}}</td>
           <td class="govuk-table__cell">Original certificate</td>
           <td class="govuk-table__cell govuk-table__cell--numeric">£25.52</td>
         </tr>
@@ -100,8 +68,8 @@
       <tbody class="govuk-table__body">
         <tr class="govuk-table__row">
           <th scope="row" class="govuk-table__header">R5</th>
-          <td class="govuk-table__cell">{{query.id | appInformationV5('certificateIssueDate') or "01 January 2022"}}</td>
-          <td class="govuk-table__cell">{{query.id | appInformationV5('certificateExpiryDate') or "01 January 2022"}}</td>
+          <td class="govuk-table__cell">{{query.id | appInformationV5('certificateIssueDate') or "25 July 2022"}}</td>
+          <td class="govuk-table__cell">{{query.id | appInformationV5('certificateExpiryDate') or "8 August 2022"}}</td>
           <td class="govuk-table__cell">Something else: The wrong consignee details were printed by APHA</td>
           <td class="govuk-table__cell govuk-table__cell--numeric">£0</td>
         </tr>
@@ -157,15 +125,15 @@
       <tbody class="govuk-table__body">
         <tr class="govuk-table__row">
           <th scope="row" class="govuk-table__header">R1</th>
-          <td class="govuk-table__cell">18 December 2022</td>
-          <td class="govuk-table__cell">{{query.id | appInformationV5('certificateExpiryDate') or "15 January 2022"}}</td>
+          <td class="govuk-table__cell">{{todaysDate or "10 February 2023"}}</td>
+          <td class="govuk-table__cell">{{todaysDateExpiry6Months or "10 August 2023"}}</td>
           <td class="govuk-table__cell">I need to change details on the certificate</td>
           <td class="govuk-table__cell govuk-table__cell--numeric">£15.76</td>
         </tr>
         <tr class="govuk-table__row">
           <th scope="row" class="govuk-table__header">Original</th>
-          <td class="govuk-table__cell">{{query.id | appInformationV5('certificateIssueDate') or "01 January 2022"}}</td>
-          <td class="govuk-table__cell">{{query.id | appInformationV5('certificateExpiryDate') or "15 January 2022"}}</td>
+          <td class="govuk-table__cell">{{query.id | appInformationV5('certificateIssueDate') or "28 June 2022"}}</td>
+          <td class="govuk-table__cell">{{query.id | appInformationV5('certificateExpiryDate') or "28 December 2022"}}</td>
           <td class="govuk-table__cell">Original certificate</td>
           <td class="govuk-table__cell govuk-table__cell--numeric">£25.52</td>
         </tr>
@@ -185,23 +153,44 @@
       </thead>
       <tbody class="govuk-table__body">
         <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header">R5</th>
+          <td class="govuk-table__cell">{{query.id | appInformationV5('certificateIssueDate') or "25 July 2022"}}</td>
+          <td class="govuk-table__cell">{{query.id | appInformationV5('certificateExpiryDate') or "8 August 2022"}}</td>
+          <td class="govuk-table__cell">Something else: The wrong consignee details were printed by APHA</td>
+          <td class="govuk-table__cell govuk-table__cell--numeric">£0</td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header">R4</th>
+          <td class="govuk-table__cell">24 July 2022</td>
+          <td class="govuk-table__cell">7 August 2022</td>
+          <td class="govuk-table__cell">It never arrived</td>
+          <td class="govuk-table__cell govuk-table__cell--numeric">£0</td>
+        </tr>
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header">R3</th>
+          <td class="govuk-table__cell">22 July 2022</td>
+          <td class="govuk-table__cell">5 August 2022</td>
+          <td class="govuk-table__cell">It is lost or damaged</td>
+          <td class="govuk-table__cell govuk-table__cell--numeric">£15.76</td>
+        </tr>
+        <tr class="govuk-table__row">
           <th scope="row" class="govuk-table__header">R2</th>
-          <td class="govuk-table__cell">{{query.id | appInformationV5('certificateIssueDate') or "01 January 2022"}}</td>
-          <td class="govuk-table__cell">{{query.id | appInformationV5('certificateExpiryDate') or "01 January 2022"}}</td>
-          <td class="govuk-table__cell">There is something wrong with the certificate that only an inspector can fix</td>
+          <td class="govuk-table__cell">19 July 2022</td>
+          <td class="govuk-table__cell">2 August 2022</td>
+          <td class="govuk-table__cell">There is something wrong with the certificate that only an inspector can fix: Printing error</td>
           <td class="govuk-table__cell govuk-table__cell--numeric">£0</td>
         </tr>
         <tr class="govuk-table__row">
           <th scope="row" class="govuk-table__header">R1</th>
           <td class="govuk-table__cell">18 July 2022</td>
-          <td class="govuk-table__cell">{{query.id | appInformationV5('certificateExpiryDate') or "01 January 2022"}}</td>
-          <td class="govuk-table__cell">I need to change details on the certificate</td>
+          <td class="govuk-table__cell">1 August 2022</td>
+          <td class="govuk-table__cell">The date on the certificate has expired</td>
           <td class="govuk-table__cell govuk-table__cell--numeric">£15.76</td>
         </tr>
         <tr class="govuk-table__row">
           <th scope="row" class="govuk-table__header">Original</th>
           <td class="govuk-table__cell">16 July 2022</td>
-          <td class="govuk-table__cell">{{query.id | appInformationV5('certificateExpiryDate') or "01 January 2022"}}</td>
+          <td class="govuk-table__cell">30 July 2022</td>
           <td class="govuk-table__cell">Original certificate</td>
           <td class="govuk-table__cell govuk-table__cell--numeric">£25.52</td>
         </tr>

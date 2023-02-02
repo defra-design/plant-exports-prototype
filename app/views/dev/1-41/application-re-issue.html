@@ -28,7 +28,11 @@
 
   <div class="govuk-grid-column-two-thirds">
 
-    {% if data.reissue_certificate_data_pfp == "rejected" %}
+    {% if data.reissue_certificate_data_pfp == "draft" %}
+    <div class="app-alert app-alert--info" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
+      <p class="govuk-body" id="govuk-notification-banner-message">This application has been amended. You must resubmit your application for these changes to appear on your certificate.</p>
+    </div>
+    {% elif data.reissue_certificate_data_pfp == "rejected" %}
     <div class="app-alert app-alert--warning" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
       {% if query.rejectionReason == "1" %}
       <p class="govuk-body" id="govuk-notification-banner-message">The inspector decided your certificate cannot be re-issued. The inspector said:</p>
@@ -82,10 +86,6 @@
           <div class="govuk-tag govuk-tag--blue">
             Processing re-issue
           </div>
-          <!-- {% elif data.reissue_certificate_data_pfp == "preparing" %}
-          <div class="govuk-tag govuk-tag--indigo">
-            Preparing re-issue
-          </div> -->
           {% elif data.reissue_certificate_data_pfp == "approved" %}
           <div class="govuk-tag govuk-tag--green">
             Certificate re-issued
@@ -132,17 +132,17 @@
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Phytosanitary certificate number</dt>
-        <dd class="govuk-summary-list__value">UK/GB/E&W/{{query.id | appInformationV5('certificate') or "2022/4236522044833"}}</dd>
+        <dd class="govuk-summary-list__value">UK/GB/E&W/{{query.id | appInformationV5('certificate') or "2022/4236522044833"}}{% if data.reissue_certificate_data_pfp == "approved" %} R1{% endif %}</dd>
       </div>
       
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Certificate issue date</dt>
-        <dd class="govuk-summary-list__value">{% if data.reissue_certificate_data_pfp == "approved" %}18 December 2022{% else %}{{query.id | appInformationV5('certificateIssueDate') or "01 January 2022"}}{% endif %}</dd>
+        <dd class="govuk-summary-list__value">{% if data.reissue_certificate_data_pfp == "approved" %}{{todaysDate}}{% else %}{{query.id | appInformationV5('certificateIssueDate') or "10 January 2023"}}{% endif %}</dd>
       </div>
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Certificate expiry date</dt>
-        <dd class="govuk-summary-list__value">{{query.id | appInformationV5('certificateExpiryDate') or "15 January 2022"}}</dd>
+        <dd class="govuk-summary-list__value">{% if data.reissue_certificate_data_pfp == "approved" %}{{todaysDateExpiry14Days}}{% else %}{{query.id | appInformationV5('certificateExpiryDate') or "24 January 2023"}}{% endif %}</dd>
       </div>
 
     </dl>
@@ -172,7 +172,7 @@
       {% if data.reissue_certificate_data_pfp == "submitted" or data.reissue_certificate_data_pfp == "processing" %}
 
       {% else %}
-      <li><a class="govuk-link govuk-link--no-visited-state" href="application/re-issue/introduction?id={{query.id}}&is_group={{query.is_group}}">Ask for certificate to be re-issued</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="{% if data.reissue_certificate_data_pfp == 'draft' %}application/re-issue/amend-your-certificate?id={{query.id}}&is_group={{query.is_group}}&commodity=plants{% else %}application/re-issue/introduction?id={{query.id}}&is_group={{query.is_group}}{% endif %}">Ask for certificate to be re-issued</a></li>
       {% endif %}
     </ul>
   </div>
@@ -290,10 +290,6 @@
           <div class="govuk-tag govuk-tag--blue">
             Processing re-issue
           </div>
-          <!-- {% elif data.reissue_certificate_data_ppp == "preparing" %}
-          <div class="govuk-tag govuk-tag--indigo">
-            Preparing re-issue
-          </div> -->
           {% elif data.reissue_certificate_data_ppp == "approved" %}
           <div class="govuk-tag govuk-tag--green">
             Certificate re-issued
