@@ -28,7 +28,11 @@
       {% endif %}
     </h1>
 
+    {% if data.reissue == "yes" %}
+    <form action="../re-issue/amend-your-certificate?id={{data.id}}&is_group={{data.is_group}}{% if data.id == '34' %}&commodity=plants{% else %}&commodity=plant products{% endif %}&reissue_certificate_data_pfp=draft" method="post">
+    {% else %}
     <form action="{{query.return_url or '../create/task-list'}}" method="post">
+    {% endif %}
       <fieldset class="govuk-fieldset" role="group">
 
         {% if data.journey != "coc" and data.commodity != "bulbs" %}
@@ -171,7 +175,13 @@
         {% endif %}
 
       </fieldset>
-      <input class="govuk-button govuk-!-margin-bottom-9" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+
+      <div class="govuk-button-group{% if data.reissue != 'yes' %} govuk-!-margin-bottom-9{% endif %}">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+        {% if data.reissue == "yes" %}
+        <a class="govuk-link app-button--link" href="../../application-re-issue?id={{data.id}}&is_group={{data.is_group}}">Cancel</a>
+        {% endif %}
+      </div>
 
       <!-- Session data hook to update the task list so that this section is marked as 'COMPLETED' -->
       <div class="govuk-form-group" hidden>
@@ -179,7 +189,9 @@
         <input class="govuk-input" id="shipping_task_list_data" name="shipping_task_list_data" type="text" value="Complete">
       </div>
 
-      {% include "../modules/_save-continue-later.html" %}
+      {% if data.reissue != "yes" %}
+			{% include "../modules/_save-continue-later.html" %}
+      {% endif %}
     </form>
     {% else %}
     {% if data.reissue == "yes" %}
@@ -194,7 +206,11 @@
     </h1>
     {% endif %}
 
+    {% if data.reissue == "yes" %}
+    <form action="../re-issue/amend-your-certificate?id={{data.id}}&is_group={{data.is_group}}{% if data.id == '34' %}&commodity=plants{% else %}&commodity=plant products{% endif %}&reissue_certificate_data_pfp=draft" method="post">
+    {% else %}
     <form action="{{query.return_url or '../create/task-list'}}" method="post">
+    {% endif %}
       <fieldset class="govuk-fieldset" role="group">
 
         {% if data.journey != "coc" %}
@@ -322,7 +338,13 @@
         {% endif %}
 
       </fieldset>
-      <input class="govuk-button govuk-!-margin-bottom-9" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+
+      <div class="govuk-button-group{% if data.reissue != 'yes' %} govuk-!-margin-bottom-9{% endif %}">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+        {% if data.reissue == "yes" %}
+        <a class="govuk-link app-button--link" href="../../application-re-issue?id={{data.id}}&is_group={{data.is_group}}">Cancel</a>
+        {% endif %}
+      </div>
 
       <!-- Session data hook to update the task list so that this section is marked as 'COMPLETED' -->
       <div class="govuk-form-group" hidden>
@@ -330,7 +352,11 @@
         <input class="govuk-input" id="shipping_task_list_data" name="shipping_task_list_data" type="text" value="Complete">
       </div>
 
-      {% include "../modules/_save-continue-later.html" %}
+      {% if data.reissue != "yes" %}
+      {% block continueLater %}
+			{% include "../modules/_save-continue-later.html" %}
+			{% endblock %}
+      {% endif %}
     </form>
     {% endif %}
 

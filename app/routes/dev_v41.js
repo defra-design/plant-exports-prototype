@@ -399,10 +399,10 @@ module.exports = function(router) {
       else {
 
         if (return_url) {
-          return res.redirect(return_url);
+          return res.redirect(return_url + "?reissue_certificate_data_pfp=draft");
         }
         else {
-          return res.redirect("../amend-your-certificate");
+          return res.redirect("../amend-your-certificate?reissue_certificate_data_pfp=draft");
         }
 
       }
