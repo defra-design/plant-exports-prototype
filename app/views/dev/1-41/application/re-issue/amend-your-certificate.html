@@ -11,6 +11,16 @@
 {% endblock %}
 
 {% block content %}
+<style>
+
+  /* Needs extracting and adding to the external Sass or CSS */
+  /* Chris Harding (08.02.23) -  */
+  .govuk-table__header-no-bold  {
+    font-weight: normal;
+  }
+
+</style>
+
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-three-quarters">
@@ -31,7 +41,7 @@
             {% if data.pheats_check != "yes" %}
             {% if data.reforwarding %}
             Re-forwarding phytosanitary certificate for {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or data.id | appInformationV5('commodity_info')}}{% endif %}
-            {% elseif data.journey == "coc" %}
+            {% elif data.journey == "coc" %}
             Certificate of conformity
             {% else %}
             Phytosanitary certificate for 
@@ -51,18 +61,13 @@
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Destination</dt>
           <dd class="govuk-summary-list__value">{% if data.id | appInformationV5('destination') == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{data.id | appInformationV5('destination') or "Denmark"}}{% endif %}</dd>
-          <!-- <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="../setup/what-country?change=yes&return_url=../re-issue/amend-your-certificate">Change <span class="govuk-visually-hidden">destination country</span></a>
-          </dd> -->
           <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Your reference</dt>
           <dd class="govuk-summary-list__value">{{data.reference_num or data.id | appInformationV5('reference')}}</dd>
-          <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="../setup/reference?change=yes&return_url=../re-issue/amend-your-certificate&reference_num={{data.reference_num or data.id | appInformationV5('reference')}}&reissue=yes">Change <span class="govuk-visually-hidden">your reference for this application</span></a>
-          </dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
 
       </dl>
@@ -71,7 +76,7 @@
         
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Name</dt>
-          <dd class="govuk-summary-list__value">ABC TRADING LTD</dd>
+          <dd class="govuk-summary-list__value">Acme Ltd</dd>
           <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
 
@@ -97,180 +102,120 @@
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Import phytosanitary certificate number</dt>
           <dd class="govuk-summary-list__value">{{data.import_no or "1234567890"}}</dd>
-          <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="import-details?change=yes&return_url=../re-issue/amend-your-certificate">Change <span class="govuk-visually-hidden">import phytosanitary certificate number</span></a>
-          </dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Country of origin</dt>
           <dd class="govuk-summary-list__value">{{data.countrySelect[0] or "Netherlands"}}</dd>
-          <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="import-details?change=yes&return_url=../re-issue/amend-your-certificate">Change <span class="govuk-visually-hidden">country of origin</span></a>
-          </dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">If the consignment was repacked, what type of packaging did you use?</dt>
           <dd class="govuk-summary-list__value">{{data.repacked or "Original packaging"}}</dd>
-          <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="import-details?change=yes&return_url=../re-issue/amend-your-certificate">Change <span class="govuk-visually-hidden">if the consignment was repacked, what type of container did you use?</span></a>
-          </dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Import phytosanitary certificate</dt>
-          <dd class="govuk-summary-list__value">
-            <a href="#" class="govuk-link">phyto-cert-456678.pdf</a>
-          </dd>
-          <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="import-phyto-upload?change=yes&return_url=../re-issue/amend-your-certificate">Change <span class="govuk-visually-hidden">import phytosanitary certificate</span></a>
-          </dd>
+          <dd class="govuk-summary-list__value"><a href="#" class="govuk-link">phyto-cert-456678.pdf</a></dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
 
       </dl>
       {% endif %}
 
       <!-- Your commodities -->
+      <h2 class="govuk-heading-m">Your consignment</h2>
       {% if data.commodity == "bulbs" %}
-      <h2 class="govuk-heading-m" id="your-consignment">Your consignment</h2>
       
+      {% elif data.commodity == "plants" %}
       <table class="govuk-table govuk-!-margin-bottom-4">
+        <caption class="govuk-table__caption govuk-visually-hidden">Your consignment</caption>
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
-            <th class="govuk-table__header govuk-summary-list__key" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">Country of origin</th>
-            <th class="govuk-table__header" scope="col">Quantity</th>
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body" style="text-align: right;">
-          {% for commodity in data.commodities %}
-            {% block summaryBulb %}{% include "../modules/_summary-bulbs-cya.html" %}{% endblock %}
-          {% endfor %}
-        </tbody>
-      </table>
-
-      <p class="govuk-body"><a href="how-to-identify?return_url=../re-issue/amend-your-certificate">Add more</a></p>
-      {% elseif data.commodity == "used farm machinery" %}
-      <h2 class="govuk-heading-m">Your consignment</h2>
-    
-      <table class="govuk-table govuk-!-margin-bottom-4">
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">{% if data.build == "development" %}Country of last use{% else %}Country of origin{% endif %}</th>
-            <th class="govuk-table__header govuk-table__header" scope="col">Unique ID</th>
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Action</th>
+            <th scope="col" class="govuk-table__header">Description</th>
+            <th scope="col" class="govuk-table__header">Country of origin</th>
+            <th scope="col" class="govuk-table__header">Quantity</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Action</th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">
-          {% for commodity in data.commodities %}
-            {% block summaryMachinery %}{% include "../modules/_summary-machinery-check-answers.html" %}{% endblock %}
-          {% endfor %}
-        </tbody>
-      </table>
-
-      <p class="govuk-body"><a href="commodity-page-machinery?return_url=../re-issue/amend-your-certificate">Add more</a></p>
-      {% elseif data.commodity == "potatoes" %}
-      <h2 class="govuk-heading-m">Your consignment</h2>
-      
-      <table class="govuk-table govuk-!-margin-bottom-4">
-        <thead class="govuk-table__head">
           <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">Stock number</th>
-            <th class="govuk-table__header" scope="col">Quantity</th>
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
+            <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Cabbage 'Durham Early'</th>
+            <td class="govuk-table__cell">United Kingdom</td>
+            <td class="govuk-table__cell">{{data.quantity3 or "17"}}t</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              <a href="edit/how-to-identify-3?change=yes&commodity=plants&return_url=../amend-your-certificate&reissue=yes" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+            </td>
           </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-          {% for commodity in data.commodities %}
-            {% block summaryPotatoes %}{% include "../modules/_summary-potatoes-check-answers.html" %}{% endblock %}
-          {% endfor %}
-        </tbody>
-      </table>
-
-      <p class="govuk-body"><a href="commodity-page?return_url=../re-issue/amend-your-certificate">Add more</a></p>
-      {% elseif data.commodity == "seeds" %}
-      <h2 class="govuk-heading-m">Your consignment</h2>
-
-      <table class="govuk-table govuk-!-margin-bottom-4">
-        <thead class="govuk-table__head">
           <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">Lot reference</th>
-            <th class="govuk-table__header" scope="col"><abbr title="Animal and Plant Health Agency">APHA</abbr> sample reference</th>
-            <th class="govuk-table__header" scope="col">Quantity</th>
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
+            <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Cabbage 'Avon Crest'</th>
+            <td class="govuk-table__cell">United Kingdom</td>
+            <td class="govuk-table__cell">{{data.quantity2 or "35"}}t</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              <a href="edit/how-to-identify-2?change=yes&commodity=plants&return_url=../amend-your-certificate&reissue=yes" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+            </td>
           </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-          {% set showDelete = "true" %}
-          {% set showChange = "true" %}
-          {% include "../modules/_summary-seed-no-country.html" %}
-        </tbody>
-      </table>
-
-      <p class="govuk-body"><a href="how-to-identify?return_url=../re-issue/amend-your-certificate">Add more</a></p>
-      {% elseif data.journey == "coc" %}
-      <h2 class="govuk-heading-m">Your consignment</h2>
-      
-      <table class="govuk-table govuk-!-margin-bottom-4">
-        <thead class="govuk-table__head">
           <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Commodity</th>
-            <th class="govuk-table__header" scope="col">Variety or type</th>
-            <th class="govuk-table__header" scope="col">Class</th>
-            <th class="govuk-table__header" scope="col">Total net weight</th>
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-          {% block summaryCoc %}{% include "../modules/_summary-coc.html" %}{% endblock %}
-        </tbody>
-      </table>
-      {% else %}
-      <h2 class="govuk-heading-m">Your consignment</h2>
-      
-      <table class="govuk-table govuk-!-margin-bottom-4">
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Description</th>
-            {% if data.commodity != "seeds" %}
-            <th class="govuk-table__header" scope="col">
-              {% if data.build == "development" %}Country of origin{% else %}{% if data.commodity == "plant products"%}Primary country where grown{% else %}Country of origin{% endif %}{% endif %}
-            </th>
-            {% endif %}
-            <th class="govuk-table__header" scope="col">Quantity</th>
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-          {% for commodity in data.commodities %}
-            {% block summaryGeneral %}
-            {% include "../modules/_summary-general-check-answers.html" %}
-            {% endblock %}
-          {% endfor %}
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">{{data.commodity_host_species or data.genus or data.commodity_common_name or "Corylus avellana"}}</td>
-            <td class="govuk-table__cell">{{commodity.countrySelect[0] or "United Kingdom"}}</td>
-            <td class="govuk-table__cell govuk-table__cell">
-              {{data.quantity or "25"}}{{commodity.unit or "kg"}}</td>
-            <td class="govuk-table__cell" style="text-align: right;">
-              {% if data.id == "34" %}
-              <a href="edit/how-to-identify?change=yes&commodity=plants&return_url=../amend-your-certificate&has_botanicial_name=use_description&reissue=yes" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
-              {% else %}
-              <a href="edit/how-to-identify?change=yes&commodity=plant products&return_url=../amend-your-certificate&has_botanicial_name=use_description&reissue=yes" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
-              {% endif %}
-              <!-- <br>
-              <a href="#" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a> -->
+            <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Cabbage 'Savoy'</th>
+            <td class="govuk-table__cell">United Kingdom</td>
+            <td class="govuk-table__cell">{{data.quantity or "30"}}t</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              <a href="edit/how-to-identify?change=yes&commodity=plants&return_url=../amend-your-certificate&reissue=yes" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
             </td>
           </tr>
         </tbody>
       </table>
+      {% elif data.commodity == "potatoes" %}
+      
+      {% elif data.commodity == "plant products" %}
+      
+      {% elif data.commodity == "seeds" %}
 
-      <!-- <p class="govuk-body"><a href="how-to-identify?return_url=../re-issue/amend-your-certificate">Add more</a></p> -->
+      {% elif data.commodity == "grain" %}
+
+      {% elif data.commodity == "used farm machinery" %} 
+      
+      {% else %}      
+      <table class="govuk-table govuk-!-margin-bottom-4">
+        <caption class="govuk-table__caption govuk-visually-hidden">Your consignment</caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Description</th>
+            <th scope="col" class="govuk-table__header">Country of origin</th>
+            <th scope="col" class="govuk-table__header">Quantity</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Action</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Cabbage 'Durham Early'</th>
+            <td class="govuk-table__cell">United Kingdom</td>
+            <td class="govuk-table__cell">{{data.quantity3 or "17"}}t</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              <a href="edit/how-to-identify-3?change=yes&commodity=plants&return_url=../amend-your-certificate&reissue=yes" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+            </td>
+          </tr>
+          <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Cabbage 'Avon Crest'</th>
+            <td class="govuk-table__cell">United Kingdom</td>
+            <td class="govuk-table__cell">{{data.quantity2 or "35"}}t</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              <a href="edit/how-to-identify-2?change=yes&commodity=plants&return_url=../amend-your-certificate&reissue=yes" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+            </td>
+          </tr>
+          <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Cabbage 'Savoy'</th>
+            <td class="govuk-table__cell">United Kingdom</td>
+            <td class="govuk-table__cell">{{data.quantity or "30"}}t</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              <a href="edit/how-to-identify?change=yes&commodity=plants&return_url=../amend-your-certificate&reissue=yes" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
       {% endif %}
 
       <!-- Inspection details -->
@@ -281,18 +226,12 @@
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Are you applying under PHEATS?</dt>
           <dd class="govuk-summary-list__value">{% if data.pheats_check == "yes" %}Yes{% else %}No{% endif %}</dd>
-          <!-- <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="pheats-check?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">whether you are applying under PHEATS</span></a>
-          </dd> -->
           <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Address</dt>
           <dd class="govuk-summary-list__value">{% if data.build == "development" %}{{"Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH" | upper}}{% else %}Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH{% endif %}</dd>
-          <!-- <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="inspection-addresses?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">address</span></a>
-          </dd> -->
           <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
 
@@ -300,36 +239,24 @@
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Contact name</dt>
           <dd class="govuk-summary-list__value">Sarah Philips</dd>
-          <!-- <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">contact name</span></a>
-          </dd> -->
           <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Phone number</dt>
           <dd class="govuk-summary-list__value">07123 456789</dd>
-          <!-- <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">phone number</span></a>
-          </dd> -->
           <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Email address</dt>
           <dd class="govuk-summary-list__value">email@domain.com</dd>
-          <!-- <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="contact-details?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">email address</span></a>
-          </dd> -->
           <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Date when your consignment will be ready for inspection</dt>
-          <dd class="govuk-summary-list__value">15 June {{data.inpection_date_year or "2021"}}</dd>
-          <!-- <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="inspection-dates?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">date when your consignment will be ready for inspection</span></a>
-          </dd> -->
+          <dd class="govuk-summary-list__value">4 January 2023</dd>
           <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
         {% endif %}
@@ -346,9 +273,7 @@
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Value of your consignment (pounds)</dt>
           <dd class="govuk-summary-list__value">{{data.consignment_value or "10,000"}}</dd>
-          <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="shipping?change=yes&return_url=../re-issue/amend-your-certificate&consignment_value={{data.consignment_value or '10,000'}}&port_entry={{data.port_entry or 'Port of Denmark'}}&transport_method={{data.transport_method or 'Air'}}&reissue=yes">Change<span class="govuk-visually-hidden"> the value of consignment</span></a>
-          </dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
         {% endif %}
         
@@ -427,9 +352,7 @@
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Value of your consignment (pounds)</dt>
           <dd class="govuk-summary-list__value">{{data.consignment_value or "10,000"}}</dd>
-          <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="../create/shipping?change=yes&return_url=../re-issue/amend-your-certificate&consignment_value={{data.consignment_value or '10,000'}}&port_entry={{data.port_entry or 'Port of Hope'}}&transport_method={{data.transport_method or 'Air'}}&reissue=yes">Change<span class="govuk-visually-hidden"> the value of consignment</span></a>
-          </dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
 
         <div class="govuk-summary-list__row">
@@ -536,9 +459,7 @@
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Import permit number</dt>
           <dd class="govuk-summary-list__value">{{data.import_permit_number or '2244668800'}}</dd>
-          <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="destination-consignee?change=yes&return_url=../re-issue/amend-your-certificate">Change<span class="govuk-visually-hidden"> the import permit number</span></a>
-          </dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
         {% endif %}
         {% else %}
@@ -562,9 +483,6 @@
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Further information</dt>
           <dd class="govuk-summary-list__value">{{data.consignee_more_detail or 'More information'}}</dd>
-          <!-- <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="destination-consignee?change=yes&return_url=../re-issue/amend-your-certificate">Change<span class="govuk-visually-hidden"> the further information</span></a>
-          </dd> -->
           <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
         {% endif %}
@@ -572,9 +490,6 @@
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Import permit number</dt>
           <dd class="govuk-summary-list__value">{{data.import_permit_number or '2244668800'}}</dd>
-          <!-- <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="destination-consignee?change=yes&return_url=../re-issue/amend-your-certificate">Change<span class="govuk-visually-hidden"> the import permit number</span></a>
-          </dd> -->
           <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>        
         {% endif %}
@@ -620,7 +535,7 @@
         
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Name on the consignment</dt>
-          <dd class="govuk-summary-list__value">ABC TRADING LTD</dd>
+          <dd class="govuk-summary-list__value">Acme Ltd</dd>
           <dd class="govuk-summary-list__actions">
             <a class="govuk-link" href="packer?change=yes&return_url=../re-issue/amend-your-certificate">Change<span class="govuk-visually-hidden"> packer name</span></a>
           </dd>

@@ -387,14 +387,70 @@ module.exports = function(router) {
       var quantity = Number(req.session.data.quantity);
       var number_of_packages = Number(req.session.data.number_of_packages);
       
-      if (quantity > 25 && number_of_packages > 100) {
+      if (quantity > 30 && number_of_packages > 120) {
         return res.redirect("how-to-identify?change=yes&error=true&error1=true&error2=true");
       }
-      else if (quantity > 25) {
+      else if (quantity > 30) {
         return res.redirect("how-to-identify?change=yes&error=true&error1=true");
       }
-      else if (number_of_packages > 100) {
+      else if (number_of_packages > 120) {
         return res.redirect("how-to-identify?change=yes&error=true&error2=true");
+      }
+      else {
+
+        if (return_url) {
+          return res.redirect(return_url + "?reissue_certificate_data_pfp=draft");
+        }
+        else {
+          return res.redirect("../amend-your-certificate?reissue_certificate_data_pfp=draft");
+        }
+
+      }
+
+    }
+
+    if (baseDir === "/re-issue/edit/how-to-identify-2-validation") {
+
+      var return_url = req.session.data.return_url;
+      var quantity = Number(req.session.data.quantity2);
+      var number_of_packages = Number(req.session.data.number_of_packages2);
+      
+      if (quantity > 35 && number_of_packages > 140) {
+        return res.redirect("how-to-identify-2?change=yes&error=true&error1=true&error2=true");
+      }
+      else if (quantity > 35) {
+        return res.redirect("how-to-identify-2?change=yes&error=true&error1=true");
+      }
+      else if (number_of_packages > 140) {
+        return res.redirect("how-to-identify-2?change=yes&error=true&error2=true");
+      }
+      else {
+
+        if (return_url) {
+          return res.redirect(return_url + "?reissue_certificate_data_pfp=draft");
+        }
+        else {
+          return res.redirect("../amend-your-certificate?reissue_certificate_data_pfp=draft");
+        }
+
+      }
+
+    }
+
+    if (baseDir === "/re-issue/edit/how-to-identify-3-validation") {
+
+      var return_url = req.session.data.return_url;
+      var quantity = Number(req.session.data.quantity3);
+      var number_of_packages = Number(req.session.data.number_of_packages3);
+      
+      if (quantity > 17 && number_of_packages > 68) {
+        return res.redirect("how-to-identify-3?change=yes&error=true&error1=true&error2=true");
+      }
+      else if (quantity > 17) {
+        return res.redirect("how-to-identify-3?change=yes&error=true&error1=true");
+      }
+      else if (number_of_packages > 68) {
+        return res.redirect("how-to-identify-3?change=yes&error=true&error2=true");
       }
       else {
 

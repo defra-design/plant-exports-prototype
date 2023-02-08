@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.reissue == "yes" %}Make your changes - Re-issue a phytosanitary certificate{% else %}Create a reference - Phytosanitary certificate{% endif %} - {{serviceName}} - GOV.UK
+  Create a reference - Phytosanitary certificate - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -14,47 +14,33 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
-    {% if data.reissue == "yes" %}
-    <span class="govuk-caption-xl">Your reference</span>
-    <h1 class="govuk-heading-xl">Make your changes</h1>
-    {% else %}
 	  <h1 class="govuk-heading-xl">Create a reference</h1>
-    {% endif %}
     <p class="govuk-body">
-      {% if query.change == 'yes' %}
+      {% if query.change == "yes" %}
       Change your reference for this {% if data.has_reference == 'phyto' %}phytosanitary certificate{% elif data.has_reference == 'donotneed' %}re-forwarding phytosanitary certificate{% elif data.has_reference == 'coc' %}certificate of comformity{% else %}phytosanitary certificate{% endif %}.
       {% else %}
       You can enter your own reference for this application. Your reference will not be printed on your phytosanitary certificate but it will be on your invoice.
       {% endif %}
     </p>
 
-    {% if data.reissue == "yes" %}
-    <form action="../re-issue/amend-your-certificate?id={{data.id}}&is_group={{data.is_group}}{% if data.id == '34' %}&commodity=plants{% else %}&commodity=plant products{% endif %}&reissue_certificate_data_pfp=draft" method="post">
-    {% else %}
     <form action="{{query.return_url or '../create/task-list'}}" method="post">
-    {% endif %}
 
       <div class="govuk-form-group">
 				<label class="govuk-label" for="reference_num">Your reference for this application (optional)</label>
 				<input class="govuk-input govuk-input--width-20" id="reference_num" name="reference_num" value="{% if query.change == 'yes' %}{{data.reference_num}}{% endif %}" type="text">
 			</div>
       
-      <div class="govuk-button-group{% if data.reissue != 'yes' %} govuk-!-margin-bottom-7{% endif %}">
+      <div class="govuk-button-group govuk-!-margin-bottom-7">
         <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
-        {% if query.change == "yes" or query.saveContinueLater == 'yes' %}
-        {% if data.reissue == "yes" %}
-        <a class="govuk-link app-button--link" href="../../application-re-issue?id={{data.id}}&is_group={{data.is_group}}">Cancel</a>
-        {% endif %}
+        {% if query.change == "yes" or query.saveContinueLater == "yes" %}
         {% else %}
         <a class="govuk-link app-button--link" href="../../dashboard-submitted">Cancel</a>
         {% endif %}
       </div>
 
-      {% if data.reissue != "yes" %}
       {% block continueLater %}
 			{% include "../modules/_save-continue-later.html" %}
 			{% endblock %}
-      {% endif %}
     </form>
 
   </div>
