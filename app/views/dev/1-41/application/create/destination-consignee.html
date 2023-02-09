@@ -25,7 +25,7 @@
     <form action="{{query.return_url or 'complete-phyto'}}" method="post">
     {% else %}
     {% if data.reissue == "yes" %}
-    <form action="../re-issue/amend-your-certificate?id={{data.id}}&is_group={{data.is_group}}{% if data.id == '34' %}&commodity=plants{% else %}&commodity=plant products{% endif %}&reissue_certificate_data_pfp=draft" method="post">
+    <form action="../re-issue/amend-your-certificate?id={{data.id}}&is_group={{data.is_group}}&commodity={{data.commodity or 'plants'}}&reissue_certificate_data_pfp=draft" method="post">
     {% else %}
     <form action="{{query.return_url or '../create/task-list'}}" method="post">
     {% endif %}
@@ -47,11 +47,13 @@
         {% endif %}
 
         {% if data.commodity == "bulbs" %}
+        {% if data.reissue != "yes" %}
         <div class="govuk-form-group">
           <label class="{{label_class}}" for="consignee-import-permit">Import permit number</label>
           <span id="consignee-import-permit-hint" class="govuk-hint">If you have been given an import permit by the destination country, enter the number here</span>
           <input class="govuk-input" id="consignee-import-permit" name="consignee_import_permit" type="text" aria-describedby="consignee-import-permit-hint" value="{{data.consignee_import_permit}}">
         </div>
+        {% endif %}
         {% endif %}
 
         <div class="govuk-form-group">
@@ -77,11 +79,13 @@
         {% endif %}
 
         {% if data.commodity != "bulbs" and data.commodity != "seeds" %}
+        {% if data.reissue != "yes" %}
         <div class="govuk-form-group">
           <label class="{{label_class}}" for="consignee-import-permit">Import permit number</label>
           <span id="consignee-import-permit-hint" class="govuk-hint">If you have been given an import permit by the destination country, enter the number here</span>
           <input class="govuk-input" id="consignee-import-permit" name="consignee_import_permit" type="text" aria-describedby="consignee-import-permit-hint" value="{{data.consignee_import_permit}}">
         </div>
+        {% endif %}
         {% endif %}
 
         {% else %}
@@ -105,8 +109,7 @@
         </div>
         {% endif %}
 
-        {% if data.reissue == "yes" %}
-        {% else %}
+        {% if data.reissue != "yes" %}
         <div class="govuk-form-group">
           <label class="{{label_class}}" for="consignee-import-permit">Import permit number (optional)</label>
           <span id="consignee-import-permit-hint" class="govuk-hint">

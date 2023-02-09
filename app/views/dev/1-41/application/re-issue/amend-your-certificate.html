@@ -48,7 +48,7 @@
             {% if data.build == "development" %}
             {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% else %}{{data.commodity or data.id | appInformationV5('commodity_info')}}{% endif %}
             {% else %}
-            {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or data.id | appInformationV5('commodity_info')}}{% endif %}
+            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "seeds" %}seeds for planting{% elif data.commodity == "grain" %}unprocessed cereal grains{% else %}{{data.commodity or data.id | appInformationV5('commodity_info')}}{% endif %}
             {% endif %}
             {% endif %}
             {% else %}
@@ -82,7 +82,7 @@
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Address</dt>
-          <dd class="govuk-summary-list__value">Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH</dd>
+          <dd class="govuk-summary-list__value">{% if data.build == "development" %}{{"Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH" | upper}}{% else %}Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH{% endif %}</dd>
           <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
 
@@ -129,7 +129,27 @@
       <!-- Your commodities -->
       <h2 class="govuk-heading-m">Your consignment</h2>
       {% if data.commodity == "bulbs" %}
-      
+      <table class="govuk-table govuk-!-margin-bottom-4">
+        <caption class="govuk-table__caption govuk-visually-hidden">Your consignment</caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Description</th>
+            <th scope="col" class="govuk-table__header">Country of origin</th>
+            <th scope="col" class="govuk-table__header">Quantity</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Action</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Spondias tuberosa (SPXTU) 'Dry'</th>
+            <td class="govuk-table__cell">United Kingdom</td>
+            <td class="govuk-table__cell">{{data.quantity or "30"}}t</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              <a href="edit/how-to-identify?change=yes&commodity=bulbs&return_url=../amend-your-certificate&reissue=yes" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
       {% elif data.commodity == "plants" %}
       <table class="govuk-table govuk-!-margin-bottom-4">
         <caption class="govuk-table__caption govuk-visually-hidden">Your consignment</caption>
@@ -169,13 +189,73 @@
         </tbody>
       </table>
       {% elif data.commodity == "potatoes" %}
-      
+      <table class="govuk-table govuk-!-margin-bottom-4">
+        <caption class="govuk-table__caption govuk-visually-hidden">Your consignment</caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Description</th>
+            <th scope="col" class="govuk-table__header">Stock number</th>
+            <th scope="col" class="govuk-table__header">Quantity</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Action</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Maris piper</th>
+            <td class="govuk-table__cell">00001827389</td>
+            <td class="govuk-table__cell">{{data.quantity or "30"}}t</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              <a href="edit/how-to-identify?change=yes&commodity=potatoes&return_url=../amend-your-certificate&reissue=yes" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
       {% elif data.commodity == "plant products" %}
-      
+      <table class="govuk-table govuk-!-margin-bottom-4">
+        <caption class="govuk-table__caption govuk-visually-hidden">Your consignment</caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Description</th>
+            <th scope="col" class="govuk-table__header">Primary country where grown</th>
+            <th scope="col" class="govuk-table__header">Quantity</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Action</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Protea erosa (LCSGR)</th>
+            <td class="govuk-table__cell">United Kingdom</td>
+            <td class="govuk-table__cell">{{data.quantity or "30"}}t</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              <a href="edit/how-to-identify?change=yes&commodity=plant products&return_url=../amend-your-certificate&reissue=yes{% if data.packaging %}{% else %}&packaging=BG{% endif %}" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
       {% elif data.commodity == "seeds" %}
 
       {% elif data.commodity == "grain" %}
-
+      <table class="govuk-table govuk-!-margin-bottom-4">
+        <caption class="govuk-table__caption govuk-visually-hidden">Your consignment</caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Description</th>
+            <th scope="col" class="govuk-table__header">Country of origin</th>
+            <th scope="col" class="govuk-table__header">Quantity</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Action</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Androsace adfinis subsp. puberula (ANSAP) 'Dry grain'</th>
+            <td class="govuk-table__cell">United Kingdom</td>
+            <td class="govuk-table__cell">{{data.quantity or "30"}}t</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              <a href="edit/how-to-identify?change=yes&commodity=grain&return_url=../amend-your-certificate&reissue=yes{% if data.packaging %}{% else %}&packaging=BG{% endif %}" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
       {% elif data.commodity == "used farm machinery" %} 
       
       {% else %}      
@@ -219,15 +299,17 @@
       {% endif %}
 
       <!-- Inspection details -->
-      {% if data.id == "34" or commodity == "plants" %}
+      {% if data.commodity != "plant products" and data.commodity != "seeds" and data.commodity != "grain" %}
       <h2 class="govuk-heading-m govuk-!-margin-top-9">Inspection details</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
 
+        {% if data.commodity == "plants" %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Are you applying under PHEATS?</dt>
           <dd class="govuk-summary-list__value">{% if data.pheats_check == "yes" %}Yes{% else %}No{% endif %}</dd>
           <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
+        {% endif %}
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Address</dt>
@@ -235,28 +317,48 @@
           <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
 
-        {% if data.pheats != 1 %}
+        {% if data.build == "development" %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Contact name</dt>
-          <dd class="govuk-summary-list__value">Sarah Philips</dd>
+          <dd class="govuk-summary-list__value">Bill Shoggins</dd>
           <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Phone number</dt>
-          <dd class="govuk-summary-list__value">07123 456789</dd>
+          <dd class="govuk-summary-list__value">01234 567890</dd>
           <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Email address</dt>
-          <dd class="govuk-summary-list__value">email@domain.com</dd>
+          <dd class="govuk-summary-list__value">bill.shoggins@acmeltd.com</dd>
           <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
+        {% else %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Who is the main contact for this application?</dt>
+          <dd class="govuk-summary-list__value">
+            Bill Shoggins
+            <br>
+            01234 567890
+            <br>
+            bill.shoggins@acmeltd.com
+          </dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
+        </div>
+        {% endif %}
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Date when your consignment will be ready for inspection</dt>
           <dd class="govuk-summary-list__value">4 January 2023</dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
+        </div>
+
+        {% if data.commodity == "potatoes" %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Time when your consignment will be ready for inspection</dt>
+          <dd class="govuk-summary-list__value">9:00am</dd>
           <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
         {% endif %}
@@ -272,7 +374,7 @@
         {% if data.journey != "coc" and data.commodity != "bulbs" %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Value of your consignment (pounds)</dt>
-          <dd class="govuk-summary-list__value">{{data.consignment_value or "10,000"}}</dd>
+          <dd class="govuk-summary-list__value">10,000</dd>
           <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
         {% endif %}
@@ -280,9 +382,9 @@
         {% if data.journey != "coc" %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Point of entry into the destination country</dt>
-          <dd class="govuk-summary-list__value">{{data.port_entry or "Calais"}}</dd>
+          <dd class="govuk-summary-list__value">{{data.port_entry or "Port of Hope"}}</dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="shipping?change=yes&return_url=../re-issue/amend-your-certificate">Change<span class="govuk-visually-hidden"> the point of entry into the destination country</span></a>
+            <a class="govuk-link" href="../create/shipping?change=yes&return_url=../re-issue/amend-your-certificate&port_entry={{data.port_entry or 'Port of Hope'}}&transport_method={{data.transport_method or 'Air'}}&reissue=yes">Change<span class="govuk-visually-hidden"> the point of entry into the destination country</span></a>
           </dd>
         </div>
         {% endif %}
@@ -291,24 +393,24 @@
           <dt class="govuk-summary-list__key">How will the consignment be transported?</dt>
           <dd class="govuk-summary-list__value">{{data.transport_method or "Air"}}</dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="shipping?change=yes&return_url=../re-issue/amend-your-certificate">Change<span class="govuk-visually-hidden"> how the consignment will be transported</span></a>
+            <a class="govuk-link" href="../create/shipping?change=yes&return_url=../re-issue/amend-your-certificate&port_entry={{data.port_entry or 'Port of Hope'}}&transport_method={{data.transport_method or 'Air'}}&reissue=yes">Change<span class="govuk-visually-hidden"> how the consignment will be transported</span></a>
           </dd>
         </div>
 
         {% if data.commodity == "grain" %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Name of vessel</dt>
-          <dd class="govuk-summary-list__value">{{data.transport_maritime or "Lady Shoggins"}}</dd>
+          <dd class="govuk-summary-list__value">{{data.transport_maritime or 'Lady Shoggins'}}</dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="shipping?change=yes&return_url=../re-issue/amend-your-certificate">Change<span class="govuk-visually-hidden"> the name of vessel</span></a>
+            <a class="govuk-link" href="../create/shipping?change=yes&return_url=../re-issue/amend-your-certificate&port_entry={{data.port_entry or 'Port of Hope'}}&transport_method={{data.transport_method or 'Air'}}&transport_maritime={{data.transport_maritime or 'Lady Shoggins'}}&port_export={{data.port_export or 'The Port of Felixstowe'}}&reissue=yes">Change<span class="govuk-visually-hidden"> the name of vessel</span></a>
           </dd>
         </div>
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Port of export from the UK</dt>
-          <dd class="govuk-summary-list__value">{{data.port_export or "The Port of Felixstowe"}}</dd>
+          <dd class="govuk-summary-list__value">{{data.port_export or 'The Port of Felixstowe'}}</dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="shipping?change=yes&return_url=../re-issue/amend-your-certificate">Change<span class="govuk-visually-hidden"> the port of export from the UK</span></a>
+            <a class="govuk-link" href="../create/shipping?change=yes&return_url=../re-issue/amend-your-certificate&port_entry={{data.port_entry or 'Port of Hope'}}&transport_method={{data.transport_method or 'Air'}}&transport_maritime={{data.transport_maritime or 'Lady Shoggins'}}&port_export={{data.port_export or 'The Port of Felixstowe'}}&reissue=yes">Change<span class="govuk-visually-hidden"> the port of export from the UK</span></a>
           </dd>
         </div>
         {% endif %}
@@ -316,10 +418,8 @@
         {% if data.journey != "coc" and data.commodity == "bulbs" %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Value of consignment</dt>
-          <dd class="govuk-summary-list__value">{{data.consignment_value or "10,000"}}</dd>
-          <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="shipping?change=yes&return_url=../re-issue/amend-your-certificate&consignment_value={{data.consignment_value or '10,000'}}&port_entry={{data.port_entry or 'Port of Denmark'}}&transport_method={{data.transport_method or 'Air'}}&reissue=yes">Change<span class="govuk-visually-hidden"> the value of consignment</span></a>
-          </dd>
+          <dd class="govuk-summary-list__value">10,000</dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
         {% endif %}
 
@@ -327,19 +427,15 @@
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Bill of landing number or container number</dt>
           <dd class="govuk-summary-list__value">{{data.method_air or "12345"}}</dd>
-          <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="shipping?change=yes&return_url=../re-issue/amend-your-certificate">Change<span class="govuk-visually-hidden"> the bill of landing number or container number</span></a>
-          </dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
         {% endif %}
 
         {% if data.commodity == "potatoes" %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Container number</dt>
-          <dd class="govuk-summary-list__value">{{data.container_num or "456"}}</dd>
-          <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="shipping?change=yes&return_url=../re-issue/amend-your-certificate">Change<span class="govuk-visually-hidden"> the container number</span></a>
-          </dd>
+          <dd class="govuk-summary-list__value">456</dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
         {% endif %}
 
@@ -351,7 +447,7 @@
         {% if data.journey != "coc" %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Value of your consignment (pounds)</dt>
-          <dd class="govuk-summary-list__value">{{data.consignment_value or "10,000"}}</dd>
+          <dd class="govuk-summary-list__value">10,000</dd>
           <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
 
@@ -359,7 +455,7 @@
           <dt class="govuk-summary-list__key">Point of entry into the destination country</dt>
           <dd class="govuk-summary-list__value">{{data.port_entry or "Port of Hope"}}</dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="../create/shipping?change=yes&return_url=../re-issue/amend-your-certificate&consignment_value={{data.consignment_value or '10,000'}}&port_entry={{data.port_entry or 'Port of Hope'}}&transport_method={{data.transport_method or 'Air'}}&reissue=yes">Change<span class="govuk-visually-hidden"> the point of entry into the destination country</span></a>
+            <a class="govuk-link" href="../create/shipping?change=yes&return_url=../re-issue/amend-your-certificate&port_entry={{data.port_entry or 'Port of Hope'}}&transport_method={{data.transport_method or 'Air'}}&reissue=yes">Change<span class="govuk-visually-hidden"> the point of entry into the destination country</span></a>
           </dd>
           <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
@@ -369,24 +465,24 @@
           <dt class="govuk-summary-list__key">How will the consignment be transported?</dt>
           <dd class="govuk-summary-list__value">{{data.transport_method or "Air"}}</dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="../create/shipping?change=yes&return_url=../re-issue/amend-your-certificate&consignment_value={{data.consignment_value or '10,000'}}&port_entry={{data.port_entry or 'Port of Hope'}}&transport_method={{data.transport_method or 'Air'}}&reissue=yes">Change<span class="govuk-visually-hidden"> how the consignment will be transported</span></a>
+            <a class="govuk-link" href="../create/shipping?change=yes&return_url=../re-issue/amend-your-certificate&port_entry={{data.port_entry or 'Port of Hope'}}&transport_method={{data.transport_method or 'Air'}}&reissue=yes">Change<span class="govuk-visually-hidden"> how the consignment will be transported</span></a>
           </dd>
         </div>
 
         {% if data.commodity == "grain" %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Name of vessel</dt>
-          <dd class="govuk-summary-list__value">{{data.transport_maritime or "Lady Shoggins"}}</dd>
+          <dd class="govuk-summary-list__value">{{data.transport_maritime or 'Lady Shoggins'}}</dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="shipping?change=yes&return_url=../re-issue/amend-your-certificate">Change<span class="govuk-visually-hidden"> the name of vessel</span></a>
+            <a class="govuk-link" href="../create/shipping?change=yes&return_url=../re-issue/amend-your-certificate&port_entry={{data.port_entry or 'Port of Hope'}}&transport_method={{data.transport_method or 'Air'}}&transport_maritime={{data.transport_maritime or 'Lady Shoggins'}}&port_export={{data.port_export or 'The Port of Felixstowe'}}&reissue=yes">Change<span class="govuk-visually-hidden"> the name of vessel</span></a>
           </dd>
         </div>
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Port of export from the UK</dt>
-          <dd class="govuk-summary-list__value">{{data.port_export or "The Port of Felixstowe"}}</dd>
+          <dd class="govuk-summary-list__value">{{data.port_export or 'The Port of Felixstowe'}}</dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="shipping?change=yes&return_url=../re-issue/amend-your-certificate">Change<span class="govuk-visually-hidden"> the port of export from the UK</span></a>
+            <a class="govuk-link" href="../create/shipping?change=yes&return_url=../re-issue/amend-your-certificate&port_entry={{data.port_entry or 'Port of Hope'}}&transport_method={{data.transport_method or 'Air'}}&transport_maritime={{data.transport_maritime or 'Lady Shoggins'}}&port_export={{data.port_export or 'The Port of Felixstowe'}}&reissue=yes">Change<span class="govuk-visually-hidden"> the port of export from the UK</span></a>
           </dd>
         </div>
         {% endif %}
@@ -395,19 +491,15 @@
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Bill of landing number or container number</dt>
           <dd class="govuk-summary-list__value">{{data.method_air or "12345"}}</dd>
-          <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="shipping?change=yes&return_url=../re-issue/amend-your-certificate">Change<span class="govuk-visually-hidden"> the bill of landing number or container number</span></a>
-          </dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
         {% endif %}
 
         {% if data.commodity == "potatoes" %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Container number</dt>
-          <dd class="govuk-summary-list__value">{{data.container_num or "456"}}</dd>
-          <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="shipping?change=yes&return_url=../re-issue/amend-your-certificate">Change<span class="govuk-visually-hidden"> the container number</span></a>
-          </dd>
+          <dd class="govuk-summary-list__value">456</dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
         {% endif %}
 
@@ -422,18 +514,16 @@
         {% if data.commodity == "bulbs" %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Import permit number</dt>
-          <dd class="govuk-summary-list__value">{{data.import_permit_number or '2244668800'}}</dd>
-          <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="destination-consignee?change=yes&return_url=../re-issue/amend-your-certificate">Change<span class="govuk-visually-hidden"> the import permit number</span></a>
-          </dd>
+          <dd class="govuk-summary-list__value">2244668800</dd>
+          <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
         {% endif %}
 
         <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Name of the consignee</dt>
-          <dd class="govuk-summary-list__value">{{data.consignee or 'PlantPro'}}</dd>
+          <dt class="govuk-summary-list__key">Name of consignee</dt>          
+          <dd class="govuk-summary-list__value">{{data.consignee_name or data.id | appInformationV5('importer') | title}}</dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="destination-consignee?change=yes&return_url=../re-issue/amend-your-certificate">Change<span class="govuk-visually-hidden"> who will receive this consignment</span></a>
+            <a class="govuk-link" href="../create/destination-consignee?change=yes&return_url=../re-issue/amend-your-certificate&consignee_name={{data.consignee_name or data.id | appInformationV5('importer')}}&consignee_address={{data.consignee_address or 'Danish Place, Danish Lane, Dane, Denmark'}}&reissue=yes">Change <span class="govuk-visually-hidden">who will receive this consignment</span></a>
           </dd>
         </div>
 
@@ -441,7 +531,7 @@
           <dt class="govuk-summary-list__key">Address of the consignee</dt>
           <dd class="govuk-summary-list__value">{{data.consignee_address or 'Danish Place, Danish Lane, Dane, Denmark'}}</dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="destination-consignee?change=yes&return_url=../re-issue/amend-your-certificate">Change<span class="govuk-visually-hidden"> the address of the consignee</span></a>
+            <a class="govuk-link" href="../create/destination-consignee?change=yes&return_url=../re-issue/amend-your-certificate&consignee_name={{data.consignee_name or data.id | appInformationV5('importer')}}&consignee_address={{data.consignee_address or 'Danish Place, Danish Lane, Dane, Denmark'}}&reissue=yes">Change<span class="govuk-visually-hidden"> the address of the consignee</span></a>
           </dd>
         </div>
 
@@ -450,7 +540,7 @@
           <dt class="govuk-summary-list__key">Further information</dt>
           <dd class="govuk-summary-list__value">{{data.consignee_more_detail or 'More information'}}</dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="destination-consignee?change=yes&return_url=../re-issue/amend-your-certificate">Change<span class="govuk-visually-hidden"> the further information</span></a>
+            <a class="govuk-link" href="../create/destination-consignee?change=yes&return_url=../re-issue/amend-your-certificate&consignee_name={{data.consignee_name or data.id | appInformationV5('importer')}}&consignee_address={{data.consignee_address or 'Danish Place, Danish Lane, Dane, Denmark'}}&consignee_more_detail={{data.consignee_more_detail or 'More information'}}&reissue=yes">Change<span class="govuk-visually-hidden"> the address of the consignee</span></a>
           </dd>
         </div>
         {% endif %}
@@ -458,7 +548,7 @@
         {% if data.commodity != "bulbs" %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Import permit number</dt>
-          <dd class="govuk-summary-list__value">{{data.import_permit_number or '2244668800'}}</dd>
+          <dd class="govuk-summary-list__value">2244668800</dd>
           <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
         {% endif %}
@@ -483,13 +573,15 @@
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Further information</dt>
           <dd class="govuk-summary-list__value">{{data.consignee_more_detail or 'More information'}}</dd>
-          <dd class="govuk-summary-list__actions">&nbsp;</dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="../create/destination-consignee?change=yes&return_url=../re-issue/amend-your-certificate&consignee_name={{data.consignee_name or data.id | appInformationV5('importer')}}&consignee_address={{data.consignee_address or 'Danish Place, Danish Lane, Dane, Denmark'}}&consignee_more_detail={{data.consignee_more_detail or 'More information'}}&reissue=yes">Change<span class="govuk-visually-hidden"> the address of the consignee</span></a>
+          </dd>
         </div>
         {% endif %}
         
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Import permit number</dt>
-          <dd class="govuk-summary-list__value">{{data.import_permit_number or '2244668800'}}</dd>
+          <dd class="govuk-summary-list__value">2244668800</dd>
           <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>        
         {% endif %}
@@ -524,7 +616,7 @@
             {% endif %}
           </dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="../create/attachments?change=yes&return_url=../re-issue/amend-your-certificate">Change<span class="govuk-visually-hidden"> supporting documents</span></a>
+            <a class="govuk-link" href="../create/attachments?change=yes&return_url=../re-issue/amend-your-certificate&reissue=yes">Change<span class="govuk-visually-hidden"> supporting documents</span></a>
           </dd>
         </div>
 
@@ -537,7 +629,7 @@
           <dt class="govuk-summary-list__key">Name on the consignment</dt>
           <dd class="govuk-summary-list__value">Acme Ltd</dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="packer?change=yes&return_url=../re-issue/amend-your-certificate">Change<span class="govuk-visually-hidden"> packer name</span></a>
+            <a class="govuk-link" href="packer?change=yes&return_url=../re-issue/amend-your-certificate&reissue=yes">Change<span class="govuk-visually-hidden"> packer name</span></a>
           </dd>
         </div>
 
@@ -545,7 +637,7 @@
           <dt class="govuk-summary-list__key">Address on the packaging</dt>
           <dd class="govuk-summary-list__value">Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH</dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="packer?change=yes&return_url=../re-issue/amend-your-certificate">Change<span class="govuk-visually-hidden"> packer address</span></a>
+            <a class="govuk-link" href="packer?change=yes&return_url=../re-issue/amend-your-certificate&reissue=yes">Change<span class="govuk-visually-hidden"> packer address</span></a>
           </dd>
         </div>
 

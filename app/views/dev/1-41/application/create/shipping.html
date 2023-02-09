@@ -29,7 +29,7 @@
     </h1>
 
     {% if data.reissue == "yes" %}
-    <form action="../re-issue/amend-your-certificate?id={{data.id}}&is_group={{data.is_group}}{% if data.id == '34' %}&commodity=plants{% else %}&commodity=plant products{% endif %}&reissue_certificate_data_pfp=draft" method="post">
+    <form action="../re-issue/amend-your-certificate?id={{data.id}}&is_group={{data.is_group}}&commodity={{data.commodity or 'plants'}}&reissue_certificate_data_pfp=draft" method="post">
     {% else %}
     <form action="{{query.return_url or '../create/task-list'}}" method="post">
     {% endif %}
@@ -157,10 +157,12 @@
         {% endif %}
         
         {% if data.commodity == "potatoes" %}
+        {% if data.reissue != "yes" %}
         <div class="govuk-form-group">
           <label class="{{label_class}}" for="container_num">Container number</label>
           <input class="govuk-input govuk-input--width-20" id="container_num" name="container_num" value="{{data.container_num}}" type="text">
         </div>
+        {% endif %}
         {% endif %}
 
         {% if data.journey != "coc" and data.commodity == "bulbs" %}
@@ -206,7 +208,7 @@
     {% endif %}
 
     {% if data.reissue == "yes" %}
-    <form action="../re-issue/amend-your-certificate?id={{data.id}}&is_group={{data.is_group}}{% if data.id == '34' %}&commodity=plants{% else %}&commodity=plant products{% endif %}&reissue_certificate_data_pfp=draft" method="post">
+    <form action="../re-issue/amend-your-certificate?id={{data.id}}&is_group={{data.is_group}}&commodity={{data.commodity or 'plants'}}&reissue_certificate_data_pfp=draft" method="post">
     {% else %}
     <form action="{{query.return_url or '../create/task-list'}}" method="post">
     {% endif %}
@@ -325,10 +327,12 @@
         {% endif %}
         
         {% if data.commodity == "potatoes" %}
+        {% if data.reissue != "yes" %}
         <div class="govuk-form-group">
           <label class="govuk-label" for="container_num">Container number</label>
           <input class="govuk-input govuk-input--width-20" id="container_num" name="container_num" value="{{data.container_num}}" type="text">
         </div>
+        {% endif %}
         {% endif %}
 
       </fieldset>
