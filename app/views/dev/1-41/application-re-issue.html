@@ -30,23 +30,23 @@
 
     {% if data.reissue_certificate_data_pfp == "draft" %}
     <div class="app-alert app-alert--info" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
-      <!-- <p class="govuk-body" id="govuk-notification-banner-message">This application has been amended. You must resubmit your application for these changes to appear on your certificate.</p> -->
-      <p class="govuk-body" id="govuk-notification-banner-message">A re-issue application has been started but not submitted.</p>
+      <p class="govuk-body" id="govuk-notification-banner-message">A re-issue application has been started but not submitted. If you asked for any changes as part of the re-issue, these are still saved.</p>
+      <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="application/re-issue/amend-your-certificate?id={{query.id}}&is_group={{query.is_group}}&commodity=plants">Complete your re-issue application</a></p>
     </div>
     {% elif data.reissue_certificate_data_pfp == "rejected" %}
     <div class="app-alert app-alert--warning" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
       {% if query.rejectionReason == "1" %}
-      <p class="govuk-body" id="govuk-notification-banner-message">The inspector decided your certificate cannot be re-issued. The inspector said:</p>
+      <p class="govuk-body" id="govuk-notification-banner-message">The inspector decided your certificate cannot be re-issued. The inspector said: <strong>"Mandatory free text added by the inspector"</strong>.</p>
       {% elif query.rejectionReason == "2" %}
-      <p class="govuk-body" id="govuk-notification-banner-message">The inspector decided your certificate cannot be re-issued as you need a new import permit. The inspector also said:</p>
+      <p class="govuk-body" id="govuk-notification-banner-message">The inspector decided your certificate cannot be re-issued as you need a new import permit. The inspector also said: <strong>"Mandatory free text added by the inspector"</strong>.</p>
       {% elif query.rejectionReason == "3" %}
-      <p class="govuk-body" id="govuk-notification-banner-message">The inspector decided your certificate cannot be re-issued as your consignment would need to be tested again. The inspector also said:</p>
+      <p class="govuk-body" id="govuk-notification-banner-message">The inspector decided your certificate cannot be re-issued as your consignment would need to be tested again. The inspector also said: <strong>"Mandatory free text added by the inspector"</strong>.</p>
       {% elif query.rejectionReason == "4" %}
-      <p class="govuk-body" id="govuk-notification-banner-message">The inspector decided your certificate cannot be re-issued. The inspector said:</p>
+      <p class="govuk-body" id="govuk-notification-banner-message">The inspector decided your certificate cannot be re-issued. The inspector said: <strong>"Mandatory free text added by the inspector"</strong>.</p>
       {% else %}
-      <p class="govuk-body" id="govuk-notification-banner-message">The inspector decided your certificate cannot be re-issued. The inspector said:</p>
+      <p class="govuk-body" id="govuk-notification-banner-message">The inspector decided your certificate cannot be re-issued. The inspector said: <strong>"Mandatory free text added by the inspector"</strong>.</p>
       {% endif %}
-      <p class="govuk-body govuk-!-font-weight-bold">"Mandatory free text added by the inspector"</p>
+      <p class="govuk-body">If you asked for any changes as part of the re-issue, these are still saved in the application.</p>
     </div>
     {% endif %}    
 
@@ -171,7 +171,12 @@
       <li><a class="govuk-link govuk-link--no-visited-state" href="#">View application details</a></li>
       <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id}}&is_group={{query.is_group}}">Copy as new application</a></li>
       {% if data.reissue_certificate_data_pfp != "submitted" and data.reissue_certificate_data_pfp != "processing" %}
-      <li><a class="govuk-link govuk-link--no-visited-state" href="{% if data.reissue_certificate_data_pfp == 'draft' %}application/re-issue/amend-your-certificate?id={{query.id}}&is_group={{query.is_group}}&commodity=plants{% else %}application/re-issue/introduction?id={{query.id}}&is_group={{query.is_group}}{% endif %}">Ask for certificate to be re-issued</a></li>
+      <li>
+        {% if data.reissue_certificate_data_pfp == 'draft' %}
+        <a class="govuk-link govuk-link--no-visited-state" href="application/re-issue/amend-your-certificate?id={{query.id}}&is_group={{query.is_group}}&commodity=plants">Complete your re-issue application</a></li>
+        {% else %}
+        <a class="govuk-link govuk-link--no-visited-state" href="application/re-issue/introduction?id={{query.id}}&is_group={{query.is_group}}">Ask for certificate to be re-issued</a></li>
+        {% endif %}
       {% endif %}
     </ul>
   </div>
