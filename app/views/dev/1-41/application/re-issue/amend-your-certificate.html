@@ -40,7 +40,12 @@
           <dd class="govuk-summary-list__value">
             {% if data.pheats_check != "yes" %}
             {% if data.reforwarding %}
-            Re-forwarding phytosanitary certificate for {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or data.id | appInformationV5('commodity_info')}}{% endif %}
+            Re-forwarding phytosanitary certificate for 
+            {% if data.build == "development" %}
+            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% else %}{{data.commodity or data.id | appInformationV5('commodity_info')}}{% endif %}
+            {% else %}
+            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "seeds" %}seeds for planting{% elif data.commodity == "grain" %}unprocessed cereal grains{% else %}{{data.commodity or data.id | appInformationV5('commodity_info')}}{% endif %}
+            {% endif %}
             {% elif data.journey == "coc" %}
             Certificate of conformity
             {% else %}
@@ -233,7 +238,62 @@
         </tbody>
       </table>
       {% elif data.commodity == "seeds" %}
-
+      {% if data.bulkUploadCompleted == "true" %}
+      <dl class="govuk-summary-list">
+      
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Number of commodity records</dt>
+          <dd class="govuk-summary-list__value">395</dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="#">Change<span class="govuk-visually-hidden"> commodity list</span></a></dd>
+        </div>
+  
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Total quantity</dt>
+          <dd class="govuk-summary-list__value">
+            10.35kg
+            <br>
+            and 15 tonnes
+          </dd>
+          <dd class="govuk-summary-list__value">&nbsp;</dd>
+        </div>
+  
+      </dl>
+      {% else %}
+      <table class="govuk-table govuk-!-margin-bottom-4">
+        <caption class="govuk-table__caption govuk-visually-hidden">Your consignment</caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Description</th>
+            <th scope="col" class="govuk-table__header">Lot reference</th>
+            {% if data.build != "development" %}
+            <th class="govuk-table__header" scope="col"><abbr title="Animal and Plant Health Agency">APHA</abbr> sample reference</th> 
+            {% endif %}
+            <th scope="col" class="govuk-table__header">Quantity</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Action</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Solanum lycopersicum 'F1'</th>
+            <td class="govuk-table__cell">83471-*-*-1</td>
+            <td class="govuk-table__cell">S12345008</td>
+            <td class="govuk-table__cell">{{data.quantity2 or "35"}}t</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              <a href="edit/how-to-identify-2?change=yes&commodity=seeds&return_url=../amend-your-certificate&reissue=yes" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+            </td>
+          </tr>
+          <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Solanum lycopersicum 'ST'</th>
+            <td class="govuk-table__cell">80091-*-*-1</td>
+            <td class="govuk-table__cell">S12345009</td>
+            <td class="govuk-table__cell">{{data.quantity or "30"}}t</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              <a href="edit/how-to-identify?change=yes&commodity=seeds&return_url=../amend-your-certificate&reissue=yes" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      {% endif %}
       {% elif data.commodity == "grain" %}
       <table class="govuk-table govuk-!-margin-bottom-4">
         <caption class="govuk-table__caption govuk-visually-hidden">Your consignment</caption>
@@ -257,7 +317,25 @@
         </tbody>
       </table>
       {% elif data.commodity == "used farm machinery" %} 
-      
+      <table class="govuk-table govuk-!-margin-bottom-4">
+        <caption class="govuk-table__caption govuk-visually-hidden">Your consignment</caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Description</th>
+            <th scope="col" class="govuk-table__header">{% if data.build == "development" %}Country of last use{% else %}Country of origin{% endif %}</th>
+            <th scope="col" class="govuk-table__header">Unique ID</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Action</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Massey Ferguson B2741</th>
+            <td class="govuk-table__cell">United Kingdom</td>
+            <td class="govuk-table__cell">5456987452Z</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">&nbsp;</td>
+          </tr>
+        </tbody>
+      </table>
       {% else %}      
       <table class="govuk-table govuk-!-margin-bottom-4">
         <caption class="govuk-table__caption govuk-visually-hidden">Your consignment</caption>
