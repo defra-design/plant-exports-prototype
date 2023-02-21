@@ -19,9 +19,23 @@
     <div class="app-alert app-alert--success" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
       <p class="govuk-body" id="govuk-notification-banner-message">You have successfully copied this application</p>
     </div>
+    {% elif query.bulkUploadCompleted == "true" %}
+    {% if data.build == "development" %}
+    <div class="app-alert app-alert--success" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
+      <p class="govuk-body" id="govuk-notification-banner-message"><strong>{{data.fileUpload1 or "1 APHA_phytosanitary_certificate_csv_template - PLANTS 15112021.csv"}}</strong> with 4 commodity records uploaded successfully</p>
+    </div>
+    {% else %}  
+    <div class="app-alert app-alert--success" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
+      <p class="govuk-body" id="govuk-notification-banner-message"><strong>{{data.fileUpload1 or "21.01.23 XXXXXXX C154189.csv"}}</strong> with 4 commodity records uploaded successfully</p>
+    </div>
+    {% endif %}
     {% endif %}
 
     <form action="{% if data.journey == 'coc' %}../submit/submit-date-coc{% else %}../submit/submit-date{% endif %}" method="post">
+      {% if data.cloned == "yes" %}
+      <h1 class="govuk-heading-xl">Make changes to your application</h1>
+      <p class="govuk-body">Create your new application by changing the answers below.</p>
+      {% else %}
       <h1 class="govuk-heading-xl">Review your answers</h1>
       
       <div class="govuk-inset-text{% if data.build == 'development' %} govuk-!-font-weight-bold{% else %}{% endif %}">
@@ -30,6 +44,7 @@
         <br>
         Please check that the answers you've provided are correct.
       </div>
+      {% endif %}
       
       <h2 class="govuk-heading-m">Application summary</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
@@ -39,15 +54,20 @@
           <dd class="govuk-summary-list__value">
             {% if data.pheats_check != "yes" %}
             {% if data.reforwarding %}
-            Re-forwarding phytosanitary certificate for {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}
+            Re-forwarding phytosanitary certificate for 
+            {% if data.build == "development" %}
+            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% else %}{{data.commodity or data.id | appInformationV5('commodity_info')}}{% endif %}
+            {% else %}
+            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "seeds" %}seeds for planting{% elif data.commodity == "grain" %}unprocessed cereal grains{% else %}{{data.commodity or data.id | appInformationV5('commodity_info')}}{% endif %}
+            {% endif %}
             {% elif data.journey == "coc" %}
             Certificate of conformity
             {% else %}
             Phytosanitary certificate for 
             {% if data.build == "development" %}
-            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% else %}{{data.commodity or 'plant products'}}{% endif %}
+            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% else %}{{data.commodity or data.id | appInformationV5('commodity_info')}}{% endif %}
             {% else %}
-            {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}
+            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "seeds" %}seeds for planting{% elif data.commodity == "grain" %}unprocessed cereal grains{% else %}{{data.commodity or data.id | appInformationV5('commodity_info')}}{% endif %}
             {% endif %}
             {% endif %}
             {% else %}
@@ -162,7 +182,7 @@
         </tbody>
       </table>
 
-      <p class="govuk-body"><a href="how-to-identify?return_url=check-your-answers">Add more</a></p>
+      <p class="govuk-body"><a href="input-method?return_url=check-your-answers">Add more</a></p>
       {% elif data.commodity == "potatoes" %}
       <h2 class="govuk-heading-m">Your consignment</h2>
       
@@ -184,7 +204,7 @@
         </tbody>
       </table>
 
-      <p class="govuk-body"><a href="commodity-page?return_url=check-your-answers">Add more</a></p>
+      <p class="govuk-body"><a href="input-method?return_url=check-your-answers">Add more</a></p>
       {% elif data.commodity == "seeds" %}
       <h2 class="govuk-heading-m">Your consignment</h2>
 
@@ -208,7 +228,7 @@
         </tbody>
       </table>
 
-      <p class="govuk-body"><a href="how-to-identify?return_url=check-your-answers">Add more</a></p>
+      <p class="govuk-body"><a href="input-method?return_url=check-your-answers">Add more</a></p>
       {% elif data.commodity == "used farm machinery" %}
       <h2 class="govuk-heading-m">Your consignment</h2>
     
@@ -251,7 +271,7 @@
         </tbody>
       </table>
 
-      <p class="govuk-body"><a href="commodity-page-machinery?return_url=check-your-answers">Add more</a></p>
+      <p class="govuk-body"><a href="input-method?return_url=check-your-answers">Add more</a></p>
       {% elif data.journey == "coc" %}
       <h2 class="govuk-heading-m">Your consignment</h2>
       
@@ -313,7 +333,11 @@
         </tbody>
       </table>
 
+      {% if data.commodity == "biological control agents and clay" or data.commodity == "grain" %}
       <p class="govuk-body"><a href="how-to-identify?return_url=check-your-answers">Add more</a></p>
+      {% else %}
+      <p class="govuk-body"><a href="input-method?return_url=check-your-answers">Add more</a></p>
+      {% endif %}
       {% endif %}
 
       <!-- Inspection details -->

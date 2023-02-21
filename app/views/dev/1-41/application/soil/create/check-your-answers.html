@@ -31,8 +31,18 @@
   
   <div class="govuk-grid-column-three-quarters">
 
+    {% if query.cloned == "yes" %}
+    <div class="app-alert app-alert--success" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
+      <p class="govuk-body" id="govuk-notification-banner-message">You have successfully copied this application</p>
+    </div>
+    {% endif %}
+
     <form action="../submit/declaration" method="post">
       {% if data.build == "development" %}
+      {% if data.cloned == "yes" %}
+      <h1 class="govuk-heading-xl">Make changes to your application</h1>
+      <p class="govuk-body">Create your new application by changing the answers below.</p>
+      {% else %}
       <h1 class="govuk-heading-xl">Review your answers</h1>
       
       <div class="govuk-inset-text govuk-!-font-weight-bold">
@@ -41,6 +51,7 @@
         <br>
         Please check that the answers you've provided are correct.
       </div>
+      {% endif %}
 
       <h2 class="govuk-heading-m">Application summary</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
@@ -82,7 +93,13 @@
 
       </dl>
       {% else %}
+      {% if data.cloned == "yes" %}
+      <h1 class="govuk-heading-xl">Make changes to your application</h1>
+      <p class="govuk-body">Create your new application by changing the answers below.</p>
+      {% else %}
       <h1 class="govuk-heading-xl">Check your answers before sending your application</h1>
+      {% endif %}
+      
       <h2 class="govuk-heading-m">Application details</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
         
