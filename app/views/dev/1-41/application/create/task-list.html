@@ -26,7 +26,6 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
-
     {% if data.build != "development" %}
     {% if data.reference_num %}<span class="govuk-caption-xl">{{data.reference_num}}</span>{% endif %}
     {% endif %}
@@ -62,13 +61,7 @@
           {% endif %}
           <li class="app-task-list__item">
             <span class="app-task-list__task-name">
-              {% if data.cloned == "yes" %}
-              {% if data.commodities and (data.commodities | length) > 0 or data.stock_number or data.upload or data.variety or data.number_of_packages or data.machinery_id %}
-              <a href="commodity-list" aria-describedby="your_consignment">What's in your consignment?</a>
-              {% else %}
-              <a href="input-method" aria-describedby="your_consignment">What's in your consignment?</a>
-              {% endif %}
-              {% elif data.commodity == "biological control agents and clay" or data.commodity == "grain" %}
+              {% if data.commodity == "biological control agents and clay" or data.commodity == "grain" %}
               <a href="{% if data.commodities and (data.commodities | length) > 0 %}commodity-list{% else %}how-to-identify{% endif %}" aria-describedby="your_consignment">What's in your consignment?</a>
               {% elif data.commodity == "used farm machinery" %}
               <a href="{% if data.commodities and (data.commodities | length) > 0 %}commodity-list{% else %}input-method{% endif %}" aria-describedby="your_consignment">What's in your consignment?</a>
@@ -166,7 +159,7 @@
         <h2 class="app-task-list__section"><span class="app-task-list__section-number">{% if data.journey == "coc" %}2.{% else %}3.{% endif %}</span> Check and submit your application</h2>
         <ul class="app-task-list__items">
           <li class="app-task-list__item">
-            {% if data.cloned == "yes" %}
+            {% if data.shortcut == "false" %}
             {% if (data.id | appInformationV5('cert_info')) == 'Re-forwarding' or data.reforwarding == "1" or (data.id | appInformationV5('cert_info')) == 'Conformity' or data.has_reference == "coc" %}
             <span class="app-task-list__task-name"><a href="check-your-answers">Check your answers and submit your application</a></span>
             {% elif (data.id | appInformationV5('commodity_info')) == 'biological control agents and clay' or data.commodity == "biological control agents and clay" or (data.id | appInformationV5('commodity_info')) == 'processed plant products' or data.commodity == "plant products" or (data.id | appInformationV5('commodity_info')) == 'seeds' or data.commodity == "seeds" or (data.id | appInformationV5('commodity_info')) == 'unprocessed cereal grains' or data.commodity == "grain" %}
