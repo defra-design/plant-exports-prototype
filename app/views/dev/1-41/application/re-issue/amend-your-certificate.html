@@ -134,7 +134,7 @@
       <!-- Your commodities -->
       <h2 class="govuk-heading-m">Your consignment</h2>
       {% if data.commodity == "bulbs" %}
-      <table class="govuk-table govuk-!-margin-bottom-4">
+      <table class="govuk-table govuk-!-margin-bottom-4" id="commodityTable">
         <caption class="govuk-table__caption govuk-visually-hidden">Your consignment</caption>
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
@@ -156,45 +156,63 @@
         </tbody>
       </table>
       {% elif data.commodity == "plants" %}
-      <table class="govuk-table govuk-!-margin-bottom-4">
+      <table class="govuk-table govuk-!-margin-bottom-4" id="commodityTable">
         <caption class="govuk-table__caption govuk-visually-hidden">Your consignment</caption>
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th scope="col" class="govuk-table__header">Description</th>
             <th scope="col" class="govuk-table__header">Country of origin</th>
             <th scope="col" class="govuk-table__header">Quantity</th>
-            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Action</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">{% if data.rowCount == '1' %}Action{% else %}Actions{% endif %}</th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">
+          {% if data.row1 == "true" %}
           <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Cabbage 'Durham Early'</th>
             <td class="govuk-table__cell">United Kingdom</td>
             <td class="govuk-table__cell">{{data.quantity3 or "17"}}t</td>
             <td class="govuk-table__cell govuk-table__cell--numeric">
               <a href="edit/how-to-identify-3?change=yes&commodity=plants&return_url=../amend-your-certificate&reissue=yes" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+              {% if data.rowCount != '1' %}
+              <br>
+              <a href="delete-commodity?deleteRow1=true&change=yes&return_url=amend-your-certificate" class="govuk-link govuk-link--no-visited-state delete-link">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+              {% endif %}
             </td>
           </tr>
+          {% endif %}
+          {% if data.row2 == "true" %}
           <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Cabbage 'Avon Crest'</th>
             <td class="govuk-table__cell">United Kingdom</td>
             <td class="govuk-table__cell">{{data.quantity2 or "35"}}t</td>
             <td class="govuk-table__cell govuk-table__cell--numeric">
               <a href="edit/how-to-identify-2?change=yes&commodity=plants&return_url=../amend-your-certificate&reissue=yes" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+              {% if data.rowCount != '1' %}
+              <br>
+              <a href="delete-commodity?deleteRow2=true&change=yes&return_url=amend-your-certificate" class="govuk-link govuk-link--no-visited-state delete-link">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+              {% endif %}
             </td>
           </tr>
+          {% endif %}
+          {% if data.row3 == "true" %}
           <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Cabbage 'Savoy'</th>
             <td class="govuk-table__cell">United Kingdom</td>
             <td class="govuk-table__cell">{{data.quantity or "30"}}t</td>
             <td class="govuk-table__cell govuk-table__cell--numeric">
               <a href="edit/how-to-identify?change=yes&commodity=plants&return_url=../amend-your-certificate&reissue=yes" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+              {% if data.rowCount != '1' %}
+              <br>
+              <a href="delete-commodity?deleteRow3=true&change=yes&return_url=amend-your-certificate" class="govuk-link govuk-link--no-visited-state delete-link">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+              {% endif %}
             </td>
           </tr>
+          {% endif %}
         </tbody>
       </table>
       {% elif data.commodity == "potatoes" %}
-      <table class="govuk-table govuk-!-margin-bottom-4">
+      <table class="govuk-table govuk-!-margin-bottom-4" id="commodityTable">
         <caption class="govuk-table__caption govuk-visually-hidden">Your consignment</caption>
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
@@ -216,7 +234,7 @@
         </tbody>
       </table>
       {% elif data.commodity == "plant products" %}
-      <table class="govuk-table govuk-!-margin-bottom-4">
+      <table class="govuk-table govuk-!-margin-bottom-4" id="commodityTable">
         <caption class="govuk-table__caption govuk-visually-hidden">Your consignment</caption>
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
@@ -259,7 +277,7 @@
   
       </dl>
       {% else %}
-      <table class="govuk-table govuk-!-margin-bottom-4">
+      <table class="govuk-table govuk-!-margin-bottom-4" id="commodityTable">
         <caption class="govuk-table__caption govuk-visually-hidden">Your consignment</caption>
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
@@ -269,7 +287,7 @@
             <th class="govuk-table__header" scope="col"><abbr title="Animal and Plant Health Agency">APHA</abbr> sample reference</th> 
             {% endif %}
             <th scope="col" class="govuk-table__header">Quantity</th>
-            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Action</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Actions</th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">
@@ -280,6 +298,8 @@
             <td class="govuk-table__cell">{{data.quantity2 or "35"}}t</td>
             <td class="govuk-table__cell govuk-table__cell--numeric">
               <a href="edit/how-to-identify-2?change=yes&commodity=seeds&return_url=../amend-your-certificate&reissue=yes" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+              <br>
+              <a href="#" class="govuk-link govuk-link--no-visited-state delete-link">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
             </td>
           </tr>
           <tr class="govuk-table__row">
@@ -289,13 +309,15 @@
             <td class="govuk-table__cell">{{data.quantity or "30"}}t</td>
             <td class="govuk-table__cell govuk-table__cell--numeric">
               <a href="edit/how-to-identify?change=yes&commodity=seeds&return_url=../amend-your-certificate&reissue=yes" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+              <br>
+              <a href="#" class="govuk-link govuk-link--no-visited-state delete-link">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
             </td>
           </tr>
         </tbody>
       </table>
       {% endif %}
       {% elif data.commodity == "grain" %}
-      <table class="govuk-table govuk-!-margin-bottom-4">
+      <table class="govuk-table govuk-!-margin-bottom-4" id="commodityTable">
         <caption class="govuk-table__caption govuk-visually-hidden">Your consignment</caption>
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
@@ -317,7 +339,7 @@
         </tbody>
       </table>
       {% elif data.commodity == "used farm machinery" %} 
-      <table class="govuk-table govuk-!-margin-bottom-4">
+      <table class="govuk-table govuk-!-margin-bottom-4" id="commodityTable">
         <caption class="govuk-table__caption govuk-visually-hidden">Your consignment</caption>
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
@@ -335,41 +357,59 @@
         </tbody>
       </table>
       {% else %}      
-      <table class="govuk-table govuk-!-margin-bottom-4">
+      <table class="govuk-table govuk-!-margin-bottom-4" id="commodityTable">
         <caption class="govuk-table__caption govuk-visually-hidden">Your consignment</caption>
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th scope="col" class="govuk-table__header">Description</th>
             <th scope="col" class="govuk-table__header">Country of origin</th>
             <th scope="col" class="govuk-table__header">Quantity</th>
-            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Action</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">{% if data.rowCount == '1' %}Action{% else %}Actions{% endif %}</th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">
+          {% if data.row1 == "true" %}
           <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Cabbage 'Durham Early'</th>
             <td class="govuk-table__cell">United Kingdom</td>
             <td class="govuk-table__cell">{{data.quantity3 or "17"}}t</td>
             <td class="govuk-table__cell govuk-table__cell--numeric">
               <a href="edit/how-to-identify-3?change=yes&commodity=plants&return_url=../amend-your-certificate&reissue=yes" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+              {% if data.rowCount != '1' %}
+              <br>
+              <a href="delete-commodity?deleteRow1=true&change=yes&return_url=amend-your-certificate" class="govuk-link govuk-link--no-visited-state delete-link">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+              {% endif %}
             </td>
           </tr>
+          {% endif %}
+          {% if data.row2 == "true" %}
           <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Cabbage 'Avon Crest'</th>
             <td class="govuk-table__cell">United Kingdom</td>
             <td class="govuk-table__cell">{{data.quantity2 or "35"}}t</td>
             <td class="govuk-table__cell govuk-table__cell--numeric">
               <a href="edit/how-to-identify-2?change=yes&commodity=plants&return_url=../amend-your-certificate&reissue=yes" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+              {% if data.rowCount != '1' %}
+              <br>
+              <a href="delete-commodity?deleteRow2=true&change=yes&return_url=amend-your-certificate" class="govuk-link govuk-link--no-visited-state delete-link">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+              {% endif %}
             </td>
           </tr>
+          {% endif %}
+          {% if data.row3 == "true" %}
           <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Cabbage 'Savoy'</th>
             <td class="govuk-table__cell">United Kingdom</td>
             <td class="govuk-table__cell">{{data.quantity or "30"}}t</td>
             <td class="govuk-table__cell govuk-table__cell--numeric">
               <a href="edit/how-to-identify?change=yes&commodity=plants&return_url=../amend-your-certificate&reissue=yes" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+              {% if data.rowCount != '1' %}
+              <br>
+              <a href="delete-commodity?deleteRow3=true&change=yes&return_url=amend-your-certificate" class="govuk-link govuk-link--no-visited-state delete-link">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+              {% endif %}
             </td>
           </tr>
+          {% endif %}
         </tbody>
       </table>
       {% endif %}
@@ -730,4 +770,22 @@
   </div>
 
 </div>
+{% endblock %}
+
+{% block pageScripts %}
+<script>
+
+$(document).ready(function () {
+
+  var rowCount = $("#commodityTable tr").length -1;
+
+  $("a.delete-link").each(function() {
+    var $this = $(this);       
+    var _href = $this.attr("href"); 
+    $this.attr("href", _href + "&rowCount=" + rowCount);
+  });
+
+});
+
+</script>
 {% endblock %}
