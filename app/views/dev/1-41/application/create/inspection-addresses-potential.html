@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Provide inspection details - Phytosanitary certificate - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-two-thirds">
+
+    <form action="{{query.return_url or 'contact-details-potential'}}" method="post">
+
+      {% if query.addressAdded == "yes" %}
+      <div class="app-alert app-alert--success" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
+        <p class="govuk-body" id="govuk-notification-banner-message">Address added successfully</p>
+      </div>
+      {% endif %}
+    
+      <div class="govuk-form-group">
+        <h1 class="govuk-heading-xl">Provide inspection details</h1>
+        <p class="govuk-body">We might need to inspect your consignment depending on what you're exporting.</p>
+        <p class="govuk-body">Select the address where the inspector may need check your consignment.</p>
+        <p class="govuk-body">You can <a href="../../account/inspection-addresses" class="govuk-link">manage your addresses</a> or <a class="govuk-link" href="../../account/address-lookup?return_url=/dev/{{data.version}}/application/create/inspection-addresses">add a new address</a>.</p>
+      </div>
+      
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          
+          <div class="govuk-radios" data-module="govuk-radios">
+            
+            {% if data.addressAdded == "yes" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="address_0" name="select_address" type="radio" value="Top Lane, Peterborough, Cambridgeshire, PO5 7HY" {% if data.select_address == 'Top Lane, Peterborough, Cambridgeshire, PO5 7HY' %}checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="address_0">Top Lane, Peterborough, Cambridgeshire, PO5 7HY</label>
+            </div>
+            {% endif %}
+            
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="address_1" name="select_address" type="radio" value="Shoggins Farm, Turnip Row, Mordor, The Shire, ZI99 7YH" {% if data.select_address == 'Shoggins Farm, Turnip Row, Mordor, The Shire, ZI99 7YH' %}checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="address_1">Shoggins Farm, Turnip Row, Mordor, The Shire, ZI99 7YH</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="address_2" name="select_address" type="radio" value="Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH" {% if data.select_address == 'Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH' %}checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="address_2">Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="address_3" name="select_address" type="radio" value="Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ" {% if data.select_address == 'Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ' %}checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="address_3">Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="address_4" name="select_address" type="radio" value="Goatacre Cricket Club, Hill Lane, Goatacre, Wiltshire, SN15 6YG" {% if data.select_address == 'Goatacre Cricket Club, Hill Lane, Goatacre, Wiltshire, SN15 6YG' %}checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="address_4">Goatacre Cricket Club, Hill Lane, Goatacre, Wiltshire, SN15 6YG</label>
+            </div>
+
+          </div>
+
+        </fieldset>
+      </div>
+
+      <button class="govuk-button govuk-!-margin-bottom-9" type="submit" data-module="govuk-button">Save and continue</button>      
+
+      {% block continueLater %}
+      {% include "../modules/_save-continue-later.html" %}
+      {% endblock %}
+    </form>
+
+    <!-- {% if query.extras == "yes" %}
+    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible govuk-!-margin-top-9">
+    <p class="govuk-body"><a href="no-inspection-addresses" class="govuk-link govuk-link-no-visited-state">Scenario: no inspection addresses exist</a></p>
+    {% else %}
+    {% endif %} -->
+  </div>
+
+</div>
+{% endblock %}

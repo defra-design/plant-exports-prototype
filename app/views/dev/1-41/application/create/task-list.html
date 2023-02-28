@@ -65,6 +65,8 @@
               <a href="{% if data.commodities and (data.commodities | length) > 0 %}commodity-list{% else %}how-to-identify{% endif %}" aria-describedby="your_consignment">What's in your consignment?</a>
               {% elif data.commodity == "used farm machinery" %}
               <a href="{% if data.commodities and (data.commodities | length) > 0 %}commodity-list{% else %}input-method{% endif %}" aria-describedby="your_consignment">What's in your consignment?</a>
+              {% elif data.commodity == "something else" %}
+              <a href="{% if data.commodities and (data.commodities | length) > 0 %}commodity-list{% else %}how-to-identify{% endif %}" aria-describedby="your_consignment">What's in your consignment?</a>
               {% else %}
               <!-- <a href="{% if data.commodities and (data.commodities | length) > 0 %}commodity-list{% else %}input-method{% endif %}" aria-describedby="your_consignment"> -->
               <a href="{% if data.upload %}{% if data.commodity == 'seeds' %}commodity-list-summary?return_url=task-list{% else %}upload-completed{% endif %}{% elif data.commodities and (data.commodities | length) > 0 %}commodity-list{% else %}input-method{% endif %}" aria-describedby="your_consignment">What's in your consignment?</a>
@@ -76,11 +78,20 @@
             <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="your_consignment">Not started</strong>
             {% endif %}
           </li>
-          {% if data.commodity == "biological control agents and clay" or (data.commodity == "bulbs" and data.countrySelect[0] == "United States") or data.commodity == "plant products" or data.commodity == "seeds" or data.commodity == "grain" %}
-
-          {% else %}
+          {% if data.commodity != "biological control agents and clay" and (data.commodity != "bulbs" and data.countrySelect[0] != "United States") and data.commodity != "plant products" and data.commodity != "seeds" and data.commodity != "grain" and data.commodity != "something else" %}
           <li class="app-task-list__item">
-            <span class="app-task-list__task-name">{% if data.commodity == "plants" and data.journey != "coc" %}<a href="pheats-check" aria-describedby="inspection_details">{% else %}<a href="inspection-addresses" aria-describedby="status-1.3">{% endif %}What are the inspection details?</a></span>
+            <span class="app-task-list__task-name">{% if data.commodity == "plants" and data.journey != "coc" %}<a href="pheats-check" aria-describedby="inspection_details">{% else %}<a href="inspection-addresses" aria-describedby="inspection_details">{% endif %}What are the inspection details?</a></span>
+            {% if data.inspection_address_added == "In progress" %}
+            <strong class="govuk-tag govuk-tag--blue app-task-list__tag" id="inspection_details">In progress</strong>
+            {% elif data.inspection_address_added == "Complete" or data.confirm_address or data.how-contacted %}
+            <strong class="govuk-tag app-task-list__tag" id="inspection_details">Complete</strong>
+            {% else %}
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="inspection_details">Not started</strong>
+            {% endif %}
+          </li>
+          {% elif data.commodity == "something else" %}
+          <li class="app-task-list__item">
+            <span class="app-task-list__task-name"><a href="inspection-addresses-potential" aria-describedby="inspection_details">Potential inspection details</a></span>
             {% if data.inspection_address_added == "In progress" %}
             <strong class="govuk-tag govuk-tag--blue app-task-list__tag" id="inspection_details">In progress</strong>
             {% elif data.inspection_address_added == "Complete" or data.confirm_address or data.how-contacted %}

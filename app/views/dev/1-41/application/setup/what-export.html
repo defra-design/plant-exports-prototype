@@ -17,7 +17,7 @@
   <div class="govuk-grid-column-three-quarters">
 
     <form action="{{query.return_url or 'what-country'}}" method="post">
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-6">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
         <h1 class="govuk-fieldset__heading">What are you exporting?</h1>
       </legend>
 
@@ -25,159 +25,101 @@
         <fieldset class="govuk-fieldset">
 
           <div class="govuk-radios" data-module="govuk-radios">
-            {% if data.build == "development" %}
-            {% else %}
-
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="commodity_bca" name="commodity" type="radio" 
-              {% if query.change == "yes" %}
-              value="biological control agents and clay" 
-              {% else %}
-              value="biological control agents and clay~pre-application-test?version={{data.version}}&build={{query.build}}&route={{query.route}}" 
-              {% endif %}
-              {% if query.change and data.commodity == "biological control agents and clay" %}checked="checked"{% endif %}>
-              <label class="govuk-label govuk-radios__label" for="commodity_bca">Biological control agents and clay</label>
-              <div id="commodity_bca-hint" class="govuk-hint govuk-radios__hint">Beneficial insects, bio pesticides, growth stimulants and nematodes</div>
-            </div>
-            {% endif %}
+            <!-- {% if data.build != "development" %}
             
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="commodity_bulbs" name="commodity" type="radio" 
-              {% if query.change == "yes" %}
-              value="bulbs" 
-              {% else %}
-              value="bulbs~pre-application-test?version={{data.version}}&build={{query.build}}&route={{query.route}}" 
-              {% endif %}
-              {% if query.change and data.commodity == "bulbs" %}checked="checked"{% endif %}>
-              <label class="govuk-label govuk-radios__label" for="commodity_bulbs">Bulbs</label>              
+              <input class="govuk-radios__input" id="commodity_bca" name="commodity" type="radio" value="biological control agents and clay{% if query.change != 'yes' %}~pre-application-test?version={{data.version}}&build={{query.build}}&route={{query.route}}{% endif %}" aria-describedby="commodity_bca-hint"{% if query.change and data.commodity == "biological control agents and clay" %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="commodity_bca">Biological control agents and clay</label>
               
-              <div id="commodity_bulbs-hint" class="govuk-hint govuk-radios__hint">
-                {% if data.build == "development" %}
-                Includes tubers, rhizomes, corms and bulbs for planting, not for use as food
-                {% else %}
-                Bulbs, corms, crowns, tuberous roots, tubers, rhizomes
-                {% endif %}
-              </div>
-              
-            </div>
-
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="commodity_plants" name="commodity" type="radio" {% if query.change == "yes" %}value="plants"{% else %}value="plants~pre-application-test?version={{data.version}}&build={{query.build}}&route={{query.route}}"{% endif %} aria-describedby="commodity_plants-hint"{% if query.change and data.commodity == "plants" %} checked="checked"{% endif %}>
-              <label class="govuk-label govuk-radios__label" for="commodity_plants">Plants and fresh produce</label>
-              
-              <div id="commodity_plants-hint" class="govuk-hint govuk-radios__hint">
-                Plants, trees and cuttings for planting, cut flowers, fresh fruit and vegetables for food
-              </div>
-
-            </div>
-            <!-- {% if data.planB == "yes" %}
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="commodity_plants" name="commodity" type="radio" {% if query.change == "yes" %}value="plants"{% else %}value="plants~pre-application-test?version={{data.version}}&build={{query.build}}&route={{query.route}}"{% endif %} aria-describedby="commodity_plants-hint" data-aria-controls="commodity_plants-sub-type"{% if query.change and data.commodity == "plants" %} checked="checked"{% endif %}>
-              <label class="govuk-label govuk-radios__label" for="commodity_plants">Plants and fresh produce</label>
-              
-              <div id="commodity_plants-hint" class="govuk-hint govuk-radios__hint">
-                Plants, trees and cuttings for planting, cut flowers, fresh fruit and vegetables for food
-              </div>
-
-            </div>
-
-            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="commodity_plants-sub-type">
-              
-              <div class="govuk-form-group">
-
-                <div class="govuk-radios__item">
-                  <input class="govuk-radios__input" id="sub-commodity-type-1" name="subCommodityType" type="radio" value="Micropropagation material">
-                  <label class="govuk-label govuk-radios__label" for="sub-commodity-type-1">Micropropagation material</label>
-                </div>
-
-                <div class="govuk-radios__item">
-                  <input class="govuk-radios__input" id="sub-commodity-type-2" name="subCommodityType" type="radio" value="Plants">
-                  <label class="govuk-label govuk-radios__label" for="sub-commodity-type-2">Plants</label>
-                </div>
-    
-                <div class="govuk-radios__item">
-                  <input class="govuk-radios__input" id="sub-commodity-type-3" name="subCommodityType" type="radio" value="Plants for the production of fruit, flowers or vegetables">
-                  <label class="govuk-label govuk-radios__label" for="sub-commodity-type-3">Plants for the production of fruit, flowers or vegetables</label>
-                </div>
-
-              </div>
-      
-            </div>
-            {% else %}
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="commodity_plants" name="commodity" type="radio" {% if query.change == "yes" %}value="plants"{% else %}value="plants~pre-application-test?version={{data.version}}&build={{query.build}}&route={{query.route}}"{% endif %} aria-describedby="commodity_plants-hint"{% if query.change and data.commodity == "plants" %} checked="checked"{% endif %}>
-              <label class="govuk-label govuk-radios__label" for="commodity_plants">Plants and fresh produce</label>
-              
-              <div id="commodity_plants-hint" class="govuk-hint govuk-radios__hint">
-                Plants, trees and cuttings for planting, cut flowers, fresh fruit and vegetables for food
+              <div id="commodity_bca-hint" class="govuk-hint govuk-radios__hint">
+                Beneficial insects, bio pesticides, growth stimulants and nematodes
               </div>
 
             </div>
             {% endif %} -->
-
+            
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="commodity_potatoes" name="commodity" type="radio"
-              {% if query.change == "yes" %}
-              value="potatoes" 
-              {% else %}
-              value="potatoes~pre-application-test?version={{data.version}}&build={{query.build}}&route={{query.route}}" 
-              {% endif %}
-              {% if query.change and data.commodity == "potatoes" %}checked="checked"{% endif %}>
-              <label class="govuk-label govuk-radios__label" for="commodity_potatoes">Potatoes</label>
-              <div id="commodity_potatoes-hint" class="govuk-hint govuk-radios__hint">Ware and seed potatoes</div>
+              <input class="govuk-radios__input" id="commodity_bulbs" name="commodity" type="radio" value="bulbs{% if query.change != 'yes' %}~pre-application-test?version={{data.version}}&build={{query.build}}&route={{query.route}}{% endif %}" aria-describedby="commodity_bulbs-hint"{% if query.change and data.commodity == "bulbs" %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="commodity_bulbs">Bulbs</label>              
+              
+              <div id="commodity_bulbs-hint" class="govuk-hint govuk-radios__hint">
+                {% if data.build == "development" %}Includes tubers, rhizomes, corms and bulbs for planting, not for use as food{% else %}Bulbs, corms, crowns, tuberous roots, tubers, rhizomes{% endif %}
+              </div>
+              
             </div>
 
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="commodity_plants_products" name="commodity" type="radio" 
-              {% if query.change == "yes" %}
-              value="plant products" 
-              {% else %}
-              value="plant products~pre-application-test?version={{data.version}}&build={{query.build}}&route={{query.route}}" 
-              {% endif %}
-              {% if query.change and data.commodity == "plant products" %}checked="checked"{% endif %}>
+              <input class="govuk-radios__input" id="commodity_plants" name="commodity" type="radio" value="plants{% if query.change != 'yes' %}~pre-application-test?version={{data.version}}&build={{query.build}}&route={{query.route}}{% endif %}" aria-describedby="commodity_plants-hint"{% if query.change and data.commodity == "plants" %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="commodity_plants">Plants and fresh produce</label>
+              
+              <div id="commodity_plants-hint" class="govuk-hint govuk-radios__hint">
+                Plants, trees and cuttings for planting, cut flowers, fresh fruit and vegetables for food
+              </div>
+
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="commodity_potatoes" name="commodity" type="radio" value="potatoes{% if query.change != 'yes' %}~pre-application-test?version={{data.version}}&build={{query.build}}&route={{query.route}}{% endif %}" aria-describedby="commodity_potatoes-hint"{% if query.change and data.commodity == "potatoes" %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="commodity_potatoes">Potatoes</label>
+
+              <div id="commodity_potatoes-hint" class="govuk-hint govuk-radios__hint">
+                Ware and seed potatoes
+              </div>
+
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="commodity_plants_products" name="commodity" type="radio" value="plant products{% if query.change != 'yes' %}~pre-application-test?version={{data.version}}&build={{query.build}}&route={{query.route}}{% endif %}" aria-describedby="commodity_plants_products-hint"{% if query.change and data.commodity == "plant products" %} checked{% endif %}>
               <label class="govuk-label govuk-radios__label" for="commodity_plants_products">Processed plant products</label>
 
-              <div id="commodity_plants_products-hint" class="govuk-hint govuk-radios__hint">Products or ingredients from plants, seeds and pulses that have been processed such as being dried, milled or cooked</div>
-            </div>
-
-
-            <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="commodity_seeds" name="commodity" type="radio"
-              {% if query.change == "yes" %}
-              value="seeds" 
-              {% else %}
-              value="seeds~pre-application-test?version={{data.version}}&build={{query.build}}&route={{query.route}}" 
-              {% endif %}
-
-              {% if query.change and data.commodity == "seeds" %}checked="checked"{% endif %}>
-              <label class="govuk-label govuk-radios__label" for="commodity_seeds">Seeds for planting
-              </label>
-              <div id="commodity_seeds-hint" class="govuk-hint govuk-radios__hint">Select ‘Processed plant products’ if you have seeds for food or feed 
+              <div id="commodity_plants_products-hint" class="govuk-hint govuk-radios__hint">
+                Products or ingredients from plants, seeds and pulses that have been processed such as being dried, milled or cooked
               </div>
+
             </div>
 
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="commodity_grain" name="commodity" type="radio" 
-              {% if query.change == "yes" %}
-              value="grain" 
-              {% else %}
-              value="grain~pre-application-test?version={{data.version}}&build={{query.build}}&route={{query.route}}" 
-              {% endif %}
-              {% if query.change and data.commodity == "grain" %}checked="checked"{% endif %}>
+              <input class="govuk-radios__input" id="commodity_seeds" name="commodity" type="radio" value="seeds{% if query.change != 'yes' %}~pre-application-test?version={{data.version}}&build={{query.build}}&route={{query.route}}{% endif %}" aria-describedby="commodity_seeds-hint"{% if query.change and data.commodity == "seeds" %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="commodity_seeds">Seeds for planting</label>
+
+              <div id="commodity_seeds-hint" class="govuk-hint govuk-radios__hint">
+                Select ‘Processed plant products’ if you have seeds for food or feed 
+              </div>
+
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="commodity_grain" name="commodity" type="radio" value="grain{% if query.change != 'yes' %}~pre-application-test?version={{data.version}}&build={{query.build}}&route={{query.route}}{% endif %}" aria-describedby="commodity_grain-hint"{% if query.change and data.commodity == "grain" %} checked{% endif %}>
               <label class="govuk-label govuk-radios__label" for="commodity_grain">Unprocessed cereal grains</label>
-              <div id="commodity_grain-hint" class="govuk-hint govuk-radios__hint">Wheat, barley, oats and corn for food or feed - unprocessed, not for planting</div>
+              
+              <div id="commodity_grain-hint" class="govuk-hint govuk-radios__hint">
+                Wheat, barley, oats and corn for food or feed - unprocessed, not for planting
+              </div>
+              
             </div>
 
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="commodity_wood" name="commodity" type="radio"                
-              {% if query.change == "yes" %}
-              value="used farm machinery" 
-              {% else %}
-              value="used farm machinery~pre-application-test?version={{data.version}}&build={{query.build}}&route={{query.route}}" 
-              {% endif %}
-              {% if query.change and data.commodity == "farm machinery" %}checked="checked"{% endif %}>
-              <label class="govuk-label govuk-radios__label" for="commodity_wood">Used farm machinery</label>
-              <div id="commodity_wood-hint" class="govuk-hint govuk-radios__hint">Such as tractors, combine harvesters</div>
+              <input class="govuk-radios__input" id="commodity_ufm" name="commodity" type="radio" value="used farm machinery{% if query.change != 'yes' %}~pre-application-test?version={{data.version}}&build={{query.build}}&route={{query.route}}{% endif %}" aria-describedby="commodity_ufm-hint"{% if query.change and data.commodity == "used farm machinery" %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="commodity_ufm">Used farm machinery</label>
+
+              <div id="commodity_ufm-hint" class="govuk-hint govuk-radios__hint">
+                Such as tractors, combine harvesters
+              </div>
+
+            </div>
+
+            <div class="govuk-radios__divider">
+              or
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="commodity_other" name="commodity" type="radio" value="something else{% if query.change != 'yes' %}~pre-application-test?version={{data.version}}&build={{query.build}}&route={{query.route}}{% endif %}" aria-describedby="commodity_other-hint"{% if query.change and data.commodity == "something else" %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="commodity_other">Something else</label>
+
+              <div id="commodity_other-hint" class="govuk-hint govuk-radios__hint">
+                <a href="#" title="Find out what this term means" class="js-modal modal-link" data-modal-text="<p class='govuk-body'>This includes:</p><ul class='govuk-list govuk-list--bullet'><li>beneficial insects</li><li>bio pesticides</li><li>growth stimulants</li><li>nematodes</li></ul>" data-modal-title="Biological control agents" data-modal-close-text="Close" data-modal-close-title="Close this window">Biological control agents</a>, clay, dried flax, mushroom spawn, mychorrizal funghi, preserved flowers, rare materials and seaweed
+              </div>
+              
             </div>
 
           </div>
@@ -195,4 +137,10 @@
   </div>
 
 </div>
+
+<!-- JavaScript (START) -->
+<script src="/public/javascripts/jquery-3.6.0.js"></script>
+<!-- Tooltip taken from Nicolas Hoffmann (https://a11y.nicolas-hoffmann.net/modal/) -->
+<script src="/public/javascripts/jquery-accessible-modal-window-aria.js"></script>
+<!-- JavaScript (END) -->
 {% endblock %}
