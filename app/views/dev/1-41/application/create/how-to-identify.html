@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.build == "development" %}{% if data.commodity == "plant products" %}Plant Products{% else %}{{data.commodity | capitalize or 'Plant Products' }}{% endif %} Details - Exports application{% else %}Add {% if data.pheats != 1 %}{% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your {% if data.reforwarding %} re-forwarding{% endif %} consignment - Phytosanitary certificate - {{serviceName}}{% endif %} - GOV.UK
+  {% if data.build == "development" %}{% if data.commodity == "plant products" %}Plant Products{% else %}{{data.commodity | capitalize or 'Plant Products' }}{% endif %} Details - Exports application{% else %}Add {% if data.pheats != 1 %}{% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "something else" %}commodities{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your {% if data.reforwarding %} re-forwarding{% endif %} consignment - Phytosanitary certificate - {{serviceName}}{% endif %} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -20,12 +20,14 @@
     <form action="{{query.return_url or 'check-your-answers'}}?row1=true" method="post">
     {% elif data.id == "34" %}
     <form action="{{query.return_url or 'commodity-list'}}?row1=true" method="post">
+    {% elif data.commodity == "something else" %}
+    <form action="{{query.return_url or 'commodity-list'}}?row1=true" method="post">
     {% else %}
     <form method="post">
     {% endif %}    
       <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">{% if data.build == "development" %}Your commodity{% else %}Add {% if data.pheats != 1 %}{% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your{% if data.reforwarding %} re-forwarding{% endif %} consignment{% endif %}</legend>
-        <p class="govuk-body govuk-!-margin-top-6" for="how-contacted-conditional">How do you want to describe your {% if data.build == "development" %}commodity{% else %}{% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %}?</p>
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">{% if data.build == "development" %}Your commodity{% else %}Add {% if data.pheats != 1 %}{% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "something else" %}commodities{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your{% if data.reforwarding %} re-forwarding{% endif %} consignment{% endif %}</legend>
+        <p class="govuk-body govuk-!-margin-top-6" for="how-contacted-conditional">How do you want to describe your {% if data.build == "development" %}commodity{% else %}{% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "something else" %}commodities{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %}?</p>
 
         <div class="govuk-form-group">
 

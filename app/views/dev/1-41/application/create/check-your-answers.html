@@ -310,8 +310,12 @@
           </tr>
         </thead>
         <tbody class="govuk-table__body">
+          <!-- BULK UPLOAD (plants and fresh produce) -->
           {% if data.id == "34" %}
           {% block summaryBulkUploadAfterClone %}{% include "../modules/_summary-bulk-upload-after-clone-cya.html" %}{% endblock %}
+          <!-- SOMETHING ELSE -->
+          {% elif data.commodity == "something else" %}
+          {% block summarySomethingElse %}{% include "../modules/_summary-something-else-cya.html" %}{% endblock %}
           <!-- Smart commodity looping (START) - Added by a previous designer to always add another row to the commodity table each time a new commodity is added -->
           {% elif data.commodities and (data.commodities | length) > 0 %}
           {% for commodity in data.commodities %}
@@ -335,8 +339,8 @@
         </tbody>
       </table>
 
-      {% if data.commodity == "biological control agents and clay" or data.commodity == "grain" %}
-      <p class="govuk-body"><a href="how-to-identify?return_url=check-your-answers">Add more</a></p>
+      {% if data.commodity == "biological control agents and clay" or data.commodity == "grain" or data.commodity == "something else" %}
+      <p class="govuk-body"><a href="how-to-identify?change=yes&return_url=check-your-answers"{% if data.commodity == 'something else' %} id="dynamic-add-more"{% endif %}>Add more</a></p>
       {% else %}
       <p class="govuk-body"><a href="input-method?change=yes&return_url=check-your-answers">Add more</a></p>
       {% endif %}
@@ -345,8 +349,8 @@
       <!-- Inspection details -->
       {% if data.commodity == "biological control agents and clay" or data.commodity == "plant products" or data.commodity == "seeds" or data.commodity == "grain" %}
 
-      {% elif data.commodity == "bulbs" or data.commodity == "plants" or data.commodity == "potatoes" or data.commodity == "used farm machinery" or data.journey == "coc" %}
-      <h2 class="govuk-heading-m govuk-!-margin-top-9">Inspection details</h2>
+      {% elif data.commodity == "bulbs" or data.commodity == "plants" or data.commodity == "potatoes" or data.commodity == "used farm machinery" or data.commodity == "something else" or data.journey == "coc" %}
+      <h2 class="govuk-heading-m govuk-!-margin-top-9">Inspection details{% if data.commodity == "something else" %} (if applicable){% endif %}</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
         {% if data.commodity == "plants" %}
@@ -440,7 +444,7 @@
           {% set inpection_date_month_name = "December" %}
         {% endif %}
         
-        {% if not data.reforwarding %}
+        {% if not data.reforwarding and data.commodity != "something else" %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Date when your consignment will be ready for inspection</dt>
           <dd class="govuk-summary-list__value">{{data.inpection_date_day or "12"}} {{inpection_date_month_name or "August"}} {{data.inpection_date_year or "2023"}}</dd>
@@ -533,6 +537,7 @@
           </dd>
           <dd class="govuk-summary-list__actions"><a class="govuk-link" href="inspection-dates?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> the date when your consignment will be ready for inspection</span></a></dd>
         </div> -->
+        {% if data.commodity != "something else" %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Date when your consignment will be ready for inspection</dt>
           <dd class="govuk-summary-list__value">{{data.inpection_date_day or "12"}} {{inpection_date_month_name or "August"}} {{data.inpection_date_year or "2023"}}</dd>
@@ -540,6 +545,7 @@
             <a class="govuk-link" href="inspection-dates?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">date when your consignment will be ready for inspection</span></a>
           </dd>
         </div>
+        {% endif %}
         
         {% if data.commodity == "potatoes" %}
         <div class="govuk-summary-list__row">
@@ -871,13 +877,32 @@
 
 $(document).ready(function () {
 
-  var rowCount = $("#commodityTable tr").length -1;
+  var trueRowCount = $("#commodityTable tr").length -1;
+  var rowCount = $("#commodityTable tr").length;
 
+  // Chris Harding (01.03.23) - Allows the true deletion of a commodity row in the consignment
   $("a.delete-link").each(function() {
     var $this = $(this);       
     var _href = $this.attr("href"); 
-    $this.attr("href", _href + "&rowCount=" + rowCount);
+    $this.attr("href", _href + "&rowCount=" + trueRowCount);
   });
+
+  // Commodity: SOMETHING ELSE
+  // Chris Harding (01.03.23) - Makes use of the multiple (5) duplicated versions of the 'how-to-identify' commodity page, allowing more dynamic data entry (up to 5 commodity rows)
+  if (rowCount < 6) {
+    
+    var $this = $("#dynamic-add-more");       
+    var _href = $this.attr("href");
+
+    $this.attr("href", "how-to-identify-" + rowCount + "?change=yes&return_url=check-your-answers");
+  }
+  else {
+
+    var $this = $("#dynamic-add-more");       
+    var _href = $this.attr("href");
+
+    $this.attr("href", "how-to-identify-" + 5 + "?change=yes&return_url=check-your-answers");
+  }
 
 });
 
