@@ -63,7 +63,7 @@
               {% if data.show_manual_input == "yes" %}
               <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display: none;">The {% if data.commodity == "everything else" %}scientific{% else %}botanical{% endif %} name needs to be spelled correctly, if you are not sure <a href="?show_manual_input=no&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">search for a {% if data.commodity == "everything else" %}scientific{% else %}botanical{% endif %} name</a></p>
               {% else %}
-              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display: none;">If you cannot find your {{data.commodity or "plants and fresh produce"}}, but you know the {% if data.commodity == "everything else" %}scientific{% else %}botanical{% endif %} name, <a href="?show_manual_input=yes&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">enter the {% if data.commodity == "everything else" %}scientific{% else %}botanical{% endif %} name manually</a></p>
+              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display: none;">If you cannot find your {% if data.commodity == "everything else" %}{% if data.sub_commodity == "something else" %}commodity{% else %}{{data.sub_commodity or "clay"}}{% endif %}{% else %}{{data.commodity or "plants and fresh produce"}}{% endif %}, but you know the {% if data.commodity == "everything else" %}scientific{% else %}botanical{% endif %} name, <a href="?show_manual_input=yes&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">enter the {% if data.commodity == "everything else" %}scientific{% else %}botanical{% endif %} name manually</a></p>
               {% endif %}
 
               {% if data.commodity == "plants" or data.commodity == "seeds" or data.commodity == "bulbs" %}
@@ -84,7 +84,7 @@
               <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-3">Description</label>
               
               <div id="how-contacted-conditional-hint" class="govuk-hint govuk-radios__hint">
-                If you cannot find the {% if data.commodity == "everything else" %}scientific{% else %}botanical{% endif %} name, or your product is made of many {% if data.commodity == "bulbs" %}varieties{% else %}species{% endif %}, enter a description instead
+                {% if data.commodity == "everything else" %}If the thing you are exporting does not have a scientific name, enter a description instead{% else %}If you cannot find the botanical name, or your product is made of many {% if data.commodity == "bulbs" %}varieties{% else %}species{% endif %}, enter a description instead{% endif %}
                 {% if data.commodity == "grain" %}
                 <!-- If the importing country needs you to describe your grain in a language other than English, enter it here. -->
                 {% endif %}

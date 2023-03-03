@@ -63,11 +63,11 @@
             {% elif data.journey == "coc" %}
             Certificate of conformity
             {% else %}
-            Phytosanitary certificate for 
+            Phytosanitary certificate{% if data.commodity == "everything else" and data.sub_commodity == "something else"%}{% else %}for{% endif %} 
             {% if data.build == "development" %}
             {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% else %}{{data.commodity or data.id | appInformationV5('commodity_info')}}{% endif %}
             {% else %}
-            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "seeds" %}seeds for planting{% elif data.commodity == "grain" %}unprocessed cereal grains{% else %}{{data.commodity or data.id | appInformationV5('commodity_info')}}{% endif %}
+            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "seeds" %}seeds for planting{% elif data.commodity == "grain" %}unprocessed cereal grains{% elif data.commodity == "everything else" %}{% if data.sub_commodity != "something else" %}{{data.sub_commodity or "clay"}}{% endif %}{% else %}{{data.commodity or data.id | appInformationV5('commodity_info')}}{% endif %}
             {% endif %}
             {% endif %}
             {% else %}
@@ -350,7 +350,7 @@
       {% if data.commodity == "biological control agents and clay" or data.commodity == "plant products" or data.commodity == "seeds" or data.commodity == "grain" %}
 
       {% elif data.commodity == "bulbs" or data.commodity == "plants" or data.commodity == "potatoes" or data.commodity == "used farm machinery" or data.commodity == "everything else" or data.journey == "coc" %}
-      <h2 class="govuk-heading-m govuk-!-margin-top-9">Inspection details{% if data.commodity == "everything else" %} (if applicable){% endif %}</h2>
+      <h2 class="govuk-heading-m govuk-!-margin-top-9">{% if data.commodity == "everything else" %}If an inspection is needed{% else %}Inspection details{% endif %}</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
         {% if data.commodity == "plants" %}
