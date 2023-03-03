@@ -74,7 +74,7 @@
         {% if data.build == "development" %}
         {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'processed plant products'}}{% endif %}
         {% else %}
-        {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}          
+        {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "everything else" %}your commodity{% else %}{{data.commodity or 'plant products'}}{% endif %}           
         {% endif %}        
         to 
         {% if (data.countrySelect[0] == "United Kingdom (Northern Ireland)") %}
@@ -99,22 +99,22 @@
     </p>
     <ul class="govuk-list govuk-list--bullet">
       <li>needs you to have a phytosanitary certificate to 
-      {% if (data.countrySelect[0] == "United Kingdom (Northern Ireland)") %}
-      send
-      {% else %}
-      export
-      {% endif %}
-      {% if data.build == "development" %}
-      {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% else %}{{data.commodity or 'processed plant products'}}{% endif %}
-      {% else %}
-      {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %} 
-      {% endif %}
-      to
-      {% if (data.countrySelect[0] == "United Kingdom (Northern Ireland)") %}
-      Northern Ireland
-      {% else %}
-      {{data.countrySelect[0] or 'China'}}  
-      {% endif %}
+        {% if (data.countrySelect[0] == "United Kingdom (Northern Ireland)") %}
+        send
+        {% else %}
+        export
+        {% endif %}
+        {% if data.build == "development" %}
+        {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% else %}{{data.commodity or 'processed plant products'}}{% endif %}
+        {% else %}
+        {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "everything else" %}your commodity{% else %}{{data.commodity or 'plant products'}}{% endif %} 
+        {% endif %}
+        to
+        {% if (data.countrySelect[0] == "United Kingdom (Northern Ireland)") %}
+        Northern Ireland
+        {% else %}
+        {{data.countrySelect[0] or 'China'}}  
+        {% endif %}
       </li>
       {% if data.commodity == "biological control agents and clay" or data.commodity == "plants" or data.commodity == "bulbs" or data.commodity == "potatoes" %}
       {% if data.pheats == 1 %}

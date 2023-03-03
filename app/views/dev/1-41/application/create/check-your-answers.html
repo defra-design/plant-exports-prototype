@@ -42,7 +42,7 @@
         Your application is now ready to be submitted.
         <br>
         <br>
-        Please check that the answers you've provided are correct.
+        {% if data.build == "development" %}Please check{% else %}Check{% endif %} that the answers you've provided are correct.
       </div>
       {% endif %}
       
@@ -314,7 +314,7 @@
           {% if data.id == "34" %}
           {% block summaryBulkUploadAfterClone %}{% include "../modules/_summary-bulk-upload-after-clone-cya.html" %}{% endblock %}
           <!-- SOMETHING ELSE -->
-          {% elif data.commodity == "something else" %}
+          {% elif data.commodity == "everything else" %}
           {% block summarySomethingElse %}{% include "../modules/_summary-something-else-cya.html" %}{% endblock %}
           <!-- Smart commodity looping (START) - Added by a previous designer to always add another row to the commodity table each time a new commodity is added -->
           {% elif data.commodities and (data.commodities | length) > 0 %}
@@ -339,8 +339,8 @@
         </tbody>
       </table>
 
-      {% if data.commodity == "biological control agents and clay" or data.commodity == "grain" or data.commodity == "something else" %}
-      <p class="govuk-body"><a href="how-to-identify?change=yes&return_url=check-your-answers"{% if data.commodity == 'something else' %} id="dynamic-add-more"{% endif %}>Add more</a></p>
+      {% if data.commodity == "biological control agents and clay" or data.commodity == "grain" or data.commodity == "everything else" %}
+      <p class="govuk-body"><a href="how-to-identify?change=yes&return_url=check-your-answers"{% if data.commodity == 'everything else' %} id="dynamic-add-more"{% endif %}>Add more</a></p>
       {% else %}
       <p class="govuk-body"><a href="input-method?change=yes&return_url=check-your-answers">Add more</a></p>
       {% endif %}
@@ -349,8 +349,8 @@
       <!-- Inspection details -->
       {% if data.commodity == "biological control agents and clay" or data.commodity == "plant products" or data.commodity == "seeds" or data.commodity == "grain" %}
 
-      {% elif data.commodity == "bulbs" or data.commodity == "plants" or data.commodity == "potatoes" or data.commodity == "used farm machinery" or data.commodity == "something else" or data.journey == "coc" %}
-      <h2 class="govuk-heading-m govuk-!-margin-top-9">Inspection details{% if data.commodity == "something else" %} (if applicable){% endif %}</h2>
+      {% elif data.commodity == "bulbs" or data.commodity == "plants" or data.commodity == "potatoes" or data.commodity == "used farm machinery" or data.commodity == "everything else" or data.journey == "coc" %}
+      <h2 class="govuk-heading-m govuk-!-margin-top-9">Inspection details{% if data.commodity == "everything else" %} (if applicable){% endif %}</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
         {% if data.commodity == "plants" %}
@@ -444,7 +444,7 @@
           {% set inpection_date_month_name = "December" %}
         {% endif %}
         
-        {% if not data.reforwarding and data.commodity != "something else" %}
+        {% if not data.reforwarding and data.commodity != "everything else" %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Date when your consignment will be ready for inspection</dt>
           <dd class="govuk-summary-list__value">{{data.inpection_date_day or "12"}} {{inpection_date_month_name or "August"}} {{data.inpection_date_year or "2023"}}</dd>
@@ -537,7 +537,7 @@
           </dd>
           <dd class="govuk-summary-list__actions"><a class="govuk-link" href="inspection-dates?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> the date when your consignment will be ready for inspection</span></a></dd>
         </div> -->
-        {% if data.commodity != "something else" %}
+        {% if data.commodity != "everything else" %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Date when your consignment will be ready for inspection</dt>
           <dd class="govuk-summary-list__value">{{data.inpection_date_day or "12"}} {{inpection_date_month_name or "August"}} {{data.inpection_date_year or "2023"}}</dd>

@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.build == "development" %}{% if data.commodity == "plant products" %}Plant Products{% else %}{{data.commodity | capitalize or 'Plant Products' }}{% endif %} Details - Exports application{% else %}Add {% if data.pheats != 1 %}{% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your {% if data.reforwarding %} re-forwarding{% endif %} consignment - Phytosanitary certificate - {{serviceName}}{% endif %} - GOV.UK
+  {% if data.build == "development" %}{% if data.commodity == "plant products" %}Plant Products{% else %}{{data.commodity | capitalize or 'Plant Products' }}{% endif %} Details - Exports application{% else %}Add {% if data.pheats != 1 %}{% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "everything else" %}your commodity{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your {% if data.reforwarding %} re-forwarding{% endif %} consignment - Phytosanitary certificate - {{serviceName}}{% endif %} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -20,14 +20,14 @@
     <form action="{{query.return_url or 'check-your-answers'}}?row4=true" method="post">
     {% elif data.id == "34" %}
     <form action="{{query.return_url or 'commodity-list'}}?row4=true" method="post">
-    {% elif data.commodity == "something else" %}
+    {% elif data.commodity == "everything else" %}
     <form action="{{query.return_url or 'commodity-list'}}?row4=true" method="post">
     {% else %}
     <form method="post">
     {% endif %} 
       <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">{% if data.build == "development" %}Your commodity{% else %}Add {% if data.pheats != 1 %}{% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your{% if data.reforwarding %} re-forwarding{% endif %} consignment{% endif %}</legend>
-        <p class="govuk-body govuk-!-margin-top-6" for="how-contacted-conditional">How do you want to describe your {% if data.build == "development" %}commodity{% else %}{% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %}?</p>
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">{% if data.build == "development" %}Your commodity{% else %}Add {% if data.pheats != 1 %}{% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "everything else" %}your commodity{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your{% if data.reforwarding %} re-forwarding{% endif %} consignment{% endif %}</legend>
+        <p class="govuk-body govuk-!-margin-top-6" for="how-contacted-conditional">How do you want to describe {% if data.build == "development" %}your commodity{% else %}{% if data.commodity == "plants" %}your plants and fresh produce{% elif data.commodity == "everything else" %}the thing you are exporting{% else %}your {{data.commodity or 'plant products'}}{% endif %}{% endif %}?</p>
 
         <div class="govuk-form-group">
 
@@ -35,7 +35,7 @@
 
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="how-contacted-conditional" name="has_botanicial_name4" type="radio" value="yes" data-aria-controls="conditional-how-contacted-conditional"{% if data.has_botanicial_name4 == "yes" %} checked{% endif %}>
-              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional">Botanical name</label>
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional">{% if data.commodity == "everything else" %}Scientific{% else %}Botanical{% endif %} name</label>
               
               <div id="how-contacted-conditional-hint" class="govuk-hint govuk-radios__hint">
                 Search by genus, species or common name
@@ -61,9 +61,9 @@
               {% endif %}
 
               {% if data.show_manual_input == "yes" %}
-              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display: none;">The botanical name needs to be spelled correctly, if you are not sure <a href="?show_manual_input=no&has_botanicial_name4=yes" class="govuk-link govuk-link--no-visited-state">search for a botanical name</a></p>
+              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display: none;">The {% if data.commodity == "everything else" %}scientific{% else %}botanical{% endif %} name needs to be spelled correctly, if you are not sure <a href="?show_manual_input=no&has_botanicial_name4=yes" class="govuk-link govuk-link--no-visited-state">search for a {% if data.commodity == "everything else" %}scientific{% else %}botanical{% endif %} name</a></p>
               {% else %}
-              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display: none;">If you cannot find your {{data.commodity or "plants and fresh produce"}}, but you know the botanical name, <a href="?show_manual_input=yes&has_botanicial_name4=yes" class="govuk-link govuk-link--no-visited-state">enter the botanical name manually</a></p>
+              <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display: none;">If you cannot find your {{data.commodity or "plants and fresh produce"}}, but you know the {% if data.commodity == "everything else" %}scientific{% else %}botanical{% endif %} name, <a href="?show_manual_input=yes&has_botanicial_name4=yes" class="govuk-link govuk-link--no-visited-state">enter the {% if data.commodity == "everything else" %}scientific{% else %}botanical{% endif %} name manually</a></p>
               {% endif %}
 
               {% if data.commodity == "plants" or data.commodity == "seeds" or data.commodity == "bulbs" %}
@@ -84,7 +84,7 @@
               <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-3">Description</label>
               
               <div id="how-contacted-conditional-hint" class="govuk-hint govuk-radios__hint">
-                If you cannot find the botanical name, or your product is made of many {% if data.commodity == "bulbs" %}varieties{% else %}species{% endif %}, enter a description instead
+                If you cannot find the {% if data.commodity == "everything else" %}scientific{% else %}botanical{% endif %} name, or your product is made of many {% if data.commodity == "bulbs" %}varieties{% else %}species{% endif %}, enter a description instead
                 {% if data.commodity == "grain" %}
                 <!-- If the importing country needs you to describe your grain in a language other than English, enter it here. -->
                 {% endif %}
