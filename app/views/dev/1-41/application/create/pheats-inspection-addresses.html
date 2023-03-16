@@ -22,8 +22,8 @@
         <p class="govuk-body" id="govuk-notification-banner-message">New PHEATS addresses will not be listed until they have been approved.</p>
       </div>
       {% endif %}
-
-      <div class="govuk-form-group">
+      
+      <div class="govuk-form-group{% if query.addresses == '0' %} govuk-!-margin-bottom-9{% endif %}">
         <h1 class="govuk-heading-xl">Select the inspection address</h1>
         {% if data.reforwarding %}
         <p class="govuk-body">Your inspector will decide whether your consignment can be re-forwarded without undergoing a further inspection. You should supply an inspection address in case it is needed.</p>
@@ -34,6 +34,7 @@
         <p class="govuk-body">If you add a new PHEATS address, it will need to be approved before you can use it.</p>
       </div>
       
+      {% if query.addresses != "0" %}
       {% if data.build == "development" %}
       <table class="govuk-table govuk-!-margin-bottom-9">
         <caption class="govuk-table__caption govuk-visually-hidden">Your inspection addresses</caption>
@@ -89,6 +90,7 @@
         <label class="govuk-label" for="inspection_address_added">Task list section URL</label>
         <input class="govuk-input" id="inspection_address_added" name="inspection_address_added" type="text" value="Complete">
       </div>
+      {% endif %}
 
       {% block continueLater %}
       {% include "../modules/_save-continue-later.html" %}
@@ -97,7 +99,7 @@
 
     {% if query.extras == "yes" %}
     <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible govuk-!-margin-top-9">
-    <p class="govuk-body"><a href="no-inspection-addresses" class="govuk-link govuk-link-no-visited-state">Scenario: no inspection addresses exist</a></p>
+    <p class="govuk-body"><a href="pheats-inspection-addresses?addresses=0" class="govuk-link govuk-link-no-visited-state">Scenario: no PHEATS approved inspection addresses</a></p>
     {% else %}
     {% endif %}
   </div>

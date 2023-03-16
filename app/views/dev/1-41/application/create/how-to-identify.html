@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.build == "development" %}{% if data.commodity == "plant products" %}Plant Products{% else %}{{data.commodity | capitalize or 'Plant Products' }}{% endif %} Details - Exports application{% else %}Add {% if data.pheats != 1 %}{% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "everything else" %}your commodity{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your {% if data.reforwarding %} re-forwarding{% endif %} consignment - Phytosanitary certificate - {{serviceName}}{% endif %} - GOV.UK
+  {% if data.build == "development" %}{% if data.commodity == "plant products" %}Plant Products{% else %}{{data.commodity | capitalize or 'Plant Products' }}{% endif %} Details - Exports application{% else %}Add {% if data.pheats_check != "yes" %}{% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "everything else" %}your commodity{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your {% if data.reforwarding %} re-forwarding{% endif %} consignment - Phytosanitary certificate - {{serviceName}}{% endif %} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -26,7 +26,7 @@
     <form method="post">
     {% endif %}    
       <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">{% if data.build == "development" %}Your commodity{% else %}Add {% if data.pheats != 1 %}{% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "everything else" %}your commodity{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your{% if data.reforwarding %} re-forwarding{% endif %} consignment{% endif %}</legend>
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">{% if data.build == "development" %}Your commodity{% else %}Add {% if data.pheats_check != "yes" %}{% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "everything else" %}your commodity{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your{% if data.reforwarding %} re-forwarding{% endif %} consignment{% endif %}</legend>
         <p class="govuk-body govuk-!-margin-top-6" for="how-contacted-conditional">How do you want to describe {% if data.build == "development" %}your commodity{% else %}{% if data.commodity == "plants" %}your plants and fresh produce{% elif data.commodity == "everything else" %}the thing you are exporting{% else %}your {{data.commodity or 'plant products'}}{% endif %}{% endif %}?</p>
 
         <div class="govuk-form-group">
@@ -330,7 +330,7 @@
         {% endif %}
 
         {% if data.commodity == "biological control agents and clay" or data.commodity == "seeds" %}
-        {% if data.pheats != 1 %}
+        {% if data.pheats_check != "yes" %}
         <div class="govuk-form-group govuk-!-margin-top-4">
           <label class="govuk-label" for="commodity_lot">Lot reference</label>
           <input class="govuk-input govuk-input--width-20" id="commodity_lot" name="commodity_lot" type="text" value="{{data.commodity_lot}}">
