@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.build == "development" %}Declaration - Exports application{% else %}Exporter declaration - Phytosanitary certificate - {{serviceName}}{% endif %} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<style>
+  
+  /* Needs extracting and adding to the external Sass or CSS */
+  .govuk-checkboxes-long-label {
+    margin-top: -10px;
+  }
+
+</style>
+
+<div class="govuk-grid-row">
+
+  <div class="{% if data.build == 'development' %}govuk-grid-column-full{% else %}govuk-grid-column-two-thirds{% endif %}">
+    <h1 class="govuk-heading-xl">Exporter declaration</h1>
+    {% if data.pheats_check != "yes" %}
+    <p class="govuk-body">By submitting this application form, you are agreeing that to the best of your knowledge and belief the statements made in this {% if data.reforwarding %}re-forwarding{% endif %} application are true and complete.<!-- You will comply with the legal requirements of UK law, including payment for official controls, repossession of any consignment rejected after transit from the UK to another country or costs of destruction if necessary. --></p>
+    {% else %}
+    <p class="govuk-body">By submitting this application form, you are agreeing that a PHEATS Authorised Person has carried out the official inspection of the consignment, and only those commodities that have passed this inspection have been entered in this application.</p>
+    {% endif %}
+    <p class="govuk-body">Date of declaration: {{todaysDate}}</p>
+
+    <form class="review-form" action="confirmation" method="post">
+
+      <div class="govuk-form-group">
+
+        <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+          
+          <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" type="checkbox" autofocus="autofocus" name="confirm" id="confirm" value="Declaration Accepted">
+            <label class="govuk-label govuk-checkboxes__label govuk-!-font-weight-bold govuk-checkboxes-long-label" for="confirm">I confirm that the information I have provided is correct to the best of my knowledge</label>
+          </div>
+
+        </div>
+
+      </div>
+
+      {% if data.commodity == "biological control agents and clay" %}
+      <a class="govuk-button margin-top-30" href="confirmation-bca-and-clay" value="Submit application" id="Button-SubmitApplication">Submit application</a>
+      {% elif data.commodity == "plants" %}
+      <a class="govuk-button margin-top-30" href="confirmation-plants-phe36" value="Submit application" id="Button-SubmitApplication">Submit application</a>
+      {% elseif data.commodity == "bulbs" and data.countrySelect[0] == "United States" %}
+      <a class="govuk-button margin-top-30" href="confirmation-bulbs-ko1" value="Submit application" id="Button-SubmitApplication">Submit application</a>
+      {% elseif data.commodity == "grain" %}
+      <a class="govuk-button margin-top-30" href="confirmation-grain-hh93" value="Submit application" id="Button-SubmitApplication">Submit application</a>
+      {% elseif data.commodity == "bulbs" %}
+      <a class="govuk-button margin-top-30" href="confirmation-bulbs" value="Submit application" id="Button-SubmitApplication">Submit application</a>
+      {% elseif data.commodity == "seeds" %}
+      <a class="govuk-button margin-top-30" href="confirmation-seeds-phe90" value="Submit application" id="Button-SubmitApplication">Submit application</a>
+      {% elseif data.commodity == "potatoes" %}
+      <a class="govuk-button margin-top-30" href="confirmation-potatoes-phe60" value="Submit application" id="Button-SubmitApplication">Submit application</a>
+      {% elseif data.commodity == "used farm machinery" %}
+      <a class="govuk-button margin-top-30" href="confirmation-machinery-HH36A" value="Submit application" id="Button-SubmitApplication">Submit application</a>
+      {% elif data.commodity == "everything else" %}
+      <a class="govuk-button margin-top-30" href="confirmation-everything-else" value="Submit application" id="Button-SubmitApplication">Submit application</a>
+      {% elseif data.journey == "coc" %}
+      <a class="govuk-button margin-top-30" href="confirmation-coc" value="Submit application" id="Button-SubmitApplication">Submit application</a>
+      {% else %}
+      <a class="govuk-button margin-top-30" href="confirmation-plant-products-hh91" value="Submit application" id="Button-SubmitApplication">Submit application</a>
+      {% endif %}
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

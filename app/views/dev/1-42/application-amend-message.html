@@ -1,0 +1,255 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+GOV.UK Prototype Kit
+{% endblock %}
+{% block beforeContent %}
+<a href="javascript:history.back()" class="govuk-back-link">Return to your applications</a>
+<style>
+  .govuk-status--warning {
+    width: auto !important;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    padding-bottom: 1px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    display: inline-block;
+    color: #0b0c0c;
+    background: #FFBF47;
+    border: 3px solid #FFBF47;
+  }
+</style>
+{% endblock %}
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">{% if query.is_block == "yes" %}block application{%elseif query.is_group == "yes" %}group application{% else %}Application{% endif %} <span style="white-space: nowrap;">{{query.id | appInformationV5('applicationID')}}</span>
+    </h1>
+
+    <div class="app-alert app-alert--info" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
+      <p class="govuk-body" id="govuk-notification-banner-message">This application has been amended. You must resubmit your application using the 'Update this application link' for these changes to appear on your certificate.</p>
+    </div>
+
+    {% if query.is_block == "yes" %}
+    <p class="govuk-body">This is a block application of 100 certificates</p>
+    {% endif %}
+    {% if query.is_group == "yes" %}
+    <p class="govuk-body">This is an application of 5 certificates</p>
+    {% endif %}
+    <!-- <div class="defra-alert defra-alert--info ">
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-2">1 certificate has been replaced </h3>
+        <p class="govuk-body">You can still clone this certificate. We'll adapt the information from the old version to fit the new form, but there may be new changes or changed questions. <br></p>
+      </div> -->
+    <dl class="govuk-summary-list govuk-summary-list--no-border">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Status
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <div class="govuk-tag govuk-tag--{{query.id | appInformationV5('tag')}}">
+            {{query.id | appInformationV5('status')}}
+          </div>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Your reference
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {% if (query.id | appInformationV5('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id |
+            appInformationV5('reference')}}{% endif %}
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Certificate
+        </dt>
+        <dd class="govuk-summary-list__value">
+          Phytosanitary certificate for potatoes
+        </dd>
+
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Destination country
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{(query.id | appInformationV5('destination'))}}
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Customer
+        </dt>
+        <dd class="govuk-summary-list__value">
+          Las Patatas Imports
+        </dd>
+      </div>
+      <!--<div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Certifier
+        </dt>
+        <dd class="govuk-summary-list__value">
+          ABC Vets LTD
+        </dd>
+      </div>-->
+      <!-- <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key govuk-summary-list__40">
+            Proposed export date
+          </dt>
+          <dd class="govuk-summary-list__value govuk-summary-list__40">
+            02 Jan 2019
+          </dd>
+        </div> -->
+    </dl>
+
+    <!-- <p class="govuk-body">
+      {% if query.application_status == 'draft' %}
+      <a class="govuk-button govuk-!-margin-right-4" href="certificate/check-your-progress">Edit and submit</a>
+      {% endif %}
+      <a class="govuk-button govuk-button--secondary " href="clone">Clone as new application</a>
+      {% if query.application_status == 'draft' %}
+      <a class="govuk-link govuk-link--no-visited-state" href="delete">Delete application</a>
+      {% endif %}
+    </p> -->
+    <ul class="govuk-list  govuk-!-margin-bottom-6">
+      {% if (query.id | appInformationV5('status')) == 'certificate issued' %}
+      {# add this else statement for demo to always show amend link #}
+
+      {% elseif (query.id | appInformationV5('status')) == 'exporter action' %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-pre-inspect-amend-message">Update this application</a></li>
+
+      {% else %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-pre-inspect-amend?is_amend=yes">Amend this application</a> - change details like final weight or transportation</li>
+      {% endif %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{query.is_group}}">Copy as new application</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="cancel-reason">Cancel this application</a></li>
+      {% if (query.id | appInformationV5('status')) == 'draft' %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="delete">Delete this application</a></li>
+      {% endif %}
+    </ul>
+
+  </div>
+</div>
+{% if (query.id | appInformationV5('status')) == 'draft' %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <h2 class="govuk-heading-l">{% if (query.id | appInformationV5('is_block')) == 'yes' or query.is_group == "yes"   %}5 certificates{% else %}Certificate{% endif %} </h2>
+      <table class="govuk-table">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            {% if (query.id | appInformationV5('is_block')) == 'yes' or query.is_group =="yes"%}<th class="govuk-table__header">No.</th>{% endif %}
+            <th class="govuk-table__header">Certificate number</th>
+            <th class="govuk-table__header">Actual export date</th>
+            <th class="govuk-table__header">Certificate status</th>
+            <th class="govuk-table__header">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="govuk-table__row">
+            {% if (query.id | appInformationV5('is_block')) == 'yes' or query.is_group =="yes"%}
+            <td id="cert-counter" class="govuk-table__cell" scope="row">1</td>
+            {% endif %}
+            {% if (query.id | appInformationV5('is_block')) == 'yes' and query.is_group !="yes" and query.is_replaced %}
+            <td id="cert-num" class="govuk-table__cell" scope="row" style="width:30%;"><span class="govuk-status govuk-status--warning">Replaced</span>&nbsp;&nbsp;{{query.id | appInformationV5('certificate') }}<br>
+              <span class="govuk-hint govuk-!-margin-top-1 govuk-!-margin-bottom-0">Replaced by <a href="case-new">19/2/00872</a></span>
+            </td>
+            {% elseif (query.id | appInformationV5('is_block')) != 'yes' and query.is_group !="yes" and query.is_replacement %}
+            <td id="cert-num" class="govuk-table__cell" scope="row"><span class="govuk-tag govuk-tag--complete">Replacement</span>&nbsp;&nbsp; {{query.id | appInformationV5('certificate') }}
+              <br>
+              <span class="govuk-hint govuk-!-margin-top-1 govuk-!-margin-bottom-0">Replaced certificate <a href="application?has_cancelation=yes&is_block=yes&application_status=dispatched">19/2/00869 </a> on 02 Aug 2019</span>
+            </td>
+            {% elseif query.is_pending_replacement %}
+            <td id="cert-num" class="govuk-table__cell" scope="row"><span class="govuk-status govuk-status--warning">pending replacement</span>&nbsp;&nbsp;{{query.id | appInformationV5('certificate') }}<br>
+                <span class="govuk-hint govuk-!-margin-top-1 govuk-!-margin-bottom-0">Requested to cancel and replace on 2 Dec 2019</span>
+            </td>
+            {% else %}
+            <td id="cert-num" class="govuk-table__cell" scope="row">{% if (query.id | appInformationV5('status')) == 'submitted' %}Awaiting number{% else %}{{query.id | appInformationV5('certificate') }}{% endif %}</td>
+            {% endif %}
+            <td id="actual-export-date" class="govuk-table__cell" scope="row">
+              30 Nov 2019
+            </td>
+            <td id="status" class="govuk-table__cell" scope="row">
+              {% if not query.has_cancelation %}
+              {% if (query.id | appInformationV5('certificate')) == "certificate issued"%}CERTIFIED{% else %}{{ ((query.id | appInformationV5('status'))|upper) or "DISPATCHED"}}{% endif %}
+
+              {% endif %}
+            </td>
+            <td id="actions" class="govuk-table__cell" scope="row">
+              <a id="view_cert_19/2/008722" href="/public/images/{{query.id | appInformationV5('PDF')}}" target="_blank">
+                 {% if query.application_status =="draft" or query.application_status =="submitted"  %}{% else %}View certificate{% endif %}
+              </a>
+            </td>
+          </tr>
+          {% if (query.id | appInformationV5('is_block')) == 'yes' or query.is_group =="yes"%}
+          <tr class="govuk-table__row">
+            <td id="cert-counter" class="govuk-table__cell" scope="row">2</td>
+            <td id="cert-num" class="govuk-table__cell" scope="row">19/2/022133</td>
+            <td id="actual-export-date" class="govuk-table__cell" scope="row">
+              30 Nov 2019
+            </td>
+            <td id="status" class="govuk-table__cell" scope="row">{% if query.is_group =="yes"%}{{query.application_status | upper}}{% else %}CERTIFIED{% endif %}
+            </td>
+            <td id="actions" class="govuk-table__cell" scope="row">
+              <a id="view_cert_19/2/008722" href="/public/images/ehc-6969ehc-8.1.pdf" target="_blank">
+                View certificate
+              </a>
+            </td>
+          </tr>
+          {% if query.has_cancelation %}
+          <tr class="govuk-table__row">
+            <td id="cert-counter" class="govuk-table__cell" scope="row">3</td>
+            <td id="cert-num" class="govuk-table__cell" scope="row" style="width:30%;"><span class="govuk-status govuk-status--warning">Replaced</span>&nbsp;&nbsp;19/2/00869<br>
+              <span class="govuk-hint govuk-!-margin-top-1 govuk-!-margin-bottom-0">Replaced by <a href="case-new">19/2/00872</a></span>
+            </td>
+            <td id="actual-export-date" class="govuk-table__cell" scope="row">
+              02 Aug 2019
+            </td>
+            <td id="status" class="govuk-table__cell" scope="row">CANCELLED
+            </td>
+            <td id="actions" class="govuk-table__cell" scope="row">
+              <!-- <a id="view_cert_19/2/008722" href="/public/images/ehc-6969ehc-8.1.pdf" target="_blank">
+                View certificate
+              </a> -->
+            </td>
+          </tr>
+          {% endif %}
+          <tr class="govuk-table__row">
+            <td id="cert-counter" class="govuk-table__cell" scope="row">4</td>
+            <td id="cert-num" class="govuk-table__cell" scope="row">19/2/022135</td>
+            <td id="actual-export-date" class="govuk-table__cell" scope="row">
+              30 Nov 2019
+            </td>
+            <td id="status" class="govuk-table__cell" scope="row">{% if query.is_group =="yes"%}{{query.application_status | upper}}{% else %}DISPATCHED{% endif %}
+            </td>
+            <td id="actions" class="certificateActions govuk-table__cell" scope="row">
+              <a id="view_cert_19/2/022135" class="printViewCertificatePdfLink" href="/protected/application/1721147998437/ehc/c3ae2920-05f7-e911-a813-000d3ab0f933?printView=true" target="_blank">View certificate</a>
+            </td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td id="cert-counter" class="govuk-table__cell" scope="row">5</td>
+            <td id="cert-num" class="govuk-table__cell" scope="row">19/2/022136</td>
+            <td id="actual-export-date" class="govuk-table__cell" scope="row">
+              30 Nov 2019
+            </td>
+            <td id="status" class="govuk-table__cell" scope="row">{% if query.is_group =="yes"%}{{query.application_status | upper}}{% else %}DISPATCHED{% endif %}
+            </td>
+            <td id="actions" class="certificateActions govuk-table__cell" scope="row">
+              <a id="view_cert_19/2/022136" class="printViewCertificatePdfLink" href="/protected/application/1721147998437/ehc/c4ae2920-05f7-e911-a813-000d3ab0f933?printView=true" target="_blank">View certificate</a>
+            </td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+  </div>
+  <div class="govuk-grid-column-two-thirds">
+      <p class="govuk-body govuk-hint">{% if query.application_status=="completed" or query.is_block == 'yes' %}If you need to cancel and replace a certificate, contact your certifier to make the request.{% endif %}</p>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
