@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Do you need an inspection? - Phytosanitary certificate - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-two-thirds">
+
+    <form action="{{query.return_url or 'inspection-addresses-potential'}}" method="post">
+    
+      <div class="govuk-form-group">
+        <h1 class="govuk-heading-xl">Do you need an inspection? </h1>
+        <p class="govuk-body">...</p>
+      </div>
+      
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          
+          <div class="govuk-radios" data-module="govuk-radios">
+            
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="address_1" name="select_address" type="radio" value="Yes~inspection-addresses-potential" {% if data.select_address == 'Yes' %}checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="address_1">Yes</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="address_2" name="select_address" type="radio" value="No~task-list" {% if data.select_address == 'No' %}checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="address_2">No</label>
+            </div>
+
+          </div>
+
+        </fieldset>
+      </div>
+
+      <button class="govuk-button govuk-!-margin-bottom-9" type="submit" data-module="govuk-button">Save and continue</button>      
+
+      {% block continueLater %}
+      {% include "../modules/_save-continue-later.html" %}
+      {% endblock %}
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

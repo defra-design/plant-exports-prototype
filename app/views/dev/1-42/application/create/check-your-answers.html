@@ -63,11 +63,11 @@
             {% elif data.journey == "coc" %}
             Certificate of conformity
             {% else %}
-            Phytosanitary certificate{% if data.commodity == "everything else" and data.sub_commodity == "something else"%}{% else %} for{% endif %} 
+            Phytosanitary certificate{% if data.commodity == "everything else" and data.subCommodity == "something else"%}{% else %} for{% endif %} 
             {% if data.build == "development" %}
             {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% else %}{{data.commodity or data.id | appInformationV5('commodity_info')}}{% endif %}
             {% else %}
-            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "seeds" %}seeds for planting{% elif data.commodity == "grain" %}unprocessed cereal grains{% elif data.commodity == "everything else" %}{% if data.sub_commodity != "something else" %}{{data.sub_commodity or "clay"}}{% endif %}{% else %}{{data.commodity or data.id | appInformationV5('commodity_info')}}{% endif %}
+            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "seeds" %}seeds for planting{% elif data.commodity == "grain" %}unprocessed cereal grains{% elif data.commodity == "everything else" %}{% if data.subCommodity != "something else" %}{{data.subCommodity or "clay"}}{% endif %}{% else %}{{data.commodity or data.id | appInformationV5('commodity_info')}}{% endif %}
             {% endif %}
             {% endif %}
             {% else %}
@@ -347,10 +347,10 @@
       {% endif %}
 
       <!-- Inspection details -->
-      {% if data.commodity == "biological control agents and clay" or data.commodity == "plant products" or data.commodity == "seeds" or data.commodity == "grain" %}
+      {% if data.commodity == "biological control agents and clay" or data.commodity == "plant products" or data.commodity == "seeds" or data.commodity == "grain" or (data.commodity == "everything else" and data.subCommodity != "something else") %}
 
-      {% elif data.commodity == "bulbs" or data.commodity == "plants" or data.commodity == "potatoes" or data.commodity == "used farm machinery" or data.commodity == "everything else" or data.journey == "coc" %}
-      <h2 class="govuk-heading-m govuk-!-margin-top-9">{% if data.commodity == "everything else" %}If an inspection is needed{% else %}Inspection details{% endif %}</h2>
+      {% elif data.commodity == "bulbs" or data.commodity == "plants" or data.commodity == "potatoes" or data.commodity == "used farm machinery" or data.subCommodity == "something else" or data.journey == "coc" %}
+      <h2 class="govuk-heading-m govuk-!-margin-top-9">{% if data.subCommodity == "something else" %}If an inspection is needed{% else %}Inspection details{% endif %}</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
         {% if data.commodity == "plants" %}
@@ -444,7 +444,7 @@
           {% set inpection_date_month_name = "December" %}
         {% endif %}
         
-        {% if not data.reforwarding and data.commodity != "everything else" %}
+        {% if not data.reforwarding and data.subCommodity != "something else" %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Date when your consignment will be ready for inspection</dt>
           <dd class="govuk-summary-list__value">{{data.inpection_date_day or "12"}} {{inpection_date_month_name or "August"}} {{data.inpection_date_year or "2023"}}</dd>
@@ -537,7 +537,7 @@
           </dd>
           <dd class="govuk-summary-list__actions"><a class="govuk-link" href="inspection-dates?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> the date when your consignment will be ready for inspection</span></a></dd>
         </div> -->
-        {% if data.commodity != "everything else" %}
+        {% if data.subCommodity != "something else" %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Date when your consignment will be ready for inspection</dt>
           <dd class="govuk-summary-list__value">{{data.inpection_date_day or "12"}} {{inpection_date_month_name or "August"}} {{data.inpection_date_year or "2023"}}</dd>
