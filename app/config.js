@@ -2,8 +2,11 @@
 // Note: prototype config can be overridden using environment variables (e.g. on Heroku)
 module.exports = {
 
-  // Service name used in header. Eg: 'Renew your passport'
+  // Service name used in header (PHES)
   serviceName: 'Apply for plant export certificates and inspections',
+
+  // Micro service name (PHEATS)
+  microServiceName: 'Plant health exports audited trader scheme',
 
   // Default port that prototype runs on
   port: '3000',

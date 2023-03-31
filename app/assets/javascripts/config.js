@@ -7,36 +7,26 @@
 // jQuery (START)
 $(document).ready(function () {
 
-	// User selects the 'First time, no application' radio choice (under 'What user journey do you want to start with?')
-	$("#route_new").change(function () {
+	// When user wants to view PHEATS designs hide all PHES related options 
+	$("#service").change(function () {
 
-		if ($("#route_new").is(":checked")) {
-			// Choose the next most used starting place
-			$("#start_page_start").click();
-			// DISABLE the 'Dashboard' radio option
-			$("#start_page_dashboard").attr("aria-disabled", true);
-			$("#start_page_dashboard").attr("disabled", "disabled");
+		var serviceChoice = $('input[name="service"]:checked').val();
+		// var serviceChoice = $(this).val();
+		console.log("serviceChoice is: " + serviceChoice);
+
+		if (serviceChoice == "PHEATS") {
+			$("#phesOptions").hide();
+			$("#phesOptions").addClass("hidden");
+			$("#phesOptions").attr("aria-hidden", true);
+			$("#phesOptions").attr("hidden");
 		}
 		else {
-			// Do nothing
+			$("#phesOptions").show();
+			$("#phesOptions").removeClass("hidden");
+			$("#phesOptions").attr("aria-hidden", false);
+			$("#phesOptions").removeAttr("hidden");
 		}
-
-	});
-
-	// User selects the 'Returning user, has multiple applications' radio choice (under 'What user journey do you want to start with?')
-	$("#route_returning").change(function () {
-
-		if ($("#route_returning").is(":checked")) {
-			// ENABLE the 'Dashboard' radio option
-			$("#start_page_dashboard").attr("aria-disabled", false);
-			$("#start_page_dashboard").attr("disabled", false);
-			// Revert back to the most used starting place
-			$("#start_page_dashboard").click();
-		}
-		else {
-			// Do nothing
-		}
-
+	
 	});
 
 });

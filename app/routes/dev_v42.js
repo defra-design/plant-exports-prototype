@@ -310,7 +310,7 @@ module.exports = function(router) {
   // Global page GET router
   // *******************************
 
-  // this adds query to all pages and will be used if no other get routing exists to override this.
+  // This adds query to all pages and will be used if no other get routing exists to override this.
   router.get('/' + base_url + '*', function(req, res) {
     console.log("(dev_v42.js)");
     /* for (item in req.query){
@@ -339,6 +339,10 @@ module.exports = function(router) {
     }
 
     var page = base_url + req.params[0];
+
+    // *******************************
+    // PHES routing
+    // *******************************
 
     // Chris Harding - USDA Bulbs: Decide whether to redirect users to the USDA page when they are exporting bulbs to the United States
     if (baseDir === "/setup/bulbs-declaration") {
@@ -380,7 +384,7 @@ module.exports = function(router) {
 
     }
 
-    // Chris Harding (18.01.23) - Error validation (how-to-identify) for the commodity page (re-issue)
+    // Chris Harding (18.01.23) - Re-issue: Error validation (how-to-identify) for the commodity page (re-issue)
     if (baseDir === "/re-issue/edit/how-to-identify-validation") {
 
       var return_url = req.session.data.return_url;
@@ -469,21 +473,65 @@ module.exports = function(router) {
     console.log(baseDir);
     console.log(req.session.data['consignee-import-permit']);
     
-    // this is only triggered when the consignee page is submitted 
+    // This is only triggered when the consignee page is submitted 
     if (baseDir === "/create/task-list") {
 
       if (req.session.data.build && req.session.data.build == "ux") {
 
-        // only check when the consignee page is submitted
+        // ONly check when the consignee page is submitted
         if (res.locals.prevURL && res.locals.prevURL.indexOf("destination-consignee") >- 1) {
 
           if (req.session.data['consignee-import-permit']) {
-            // redirect the page to show true url 
+            // Redirect the page to show true url 
             return res.redirect("upload-permit")
           }
 
         }
 
+      }
+
+    }
+
+    // *******************************
+    // PHEATS routing
+    // *******************************
+
+    // Chris Harding (30.03.23) - Eligibility checker: Q1
+    if (baseDir === "/eligibility-checker/1-validation") {
+
+      var ecq1 = req.session.data.ecq1;
+      
+      // Force users to enter at least one value
+      if (ecq1 == "" || ecq1 == null) {
+        return res.redirect("1?error=true");
+      }
+      // Eligible: continue...
+      else if (ecq1 == "Plants and fresh produce") {
+        return res.redirect("2");
+      }
+      // Not eligible: end
+      else {
+        return res.redirect("not-eligible");
+      }
+
+    }
+
+    if (baseDir === "/eligibility-checker/2-validation") {
+
+      var ecq2 = req.session.data.ecq2;
+      console.log("ecq2 is: " + ecq2);
+      
+      // Force users to enter at least one value
+      if (ecq2 == "" || ecq2 == null) {
+        return res.redirect("2?error=true");
+      }
+      // Not eligible: end
+      else if (ecq2 == "EU,Rest of the world" || ecq2 == "Northern Ireland,Rest of the world" || ecq2 == "EU,Northern Ireland,Rest of the world" || ecq2 == "Rest of the world") {
+        return res.redirect("not-eligible");
+      }
+      // Eligible: continue...
+      else {
+        return res.redirect("eligible");
       }
 
     }
@@ -501,7 +549,7 @@ module.exports = function(router) {
           console.log("No page in directory, attempting to load from core...");
           return res.render(file_url + baseDir, {
             "query": req.query,
-            // and more data to push to every page
+            // More data to push to every page
           });
         }
 
