@@ -11,10 +11,9 @@ $(document).ready(function () {
 	$("#service").change(function () {
 
 		var serviceChoice = $('input[name="service"]:checked').val();
-		// var serviceChoice = $(this).val();
 		console.log("serviceChoice is: " + serviceChoice);
 
-		if (serviceChoice == "PHEATS") {
+		if (serviceChoice == "PHEATS~pheats/start-page") {
 			$("#phesOptions").hide();
 			$("#phesOptions").addClass("hidden");
 			$("#phesOptions").attr("aria-hidden", true);
