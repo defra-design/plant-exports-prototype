@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  Make your changes - Re-issue a phytosanitary certificate - {{serviceName}} - GOV.UK
+  {% if query.error == "true" %}Error: {% endif %}Make your changes - Re-issue a phytosanitary certificate - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -64,7 +64,7 @@
         <div class="govuk-form-group{% if query.error1 == 'true' %} govuk-form-group--error{% endif %} govuk-!-margin-top-6">
           <fieldset class="govuk-fieldset" aria-describedby="quantity-hint{% if query.error1 == 'true' %} quantity-input-error{% endif %}">
             <legend class="govuk-fieldset__legend">
-              <h1 class="govuk-body govuk-!-margin-bottom-0">Quantity and unit of measurement</h1>
+              <h2 class="govuk-body govuk-!-margin-bottom-0">Quantity and unit of measurement</h2>
             </legend>
 
             <div id="quantity-hint" class="govuk-hint">
@@ -74,21 +74,8 @@
             {% if query.error1 == "true" %}
             <p id="quantity-input-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> You cannot increase the quantity, you can only decrease it</p>
             {% endif %}
-            <input class="govuk-input{% if query.error1 == 'true' %} govuk-input--error{% endif %} govuk-input--width-5" id="quantity" name="quantity" type="text" aria-label="Quantity" value="{% if query.change == 'yes' %}{{data.quantity or '30'}}{% endif %}">
-            <select name="units" id="units" class="govuk-select govuk-!-margin-left-1" aria-label="Unit of measurement" disabled aria-disabled="true">
-              <option value="">Unit of measurement</option>
-              {% if data.commodity == "seeds" %}
-              <option value="Grams">Grams</option>
-              <option value="Kilograms">Kilograms</option>
-              <option value="Tonnes" selected>Tonnes</option>
-              {% else %}
-              <option value="Grams">Grams</option>
-              <option value="Kilograms">Kilograms</option>
-              <option value="Litres">Litres</option>
-              <option value="Tonnes" selected>Tonnes</option>
-              <option value="Units">Units</option>
-              {% endif %}
-            </select>
+            <input class="govuk-input{% if query.error1 == 'true' %} govuk-input--error{% endif %} govuk-input--width-5" id="quantity" name="quantity" type="text" value="{% if query.change == 'yes' %}{{data.quantity or '30'}}{% endif %}">
+            <span class="govuk-body" aria-hidden="true">Tonnes</span>
           </fieldset>
         </div>
 

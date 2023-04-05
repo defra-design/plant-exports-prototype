@@ -6,6 +6,7 @@ var applicationsv2 = require('./data/applications-v2.json');;
 var applicationsv3 = require('./data/applications-v3.json');
 var applicationsv4 = require('./data/applications-v4.json');
 var applicationsv5 = require('./data/applications-v5.json');
+var applicationsv6 = require('./data/applications-v6.json');
 var sample = require('./data/sample.json');
 
 module.exports = function (env) {
@@ -101,6 +102,23 @@ module.exports = function (env) {
 
     return app[key];
   }
+
+    // Get application information (v6)
+    // Prototype version 1-42 onward
+    filters.appInformationV6 = function (id, key) {
+      
+      var app = {};
+      
+      applicationsv6.forEach(function (item) {
+        
+        if (item.index == id) {
+          app = item;
+        }
+
+      })
+
+      return app[key];
+    }
 
   // Show hide infomation based on search results
   filters.showHide = function (obj, text) {
