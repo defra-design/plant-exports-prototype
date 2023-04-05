@@ -14,8 +14,11 @@
 <div class="govuk-grid-row">
   
   <div class="govuk-grid-column-two-thirds">
-
-    <form action="{{query.return_url or 'task-list?inspection_address_added=Complete'}}" method="post">
+    {% if query.change == "yes" and query.notAdded == "yes" %}
+    <form action="contact-details-potential?change=yes&return_url=check-your-answers&inspection_address_added=In progress" method="post">
+    {% else %}
+    <form action="{{query.return_url or 'contact-details-potential?inspection_address_added=In progress'}}" method="post">
+    {% endif %}
 
       {% if query.addressAdded == "yes" %}
       <div class="app-alert app-alert--success" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
@@ -23,16 +26,15 @@
       </div>
       {% endif %}
     
-      <div class="govuk-form-group">
+      <div class="govuk-form-group{% if query.addresses == '0' %} govuk-!-margin-bottom-9{% endif %}">
         <h1 class="govuk-heading-xl">If inspection is needed (optional)</h1>
-        <p class="govuk-body">If you are confident that you do not need an inspection or audit, you can <a href="contact-details-potential" class="govuk-link">skip this step</a>.</p>
-        <h2 class="govuk-heading-s">If your organisation is audited</h2>
-        <p class="govuk-body">Check that you are up to date with your audit schedule. This will prevent any delays to your application.</p>
-        <h2 class="govuk-heading-s">If your export needs inspection</h2>
-        <p class="govuk-body">The inspector will decide whether you need an inspection or not. If you feel that an inspection is likely, select the address where this will happen.</p>
+        <p class="govuk-body">If you are confident that you do not need an inspection, or if your business is audited, you can <a href="task-list" class="govuk-link">skip this step</a>.</p>
+        <p class="govuk-body">The inspector will decide whether you need an inspection or audit.</p>
+        <h2 class="govuk-heading-s">Select the inspection address</h2>
         <p class="govuk-body">You can <a href="../../account/inspection-addresses" class="govuk-link">manage your addresses</a> or <a class="govuk-link" href="../../account/address-lookup?return_url=/dev/{{data.version}}/application/create/inspection-addresses">add a new address</a>.</p>
       </div>
       
+      {% if query.addresses != "0" %}
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">
           
@@ -40,28 +42,28 @@
             
             {% if data.addressAdded == "yes" %}
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="address_0" name="select_address" type="radio" value="Top Lane, Peterborough, Cambridgeshire, PO5 7HY~contact-details-potential" {% if data.select_address == 'Top Lane, Peterborough, Cambridgeshire, PO5 7HY' %}checked{% endif %}>
+              <input class="govuk-radios__input" id="address_0" name="select_address" type="radio" value="Top Lane, Peterborough, Cambridgeshire, PO5 7HY" {% if data.select_address == 'Top Lane, Peterborough, Cambridgeshire, PO5 7HY' %}checked{% endif %}>
               <label class="govuk-label govuk-radios__label" for="address_0">Top Lane, Peterborough, Cambridgeshire, PO5 7HY</label>
             </div>
             {% endif %}
             
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="address_1" name="select_address" type="radio" value="Shoggins Farm, Turnip Row, Mordor, The Shire, ZI99 7YH~contact-details-potential" {% if data.select_address == 'Shoggins Farm, Turnip Row, Mordor, The Shire, ZI99 7YH' %}checked{% endif %}>
+              <input class="govuk-radios__input" id="address_1" name="select_address" type="radio" value="Shoggins Farm, Turnip Row, Mordor, The Shire, ZI99 7YH" {% if data.select_address == 'Shoggins Farm, Turnip Row, Mordor, The Shire, ZI99 7YH' %}checked{% endif %}>
               <label class="govuk-label govuk-radios__label" for="address_1">Shoggins Farm, Turnip Row, Mordor, The Shire, ZI99 7YH</label>
             </div>
 
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="address_2" name="select_address" type="radio" value="Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH~contact-details-potential" {% if data.select_address == 'Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH' %}checked{% endif %}>
+              <input class="govuk-radios__input" id="address_2" name="select_address" type="radio" value="Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH" {% if data.select_address == 'Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH' %}checked{% endif %}>
               <label class="govuk-label govuk-radios__label" for="address_2">Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH</label>
             </div>
 
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="address_3" name="select_address" type="radio" value="Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ~contact-details-potential" {% if data.select_address == 'Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ' %}checked{% endif %}>
+              <input class="govuk-radios__input" id="address_3" name="select_address" type="radio" value="Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ" {% if data.select_address == 'Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ' %}checked{% endif %}>
               <label class="govuk-label govuk-radios__label" for="address_3">Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ</label>
             </div>
 
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="address_4" name="select_address" type="radio" value="Goatacre Cricket Club, Hill Lane, Goatacre, Wiltshire, SN15 6YG~contact-details-potential" {% if data.select_address == 'Goatacre Cricket Club, Hill Lane, Goatacre, Wiltshire, SN15 6YG' %}checked{% endif %}>
+              <input class="govuk-radios__input" id="address_4" name="select_address" type="radio" value="Goatacre Cricket Club, Hill Lane, Goatacre, Wiltshire, SN15 6YG" {% if data.select_address == 'Goatacre Cricket Club, Hill Lane, Goatacre, Wiltshire, SN15 6YG' %}checked{% endif %}>
               <label class="govuk-label govuk-radios__label" for="address_4">Goatacre Cricket Club, Hill Lane, Goatacre, Wiltshire, SN15 6YG</label>
             </div>
 
@@ -70,18 +72,19 @@
         </fieldset>
       </div>
 
-      <button class="govuk-button govuk-!-margin-bottom-9" type="submit" data-module="govuk-button">Save and continue</button>      
+      <button class="govuk-button govuk-!-margin-bottom-9" type="submit" data-module="govuk-button">Save and continue</button>
+      {% endif %}     
 
       {% block continueLater %}
       {% include "../modules/_save-continue-later.html" %}
       {% endblock %}
     </form>
 
-    <!-- {% if query.extras == "yes" %}
+    {% if query.extras == "yes" %}
     <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible govuk-!-margin-top-9">
-    <p class="govuk-body"><a href="no-inspection-addresses" class="govuk-link govuk-link-no-visited-state">Scenario: no inspection addresses exist</a></p>
+    <p class="govuk-body"><a href="inspection-addresses-potential?addresses=0" class="govuk-link govuk-link-no-visited-state">Scenario: no inspection addresses exist</a></p>
     {% else %}
-    {% endif %} -->
+    {% endif %}
   </div>
 
 </div>

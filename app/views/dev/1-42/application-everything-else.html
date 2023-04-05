@@ -24,30 +24,7 @@
 {% block content %}
 <div class="govuk-grid-row">
 
-  <div class="govuk-grid-column-two-thirds">
-
-    {% if data.reissue_certificate_data_pfp == "draft" %}
-    <div class="app-alert app-alert--info" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
-      <p class="govuk-body" id="govuk-notification-banner-message">A re-issue application has been started but not submitted. If you asked for any changes as part of the re-issue, these are still saved.</p>
-      <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="application/re-issue/amend-your-certificate?id={{query.id}}&is_group={{query.is_group}}&commodity=plants">Complete your re-issue application</a></p>
-    </div>
-    {% elif data.reissue_certificate_data_pfp == "rejected" %}
-    <div class="app-alert app-alert--warning" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
-      {% if query.rejectionReason == "1" %}
-      <p class="govuk-body" id="govuk-notification-banner-message">The inspector decided your certificate cannot be re-issued. The inspector said: <strong>"Mandatory free text added by the inspector"</strong>.</p>
-      {% elif query.rejectionReason == "2" %}
-      <p class="govuk-body" id="govuk-notification-banner-message">The inspector decided your certificate cannot be re-issued as you need a new import permit. The inspector also said: <strong>"Mandatory free text added by the inspector"</strong>.</p>
-      {% elif query.rejectionReason == "3" %}
-      <p class="govuk-body" id="govuk-notification-banner-message">The inspector decided your certificate cannot be re-issued as your consignment would need to be tested again. The inspector also said: <strong>"Mandatory free text added by the inspector"</strong>.</p>
-      {% elif query.rejectionReason == "4" %}
-      <p class="govuk-body" id="govuk-notification-banner-message">The inspector decided your certificate cannot be re-issued. The inspector said: <strong>"Mandatory free text added by the inspector"</strong>.</p>
-      {% else %}
-      <p class="govuk-body" id="govuk-notification-banner-message">The inspector decided your certificate cannot be re-issued. The inspector said: <strong>"Mandatory free text added by the inspector"</strong>.</p>
-      {% endif %}
-      <p class="govuk-body">If you asked for any changes as part of the re-issue, these are still saved in the application.</p>
-    </div>
-    {% endif %}    
-
+  <div class="govuk-grid-column-two-thirds">    
     <h1 class="govuk-heading-xl">
       {% if data.build == "development" %}
       {% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %} 
@@ -65,7 +42,7 @@
 
 <div class="govuk-grid-row">
   
-  <div class="{% if data.reissue_certificate_data_pfp == 'approved' %}govuk-grid-column-one-half{% else %}govuk-grid-column-two-thirds{% endif %}">
+  <div class="govuk-grid-column-two-thirds">
     {% if query.is_block == "yes" %}
     <p class="govuk-body">This is a block application of 100 certificates</p>
     {% elif query.is_group == "yes" %}
@@ -76,26 +53,46 @@
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Status</dt>
         <dd class="govuk-summary-list__value">
-          
-          {% if data.reissue_certificate_data_pfp == "submitted" %}
+
+          {% if data.status == "submitted" %}
           <div class="govuk-tag govuk-tag--white-tag-blue-border-and-text">
-            Re-issue requested
+            Submitted
           </div>
-          {% elif data.reissue_certificate_data_pfp == "processing" %}
+          {% elif data.status == "processing" %}
           <div class="govuk-tag govuk-tag--blue">
-            Processing re-issue
+            Processing
           </div>
-          {% elif data.reissue_certificate_data_pfp == "approved" %}
-          <div class="govuk-tag govuk-tag--green">
-            Certificate re-issued
+          {% elif data.status == "with inspector" %}
+          <div class="govuk-tag govuk-tag--purple">
+            With inspector
           </div>
-          {% elif data.reissue_certificate_data_pfp == "rejected" %}
-          <div class="govuk-tag govuk-tag--red">
-            Re-issue denied
+          {% elif data.status == "exporter action" %}
+          <div class="govuk-tag govuk-tag--orange">
+            Exporter action
           </div>
-          {% else %}
+          {% elif data.status == "preparing certificate" %}
+          <div class="govuk-tag govuk-tag--indigo">
+            Preparing certificate
+          </div>
+          {% elif data.status == "certificate issued" %}
           <div class="govuk-tag govuk-tag--green">
             Certificate issued
+          </div>
+          {% elif data.status == "rejected" %}
+          <div class="govuk-tag govuk-tag--red">
+            Rejected
+          </div>
+          {% elif data.status == "returned" %}
+          <div class="govuk-tag govuk-tag--pink">
+            Returned
+          </div>
+          {% elif data.status == "cancelled" %}
+          <div class="govuk-tag govuk-tag--yellow">
+            Cancelled
+          </div>
+          {% else %}
+          <div class="govuk-tag govuk-tag--blue">
+            Processing
           </div>
           {% endif %}
 
@@ -109,7 +106,7 @@
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Type</dt>
-        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV6('cert_info')) == 'Conformity' %}Certificate of conformity{% elif (query.id | appInformationV6('cert_info')) == 'Phytosanitary' %}Phytosanitary certificate{% elif (query.id | appInformationV6('cert_info')) == 'Re-forwarding' %}Re-forwarding phytosanitary certificate{% else %}Phytosanitary certificate{% endif %} for plants and fresh produce</dd>
+        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV6('cert_info')) == 'Conformity' %}Certificate of conformity{% elif (query.id | appInformationV6('cert_info')) == 'Phytosanitary' %}Phytosanitary certificate{% elif (query.id | appInformationV6('cert_info')) == 'Re-forwarding' %}Re-forwarding phytosanitary certificate{% else %}Phytosanitary certificate{% endif %} for clay</dd>
       </div>
 
       <div class="govuk-summary-list__row">
@@ -129,107 +126,43 @@
       </div>
       {% endif %}
 
+      {% if data.status == "certificate issued" %}
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Phytosanitary certificate number</dt>
-        <dd class="govuk-summary-list__value">UK/GB/E&W/{{query.id | appInformationV6('certificate') or "2022/4236522044833"}}{% if data.reissue_certificate_data_pfp == "approved" %} R1{% endif %}</dd>
+        <dd class="govuk-summary-list__value">UK/GB/E&W/2023/7736522098833</dd>
       </div>
       
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Certificate issue date</dt>
-        <dd class="govuk-summary-list__value">{% if data.reissue_certificate_data_pfp == "approved" %}{{todaysDate}}{% else %}{{query.id | appInformationV6('certificateIssueDate') or "10 January 2023"}}{% endif %}</dd>
+        <dd class="govuk-summary-list__value">6 April 2023</dd>
       </div>
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Certificate expiry date</dt>
-        <dd class="govuk-summary-list__value">{% if data.reissue_certificate_data_pfp == "approved" %}{{todaysDateExpiry14Days}}{% else %}{{query.id | appInformationV6('certificateExpiryDate') or "24 January 2023"}}{% endif %}</dd>
+        <dd class="govuk-summary-list__value">20 April 2023</dd>
       </div>
+      {% endif %}
 
     </dl>
 
-    <div class="govuk-inset-text">
-      <p class="govuk-body">Draw down stock is available</p>
-    </div>
-
   </div>
-
-  {% if data.reissue_certificate_data_pfp == "approved" %}
-  <div class="govuk-grid-column-one-half govuk-!-margin-bottom-8">
-    <h2 class="govuk-heading-m">Your certificate</h2>
-    <p class="govuk-body">This certificate has been re-issued.</p>
-    <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="re-issue-history?id={{query.id}}&is_group={{query.is_group}}">View certificate issue history</a></p>
-  </div>
-  {% endif %}
 
 </div>
 
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
-    <ul class="govuk-list govuk-!-margin-bottom-8 noprint">
+    <ul class="govuk-list noprint">
       <li><a class="govuk-link govuk-link--no-visited-state" href="#">View application details</a></li>
-      <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id}}&is_group={{query.is_group}}">Copy as new application</a></li>
-      {% if data.reissue_certificate_data_pfp != "submitted" and data.reissue_certificate_data_pfp != "processing" %}
-      <li>
-        {% if data.reissue_certificate_data_pfp == 'draft' %}
-        <a class="govuk-link govuk-link--no-visited-state" href="application/re-issue/amend-your-certificate?id={{query.id}}&is_group={{query.is_group}}&commodity=plants">Complete your re-issue application</a></li>
-        {% else %}
-        <a class="govuk-link govuk-link--no-visited-state" href="application/re-issue/introduction?id={{query.id}}&is_group={{query.is_group}}">Ask for certificate to be re-issued</a></li>
-        {% endif %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 4}}&is_group={{query.is_group}}">Copy as new application</a></li>
+      {% if data.status != 'certificate issued' and data.status != 'rejected' and data.status != 'cancelled' %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="cancel-reason?id={{query.id or 4}}&is_group={{query.is_group}}">Cancel this application</a></li>
+      {% endif %}
+      {% if data.status == 'certificate issued' %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="#">Ask for certificate to be re-issued</a></li>
       {% endif %}
     </ul>
   </div>
   
-</div>
-
-<div class="govuk-grid-row">
-  
-  <div class="govuk-grid-column-full">
-    <h2 class="govuk-heading-m">Commodities in this application</h2>
-
-    <table class="govuk-table">
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th class="govuk-table__header" scope="col">Commodity</th>
-          <th class="govuk-table__header" scope="col">Variety</th>
-          <th class="govuk-table__header" scope="col">Quantity</th>
-          <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tbody class="govuk-table__body">
-        <tr class="govuk-table__row">
-          <td class="govuk-table__cell">Cabbage</td>
-          <td class="govuk-table__cell">Durham Early</td>
-          <td class="govuk-table__cell">17 tonnes</td>
-          <td class="govuk-table__cell govuk-table__cell--numeric">
-            <a class="govuk-link govuk-link--no-visited-state" href="#">Draw down or view stock</a>
-            <!-- <br/>
-            <a class="govuk-link govuk-link--no-visited-state" href="application/create/stock-summary?stock=2">Draw down</a> -->
-          </td>
-        </tr>
-        <tr class="govuk-table__row">
-          <td class="govuk-table__cell">Cabbage</td>
-          <td class="govuk-table__cell">Avon Crest</td>
-          <td class="govuk-table__cell">35 tonnes</td>
-          <td class="govuk-table__cell govuk-table__cell--numeric">
-            <a class="govuk-link govuk-link--no-visited-state" href="#">Draw down or view stock</a>
-            <!-- <br/>
-            <a class="govuk-link govuk-link--no-visited-state" href="application/create/stock-summary?stock=2">Draw down</a> -->
-          </td>
-        </tr>
-        <tr class="govuk-table__row">
-          <td class="govuk-table__cell">Cabbage</td>
-          <td class="govuk-table__cell">Savoy</td>
-          <td class="govuk-table__cell">30 tonnes</td>
-          <td class="govuk-table__cell govuk-table__cell--numeric">
-            <a class="govuk-link govuk-link--no-visited-state" href="#">View stock</a>
-            <!-- <br/>
-            <a class="govuk-link govuk-link--no-visited-state" href="application/create/stock-summary?stock=2">Draw down</a> -->
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-  </div>
-
 </div>
 {% endblock %}

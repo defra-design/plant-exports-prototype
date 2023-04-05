@@ -347,10 +347,10 @@
       {% endif %}
 
       <!-- Inspection details -->
-      {% if data.commodity == "biological control agents and clay" or data.commodity == "plant products" or data.commodity == "seeds" or data.commodity == "grain" or (data.commodity == "everything else" and data.subCommodity != "something else") %}
+      {% if data.commodity == "biological control agents and clay" or data.commodity == "plant products" or data.commodity == "seeds" or data.commodity == "grain" %}
 
-      {% elif data.commodity == "bulbs" or data.commodity == "plants" or data.commodity == "potatoes" or data.commodity == "used farm machinery" or data.subCommodity == "something else" or data.journey == "coc" %}
-      <h2 class="govuk-heading-m govuk-!-margin-top-9">{% if data.subCommodity == "something else" %}If an inspection is needed{% else %}Inspection details{% endif %}</h2>
+      {% elif data.commodity == "bulbs" or data.commodity == "plants" or data.commodity == "potatoes" or data.commodity == "used farm machinery" or data.journey == "coc" %}
+      <h2 class="govuk-heading-m govuk-!-margin-top-9">Inspection details</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
         {% if data.commodity == "plants" %}
@@ -444,7 +444,7 @@
           {% set inpection_date_month_name = "December" %}
         {% endif %}
         
-        {% if not data.reforwarding and data.subCommodity != "something else" %}
+        {% if not data.reforwarding %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Date when your consignment will be ready for inspection</dt>
           <dd class="govuk-summary-list__value">{{data.inpection_date_day or "12"}} {{inpection_date_month_name or "August"}} {{data.inpection_date_year or "2023"}}</dd>
@@ -473,6 +473,41 @@
         </div>
         {% endif %}
         {% endif %}
+        {% endif %}
+
+      </dl>
+      {% elif data.commodity == "everything else" %}
+      <h2 class="govuk-heading-m govuk-!-margin-top-9">Inspection details (optional)</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Address</dt>
+          <dd class="govuk-summary-list__value">{% if data.inspection_address_added == "Complete" %}{{data.select_address}}{% else %}No inspection details provided{% endif %}</dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="inspection-addresses-potential?change=yes&return_url=check-your-answers{% if data.inspection_address_added != 'Complete' %}&notAdded=yes{% endif %}">Change <span class="govuk-visually-hidden">address</span></a>
+          </dd>
+        </div>
+        
+        {% if data.inspection_address_added == "Complete" %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Who is the main contact for this application?</dt>
+          <dd class="govuk-summary-list__value">
+            {% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}
+            Bill Shoggins
+            <br>
+            01234 567890
+            <br>
+            bill.shoggins@acmeltd.com
+            {% else %}
+            {{data.contact_name or "Bill Shoggins"}}
+            <br>
+            {{data.address_phone or "01234 567890"}}
+            <br>
+            {{data.email_address or "bill.shoggins@acmeltd.com"}}
+            {% endif %}
+          </dd>
+          <dd class="govuk-summary-list__actions"><a class="govuk-link" href="contact-details-potential?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> who the main contact for this application is</span></a></dd>
+        </div>
         {% endif %}
 
       </dl>
@@ -537,7 +572,6 @@
           </dd>
           <dd class="govuk-summary-list__actions"><a class="govuk-link" href="inspection-dates?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> the date when your consignment will be ready for inspection</span></a></dd>
         </div> -->
-        {% if data.subCommodity != "something else" %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Date when your consignment will be ready for inspection</dt>
           <dd class="govuk-summary-list__value">{{data.inpection_date_day or "12"}} {{inpection_date_month_name or "August"}} {{data.inpection_date_year or "2023"}}</dd>
@@ -545,7 +579,6 @@
             <a class="govuk-link" href="inspection-dates?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">date when your consignment will be ready for inspection</span></a>
           </dd>
         </div>
-        {% endif %}
         
         {% if data.commodity == "potatoes" %}
         <div class="govuk-summary-list__row">
