@@ -410,18 +410,38 @@
     }
   }
 
+  /* Chris Harding (14.04.23) - Expansion on the GOV.UK Design System notification banner component (https://design-system.service.gov.uk/components/notification-banner) to make the banner full width on the dashboard (width override class) */
+  .govuk-notification-banner__heading-full-width {
+    max-width: none;
+  }
+
 </style>
 
 <div class="govuk-grid-row">
 
-  <div class="govuk-grid-column-two-thirds">
+  <div class="govuk-grid-column-full">
+
+    {% if data.notificationBanner == "yes" %}
+    <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+    
+      <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">Important</h2>
+      </div>
+
+      <div class="govuk-notification-banner__content">
+        <p class="govuk-notification-banner__heading govuk-notification-banner__heading-full-width">You will not be able to use this service between 9pm on Friday 14 April 2023 and 9am on Monday 17 April 2023. This is due to planned maintenance.</p>
+      </div>
+
+    </div>
+    {% endif %} 
+
     <h1 class="govuk-heading-xl">Your applications</h1>
     {% if data.route != "new" %}
     <a class="govuk-button" href="application/setup/what-export?version={{data.version}}&build={{data.build}}&route={{data.route}}">Start a new application</a>
     {% else %}
     <p class="govuk-body">You have no applications.</p>
     <a class="govuk-button" href="application/setup/what-export?version={{data.version}}&build={{data.build}}&route={{data.route}}">Start a new application</a>
-    {% endif %}
+    {% endif %}    
   </div>
 
 </div>
