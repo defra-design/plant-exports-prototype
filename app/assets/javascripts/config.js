@@ -11,19 +11,29 @@ $(document).ready(function () {
 	$("#service").change(function () {
 
 		var serviceChoice = $('input[name="service"]:checked').val();
-		console.log("serviceChoice is: " + serviceChoice);
 
-		if (serviceChoice == "PHEATS~pheats/start-page") {
-			$("#phesOptions").hide();
-			$("#phesOptions").addClass("hidden");
-			$("#phesOptions").attr("aria-hidden", true);
-			$("#phesOptions").attr("hidden");
+		// Show config options for ePhyto plus update sub heading to 'ePhyto'
+		if (serviceChoice == "ePhyto") {
+			$("#additionalConfigOptions").show();
+			$("#additionalConfigOptions").removeClass("hidden");
+			$("#additionalConfigOptions").attr("aria-hidden", false);
+			$("#additionalConfigOptions").removeAttr("hidden");
+			$(".govuk-caption-m").html("ePhyto");
 		}
+		// Show config options for PHES plus update sub heading to 'PHES'
+		else if (serviceChoice == "PHES") {
+			$("#additionalConfigOptions").show();
+			$("#additionalConfigOptions").removeClass("hidden");
+			$("#additionalConfigOptions").attr("aria-hidden", false);
+			$("#additionalConfigOptions").removeAttr("hidden");
+			$(".govuk-caption-m").html("PHES");
+		}
+		// Hide all config options (PHEATS)
 		else {
-			$("#phesOptions").show();
-			$("#phesOptions").removeClass("hidden");
-			$("#phesOptions").attr("aria-hidden", false);
-			$("#phesOptions").removeAttr("hidden");
+			$("#additionalConfigOptions").hide();
+			$("#additionalConfigOptions").addClass("hidden");
+			$("#additionalConfigOptions").attr("aria-hidden", true);
+			$("#additionalConfigOptions").attr("hidden");
 		}
 	
 	});

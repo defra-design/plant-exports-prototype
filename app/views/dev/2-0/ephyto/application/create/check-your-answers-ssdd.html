@@ -1,0 +1,457 @@
+{% extends "layout.html" %}
+{% set items = [
+  {
+    commodity_common_name: 'White cabbage',
+    quantity: '106',
+    unit: 'Tonnes'
+  }
+  ]
+%}
+
+{% block pageTitle %}
+Review your answers - {{serviceName}} - GOV.UK
+{% endblock %}
+{% block beforeContent %}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <h1 class="govuk-heading-xl">
+      Review your answers
+    </h1>
+    <h2 class="govuk-heading-m">Application summary</h2>
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Certificate
+        </dt>
+        <dd class="govuk-summary-list__value">
+            Phytosanitary certificate for 
+            {% if data.commodity == "plants" %}
+              plants and fresh produce
+            {% else %}
+              {{data.commodity or 'plants and fresh produce'}}
+            {% endif %}
+        </dd>
+        <dd class="govuk-summary-list__actions">
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Destination
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ data.countrySelect[0] or ""}}
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="../setup/what-country-ssdd?return_url=../create/check-your-answers-ssdd&change=yes">
+            Change<span class="govuk-visually-hidden">
+              Certification region</span>
+          </a>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Your reference
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{ data.reference_num or "12345" }}
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="../setup/reference?return_url=../create/check-your-answers-ssdd&change=yes">
+            Change<span class="govuk-visually-hidden">
+              Certification region</span>
+          </a>
+        </dd>
+      </div>
+
+    </dl>
+
+  
+    <h2 class="govuk-heading-m">Exporter details</h2>
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+      <div class="govuk-summary-list__row">
+
+        <dt class="govuk-summary-list__key">
+          Name
+        </dt>
+        <dd class="govuk-summary-list__value">
+          Acme Ltd
+        </dd>
+        <dd class="govuk-summary-list__actions">
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Address
+        </dt>
+        <dd class="govuk-summary-list__value">
+          Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH
+        </dd>
+        <dd class="govuk-summary-list__actions">
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Phone number
+        </dt>
+        <dd class="govuk-summary-list__value">
+          024 546 7069
+        </dd>
+        <dd class="govuk-summary-list__actions">
+        </dd>
+      </div>
+    </dl>
+
+    <!--Your commodities-->
+      {% if data.commodity == "potatoes" %}
+      <h2 class="govuk-heading-m">Your consignment</h2>
+        <table class="govuk-table govuk-!-margin-bottom-4">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header" scope="col">
+                Description
+              </th>
+              <th class="govuk-table__header" scope="col">
+                Stock number
+              </th>
+              <th class="govuk-table__header" scope="col">
+                Quantity
+              </th>
+              <th class="govuk-table__header" scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+        {% for commodity in data.commodities %}
+          {% block summaryPotatoes %}{% include "../modules/_summary-potatoes.html" %}{% endblock %}
+        {% endfor %}
+        </tbody>
+      </table>
+      <p class="govuk-body"><a href="commodity-page" class="govuk-link">Add another variety</a></p>
+
+      {% else %}
+        <h2 class="govuk-heading-m">Your consignment</h2>
+        <table class="govuk-table govuk-!-margin-bottom-4">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header" scope="col">
+                Description
+              </th>
+              {% if data.commodity != "seeds" %}
+              <th class="govuk-table__header" scope="col">
+                {% if data.commodity == "plant products"%}
+                Primary country where grown
+                {% else %}
+                Country of origin
+                {% endif %}
+              </th>
+              {% endif %}
+              <th class="govuk-table__header" scope="col">
+                Quantity
+              </th>
+              <th class="govuk-table__header" scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            {% for item in items %}
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">
+                {% if data.commodity == "plant products"%}
+                {{'Vegetable oil'}}
+                {% else %}
+                {{item.commodity_common_name or 'Corylus avellana'}}
+                {% endif %}
+              </td>
+              <td class="govuk-table__cell">
+                {{item.countrySelect[0] or "United Kingdom"}}
+              </td>
+              <td class="govuk-table__cell govuk-table__cell">
+                {% if data.commodity == "plant products"%}
+                {{'1'}}
+                {% else %}
+                {{data.weight or item.quantity or "25"}} {{item.unit or "Tonnes"}}
+                {% endif %}
+              </td>
+              <td class="govuk-table__cell" style="text-align: right;">
+                <a href="how-to-identify-part-edit.html?change=yes&return_url=check-your-answers-ssdd" class="govuk-link govuk-link--no-visited-state">
+                  Change
+                </a><br>
+
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+      {% endif %}
+
+      
+      {% if data.commodity == "plant products" %}
+      <div style="display:none !important">
+
+      <h2 class="govuk-heading-m govuk-!-margin-top-9">Inspection details</h2>
+        <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Address
+            </dt>
+            <dd class="govuk-summary-list__value">
+              Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH
+            </dd>
+            <dd class="govuk-summary-list__actions">
+            </dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Contact name
+            </dt>
+            <dd class="govuk-summary-list__value">
+              Mayur Kumar
+            </dd>
+            <dd class="govuk-summary-list__actions">
+              <a class="govuk-link" href="contact-details-amend?change=yes&return_url=check-your-answers-ssdd">
+              Change <span class="govuk-visually-hidden">contact name</span>
+            </a>
+            </dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Phone number
+            </dt>
+            <dd class="govuk-summary-list__value">
+              024 546 7069
+            </dd>
+            <dd class="govuk-summary-list__actions">
+              <a class="govuk-link" href="contact-details-amend?change=yes&return_url=check-your-answers-ssdd">
+              Change <span class="govuk-visually-hidden">phone number</span>
+            </a>
+            </dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Email address
+            </dt>
+            <dd class="govuk-summary-list__value">
+              email@domain.com
+            </dd>
+            <dd class="govuk-summary-list__actions">
+              <a class="govuk-link" href="contact-details-amend?change=yes&return_url=check-your-answers-ssdd">
+              Change <span class="govuk-visually-hidden">email address</span>
+            </a>
+            </dd>
+          </div>
+
+        </dl>
+      </div>
+      {% else %}
+      <h2 class="govuk-heading-m govuk-!-margin-top-9">Inspection details</h2>
+        <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Address
+            </dt>
+            <dd class="govuk-summary-list__value">
+              Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH
+            </dd>
+            <dd class="govuk-summary-list__actions">
+            </dd>
+          </div>
+
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Contact name
+            </dt>
+            <dd class="govuk-summary-list__value">
+              Mayur Kumar
+            </dd>
+            <dd class="govuk-summary-list__actions">
+              <a class="govuk-link" href="contact-details-amend?change=yes&return_url=check-your-answers-ssdd">
+              Change <span class="govuk-visually-hidden">contact name</span>
+            </a>
+            </dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Phone number
+            </dt>
+            <dd class="govuk-summary-list__value">
+              024 546 7069
+            </dd>
+            <dd class="govuk-summary-list__actions">
+              <a class="govuk-link" href="contact-details-amend?change=yes&return_url=check-your-answers-ssdd">
+              Change <span class="govuk-visually-hidden">phone number</span>
+            </a>
+            </dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Email address
+            </dt>
+            <dd class="govuk-summary-list__value">
+              email@domain.com
+            </dd>
+            <dd class="govuk-summary-list__actions">
+              <a class="govuk-link" href="contact-details-amend?change=yes&return_url=check-your-answers-ssdd">
+              Change <span class="govuk-visually-hidden">email address</span>
+            </a>
+            </dd>
+          </div>
+
+        </dl>
+      {% endif %}
+
+      <!--Transportation-->
+    <h2 class="govuk-heading-m govuk-!-margin-top-9 ">Transportation</h2>
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+      {% if data.journey != "coc" %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Value of consignment
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{data.value or "10000"}}
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="shipping?change=yes&return_url=check-your-answers">
+            Change <span class="govuk-visually-hidden">how the consignment will be transported</span>
+          </a>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Point of entry into the destination country
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{data.point_of_entry or "Calais"}}
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="shipping?change=yes&return_url=check-your-answers">
+            Change <span class="govuk-visually-hidden">how the consignment will be transported</span>
+          </a>
+        </dd>
+      </div>
+      {% endif %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          How will the consignment be transported?
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{data.transport_method or "Air"}}
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="shipping?change=yes&return_url=check-your-answers">
+            Change <span class="govuk-visually-hidden">how the consignment will be transported</span>
+          </a>
+        </dd>
+      </div>
+      {% if data.journey == "coc" %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Bill of lading number or container number
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{data.method_air or "12345"}}
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="shipping?change=yes&return_url=check-your-answers">
+            Change <span class="govuk-visually-hidden">how the consignment will be transported</span>
+          </a>
+        </dd>
+      </div>
+      {% endif %}
+
+      {% if data.commodity == "potatoes" %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Container number
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{data.container_num or "456"}}
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="shipping?change=yes&return_url=check-your-answers">
+            Change <span class="govuk-visually-hidden">how the consignment will be transported</span>
+          </a>
+        </dd>
+      </div>
+      {% endif %}
+    </dl>
+
+    <h2 class="govuk-heading-m">Who will receive this consignment?</h2>
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Name of consignee
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{data.consignee or 'Consignee name'}}
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="destination-consignee?change=yes&return_url=check-your-answers">
+            Change <span class="govuk-visually-hidden">name of the consignee</span>
+          </a>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+            Address of the consignee
+        </dt>
+        <dd class="govuk-summary-list__value">
+            {{ data.consignee_address or 'XYZ China Imports Ltd, Kaiser Centre, Phase III, 9-11 Hok Yuen St., Kowloon, China'}}
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="destination-consignee?change=yes&return_url=check-your-answers">
+            Change <span class="govuk-visually-hidden">how the consignment will be transported</span>
+          </a>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Import permit number
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{data.import_permit_number or '2244668800'}}
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="destination-consignee?change=yes&return_url=check-your-answers">
+            Change <span class="govuk-visually-hidden">name of the consignee</span>
+          </a>
+        </dd>
+      </div>
+    </dl>
+
+
+    <h3 class="govuk-heading-m">Supporting photographs</h3>
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9 ">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          File name<br>
+          File description
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <a href="#"><strong>DSC2020110051100.jpeg</strong></a><br>
+          <a href="#"><strong>Photo of cabbages, Store 17</strong></a>
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="ssdd-attachments?change=yes&return_url=check-your-answers">
+            Change <span class="govuk-visually-hidden">supporting documents</span>
+          </a>
+        </dd>
+      </div>
+    </dl>
+
+    <p class="govuk-body">You will pay the standard <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_blank">phytosanitary certificate fee</a> for this application (opens in a new window).</p>
+
+
+
+        <p class="govuk-body govuk-!-margin-top-6">
+            <a href="../submit/submit-date-ssdd" class="govuk-button">Continue</a>
+        </p>
+  </div>
+</div>
+{% endblock %}

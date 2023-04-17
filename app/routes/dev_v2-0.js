@@ -312,10 +312,7 @@ module.exports = function(router) {
 
   // This adds query to all pages and will be used if no other get routing exists to override this.
   router.get('/' + base_url + '*', function(req, res) {
-    console.log("(dev_v42.js)");
-    /* for (item in req.query){
-      console.log(item + ": " + req.query[item]);
-    } */
+    console.log("(dev_v2-0.js)");
     console.log("default global GET routing page for: " + base_url + " plus " + req.params[0]);
     
     var dir = req.params[0].split(/\/+/g);
@@ -328,11 +325,9 @@ module.exports = function(router) {
     dir.forEach(function(element) {
       var path = "/" + element;
       baseDir += path;
-
     });
-    // console.log("base dir:", baseDir);
      
-    // Clear previous session data if the user has selected commodity and cert type
+    // Clear previous session data if the user has selected commodity and certificate type
     if (baseDir === "/setup/what-export") {
       console.log("clearing data");
       req.session.data = {}
@@ -340,6 +335,54 @@ module.exports = function(router) {
 
     var page = base_url + req.params[0];
 
+    // *******************************
+    // CONFIG page
+    // *******************************
+
+    // Get the name of any prototype HTML file, called, that sits in the root of the version folder (e.g. config.html)
+    var baseFile = req.params[0];
+
+    // Chris Harding (17.04.23) - Added to allow smarter routing between the 3 core services (ePhyto, PHES and PHEATS)
+    if (baseFile === "config-routing") {
+
+      var service = req.session.data.service;
+      var entryPoint = req.session.data.start_page;
+
+      // Direct users to ePhyto pages, designs and content
+      if (service == "ePhyto") {
+
+        if (entryPoint == "Start") {
+          return res.redirect("ephyto/start-page");
+        }
+        else if (entryPoint == "Gateway") {
+          return res.redirect("ephyto/gateway/gov-sign-in");
+        }
+        else {
+          return res.redirect("ephyto/dashboard-submitted");
+        }
+
+      }
+      // Direct users to PHES pages, designs and content
+      else if (service == "PHES") {
+
+        if (entryPoint == "Start") {
+          return res.redirect("start-page");
+        }
+        else if (entryPoint == "Gateway") {
+          return res.redirect("gateway/gov-sign-in");
+        }
+        else {
+          return res.redirect("dashboard-submitted");
+        }
+        
+      }
+      // Direct users to the PHEATS start page
+      else {
+        return res.redirect("pheats/start-page");
+      }
+
+    }
+    
     // *******************************
     // PHES routing
     // *******************************
