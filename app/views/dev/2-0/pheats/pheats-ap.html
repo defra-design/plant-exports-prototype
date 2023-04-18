@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  [title] - Manage account - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="../account" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
+  </ul>
+</div>
+
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-two-thirds">
+
+    <!-- <h1 class="govuk-heading-xl">Are you applying to PHEATS? {{data.dave}}</h1> -->
+
+    <h1 class="govuk-heading-xl">
+      [authorised person details]
+    </h1>
+
+    
+
+    <p class="govuk-body">[explain]</p>
+
+    <form method="post" novalidate action="pheats-aps-added?deleted=false">
+        <div class="govuk-form-group ">
+          <fieldset class="govuk-fieldset">
+            
+            {% set _apCount = data['apCount'] or 1 %}
+            <input id="apCount" name="apCount" type="hidden" value="{{_apCount}}">
+
+            <div class="govuk-form-group">
+              {% set _apNameID = 'apName' + _apCount %}
+              <label class="govuk-label" for="{{_apNameID}}">
+                Name
+              </label>
+              <input class="govuk-input" id="{{_apNameID}}" name="{{_apNameID}}" type="text" value="">
+            </div>
+
+            <div class="govuk-form-group">
+              {% set _apPositionID = 'apPosition' + _apCount %}
+              <label class="govuk-label" for="{{_apPositionID}}">
+                Position
+              </label>
+              <input class="govuk-input" id="{{_apPositionID}}" name="{{_apPositionID}}" type="text">
+            </div>
+
+            <div class="govuk-form-group">
+              {% set _apEmailID = 'apEmail' + _apCount %}
+              <label class="govuk-label" for="{{_apEmailID}}">
+                Email address
+              </label>
+              <input class="govuk-input" id="{{_apEmailID}}" name="{{_apEmailID}}" type="email" spellcheck="false" autocomplete="email" value="">
+            </div>
+
+            
+          </fieldset>
+        </div>
+
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+        <p class="govuk-body govuk-!-margin-top-2"><a href="pheats-cancel" class="govuk-link govuk-link--no-visited-state">[Cancel PHEATS application]</a></p>
+
+    </form>
+
+  </div>
+</div>
+{% endblock %}

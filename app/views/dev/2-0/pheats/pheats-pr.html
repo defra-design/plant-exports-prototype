@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  [title] - Manage account - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="../account" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
+  </ul>
+</div>
+
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-two-thirds">
+
+    <!-- <h1 class="govuk-heading-xl">Are you applying to PHEATS? {{data.dave}}</h1> -->
+
+    <h1 class="govuk-heading-xl">
+      [person responsible details]
+    </h1>
+
+    <p class="govuk-body">[explain]</p>
+
+    <form method="post" novalidate action="pheats-ap">
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset">
+           
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="main-contact-name">
+                Name
+              </label>
+              <input class="govuk-input" id="main-contact-name" name="main-contact-name" type="text" value="{{data['main-contact-name'] or 'Bill Shoggins'}}">
+            </div>
+
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="main-contact-position">
+                Position
+              </label>
+              <input class="govuk-input" id="main-contact-position" name="main-contact-position" type="text" value="{{data['main-contact-position']}}">
+            </div>
+
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="prEmail">
+                Email address
+              </label>
+              <input class="govuk-input" id="prEmail" name="prEmail" type="email" spellcheck="false" autocomplete="email" value="{{data['main-contact-email'] or 'bill.shoggins@acmeltd.com'}}">
+            </div>
+
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="prPhone">
+                Phone number
+              </label>
+              <input class="govuk-input govuk-input--width-20" id="prPhone" name="prPhone" type="tel" autocomplete="tel" value="{{data['main-contact-phone'] or '01234 567890'}}">
+            </div>
+
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="prMobile">
+                Mobile number (optional)
+              </label>
+              <input class="govuk-input govuk-input--width-20" id="prMobile" name="prMobile" type="tel" autocomplete="tel" value="{{data['main-contact-mobile'] or '07123 456789'}}">
+            </div>
+            
+          </fieldset>
+        </div>
+
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+
+        <p class="govuk-body govuk-!-margin-top-2"><a href="pheats-cancel" class="govuk-link govuk-link--no-visited-state">[Cancel PHEATS application]</a></p>
+
+    </form>
+
+  </div>
+</div>
+{% endblock %}
