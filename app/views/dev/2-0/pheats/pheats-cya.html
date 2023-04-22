@@ -25,7 +25,7 @@
     <!-- <h1 class="govuk-heading-xl">Are you applying to PHEATS? {{data.dave}}</h1> -->
 
     <h1 class="govuk-heading-xl">
-      Review your answers
+      Check your answers
     </h1>
 
     <p class="govuk-body govuk-!-margin-bottom-9">Your application is now ready to be submitted. Check that the answers you've provided are correct.</p>
@@ -55,13 +55,44 @@
 
       </dl>
 
+      <h2 class="govuk-heading-m">Commodities</h2>
+
+      {% set _commodityCount = data['commodityCount'] or 1 | int %}
+
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+
+        {% for i in range(0, _commodityCount) -%}
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            {{data['botanical_name'] or 'Dactylorhiza umbrosa (DAKUM)'}}<br>
+
+              {% set _commodityVariety = 'commodityVariety' + loop.index %}
+              <span style="font-weight:normal">{{data[_commodityVariety]}}</span>
+          </dt>
+          <dd class="govuk-summary-list__value">
+            Imported from: <br>{{data['countryOfOriginSelect'] or 'France'}}<br><br>
+
+            Exported to: <br>{{data['countryOfExportSelect'] or 'Northern Ireland'}}
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link govuk-link--no-visited-state" href="pheats-commodities-added">
+              Change<span class="govuk-visually-hidden"> </span>
+            </a>
+          </dd>
+        </div>
+
+        {%- endfor %}
+
+      </dl>
+
       <h2 class="govuk-heading-m">People</h2>
     
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
-            [PR]
+            Main contact
           </dt>
           <dd class="govuk-summary-list__value">
             {{data['main-contact-name'] or 'Bill Shoggins'}}<br>
@@ -79,7 +110,7 @@
 
       </dl>
 
-      <h2 class="govuk-heading-m">[authorised people]</h2>
+      <h2 class="govuk-heading-m">Authorised people</h2>
 
       {% set _apCount = data['apCount'] or 1 | int %}
 
@@ -109,13 +140,13 @@
 
       </dl>
 
-      <h2 class="govuk-heading-m">Site</h2>
+      <h2 class="govuk-heading-m">Site plan</h2>
 
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
-            [site plan]
+            File name
           </dt>
           <dd class="govuk-summary-list__value">
             {{data['pheatsSite'] or 'site-plan.pdf'}}, 2MB
@@ -134,7 +165,7 @@
         
 
         {{ govukButton({
-          text: "[submit]"
+          text: "Accept and submit"
         }) }}
 
 

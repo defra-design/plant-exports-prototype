@@ -1,0 +1,89 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  [title] - Manage account - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="../account" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
+  </ul>
+</div>
+
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-two-thirds">
+
+    <!-- <h1 class="govuk-heading-xl">Are you applying to PHEATS? {{data.dave}}</h1> -->
+
+    <h1 class="govuk-heading-xl">
+      [add commodity to be exported through pheats]
+    </h1>
+
+    <form method="post" novalidate action="pheats-commodities-added?deleted=false">
+        <div class="govuk-form-group ">
+          <fieldset class="govuk-fieldset">
+
+            {% set _commodityCount = data['commodityCount'] or 1 %}
+            
+            <input id="commodityCount" name="commodityCount" type="hidden" value="{{_commodityCount}}">
+
+            {% set _commodityNameID = 'commodityName' + _commodityCount %}
+            <label class="govuk-label" for="{{_commodityNameID}}">
+             Botanical name
+            </label>
+            {% block genus %}
+            {% include "./modules/_genus.html" %}
+            {% endblock %}
+
+            <div class="govuk-form-group">
+              {% set _commodityVarietyID = 'commodityVariety' + _commodityCount %}
+              <label class="govuk-label" for="{{_commodityVarietyID}}">
+                Variety (optional)
+              </label>
+              <input class="govuk-input" id="{{_commodityVarietyID}}" name="{{_commodityVarietyID}}" type="text" value="">
+            </div>
+
+            {% set country_module_label = "Primary country of origin" %}
+            {% include "./modules/_country-of-origin-select.html" %}
+
+            {% set country_module_label_export = "Primarily exporting to" %}
+            {% include "./modules/_country-of-export-select.html" %}
+            
+          </fieldset>
+        </div>
+
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+        {% set _pheatsReturnURL = 'pheats-commodity' %}
+        <p class="govuk-body govuk-!-margin-top-2"><a href="pheats-cancel?pheatsReturnURL={{_pheatsReturnURL}}" class="govuk-link govuk-link--no-visited-state">Cancel PHEATS application</a></p>
+
+    </form>
+
+  </div>
+</div>
+
+<script type="text/javascript">
+  
+  window.addEventListener('load', function() {
+    
+    var _commodityNameIDJQ = {{_commodityNameID | dump | safe }}
+
+    $("#commoditiy-botanical-lookup").show()
+
+    $("#autocomplete-customTemplates").attr('id', _commodityNameIDJQ);
+
+  });
+
+</script>
+{% endblock %}
