@@ -41,10 +41,10 @@
     {% endif %}
 
     <h1 class="govuk-heading-xl">
-      Add a commodity that will be exported through PHEATS
+      What will you export using PHEATS?
     </h1>
 
-    <p class="govuk-body">You can add more commodities later.</p>
+    <p class="govuk-body">You will be able to add more commodities later.</p>
 
     <form method="post" novalidate action="pheats-commodities-added?deleted=false">
         <div class="govuk-form-group ">
@@ -56,8 +56,11 @@
 
             {% set _commodityNameID = 'commodityName' + _commodityCount %}
             <label class="govuk-label" for="{{_commodityNameID}}">
-             Botanical name
+              Botanical name
             </label>
+            <div class="govuk-hint">
+              Search by genus, species or common name
+          </div>
             {% block genus %}
             {% include "./modules/_genus.html" %}
             {% endblock %}
@@ -70,11 +73,13 @@
               <input class="govuk-input" id="{{_commodityVarietyID}}" name="{{_commodityVarietyID}}" type="text" value="">
             </div>
 
-            {% set country_module_label = "Primary country of origin" %}
+            {% set country_module_label = "Country of origin" %}
             {% include "./modules/_country-of-origin-select.html" %}
+            
 
-            {% set country_module_label_export = "Primarily exporting to" %}
+            {% set country_module_label_export = "Destination country" %}
             {% include "./modules/_country-of-export-select.html" %}
+            
             
           </fieldset>
         </div>
@@ -100,6 +105,8 @@
     $("#commoditiy-botanical-lookup").show()
 
     $("#autocomplete-customTemplates").attr('id', _commodityNameIDJQ);
+
+    
 
   });
 
