@@ -24,35 +24,54 @@
 
     <!-- <h1 class="govuk-heading-xl">Are you applying to PHEATS? {{data.dave}}</h1> -->
 
+    {% if data.deleted != "false" %}
+    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+            Success
+            </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+            <h3 class="govuk-notification-banner__heading">
+              Commodity deleted
+            </h3>
+            <p class="govuk-body">{{data.deleted}} has been deleted.</p>
+        </div>
+    </div>
+    {% endif %}
+
     <h1 class="govuk-heading-xl">
-      [commodities to be exported through pheats]
+      Commodities that will be exported through PHEATS
     </h1>
 
-    <!-- <p class="govuk-body">Here are all the people authorised to do PHEATS inspections.</p> -->
+    <p class="govuk-body">Here are all the commodities that will be exported through PHEATS.</p>
 
     <!-- <h2 class="govuk-heading-l">
       [authorised people added]
     </h2> -->
 
     {% set _commodityCount = data['commodityCount'] or 1 | int %}
+    {% set _commodityCountDeleted = _commodityCount|int - 1 %}
     {% set _commodityCountNext = _commodityCount|int + 1 %}
 
     <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
       {% for i in range(0, _commodityCount) -%}
 
+      {% set _commodityName = data['botanical_name'] or 'Dactylorhiza umbrosa (DAKUM)' %}
+
         <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">
-              {{data['botanical_name'] or 'Dactylorhiza umbrosa (DAKUM)'}}<br>
+              {{_commodityName}}<br>
 
               {% set _commodityVariety = 'commodityVariety' + loop.index %}
               <span style="font-weight:normal">{{data[_commodityVariety]}}</span>
             </dt>
             <dd class="govuk-summary-list__value">
                 <p class="govuk-body">
-                  Imported from: <br>{{data['countryOfOriginSelect'] or 'France'}}<br><br>
+                  Primarily imported from: <br>{{data['countryOfOriginSelect'] or 'France'}}<br><br>
 
-                  Exported to: <br>{{data['countryOfExportSelect'] or 'Northern Ireland'}}
+                  Primarily exported to: <br>{{data['countryOfExportSelect'] or 'Northern Ireland'}}
                 </p>
             </dd>
             <dd class="govuk-summary-list__actions">
@@ -61,8 +80,12 @@
               </a>
             </dd>
             <!-- pheats-commodity?deleted=false -->
+            {% set _deleteLink = "pheats-commodities-added?deleted=" + _commodityName + "&commodityCount=" + _commodityCountDeleted | int %}
+            {% if _commodityCount | int == 1 %}
+            {% set _deleteLink = "pheats-commodity?deleted=" + _commodityName + "&commodityCount=" + _commodityCount | int %}
+            {% endif %}
             <dd class="govuk-summary-list__actions">
-              <a class="govuk-link govuk-link--no-visited-state" href="#">
+              <a class="govuk-link govuk-link--no-visited-state" href="{{_deleteLink}}">
                   Delete<span class="govuk-visually-hidden"> </span>
               </a>
             </dd>
@@ -79,7 +102,7 @@
       <div class="govuk-form-group ">
         <fieldset class="govuk-fieldset">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-            Add a commodity?
+            Add another commodity?
           </legend>
 
           <!-- <p class="govuk-body">It may take several months for a new authorised person to get approved to do inspections.</p> -->

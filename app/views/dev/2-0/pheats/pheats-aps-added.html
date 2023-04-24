@@ -24,6 +24,22 @@
 
     <!-- <h1 class="govuk-heading-xl">Are you applying to PHEATS? {{data.dave}}</h1> -->
 
+    {% if data.deleted != "false" %}
+    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+            Success
+            </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+            <h3 class="govuk-notification-banner__heading">
+              Authorised person deleted
+            </h3>
+            <p class="govuk-body">{{data.deleted}} has been deleted.</p>
+        </div>
+    </div>
+    {% endif %}
+
     <h1 class="govuk-heading-xl">
       Authorised people
     </h1>
@@ -35,6 +51,7 @@
     </h2> -->
 
     {% set _apCount = data['apCount'] or 1 | int %}
+    {% set _apCountDeleted = _apCount|int - 1 %}
     {% set _apCountNext = _apCount|int + 1 %}
 
     <dl class="govuk-summary-list govuk-!-margin-bottom-9">
@@ -44,7 +61,8 @@
         <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">
               {% set _apName = 'apName' + loop.index %}
-              {{data[_apName] or 'Jane Doe'}}
+              {% set _apNameLabel = data[_apName] or 'Jane Doe' %}
+              {{_apNameLabel}}
             </dt>
             <dd class="govuk-summary-list__value">
                 <p class="govuk-body">
@@ -60,8 +78,12 @@
               </a>
             </dd>
             <!-- pheats-ap?deleted=false -->
+            {% set _deleteLink = "pheats-aps-added?deleted=" + _apNameLabel + "&apCount=" + _apCountDeleted | int %}
+            {% if _apCount | int == 1 %}
+            {% set _deleteLink = "pheats-ap?deleted=" + _apNameLabel + "&apCount=" + _apCount | int %}
+            {% endif %}
             <dd class="govuk-summary-list__actions">
-              <a class="govuk-link govuk-link--no-visited-state" href="#">
+              <a class="govuk-link govuk-link--no-visited-state" href="{{_deleteLink}}">
                   Delete<span class="govuk-visually-hidden"> </span>
               </a>
             </dd>
