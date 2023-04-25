@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  Provide inspection details - Phytosanitary certificate - {{serviceName}} - GOV.UK
+  If inspection is needed (optional) - Phytosanitary certificate - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -20,11 +20,11 @@
     <form action="{{query.return_url or 'contact-details-potential?inspection_address_added=In progress'}}" method="post">
     {% endif %}
 
-      {% if query.addressAdded == "yes" %}
+      <!-- {% if query.addressAdded == "yes" %}
       <div class="app-alert app-alert--success" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
         <p class="govuk-body" id="govuk-notification-banner-message">Address added successfully</p>
       </div>
-      {% endif %}
+      {% endif %} -->
     
       <div class="govuk-form-group{% if query.addresses == '0' %} govuk-!-margin-bottom-9{% endif %}">
         <h1 class="govuk-heading-xl">If inspection is needed (optional)</h1>
@@ -35,6 +35,41 @@
       </div>
       
       {% if query.addresses != "0" %}
+      {% if data.build == "development" %}
+      <table class="govuk-table govuk-!-margin-bottom-9">
+        <caption class="govuk-table__caption govuk-visually-hidden">Your inspection addresses</caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Address</th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          {% if query.addressAdded == "yes" %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Top Lane, Peterborough, Cambridgeshire, PO5 7HY</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric"><a href="confirm-inspection-address?commodity=everything%20else&address=0" class="govuk-link govuk-link--no-visited-state">Select</a></td>
+          </tr>
+          {% endif %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Shoggins Farm, Turnip Row, Mordor, The Shire, ZI99 7YH</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric"><a href="confirm-inspection-address?commodity=everything%20else&address=1" class="govuk-link govuk-link--no-visited-state">Select</a></td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric"><a href="confirm-inspection-address?commodity=everything%20else&address=2" class="govuk-link govuk-link--no-visited-state">Select</a></td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric"><a href="confirm-inspection-address?commodity=everything%20else&address=3" class="govuk-link govuk-link--no-visited-state">Select</a></td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Goatacre Cricket Club, Hill Lane, Goatacre, Wiltshire, SN15 6YG</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric"><a href="confirm-inspection-address?commodity=everything%20else&address=4" class="govuk-link govuk-link--no-visited-state">Select</a></td>
+          </tr>
+        </tbody>
+      </table>
+      {% else %}
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">
           
@@ -73,6 +108,7 @@
       </div>
 
       <button class="govuk-button govuk-!-margin-bottom-9" type="submit" data-module="govuk-button">Save and continue</button>
+      {% endif %}
       {% endif %}     
 
       {% block continueLater %}
