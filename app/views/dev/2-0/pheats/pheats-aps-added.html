@@ -54,42 +54,51 @@
     {% set _apCountDeleted = _apCount|int - 1 %}
     {% set _apCountNext = _apCount|int + 1 %}
 
-    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+
+      <table class="govuk-table govuk-!-margin-bottom-7" >
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Name</th>
+            <th class="govuk-table__header" scope="col">Postion and email address</th>
+            <th class="govuk-table__header" scope="col"></th>
+          </tr>
+        </thead>
 
       {% for i in range(0, _apCount) -%}
 
-        <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-              {% set _apName = 'apName' + loop.index %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            {% set _apName = 'apName' + loop.index %}
               {% set _apNameLabel = data[_apName] or 'Jane Doe' %}
               {{_apNameLabel}}
-            </dt>
-            <dd class="govuk-summary-list__value">
-                <p class="govuk-body">
-                  {% set _apPosition = 'apPosition' + loop.index %}
-                  {% set _apEmail = 'apEmail' + loop.index %}
-                  {{data[_apPosition] or 'Manager'}}<br>
-                  {{data[_apEmail] or 'email@email.com'}}
-                </p>
-            </dd>
-            <dd class="govuk-summary-list__actions">
-              <a class="govuk-link govuk-link--no-visited-state" href="#">
-                Edit<span class="govuk-visually-hidden"> </span>
-              </a>
-            </dd>
-            {% set _deleteLink = "pheats-aps-added?deleted=" + _apNameLabel + "&apCount=" + _apCountDeleted | int %}
-            {% if _apCount | int == 1 %}
-            {% set _deleteLink = "pheats-ap?deleted=" + _apNameLabel + "&apCount=" + _apCount | int %}
-            {% endif %}
-            <dd class="govuk-summary-list__actions">
-              <a class="govuk-link govuk-link--no-visited-state" href="{{_deleteLink}}">
-                  Delete<span class="govuk-visually-hidden"> </span>
-              </a>
-            </dd>
-        </div>
+          </td>
+          <td class="govuk-table__cell">
+            {% set _apPosition = 'apPosition' + loop.index %}
+            {% set _apEmail = 'apEmail' + loop.index %}
+            {{data[_apPosition] or 'Manager'}}<br>
+            {{data[_apEmail] or 'email@email.com'}}
+          </td>
+          
+          {% set _deleteLink = "pheats-aps-added?deleted=" + _apNameLabel + "&apCount=" + _apCountDeleted | int %}
+          {% if _apCount | int == 1 %}
+          {% set _deleteLink = "pheats-ap?deleted=" + _apNameLabel + "&apCount=" + _apCount | int %}
+          {% endif %}
+          <td class="govuk-table__cell" style="text-align: right;">
+
+            <p class="govuk-body govuk-!-margin-bottom-2">
+              <a href="pheats-ap?deleted=false" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this authorised person</span></a>
+            </p>
+            <p class="govuk-body govuk-!-margin-bottom-2">
+              <a href="{{_deleteLink}}" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this authorised person</span></a>
+            </p>
+
+          </td>
+        </tr>
       {%- endfor %}
 
-    </dl>
+
+  </tbody>
+</table>
 
 
     

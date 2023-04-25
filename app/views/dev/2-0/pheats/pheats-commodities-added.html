@@ -54,47 +54,47 @@
     {% set _commodityCountDeleted = _commodityCount|int - 1 %}
     {% set _commodityCountNext = _commodityCount|int + 1 %}
 
-    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+    <table class="govuk-table govuk-!-margin-bottom-7" id="commodityTable">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">Description</th>
+          <th class="govuk-table__header" scope="col">Origin</th>
+          <th class="govuk-table__header" scope="col">Destinations</th>
+          <th class="govuk-table__header" scope="col"></th>
+        </tr>
+      </thead>
 
       {% for i in range(0, _commodityCount) -%}
 
       {% set _commodityName = data['botanical_name'] or 'Dactylorhiza umbrosa (DAKUM)' %}
+      {% set _commodityVariety = 'commodityVariety' + loop.index %}
 
-        <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-              {{_commodityName}}<br>
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell">
+          {{_commodityName}}{% if data[_commodityVariety] %} ({{data[_commodityVariety]}}){% endif %}
+        </td>
+        <td class="govuk-table__cell">
+          {{data['countryOfOriginSelect'] or 'France'}}
+        </td>
+        <td class="govuk-table__cell govuk-table__cell">
+          {{data['countryOfExportSelect'] or 'Northern Ireland'}}
+        </td>
+        {% set _deleteLink = "pheats-commodities-added?deleted=" + _commodityName + "&commodityCount=" + _commodityCountDeleted | int %}
+        {% if _commodityCount | int == 1 %}
+        {% set _deleteLink = "pheats-commodity?deleted=" + _commodityName + "&commodityCount=" + _commodityCount | int %}
+        {% endif %}
+        <td class="govuk-table__cell" style="text-align: right;">
+          <p class="govuk-body govuk-!-margin-bottom-2"><a href="pheats-commodity?deleted=false" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a></p>
+          <p class="govuk-body govuk-!-margin-bottom-2">
+          <a href="{{_deleteLink}}" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+          </p>
+        </td>
+      </tr>
 
-              {% set _commodityVariety = 'commodityVariety' + loop.index %}
-              <span style="font-weight:normal">{{data[_commodityVariety]}}</span>
-            </dt>
-            <dd class="govuk-summary-list__value">
-                <p class="govuk-body">
-                  Origin: <br>{{data['countryOfOriginSelect'] or 'France'}}<br><br>
-
-                  Destinations: <br>{{data['countryOfExportSelect'] or 'Northern Ireland'}}
-                </p>
-            </dd>
-            <dd class="govuk-summary-list__actions">
-              <a class="govuk-link govuk-link--no-visited-state" href="#">
-                Edit<span class="govuk-visually-hidden"> </span>
-              </a>
-            </dd>
-            {% set _deleteLink = "pheats-commodities-added?deleted=" + _commodityName + "&commodityCount=" + _commodityCountDeleted | int %}
-            {% if _commodityCount | int == 1 %}
-            {% set _deleteLink = "pheats-commodity?deleted=" + _commodityName + "&commodityCount=" + _commodityCount | int %}
-            {% endif %}
-            <dd class="govuk-summary-list__actions">
-              <a class="govuk-link govuk-link--no-visited-state" href="{{_deleteLink}}">
-                  Delete<span class="govuk-visually-hidden"> </span>
-              </a>
-            </dd>
-        </div>
       {%- endfor %}
 
-    </dl>
-
-
-    
+    </tbody>
+  </table>
 
     <form method="post" novalidate>
       <div class="govuk-form-group ">
