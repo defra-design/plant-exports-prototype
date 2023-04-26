@@ -11,6 +11,16 @@
 {% endblock %}
 
 {% block content %}
+<style>
+
+  /* Needs extracting and adding to the external Sass or CSS */
+  /* Chris Harding (08.02.23) -  */
+  .govuk-table__header-no-bold  {
+    font-weight: normal;
+  }
+
+</style>
+
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-three-quarters">
@@ -100,19 +110,19 @@
         
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Name</dt>
-          <dd class="govuk-summary-list__value">Acme Ltd</dd>
+          <dd class="govuk-summary-list__value">Shoggins Shoes Ltd</dd>
           <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Address</dt>
-          <dd class="govuk-summary-list__value">Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH</dd>
+          <dd class="govuk-summary-list__value">{% if data.build == "development" %}10 THE STEADING, PARKHILL FARM, ABBEY ROAD, NEWBURGH, CUPAR, FIFE, KY14 6HH, United Kingdom{% else %}10 The Steading, Parkhill Farm, Abbey Road, Newburgh, Cupar, Fife, KY14 6HH, United Kingdom{% endif %}</dd>
           <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Phone number</dt>
-          <dd class="govuk-summary-list__value">024 546 7069</dd>
+          <dd class="govuk-summary-list__value">01743 111222</dd>
           <dd class="govuk-summary-list__actions">&nbsp;</dd>
         </div>
 
@@ -365,7 +375,7 @@
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Address</dt>
-          <dd class="govuk-summary-list__value">{% if data.build == "development" %}{{"Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH" | upper}}{% else %}{{data.select_address}}{% endif %}</dd>
+          <dd class="govuk-summary-list__value">{% if data.build == "development" %}{{"Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH" | upper}}{% else %}{{data.select_address or "Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH"}}{% endif %}</dd>
           <dd class="govuk-summary-list__actions">
             <a class="govuk-link" href="inspection-addresses?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">address</span></a>
           </dd>
@@ -375,7 +385,7 @@
         {% if data.build == "development" %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Contact name</dt>
-          <dd class="govuk-summary-list__value">{% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}Bill Shoggins{% else %}{{data.contact_name or "Bill Shoggins"}}{% endif %}</dd>
+          <dd class="govuk-summary-list__value">{{data.contact_name or "Bill Shoggins"}}</dd>
           <dd class="govuk-summary-list__actions">
             <a class="govuk-link" href="contact-details-simple-short?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">contact name</span></a>
           </dd>
@@ -383,7 +393,7 @@
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Phone number</dt>
-          <dd class="govuk-summary-list__value">{% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}01234 567890{% else %}{{data.address_phone or "01234 567890"}}{% endif %}</dd>
+          <dd class="govuk-summary-list__value">{{data.address_phone or "01743 111222"}}</dd>
           <dd class="govuk-summary-list__actions">
             <a class="govuk-link" href="contact-details-simple-short?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">phone number</span></a>
           </dd>
@@ -391,7 +401,7 @@
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Email address</dt>
-          <dd class="govuk-summary-list__value">{% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}bill.shoggins@acmeltd.com{% else %}{{data.email_address or "bill.shoggins@acmeltd.com"}}{% endif %}</dd>
+          <dd class="govuk-summary-list__value">{{data.email_address or "bill.shoggins@shoggins-shoes.co.uk"}}</dd>
           <dd class="govuk-summary-list__actions">
             <a class="govuk-link" href="contact-details-simple-short?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">email address</span></a>
           </dd>
@@ -400,20 +410,12 @@
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Who is the main contact for this application?</dt>
           <dd class="govuk-summary-list__value">
-            {% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}
             Bill Shoggins
             <br>
-            01234 567890
+            01743 111222
             <br>
-            bill.shoggins@acmeltd.com
-            {% else %}
-            {{data.contact_name or "Bill Shoggins"}}
-            <br>
-            {{data.address_phone or "01234 567890"}}
-            <br>
-            {{data.email_address or "bill.shoggins@acmeltd.com"}}
-            {% endif %}
-          </dd>
+            bill.shoggins@shoggins-shoes.co.uk
+          </dd>          
           <dd class="govuk-summary-list__actions"><a class="govuk-link" href="contact-details-simple-short?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> who the main contact for this application is</span></a></dd>
         </div>
         {% endif %}
