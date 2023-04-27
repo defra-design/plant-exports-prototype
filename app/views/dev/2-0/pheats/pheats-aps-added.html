@@ -25,19 +25,19 @@
     <!-- <h1 class="govuk-heading-xl">Are you applying to PHEATS? {{data.dave}}</h1> -->
 
     {% if query.deleted %}
-    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-        <div class="govuk-notification-banner__header">
-            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-            Success
-            </h2>
-        </div>
-        <div class="govuk-notification-banner__content">
-            <h3 class="govuk-notification-banner__heading">
-              Authorised person deleted
-            </h3>
-            <p class="govuk-body">{{query.deleted}} has been deleted.</p>
-        </div>
-    </div>
+      <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+          <div class="govuk-notification-banner__header">
+              <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+              Success
+              </h2>
+          </div>
+          <div class="govuk-notification-banner__content">
+              <h3 class="govuk-notification-banner__heading">
+                Authorised person deleted
+              </h3>
+              <p class="govuk-body">{{data['apName' + query.deleted] or 'Jane Doe'}} has been deleted.</p>
+          </div>
+      </div>
     {% endif %}
 
     <h1 class="govuk-heading-xl">
@@ -51,9 +51,8 @@
     </h2> -->
 
     {% set _apCount = data['apCount'] or 1 | int %}
-    {% set _apCountDeleted = _apCount|int - 1 %}
-    {% set _apCountNext = _apCount|int + 1 %}
-
+    {% set _apDisplayedCount = data['apDisplayedCount'] or 1 | int %}
+    {% set _apCountDeleted = _apDisplayedCount|int - 1 %}
 
       <table class="govuk-table govuk-!-margin-bottom-7" >
         <thead class="govuk-table__head">
@@ -66,34 +65,40 @@
 
       {% for i in range(0, _apCount) -%}
 
+        {% set _show = "true" %}
+        {% set _id = loop.index %}
+        {% set _deletedValue = data['apDeleted'+_id] %}
+        {% if _deletedValue == "true" %}
+          {% set _show = "false" %}
+        {% endif %}
+
+        {% if _show == "true" %}
         <tr class="govuk-table__row">
           <td class="govuk-table__cell">
-            {% set _apName = 'apName' + loop.index %}
-              {% set _apNameLabel = data[_apName] or 'Jane Doe' %}
-              {{_apNameLabel}}
+            {{data['apName' + _id] or 'Jane Doe'}}
           </td>
           <td class="govuk-table__cell">
-            {% set _apPosition = 'apPosition' + loop.index %}
-            {% set _apEmail = 'apEmail' + loop.index %}
-            {{data[_apPosition] or 'Manager'}}<br>
-            {{data[_apEmail] or 'email@email.com'}}
+            {{data['apPosition' + _id] or 'Manager'}}<br>
+            {{data['apEmail' + _id] or 'email@email.com'}}
           </td>
           
-          {% set _deleteLink = "pheats-aps-added?deleted=" + _apNameLabel + "&apCount=" + _apCountDeleted | int %}
-          {% if _apCount | int == 1 %}
-          {% set _deleteLink = "pheats-ap?deleted=" + _apNameLabel + "&apCount=" + _apCount | int %}
+          {% set _deleteLinkSuffix = "?deleted=" + _id + "&apDeleted" + _id + "=true" + "&apDisplayedCount=" + _apCountDeleted | int %}
+          {% set _deleteLink = "pheats-aps-added" %}
+          {% if _apDisplayedCount | int == 1 %}
+            {% set _deleteLink = "pheats-ap" %}
           {% endif %}
           <td class="govuk-table__cell" style="text-align: right;">
 
             <p class="govuk-body govuk-!-margin-bottom-2">
-              <a href="pheats-ap" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this authorised person</span></a>
+              <a href="pheats-ap?edit={{_id}}" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this authorised person</span></a>
             </p>
             <p class="govuk-body govuk-!-margin-bottom-2">
-              <a href="{{_deleteLink}}" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this authorised person</span></a>
+              <a href="{{_deleteLink}}{{_deleteLinkSuffix}}" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this authorised person</span></a>
             </p>
 
           </td>
         </tr>
+        {% endif %}
       {%- endfor %}
 
 
@@ -114,7 +119,7 @@
           
           <div class="govuk-radios" data-module="govuk-radios">
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="pheatsAddAP-1" name="pheatsAddAP" type="radio" value="Yes~pheats-ap?apCount={{_apCountNext | int}}">
+              <input class="govuk-radios__input" id="pheatsAddAP-1" name="pheatsAddAP" type="radio" value="Yes~pheats-ap">
               <label class="govuk-label govuk-radios__label" for="pheatsAddAP-1">
                 Yes
               </label>

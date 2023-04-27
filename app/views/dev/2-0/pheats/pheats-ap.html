@@ -25,19 +25,19 @@
     <!-- <h1 class="govuk-heading-xl">Are you applying to PHEATS? {{data.dave}}</h1> -->
 
     {% if query.deleted %}
-    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-        <div class="govuk-notification-banner__header">
-            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-            Success
-            </h2>
-        </div>
-        <div class="govuk-notification-banner__content">
-            <h3 class="govuk-notification-banner__heading">
-              Authorised person deleted
-            </h3>
-            <p class="govuk-body">{{query.deleted}} has been deleted.</p>
-        </div>
-    </div>
+      <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+          <div class="govuk-notification-banner__header">
+              <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+              Success
+              </h2>
+          </div>
+          <div class="govuk-notification-banner__content">
+              <h3 class="govuk-notification-banner__heading">
+                Authorised person deleted
+              </h3>
+              <p class="govuk-body">{{data['apName' + query.deleted] or 'Jane Doe'}} has been deleted.</p>
+          </div>
+      </div>
     {% endif %}
 
     <h1 class="govuk-heading-xl">
@@ -52,32 +52,53 @@
     <form method="post" novalidate action="pheats-aps-added">
         <div class="govuk-form-group ">
           <fieldset class="govuk-fieldset">
-            
-            {% set _apCount = data['apCount'] or 1 %}
+
+            <!-- IF editing an existing one or not -->
+            {% set _editing = false %}
+            {% set _notEditing = true %}
+            {% if query.edit %}
+              {% set _editing = true %}
+              {% set _notEditing = false %}
+            {% endif %}
+
+            <!-- Set counts -->
+            {% set _apCount = data['apCount'] or 0 | int %}
+            {% set _apDisplayedCount = data['apDisplayedCount'] or 0 | int %}
+            {% if _notEditing %}
+              {% set _apCount = _apCount|int + 1 %}
+              {% set _apDisplayedCount = _apDisplayedCount|int + 1 %}
+            {% endif %}
             <input id="apCount" name="apCount" type="hidden" value="{{_apCount}}">
+            <input id="apDisplayedCount" name="apDisplayedCount" type="hidden" value="{{_apDisplayedCount}}">
+
+            <!-- Set id to use -->
+            {% set _id = _apCount %} <!--1-->
+            {% if _editing %}
+              {% set _id = query.edit %}
+            {% endif %}
+
+            <!-- Set deleted false default  -->
+            <input id="apDeleted{{_id}}" name="apDeleted{{_id}}" type="hidden" value="false">
 
             <div class="govuk-form-group">
-              {% set _apNameID = 'apName' + _apCount %}
-              <label class="govuk-label" for="{{_apNameID}}">
+              <label class="govuk-label" for="apName{{_id}}">
                 Name
               </label>
-              <input class="govuk-input" id="{{_apNameID}}" name="{{_apNameID}}" type="text" value="">
+              <input class="govuk-input" id="apName{{_id}}" name="apName{{_id}}" type="text" value="{{data['apName' + _id] or ''}}">
             </div>
 
             <div class="govuk-form-group">
-              {% set _apPositionID = 'apPosition' + _apCount %}
-              <label class="govuk-label" for="{{_apPositionID}}">
+              <label class="govuk-label" for="apPosition{{_id}}">
                 Position
               </label>
-              <input class="govuk-input" id="{{_apPositionID}}" name="{{_apPositionID}}" type="text">
+              <input class="govuk-input" id="apPosition{{_id}}" name="apPosition{{_id}}" type="text" value="{{data['apPosition' + _id] or ''}}">
             </div>
 
             <div class="govuk-form-group">
-              {% set _apEmailID = 'apEmail' + _apCount %}
-              <label class="govuk-label" for="{{_apEmailID}}">
+              <label class="govuk-label" for="apEmail{{_id}}">
                 Email address
               </label>
-              <input class="govuk-input" id="{{_apEmailID}}" name="{{_apEmailID}}" type="email" spellcheck="false" autocomplete="email" value="">
+              <input class="govuk-input" id="apEmail{{_id}}" name="apEmail{{_id}}" type="email" spellcheck="false" autocomplete="email" value="{{data['apEmail' + _id] or ''}}">
             </div>
 
             
