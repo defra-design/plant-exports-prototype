@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  [title] - Manage account - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="../account" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
+  </ul>
+</div>
+
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-two-thirds">
+
+    
+    {% if data.addressAdded == "yes" %}
+    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+            Success
+            </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+            <h3 class="govuk-notification-banner__heading">
+                You've added a new inspection address
+            </h3>
+            <!-- <p class="govuk-body">Contact <a class="govuk-notification-banner__link" href="#">example@department.gov.uk</a> if you think there’s a problem.</p> -->
+        </div>
+    </div>
+    {% endif %}
+
+    <h1 class="govuk-heading-xl">Will you do PHEATS inspections at this address?</h1>
+
+    <!-- <div class="govuk-form-group"> -->
+        <p class="govuk-body">If you are sending fruit, vegetables and cut flowers to the European Union or Northern Ireland then you could be eligible to join the plant health exports audited trader scheme (PHEATS). The scheme trains you to do your own inspections, which can help you get export certificates more quickly.</p>
+        <p class="govuk-body">It can take several months to register and complete training. You can find out more about PHEATS on GOV.UK.</p>
+    <!-- </div> -->
+
+    <form method="post" novalidate>
+        <div class="govuk-form-group ">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-visually-hidden">
+                Will you do PHEATS inspections at this address?
+            </legend>
+
+            
+            
+            <div class="govuk-radios" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="pheatsStart-1" name="pheatsStart" type="radio" value="Yes~pheats-commodity">
+                <label class="govuk-label govuk-radios__label" for="pheatsStart-1">
+                  Yes
+                </label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="pheatsStart-2" name="pheatsStart" type="radio" value="No~{{data.return_url or '../account/inspection-addresses-added'}}?addressAdded=yes">
+                <label class="govuk-label govuk-radios__label" for="pheatsStart-2">
+                  No
+                </label>
+              </div>
+
+
+              
+
+            </div>
+          </fieldset>
+        </div>
+        <button class="govuk-button" data-module="govuk-button">
+          Continue
+        </button>
+    </form>
+
+  </div>
+</div>
+{% endblock %}

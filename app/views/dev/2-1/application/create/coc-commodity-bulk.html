@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  What are you exporting? - Phytosanitary certificate - {{serviceName}} - GOV UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <form action="upload-coc" method="post" class="form">
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" aria-describedby="what-exporting-hint">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
+            <h1 class="govuk-fieldset__heading">What are you exporting?</h1>
+          </legend>
+
+          <div id="what-exporting-hint"  class="govuk-hint">
+            Select the type of commodities you want to upload
+          </div>
+
+          <div class="govuk-radios" data-module="govuk-radios">
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="bulkCommodities-sms" name="bulkCommodities" type="radio" value="sms" data-aria-controls="bulkCommodities-sms-hint"{% if query.change and data.bulkCommodities == "sms" %} checked="checked"{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="bulkCommodities-sms"><strong>Specific Marketing Standard (SMS) commodities</strong></label>
+
+              <div id="commodity_gms-hint" class="govuk-hint govuk-radios__hint">
+                Select this option if you are uploading
+                <ul class="govuk-hint govuk-list govuk-list--bullet">
+                  <li>apples</li>
+                  <li>pears</li>
+                  <li>citrus fruit</li>
+                  <li>grapes</li>
+                  <li>kiwi fruit</li>
+                  <li>nectarines</li>
+                  <li>peaches</li>
+                  <li>strawberries</li>
+                  <li>lettuce</li>
+                  <li>tomatoes</li>
+                </ul>
+              </div>
+
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="bulkCommodities-gms" name="bulkCommodities" type="radio" value="gms" aria-describedby="bulkCommodities-gms-hint"{% if query.change and data.bulkCommodities == "gms" %} checked="checked"{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="bulkCommodities-gms"><strong>General Marketing Standard (GMS) commodities</strong></label>
+
+              <div id="commodity_gms-hint" class="govuk-hint govuk-radios__hint">
+                Choose this option if a destination country asks for a certificate of conformity for a commodity not listed above.
+              </div>
+
+            </div>
+
+          </div>
+
+        </fieldset>
+      </div>
+
+      <div class="govuk-button-group govuk-!-margin-top-4 govuk-!-margin-bottom-8">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      </div>
+
+    </form>
+
+    {% block continueLater %}
+    {% include "../modules/_save-continue-later.html" %}
+    {% endblock %}
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,151 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  [title] - Manage account - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="../account" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
+  </ul>
+</div>
+
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-two-thirds">
+
+    <!-- <h1 class="govuk-heading-xl">Are you applying to PHEATS? {{data.dave}}</h1> -->
+
+    {% if query.deleted %}
+    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+            Success
+            </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+            <h3 class="govuk-notification-banner__heading">
+              Commodity deleted
+            </h3>
+            <p class="govuk-body">{{data['commodityName' + query.deleted] or 'Dactylorhiza umbrosa (DAKUM)'}} has been deleted.</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <h1 class="govuk-heading-xl">
+      Commodities
+    </h1>
+
+    <p class="govuk-body">Here are all the commodities that can be exported from this address using PHEATS.</p>
+
+    <!-- <h2 class="govuk-heading-l">
+      [authorised people added]
+    </h2> -->
+
+    
+    {% set _commodityCount = data['commodityCount'] or 1 | int %}
+    {% set _commodityDisplayedCount = data['commodityDisplayedCount'] or 1 | int %}
+    {% set _commodityCountDeleted = _commodityDisplayedCount|int - 1 %}
+
+    <table class="govuk-table govuk-!-margin-bottom-7" id="commodityTable">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">Description</th>
+          <th class="govuk-table__header" scope="col">Origin</th>
+          <th class="govuk-table__header" scope="col">Destinations</th>
+          <th class="govuk-table__header" scope="col"></th>
+        </tr>
+      </thead>
+
+      {% for i in range(0, _commodityCount) -%}
+
+        {% set _show = "true" %}
+        {% set _id = loop.index %}
+        {% set _deletedValue = data['commodityDeleted'+_id] %}
+        {% if _deletedValue == "true" %}
+          {% set _show = "false" %}
+        {% endif %}
+
+        {% if _show == "true" %}
+
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            {{data['commodityName' + _id] or 'Dactylorhiza umbrosa (DAKUM)'}}
+            {% if data['commodityVariety' + loop.index] %} ({{data['commodityVariety' + loop.index]}}){% endif %}
+          </td>
+          <td class="govuk-table__cell">
+            {{data['countryOfOriginSelect'] or 'France'}}
+          </td>
+          <td class="govuk-table__cell govuk-table__cell">
+            {{data['countryOfExportSelect'] or 'Northern Ireland'}}
+          </td>
+
+
+          {% set _deleteLinkSuffix = "?deleted=" + _id + "&commodityDeleted" + _id + "=true" + "&commodityDisplayedCount=" + _commodityCountDeleted | int %}
+          {% set _deleteLink = "pheats-commodities-added" %}
+          {% if _commodityDisplayedCount | int == 1 %}
+            {% set _deleteLink = "pheats-commodity" %}
+          {% endif %}
+          <td class="govuk-table__cell" style="text-align: right;">
+
+            <p class="govuk-body govuk-!-margin-bottom-2"><a href="pheats-commodity?edit={{_id}}" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a></p>
+            <p class="govuk-body govuk-!-margin-bottom-2">
+            <a href="{{_deleteLink}}{{_deleteLinkSuffix}}" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+            </p>
+
+          </td>
+        </tr>
+        {% endif %}
+
+      {%- endfor %}
+
+    </tbody>
+  </table>
+
+    <form method="post" novalidate>
+      <div class="govuk-form-group ">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+            Add another commodity?
+          </legend>
+
+          <!-- <p class="govuk-body">It may take several months for a new authorised person to get approved to do inspections.</p> -->
+          
+          <div class="govuk-radios" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="pheatsAddCommodity-1" name="pheatsAddCommodity" type="radio" value="Yes~pheats-commodity">
+              <label class="govuk-label govuk-radios__label" for="pheatsAddCommodity-1">
+                Yes
+              </label>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="pheatsAddCommodity-2" name="pheatsAddCommodity" type="radio" value="No~pheats-pr">
+              <label class="govuk-label govuk-radios__label" for="pheatsAddCommodity-2">
+                No
+              </label>
+            </div>
+
+          </div>
+        </fieldset>
+      </div>
+
+      <button class="govuk-button" data-module="govuk-button">
+        Continue
+      </button>
+
+      {% set _pheatsReturnURL = 'pheats-commodities-added' %}
+      <p class="govuk-body govuk-!-margin-top-2"><a href="pheats-cancel?pheatsReturnURL={{_pheatsReturnURL}}" class="govuk-link govuk-link--no-visited-state">Cancel PHEATS application</a></p>
+
+    </form>
+
+  </div>
+</div>
+{% endblock %}
