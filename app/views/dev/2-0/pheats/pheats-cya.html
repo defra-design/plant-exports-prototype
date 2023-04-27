@@ -118,16 +118,21 @@
 
         {% for i in range(0, _apCount) -%}
 
+        {% set _show = "true" %}
+        {% set _id = loop.index %}
+        {% set _deletedValue = data['apDeleted'+_id] %}
+        {% if _deletedValue == "true" %}
+          {% set _show = "false" %}
+        {% endif %}
+
+        {% if _show == "true" %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
-            {% set _apName = 'apName' + loop.index %}
-            {{data[_apName] or 'Jane Doe'}}
+            {{data['apName' + _id] or 'Jane Doe'}}
           </dt>
           <dd class="govuk-summary-list__value">
-            {% set _apPosition = 'apPosition' + loop.index %}
-            {% set _apEmail = 'apEmail' + loop.index %}
-            {{data[_apPosition] or 'Manager'}}<br>
-            {{data[_apEmail] or 'email@email.com'}}
+            {{data['apPosition' + _id] or 'Manager'}}<br>
+            {{data['apEmail' + _id] or 'email@email.com'}}
           </dd>
           <dd class="govuk-summary-list__actions">
             <a class="govuk-link govuk-link--no-visited-state" href="pheats-aps-added">
@@ -135,6 +140,7 @@
             </a>
           </dd>
         </div>
+        {% endif %}
 
         {%- endfor %}
 
