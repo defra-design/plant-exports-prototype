@@ -35,7 +35,7 @@
             <h3 class="govuk-notification-banner__heading">
               Commodity deleted
             </h3>
-            <p class="govuk-body">{{query.deleted}} has been deleted.</p>
+            <p class="govuk-body">{{data['commodityName' + query.deleted] or 'Dactylorhiza umbrosa (DAKUM)'}} has been deleted.</p>
         </div>
     </div>
     {% endif %}
@@ -50,28 +50,60 @@
         <div class="govuk-form-group ">
           <fieldset class="govuk-fieldset">
 
-            {% set _commodityCount = data['commodityCount'] or 1 %}
+            <!-- {% set _commodityCount = data['commodityCount'] or 1 %}
             
-            <input id="commodityCount" name="commodityCount" type="hidden" value="{{_commodityCount}}">
+            <input id="commodityCount" name="commodityCount" type="hidden" value="{{_commodityCount}}"> -->
 
-            {% set _commodityNameID = 'commodityName' + _commodityCount %}
-            <label class="govuk-label" for="{{_commodityNameID}}">
-              Botanical name
-            </label>
-            <div class="govuk-hint">
-              Search by genus, species or common name
-          </div>
-            {% block genus %}
+            <!-- IF editing an existing one or not -->
+            {% set _editing = false %}
+            {% set _notEditing = true %}
+            {% if query.edit %}
+              {% set _editing = true %}
+              {% set _notEditing = false %}
+            {% endif %}
+
+            <!-- Set counts -->
+            {% set _commodityCount = data['commodityCount'] or 0 | int %}
+            {% set _commodityDisplayedCount = data['commodityDisplayedCount'] or 0 | int %}
+            {% if _notEditing %}
+              {% set _commodityCount = _commodityCount|int + 1 %}
+              {% set _commodityDisplayedCount = _commodityDisplayedCount|int + 1 %}
+            {% endif %}
+            <input id="commodityCount" name="commodityCount" type="hidden" value="{{_commodityCount}}">
+            <input id="commodityDisplayedCount" name="commodityDisplayedCount" type="hidden" value="{{_commodityDisplayedCount}}">
+
+            <!-- Set id to use -->
+            {% set _id = _commodityCount %} <!--1-->
+            {% if _editing %}
+              {% set _id = query.edit %}
+            {% endif %}
+
+            <!-- Set deleted false default  -->
+            <input id="commodityDeleted{{_id}}" name="commodityDeleted{{_id}}" type="hidden" value="false">
+
+
+
+
+
+
+
+
+            {% set _commodityNameID = 'commodityName' + _id %}
             {% include "./modules/_genus.html" %}
-            {% endblock %}
+
+
 
             <div class="govuk-form-group">
-              {% set _commodityVarietyID = 'commodityVariety' + _commodityCount %}
-              <label class="govuk-label" for="{{_commodityVarietyID}}">
+              <label class="govuk-label" for="commodityVariety{{_id}}">
                 Variety (optional)
               </label>
-              <input class="govuk-input" id="{{_commodityVarietyID}}" name="{{_commodityVarietyID}}" type="text" value="">
+              <input class="govuk-input" id="commodityVariety{{_id}}" name="commodityVariety{{_id}}" type="text" value="{{data['commodityVariety' + _id] or ''}}">
             </div>
+
+
+
+
+
 
             {% set country_module_label = "Country of origin" %}
             {% include "./modules/_country-of-origin-select.html" %}
@@ -96,19 +128,5 @@
   </div>
 </div>
 
-<script type="text/javascript">
-  
-  window.addEventListener('load', function() {
-    
-    var _commodityNameIDJQ = {{_commodityNameID | dump | safe }}
 
-    $("#commoditiy-botanical-lookup").show()
-
-    $("#autocomplete-customTemplates").attr('id', _commodityNameIDJQ);
-
-    
-
-  });
-
-</script>
 {% endblock %}

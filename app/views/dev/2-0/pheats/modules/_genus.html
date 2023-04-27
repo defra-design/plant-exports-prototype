@@ -10,12 +10,18 @@
   {% endfor %}
 </ul>
 
-<div id="commoditiy-botanical-lookup" class="govuk-form-group" style="display: none;" data-default="{% if data.botanical_name %}{{data.botanical_name}}{% endif %}">
+
+<div id="commoditiy-botanical-lookup" class="govuk-form-group" data-default="{{data['commodityName' + _id] or ''}}">
+
   <fieldset class="govuk-fieldset">
 
     <div class="govuk-form-group autocomplete-wrapper" >
-      <label class="govuk-label govuk-visually-hidden" for="sort">Find botanical</label>
-      <!-- <span class="govuk-hint">Find by genus, species or a common name</span> -->
+      <label class="govuk-label" for="{{_commodityNameID}}">
+        Botanical name
+      </label>
+      <div class="govuk-hint">
+        Search by genus, species or common name
+      </div>
 
       <div id="tt-customTemplates" class="autocomplete-wrapper">
 
@@ -67,8 +73,6 @@
       )
     }
 
-    console.log($('#commoditiy-botanical-lookup').attr('data-default'))
-
     function inputValueTemplate (result) {
       return result && result.fullname + " (" +  result.eppocode + ")"
     }
@@ -78,13 +82,14 @@
     }
 
     element = document.querySelector('#tt-customTemplates')
-    id = 'autocomplete-customTemplates'
+
+    var _commodityNameIDJQ = {{_commodityNameID | dump | safe }}
 
     accessibleAutocomplete({
       element: element,
-      id: id,
+      id: _commodityNameIDJQ,
       defaultValue: $('#commoditiy-botanical-lookup').attr('data-default'),
-      name: "botanical_name",
+      name: _commodityNameIDJQ,
       source: customSuggest,
       templates: {
         inputValue: inputValueTemplate,

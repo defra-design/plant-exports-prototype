@@ -63,12 +63,19 @@
 
         {% for i in range(0, _commodityCount) -%}
 
+        {% set _show = "true" %}
+        {% set _id = loop.index %}
+        {% set _deletedValue = data['commodityDeleted'+_id] %}
+        {% if _deletedValue == "true" %}
+          {% set _show = "false" %}
+        {% endif %}
+
+        {% if _show == "true" %}
+
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
-            {{data['botanical_name'] or 'Dactylorhiza umbrosa (DAKUM)'}}<br>
-
-              {% set _commodityVariety = 'commodityVariety' + loop.index %}
-              <span style="font-weight:normal">{{data[_commodityVariety]}}</span>
+            {{data['commodityName' + _id] or 'Dactylorhiza umbrosa (DAKUM)'}}
+            {% if data['commodityVariety' + loop.index] %} <span style="font-weight:normal"><br>{{data['commodityVariety' + loop.index]}}</span>{% endif %}
           </dt>
           <dd class="govuk-summary-list__value">
             Origin: <br>{{data['countryOfOriginSelect'] or 'France'}}<br><br>
@@ -81,6 +88,7 @@
             </a>
           </dd>
         </div>
+        {% endif %}
 
         {%- endfor %}
 
@@ -167,14 +175,37 @@
       </dl>
 
       
+      <!-- 
+        Reset authorised people counts so if you add another pheats reg it is reset 
+      -->
+      {% for i in range(0, _apCount) -%}
+      {% set _id = loop.index %}
+      <input class="govuk-input" id="apName{{_id}}" name="apName{{_id}}" type="hidden" value="">
+      <input class="govuk-input" id="apPosition{{_id}}" name="apPosition{{_id}}" type="hidden" value="">
+      <input class="govuk-input" id="apEmail{{_id}}" name="apEmail{{_id}}" type="hidden" value="">
+      <input class="govuk-input" id="apDeleted{{_id}}" name="apDeleted{{_id}}" type="hidden" value="false">
+      {%- endfor %}
+      <input id="apCount" name="apCount" type="hidden" value="0">
+      <input id="apDisplayedCount" name="apDisplayedCount" type="hidden" value="0">
 
+      <!-- 
+        Reset commodity counts so if you add another pheats reg it is reset 
+      -->
+      {% for i in range(0, _commodityCount) -%}
+      {% set _id = loop.index %}
+      <input class="govuk-input" id="commodityVariety{{_id}}" name="commodityVariety{{_id}}" type="hidden" value="">
+      <input class="govuk-input" id="commodityName{{_id}}" name="commodityName{{_id}}" type="hidden" value="">
+      <input class="govuk-input" id="commodityDeleted{{_id}}" name="commodityDeleted{{_id}}" type="hidden" value="false">
+      {%- endfor %}
+      <input id="commodityCount" name="commodityCount" type="hidden" value="0">
+      <input id="commodityDisplayedCount" name="commodityDisplayedCount" type="hidden" value="0">
         
 
-        {{ govukButton({
-          text: "Accept and submit"
-        }) }}
+      {{ govukButton({
+        text: "Accept and submit"
+      }) }}
 
-
+        
         {% set _pheatsReturnURL = 'pheats-cya' %}
         <p class="govuk-body govuk-!-margin-top-2"><a href="pheats-cancel?pheatsReturnURL={{_pheatsReturnURL}}" class="govuk-link govuk-link--no-visited-state">Cancel PHEATS application</a></p>
 

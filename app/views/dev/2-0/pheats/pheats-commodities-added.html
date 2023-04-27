@@ -35,7 +35,7 @@
             <h3 class="govuk-notification-banner__heading">
               Commodity deleted
             </h3>
-            <p class="govuk-body">{{query.deleted}} has been deleted.</p>
+            <p class="govuk-body">{{data['commodityName' + query.deleted] or 'Dactylorhiza umbrosa (DAKUM)'}} has been deleted.</p>
         </div>
     </div>
     {% endif %}
@@ -50,9 +50,10 @@
       [authorised people added]
     </h2> -->
 
+    
     {% set _commodityCount = data['commodityCount'] or 1 | int %}
-    {% set _commodityCountDeleted = _commodityCount|int - 1 %}
-    {% set _commodityCountNext = _commodityCount|int + 1 %}
+    {% set _commodityDisplayedCount = data['commodityDisplayedCount'] or 1 | int %}
+    {% set _commodityCountDeleted = _commodityDisplayedCount|int - 1 %}
 
     <table class="govuk-table govuk-!-margin-bottom-7" id="commodityTable">
       <thead class="govuk-table__head">
@@ -66,30 +67,43 @@
 
       {% for i in range(0, _commodityCount) -%}
 
-      {% set _commodityName = data['botanical_name'] or 'Dactylorhiza umbrosa (DAKUM)' %}
-      {% set _commodityVariety = 'commodityVariety' + loop.index %}
-
-      <tr class="govuk-table__row">
-        <td class="govuk-table__cell">
-          {{_commodityName}}{% if data[_commodityVariety] %} ({{data[_commodityVariety]}}){% endif %}
-        </td>
-        <td class="govuk-table__cell">
-          {{data['countryOfOriginSelect'] or 'France'}}
-        </td>
-        <td class="govuk-table__cell govuk-table__cell">
-          {{data['countryOfExportSelect'] or 'Northern Ireland'}}
-        </td>
-        {% set _deleteLink = "pheats-commodities-added?deleted=" + _commodityName + "&commodityCount=" + _commodityCountDeleted | int %}
-        {% if _commodityCount | int == 1 %}
-        {% set _deleteLink = "pheats-commodity?deleted=" + _commodityName + "&commodityCount=" + _commodityCount | int %}
+        {% set _show = "true" %}
+        {% set _id = loop.index %}
+        {% set _deletedValue = data['commodityDeleted'+_id] %}
+        {% if _deletedValue == "true" %}
+          {% set _show = "false" %}
         {% endif %}
-        <td class="govuk-table__cell" style="text-align: right;">
-          <p class="govuk-body govuk-!-margin-bottom-2"><a href="pheats-commodity" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a></p>
-          <p class="govuk-body govuk-!-margin-bottom-2">
-          <a href="{{_deleteLink}}" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
-          </p>
-        </td>
-      </tr>
+
+        {% if _show == "true" %}
+
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            {{data['commodityName' + _id] or 'Dactylorhiza umbrosa (DAKUM)'}}
+            {% if data['commodityVariety' + loop.index] %} ({{data['commodityVariety' + loop.index]}}){% endif %}
+          </td>
+          <td class="govuk-table__cell">
+            {{data['countryOfOriginSelect'] or 'France'}}
+          </td>
+          <td class="govuk-table__cell govuk-table__cell">
+            {{data['countryOfExportSelect'] or 'Northern Ireland'}}
+          </td>
+
+
+          {% set _deleteLinkSuffix = "?deleted=" + _id + "&commodityDeleted" + _id + "=true" + "&commodityDisplayedCount=" + _commodityCountDeleted | int %}
+          {% set _deleteLink = "pheats-commodities-added" %}
+          {% if _commodityDisplayedCount | int == 1 %}
+            {% set _deleteLink = "pheats-commodity" %}
+          {% endif %}
+          <td class="govuk-table__cell" style="text-align: right;">
+
+            <p class="govuk-body govuk-!-margin-bottom-2"><a href="pheats-commodity?edit={{_id}}" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a></p>
+            <p class="govuk-body govuk-!-margin-bottom-2">
+            <a href="{{_deleteLink}}{{_deleteLinkSuffix}}" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+            </p>
+
+          </td>
+        </tr>
+        {% endif %}
 
       {%- endfor %}
 
@@ -107,7 +121,7 @@
           
           <div class="govuk-radios" data-module="govuk-radios">
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="pheatsAddCommodity-1" name="pheatsAddCommodity" type="radio" value="Yes~pheats-commodity?commodityCount={{_commodityCountNext | int}}">
+              <input class="govuk-radios__input" id="pheatsAddCommodity-1" name="pheatsAddCommodity" type="radio" value="Yes~pheats-commodity">
               <label class="govuk-label govuk-radios__label" for="pheatsAddCommodity-1">
                 Yes
               </label>
