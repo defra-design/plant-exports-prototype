@@ -65,7 +65,7 @@
 
         {% set _show = "true" %}
         {% set _id = loop.index %}
-        {% set _deletedValue = data['commodityDeleted'+_id] %}
+        {% set _deletedValue = data['commodityDeleted' + _id] %}
         {% if _deletedValue == "true" %}
           {% set _show = "false" %}
         {% endif %}
@@ -75,12 +75,35 @@
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
             {{data['commodityName' + _id] or 'Dactylorhiza umbrosa (DAKUM)'}}
-            {% if data['commodityVariety' + loop.index] %} <span style="font-weight:normal"><br>{{data['commodityVariety' + loop.index]}}</span>{% endif %}
+            {% if data['commodityVariety' + _id] %} <span style="font-weight:normal"><br>{{data['commodityVariety' + _id]}}</span>{% endif %}
           </dt>
           <dd class="govuk-summary-list__value">
-            Origin: <br>{{data['countryOfOriginSelect'] or 'France'}}<br><br>
 
-            Destination: <br>{{data['countryOfExportSelect'] or 'Northern Ireland'}}
+            <p class="govuk-body">Origins: </p>
+            {% set _originCount = data['originCount' + _id] or 1 | int %}
+            <ul class="govuk-list govuk-list--bullet">
+              {% for i in range(0, _originCount) -%}
+                {% set _show = "true" %}
+                {% set _originID = loop.index %}
+                {% set _deletedValue = data['commodityOriginDeleted' + _id + '-' + _originID] %}
+                {% if _deletedValue == "true" %}
+                  {% set _show = "false" %}
+                {% endif %}
+
+                {% if _show == "true" %}
+                <li>{{data['commodityOrigin' + _id + '-' + _originID][0] or 'France'}}</li>
+                {% endif %}
+              {%- endfor %}
+            </ul>
+
+            <p class="govuk-body">Destinations: </p>
+            {% set _destinationCount = data['destinationCount' + _id] or 1 | int %}
+            <ul class="govuk-list govuk-list--bullet">
+              {% for i in range(0, _destinationCount) -%}
+                <li>{{data['commodityDestination' + _id + '-' + loop.index][0] or 'Northern Ireland'}}</li>
+              {%- endfor %}
+            </ul>
+
           </dd>
           <dd class="govuk-summary-list__actions">
             <a class="govuk-link govuk-link--no-visited-state" href="pheats-commodities-added">
@@ -176,26 +199,32 @@
 
       
       <!-- 
-        Reset authorised people counts so if you add another pheats reg it is reset 
+        Reset authorised people counts and data so if you add another pheats reg it is reset 
       -->
       {% for i in range(0, _apCount) -%}
-      {% set _id = loop.index %}
-      <input class="govuk-input" id="apName{{_id}}" name="apName{{_id}}" type="hidden" value="">
-      <input class="govuk-input" id="apPosition{{_id}}" name="apPosition{{_id}}" type="hidden" value="">
-      <input class="govuk-input" id="apEmail{{_id}}" name="apEmail{{_id}}" type="hidden" value="">
-      <input class="govuk-input" id="apDeleted{{_id}}" name="apDeleted{{_id}}" type="hidden" value="false">
+        {% set _id = loop.index %}
+        <input id="apName{{_id}}" name="apName{{_id}}" type="hidden" value="">
+        <input id="apPosition{{_id}}" name="apPosition{{_id}}" type="hidden" value="">
+        <input id="apEmail{{_id}}" name="apEmail{{_id}}" type="hidden" value="">
+        <input id="apDeleted{{_id}}" name="apDeleted{{_id}}" type="hidden" value="false">
       {%- endfor %}
       <input id="apCount" name="apCount" type="hidden" value="0">
       <input id="apDisplayedCount" name="apDisplayedCount" type="hidden" value="0">
 
       <!-- 
-        Reset commodity counts so if you add another pheats reg it is reset 
+        Reset commodity counts and data so if you add another pheats reg it is reset 
       -->
       {% for i in range(0, _commodityCount) -%}
-      {% set _id = loop.index %}
-      <input class="govuk-input" id="commodityVariety{{_id}}" name="commodityVariety{{_id}}" type="hidden" value="">
-      <input class="govuk-input" id="commodityName{{_id}}" name="commodityName{{_id}}" type="hidden" value="">
-      <input class="govuk-input" id="commodityDeleted{{_id}}" name="commodityDeleted{{_id}}" type="hidden" value="false">
+        {% set _id = loop.index %}
+        <input id="commodityVariety{{_id}}" name="commodityVariety{{_id}}" type="hidden" value="">
+        <input id="commodityName{{_id}}" name="commodityName{{_id}}" type="hidden" value="">
+        <input id="commodityDeleted{{_id}}" name="commodityDeleted{{_id}}" type="hidden" value="false">
+        {% for i in range(0, data['originCount' + _id] or 1 | int) -%}
+          <input id="commodityOriginDeleted{{_id}}-{{loop.index}}" name="commodityOriginDeleted{{_id}}-{{loop.index}}" type="hidden" value="false" >
+          <input id="commodityOrigin{{_id}}-{{loop.index}}" name="commodityOrigin{{_id}}-{{loop.index}}" type="hidden" value="" >
+        {%- endfor %}
+        <input id="originCount{{_id}}" name="originCount{{_id}}" type="hidden" value="1">
+        <input id="destinationCount{{_id}}" name="destinationCount{{_id}}" type="hidden" value="1">
       {%- endfor %}
       <input id="commodityCount" name="commodityCount" type="hidden" value="0">
       <input id="commodityDisplayedCount" name="commodityDisplayedCount" type="hidden" value="0">

@@ -82,10 +82,39 @@
             {% if data['commodityVariety' + loop.index] %} ({{data['commodityVariety' + loop.index]}}){% endif %}
           </td>
           <td class="govuk-table__cell">
-            {{data['countryOfOriginSelect'] or 'France'}}
+            {% set _originCount = data['originCount' + _id] or 1 | int %}
+            <ul class="govuk-list govuk-list--bullet">
+              {% for i in range(0, _originCount) -%}
+                {% set _show = "true" %}
+                {% set _originID = loop.index %}
+                {% set _deletedValue = data['commodityOriginDeleted' + _id + '-' + _originID] %}
+                {% if _deletedValue == "true" %}
+                  {% set _show = "false" %}
+                {% endif %}
+
+                {% if _show == "true" %}
+                <li>{{data['commodityOrigin' + _id + '-' + _originID][0] or 'France'}}</li>
+                {% endif %}
+              {%- endfor %}
+            </ul>
           </td>
           <td class="govuk-table__cell govuk-table__cell">
-            {{data['countryOfExportSelect'] or 'Northern Ireland'}}
+            {% set _destinationCount = data['destinationCount' + _id] or 1 | int %}
+            <ul class="govuk-list govuk-list--bullet">
+              {% for i in range(0, _destinationCount) -%}
+                {% set _show = "true" %}
+                {% set _destinationID = loop.index %}
+                {% set _deletedValue = data['commodityDestinationDeleted' + _id + '-' + _destinationID] %}
+                {% if _deletedValue == "true" %}
+                  {% set _show = "false" %}
+                {% endif %}
+
+                {% if _show == "true" %}
+                <li>{{data['commodityDestination' + _id + '-' + _destinationID][0] or 'France'}}</li>
+                {% endif %}
+              {%- endfor %}
+            </ul>
+
           </td>
 
 
