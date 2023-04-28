@@ -36,18 +36,18 @@
             {% if data.reforwarding %}
             Re-forwarding phytosanitary certificate for 
             {% if data.build == "development" %}
-            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% else %}{{data.commodity or data.id | appInformationV6('commodity_info')}}{% endif %}
+            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% else %}{{data.commodity or data.id | appInformationV6('commodity_info') or "plants"}}{% endif %}
             {% else %}
-            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "seeds" %}seeds for planting{% elif data.commodity == "grain" %}unprocessed cereal grains{% else %}{{data.commodity or data.id | appInformationV6('commodity_info')}}{% endif %}
+            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "seeds" %}seeds for planting{% elif data.commodity == "grain" %}unprocessed cereal grains{% else %}{{data.commodity or data.id | appInformationV6('commodity_info') or "plants"}}{% endif %}
             {% endif %}
             {% elif data.journey == "coc" %}
             Certificate of conformity
             {% else %}
             Phytosanitary certificate{% if data.commodity == "everything else" and data.subCommodity == "something else"%}{% else %} for{% endif %} 
             {% if data.build == "development" %}
-            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% else %}{{data.commodity or data.id | appInformationV6('commodity_info')}}{% endif %}
+            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "everything else" %}{% if data.subCommodity != "something else" %}{{data.subCommodity or "clay"}}{% endif %}{% else %}{{data.commodity or data.id | appInformationV6('commodity_info') or "plants"}}{% endif %}
             {% else %}
-            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "seeds" %}seeds for planting{% elif data.commodity == "grain" %}unprocessed cereal grains{% elif data.commodity == "everything else" %}{% if data.subCommodity != "something else" %}{{data.subCommodity or "clay"}}{% endif %}{% else %}{{data.commodity or data.id | appInformationV6('commodity_info')}}{% endif %}
+            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "seeds" %}seeds for planting{% elif data.commodity == "grain" %}unprocessed cereal grains{% elif data.commodity == "everything else" %}{% if data.subCommodity != "something else" %}{{data.subCommodity or "clay"}}{% endif %}{% else %}{{data.commodity or data.id | appInformationV6('commodity_info') or "plants"}}{% endif %}
             {% endif %}
             {% endif %}
             {% else %}
@@ -496,28 +496,37 @@
 
         <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
           <dt class="govuk-summary-list__key">Address</dt>
-          <dd class="govuk-summary-list__value">{% if data.inspection_address_added == "Complete" %}{{data.select_address or "Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH"}}{% else %}No inspection details provided{% endif %}</dd>
+          <dd class="govuk-summary-list__value">{% if data.inspection_address_added == "Complete" %}{% if data.build == "development" %}{{"Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH" | upper}}{% else %}{{data.select_address or "Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH"}}{% endif %}{% else %}No inspection details provided{% endif %}</dd>
         </div>
         
         {% if data.inspection_address_added == "Complete" %}
+        {% if data.build == "development" %}
+        <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+          <dt class="govuk-summary-list__key">Contact name</dt>
+          <dd class="govuk-summary-list__value">{{data.contact_name or "Bill Shoggins"}}</dd>
+        </div>
+
+        <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+          <dt class="govuk-summary-list__key">Phone number</dt>
+          <dd class="govuk-summary-list__value">{{data.address_phone or "01743 111222"}}</dd>
+        </div>
+
+        <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+          <dt class="govuk-summary-list__key">Email address</dt>
+          <dd class="govuk-summary-list__value">{{data.email_address or "bill.shoggins@shoggins-shoes.co.uk"}}</dd>
+        </div>
+        {% else %}
         <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
           <dt class="govuk-summary-list__key">Who is the main contact for this application?</dt>
           <dd class="govuk-summary-list__value">
-            {% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}
-            Bill Shoggins
-            <br>
-            01234 567890
-            <br>
-            bill.shoggins@acmeltd.com
-            {% else %}
             {{data.contact_name or "Bill Shoggins"}}
             <br>
-            {{data.address_phone or "01234 567890"}}
+            {{data.address_phone or "01743 111222"}}
             <br>
-            {{data.email_address or "bill.shoggins@acmeltd.com"}}
-            {% endif %}
+            {{data.email_address or "bill.shoggins@shoggins-shoes.co.uk"}}
           </dd>
         </div>
+        {% endif %}
         {% endif %}
 
       </dl>
@@ -531,45 +540,17 @@
           <dd class="govuk-summary-list__value">{{data.select_address or "Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH"}}</dd>
         </div>
 
-        <!-- <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-          <dt class="govuk-summary-list__key">Contact name</dt>
-          <dd class="govuk-summary-list__value">Bill Shoggins</dd>
-        </div>
-
-        <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-          <dt class="govuk-summary-list__key">Phone number</dt>
-          <dd class="govuk-summary-list__value">01234 567890</dd>
-        </div>
-
-        <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-          <dt class="govuk-summary-list__key">Email address</dt>
-          <dd class="govuk-summary-list__value">bill.shoggins@acmeltd.com</dd>
-        </div> -->
         <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
           <dt class="govuk-summary-list__key">Who is the main contact for this application?</dt>
           <dd class="govuk-summary-list__value">
-            {% if data.contact_details == "Bill Shoggins (01234 567890, bill.shoggins@acmeltd.com)" %}
-            Bill Shoggins
-            <br>
-            01234 567890
-            <br>
-            bill.shoggins@acmeltd.com
-            {% else %}
             {{data.contact_name or "Bill Shoggins"}}
             <br>
-            {{data.address_phone or "01234 567890"}}
+            {{data.address_phone or "01743 111222"}}
             <br>
-            {{data.email_address or "bill.shoggins@acmeltd.com"}}
-            {% endif %}
+            {{data.email_address or "bill.shoggins@shoggins-shoes.co.uk"}}
           </dd>
         </div>
 
-        <!-- <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-          <dt class="govuk-summary-list__key">Date when your consignment will be ready for inspection</dt>
-          <dd class="govuk-summary-list__value">
-            {{data.inpection_date_day or "12"}} January {{data.inpection_date_year or "2022"}}
-          </dd>
-        </div> -->
         <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
           <dt class="govuk-summary-list__key">Date when your consignment will be ready for inspection</dt>
           <dd class="govuk-summary-list__value">{{data.inpection_date_day or "12"}} {{inpection_date_month_name or "August"}} {{data.inpection_date_year or "2023"}}</dd>

@@ -7,7 +7,7 @@
 {# set label as bold #}
 {% set label_class = "govuk-label govuk-!-font-weight-bold" %}
 {% if data.build != "development" %}
-{% set  label_class = "govuk-label" %}
+{% set label_class = "govuk-label" %}
 {% endif %}
 
 {% block beforeContent %}
@@ -34,42 +34,26 @@
             The inspector may contact this person about the application
           </div>
 
-          {% if data.build == "development" %}
           <div class="govuk-form-group">
-            <label class="govuk-label govuk-!-font-weight-bold" for="contact_name">Contact name</label>
+            <label class="{{label_class}}" for="contact_name">Contact name</label>
             <input class="govuk-input govuk-input--width-20" id="contact_name" name="contact_name" type="text" spellcheck="false" autocomplete="name" value="{{data.contact_name or ''}}">
           </div>
 
           <div class="govuk-form-group">
-            <label class="govuk-label govuk-!-font-weight-bold" for="address_phone">Phone number</label>
+            <label class="{{label_class}}" for="address_phone">Phone number</label>
             <input class="govuk-input govuk-input--width-20" id="address_phone" name="address_phone" type="tel" autocomplete="tel" value="{{data.address_phone or ''}}">
           </div>
 
           <div class="govuk-form-group">
-            <label class="govuk-label govuk-!-font-weight-bold" for="email_address">Email address (optional)</label>
+            <label class="{{label_class}}" for="email_address">Email address (optional)</label>
             <input class="govuk-input govuk-input--width-20" id="email_address" name="email_address" type="email" spellcheck="false" autocomplete="email" value="{{data.email_address or ''}}">
           </div>
-          {% else %}
-          <div class="govuk-form-group">
-            <label class="govuk-label" for="contact_name">Contact name</label>
-            <input class="govuk-input govuk-input--width-20" id="contact_name" name="contact_name" type="text" spellcheck="false" autocomplete="name" value="{{data.contact_name or ''}}">
-          </div>
-
-          <div class="govuk-form-group">
-            <label class="govuk-label" for="address_phone">Phone number</label>
-            <input class="govuk-input govuk-input--width-20" id="address_phone" name="address_phone" type="tel" autocomplete="tel" value="{{data.address_phone or ''}}">
-          </div>
-
-          <div class="govuk-form-group">
-            <label class="govuk-label" for="email_address">Email address (optional)</label>
-            <input class="govuk-input govuk-input--width-20" id="email_address" name="email_address" type="email" spellcheck="false" autocomplete="email" value="{{data.email_address or ''}}">
-          </div>
-          {% endif %}
       
         </fieldset>
       </div>
 
       <button class="govuk-button govuk-!-margin-bottom-9" type="submit" data-module="govuk-button">Save and continue</button>
+      
       {% block continueLater %}
       {% include "../modules/_save-continue-later.html" %}
       {% endblock %}
