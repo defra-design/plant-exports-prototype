@@ -91,7 +91,7 @@
                 {% endif %}
 
                 {% if _show == "true" %}
-                <li>{{data['commodityOrigin' + _id + '-' + _originID][0] or 'France'}}</li>
+                <li>{{data['commodityOrigin' + _id + '-' + _originID][0] or 'United Kingdom'}}</li>
                 {% endif %}
               {%- endfor %}
             </ul>
@@ -100,7 +100,16 @@
             {% set _destinationCount = data['destinationCount' + _id] or 1 | int %}
             <ul class="govuk-list govuk-list--bullet">
               {% for i in range(0, _destinationCount) -%}
-                <li>{{data['commodityDestination' + _id + '-' + loop.index][0] or 'Northern Ireland'}}</li>
+                {% set _show = "true" %}
+                {% set _destinationID = loop.index %}
+                {% set _deletedValue = data['commodityDestinationDeleted' + _id + '-' + _destinationID] %}
+                {% if _deletedValue == "true" %}
+                  {% set _show = "false" %}
+                {% endif %}
+
+                {% if _show == "true" %}
+                <li>{{data['commodityDestination' + _id + '-' + _destinationID][0] or 'France'}}</li>
+                {% endif %}
               {%- endfor %}
             </ul>
 
@@ -224,6 +233,10 @@
           <input id="commodityOrigin{{_id}}-{{loop.index}}" name="commodityOrigin{{_id}}-{{loop.index}}" type="hidden" value="" >
         {%- endfor %}
         <input id="originCount{{_id}}" name="originCount{{_id}}" type="hidden" value="1">
+        {% for i in range(0, data['destinationCount' + _id] or 1 | int) -%}
+          <input id="commodityDestinationDeleted{{_id}}-{{loop.index}}" name="commodityDestinationDeleted{{_id}}-{{loop.index}}" type="hidden" value="false" >
+          <input id="commodityDestination{{_id}}-{{loop.index}}" name="commodityDestination{{_id}}-{{loop.index}}" type="hidden" value="" >
+        {%- endfor %}
         <input id="destinationCount{{_id}}" name="destinationCount{{_id}}" type="hidden" value="1">
       {%- endfor %}
       <input id="commodityCount" name="commodityCount" type="hidden" value="0">
