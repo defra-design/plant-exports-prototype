@@ -23,6 +23,8 @@ var applicationsv4 = require('./applications-v4.json');
 var applicationsv5 = require('./applications-v5.json');
 var applicationsv6 = require('./applications-v6.json');
 var sample = require('./sample.json');
+var countries = require('./countries-full.json');
+var countries2 = require('./countries-eu-ni.json');
 
 module.exports = {
   "applications" : applications,
@@ -34,6 +36,8 @@ module.exports = {
   "commodities" : [],
   "id_count" : 1,
   "sample": sample,
-  "plants" : []
+  "plants" : [],
+  "countries-full": countries,
+  "countries-eu-ni": countries2
   // Insert values here
 }
