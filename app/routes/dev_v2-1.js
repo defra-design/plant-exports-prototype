@@ -312,7 +312,7 @@ module.exports = function(router) {
 
   // This adds query to all pages and will be used if no other get routing exists to override this.
   router.get('/' + base_url + '*', function(req, res) {
-    console.log("(dev_v2-0.js)");
+    console.log("(dev_v2-1.js)");
     console.log("default global GET routing page for: " + base_url + " plus " + req.params[0]);
     
     var dir = req.params[0].split(/\/+/g);
@@ -536,6 +536,158 @@ module.exports = function(router) {
     }
 
     // *******************************
+    // EPHYTO routing (delete all of this when we merge ePhyto with PHES)
+    // *******************************
+
+    // Chris Harding - USDA Bulbs: Decide whether to redirect users to the USDA page when they are exporting bulbs to the United States
+    if (baseDir === "/application/setup/bulbs-declaration") {
+
+      var commodity = req.session.data.commodity;
+      var countrySelect = req.session.data.countrySelect[0];
+      
+      if (commodity == "bulbs") {
+
+        if (countrySelect == "United States") {
+          // Redirect users to the USDA page when they are exporting bulbs to the United States
+          return res.redirect("usda");
+        }
+        else {
+          // Continue to the declaration page
+          return res.redirect("declaration");
+        }
+
+      }
+      else {
+        // Don't do the USDA check or change the page parameter
+      }
+
+    }
+
+    // Chris Harding (06.01.23) - Copy application: Validate the copied date so we can either a) throw an error b) direct to the task list
+    if (baseDir === "/application/create/inspection-dates-validation") {
+
+      var day = req.session.data.inpection_date_day;
+      var month = req.session.data.inpection_date_month;
+      var year = Number(req.session.data.inpection_date_year);
+      
+      if (year < 2023) {
+        return res.redirect("inspection-dates?error=true");
+      }
+      else {
+        return res.redirect("task-list");
+      }
+
+    }
+
+    // Chris Harding (18.01.23) - Re-issue: Error validation (how-to-identify) for the commodity page (re-issue)
+    if (baseDir === "/application/re-issue/edit/how-to-identify-validation") {
+
+      var return_url = req.session.data.return_url;
+      var quantity = Number(req.session.data.quantity);
+      var number_of_packages = Number(req.session.data.number_of_packages);
+      
+      if (quantity > 30 && number_of_packages > 120) {
+        return res.redirect("how-to-identify?change=yes&error=true&error1=true&error2=true");
+      }
+      else if (quantity > 30) {
+        return res.redirect("how-to-identify?change=yes&error=true&error1=true");
+      }
+      else if (number_of_packages > 120) {
+        return res.redirect("how-to-identify?change=yes&error=true&error2=true");
+      }
+      else {
+
+        if (return_url) {
+          return res.redirect(return_url + "?reissue_certificate_data_pfp=draft");
+        }
+        else {
+          return res.redirect("../amend-your-certificate?reissue_certificate_data_pfp=draft");
+        }
+
+      }
+
+    }
+
+    if (baseDir === "/application/re-issue/edit/how-to-identify-2-validation") {
+
+      var return_url = req.session.data.return_url;
+      var quantity = Number(req.session.data.quantity2);
+      var number_of_packages = Number(req.session.data.number_of_packages2);
+      
+      if (quantity > 35 && number_of_packages > 140) {
+        return res.redirect("how-to-identify-2?change=yes&error=true&error1=true&error2=true");
+      }
+      else if (quantity > 35) {
+        return res.redirect("how-to-identify-2?change=yes&error=true&error1=true");
+      }
+      else if (number_of_packages > 140) {
+        return res.redirect("how-to-identify-2?change=yes&error=true&error2=true");
+      }
+      else {
+
+        if (return_url) {
+          return res.redirect(return_url + "?reissue_certificate_data_pfp=draft");
+        }
+        else {
+          return res.redirect("../amend-your-certificate?reissue_certificate_data_pfp=draft");
+        }
+
+      }
+
+    }
+
+    if (baseDir === "/application/re-issue/edit/how-to-identify-3-validation") {
+
+      var return_url = req.session.data.return_url;
+      var quantity = Number(req.session.data.quantity3);
+      var number_of_packages = Number(req.session.data.number_of_packages3);
+      
+      if (quantity > 17 && number_of_packages > 68) {
+        return res.redirect("how-to-identify-3?change=yes&error=true&error1=true&error2=true");
+      }
+      else if (quantity > 17) {
+        return res.redirect("how-to-identify-3?change=yes&error=true&error1=true");
+      }
+      else if (number_of_packages > 68) {
+        return res.redirect("how-to-identify-3?change=yes&error=true&error2=true");
+      }
+      else {
+
+        if (return_url) {
+          return res.redirect(return_url + "?reissue_certificate_data_pfp=draft");
+        }
+        else {
+          return res.redirect("../amend-your-certificate?reissue_certificate_data_pfp=draft");
+        }
+
+      }
+
+    }
+
+    // Decide whether to redirect to import permit upload if they enter a permit number
+    console.log(baseDir);
+    console.log(req.session.data['consignee-import-permit']);
+    
+    // This is only triggered when the consignee page is submitted 
+    if (baseDir === "/application/create/task-list") {
+
+      if (req.session.data.build && req.session.data.build == "ux") {
+
+        // ONly check when the consignee page is submitted
+        if (res.locals.prevURL && res.locals.prevURL.indexOf("destination-consignee") >- 1) {
+
+          if (req.session.data['consignee-import-permit']) {
+            // Redirect the page to show true url 
+            return res.redirect("upload-permit")
+          }
+
+        }
+
+      }
+
+    }
+
+    // *******************************
     // PHEATS routing
     // *******************************
 
@@ -562,7 +714,6 @@ module.exports = function(router) {
     if (baseDir === "/eligibility-checker/2-validation") {
 
       var ecq2 = req.session.data.ecq2;
-      console.log("ecq2 is: " + ecq2);
       
       // Force users to enter at least one value
       if (ecq2 == "" || ecq2 == null) {
