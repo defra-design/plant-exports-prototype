@@ -25,6 +25,7 @@ var applicationsv6 = require('./applications-v6.json');
 var sample = require('./sample.json');
 var countries = require('./countries-full.json');
 var countries2 = require('./countries-eu-ni.json');
+var addresses = require('./addresses.json');
 
 module.exports = {
   "applications" : applications,
@@ -38,6 +39,8 @@ module.exports = {
   "sample": sample,
   "plants" : [],
   "countries-full": countries,
-  "countries-eu-ni": countries2
+  "countries-eu-ni": countries2,
+  "addresses": addresses
   // Insert values here
+  
 }

@@ -1,0 +1,230 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  [title] - Manage account - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="../account" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
+  </ul>
+</div>
+
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-two-thirds">
+
+    <!-- Selected address -->
+    {% set _addressID = data['address'] or 1 %}
+    {% set _address = data['addresses'][0] %}
+    {% for _address2 in data['addresses'] %}
+      {% if _address2.id == _addressID %}
+        {% set _address = _address2 %}
+      {% endif %}
+    {% endfor %}
+
+
+    <h1 class="govuk-heading-xl">
+      <span class="govuk-caption-xl">[{{_address.postcode}}], [{{_address.address1}}]</span>
+      [PHEATS registration]
+    </h1>
+
+    <!-- <h2 class="govuk-heading-m">Registration summary</h2> -->
+
+    <dl class="govuk-summary-list">
+
+      <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key govuk-!-width-one-third">
+            [PHEATS status]
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <p class="govuk-body govuk-!-margin-bottom-2">
+              {% if _address.pheats.status == "notregistered" %}
+                <!-- NOT REGISTERED -->
+                <strong class="govuk-tag govuk-tag--grey">
+                    [Not registered for PHEATS]
+                </strong>
+              {% elif _address.pheats.status == "registered" %}
+                <!-- REGISTERED -->
+                <strong class="govuk-tag govuk-tag--green">
+                  [PHEATS Registered]
+                </strong>
+              {% elif _address.pheats.status == "pending" %}
+                <!-- PENDING -->
+                <strong class="govuk-tag govuk-tag--orange">
+                  [PHEATS pending]
+                </strong>
+              {% elif _address.pheats.status == "paused" %}
+                <!-- PAUSED -->
+                <strong class="govuk-tag govuk-tag--grey">
+                  [PHEATS paused]
+                </strong>
+              {% endif %}
+            </p>
+          </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key govuk-!-width-one-third">
+          [Address]
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <p class="govuk-body govuk-!-margin-bottom-2">
+              {{_address.address1}}<br>
+              {{_address.address2}}<br>
+              {{_address.address3}}<br>
+              {{_address.address4}}<br>
+              {{_address.postcode}}
+          </p>
+        </dd>
+      </div>
+    </dl>
+
+    <p class="govuk-body">
+      <a href="#" class="govuk-button" >
+        [Pause PHEATS registration]
+      </a>
+    </p>
+    <!-- <p class="govuk-body">
+      <a href="#" class="govuk-button" >
+        [Restart PHEATS registration]
+      </a>
+    </p> -->
+
+    <!-- <h2 class="govuk-heading-l govuk-!-margin-top-8">[PHEATS details]</h2> -->
+
+    <h3 class="govuk-heading-m ">[Commodities on PHEATS]</h3>
+
+    <dl class="govuk-summary-list">
+
+      {% for _commodity in _address.pheats.commodities %}
+      <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key govuk-!-width-one-third">
+            {{_commodity.name}}
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <p class="govuk-body govuk-!-margin-bottom-2">
+              [Origins:]
+            </p>
+            <ul class="govuk-list govuk-list--bullet">
+              {% for _origin in _commodity.origins %}
+                <li>{{_origin[0]}}</li>
+              {% endfor %}
+            </ul>
+            <p class="govuk-body govuk-!-margin-bottom-2">
+              [Destinations:]
+            </p>
+            <ul class="govuk-list govuk-list--bullet">
+              {% for _destination in _commodity.destinations %}
+                <li>{{_destination[0]}}</li>
+              {% endfor %}
+            </ul>
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link govuk-link--no-visited-state" href="#">
+              [Edit]<span class="govuk-visually-hidden"> </span>
+            </a>
+          </dd>
+      </div>
+      {% endfor %}
+     
+    </dl>
+
+    <p class="govuk-body govuk-!-margin-bottom-9">
+      <a href="#" class="govuk-link govuk-link--no-visited-state" >
+          [Add new commodity]
+      </a>
+    </p>
+
+
+    <h3 class="govuk-heading-m">[Main contact/person responsible]</h3>
+
+    {% set _personResponsible = _address.pheats.personresponsible %}
+
+    <dl class="govuk-summary-list">
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          {{_personResponsible.name}}
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{_personResponsible.position or "Technical Director"}}<br>
+          {{_personResponsible.email}}
+          {% if _personResponsible.mobile %}<br>{{_personResponsible.mobile}}{% endif %}
+          {% if _personResponsible.telephone %}<br>{{_personResponsible.telephone}}{% endif %}
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link govuk-link--no-visited-state" href="#">
+            [Edit]<span class="govuk-visually-hidden"> </span>
+          </a>
+        </dd>
+      </div>
+
+    </dl>
+
+    <p class="govuk-body govuk-!-margin-bottom-9">
+      <a href="#" class="govuk-link govuk-link--no-visited-state" >
+          [Change person responsible]
+      </a>
+    </p>
+
+    <h3 class="govuk-heading-m">[Authorised people]</h3>
+
+    <dl class="govuk-summary-list">
+
+      {% for _authorisedperson in _address.pheats.authorisedpeople %}
+      <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key govuk-!-width-one-third">
+            {{_authorisedperson.name}}
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{_authorisedperson.position or "Technical Director"}}<br>
+            {{_authorisedperson.email}}
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link govuk-link--no-visited-state" href="#">
+              [Edit]<span class="govuk-visually-hidden"> </span>
+            </a>
+          </dd>
+      </div>
+      {% endfor %}
+     
+    </dl>
+
+    <p class="govuk-body govuk-!-margin-bottom-9">
+      <a href="#" class="govuk-link govuk-link--no-visited-state" >
+          [Add new authorised person]
+      </a>
+    </p>
+
+    <h3 class="govuk-heading-m">Site plan</h3>
+
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          File name
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{_address.pheats.siteplan}}, 2MB
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link govuk-link--no-visited-state" href="#">
+            [Edit]<span class="govuk-visually-hidden"> </span>
+          </a>
+        </dd>
+      </div>
+
+    </dl>
+      
+
+  </div>
+</div>
+{% endblock %}
