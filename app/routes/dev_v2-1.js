@@ -312,6 +312,7 @@ module.exports = function(router) {
 
   // This adds query to all pages and will be used if no other get routing exists to override this.
   router.get('/' + base_url + '*', function(req, res) {
+
     console.log("(dev_v2-1.js)");
     console.log("default global GET routing page for: " + base_url + " plus " + req.params[0]);
     
@@ -326,6 +327,8 @@ module.exports = function(router) {
       var path = "/" + element;
       baseDir += path;
     });
+
+    // console.log("baseDir = " + baseDir)
      
     // Clear previous session data if the user has selected commodity and certificate type
     if (baseDir === "/setup/what-export") {
@@ -729,6 +732,28 @@ module.exports = function(router) {
       }
 
     }
+
+    // Dave Haigh (11.05.23) - confirmation registration
+    if (baseDir === "/pheats-confirmation") {
+      req.session.data.addresses[0].pheats.status = "pending"
+    }
+
+    if (baseDir === "/pheats-manage") {
+      var _addressID = req.session.data.address || "1"
+
+      if(req.query.paused == "yes"){
+
+        for (var a = 0; a < req.session.data.addresses.length; a++) {
+          var _address = req.session.data.addresses[a]
+          if(_addressID.toString() == _address.id.toString()){
+            _address.pheats.status = "paused"
+          }
+        }
+
+      }
+
+    }
+
 
     // Attempt to render a page in the current folder
     res.render(page, {

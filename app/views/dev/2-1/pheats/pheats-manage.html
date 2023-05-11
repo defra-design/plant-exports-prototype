@@ -14,7 +14,13 @@
   </ul>
 </div>
 
-<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+<div class="govuk-breadcrumbs">
+  <ol class="govuk-breadcrumbs__list">
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="../account/inspection-addresses">Manage inspection addresses</a>
+    </li>
+  </ol>
+</div>
 {% endblock %}
 
 {% block content %}
@@ -30,6 +36,22 @@
         {% set _address = _address2 %}
       {% endif %}
     {% endfor %}
+
+    {% if query.paused == "yes" %}
+    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+            Success
+            </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+            <h3 class="govuk-notification-banner__heading">
+                [paused]
+            </h3>
+            <!-- <p class="govuk-body">Contact <a class="govuk-notification-banner__link" href="#">example@department.gov.uk</a> if you think there’s a problem.</p> -->
+        </div>
+    </div>
+    {% endif %}
 
 
     <h1 class="govuk-heading-xl">
@@ -87,11 +109,19 @@
       </div>
     </dl>
 
+    {% if _address.pheats.status != "paused" %}
     <p class="govuk-body">
-      <a href="#" class="govuk-button" >
+      <a href="pheats-pause?address={{_addressID}}" class="govuk-button" >
         [Pause PHEATS registration]
       </a>
     </p>
+    {% else %}
+    <p class="govuk-body">
+      <a href="#" class="govuk-button" >
+        [Restart PHEATS registration]
+      </a>
+    </p>
+    {% endif %}
     <!-- <p class="govuk-body">
       <a href="#" class="govuk-button" >
         [Restart PHEATS registration]
