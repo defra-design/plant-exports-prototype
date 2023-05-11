@@ -22,22 +22,41 @@
   
   <div class="govuk-grid-column-two-thirds">
 
-    <!-- <h1 class="govuk-heading-xl">[cancel pheats application?]</h1> -->
-
+    <!-- Selected address -->
     {% set _addressID = data['address'] or 1 %}
+    {% set _address = data['addresses'][0] %}
+    {% for _address2 in data['addresses'] %}
+      {% if _address2.id == _addressID %}
+        {% set _address = _address2 %}
+      {% endif %}
+    {% endfor %}
 
     <form method="post" novalidate>
 
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-8">
             <h1 class="govuk-fieldset__heading">
               [Are you sure you want to pause your PHEATS registration?]
             </h1>
           </legend>
+
+          <div class="govuk-form-group">
+            <p class="govuk-body" >
+                <span class="govuk-!-margin-bottom-2" style="display: block;">
+                [PHEATS registration for:]<br>
+                </span>
+                {{_address.address1}}<br>
+                {{_address.address2}}<br>
+                {{_address.address3}}<br>
+                {{_address.address4}}<br>
+                {{_address.postcode}}
+            </p>
+          </div>
+
           <div class="govuk-radios" data-module="govuk-radios">
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="pheatsPause-1" name="pheatsPause" type="radio" value="Yes~pheats-manage?address={{_addressID}}&paused=yes">
+              <input class="govuk-radios__input" id="pheatsPause-1" name="pheatsPause" type="radio" value="Yes~pheats-pause-confirmation?address={{_addressID}}">
               <label class="govuk-label govuk-radios__label" for="pheatsPause-1">
                 Yes
               </label>
@@ -52,8 +71,17 @@
         </fieldset>
       </div>
 
+      <!-- Cancel voucher -->
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-warning-text__assistive">Warning</span>
+          [warning about impact of this action]
+        </strong>
+      </div>
+
       <button class="govuk-button" data-module="govuk-button">
-        Continue
+        [Confirm and continue]
       </button>
 
     </form>

@@ -37,20 +37,12 @@
       {% endif %}
     {% endfor %}
 
-    {% if query.paused == "yes" %}
-    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-        <div class="govuk-notification-banner__header">
-            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-            Success
-            </h2>
-        </div>
-        <div class="govuk-notification-banner__content">
-            <h3 class="govuk-notification-banner__heading">
-                [paused]
-            </h3>
-            <!-- <p class="govuk-body">Contact <a class="govuk-notification-banner__link" href="#">example@department.gov.uk</a> if you think there’s a problem.</p> -->
-        </div>
-    </div>
+    <!-- Paused state or not -->
+    {% set _showEditLinks = true %}
+    {% set _dontShowEditLinks = false %}
+    {% if _address.pheats.status == "paused" %}
+      {% set _showEditLinks = false %}
+      {% set _dontShowEditLinks = true %}
     {% endif %}
 
 
@@ -64,7 +56,7 @@
     <dl class="govuk-summary-list">
 
       <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key govuk-!-width-one-third">
+          <dt class="govuk-summary-list__key">
             [PHEATS status]
           </dt>
           <dd class="govuk-summary-list__value">
@@ -132,11 +124,11 @@
 
     <h3 class="govuk-heading-m ">[Commodities on PHEATS]</h3>
 
-    <dl class="govuk-summary-list">
+    <dl class="govuk-summary-list {% if _dontShowEditLinks %}govuk-!-margin-bottom-9{% endif %}">
 
       {% for _commodity in _address.pheats.commodities %}
       <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key govuk-!-width-one-third">
+          <dt class="govuk-summary-list__key">
             {{_commodity.name}}
           </dt>
           <dd class="govuk-summary-list__value">
@@ -157,28 +149,32 @@
               {% endfor %}
             </ul>
           </dd>
+          {% if _showEditLinks %}
           <dd class="govuk-summary-list__actions">
             <a class="govuk-link govuk-link--no-visited-state" href="#">
               [Edit]<span class="govuk-visually-hidden"> </span>
             </a>
           </dd>
+          {% endif %}
       </div>
       {% endfor %}
      
     </dl>
 
+    {% if _showEditLinks %}
     <p class="govuk-body govuk-!-margin-bottom-9">
       <a href="#" class="govuk-link govuk-link--no-visited-state" >
           [Add new commodity]
       </a>
     </p>
+    {% endif %}
 
 
     <h3 class="govuk-heading-m">[Main contact/person responsible]</h3>
 
     {% set _personResponsible = _address.pheats.personresponsible %}
 
-    <dl class="govuk-summary-list">
+    <dl class="govuk-summary-list {% if _dontShowEditLinks %}govuk-!-margin-bottom-9{% endif %}">
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
@@ -190,49 +186,58 @@
           {% if _personResponsible.mobile %}<br>{{_personResponsible.mobile}}{% endif %}
           {% if _personResponsible.telephone %}<br>{{_personResponsible.telephone}}{% endif %}
         </dd>
+        {% if _showEditLinks %}
         <dd class="govuk-summary-list__actions">
           <a class="govuk-link govuk-link--no-visited-state" href="#">
             [Edit]<span class="govuk-visually-hidden"> </span>
           </a>
         </dd>
+        {% endif %}
       </div>
 
     </dl>
 
+    {% if _showEditLinks %}
     <p class="govuk-body govuk-!-margin-bottom-9">
       <a href="#" class="govuk-link govuk-link--no-visited-state" >
           [Change person responsible]
       </a>
     </p>
+    {% endif %}
 
     <h3 class="govuk-heading-m">[Authorised people]</h3>
 
-    <dl class="govuk-summary-list">
+    <dl class="govuk-summary-list {% if _dontShowEditLinks %}govuk-!-margin-bottom-9{% endif %}">
 
       {% for _authorisedperson in _address.pheats.authorisedpeople %}
       <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key govuk-!-width-one-third">
+          <dt class="govuk-summary-list__key ">
             {{_authorisedperson.name}}
           </dt>
           <dd class="govuk-summary-list__value">
             {{_authorisedperson.position or "Technical Director"}}<br>
             {{_authorisedperson.email}}
           </dd>
+          {% if _showEditLinks %}
           <dd class="govuk-summary-list__actions">
             <a class="govuk-link govuk-link--no-visited-state" href="#">
               [Edit]<span class="govuk-visually-hidden"> </span>
             </a>
+            
           </dd>
+          {% endif %}
       </div>
       {% endfor %}
      
     </dl>
 
+    {% if _showEditLinks %}
     <p class="govuk-body govuk-!-margin-bottom-9">
       <a href="#" class="govuk-link govuk-link--no-visited-state" >
           [Add new authorised person]
       </a>
     </p>
+    {% endif %}
 
     <h3 class="govuk-heading-m">Site plan</h3>
 
@@ -245,11 +250,13 @@
         <dd class="govuk-summary-list__value">
           {{_address.pheats.siteplan}}, 2MB
         </dd>
+        {% if _showEditLinks %}
         <dd class="govuk-summary-list__actions">
           <a class="govuk-link govuk-link--no-visited-state" href="#">
             [Edit]<span class="govuk-visually-hidden"> </span>
           </a>
         </dd>
+        {% endif %}
       </div>
 
     </dl>

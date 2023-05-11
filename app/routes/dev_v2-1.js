@@ -738,10 +738,10 @@ module.exports = function(router) {
       req.session.data.addresses[0].pheats.status = "pending"
     }
 
-    if (baseDir === "/pheats-manage") {
+    if (baseDir === "/pheats-pause-confirmation") {
       var _addressID = req.session.data.address || "1"
 
-      if(req.query.paused == "yes"){
+      // if(req.query.paused == "yes"){
 
         for (var a = 0; a < req.session.data.addresses.length; a++) {
           var _address = req.session.data.addresses[a]
@@ -750,7 +750,7 @@ module.exports = function(router) {
           }
         }
 
-      }
+      // }
 
     }
 
