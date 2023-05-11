@@ -388,6 +388,18 @@
     margin-bottom: 0px;
   }
 
+  /* Chris Harding (10.05.23) - To force the breaking of user entered dynamic content ('your reference' and 'consignee') in the table view */
+  .force-content-break {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -ms-word-break: break-all;
+    word-break: break-word;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  }
+
 </style>
 
 <div class="govuk-grid-row">
@@ -720,13 +732,13 @@
                 {% if data.application_submission_data == "submitted" %}
                 <tr class="govuk-table__row rowCounter result">
                   <td id="apha-reference-1" class="govuk-table__cell table-header" scope="row">
-                    <a href="{% if data.has_reference == 'gsi' %}application-gsi{% elif data.has_reference == 'soil sampling' %}application-ss{% else %}application{% endif %}?application_submission_data=submitted&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break"><span class="table-heading table-heading-full" aria-hidden="true">APHA reference</span> 1721 14800 4809</a>
+                    <a href="{% if data.has_reference == 'gsi' %}application-gsi{% elif data.has_reference == 'soil sampling' %}application-ss{% else %}application{% endif %}?application_submission_data=submitted&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break"><span class="table-heading table-heading-full" aria-hidden="true">APHA reference </span>1721 14800 4809</a>
                   </td>
-                  <td id="your-reference-1" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Your reference</span> {% if data.reference_num %}{{data.reference_num or "REFERENCE"}}{% else %}&nbsp;{% endif %}
+                  <td id="your-reference-1" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Your reference </span>{% if data.reference_num %}{{data.reference_num or "REFERENCE"}}{% else %}&nbsp;{% endif %}
                   </td>
                   <td id="type-1" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Type</span> 
+                    <span class="table-heading" aria-hidden="true">Type </span>
                     {% if data.has_reference == 'phyto' %}
                     Phytosanitary
                     {% elif data.has_reference == 'donotneed' %}
@@ -745,14 +757,14 @@
                     Phytosanitary
                     {% endif %}
                   </td>
-                  <td id="destination-country-1" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Destination</span> {% if data.destinationcountries %}{{data.destinationcountries or "USA" }}{% else %}&nbsp;{% endif %}
+                  <td id="destination-country-1" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Destination </span>{% if data.consignee_name %}{{data.consignee_name or "Acme Ltd"}}<br>{% else %}&nbsp;{% endif %}{% if data.destinationcountries %}{{data.destinationcountries or "USA"}}{% else %}&nbsp;{% endif %}
                   </td>
                   <td id="submitted-date-1" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Submitted date</span> {{todaysDate}}
+                    <span class="table-heading" aria-hidden="true">Submitted date </span>{{todaysDate}}
                   </td>
                   <td id="status-1" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Status</span>
+                    <span class="table-heading" aria-hidden="true">Status </span>
                     
                     <div class="govuk-tag govuk-tag--white-tag-blue-border-and-text">
                       submitted
@@ -783,22 +795,22 @@
                     {% else %}
                     <a href="application?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% endif %}
-                    <span class="table-heading table-heading-full" aria-hidden="true">APHA reference</span> {{app.applicationID}}</a>
+                    <span class="table-heading table-heading-full" aria-hidden="true">APHA reference </span>{{app.applicationID}}</a>
                   </td>
-                  <td id="your-reference-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Your reference</span> {% if app.reference %}{{app.reference or "REFERENCE"}}{% else %}&nbsp;{% endif %}
+                  <td id="your-reference-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Your reference </span>{% if app.reference %}{{app.reference or "REFERENCE"}}{% else %}&nbsp;{% endif %}
                   </td>
                   <td id="type-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Type</span> {{app.cert_info}}
+                    <span class="table-heading" aria-hidden="true">Type </span>{{app.cert_info}}
                   </td>
-                  <td id="destination-country-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Destination</span> {% if app.importer == "" %}&nbsp;{% else %}{{app.importer | title}}<br>{% endif %}{% if app.destination == "" %}&nbsp;{% else %}{{app.destination}}{% endif %}
+                  <td id="destination-country-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Destination </span>{% if app.importer == "" %}&nbsp;{% else %}{{app.importer | title}}<br>{% endif %}{% if app.destination == "" %}&nbsp;{% else %}{{app.destination}}{% endif %}
                   </td>
                   <td id="submitted-date-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Submitted date</span> {% if app.date_truncated == "" %}&nbsp;{% else %}{{app.date_truncated}}{% endif %}
+                    <span class="table-heading" aria-hidden="true">Submitted date </span>{% if app.date_truncated == "" %}&nbsp;{% else %}{{app.date_truncated}}{% endif %}
                   </td>
                   <td id="status-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Status</span>
+                    <span class="table-heading" aria-hidden="true">Status </span>
                     
                     <div class="govuk-tag govuk-tag--{{app.tag | lower}}">
                       {{app.status}}
@@ -862,22 +874,22 @@
                     {% else %}
                     <a href="application?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% endif %}
-                    <span class="table-heading table-heading-full" aria-hidden="true">APHA reference</span> {{app.applicationID}}</a>
+                    <span class="table-heading table-heading-full" aria-hidden="true">APHA reference </span>{{app.applicationID}}</a>
                   </td>
-                  <td id="your-reference-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Your reference</span> {% if app.reference %}{{app.reference or "REFERENCE"}}{% else %}&nbsp;{% endif %}
+                  <td id="your-reference-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Your reference </span>{% if app.reference %}{{app.reference or "REFERENCE"}}{% else %}&nbsp;{% endif %}
                   </td>
                   <td id="type-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Type</span> {{app.cert_info}}
+                    <span class="table-heading" aria-hidden="true">Type </span>{{app.cert_info}}
                   </td>
-                  <td id="destination-country-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Destination</span> {% if app.importer == "" %}&nbsp;{% else %}{{app.importer | title}}<br>{% endif %}{% if app.destination == "" %}&nbsp;{% else %}{{app.destination}}{% endif %}
+                  <td id="destination-country-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Destination </span>{% if app.importer == "" %}&nbsp;{% else %}{{app.importer | title}}<br>{% endif %}{% if app.destination == "" %}&nbsp;{% else %}{{app.destination}}{% endif %}
                   </td>
                   <td id="submitted-date-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Submitted date</span> {% if app.date_truncated == "" %}&nbsp;{% else %}{{app.date_truncated}}{% endif %}
+                    <span class="table-heading" aria-hidden="true">Submitted date </span>{% if app.date_truncated == "" %}&nbsp;{% else %}{{app.date_truncated}}{% endif %}
                   </td>
                   <td id="status-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Status</span>
+                    <span class="table-heading" aria-hidden="true">Status </span>
                     
                     <div class="govuk-tag govuk-tag--{{app.tag | lower}}">
                       {{app.status}}
@@ -908,22 +920,22 @@
                     {% else %}
                     <a href="application?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% endif %}
-                    <span class="table-heading table-heading-full" aria-hidden="true">APHA reference</span> {{app.applicationID}}</a>
+                    <span class="table-heading table-heading-full" aria-hidden="true">APHA reference </span>{{app.applicationID}}</a>
                   </td>
-                  <td id="your-reference-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Your reference</span> {% if app.reference %}{{app.reference or "REFERENCE"}}{% else %}&nbsp;{% endif %}
+                  <td id="your-reference-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Your reference </span>{% if app.reference %}{{app.reference or "REFERENCE"}}{% else %}&nbsp;{% endif %}
                   </td>
                   <td id="type-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Type</span> {{app.cert_info}}
+                    <span class="table-heading" aria-hidden="true">Type </span>{{app.cert_info}}
                   </td>
-                  <td id="destination-country-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Destination</span> {% if app.importer == "" %}&nbsp;{% else %}{{app.importer | title}}<br>{% endif %}{% if app.destination == "" %}&nbsp;{% else %}{{app.destination}}{% endif %}
+                  <td id="destination-country-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Destination </span>{% if app.importer == "" %}&nbsp;{% else %}{{app.importer | title}}<br>{% endif %}{% if app.destination == "" %}&nbsp;{% else %}{{app.destination}}{% endif %}
                   </td>
                   <td id="submitted-date-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Submitted date</span> {% if app.date_truncated == "" %}&nbsp;{% else %}{{app.date_truncated}}{% endif %}
+                    <span class="table-heading" aria-hidden="true">Submitted date </span>{% if app.date_truncated == "" %}&nbsp;{% else %}{{app.date_truncated}}{% endif %}
                   </td>
                   <td id="status-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Status</span>
+                    <span class="table-heading" aria-hidden="true">Status </span>
                     
                     <div class="govuk-tag govuk-tag--{{app.tag | lower}}">
                       {{app.status}}
@@ -987,22 +999,22 @@
                     {% else %}
                     <a href="application?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% endif %}
-                    <span class="table-heading table-heading-full" aria-hidden="true">APHA reference</span> {{app.applicationID}}</a>
+                    <span class="table-heading table-heading-full" aria-hidden="true">APHA reference </span>{{app.applicationID}}</a>
                   </td>
-                  <td id="your-reference-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Your reference</span> {% if app.reference %}{{app.reference or "REFERENCE"}}{% else %}&nbsp;{% endif %}
+                  <td id="your-reference-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Your reference </span>{% if app.reference %}{{app.reference or "REFERENCE"}}{% else %}&nbsp;{% endif %}
                   </td>
                   <td id="type-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Type</span> {{app.cert_info}}
+                    <span class="table-heading" aria-hidden="true">Type </span>{{app.cert_info}}
                   </td>
-                  <td id="destination-country-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Destination</span> {% if app.importer == "" %}&nbsp;{% else %}{{app.importer | title}}<br>{% endif %}{% if app.destination == "" %}&nbsp;{% else %}{{app.destination}}{% endif %}
+                  <td id="destination-country-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Destination </span>{% if app.importer == "" %}&nbsp;{% else %}{{app.importer | title}}<br>{% endif %}{% if app.destination == "" %}&nbsp;{% else %}{{app.destination}}{% endif %}
                   </td>
                   <td id="submitted-date-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Submitted date</span> {% if app.date_truncated == "" %}&nbsp;{% else %}{{app.date_truncated}}{% endif %}
+                    <span class="table-heading" aria-hidden="true">Submitted date </span>{% if app.date_truncated == "" %}&nbsp;{% else %}{{app.date_truncated}}{% endif %}
                   </td>
                   <td id="status-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Status</span>
+                    <span class="table-heading" aria-hidden="true">Status </span>
                     
                     <div class="govuk-tag govuk-tag--{{app.tag | lower}}">
                       {{app.status}}
@@ -1091,22 +1103,22 @@
                     {% else %}
                     <a href="application?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% endif %}
-                    <span class="table-heading table-heading-full" aria-hidden="true">APHA reference</span> {{app.applicationID}}</a>
+                    <span class="table-heading table-heading-full" aria-hidden="true">APHA reference </span>{{app.applicationID}}</a>
                   </td>
-                  <td id="your-reference-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Your reference</span> {% if app.reference %}{{app.reference or "REFERENCE"}}{% else %}&nbsp;{% endif %}
+                  <td id="your-reference-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Your reference </span>{% if app.reference %}{{app.reference or "REFERENCE"}}{% else %}&nbsp;{% endif %}
                   </td>
                   <td id="type-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Type</span> {{app.cert_info}}
+                    <span class="table-heading" aria-hidden="true">Type </span>{{app.cert_info}}
                   </td>
-                  <td id="destination-country-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Destination</span> {% if app.importer == "" %}&nbsp;{% else %}{{app.importer | title}}<br>{% endif %}{% if app.destination == "" %}&nbsp;{% else %}{{app.destination}}{% endif %}
+                  <td id="destination-country-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Destination </span>{% if app.importer == "" %}&nbsp;{% else %}{{app.importer | title}}<br>{% endif %}{% if app.destination == "" %}&nbsp;{% else %}{{app.destination}}{% endif %}
                   </td>
                   <td id="submitted-date-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Submitted date</span> {% if app.date_truncated == "" %}&nbsp;{% else %}{{app.date_truncated}}{% endif %}
+                    <span class="table-heading" aria-hidden="true">Submitted date </span>{% if app.date_truncated == "" %}&nbsp;{% else %}{{app.date_truncated}}{% endif %}
                   </td>
                   <td id="status-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Status</span>
+                    <span class="table-heading" aria-hidden="true">Status </span>
                     
                     <div class="govuk-tag govuk-tag--{{app.tag | lower}}">
                       {{app.status}}
@@ -1170,22 +1182,22 @@
                     {% else %}
                     <a href="application?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% endif %}
-                    <span class="table-heading table-heading-full" aria-hidden="true">APHA reference</span> {{app.applicationID}}</a>
+                    <span class="table-heading table-heading-full" aria-hidden="true">APHA reference </span>{{app.applicationID}}</a>
                   </td>
-                  <td id="your-reference-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Your reference</span> {% if app.reference %}{{app.reference or "REFERENCE"}}{% else %}&nbsp;{% endif %}
+                  <td id="your-reference-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Your reference </span>{% if app.reference %}{{app.reference or "REFERENCE"}}{% else %}&nbsp;{% endif %}
                   </td>
                   <td id="type-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Type</span> {{app.cert_info}}
+                    <span class="table-heading" aria-hidden="true">Type </span>{{app.cert_info}}
                   </td>
-                  <td id="destination-country-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Destination</span> {% if app.importer == "" %}&nbsp;{% else %}{{app.importer | title}}<br>{% endif %}{% if app.destination == "" %}&nbsp;{% else %}{{app.destination}}{% endif %}
+                  <td id="destination-country-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Destination </span>{% if app.importer == "" %}&nbsp;{% else %}{{app.importer | title}}<br>{% endif %}{% if app.destination == "" %}&nbsp;{% else %}{{app.destination}}{% endif %}
                   </td>
                   <td id="submitted-date-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Submitted date</span> {% if app.date_truncated == "" %}&nbsp;{% else %}{{app.date_truncated}}{% endif %}
+                    <span class="table-heading" aria-hidden="true">Submitted date </span>{% if app.date_truncated == "" %}&nbsp;{% else %}{{app.date_truncated}}{% endif %}
                   </td>
                   <td id="status-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Status</span>
+                    <span class="table-heading" aria-hidden="true">Status </span>
                     
                     <div class="govuk-tag govuk-tag--{{app.tag | lower}}">
                       {{app.status}}
@@ -1216,22 +1228,22 @@
                     {% else %}
                     <a href="application?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% endif %}
-                    <span class="table-heading table-heading-full" aria-hidden="true">APHA reference</span> {{app.applicationID}}</a>
+                    <span class="table-heading table-heading-full" aria-hidden="true">APHA reference </span>{{app.applicationID}}</a>
                   </td>
-                  <td id="your-reference-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Your reference</span> {% if app.reference %}{{app.reference or "REFERENCE"}}{% else %}&nbsp;{% endif %}
+                  <td id="your-reference-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Your reference </span>{% if app.reference %}{{app.reference or "REFERENCE"}}{% else %}&nbsp;{% endif %}
                   </td>
                   <td id="type-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Type</span> {{app.cert_info}}
+                    <span class="table-heading" aria-hidden="true">Type </span>{{app.cert_info}}
                   </td>
-                  <td id="destination-country-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Destination</span> {% if app.importer == "" %}&nbsp;{% else %}{{app.importer | title}}<br>{% endif %}{% if app.destination == "" %}&nbsp;{% else %}{{app.destination}}{% endif %}
+                  <td id="destination-country-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Destination </span>{% if app.importer == "" %}&nbsp;{% else %}{{app.importer | title}}<br>{% endif %}{% if app.destination == "" %}&nbsp;{% else %}{{app.destination}}{% endif %}
                   </td>
                   <td id="submitted-date-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Submitted date</span> {% if app.date_truncated == "" %}&nbsp;{% else %}{{app.date_truncated}}{% endif %}
+                    <span class="table-heading" aria-hidden="true">Submitted date </span>{% if app.date_truncated == "" %}&nbsp;{% else %}{{app.date_truncated}}{% endif %}
                   </td>
                   <td id="status-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Status</span>
+                    <span class="table-heading" aria-hidden="true">Status </span>
                     
                     <div class="govuk-tag govuk-tag--{{app.tag | lower}}">
                       {{app.status}}
@@ -1295,22 +1307,22 @@
                     {% else %}
                     <a href="application?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
                     {% endif %}
-                    <span class="table-heading table-heading-full" aria-hidden="true">APHA reference</span> {{app.applicationID}}</a>
+                    <span class="table-heading table-heading-full" aria-hidden="true">APHA reference </span>{{app.applicationID}}</a>
                   </td>
-                  <td id="your-reference-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Your reference</span> {% if app.reference %}{{app.reference or "REFERENCE"}}{% else %}&nbsp;{% endif %}
+                  <td id="your-reference-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Your reference </span>{% if app.reference %}{{app.reference or "REFERENCE"}}{% else %}&nbsp;{% endif %}
                   </td>
                   <td id="type-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Type</span> {{app.cert_info}}
+                    <span class="table-heading" aria-hidden="true">Type </span>{{app.cert_info}}
                   </td>
-                  <td id="destination-country-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Destination</span> {% if app.importer == "" %}&nbsp;{% else %}{{app.importer | title}}<br>{% endif %}{% if app.destination == "" %}&nbsp;{% else %}{{app.destination}}{% endif %}
+                  <td id="destination-country-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Destination </span>{% if app.importer == "" %}&nbsp;{% else %}{{app.importer | title}}<br>{% endif %}{% if app.destination == "" %}&nbsp;{% else %}{{app.destination}}{% endif %}
                   </td>
                   <td id="submitted-date-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Submitted date</span> {% if app.date_truncated == "" %}&nbsp;{% else %}{{app.date_truncated}}{% endif %}
+                    <span class="table-heading" aria-hidden="true">Submitted date </span>{% if app.date_truncated == "" %}&nbsp;{% else %}{{app.date_truncated}}{% endif %}
                   </td>
                   <td id="status-{{app.index}}" class="govuk-table__cell" scope="row">
-                    <span class="table-heading" aria-hidden="true">Status</span>
+                    <span class="table-heading" aria-hidden="true">Status </span>
                     
                     <div class="govuk-tag govuk-tag--{{app.tag | lower}}">
                       {{app.status}}
