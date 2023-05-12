@@ -16,7 +16,19 @@
 
   <div class="govuk-grid-column-two-thirds">
 
-    <form action="{{query.return_url or 'digital-phytosanitary-certificate'}}" method="post" novalidate>
+    {% set journey = data.has_reference %}
+    {% if data.commodity == "bulbs" %}
+    <form action="{{query.return_url or 'bulbs-declaration'}}" method="post" action="reference" novalidate>
+    {% elif data.commodity == "farm machinery" %}
+    <form action="{{query.return_url or 'declaration-used-farm-machinery'}}" method="post" action="reference" novalidate>
+    {% elif journey == "coc" %}
+    <form action="{{query.return_url or 'reference?journey=coc'}}" method="post" action="reference" novalidate>
+    {% elif journey == "both" %}
+    <form action="{{query.return_url or 'declaration?journey=both'}}" method="post" action="reference" novalidate>
+    {% else %}
+    <form action="{{query.return_url or 'declaration'}}" method="post" action="reference" novalidate>
+    {% endif %}
+    <!-- <form action="{{query.return_url or 'digital-phytosanitary-certificate'}}" method="post" novalidate> -->
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-6">
         <h1 class="govuk-fieldset__heading">Destination country</h1>
       </legend>
