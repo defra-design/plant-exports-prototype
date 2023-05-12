@@ -733,11 +733,14 @@ module.exports = function(router) {
 
     }
 
-    // Dave Haigh (11.05.23) - confirmation registration
+    // Dave Haigh
+    //commision date
+    var today = new Date();
+    req.session.data.todaysdate = today.getDate() + " " + ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][today.getMonth()] + " " + today.getFullYear()
+    //page specific
     if (baseDir === "/pheats-confirmation") {
       req.session.data.addresses[0].pheats.status = "pending"
     }
-
     if (baseDir === "/pheats-pause-confirmation") {
       var _addressID = req.session.data.address || "1"
 
