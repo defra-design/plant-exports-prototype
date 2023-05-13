@@ -30,7 +30,7 @@
 
     <p class="govuk-body govuk-!-margin-bottom-9">[make clear that they need to review and update anything before restarting]</p>
 
-    <form method="post" novalidate action="pheats-confirmation">
+    <form method="post" novalidate action="pheats-restart-confirmation">
 
       <h2 class="govuk-heading-m">Registration summary</h2>
 
@@ -48,6 +48,45 @@
           </dd>
           <dd class="govuk-summary-list__actions">
             
+          </dd>
+        </div>
+
+      </dl>
+
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            [site handles]
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <p class="govuk-body">Plant materials of UK origin:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              {% if data['ukOrigin'] %}
+                {% for _ukOrigin in data['ukOrigin'] %}
+                  <li>{{_ukOrigin | lower}}</li>
+                {% endfor %}
+              {% else %}
+                <li>[none]</li>
+              {% endif %}
+            </ul>
+            
+            <p class="govuk-body">Plant materials not of UK origin:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              {% if data['notUKOrigin'] %}
+                {% for _notUKOrigin in data['notUKOrigin'] %}
+                  <li>{{_notUKOrigin | lower}}</li>
+                {% endfor %}
+              {% else %}
+                <li>[none]</li>
+              {% endif %}
+            </ul>
+            
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link govuk-link--no-visited-state" href="pheats-site-handles?restart=yes">
+              Change<span class="govuk-visually-hidden"> </span>
+            </a>
           </dd>
         </div>
 
@@ -206,6 +245,27 @@
 
       </dl>
 
+      <h2 class="govuk-heading-m">
+        [declaration heading]
+      </h2>
+  
+      <p class="govuk-body">[declaration content]</p>
+
+      <div class="govuk-form-group govuk-!-margin-bottom-9">
+        <fieldset class="govuk-fieldset" >
+          <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+            <div class="govuk-checkboxes__item">
+              <input class="govuk-checkboxes__input" id="pheatsRestartDeclaration" name="pheatsRestartDeclaration" type="checkbox" value="Yes">
+              <label class="govuk-label govuk-checkboxes__label" for="pheatsRestartDeclaration">
+                [checkbox]
+              </label>
+            </div>
+          </div>
+
+        </fieldset>
+      </div>
+
+
       
       <!-- 
         Reset authorised people counts and data so if you add another pheats reg it is reset 
@@ -248,8 +308,8 @@
       }) }}
 
         
-        {% set _pheatsReturnURL = 'pheats-cya' %}
-        <!-- <p class="govuk-body govuk-!-margin-top-2"><a href="pheats-cancel?pheatsReturnURL={{_pheatsReturnURL}}" class="govuk-link govuk-link--no-visited-state">Cancel PHEATS application</a></p> -->
+        {% set _pheatsReturnURL = 'pheats-restart-cya' %}
+        <p class="govuk-body govuk-!-margin-top-2"><a href="pheats-cancel?pheatsReturnURL={{_pheatsReturnURL}}" class="govuk-link govuk-link--no-visited-state">Cancel PHEATS [restart]</a></p>
 
     </form>
 

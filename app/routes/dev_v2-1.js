@@ -743,18 +743,21 @@ module.exports = function(router) {
     }
     if (baseDir === "/pheats-pause-confirmation") {
       var _addressID = req.session.data.address || "1"
-
-      // if(req.query.paused == "yes"){
-
         for (var a = 0; a < req.session.data.addresses.length; a++) {
           var _address = req.session.data.addresses[a]
           if(_addressID.toString() == _address.id.toString()){
             _address.pheats.status = "paused"
           }
         }
-
-      // }
-
+    }
+    if (baseDir === "/pheats-restart-confirmation") {
+      var _addressID = req.session.data.address || "1"
+        for (var a = 0; a < req.session.data.addresses.length; a++) {
+          var _address = req.session.data.addresses[a]
+          if(_addressID.toString() == _address.id.toString()){
+            _address.pheats.status = "pending"
+          }
+        }
     }
 
 

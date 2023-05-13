@@ -101,18 +101,26 @@
       </div>
     </dl>
 
-    {% if _address.pheats.status != "paused" %}
+    {% if _address.pheats.status == "registered" %}
     <p class="govuk-body">
       <a href="pheats-pause?address={{_addressID}}" class="govuk-button govuk-button--secondary" >
         [Pause PHEATS registration]
       </a>
     </p>
-    {% else %}
+    {% endif %}
+    {% if _address.pheats.status == "paused" %}
     <p class="govuk-body">
       <a href="pheats-restart-cya?address={{_addressID}}" class="govuk-button govuk-button--secondary" >
         [Restart PHEATS registration]
       </a>
     </p>
+    {% endif %}
+    {% if _address.pheats.status == "pending" %}
+    <!-- <p class="govuk-body">
+      <a href="#" class="govuk-button govuk-button--secondary" >
+        [Cancel]
+      </a>
+    </p> -->
     {% endif %}
     <!-- <p class="govuk-body">
       <a href="#" class="govuk-button" >
@@ -121,6 +129,45 @@
     </p> -->
 
     <!-- <h2 class="govuk-heading-l govuk-!-margin-top-8">[PHEATS details]</h2> -->
+
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          [site handles]
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <p class="govuk-body">Plant materials of UK origin:</p>
+          <ul class="govuk-list govuk-list--bullet">
+            {% if _address.pheats.sitehandlesUKOrigin %}
+              {% for _ukOrigin in _address.pheats.sitehandlesUKOrigin %}
+                <li>{{_ukOrigin | lower}}</li>
+              {% endfor %}
+            {% else %}
+              <li>[none]</li>
+            {% endif %}
+          </ul>
+          
+          <p class="govuk-body">Plant materials not of UK origin:</p>
+          <ul class="govuk-list govuk-list--bullet">
+            {% if _address.pheats.sitehandlesNotUKOrigin %}
+              {% for _notUKOrigin in _address.pheats.sitehandlesNotUKOrigin %}
+                <li>{{_notUKOrigin | lower}}</li>
+              {% endfor %}
+            {% else %}
+              <li>[none]</li>
+            {% endif %}
+          </ul>
+          
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link govuk-link--no-visited-state" href="pheats-site-handles">
+            Change<span class="govuk-visually-hidden"> </span>
+          </a>
+        </dd>
+      </div>
+
+    </dl>
 
     <h3 class="govuk-heading-m ">[Commodities on PHEATS]</h3>
 
