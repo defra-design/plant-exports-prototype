@@ -50,8 +50,8 @@
 
 
     <h1 class="govuk-heading-xl">
-      <span class="govuk-caption-xl">[{{_address.postcode}}], [{{_address.address1}}]</span>
-      [PHEATS registration]
+      <span class="govuk-caption-xl">{{_address.postcode}}, {{_address.address1}}</span>
+      Manage PHEATS for this address
     </h1>
 
     <!-- <h2 class="govuk-heading-m">Registration summary</h2> -->
@@ -60,24 +60,24 @@
 
       <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
-            [PHEATS status]
+            PHEATS registration status
           </dt>
           <dd class="govuk-summary-list__value">
             <p class="govuk-body govuk-!-margin-bottom-2">
               {% if _address.pheats.status == "notregistered" %}
                 <!-- NOT REGISTERED -->
                 <strong class="govuk-tag govuk-tag--grey">
-                    [Not registered for PHEATS]
+                    Not registered
                 </strong>
               {% elif _address.pheats.status == "registered" %}
                 <!-- REGISTERED -->
                 <strong class="govuk-tag govuk-tag--green">
-                  [PHEATS Registered]
+                  Registered
                 </strong>
               {% elif _address.pheats.status == "updated" %}
                 <!-- REGISTERED and UPDATED-->
                 <strong class="govuk-tag govuk-tag--green">
-                  [PHEATS Registered]
+                  Registered
                 </strong>
                 <!-- <span class="govuk-!-margin-bottom-2 govuk-!-margin-top-2" style="display: block">and </span>
                 <span class="govuk-!-font-weight-bold">[pending updates]</span> -->
@@ -88,12 +88,12 @@
               {% elif _address.pheats.status == "pending" %}
                 <!-- PENDING -->
                 <strong class="govuk-tag govuk-tag--orange">
-                  [PHEATS pending]
+                  In progress
                 </strong>
               {% elif _address.pheats.status == "paused" %}
                 <!-- PAUSED -->
                 <strong class="govuk-tag govuk-tag--grey">
-                  [PHEATS paused]
+                  Not active
                 </strong>
               {% endif %}
             </p>
@@ -101,7 +101,7 @@
       </div>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key govuk-!-width-one-third">
-          [Address]
+          Address
         </dt>
         <dd class="govuk-summary-list__value">
           <p class="govuk-body govuk-!-margin-bottom-2">
@@ -115,39 +115,46 @@
       </div>
     </dl>
 
-    <div class="govuk-button-group govuk-!-margin-top-6">
-    {% if _address.pheats.status == "registered" or _address.pheats.status == "updated" %}
-      <!-- <p class="govuk-body"> -->
-        <a href="pheats-pause?address={{_addressID}}" class="govuk-button govuk-button--secondary" >
-          [Pause PHEATS registration]
-        </a>
-      <!-- </p> -->
-      {% endif %}
-      {% if _address.pheats.status == "paused" %}
-      <!-- <p class="govuk-body"> -->
+    {% if _address.pheats.status == "pending" %}
+    <!-- <p class="govuk-body">
+      <a href="#" class="govuk-button govuk-button--secondary" >
+        [Cancel]
+      </a>
+    </p> -->
+    {% endif %}
+
+    <!-- RESTART -->
+    {% if _address.pheats.status == "paused" %}
+      <p class="govuk-body govuk-!-margin-bottom-0">
         <a href="pheats-restart-cya?address={{_addressID}}" class="govuk-button" >
-          [Restart PHEATS registration]
+          Start PHEATS again
         </a>
-      <!-- </p> -->
-      {% endif %}
-      {% if _address.pheats.status == "pending" %}
-      <!-- <p class="govuk-body">
-        <a href="#" class="govuk-button govuk-button--secondary" >
-          [Cancel]
+      </p>
+      <p class="govuk-body">You will need to do an audit and repeat your training. It may take around a month to start doing PHEATS exports again.</p>
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+    {% endif %}
+
+    <!-- PAUSE -->
+    {% if _address.pheats.status == "registered" or _address.pheats.status == "updated" %}
+      <p class="govuk-body govuk-!-margin-bottom-0">
+        <a href="pheats-pause?address={{_addressID}}" class="govuk-button govuk-button--secondary" >
+          Take a break from PHEATS
         </a>
-      </p> -->
-      {% endif %}
-      {% if _address.pheats.status == "registered" %}
-      <!-- <p class="govuk-body"> -->
+      </p>
+      <p class="govuk-body">This will set your registration status to 'Not active'. You will not be able to do PHEATS exports at this address until you start your registration again.</p>
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+    {% endif %}
+
+    <h2 class="govuk-heading-l">Address details</h2>
+
+    <!-- UPDATE -->
+    {% if _address.pheats.status == "registered" %}
+      <p class="govuk-body govuk-!-margin-top-6">
         <a href="pheats-update-cya?address={{_addressID}}" class="govuk-button govuk-button--secondary" >
           [Update details]
         </a>
-      <!-- </p> -->
-      {% endif %}
-    </div>
-    
-
-    <h2 class="govuk-heading-l govuk-!-margin-top-8">[PHEATS details]</h2>
+      </p>
+    {% endif %}
 
     <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
@@ -190,7 +197,7 @@
 
     </dl>
 
-    <h3 class="govuk-heading-m ">[Commodities on PHEATS]</h3>
+    <h3 class="govuk-heading-m ">PHEATS commodities at this address</h3>
 
     <dl class="govuk-summary-list {% if _dontShowEditLinks %}govuk-!-margin-bottom-9{% endif %}">
 
@@ -201,7 +208,7 @@
           </dt>
           <dd class="govuk-summary-list__value">
             <p class="govuk-body govuk-!-margin-bottom-2">
-              [Origins:]
+              Countries of origin:
             </p>
             <ul class="govuk-list govuk-list--bullet">
               {% for _origin in _commodity.origins %}
@@ -209,7 +216,7 @@
               {% endfor %}
             </ul>
             <p class="govuk-body govuk-!-margin-bottom-2">
-              [Destinations:]
+              Destinations:
             </p>
             <ul class="govuk-list govuk-list--bullet">
               {% for _destination in _commodity.destinations %}
@@ -238,7 +245,9 @@
     {% endif %}
 
 
-    <h3 class="govuk-heading-m">[Main contact/person responsible]</h3>
+    <h3 class="govuk-heading-l">People registered with PHEATS at this address</h3>
+
+    <h3 class="govuk-heading-m">Main contact</h3>
 
     {% set _personResponsible = _address.pheats.personresponsible %}
 
@@ -273,7 +282,7 @@
     </p>
     {% endif %}
 
-    <h3 class="govuk-heading-m">[Authorised people]</h3>
+    <h3 class="govuk-heading-m">Authorised people</h3>
 
     <dl class="govuk-summary-list {% if _dontShowEditLinks %}govuk-!-margin-bottom-9{% endif %}">
 
