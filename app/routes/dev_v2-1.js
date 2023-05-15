@@ -738,9 +738,13 @@ module.exports = function(router) {
     var today = new Date();
     req.session.data.todaysdate = today.getDate() + " " + ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][today.getMonth()] + " " + today.getFullYear()
     //page specific
+
+    //SUBMITTED
     if (baseDir === "/pheats-confirmation") {
       req.session.data.addresses[0].pheats.status = "pending"
     }
+
+    //PAUSED
     if (baseDir === "/pheats-pause-confirmation") {
       var _addressID = req.session.data.address || "1"
         for (var a = 0; a < req.session.data.addresses.length; a++) {
@@ -750,12 +754,25 @@ module.exports = function(router) {
           }
         }
     }
+
+    //RESTARTED
     if (baseDir === "/pheats-restart-confirmation") {
       var _addressID = req.session.data.address || "1"
         for (var a = 0; a < req.session.data.addresses.length; a++) {
           var _address = req.session.data.addresses[a]
           if(_addressID.toString() == _address.id.toString()){
             _address.pheats.status = "pending"
+          }
+        }
+    }
+
+    //UPDATED
+    if (baseDir === "/pheats-update-confirmation") {
+      var _addressID = req.session.data.address || "1"
+        for (var a = 0; a < req.session.data.addresses.length; a++) {
+          var _address = req.session.data.addresses[a]
+          if(_addressID.toString() == _address.id.toString()){
+            _address.pheats.status = "updated"
           }
         }
     }

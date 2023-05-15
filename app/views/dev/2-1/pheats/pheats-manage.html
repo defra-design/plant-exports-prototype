@@ -45,6 +45,9 @@
       {% set _dontShowEditLinks = true %}
     {% endif %}
 
+    {% set _showEditLinks = false %}
+    {% set _dontShowEditLinks = true %}
+
 
     <h1 class="govuk-heading-xl">
       <span class="govuk-caption-xl">[{{_address.postcode}}], [{{_address.address1}}]</span>
@@ -70,6 +73,17 @@
                 <!-- REGISTERED -->
                 <strong class="govuk-tag govuk-tag--green">
                   [PHEATS Registered]
+                </strong>
+              {% elif _address.pheats.status == "updated" %}
+                <!-- REGISTERED and UPDATED-->
+                <strong class="govuk-tag govuk-tag--green">
+                  [PHEATS Registered]
+                </strong>
+                <!-- <span class="govuk-!-margin-bottom-2 govuk-!-margin-top-2" style="display: block">and </span>
+                <span class="govuk-!-font-weight-bold">[pending updates]</span> -->
+                <span class="govuk-!-margin-bottom-2 govuk-!-margin-top-2" style="display: block">and </span>
+                <strong class="govuk-tag govuk-tag--orange">
+                  [pending updates]
                 </strong>
               {% elif _address.pheats.status == "pending" %}
                 <!-- PENDING -->
@@ -101,34 +115,39 @@
       </div>
     </dl>
 
-    {% if _address.pheats.status == "registered" %}
-    <p class="govuk-body">
-      <a href="pheats-pause?address={{_addressID}}" class="govuk-button govuk-button--secondary" >
-        [Pause PHEATS registration]
-      </a>
-    </p>
-    {% endif %}
-    {% if _address.pheats.status == "paused" %}
-    <p class="govuk-body">
-      <a href="pheats-restart-cya?address={{_addressID}}" class="govuk-button govuk-button--secondary" >
-        [Restart PHEATS registration]
-      </a>
-    </p>
-    {% endif %}
-    {% if _address.pheats.status == "pending" %}
-    <!-- <p class="govuk-body">
-      <a href="#" class="govuk-button govuk-button--secondary" >
-        [Cancel]
-      </a>
-    </p> -->
-    {% endif %}
-    <!-- <p class="govuk-body">
-      <a href="#" class="govuk-button" >
-        [Restart PHEATS registration]
-      </a>
-    </p> -->
+    <div class="govuk-button-group govuk-!-margin-top-6">
+    {% if _address.pheats.status == "registered" or _address.pheats.status == "updated" %}
+      <!-- <p class="govuk-body"> -->
+        <a href="pheats-pause?address={{_addressID}}" class="govuk-button govuk-button--secondary" >
+          [Pause PHEATS registration]
+        </a>
+      <!-- </p> -->
+      {% endif %}
+      {% if _address.pheats.status == "paused" %}
+      <!-- <p class="govuk-body"> -->
+        <a href="pheats-restart-cya?address={{_addressID}}" class="govuk-button" >
+          [Restart PHEATS registration]
+        </a>
+      <!-- </p> -->
+      {% endif %}
+      {% if _address.pheats.status == "pending" %}
+      <!-- <p class="govuk-body">
+        <a href="#" class="govuk-button govuk-button--secondary" >
+          [Cancel]
+        </a>
+      </p> -->
+      {% endif %}
+      {% if _address.pheats.status == "registered" %}
+      <!-- <p class="govuk-body"> -->
+        <a href="pheats-update-cya?address={{_addressID}}" class="govuk-button govuk-button--secondary" >
+          [Update details]
+        </a>
+      <!-- </p> -->
+      {% endif %}
+    </div>
+    
 
-    <!-- <h2 class="govuk-heading-l govuk-!-margin-top-8">[PHEATS details]</h2> -->
+    <h2 class="govuk-heading-l govuk-!-margin-top-8">[PHEATS details]</h2>
 
     <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
@@ -160,11 +179,13 @@
           </ul>
           
         </dd>
+        {% if _showEditLinks %}
         <dd class="govuk-summary-list__actions">
           <a class="govuk-link govuk-link--no-visited-state" href="pheats-site-handles">
             Change<span class="govuk-visually-hidden"> </span>
           </a>
         </dd>
+        {% endif %}
       </div>
 
     </dl>
@@ -295,7 +316,9 @@
           File name
         </dt>
         <dd class="govuk-summary-list__value">
-          {{_address.pheats.siteplan}}, 2MB
+          <a class="govuk-link govuk-link--no-visited-state" href="#">
+            {{_address.pheats.siteplan}}, 2MB
+          </a>
         </dd>
         {% if _showEditLinks %}
         <dd class="govuk-summary-list__actions">
