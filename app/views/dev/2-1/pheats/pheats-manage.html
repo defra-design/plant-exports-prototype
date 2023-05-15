@@ -145,8 +145,6 @@
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
     {% endif %}
 
-    <h2 class="govuk-heading-l">Address details</h2>
-
     <!-- UPDATE -->
     {% if _address.pheats.status == "registered" %}
       <p class="govuk-body govuk-!-margin-top-6">
@@ -156,50 +154,11 @@
       </p>
     {% endif %}
 
-    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          [site handles]
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <p class="govuk-body">Plant materials of UK origin:</p>
-          <ul class="govuk-list govuk-list--bullet">
-            {% if _address.pheats.sitehandlesUKOrigin %}
-              {% for _ukOrigin in _address.pheats.sitehandlesUKOrigin %}
-                <li>{{_ukOrigin | lower}}</li>
-              {% endfor %}
-            {% else %}
-              <li>[none]</li>
-            {% endif %}
-          </ul>
-          
-          <p class="govuk-body">Plant materials not of UK origin:</p>
-          <ul class="govuk-list govuk-list--bullet">
-            {% if _address.pheats.sitehandlesNotUKOrigin %}
-              {% for _notUKOrigin in _address.pheats.sitehandlesNotUKOrigin %}
-                <li>{{_notUKOrigin | lower}}</li>
-              {% endfor %}
-            {% else %}
-              <li>[none]</li>
-            {% endif %}
-          </ul>
-          
-        </dd>
-        {% if _showEditLinks %}
-        <dd class="govuk-summary-list__actions">
-          <a class="govuk-link govuk-link--no-visited-state" href="pheats-site-handles">
-            Change<span class="govuk-visually-hidden"> </span>
-          </a>
-        </dd>
-        {% endif %}
-      </div>
-
-    </dl>
+    <h2 class="govuk-heading-l">Address details</h2>
 
     <h3 class="govuk-heading-m ">PHEATS commodities at this address</h3>
 
-    <dl class="govuk-summary-list {% if _dontShowEditLinks %}govuk-!-margin-bottom-9{% endif %}">
+    <dl class="govuk-summary-list {% if _dontShowEditLinks %}govuk-!-margin-bottom-{% endif %}">
 
       {% for _commodity in _address.pheats.commodities %}
       <div class="govuk-summary-list__row">
@@ -237,13 +196,90 @@
     </dl>
 
     {% if _showEditLinks %}
-    <p class="govuk-body govuk-!-margin-bottom-9">
+    <p class="govuk-body govuk-!-margin-bottom-">
       <a href="#" class="govuk-link govuk-link--no-visited-state" >
           [Add new commodity]
       </a>
     </p>
     {% endif %}
 
+    <h3 class="govuk-heading-m">Site plan</h3>
+
+    <dl class="govuk-summary-list govuk-!-margin-bottom-">
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          File name
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <a class="govuk-link govuk-link--no-visited-state" href="#">
+            {{_address.pheats.siteplan}}, 2MB
+          </a>
+        </dd>
+        {% if _showEditLinks %}
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link govuk-link--no-visited-state" href="#">
+            [Edit]<span class="govuk-visually-hidden"> </span>
+          </a>
+        </dd>
+        {% endif %}
+      </div>
+
+    </dl>
+
+    <h3 class="govuk-heading-m">This site handles</h3>
+
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Plant materials of UK origin
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {% if _address.pheats.sitehandlesUKOrigin %}
+          <ul class="govuk-list govuk-list--bullet">
+            {% for _ukOrigin in _address.pheats.sitehandlesUKOrigin %}
+              <li>{{_ukOrigin | lower}}</li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          None
+          {% endif %}
+        </dd>
+        {% if _showEditLinks %}
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link govuk-link--no-visited-state" href="pheats-site-handles">
+            Change<span class="govuk-visually-hidden"> </span>
+          </a>
+        </dd>
+        {% endif %}
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Plant materials not of UK origin
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {% if _address.pheats.sitehandlesNotUKOrigin %}
+          <ul class="govuk-list govuk-list--bullet">
+            {% for _ukOrigin in _address.pheats.sitehandlesNotUKOrigin %}
+              <li>{{_ukOrigin | lower}}</li>
+            {% endfor %}
+          </ul>
+          {% else %}
+            None
+          {% endif %}
+        </dd>
+        {% if _showEditLinks %}
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link govuk-link--no-visited-state" href="pheats-site-handles">
+            Change<span class="govuk-visually-hidden"> </span>
+          </a>
+        </dd>
+        {% endif %}
+      </div>
+
+    </dl>
 
     <h3 class="govuk-heading-l">People registered with PHEATS at this address</h3>
 
@@ -251,7 +287,7 @@
 
     {% set _personResponsible = _address.pheats.personresponsible %}
 
-    <dl class="govuk-summary-list {% if _dontShowEditLinks %}govuk-!-margin-bottom-9{% endif %}">
+    <dl class="govuk-summary-list {% if _dontShowEditLinks %}govuk-!-margin-bottom-{% endif %}">
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
@@ -275,7 +311,7 @@
     </dl>
 
     {% if _showEditLinks %}
-    <p class="govuk-body govuk-!-margin-bottom-9">
+    <p class="govuk-body govuk-!-margin-bottom-">
       <a href="#" class="govuk-link govuk-link--no-visited-state" >
           [Change person responsible]
       </a>
@@ -316,29 +352,7 @@
     </p>
     {% endif %}
 
-    <h3 class="govuk-heading-m">Site plan</h3>
-
-    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          File name
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <a class="govuk-link govuk-link--no-visited-state" href="#">
-            {{_address.pheats.siteplan}}, 2MB
-          </a>
-        </dd>
-        {% if _showEditLinks %}
-        <dd class="govuk-summary-list__actions">
-          <a class="govuk-link govuk-link--no-visited-state" href="#">
-            [Edit]<span class="govuk-visually-hidden"> </span>
-          </a>
-        </dd>
-        {% endif %}
-      </div>
-
-    </dl>
+    
       
 
   </div>
