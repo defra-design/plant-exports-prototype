@@ -164,19 +164,25 @@
       {% block country %}
       {% include "../modules/_country-of-origin-select.html" %}
       {% endblock %}
-        
+
       <div class="govuk-form-group">
-        <label class="govuk-label{% if data.build == 'development' %} govuk-!-font-weight-bold{% endif %}" for="quantity">Quantity and unit of measurement</label>
-        <span id="quantity-hint" class="govuk-hint">For example, 50 kilograms. You can update this amount when you load your consignment</span>
-        <input class="govuk-input govuk-input--width-5" id="quantity" name="quantity" type="text" aria-label="Quantity or weight per package" aria-describedby="quantity-hint" value="{{data.quantity}}">
-        <select name="units" id="units" class="govuk-select govuk-!-margin-left-1" aria-label="Units of measurement">
-          <option value="" selected>Unit of measurement</option>           
-          <option value="Grams"{% if data.units == "Grams" %} selected{% endif %}>Grams</option>
-          <option value="Kilograms"{% if data.units == "Kilograms" %} selected{% endif %}>Kilograms</option>
-          <option value="Litres"{% if data.units == "Litres" %} selected{% endif %}>Litres</option>
-          <option value="Tonnes"{% if data.units == "Tonnes" %} selected{% endif %}>Tonnes</option>
-          <option value="Units"{% if data.units == "Units" %} selected{% endif %}>Units</option>
-        </select>
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend">
+            <h2 class="govuk-body{% if data.build == 'development' %} govuk-!-font-weight-bold {% endif %} govuk-!-margin-bottom-0">Net quantity and unit of measurement</h2>
+          </legend>
+          <span id="quantity-hint" class="govuk-hint">For example, 50 kilograms. You can update this amount when you load your consignment</span>
+          <label class="govuk-label govuk-visually-hidden" for="quantity">Net quantity</label>
+          <input class="govuk-input govuk-input--width-5" id="quantity" name="quantity" type="text" aria-label="Net quantity" aria-describedby="quantity-hint" value="{{data.quantity}}">
+          <label class="govuk-label govuk-visually-hidden" for="units">Unit of measurement</label>
+          <select name="units" id="units" class="govuk-select govuk-!-margin-left-1" aria-label="Unit of measurement">
+            <option value="" selected>Unit of measurement</option>           
+            <option value="Grams"{% if data.units == "Grams" %} selected{% endif %}>Grams</option>
+            <option value="Kilograms"{% if data.units == "Kilograms" %} selected{% endif %}>Kilograms</option>
+            <option value="Litres"{% if data.units == "Litres" %} selected{% endif %}>Litres</option>
+            <option value="Tonnes"{% if data.units == "Tonnes" %} selected{% endif %}>Tonnes</option>
+            <option value="Units"{% if data.units == "Units" %} selected{% endif %}>Units</option>
+          </select>
+        </fieldset>
       </div>      
 
       <div class="govuk-form-group">
@@ -189,6 +195,86 @@
       {% block packing %}
       {% include "../modules/_packaging_not_bold.html" %}
       {% endblock %}
+
+      {% if data.service == "ePhyto" %}
+      <!-- ePhyto: Intended use (START) -->
+      {% if data.intended_use == "Consumption" %}
+      {% set radio1CheckedStatus = true %}
+      {% set radio2CheckedStatus = false %}
+      {% set radio3CheckedStatus = false %}
+      {% set radio4CheckedStatus = false %}
+      {% set radio5CheckedStatus = false %}
+      {% elif data.intended_use == "Decoration" %}
+      {% set radio1CheckedStatus = false %}
+      {% set radio2CheckedStatus = true %}
+      {% set radio3CheckedStatus = false %}
+      {% set radio4CheckedStatus = false %}
+      {% set radio5CheckedStatus = false %}
+      {% elif data.intended_use == "Planting" %}
+      {% set radio1CheckedStatus = false %}
+      {% set radio2CheckedStatus = false %}
+      {% set radio3CheckedStatus = true %}
+      {% set radio4CheckedStatus = false %}
+      {% set radio5CheckedStatus = false %}
+      {% elif data.intended_use == "Processing" %}
+      {% set radio1CheckedStatus = false %}
+      {% set radio2CheckedStatus = false %}
+      {% set radio3CheckedStatus = false %}
+      {% set radio4CheckedStatus = true %}
+      {% set radio5CheckedStatus = false %}
+      {% elif data.intended_use == "Sprouting for consumption" %}
+      {% set radio1CheckedStatus = false %}
+      {% set radio2CheckedStatus = false %}
+      {% set radio3CheckedStatus = false %}
+      {% set radio4CheckedStatus = false %}
+      {% set radio5CheckedStatus = true %}
+      {% else %}
+      {% set radio1CheckedStatus = false %}
+      {% set radio2CheckedStatus = false %}
+      {% set radio3CheckedStatus = false %}
+      {% set radio4CheckedStatus = false %}
+      {% set radio5CheckedStatus = false %}
+      {% endif %}
+      
+      {{ govukRadios({
+        idPrefix: "intended_use",
+        name: "intended_use",
+        fieldset: {
+          legend: {
+            text: "Intended use",
+            classes: class
+          }
+        },
+        items: [
+          {
+            value: "Consumption",
+            text: "Consumption",
+            checked: radio1CheckedStatus
+          },
+          {
+            value: "Decoration",
+            text: "Decoration",
+            checked: radio2CheckedStatus
+          },
+          {
+            value: "Planting",
+            text: "Planting",
+            checked: radio3CheckedStatus
+          },
+          {
+            value: "Processing",
+            text: "Processing",
+            checked: radio4CheckedStatus
+          },
+          {
+            value: "Sprouting for consumption",
+            text: "Sprouting for consumption",
+            checked: radio5CheckedStatus
+          }
+        ]
+      }) }}
+      <!-- ePhyto: Intended use (END) -->
+      {% endif %}
 
       <div class="govuk-form-group">
         <label class="govuk-label" for="packing_material_used">Packing material (optional)</label>

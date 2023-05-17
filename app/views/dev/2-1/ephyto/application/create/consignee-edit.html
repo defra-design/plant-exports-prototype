@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Edit a consignee - Phytosanitary certificate - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <form action="{{query.return_url or 'consignee-address-book?consigneeEdited=true'}}" method="post">
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
+          <h1 class="govuk-fieldset__heading">Edit a consignee</h1>
+        </legend>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="consignee_name">Name of the consignee</label>
+          <input class="govuk-input" id="consignee_name" name="consignee_name" type="text" value="{{data.consignee_name}}">
+        </div>
+
+        {% if data.design == "1" %}
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend">
+            <h1 class="govuk-fieldset__heading">Address of the consignee</h1>
+          </legend>
+
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="consignee-address-line-1">Address line 1</label>
+            <input class="govuk-input" id="consignee-address-line-1" name="consigneeAddressLine1" type="text" autocomplete="address-line1" value="{{data.consigneeAddressLine1}}">
+          </div>
+
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="consignee-address-line-2">Address line 2 (optional)</label>
+            <input class="govuk-input" id="consignee-address-line-2" name="consigneeAddressLine2" type="text" autocomplete="address-line2" value="{{data.consigneeAddressLine2}}">
+          </div>
+
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="consignee-address-line-3">Address line 3 (optional)</label>
+            <input class="govuk-input" id="consignee-address-line-3" name="consigneeAddressLine3" type="text" autocomplete="address-line3" value="{{data.consigneeAddressLine3}}">
+          </div>
+
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="consignee-address-line-4">Address line 4 (optional)</label>
+            <input class="govuk-input" id="consignee-address-line-4" name="consigneeAddressLine4" type="text" autocomplete="off" value="{{data.consigneeAddressLine4}}">
+          </div>
+
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="consignee-address-line-5">Address line 5 (optional)</label>
+            <input class="govuk-input" id="consignee-address-line-5" name="consigneeAddressLine5" type="text" autocomplete="off" value="{{data.consigneeAddressLine5}}">
+          </div>
+
+        </fieldset>
+        {% else %}
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="consignee_address">Address of the consignee</label>
+          <textarea class="govuk-textarea" id="consignee_address" name="consignee_address" rows="5">{{data.consignee_address}}</textarea>
+        </div>
+        {% endif %}
+
+      </fieldset>
+      
+      <div class="govuk-button-group govuk-!-margin-bottom-7">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Update consignee</button>
+        {% if data.addressBook == "true" %}
+        <a class="govuk-link app-button--link" href="{{query.return_url or 'consignee-address-book'}}">Cancel</a>
+        {% endif %}
+      </div>
+
+      {% block continueLater %}
+			{% include "../modules/_save-continue-later.html" %}
+			{% endblock %}
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

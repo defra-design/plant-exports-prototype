@@ -234,30 +234,51 @@
         }) }}        
         {% endif %}
 
-        <!-- PLANTS AND FRESH PRODUCE --> 
         {% if data.commodity == "plants" %}
+        <!-- PLANTS AND FRESH PRODUCE -->
+        <!-- ePhyto: Commodity type (START) -->
         {% if data.build == "development" %}
         {% set class="govuk-!-font-weight-bold" %}
         {% set hint="" %}
         {% else %}
         {% set class="" %}
-        {% set hint="If you plan to apply under PHEATS, you must select 'Produce (fruit, flowers or vegetables)'" %}
-        {% if data.commodity_type2 == "micropropagated material" %}
+        {% set hint="If you plan to apply under PHEATS, you must select 'Flowers', 'Fruit' or 'Vegetables'" %}
+        {% if data.commodity_type2 == "flowers" %}
         {% set radio1CheckedStatus = true %}
         {% set radio2CheckedStatus = false %}
         {% set radio3CheckedStatus = false %}
-        {% elif data.commodity_type2 == "plants" %}
+        {% set radio4CheckedStatus = false %}
+        {% set radio5CheckedStatus = false %}
+        {% elif data.commodity_type2 == "fruit" %}
         {% set radio1CheckedStatus = false %}
         {% set radio2CheckedStatus = true %}
         {% set radio3CheckedStatus = false %}
-        {% elif data.commodity_type2 == "produce" %}
+        {% set radio4CheckedStatus = false %}
+        {% set radio5CheckedStatus = false %}
+        {% elif data.commodity_type2 == "micropropagated material" %}
         {% set radio1CheckedStatus = false %}
         {% set radio2CheckedStatus = false %}
         {% set radio3CheckedStatus = true %}
+        {% set radio4CheckedStatus = false %}
+        {% set radio5CheckedStatus = false %}
+        {% elif data.commodity_type2 == "plants" %}
+        {% set radio1CheckedStatus = false %}
+        {% set radio2CheckedStatus = false %}
+        {% set radio3CheckedStatus = false %}
+        {% set radio4CheckedStatus = true %}
+        {% set radio5CheckedStatus = false %}
+        {% elif data.commodity_type2 == "vegetables" %}
+        {% set radio1CheckedStatus = false %}
+        {% set radio2CheckedStatus = false %}
+        {% set radio3CheckedStatus = false %}
+        {% set radio4CheckedStatus = false %}
+        {% set radio5CheckedStatus = true %}
         {% else %}
         {% set radio1CheckedStatus = false %}
         {% set radio2CheckedStatus = false %}
         {% set radio3CheckedStatus = false %}
+        {% set radio4CheckedStatus = false %}
+        {% set radio5CheckedStatus = false %}
         {% endif %}
         {% endif %}
         
@@ -275,22 +296,33 @@
           },
           items: [
             {
+              value: "flowers",
+              text: "Flowers",
+              checked: radio1CheckedStatus
+            },
+            {
+              value: "fruit",
+              text: "Fruit",
+              checked: radio2CheckedStatus
+            },
+            {
               value: "micropropagated material",
               text: "Micropropagated material",
-              checked: radio1CheckedStatus
+              checked: radio3CheckedStatus
             },
             {
               value: "plants",
               text: "Plants",
-              checked: radio2CheckedStatus
+              checked: radio4CheckedStatus
             },
             {
-              value: "produce",
-              text: "Produce (fruit, flowers or vegetables)",
-              checked: radio3CheckedStatus
+              value: "vegetables",
+              text: "Vegetables",
+              checked: radio5CheckedStatus
             }
           ]
         }) }}
+        <!-- ePhyto: Commodity type (END) -->
         {% endif %}
 
         {% if data.commodity == "bulbs" or data.commodity == "plants" or data.commodity == "potatoes" %}
@@ -351,11 +383,13 @@
         <div class="govuk-form-group">
           <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend">
-              <h2 class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Quantity and unit of measurement</h2>
+              <h2 class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-0">Net quantity and unit of measurement</h2>
             </legend>
             <span id="quantity-hint" class="govuk-hint">For example, 50 kilograms</span>
-            <input class="govuk-input govuk-input--width-5" id="quantity2" name="quantity2" type="text" aria-label="Quantity or weight per package" aria-describedby="quantity-hint" value="{{data.quantity2}}">
-            <select name="units2" id="units2" class="govuk-select govuk-!-margin-left-1" aria-label="Units of measurement">
+            <label class="govuk-label govuk-visually-hidden" for="quantity2">Net quantity</label>
+            <input class="govuk-input govuk-input--width-5" id="quantity2" name="quantity2" type="text" aria-label="Net quantity" aria-describedby="quantity-hint" value="{{data.quantity2}}">
+            <label class="govuk-label govuk-visually-hidden" for="units2">Unit of measurement</label>
+            <select name="units2" id="units2" class="govuk-select govuk-!-margin-left-1" aria-label="Unit of measurement">
               <option value="" selected>-</option>
               {% if data.commodity == "seeds" %}
               <option value="Grams"{% if data.units2 == "Grams" %} selected{% endif %}>Grams</option>
@@ -375,11 +409,13 @@
         <div class="govuk-form-group">
           <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend">
-              <h2 class="govuk-body govuk-!-margin-bottom-0">Quantity and unit of measurement</h2>
+              <h2 class="govuk-body govuk-!-margin-bottom-0">Net quantity and unit of measurement</h2>
             </legend>
             <span id="quantity-hint" class="govuk-hint">For example, 50 kilograms</span>
-            <input class="govuk-input govuk-input--width-5" id="quantity2" name="quantity2" type="text" aria-label="Quantity or weight per package" aria-describedby="quantity-hint" value="{{data.quantity2}}">
-            <select name="units2" id="units2" class="govuk-select govuk-!-margin-left-1" aria-label="Units of measurement">
+            <label class="govuk-label govuk-visually-hidden" for="quantity2">Net quantity</label>
+            <input class="govuk-input govuk-input--width-5" id="quantity2" name="quantity2" type="text" aria-label="Net quantity" aria-describedby="quantity-hint" value="{{data.quantity2}}">
+            <label class="govuk-label govuk-visually-hidden" for="units2">Unit of measurement</label>
+            <select name="units2" id="units2" class="govuk-select govuk-!-margin-left-1" aria-label="Unit of measurement">
               <option value="" selected>Unit of measurement</option>
               {% if data.commodity == "seeds" %}
               <option value="Grams"{% if data.units2 == "Grams" %} selected{% endif %}>Grams</option>
@@ -406,6 +442,86 @@
         {% block packing %}
         {% include "../modules/_packaging_not_bold-2.html" %}
         {% endblock %}
+
+        {% if data.service == "ePhyto" %}
+        <!-- ePhyto: Intended use (START) -->
+        {% if data.intended_use2 == "Consumption" %}
+        {% set radio1CheckedStatus = true %}
+        {% set radio2CheckedStatus = false %}
+        {% set radio3CheckedStatus = false %}
+        {% set radio4CheckedStatus = false %}
+        {% set radio5CheckedStatus = false %}
+        {% elif data.intended_use2 == "Decoration" %}
+        {% set radio1CheckedStatus = false %}
+        {% set radio2CheckedStatus = true %}
+        {% set radio3CheckedStatus = false %}
+        {% set radio4CheckedStatus = false %}
+        {% set radio5CheckedStatus = false %}
+        {% elif data.intended_use2 == "Planting" %}
+        {% set radio1CheckedStatus = false %}
+        {% set radio2CheckedStatus = false %}
+        {% set radio3CheckedStatus = true %}
+        {% set radio4CheckedStatus = false %}
+        {% set radio5CheckedStatus = false %}
+        {% elif data.intended_use2 == "Processing" %}
+        {% set radio1CheckedStatus = false %}
+        {% set radio2CheckedStatus = false %}
+        {% set radio3CheckedStatus = false %}
+        {% set radio4CheckedStatus = true %}
+        {% set radio5CheckedStatus = false %}
+        {% elif data.intended_use2 == "Sprouting for consumption" %}
+        {% set radio1CheckedStatus = false %}
+        {% set radio2CheckedStatus = false %}
+        {% set radio3CheckedStatus = false %}
+        {% set radio4CheckedStatus = false %}
+        {% set radio5CheckedStatus = true %}
+        {% else %}
+        {% set radio1CheckedStatus = false %}
+        {% set radio2CheckedStatus = false %}
+        {% set radio3CheckedStatus = false %}
+        {% set radio4CheckedStatus = false %}
+        {% set radio5CheckedStatus = false %}
+        {% endif %}
+        
+        {{ govukRadios({
+          idPrefix: "intended_use2",
+          name: "intended_use2",
+          fieldset: {
+            legend: {
+              text: "Intended use",
+              classes: class
+            }
+          },
+          items: [
+            {
+              value: "Consumption",
+              text: "Consumption",
+              checked: radio1CheckedStatus
+            },
+            {
+              value: "Decoration",
+              text: "Decoration",
+              checked: radio2CheckedStatus
+            },
+            {
+              value: "Planting",
+              text: "Planting",
+              checked: radio3CheckedStatus
+            },
+            {
+              value: "Processing",
+              text: "Processing",
+              checked: radio4CheckedStatus
+            },
+            {
+              value: "Sprouting for consumption",
+              text: "Sprouting for consumption",
+              checked: radio5CheckedStatus
+            }
+          ]
+        }) }}
+        <!-- ePhyto: Intended use (END) -->
+        {% endif %}
 
         {% if data.commodity != "grain" %}
         <div class="govuk-form-group">
