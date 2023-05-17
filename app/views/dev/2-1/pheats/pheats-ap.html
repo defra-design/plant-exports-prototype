@@ -44,12 +44,19 @@
       Add an authorised person
     </h1>
 
-    
-
     <p class="govuk-body">Give the details of a person who will carry out PHEATS inspections at this address.</p>
     <p class="govuk-body">You can add more authorised people later.</p>
 
-    <form method="post" novalidate action="pheats-aps-added">
+    <!-- If updating or restarting existing address or not -->
+    {% set _link = "pheats-aps-added" %}
+    {% if query.update %}
+      {% set _link = "pheats-cya-update" %}
+    {% endif %}
+    {% if query.restart %}
+      {% set _link = "pheats-cya-restart" %}
+    {% endif %}
+
+    <form method="post" novalidate action="{{_link}}">
         <div class="govuk-form-group ">
           <fieldset class="govuk-fieldset">
 

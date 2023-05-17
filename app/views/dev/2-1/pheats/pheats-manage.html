@@ -131,17 +131,6 @@
     </p> -->
     {% endif %}
 
-    <!-- RESTART -->
-    {% if _address.pheats.status == "paused" %}
-      <p class="govuk-body govuk-!-margin-bottom-0">
-        <a href="pheats-cya-restart?address={{_addressID}}" class="govuk-button" >
-          Start PHEATS again
-        </a>
-      </p>
-      <p class="govuk-body">You will need to do an audit and repeat your training. It may take around a month to start doing PHEATS exports again.</p>
-      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-    {% endif %}
-
     <!-- PAUSE -->
     {% if _address.pheats.status == "registered" or _address.pheats.status == "updated" %}
       <p class="govuk-body govuk-!-margin-bottom-0">
@@ -153,14 +142,45 @@
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
     {% endif %}
 
-    <!-- UPDATE -->
-    {% if _address.pheats.status == "registered" %}
-      <p class="govuk-body govuk-!-margin-top-6">
-        <a href="pheats-cya-update?address={{_addressID}}" class="govuk-button govuk-button--secondary" >
-          [Update details]
-        </a>
-      </p>
+    <!-- UPDATE or RESTART -->
+    {% if _address.pheats.status == "registered" or _address.pheats.status == "paused" %}
+    {% set _cyaLink = "pheats-cya-update?address=" + _addressID %}
+    {% if _address.pheats.status == "paused" %}
+      {% set _cyaLink = "pheats-cya-restart?address=" + _addressID %}
     {% endif %}
+    <form method="post" novalidate action="{{_cyaLink}}">
+
+      <!-- 
+        Set authorised people counts and data before update
+      -->
+      {% for _authorisedperson in _address.pheats.authorisedpeople %}
+        {% set _id = loop.index %}
+        <input id="apName{{_id}}" name="apName{{_id}}" type="hidden" value="{{_authorisedperson.name}}">
+        <input id="apPosition{{_id}}" name="apPosition{{_id}}" type="hidden" value="{{_authorisedperson.position}}">
+        <input id="apEmail{{_id}}" name="apEmail{{_id}}" type="hidden" value="{{_authorisedperson.email}}">
+        <input id="apDeleted{{_id}}" name="apDeleted{{_id}}" type="hidden" value="false">
+      {% endfor %}
+      <input id="apCount" name="apCount" type="hidden" value="{{_address.pheats.authorisedpeople.length}}">
+      <input id="apDisplayedCount" name="apDisplayedCount" type="hidden" value="{{_address.pheats.authorisedpeople.length}}">
+
+      <!-- RESTART -->
+      {% if _address.pheats.status == "paused" %}
+        <button class="govuk-button" data-module="govuk-button">
+          Start PHEATS again
+        </button>
+        <p class="govuk-body">You will need to do an audit and repeat your training. It may take around a month to start doing PHEATS exports again.</p>
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+      {% endif %}
+
+      <!-- UPDATE -->
+      {% if _address.pheats.status == "registered" %}
+      <button class="govuk-button govuk-button--secondary govuk-!-margin-bottom-9" data-module="govuk-button">
+        [Update details]
+      </button>
+      {% endif %}
+
+    {% endif %}
+    </form>
 
     <h2 class="govuk-heading-l">Address details</h2>
 
@@ -413,9 +433,6 @@
       </a>
     </p>
     {% endif %}
-
-    
-      
 
   </div>
 </div>
