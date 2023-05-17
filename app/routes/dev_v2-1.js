@@ -745,7 +745,7 @@ module.exports = function(router) {
     }
 
     //PAUSED
-    if (baseDir === "/pheats-pause-confirmation") {
+    if (baseDir === "/pheats-confirmation-pause") {
       var _addressID = req.session.data.address || "1"
         for (var a = 0; a < req.session.data.addresses.length; a++) {
           var _address = req.session.data.addresses[a]
@@ -756,7 +756,7 @@ module.exports = function(router) {
     }
 
     //RESTARTED
-    if (baseDir === "/pheats-restart-confirmation") {
+    if (baseDir === "/pheats-confirmation-restart") {
       var _addressID = req.session.data.address || "1"
         for (var a = 0; a < req.session.data.addresses.length; a++) {
           var _address = req.session.data.addresses[a]
@@ -767,7 +767,7 @@ module.exports = function(router) {
     }
 
     //UPDATED
-    if (baseDir === "/pheats-update-confirmation") {
+    if (baseDir === "/pheats-confirmation-update") {
       var _addressID = req.session.data.address || "1"
         for (var a = 0; a < req.session.data.addresses.length; a++) {
           var _address = req.session.data.addresses[a]
