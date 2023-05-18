@@ -736,7 +736,7 @@ module.exports = function(router) {
     // Dave Haigh
     //commision date
     var today = new Date();
-    req.session.data.todaysdate = today.getDate() + " " + ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][today.getMonth()] + " " + today.getFullYear()
+    req.session.data.todaysDateFormatted = today.getDate() + " " + ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][today.getMonth()] + " " + today.getFullYear()
     //page specific
 
     //SUBMITTED
