@@ -38,7 +38,9 @@
 
     <h2 class="govuk-heading-m">What happens next</h2>
     <ol class="govuk-list govuk-list--number">
+      {% if data.service != "ePhyto" %}
       <li>We will check and process your application{% if data.reforwarding %} and decide if an inspection is necessary{% endif %}.{% if not data.reforwarding %} If we decide that you need an inspection, the inspector will contact you.{% endif %}</li>
+      {% endif %}
       {% if data.pheats_check != "yes" %}
       {% if data.reforwarding %}
       <li>If an inspection is necessary, we will arrange it within 7 working days.</li>
@@ -46,13 +48,15 @@
       {% endif %}
       {% endif %}
       {% if data.service == "ePhyto" %}
-      <li>You do not need to print or email your digital certificate. We'll make it available to the plant health authorities in the destination country.</li>
+      <li>You will get an email when your digital certificate is issued. You do not need to print or email your digital certificate. We'll make it available to the plant health authorities in the destination country.</li>
       {% else %}
       <li>If there are no problems, we will issue your {% if data.reforwarding %}re-forwarding{% endif %} certificate.</li>
       {% endif %}
       <li>We will then send you an invoice.</li>
     </ol>
-    <p class="govuk-body govuk-!-margin-bottom-2">We'll only contact you if there is a problem with your application or to arrange an inspection.</p>
+    {% if data.service != "ePhyto" %}
+    <p class="govuk-body govuk-!-margin-bottom-2">We'll only contact you if there is a problem with your application.</p>
+    {% endif %}
 
     <form action="{% if data.route == 'new' %}../../dashboard-one{% else %}../../dashboard-submitted{% endif %}" method="post">
       <button class="govuk-button govuk-!-margin-top-2 govuk-!-margin-bottom-7" data-module="govuk-button">View your applications</button>

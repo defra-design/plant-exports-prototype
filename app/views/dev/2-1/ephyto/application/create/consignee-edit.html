@@ -20,13 +20,13 @@
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
           <h1 class="govuk-fieldset__heading">Edit a consignee</h1>
         </legend>
-
+        
         <div class="govuk-form-group">
           <label class="govuk-label" for="consignee_name">Name of the consignee</label>
-          <input class="govuk-input" id="consignee_name" name="consignee_name" type="text" value="{{data.consignee_name}}">
+          <input class="govuk-input" id="consignee_name" name="consignee_name" type="text" value="{% if data.address == '0' %}{{data.consignee_name or 'Zheng Fruits'}}{% elif data.address == '1' %}Frukta LLC{% elif data.address == '2' %}Alpine Furnishings Ltd{% elif data.address == '3' %}PINDI LLC{% elif data.address == '4' %}Globex Corporation{% else %}Zheng Fruits{% endif %}">
         </div>
 
-        {% if data.design == "1" %}
+        {% if query.addAddressDesign == "1" %}
         <fieldset class="govuk-fieldset">
           <legend class="govuk-fieldset__legend">
             <h1 class="govuk-fieldset__heading">Address of the consignee</h1>
@@ -61,16 +61,16 @@
         {% else %}
         <div class="govuk-form-group">
           <label class="govuk-label" for="consignee_address">Address of the consignee</label>
-          <textarea class="govuk-textarea" id="consignee_address" name="consignee_address" rows="5">{{data.consignee_address}}</textarea>
+          <textarea class="govuk-textarea" id="consignee_address" name="consignee_address" rows="5">{% if data.address == '0' %}{{data.consignee_address or "88 Jianguo Rd, 朝阳区, 北京市, Chine, 3208"}}{% elif data.address == '1' %}Lillegardsvagen 1, Falkenberg, South-East, Sweden, 311 50{% elif data.address == '2' %}Piazza Pietro Nenni, 4, Orta Nova Foggia, Foggia, Italy, 71045{% elif data.address == '3' %}Phase 3 St, Vaibhav Nagar, Katpadi, Vellore, Tamil Nadu, India, 632014{% elif data.address == '4' %}6347 Pacific Blvd, Huntington Park, California, United States, 90255{% else %}88 Jianguo Rd, 朝阳区, 北京市, Chine, 3208{% endif %}</textarea>
         </div>
         {% endif %}
 
       </fieldset>
       
       <div class="govuk-button-group govuk-!-margin-bottom-7">
-        <button class="govuk-button" type="submit" data-module="govuk-button">Update consignee</button>
+        <a href="{{query.return_url or 'consignee-manage-address-book'}}?consigneeEdited=true" role="button" draggable="false" class="govuk-button" data-module="govuk-button">Update consignee</a>
         {% if data.addressBook == "true" %}
-        <a class="govuk-link app-button--link" href="{{query.return_url or 'consignee-address-book'}}">Cancel</a>
+        <a class="govuk-link app-button--link" href="{{query.return_url or 'consignee-manage-address-book'}}">Cancel</a>
         {% endif %}
       </div>
 
