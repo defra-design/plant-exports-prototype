@@ -15,7 +15,7 @@
 
   <div class="govuk-grid-column-two-thirds">
 
-    <form action="{{query.return_url or 'consignee-import-permit-number?consigneeAdded=true'}}" method="post">
+    <form action="{{query.return_url or 'consignee-import-permit-number?consigneeAdded=true&addressBook=true'}}" method="post">
       <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
           <h1 class="govuk-fieldset__heading">Add a consignee</h1>
@@ -70,16 +70,22 @@
 
       </fieldset>
       
-      <div class="govuk-button-group govuk-!-margin-bottom-7">
+      {% if data.addressBook == "true" %}
+      <div class="govuk-button-group">
+        <!-- <button class="govuk-button" type="submit" data-module="govuk-button">Add consignee</button> -->
         <a href="{{query.return_url or 'consignee-import-permit-number'}}?consigneeAdded=true" role="button" draggable="false" class="govuk-button" data-module="govuk-button">Add consignee</a>
-        {% if data.addressBook == "true" %}
         <a class="govuk-link app-button--link" href="{{query.return_url or 'consignee-address-book'}}">Cancel</a>
-        {% endif %}
+      </div>
+      {% else %}
+      <div class="govuk-button-group govuk-!-margin-bottom-7">
+        <!-- <button class="govuk-button" type="submit" data-module="govuk-button">Add consignee</button> -->
+        <a href="{{query.return_url or 'consignee-import-permit-number'}}?consigneeAdded=true&addressBook=true" role="button" draggable="false" class="govuk-button" data-module="govuk-button">Add consignee</a>
       </div>
 
       {% block continueLater %}
 			{% include "../modules/_save-continue-later.html" %}
 			{% endblock %}
+      {% endif %}
     </form>
 
   </div>
