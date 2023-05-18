@@ -117,19 +117,20 @@
         }) }}
 
         <!-- Cancel link -->
+        {% set _addressID = data['address'] or 1 %}
         {% set _pheatsReturnURL = 'pheats-ap' %}
-        {% set _urlReturnSuffix = "" %}
+        {% set _urlReturnURL = "pheats-cancel?pheatsReturnURL=" + _pheatsReturnURL + "&address=" + _addressID %}
         {% set _urlReturnText = "Cancel PHEATS application" %}
         {% if query.update %}
           <!-- If updating an existing application -->
-          {% set _urlReturnText = "Cancel PHEATS [update]" %}
-          {% set _urlReturnSuffix = "-update" %}
+          {% set _urlReturnText = "Cancel" %}
+          {% set _urlReturnURL = "pheats-cya-update?address=" + _addressID %}
         {% elif query.restart %}
           <!-- If updating an existing application before restarting -->
-          {% set _urlReturnSuffix = "-restart" %}
-          {% set _urlReturnText = "Cancel PHEATS [restart]" %}
+          {% set _urlReturnText = "Cancel" %}
+          {% set _urlReturnURL = "pheats-cya-restart?address=" + _addressID %}
         {% endif %}
-        <p class="govuk-body govuk-!-margin-top-2"><a href="pheats-cancel{{_urlReturnSuffix}}?pheatsReturnURL={{_pheatsReturnURL}}&address={{_addressID}}" class="govuk-link govuk-link--no-visited-state">{{_urlReturnText}}</a></p>
+        <p class="govuk-body govuk-!-margin-top-2"><a href="{{_urlReturnURL}}" class="govuk-link govuk-link--no-visited-state">{{_urlReturnText}}</a></p>
 
     </form>
 

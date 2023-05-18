@@ -8,6 +8,7 @@ var applicationsv4 = require('./data/applications-v4.json');
 var applicationsv5 = require('./data/applications-v5.json');
 var applicationsv6 = require('./data/applications-v6.json');
 var sample = require('./data/sample.json');
+const e = require('express');
 
 module.exports = function (env) {
   /**
@@ -223,6 +224,22 @@ module.exports = function (env) {
     documentation.
 
   ------------------------------------------------------------------ */
+
+  /* ------------------------------------------------------------------
+  Added by DH 18/5 - for passing array formatted strings into a single input and then retrieving it from data as an array
+
+  Parsing array formatted string as an actual array
+  e.g. 
+  - set like this {% set _myArray = ["1,2","3","4"] %} <input name="myInputForArray" type="hidden" value='{{_myArray|dump}}' >
+  - retrieve like this {{data['myInputForArray']|toArray}}
+  ------------------------------------------------------------------ */
+  //commented out for now as not used yet
+  // filters.toArray = function (array) {
+  //   let _newArray = JSON.parse(array);
+  //   return _newArray;
+  // }
+
+
 
   /* ------------------------------------------------------------------
     keep the following line to return your filters to the app
