@@ -414,6 +414,29 @@ module.exports = function(router) {
 
     }
 
+    // Phytosanitary certificate: Decide whether to redirect to import permit upload if they enter a permit number
+    // console.log(baseDir);
+    // console.log(req.session.data['consignee-import-permit']);
+    
+    // This is only triggered when the consignee page is submitted 
+    if (baseDir === "/create/task-list") {
+
+      if (req.session.data.build && req.session.data.build == "ux") {
+
+        // Only check when the consignee page is submitted
+        if (res.locals.prevURL && res.locals.prevURL.indexOf("destination-consignee") >- 1) {
+
+          if (req.session.data['consignee-import-permit']) {
+            // Redirect the page to show true url 
+            return res.redirect("upload-permit")
+          }
+
+        }
+
+      }
+
+    }
+
     // Chris Harding (06.01.23) - Copy application: Validate the copied date so we can either a) throw an error b) direct to the task list
     if (baseDir === "/create/inspection-dates-validation") {
 
@@ -515,29 +538,6 @@ module.exports = function(router) {
 
     }
 
-    // Decide whether to redirect to import permit upload if they enter a permit number
-    console.log(baseDir);
-    console.log(req.session.data['consignee-import-permit']);
-    
-    // This is only triggered when the consignee page is submitted 
-    if (baseDir === "/create/task-list") {
-
-      if (req.session.data.build && req.session.data.build == "ux") {
-
-        // ONly check when the consignee page is submitted
-        if (res.locals.prevURL && res.locals.prevURL.indexOf("destination-consignee") >- 1) {
-
-          if (req.session.data['consignee-import-permit']) {
-            // Redirect the page to show true url 
-            return res.redirect("upload-permit")
-          }
-
-        }
-
-      }
-
-    }
-
     // *******************************
     // EPHYTO routing (delete all of this when we merge ePhyto with PHES)
     // *******************************
@@ -562,6 +562,91 @@ module.exports = function(router) {
       }
       else {
         // Don't do the USDA check or change the page parameter
+      }
+
+    }
+
+    // Chris Harding (19.05.23) - Phytosanitary certificate: Consignee address book routing (add)
+    if (baseDir === "/application/create/consignee-add-validation") {
+
+      var return_url = req.query.return_url;
+      var name = req.session.data.consignee_name;
+      var address = req.session.data.consignee_address;
+      
+      // Error validation - make sure user enters data into required fields
+      if ((name == "" || name == null) && (address == "" || address == null)) {
+        return res.redirect("consignee-add?change=yes&error=true&error1=true&error2=true");
+      }
+      else if (name == "" || name == null) {
+        return res.redirect("consignee-add?change=yes&error=true&error1=true");
+      }
+      else if (address == "" || address == null) {
+        return res.redirect("consignee-add?change=yes&error=true&error2=true");
+      }
+      // Routing - decide where to direct users to
+      else {
+
+        if (return_url) {
+          return res.redirect(return_url + "?consigneeAdded=true&addressBook=true");
+        }
+        else {
+          return res.redirect("consignee-import-permit-number?consigneeAdded=true&addressBook=true&select_address=address_0");
+        }
+
+      }
+
+    }
+
+    // Chris Harding (19.05.23) - Phytosanitary certificate: Consignee address book routing (edit)
+    if (baseDir === "/application/create/consignee-edit-validation") {
+
+      var return_url = req.query.return_url;
+      var name = req.session.data.consignee_name;
+      var address = req.session.data.consignee_address;
+      
+      // Error validation - make sure user enters data into required fields
+      if ((name == "" || name == null) && (address == "" || address == null)) {
+        return res.redirect("consignee-edit?change=yes&error=true&error1=true&error2=true");
+      }
+      else if (name == "" || name == null) {
+        return res.redirect("consignee-edit?change=yes&error=true&error1=true");
+      }
+      else if (address == "" || address == null) {
+        return res.redirect("consignee-edit?change=yes&error=true&error2=true");
+      }
+      // Routing - decide where to direct users to
+      else {
+
+        if (return_url) {
+          return res.redirect(return_url + "?consigneeEdited=true");
+        }
+        else {
+          return res.redirect("consignee-manage-address-book?consigneeEdited=true");
+        }
+
+      }
+
+    }
+
+    // Phytosanitary certificate: Decide whether to redirect to import permit upload if they enter a permit number
+    // console.log(baseDir);
+    // console.log(req.session.data['consignee-import-permit']);
+    
+    // This is only triggered when the consignee page is submitted 
+    if (baseDir === "/application/create/task-list") {
+
+      if (req.session.data.build && req.session.data.build == "ux") {
+
+        // Only check when the consignee page is submitted
+        if (res.locals.prevURL && res.locals.prevURL.indexOf("destination-consignee") >- 1) {
+
+          if (req.session.data['consignee-import-permit']) {
+            // Redirect the page to show true url 
+            return res.redirect("upload-permit")
+          }
+
+        }
+
       }
 
     }
@@ -661,29 +746,6 @@ module.exports = function(router) {
         }
         else {
           return res.redirect("../amend-your-certificate?reissue_certificate_data_pfp=draft");
-        }
-
-      }
-
-    }
-
-    // Decide whether to redirect to import permit upload if they enter a permit number
-    console.log(baseDir);
-    console.log(req.session.data['consignee-import-permit']);
-    
-    // This is only triggered when the consignee page is submitted 
-    if (baseDir === "/application/create/task-list") {
-
-      if (req.session.data.build && req.session.data.build == "ux") {
-
-        // ONly check when the consignee page is submitted
-        if (res.locals.prevURL && res.locals.prevURL.indexOf("destination-consignee") >- 1) {
-
-          if (req.session.data['consignee-import-permit']) {
-            // Redirect the page to show true url 
-            return res.redirect("upload-permit")
-          }
-
         }
 
       }
