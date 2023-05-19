@@ -1,0 +1,222 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Your commodities - Phytosanitary certificate - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="{{page.content.prev or 'javascript:history.back()'}}" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-three-quarters">
+
+    {% if data.upload == 1 %}
+    <div class="app-alert app-alert--info" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
+      <p class="govuk-body" id="govuk-notification-banner-message">File has been uploaded successfully</p>
+    </div>
+    {% endif %}
+    
+    <h1 class="govuk-heading-xl">Your commodities </h1>
+
+    <table class="govuk-table govuk-!-margin-bottom-9">
+      <thead class="govuk-table__head">
+        {% if data.commodity == "potatoes" or data.commodity == "bulbs" %}
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">
+            Description
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Stock number
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Quantity
+          </th>
+          <th class="govuk-table__header" style="text-align: right;" scope="col">
+            Action
+          </th>
+        </tr>
+        {% elif data.commodity == "grain" or data.commodity == "plants" %}
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">
+            Description
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Country of origin
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Quantity
+          </th>
+          <th class="govuk-table__header" style="text-align: right;" scope="col">
+            Action
+          </th>
+        </tr>
+        {% elif data.commodity == "plant products" %}
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">
+            Description
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Country of origin
+          </th>
+          <th class="govuk-table__header" scope="col">
+            <abbr title="Animal and Plant Health Agency">APHA</abbr> sample reference
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Quantity
+          </th>
+          <th class="govuk-table__header" style="text-align: right;" scope="col">
+            Action
+          </th>
+        </tr>
+        {% elif data.commodity == "seeds" %}
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">
+            Description
+          </th>
+<!--           <th class="govuk-table__header" scope="col">
+            Variety
+          </th> -->
+          <th class="govuk-table__header" scope="col">
+            Lot reference
+          </th>
+          <th class="govuk-table__header" scope="col">
+            <abbr title="Animal and Plant Health Agency">APHA</abbr> sample reference
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Quantity
+          </th>
+          <th class="govuk-table__header" style="text-align: right;" scope="col">
+            Action
+          </th>
+        </tr>
+        {% else %}
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">
+            Description
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Country where this machinery was last used
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Unique ID
+          </th>
+          <th class="govuk-table__header" style="text-align: right;" scope="col">
+            Action
+          </th>
+        </tr>
+        {% endif %}
+      </thead>
+      <tbody class="govuk-table__body">
+        {% if data.commodity == "seeds" %}
+        {% set showChange = "true" %}
+        {% set showDelete = "true" %}
+          {% include "../modules/_summary-seed-cya.html" %}
+        {% elif data.upload == 1 %}
+          {% include "../modules/_summary-bulk.html" %}
+        {% else %}
+          {% for commodity in data.commodities %}
+            {% if data.commodity == "bulbs" %}
+              <!-- BULBS -->
+              {% set commodity_page = "bulbs" %}
+              {% block summaryBulb %}{% include "../modules/_summary-bulbs.html" %}{% endblock %}
+            {% elif data.commodity == "used farm machinery" %}
+              <!-- USED FARM MACHINERY -->
+              {% set commodity_page = "commodity-page-machinery" %}
+              {% block summaryMachinery %}{% include "../modules/_summary-machinery-check-answers.html" %}{% endblock %}
+            {% elif data.commodity == "potatoes" %}
+              <!-- POTATOES -->
+              {% set commodity_page = "commodity-page" %}
+              {% block summaryPotatoes %}{% include "../modules/_summary-potatoes.html" %}{% endblock %}
+              {% elif data.commodity == "plant products" %}
+              <!-- PROCESSED PLANT PRODUCTS -->
+              {% set commodity_page = "commodity-page-plant-products" %}
+              {% block summaryPlantProducts %}{% include "../modules/_summary-plant-products-check-answers.html" %}{% endblock %}
+              {% else %}
+            <!-- OTHER COMMODITES -->
+              {% set commodity_page = "commodity-page" %}
+              {% block summaryGeneral %}{% include "../modules/_summary-general-check-answers.html" %}{% endblock %}
+              {% endif %}
+          {% endfor %}
+        {% endif %}
+      </tbody>
+    </table>
+
+    <form method="post">
+      
+      <fieldset class="govuk-fieldset" aria-describedby="applicant-conditional-hint">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-!-margin-bottom-6">
+          <h2 class="govuk-fieldset__heading">
+            Do you want to add more commodities?
+            <!-- Do you want to add more {% if data.commodity == "plants" %}plants and fresh produce{% else %}{{data.commodity or 'plant products'}}{% endif %} to your consignment? -->
+          </h2>
+        </legend>
+       
+        <div class="govuk-form-group">
+          
+          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+            {% set url="how-to-identify" %}
+            {% if data.commodity == "bulbs" %}
+              {% set url="how-to-identify" %}
+            {% elif data.commodity == "used farm machinery" %}
+              {% set url="commodity-page-machinery" %}
+            {% elif data.commodity == "potatoes" %}
+              {% set url="commodity-page" %}
+            {% elif data.commodity == "plant products" %}
+              {% set url="commodity-page-plant-products" %}
+            {% endif %}
+            
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="add_one_commodities-yes" name="add_more_commodities" type="radio" value="yes~{{url}}" data-aria-controls="conditional-applicant-conditional-1">
+              <label class="govuk-label govuk-radios__label" for="add_one_commodities-yes">
+                Yes, add one more commodity 
+              </label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="add_multiple_commodities-yes" name="add_more_commodities" type="radio" value="yes~upload" data-aria-controls="conditional-applicant-conditional-2">
+              <label class="govuk-label govuk-radios__label" for="add_multiple_commodities-yes">
+                Yes, upload multiple commodities 
+              </label>
+            </div>
+
+            {% if data.build == "development" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="add_more_commodities-no" name="add_more_commodities" type="radio" value="no~{% if data.commodity_group == 'produce' %}pheats-check{% elif (data.commodity == 'plant products' or data.commodity == 'plants') %}task-list{% else %}task-list{% endif %}" data-aria-controls="conditional-applicant-conditional-3">
+              <!-- <input class="govuk-radios__input" id="add_more_commodities-no" name="add_more_commodities" type="radio" value="no~{% if data.commodity_group == 'produce' %}pheats-check{% else %}task-list{% endif %}" data-aria-controls="conditional-applicant-conditional-3"> -->
+              <label class="govuk-label govuk-radios__label" for="add_more_commodities-no">
+                No, I have finished adding commodities
+              </label>
+            </div>
+            {% else %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="add_more_commodities-no" name="add_more_commodities" type="radio" value="no~sample-reuse" data-aria-controls="conditional-applicant-conditional-3">
+              <label class="govuk-label govuk-radios__label" for="add_more_commodities-no">
+                No, I have finished adding commodities
+              </label>
+            </div>            
+            {% endif %}
+
+          </div>
+
+        </div>
+
+      </fieldset>
+
+      <div class="govuk-form-group govuk-!-margin-bottom-6">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      </div>
+
+      {% block continueLater %}
+      {% include "../modules/_save-continue-later.html" %}
+      {% endblock %}
+    </form>
+    
+  </div>
+
+</div>
+{% endblock %}

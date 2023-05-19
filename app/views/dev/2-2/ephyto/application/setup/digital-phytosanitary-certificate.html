@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if query.choice == "no" %}You can now apply for a digital phytosanitary certificate{% else %}Would you like to apply for a digital phytosanitary certificate?{% endif %} - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    {% set journey = data.has_reference %}
+    {% if data.commodity == "bulbs" %}
+    <form action="{{query.return_url or 'bulbs-declaration'}}" method="post" action="reference" novalidate>
+    {% elif data.commodity == "farm machinery" %}
+    <form action="{{query.return_url or 'declaration-used-farm-machinery'}}" method="post" action="reference" novalidate>
+    {% elif journey == "coc" %}
+    <form action="{{query.return_url or 'reference?journey=coc'}}" method="post" action="reference" novalidate>
+    {% elif journey == "both" %}
+    <form action="{{query.return_url or 'declaration?journey=both'}}" method="post" action="reference" novalidate>
+    {% else %}
+    <form action="{{query.return_url or 'declaration'}}" method="post" action="reference" novalidate>
+    {% endif %}
+      {% if query.choice == "no" %}
+
+      <div class="govuk-form-group">
+        <h1 class="govuk-heading-xl">You can now apply for a digital phytosanitary certificate</h1>
+        <p class="govuk-body">Digital certificates are sent automatically. You do not need to print or email them.</p>
+      </div>
+      {% else %}
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+          <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-7">{% if query.choice == "no" %}You can now apply for a digital phytosanitary certificate{% else %}Would you like to apply for a digital phytosanitary certificate?{% endif %}</h1>
+        </legend>
+        <p class="govuk-body">Digital certificates are sent automatically. You do not need to print or email them.</p>
+
+        <div class="govuk-form-group">
+        
+          <div class="govuk-radios" data-module="govuk-radios">
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="certificate-format-1" name="certificateFormat" type="radio" value="Digital">
+              <label class="govuk-label govuk-radios__label" for="certificate-format-1">Yes, I'd like to apply for a digital certificate</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="certificate-format-2" name="certificateFormat" type="radio" value="Paper">
+              <label class="govuk-label govuk-radios__label" for="certificate-format-2">No, send me a paper certificate</label>
+            </div>
+
+          </div>
+
+        </div>
+
+      </fieldset>
+      {% endif %}
+
+      <div class="govuk-button-group">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Continue</button>
+        <a class="govuk-link app-button--link" href="../../dashboard-submitted">Cancel</a>
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

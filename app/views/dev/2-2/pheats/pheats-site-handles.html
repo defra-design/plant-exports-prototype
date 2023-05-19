@@ -1,0 +1,102 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  [title] - Manage account - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="../account" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
+  </ul>
+</div>
+
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-xl">What kind of commodities does this site handle?</h1>
+
+    {% set _checkboxes = 
+      [
+        "Not for export",
+        "For export: fruit, veg and cut flowers (not potatoes)",
+        "For export: plants, plant products, seeds, grain, seed and ware potatoes, machinery and wood"
+      ] 
+    %}
+
+    <form method="post" novalidate action="pheats-commodity">
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" >
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              Plant materials of UK origin
+          </legend>
+          <div class="govuk-hint">
+            Select all that apply
+          </div>
+          <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+            {% for _ukOriginCheckbox in _checkboxes %}
+              {% set _selected = false %}
+              {% for _item in data['ukOrigin'] %}
+                {% if _item == _ukOriginCheckbox %}
+                  {% set _selected = true %}
+                {% endif %}
+              {% endfor %}
+              <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" id="ukOrigin-{{loop.index}}" name="ukOrigin" type="checkbox" value="{{_ukOriginCheckbox}}" {% if _selected %}checked{% endif %}>
+                <label class="govuk-label govuk-checkboxes__label" for="ukOrigin-{{loop.index}}">
+                  {{_ukOriginCheckbox}}
+                </label>
+              </div>
+            {% endfor %}
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" >
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              Plant materials not of UK origin
+          </legend>
+          <div class="govuk-hint">
+            Select all that apply
+          </div>
+          <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+            {% for _notUKOriginCheckbox in _checkboxes %}
+              {% set _selected = false %}
+              {% for _item in data['notUKOrigin'] %}
+                {% if _item == _notUKOriginCheckbox %}
+                  {% set _selected = true %}
+                {% endif %}
+              {% endfor %}
+              <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" id="notUKOrigin-{{loop.index}}" name="notUKOrigin" type="checkbox" value="{{_notUKOriginCheckbox}}" {% if _selected %}checked{% endif %}>
+                <label class="govuk-label govuk-checkboxes__label" for="notUKOrigin-{{loop.index}}">
+                  {{_notUKOriginCheckbox}}
+                </label>
+              </div>
+            {% endfor %}
+          </div>
+        </fieldset>
+      </div>
+
+      {{ govukButton({
+        text: "Continue"
+      }) }}
+
+      {% set _pheatsReturnURL = 'pheats-site-handles' %}
+      <p class="govuk-body govuk-!-margin-top-2"><a href="pheats-cancel?pheatsReturnURL={{_pheatsReturnURL}}" class="govuk-link govuk-link--no-visited-state">Cancel PHEATS application</a></p>
+
+    </form>
+
+  </div>
+</div>
+{% endblock %}

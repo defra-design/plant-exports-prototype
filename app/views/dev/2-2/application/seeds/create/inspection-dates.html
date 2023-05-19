@@ -1,0 +1,124 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  When will the seeds be ready for sampling? - Seed sampling - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../../modules/_account-banner.html" %}
+<a href="{{page.content.prev or 'javascript:history.back()'}}" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <form action="{{query.return_url or 'task-list'}}" method="post">
+ 
+      {% if data.build == "development" %}
+      <fieldset class="govuk-fieldset" aria-describedby="date-hint">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+          <h1 class="govuk-fieldset__heading">When will the seeds be ready for sampling?</h1>
+        </legend>
+
+        <fieldset class="govuk-fieldset" aria-describedby="date-hint">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+            <h2 class="govuk-fieldset__heading govuk-!-margin-top-4">Date when your seeds will be ready</h2>
+          </legend>
+          <span id="submit-date-hint" class="govuk-hint">For example, 27 3 2021</span>
+
+          <div class="govuk-date-input" id="submit-date">
+
+            <div class="govuk-date-input__item">
+
+              <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" for="submit-date-day">Day</label>
+                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="submit-date-day" name="inpection_date_day" type="text" pattern="[0-9]*" inputmode="numeric" value="{{data.inpection_date_day or ''}}">
+              </div>
+
+            </div>
+
+            <div class="govuk-date-input__item">
+
+              <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" for="submit-date-month">Month</label>
+                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="submit-date-month" name="inpection_date_month" type="text" pattern="[0-9]*" inputmode="numeric" value="{{data.inpection_date_month or ''}}">
+              </div>
+
+            </div>
+
+            <div class="govuk-date-input__item">
+
+              <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" for="submit-date-year">Year</label>
+                <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="submit-date-year" name="inpection_date_year" type="text" pattern="[0-9]*" inputmode="numeric" value="{{data.inpection_date_year or ''}}">
+              </div>
+
+            </div>
+
+          </div>
+
+      </fieldset>
+      {% else %}
+      <fieldset class="govuk-fieldset" aria-describedby="submit-date-hint">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-8">
+          <h1 class="govuk-fieldset__heading">When will the seeds be ready for sampling?</h1>
+        </legend>
+
+        <div id="submit-date-hint" class="govuk-hint">
+          For example, 27 3 2021
+        </div>
+
+        <div class="govuk-date-input" id="submit-date">
+
+          <div class="govuk-date-input__item">
+
+            <div class="govuk-form-group">
+              <label class="govuk-label govuk-date-input__label" for="submit-date-day">Day</label>
+              <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="submit-date-day" name="inpection_date_day" type="text" pattern="[0-9]*" inputmode="numeric" value="{{data.inpection_date_day or ''}}">
+            </div>
+
+          </div>
+
+          <div class="govuk-date-input__item">
+
+            <div class="govuk-form-group">
+              <label class="govuk-label govuk-date-input__label" for="submit-date-month">Month</label>
+              <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="submit-date-month" name="inpection_date_month" type="text" pattern="[0-9]*" inputmode="numeric" value="{{data.inpection_date_month or ''}}">
+            </div>
+
+          </div>
+
+          <div class="govuk-date-input__item">
+
+            <div class="govuk-form-group">
+              <label class="govuk-label govuk-date-input__label" for="submit-date-year">Year</label>
+              <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="submit-date-year" name="inpection_date_year" type="text" pattern="[0-9]*" inputmode="numeric" value="{{data.inpection_date_year or ''}}">
+            </div>
+
+          </div>
+
+        </div>
+
+      </fieldset>
+      {% endif %}
+
+      <button class="govuk-button govuk-!-margin-bottom-9" type="submit" data-module="govuk-button">Save and continue</button>
+      {% block continueLater %}
+      {% include "../../modules/_save-continue-later.html" %}
+      {% endblock %}
+
+      <!-- Session data hook to update the task list so that this section is marked as 'COMPLETED' -->
+      <div class="govuk-form-group" hidden>
+        <label class="govuk-label" for="inspection_task_list_data">Task list section URL</label>
+        <input class="govuk-input" id="inspection_task_list_data" name="inspection_task_list_data" type="text" value="Complete">
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Import permit number (optional) - Phytosanitary certificate - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if query.consigneeAdded == "true" %}
+    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+  
+      <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">Success</h2>
+      </div>
+
+      <div class="govuk-notification-banner__content">
+        <h3 class="govuk-notification-banner__heading">Consignee successfully added and saved for future use</h3>
+        <!-- <p class="govuk-body">You can review and manage your saved consignees in your <a class="govuk-link" href="consignee-address-book">consignee address book</a>.</p> -->
+      </div>
+
+    </div>
+    {% endif %}
+
+    {% if data.commodity == "grain" %}
+    <form action="{{query.return_url or 'consignee-further-information'}}" method="post">
+    {% else %}
+    <form action="{{query.return_url or 'task-list'}}" method="post">
+    {% endif %}
+      
+      <div class="govuk-form-group">
+        <h1 class="govuk-label-wrapper">
+          <label class="govuk-label govuk-label--xl govuk-!-margin-bottom-9" for="consignee-import-permit">Import permit number (optional)</label>
+        </h1>
+        <span id="consignee-import-permit-hint" class="govuk-hint">If you have been given an import permit by the destination country, enter the number here. You can upload the import permit as a supporting document later on in this application</span>
+        <input class="govuk-input" id="consignee-import-permit" name="consignee_import_permit" type="text" aria-describedby="consignee-import-permit-hint" value="{{data.consignee_import_permit}}">
+      </div>
+      
+      <div class="govuk-button-group govuk-!-margin-bottom-7">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      </div>
+
+      {% if data.commodity != "grain" %}
+      <!-- Session data hook to update the task list so that this section is marked as 'COMPLETED' -->
+      <div class="govuk-form-group" hidden>
+        <label class="govuk-label" for="consignee_task_list_data">Task list section URL</label>
+        <input class="govuk-input" id="consignee_task_list_data" name="consignee_task_list_data" type="text" value="Complete">
+      </div>
+      {% endif %}
+
+      {% block continueLater %}
+			{% include "../modules/_save-continue-later.html" %}
+			{% endblock %}
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

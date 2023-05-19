@@ -1,0 +1,131 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Your consignees - Phytosanitary certificate - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="consignee-address-book" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<style>
+  
+  /* Needs extracting and adding to the external Sass or CSS */
+  /* Chris Harding (17.05.23) - Style all 'Actions' links as blocks in the final column */
+  .draft-actions-copy {
+    display: block;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  @media (min-width: 40.0625em) {
+    .draft-actions-copy {
+      padding-top: 0px;
+      padding-bottom: 10px;
+    }
+  }
+
+</style>
+
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if query.consigneeEdited == "true" %}
+    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+  
+      <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">Success</h2>
+      </div>
+
+      <div class="govuk-notification-banner__content">
+        <h3 class="govuk-notification-banner__heading">Consignee successfully updated</h3>
+        <!-- <p class="govuk-body">You can review and manage your saved consignees in your <a class="govuk-link" href="consignee-manage-address-book">consignee address book</a>.</p> -->
+      </div>
+
+    </div>
+    {% elif query.consigneeDeleted == "true" %}
+    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+  
+      <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">Success</h2>
+      </div>
+
+      <div class="govuk-notification-banner__content">
+        <h3 class="govuk-notification-banner__heading">Consignee successfully deleted</h3>
+        <!-- <p class="govuk-body">You can review and manage your saved consignees in your <a class="govuk-link" href="consignee-manage-address-book">consignee address book</a>.</p> -->
+      </div>
+
+    </div>
+    {% endif %}
+
+    <div class="govuk-form-block">
+      <h1 class="govuk-heading-xl">Your consignees</h1>
+      <!-- <p class="govuk-body"><a class="govuk-link" href="consignee-add?return_url=/dev/{{data.version}}/ephyto/application/create/consignee-address-book">Add a new consignee</a></p> -->
+      <a href="consignee-add?return_url=/dev/{{data.version}}/ephyto/application/create/consignee-address-book" role="button" draggable="false" class="govuk-button" data-module="govuk-button">Add a new consignee</a>
+    </div>
+
+    <table class="govuk-table govuk-!-margin-bottom-9">
+      <caption class="govuk-table__caption govuk-visually-hidden">Your consignees</caption>
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">Name</th>
+          <th scope="col" class="govuk-table__header">Address</th>
+          <th scope="col" class="govuk-table__header govuk-table__header--numeric">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        {% if data.consigneeAdded == "true" %}
+        <tr class="govuk-table__row">
+          <td scope="row" class="govuk-table__header">{{data.consignee_name or "Zheng Fruits"}}</td>
+          <td class="govuk-table__cell">{{data.consignee_address or "88 Jianguo Rd, 朝阳区, 北京市, Chine, 3208"}}</td>
+          <td class="govuk-table__cell govuk-table__cell--numeric">
+            <a href="consignee-edit?address=0&return_url=/dev/{{data.version}}/ephyto/application/create/consignee-manage-address-book" class="draft-actions-copy govuk-link govuk-link--no-visited-state">Edit<span class="govuk-visually-hidden"> this consignee</span></a>
+            <a href="consignee-delete?address=0&return_url=/dev/{{data.version}}/ephyto/application/create/consignee-manage-address-book" class="draft-actions-copy govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this consignee</span></a>
+          </td>
+        </tr>
+        {% endif %}
+        <tr class="govuk-table__row">
+          <td scope="row" class="govuk-table__header">Frukta LLC</td>
+          <td class="govuk-table__cell">Lillegardsvagen 1, Falkenberg, South-East, Sweden, 311 50</td>
+          <td class="govuk-table__cell govuk-table__cell--numeric">
+            <a href="consignee-edit?address=1&return_url=/dev/{{data.version}}/ephyto/application/create/consignee-manage-address-book" class="draft-actions-copy govuk-link govuk-link--no-visited-state">Edit<span class="govuk-visually-hidden"> this consignee</span></a>
+            <a href="consignee-delete?address=1&return_url=/dev/{{data.version}}/ephyto/application/create/consignee-manage-address-book" class="draft-actions-copy govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this consignee</span></a>
+          </td>
+        </tr>
+        <tr class="govuk-table__row">
+          <td scope="row" class="govuk-table__header">Alpine Furnishings Ltd</td>
+          <td class="govuk-table__cell">Piazza Pietro Nenni, 4, Orta Nova Foggia, Foggia, Italy, 71045</td>
+          <td class="govuk-table__cell govuk-table__cell--numeric">
+            <a href="consignee-edit?address=2&return_url=/dev/{{data.version}}/ephyto/application/create/consignee-manage-address-book" class="draft-actions-copy govuk-link govuk-link--no-visited-state">Edit<span class="govuk-visually-hidden"> this consignee</span></a>
+            <a href="consignee-delete?address=2&return_url=/dev/{{data.version}}/ephyto/application/create/consignee-manage-address-book" class="draft-actions-copy govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this consignee</span></a>
+          </td>
+        </tr>
+        <tr class="govuk-table__row">
+          <td scope="row" class="govuk-table__header">PINDI LLC</td>
+          <td class="govuk-table__cell">Phase 3 St, Vaibhav Nagar, Katpadi, Vellore, Tamil Nadu, India, 632014</td>
+          <td class="govuk-table__cell govuk-table__cell--numeric">
+            <a href="consignee-edit?address=3&return_url=/dev/{{data.version}}/ephyto/application/create/consignee-manage-address-book" class="draft-actions-copy govuk-link govuk-link--no-visited-state">Edit<span class="govuk-visually-hidden"> this consignee</span></a>
+            <a href="consignee-delete?address=3&return_url=/dev/{{data.version}}/ephyto/application/create/consignee-manage-address-book" class="draft-actions-copy govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this consignee</span></a>
+          </td>
+        </tr>
+        <tr class="govuk-table__row">
+          <td scope="row" class="govuk-table__header">Globex Corporation</td>
+          <td class="govuk-table__cell">6347 Pacific Blvd, Huntington Park, California, United States, 90255</td>
+          <td class="govuk-table__cell govuk-table__cell--numeric">
+            <a href="consignee-edit?address=4&return_url=/dev/{{data.version}}/ephyto/application/create/consignee-manage-address-book" class="draft-actions-copy govuk-link govuk-link--no-visited-state">Edit<span class="govuk-visually-hidden"> this consignee</span></a>
+            <a href="consignee-delete?address=4&return_url=/dev/{{data.version}}/ephyto/application/create/consignee-manage-address-book" class="draft-actions-copy govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this consignee</span></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    {% block continueLater %}
+    {% include "../modules/_save-continue-later.html" %}
+    {% endblock %}
+  </div>
+
+</div>
+{% endblock %}
