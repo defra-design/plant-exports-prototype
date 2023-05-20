@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  Add a consignee - Phytosanitary certificate - {{serviceName}} - GOV.UK
+  {% if query.error == "true" %}Error: {% endif %}Add a consignee - Phytosanitary certificate - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -15,7 +15,28 @@
 
   <div class="govuk-grid-column-two-thirds">
 
-    <form action="{{query.return_url or 'consignee-import-permit-number?consigneeAdded=true&addressBook=true'}}" method="post">
+    {% if query.error == "true" %}
+    <div class="govuk-error-summary" data-module="govuk-error-summary" tabindex="-1" autofocus>
+      
+      <div role="alert">
+        <h2 class="govuk-error-summary__title">There is a problem</h2>       
+        <div class="govuk-error-summary__body">
+          <ul class="govuk-list govuk-error-summary__list">
+            {% if query.error1 == "true" %}
+            <li><a href="#consignee_name">Enter the name of the consignee</a></li>
+            {% endif %}
+            {% if query.error2 == "true" %}
+            <li><a href="#consignee_address">Enter the address of the consignee</a></li>
+            {% endif %}
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+    {% endif %}
+
+    <form action="consignee-add-validation?return_url={{query.return_url}}" method="post">
       <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
           <h1 class="govuk-fieldset__heading">Add a consignee</h1>
@@ -24,9 +45,12 @@
         <p class="govuk-hint">The consignee is the importer or customer who receives your consignment when it arrives in the destination country</p>
         {% endif %}
 
-        <div class="govuk-form-group">
+        <div class="govuk-form-group{% if query.error1 == 'true' %} govuk-form-group--error{% endif %}">
           <label class="govuk-label" for="consignee_name">Name of the consignee</label>
-          <input class="govuk-input" id="consignee_name" name="consignee_name" type="text">
+          {% if query.error1 == 'true' %}
+          <p id="consignee_name-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Enter the name of the consignee</p>
+          {% endif %}
+          <input class="govuk-input" id="consignee_name" name="consignee_name" type="text" value="{{data.consignee_name}}"{% if query.error1 == 'true' %} aria-describedby="consignee_name-error{% endif %}">
         </div>
 
         {% if query.addAddressDesign == "1" %}
@@ -62,9 +86,12 @@
 
         </fieldset>
         {% else %}
-        <div class="govuk-form-group">
+        <div class="govuk-form-group{% if query.error2 == 'true' %} govuk-form-group--error{% endif %}">
           <label class="govuk-label" for="consignee_address">Address of the consignee</label>
-          <textarea class="govuk-textarea" id="consignee_address" name="consignee_address" rows="5"></textarea>
+          {% if query.error2 == 'true' %}
+          <p id="consignee_address-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Enter the address of the consignee</p>
+          {% endif %}
+          <textarea class="govuk-textarea" id="consignee_address" name="consignee_address" rows="5"{% if query.error2 == 'true' %} aria-describedby="consignee_address-error{% endif %}">{{data.consignee_address}}</textarea>
         </div>
         {% endif %}
 
@@ -72,14 +99,12 @@
       
       {% if data.addressBook == "true" %}
       <div class="govuk-button-group">
-        <!-- <button class="govuk-button" type="submit" data-module="govuk-button">Add consignee</button> -->
-        <a href="{{query.return_url or 'consignee-import-permit-number'}}?consigneeAdded=true" role="button" draggable="false" class="govuk-button" data-module="govuk-button">Add consignee</a>
-        <a class="govuk-link app-button--link" href="{{query.return_url or 'consignee-address-book'}}">Cancel</a>
+        <button class="govuk-button" type="submit" data-module="govuk-button">Add consignee</button>
+        <a class="govuk-link app-button--link" href="consignee-address-book">Cancel</a>
       </div>
       {% else %}
       <div class="govuk-button-group govuk-!-margin-bottom-7">
-        <!-- <button class="govuk-button" type="submit" data-module="govuk-button">Add consignee</button> -->
-        <a href="{{query.return_url or 'consignee-import-permit-number'}}?consigneeAdded=true&addressBook=true" role="button" draggable="false" class="govuk-button" data-module="govuk-button">Add consignee</a>
+        <button class="govuk-button" type="submit" data-module="govuk-button">Add consignee</button>
       </div>
 
       {% block continueLater %}

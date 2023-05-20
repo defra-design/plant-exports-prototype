@@ -779,38 +779,34 @@
         {% endif %}
         {% else %}
         <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Name of consignee</dt>          
-          <dd class="govuk-summary-list__value">{{data.consignee_name or 'Consignee name'}}</dd>
+          <dt class="govuk-summary-list__key">Name and address of consignee</dt>          
+          <dd class="govuk-summary-list__value">
+            {% if data.address == '0' %}{{data.consignee_name or 'Zheng Fruits'}}{% elif data.address == '1' %}Frukta LLC{% elif data.address == '2' %}Alpine Furnishings Ltd{% elif data.address == '3' %}PINDI LLC{% elif data.address == '4' %}Globex Corporation{% else %}Zheng Fruits{% endif %}
+            <br>
+            {% if data.address == '0' %}{{data.consignee_address or "88 Jianguo Rd, 朝阳区, 北京市, China, 3208"}}{% elif data.address == '1' %}Lillegardsvagen 1, Falkenberg, South-East, Sweden, 311 50{% elif data.address == '2' %}Piazza Pietro Nenni, 4, Orta Nova Foggia, Foggia, Italy, 71045{% elif data.address == '3' %}Phase 3 St, Vaibhav Nagar, Katpadi, Vellore, Tamil Nadu, India, 632014{% elif data.address == '4' %}6347 Pacific Blvd, Huntington Park, California, United States, 90255{% else %}88 Jianguo Rd, 朝阳区, 北京市, China, 3208{% endif %}
+          </dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="destination-consignee?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">who will receive this consignment</span></a>
+            <a class="govuk-link" href="consignee-address-book?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">who will receive this consignment</span></a>
           </dd>
         </div>
-
+        
         <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Address of the consignee</dt>
-          <dd class="govuk-summary-list__value">{{data.consignee_address or 'XYZ China Imports Ltd, Kaiser Centre, Phase III, 9-11 Hok Yuen St., Kowloon, China'}}</dd>
+          <dt class="govuk-summary-list__key">Import permit number</dt>
+          <dd class="govuk-summary-list__value">{{data.consignee_import_permit or '2244668800'}}</dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="destination-consignee?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> the address of the consignee</span></a>
+            <a class="govuk-link" href="consignee-import-permit-number?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> the import permit number</span></a>
           </dd>
-        </div>
+        </div>        
 
         {% if data.commodity == "grain" %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Further information</dt>
           <dd class="govuk-summary-list__value">{{data.consignee_more_detail or 'More information'}}</dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="destination-consignee?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> the further information</span></a>
+            <a class="govuk-link" href="consignee-further-information?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> the further information</span></a>
           </dd>
         </div>
         {% endif %}
-        
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Import permit number</dt>
-          <dd class="govuk-summary-list__value">{{data.consignee_import_permit or '2244668800'}}</dd>
-          <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="destination-consignee?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> the import permit number</span></a>
-          </dd>
-        </div>        
         {% endif %}
 
       </dl>
