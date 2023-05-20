@@ -32,7 +32,16 @@
       ] 
     %}
 
-    <form method="post" novalidate action="pheats-commodity">
+    <!-- If updating or restarting existing address or not -->
+    {% set _link = "pheats-commodity" %}
+    {% if query.update %}
+      {% set _link = "pheats-cya-update" %}
+    {% endif %}
+    {% if query.restart %}
+      {% set _link = "pheats-cya-restart" %}
+    {% endif %}
+
+    <form method="post" novalidate action="{{_link}}">
 
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset" >
@@ -92,8 +101,22 @@
         text: "Continue"
       }) }}
 
+      <!-- Cancel link -->
+      {% set _addressID = data['address'] or 1 %}
       {% set _pheatsReturnURL = 'pheats-site-handles' %}
-      <p class="govuk-body govuk-!-margin-top-2"><a href="pheats-cancel?pheatsReturnURL={{_pheatsReturnURL}}" class="govuk-link govuk-link--no-visited-state">Cancel PHEATS application</a></p>
+      {% set _urlReturnURL = "pheats-cancel?pheatsReturnURL=" + _pheatsReturnURL + "&address=" + _addressID %}
+      {% set _urlReturnText = "Cancel PHEATS application" %}
+      {% if query.update %}
+        <!-- If updating an existing application -->
+        {% set _urlReturnText = "Cancel" %}
+        {% set _urlReturnURL = "pheats-cya-update?address=" + _addressID %}
+      {% elif query.restart %}
+        <!-- If updating an existing application before restarting -->
+        {% set _urlReturnText = "Cancel" %}
+        {% set _urlReturnURL = "pheats-cya-restart?address=" + _addressID %}
+      {% endif %}
+      <p class="govuk-body govuk-!-margin-top-2"><a href="{{_urlReturnURL}}" class="govuk-link govuk-link--no-visited-state">{{_urlReturnText}}</a></p>
+
 
     </form>
 

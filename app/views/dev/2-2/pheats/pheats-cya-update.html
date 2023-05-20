@@ -109,45 +109,109 @@
 
       <h3 class="govuk-heading-m">PHEATS commodities at this address</h3>
 
+      {% set _commodityCount = data['commodityCount'] or 1 | int %}
+      {% set _commodityDisplayedCount = data['commodityDisplayedCount'] or 0 | int %}
+      {% set _commodityCountDeleted = _commodityDisplayedCount|int - 1 %}
+      {% set _commodityCountUndoDeleted = _commodityDisplayedCount|int + 1 %}
+
+      {% if _commodityDisplayedCount == 0 %}
+      <!-- <p class="govuk-body"><strong>[all authorised people will be removed - warning about effect of this?]</strong></p> -->
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-warning-text__assistive">Warning</span>
+          [all commodities will be removed - warning about effect of this?]
+        </strong>
+      </div>
+      {% else %}
       <dl class="govuk-summary-list govuk-!-margin-bottom-4">
 
-        {% for _commodity in _address.pheats.commodities %}
+        {% for i in range(0, _commodityCount) -%}
+
+        {% set _deleted = "false" %}
+        {% set _id = loop.index %}
+        {% set _deletedValue = data['commodityDeleted'+_id] %}
+        {% if _deletedValue == "true" %}
+          {% set _deleted = "true" %}
+        {% endif %}
+
         <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">
-              {{_commodity.name}}
-            </dt>
-            <dd class="govuk-summary-list__value">
-              <p class="govuk-body govuk-!-margin-bottom-2">
-                Countries of origin:
+          <dt class="govuk-summary-list__key">
+            {{data['commodityName' + _id] or 'Dactylorhiza umbrosa (DAKUM)'}}
+            {% if _deleted == "true" %}
+              <p class="govuk-body govuk-!-margin-bottom-2 govuk-!-margin-top-2">
+                <strong class="govuk-tag govuk-tag--orange">
+                  [To be deleted]
+                </strong>
               </p>
-              <ul class="govuk-list govuk-list--bullet">
-                {% for _origin in _commodity.origins %}
-                  <li>{{_origin[0]}}</li>
-                {% endfor %}
-              </ul>
-              <p class="govuk-body govuk-!-margin-bottom-2">
-                Destinations:
-              </p>
-              <ul class="govuk-list govuk-list--bullet">
-                {% for _destination in _commodity.destinations %}
-                  <li>{{_destination[0]}}</li>
-                {% endfor %}
-              </ul>
-            </dd>
-            <dd class="govuk-summary-list__actions">
-              
-              <p class="govuk-body govuk-!-margin-bottom-2"><a href="#" class="govuk-link govuk-link--no-visited-state">Edit<span class="govuk-visually-hidden"> this commodity</span></a></p>
-              <p class="govuk-body govuk-!-margin-bottom-2">
-              <a href="#" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
-              </p>
+            {% endif %}
+          </dt>
+          <dd class="govuk-summary-list__value">
 
-            </dd>
+            <p class="govuk-body">Countries of origin: </p>
+            {% set _originCount = data['originCount' + _id] or 1 | int %}
+            <ul class="govuk-list govuk-list--bullet">
+              {% for i in range(0, _originCount) -%}
+                {% set _show = "true" %}
+                {% set _originID = loop.index %}
+                {% set _deletedValue = data['commodityOriginDeleted' + _id + '-' + _originID] %}
+                {% if _deletedValue == "true" %}
+                  {% set _show = "false" %}
+                {% endif %}
+
+                {% if _show == "true" %}
+                <li>{{data['commodityOrigin' + _id + '-' + _originID][0] or 'United Kingdom'}}</li>
+                {% endif %}
+              {%- endfor %}
+            </ul>
+
+            <p class="govuk-body">Destinations: </p>
+            {% set _destinationCount = data['destinationCount' + _id] or 1 | int %}
+            <ul class="govuk-list govuk-list--bullet">
+              {% for i in range(0, _destinationCount) -%}
+                {% set _show = "true" %}
+                {% set _destinationID = loop.index %}
+                {% set _deletedValue = data['commodityDestinationDeleted' + _id + '-' + _destinationID] %}
+                {% if _deletedValue == "true" %}
+                  {% set _show = "false" %}
+                {% endif %}
+
+                {% if _show == "true" %}
+                <li>{{data['commodityDestination' + _id + '-' + _destinationID][0] or 'France'}}</li>
+                {% endif %}
+              {%- endfor %}
+            </ul>
+
+          </dd>
+          
+          {% set _deleteLinkSuffix = "?deletedCommodity=" + _id + "&commodityDeleted" + _id + "=true" + "&commodityDisplayedCount=" + _commodityCountDeleted | int %}
+          {% set _undoDeleteLinkSuffix = "?undoDeletedCommodity=" + _id + "&commodityDeleted" + _id + "=false" + "&commodityDisplayedCount=" + _commodityCountUndoDeleted | int %}
+          <dd class="govuk-summary-list__actions">
+            {% if _deleted == "true" %}
+              <p class="govuk-body govuk-!-margin-bottom-2">
+                <a href="pheats-cya-update{{_undoDeleteLinkSuffix}}" class="govuk-link govuk-link--no-visited-state">[Undo delete]<span class="govuk-visually-hidden"> of this commodity</span></a>
+              </p>
+            {% else %}
+              <p class="govuk-body govuk-!-margin-bottom-2">
+                <a href="pheats-commodity?edit={{_id}}&update=yes" class="govuk-link govuk-link--no-visited-state">Edit<span class="govuk-visually-hidden"> this commodity</span></a>
+              </p>
+              <p class="govuk-body govuk-!-margin-bottom-2">
+                <a href="pheats-cya-update{{_deleteLinkSuffix}}" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+              </p>
+            {% endif %}
+          </dd>
         </div>
-        {% endfor %}
-       
-      </dl>
 
-      <p class="govuk-body govuk-!-margin-bottom-8"><a class="govuk-link govuk-link--no-visited-state" href="" >Add another commodity</a></p>
+        {%- endfor %}
+
+      </dl>
+      {% endif %}
+
+      {% set _addAnotherCommodityText = "Add another commodity" %}
+      {% if _commodityDisplayedCount == 0 %}
+        {% set _addAnotherCommodityText = "Add a commodity" %}
+      {% endif %}
+      <p class="govuk-body govuk-!-margin-bottom-8"><a class="govuk-link govuk-link--no-visited-state" href="pheats-commodity?update=yes" >{{_addAnotherCommodityText}}</a></p>
 
       <h2 class="govuk-heading-m">Site plan</h2>
 
@@ -181,9 +245,9 @@
             Plant materials of UK origin
           </dt>
           <dd class="govuk-summary-list__value">
-            {% if _address.pheats.sitehandlesUKOrigin %}
+            {% if data['ukOrigin'] %}
               <ul class="govuk-list govuk-list--bullet">
-                {% for _ukOrigin in _address.pheats.sitehandlesUKOrigin %}
+                {% for _ukOrigin in data['ukOrigin'] %}
                   <li>{{_ukOrigin | lower}}</li>
                 {% endfor %}
               </ul>
@@ -193,7 +257,7 @@
           </dd>
           <dd class="govuk-summary-list__actions">
             <!-- <a class="govuk-link govuk-link--no-visited-state" href="pheats-site-handles"> -->
-              <a class="govuk-link govuk-link--no-visited-state" href="#">
+              <a class="govuk-link govuk-link--no-visited-state" href="pheats-site-handles?update=yes">
               Edit<span class="govuk-visually-hidden"> </span>
             </a>
           </dd>
@@ -204,9 +268,9 @@
             Plant materials not of UK origin
           </dt>
           <dd class="govuk-summary-list__value">
-            {% if _address.pheats.sitehandlesNotUKOrigin %}
+            {% if data['notUKOrigin'] %}
                 <ul class="govuk-list govuk-list--bullet">
-                  {% for _notUKOrigin in _address.pheats.sitehandlesNotUKOrigin %}
+                  {% for _notUKOrigin in data['notUKOrigin'] %}
                     <li>{{_notUKOrigin | lower}}</li>
                   {% endfor %}
                 </ul>
@@ -216,7 +280,7 @@
           </dd>
           <dd class="govuk-summary-list__actions">
             <!-- <a class="govuk-link govuk-link--no-visited-state" href="pheats-site-handles"> -->
-              <a class="govuk-link govuk-link--no-visited-state" href="#">
+              <a class="govuk-link govuk-link--no-visited-state" href="pheats-site-handles?update=yes">
                 Edit<span class="govuk-visually-hidden"> </span>
             </a>
           </dd>
@@ -370,7 +434,7 @@
       <!-- 
         Reset commodity counts and data so if you add another pheats reg it is reset 
       -->
-      <!-- {% for i in range(0, _commodityCount) -%}
+      {% for i in range(0, _commodityCount) -%}
         {% set _id = loop.index %}
         <input id="commodityVariety{{_id}}" name="commodityVariety{{_id}}" type="hidden" value="">
         <input id="commodityName{{_id}}" name="commodityName{{_id}}" type="hidden" value="">
@@ -387,16 +451,18 @@
         <input id="destinationCount{{_id}}" name="destinationCount{{_id}}" type="hidden" value="1">
       {%- endfor %}
       <input id="commodityCount" name="commodityCount" type="hidden" value="0">
-      <input id="commodityDisplayedCount" name="commodityDisplayedCount" type="hidden" value="0"> -->
+      <input id="commodityDisplayedCount" name="commodityDisplayedCount" type="hidden" value="0">
 
+      <!-- Reset site handles values -->
+      <input id="ukOrigin" name="ukOrigin" type="hidden" value="" >
+      <input id="notUKOrigin" name="notUKOrigin" type="hidden" value="" >
 
       {{ govukButton({
         text: "Accept and submit"
       }) }}
-
         
-        {% set _pheatsReturnURL = 'pheats-cya-update' %}
-        <p class="govuk-body govuk-!-margin-top-2"><a href="pheats-cancel-update?pheatsReturnURL={{_pheatsReturnURL}}&address={{_addressID}}" class="govuk-link govuk-link--no-visited-state">Cancel</a></p>
+      {% set _pheatsReturnURL = 'pheats-cya-update' %}
+      <p class="govuk-body govuk-!-margin-top-2"><a href="pheats-cancel-update?pheatsReturnURL={{_pheatsReturnURL}}&address={{_addressID}}" class="govuk-link govuk-link--no-visited-state">Cancel</a></p>
 
     </form>
 

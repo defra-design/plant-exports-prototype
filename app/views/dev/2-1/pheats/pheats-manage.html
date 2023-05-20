@@ -162,13 +162,51 @@
       {% endfor %}
       <input id="apCount" name="apCount" type="hidden" value="{{_address.pheats.authorisedpeople.length}}">
       <input id="apDisplayedCount" name="apDisplayedCount" type="hidden" value="{{_address.pheats.authorisedpeople.length}}">
+      <!-- 
+        Set commodity counts and data before update
+      -->
+      {% for _commodity in _address.pheats.commodities %}
+        {% set _id = loop.index %}
+        <input id="commodityName{{_id}}" name="commodityName{{_id}}" type="hidden" value="{{_commodity.name}}">
+        <input id="commodityDeleted{{_id}}" name="commodityDeleted{{_id}}" type="hidden" value="{{_commodity.deleted or false}}">
+        <!-- Origins -->
+        {% for _origin in _commodity.origins %}
+          <input id="commodityOriginDeleted{{_id}}-{{loop.index}}" name="commodityOriginDeleted{{_id}}-{{loop.index}}" type="hidden" value="{{_origin.deleted or false}}" >
+          {% set _originName = 'commodityOrigin' + _id + '-' + loop.index %}
+          {% for _item in _origin %}
+            <input name="{{_originName}}" type="hidden" value="{{_item}}" >
+          {% endfor %}
+          <input name="{{_originName}}" type="hidden" value="_unchecked" >
+        {% endfor %}
+        <input id="originCount{{_id}}" name="originCount{{_id}}" type="hidden" value="{{_commodity.origins.length}}">
+        <!-- Destinations -->
+        {% for _destination in _commodity.destinations %}
+          <input id="commodityDestinationDeleted{{_id}}-{{loop.index}}" name="commodityDestinationDeleted{{_id}}-{{loop.index}}" type="hidden" value="{{_destination.deleted or false}}" >
+          {% set _destinationName = 'commodityDestination' + _id + '-' + loop.index %}
+          {% for _item in _destination %}
+            <input name="{{_destinationName}}" type="hidden" value="{{_item}}" >
+          {% endfor %}
+          <input name="{{_destinationName}}" type="hidden" value="_unchecked" >
+        {% endfor %}
+        <input id="destinationCount{{_id}}" name="destinationCount{{_id}}" type="hidden" value="{{_commodity.destinations.length}}">
+      {%- endfor %}
+      <!-- Commodity counts -->
+      <input id="commodityCount" name="commodityCount" type="hidden" value="{{_address.pheats.commodities.length}}">
+      <input id="commodityDisplayedCount" name="commodityDisplayedCount" type="hidden" value="{{_address.pheats.commodities.length}}">
 
-      <!-- TEMP -->
-      {% set _array = ["1,2"] %}
-      {% for _item in _array %}
-      <input name="myInputForArray" type="hidden" value='{{_item}}' >   
+
+
+      <!-- 
+        Set site handles data before update
+      -->
+      {% for _ukOrigin in _address.pheats.sitehandlesUKOrigin %}
+      <input name="ukOrigin" type="hidden" value="{{_ukOrigin}}" >
       {% endfor %}
-      <input name="myInputForArray" type="hidden" value="_unchecked">
+      <input name="ukOrigin" type="hidden" value="_unchecked">
+      {% for _notUKOrigin in _address.pheats.sitehandlesNotUKOrigin %}
+      <input name="notUKOrigin" type="hidden" value="{{_notUKOrigin}}" >
+      {% endfor %}
+      <input name="notUKOrigin" type="hidden" value="_unchecked">
       
 
       <!-- RESTART -->
