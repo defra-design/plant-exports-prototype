@@ -19,12 +19,40 @@
 </div>
 
 <a href="javascript:history.back()" class="govuk-back-link">Return to your applications</a>
+<style>
+
+  /* Needs extracting and adding to the external Sass or CSS */
+  .govuk-status--warning {
+    width: auto !important;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    padding-bottom: 1px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    display: inline-block;
+    color: #0b0c0c;
+    background: #FFBF47;
+    border: 3px solid #FFBF47;
+  }
+
+</style>
 {% endblock %}
 
 {% block content %}
 <div class="govuk-grid-row">
 
-  <div class="govuk-grid-column-two-thirds">    
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if data.status == "not required" %}
+    <div class="app-alert app-alert--warning" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
+      <p class="govuk-body" id="govuk-notification-banner-message">[CONTENT]</p>
+      <p class="govuk-body">[MORE CONTENT]</p>
+    </div>
+    {% endif %}
+
     <h1 class="govuk-heading-xl">
       {% if data.build == "development" %}
       {% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %} 
@@ -81,6 +109,10 @@
           {% elif data.status == "rejected" %}
           <div class="govuk-tag govuk-tag--red">
             Rejected
+          </div>
+          {% elif data.status == "not required" %}
+          <div class="govuk-tag govuk-tag--pink">
+            Not required
           </div>
           {% elif data.status == "returned" %}
           <div class="govuk-tag govuk-tag--pink">
