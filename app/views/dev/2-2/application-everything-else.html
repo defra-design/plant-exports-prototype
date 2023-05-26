@@ -48,8 +48,8 @@
 
     {% if data.status == "not required" %}
     <div class="app-alert app-alert--warning" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
-      <p class="govuk-body" id="govuk-notification-banner-message">[CONTENT]</p>
-      <p class="govuk-body">[MORE CONTENT]</p>
+      <p class="govuk-body" id="govuk-notification-banner-message">The inspector decided that you do not need a phytosanitary certificate to export these goods.</p>
+      <p class="govuk-body">You will not be charged for this application.</p>
     </div>
     {% endif %}
 
@@ -106,13 +106,13 @@
           <div class="govuk-tag govuk-tag--green">
             Certificate issued
           </div>
+          {% elif data.status == "not required" %}
+          <div class="govuk-tag govuk-tag--red">
+            Not required
+          </div>
           {% elif data.status == "rejected" %}
           <div class="govuk-tag govuk-tag--red">
             Rejected
-          </div>
-          {% elif data.status == "not required" %}
-          <div class="govuk-tag govuk-tag--pink">
-            Not required
           </div>
           {% elif data.status == "returned" %}
           <div class="govuk-tag govuk-tag--pink">
@@ -187,7 +187,7 @@
     <ul class="govuk-list noprint">
       <li><a class="govuk-link govuk-link--no-visited-state" href="#">View application details</a></li>
       <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 4}}&is_group={{query.is_group}}">Copy as new application</a></li>
-      {% if data.status != 'certificate issued' and data.status != 'rejected' and data.status != 'cancelled' %}
+      {% if data.status != 'certificate issued' and data.status != 'rejected' and data.status != 'not required' and data.status != 'returned' and data.status != 'cancelled' %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="cancel-reason?id={{query.id or 4}}&is_group={{query.is_group}}">Cancel this application</a></li>
       {% endif %}
       {% if data.status == 'certificate issued' %}
