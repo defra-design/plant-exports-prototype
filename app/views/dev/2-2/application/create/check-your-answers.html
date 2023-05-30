@@ -42,7 +42,7 @@
         Your application is now ready to be submitted.
         <br>
         <br>
-        {% if data.build == "development" %}Please check{% else %}Check{% endif %} that the answers you've provided are correct.
+        {% if data.build == "development" %}Check{% else %}Check{% endif %} that the answers you've provided are correct.
       </div>
       {% endif %}
       
@@ -106,8 +106,16 @@
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Address</dt>
-          <dd class="govuk-summary-list__value">{% if data.build == "development" %}{{"New Farm, Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH" | upper}}{% else %}New Farm, Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH{% endif %}</dd>
-          <dd class="govuk-summary-list__actions">&nbsp;</dd>
+          <dd class="govuk-summary-list__value">
+            {% if data['exporter-phyto-address'] == "No" %}
+              {{data['exporter-phyto-address-select']}}
+            {% else %}
+              {% if data.build == "development" %}{{"New Farm, Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH" | upper}}{% else %}New Farm, Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH{% endif %}
+            {% endif %}
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="exporter-phyto-address?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden"></span></a>
+          </dd>
         </div>
 
         <div class="govuk-summary-list__row">
@@ -132,10 +140,18 @@
         </div>
 
         <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Country of origin</dt>
+          <dt class="govuk-summary-list__key">Additional import certificate numbers</dt>
+          <dd class="govuk-summary-list__value">{{data.import_additional_numbers or "9999567890"}}</dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="import-details?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden"></span></a>
+          </dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Origin</dt>
           <dd class="govuk-summary-list__value">{{data.countrySelect[0] or "Netherlands"}}</dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="import-details?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">country of origin</span></a>
+            <a class="govuk-link" href="import-details?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">Origin</span></a>
           </dd>
         </div>
 
@@ -168,7 +184,7 @@
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th class="govuk-table__header govuk-summary-list__key" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">Country of origin</th>
+            <th class="govuk-table__header" scope="col">Origin</th>
             <th class="govuk-table__header" scope="col">Quantity</th>
             <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
           </tr>
@@ -236,7 +252,7 @@
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">{% if data.build == "development" %}Country of last use{% else %}Country of origin{% endif %}</th>
+            <th class="govuk-table__header" scope="col">{% if data.build == "development" %}Country of last use{% else %}Origin{% endif %}</th>
             <th class="govuk-table__header govuk-table__header" scope="col">Unique ID</th>
             <th class="govuk-table__header govuk-table__header--numeric" scope="col">Action</th>
           </tr>
@@ -302,7 +318,7 @@
             <th class="govuk-table__header" scope="col">Description</th>
             {% if data.commodity != "seeds" %}
             <th class="govuk-table__header" scope="col">
-              {% if data.build == "development" %}Country of origin{% else %}{% if data.commodity == "plant products"%}Primary country where grown{% else %}Country of origin{% endif %}{% endif %}
+              {% if data.build == "development" %}Origin{% else %}{% if data.commodity == "plant products"%}Primary country where grown{% else %}Origin{% endif %}{% endif %}
             </th>
             {% endif %}
             <th class="govuk-table__header" scope="col">Quantity</th>

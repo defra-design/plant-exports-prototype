@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "layout-option.html" %}
 
 {% block pageTitle %}
   {% if data.build == "development" %}{% if data.commodity == "plant products" %}Plant Products{% else %}{{data.commodity | capitalize or 'Plant Products' }}{% endif %} Details - Exports application{% else %}Add {% if data.pheats_check != "yes" %}{% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "everything else" %}your commodity{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your {% if data.reforwarding %} re-forwarding{% endif %} consignment - Phytosanitary certificate - {{serviceName}}{% endif %} - GOV.UK
@@ -310,17 +310,21 @@
         </div> -->
         {% endif %}
 
-        {% if data.commodity == "plant products" %}
-        {% set country_module_label = "Primary country of origin" %}
-        {% elif data.build == "development" and data.commodity == "seeds" %}
-        {% set country_module_label = "Primary country of origin" %}
+        <!-- Country of oirign -->
+        {% if data.commodity == "seeds" or data.commodity == "plants" %}
+          <!-- Multi select -->
+          {% set _multiSelectLabel = "Countries of origin" %}
+          {% include "../modules/_multi-select.html" %}
         {% else %}
-        {% set country_module_label = "Country of origin" %}
+          {% block country %}
+            {% if data.commodity == "plant products" or data.build == "development" %}
+              {% set country_module_label = "Primary country of origin" %}
+            {% else %}
+              {% set country_module_label = "Country of origin" %}
+            {% endif %}
+            {% include "../modules/_country-of-origin-select.html" %}
+          {% endblock %}
         {% endif %}
-    
-        {% block country %}
-        {% include "../modules/_country-of-origin-select.html" %}
-        {% endblock %}
 
         {% if data.commodity == "plant products" %}
         <div class="govuk-form-group">
