@@ -1,13 +1,13 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  Select the supporting documents to submit - Phytosanitary certificate - {{serviceName}} - GOV.UK
+  Select the supporting documents to include - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
 {{super()}}
 {% include "../../application/modules/_account-banner.html" %}
-<a href="../export-application" class="govuk-back-link">Back to Microsoft Dynamics 365</a>
+<!-- <a href="../export-application" class="govuk-back-link">Back to Microsoft Dynamics 365</a> -->
 {% endblock %}
 
 {% block content %}
@@ -43,65 +43,20 @@
     }
   }
 
-  /* Chris Harding (10.06.22) - Defra pagination CSS fix to match the developed service implementation */
-  .defra-pagination {
-    margin: 0px;
-  }
-
-  .defra-pagination__list {
-    float: none;
-  }
-
-  .defra-pagination__link {
-    padding-top: 5px;
-    padding-right: 5px;
-    padding-bottom: 5px;
-    padding-left: 0px;
-    text-align: left;
-    min-width: 20px;    
-  }
-  @media (min-width: 40.0625em) {
-    .defra-pagination__link {
-      padding-right: 10px;
-      min-width: 25px;
-    }
-  }
-  
-  .defra-pagination__item--prev {
-    padding-right: 10px;
-  }
-  @media (min-width: 40.0625em) {
-    .defra-pagination__item--prev {
-      padding-right: 15px;
-    }
-  }
-
-  .defra-pagination__results {
-    padding-top: 1px;
-    padding-right: 5px;
-    padding-bottom: 1px;
-    padding-left: 0px;    
-  }
-  @media (min-width: 40.0625em) {
-    .defra-pagination__results {
-      padding-right: 0px;
-      padding-left: 5px;
-    }
-  }
-
 </style>
 
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
     <span class="govuk-caption-xl">Submit phytosanitary certificate 1760 96928 9066</span>
-    <h1 class="govuk-heading-xl">Select the supporting documents to submit</h1>
-    <p class="govuk-body">[CONTENT]</p>
+    <h1 class="govuk-heading-xl">Select the supporting documents to include</h1>
+    <!-- <p class="govuk-body">[CONTENT]</p> -->
+    <h2 class="govuk-heading-s" id="documentsSelected">0 selected</h2>
   </div>
 
   <div class="govuk-grid-column-full">
 
-    <form action="#" method="post">
+    <form action="review-certificate" method="post">
 
       <div class="govuk-form-block responsive-table-select-all-mobile">
 
@@ -119,8 +74,8 @@
       </div>
 
       <table id="supporting-documents-table" class="govuk-table responsive-table">
-        <caption class="govuk-table__caption"><span class="govuk-visually-hidden">Supporting documents</span></caption>
-        <thead class="govuk-table__head govuk-body-s">
+        <caption class="govuk-table__caption"><span class="govuk-visually-hidden">Select all supporting documents on this page</span></caption>
+        <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">
               <span class="responsive-table-select-all-mobile">Select all supporting documents on this page</span>
@@ -137,22 +92,75 @@
               </div>
 
             </th>
-            <!-- <th class="govuk-table__header" scope="col"><span class="govuk-visually-hidden">Check box</span></th> -->
-            <th class="govuk-table__header" scope="col">Row</th>
-            <th class="govuk-table__header" scope="col">Description</th>
-            {% if data.build != "development" %}
-            <th class="govuk-table__header" scope="col">Variety</th>
-            {% endif %}
-            <th class="govuk-table__header" scope="col">Lot reference</th>
-            <th class="govuk-table__header" scope="col">Destination</th> 
-            <th class="govuk-table__header" scope="col">Quantity</th>
+            <th class="govuk-table__header" scope="col">File name</th>
+            <th class="govuk-table__header" scope="col">File description</th>
             <th class="govuk-table__header govuk-table__header--numeric" scope="col">Action</th>
           </tr>
         </thead>
-        <tbody class="govuk-table__body govuk-body-s">
-          ...
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row result">
+            <td class="govuk-table__cell">
+          
+              <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+                
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input commodity_checkbox" id="line_1" name="line_1" type="checkbox" value="">
+                  <label class="govuk-label govuk-checkboxes__label" for="line_1">
+                    <span class="govuk-visually-hidden">Row 1</span>
+                  </label>
+                </div>
+          
+              </div>
+          
+            </td>
+            <td class="govuk-table__cell" scope="row"><span class="table-heading" aria-hidden="true">File name</span> Packing list.docx</td>
+            <td class="govuk-table__cell" scope="row"><span class="table-heading" aria-hidden="true">File description</span> All packing details for this certificate</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric"><a href="#" class="govuk-link govuk-link--no-visited-state">View<span class="govuk-visually-hidden"> Packing list.docx</span></a></td>
+          </tr>
+          <tr class="govuk-table__row result">
+            <td class="govuk-table__cell">
+          
+              <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+                
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input commodity_checkbox" id="line_2" name="line_2" type="checkbox" value="">
+                  <label class="govuk-label govuk-checkboxes__label" for="line_2">
+                    <span class="govuk-visually-hidden">Row 2</span>
+                  </label>
+                </div>
+          
+              </div>
+          
+            </td>
+            <td class="govuk-table__cell" scope="row"><span class="table-heading" aria-hidden="true">File name</span> Email from Customer (24.05.23).jpg</td>
+            <td class="govuk-table__cell" scope="row"><span class="table-heading" aria-hidden="true">File description</span> Additional information from our customer</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric"><a href="#" class="govuk-link govuk-link--no-visited-state">View<span class="govuk-visually-hidden"> Email from Customer (24.05.23).jpg</span></a></td>
+          </tr>
+          <tr class="govuk-table__row result">
+            <td class="govuk-table__cell">
+          
+              <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+                
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input commodity_checkbox" id="line_3" name="line_3" type="checkbox" value="">
+                  <label class="govuk-label govuk-checkboxes__label" for="line_3">
+                    <span class="govuk-visually-hidden">Row 3</span>
+                  </label>
+                </div>
+          
+              </div>
+          
+            </td>
+            <td class="govuk-table__cell" scope="row"><span class="table-heading" aria-hidden="true">File name</span> Import permit (901837657).pdf</td>
+            <td class="govuk-table__cell" scope="row"><span class="table-heading" aria-hidden="true">File description</span> Import permit needed for export</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric"><a href="#" class="govuk-link govuk-link--no-visited-state">View<span class="govuk-visually-hidden"> Import permit (901837657).pdf</span></a></td>
+          </tr>
         </tbody>
       </table>
+
+      <div class="govuk-form-block govuk-!-margin-top-4 govuk-!-margin-bottom-9">
+        <p class="govuk-body"><a class="govuk-link" href="#" id="selectAll">Select all supporting documents on this page</a><p>
+      </div>
 
       <div class="govuk-button-group">
         <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
@@ -163,4 +171,75 @@
   </div>
 
 </div>
+
+<!-- JavaScript (START) -->
+<script>
+
+  window.addEventListener('load', function() {
+    console.log('load');
+    var checkBoxes = $(".govuk-checkboxes__input");
+
+    /* Get the count for number of checkboxes selected on the page  */
+    checkBoxes.change(function() {
+      var len = $('.commodity_checkbox:checked').length;
+      $("#documentsSelected").text(len + " selected");
+    });
+
+    /* Select all link  */
+    $("#selectAll").bind('click onKeyDown', function(e) {
+      e.preventDefault();
+      var txt = $("#selectAll").text();
+
+      if (txt == "Deselect all supporting documents on this page") {
+        $("#selectAll").text("Select all supporting documents on this page");
+        checkBoxes.prop("checked", false)
+      }
+      else {
+        $("#selectAll").text("Deselect all supporting documents on this page");
+        checkBoxes.prop("checked", true)
+      }
+
+      var len = $('.commodity_checkbox:checked').length;
+      $("#documentsSelected").text(len + " selected");
+    });
+
+    /* Chris Harding (31.05.23) - Adding a checkbox allowing users to 'Select all supporting documents on this page' another way */
+    /* DESKTOP */
+    $("#selectAllCheckbox").bind('click onKeyDown', function() {
+      var txt = $("#selectAll").text();
+
+      if (txt == "Deselect all supporting documents on this page") {
+        $("#selectAll").text("Select all supporting documents on this page");
+        checkBoxes.prop("checked", false)
+      }
+      else {
+        $("#selectAll").text("Deselect all supporting documents on this page");
+        checkBoxes.prop("checked", true)
+      }
+
+      var len = $('.commodity_checkbox:checked').length;
+      $("#documentsSelected").text(len + " selected");
+    });
+
+    /* MOBILE */
+    $("#selectAllCheckboxMobile").bind('click onKeyDown', function() {
+      var txt = $("#selectAll").text();
+
+      if (txt == "Deselect all supporting documents on this page") {
+        $("#selectAll").text("Select all supporting documents on this page");
+        checkBoxes.prop("checked", false)
+      }
+      else {
+        $("#selectAll").text("Deselect all supporting documents on this page");
+        checkBoxes.prop("checked", true)
+      }
+
+      var len = $('.commodity_checkbox:checked').length;
+      $("#documentsSelected").text(len + " selected");
+    });
+
+  });
+
+</script>
+<!-- JavaScript (END) -->
 {% endblock %}

@@ -754,10 +754,7 @@ module.exports = function(router) {
 
       }
 
-    }
-
-    // Chris Harding (30.05.23) - Dynamics: Submit a phytosanitary certificate to IPPC Hub (attachments)
-    
+    }    
 
     // *******************************
     // PHEATS routing
