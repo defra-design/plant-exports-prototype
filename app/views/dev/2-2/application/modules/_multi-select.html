@@ -20,7 +20,22 @@
         <fieldset class="govuk-fieldset">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--m gem-c-checkboxes__legend--hidden">Countries</legend>
           <ul class="govuk-checkboxes gem-c-checkboxes__list">
-            <li class="govuk-checkboxes__item">
+
+
+            {% for _country in data['countries-full'] %}
+              <!-- <option value="{{_country.code}}"{% if _selectedOriginCountry == _country.code %} selected{% endif %}>{{_country.name}}</option> -->
+              <li class="govuk-checkboxes__item">
+                <input type="checkbox" name="filter_demo" id="{{_country.name}}" value="{{_country.name}}" class="govuk-checkboxes__input"{% for param in data.filter_demo %}{% if param == '{{_country.name}}' %} checked{% endif %}{% endfor %}{% if query.updateApplication == "yes" %} disabled{% endif %}>
+                <label for="{{_country.name}}" class="govuk-label govuk-checkboxes__label">{{_country.name}}</label>
+              </li>
+            {% endfor %}
+
+
+
+
+
+
+            <!-- <li class="govuk-checkboxes__item">
               <input type="checkbox" name="filter_demo" id="afghanistan" value="Afghanistan" class="govuk-checkboxes__input"{% for param in data.filter_demo %}{% if param == 'Afghanistan' %} checked{% endif %}{% endfor %}{% if query.updateApplication == "yes" %} disabled{% endif %}>
               <label for="afghanistan" class="govuk-label govuk-checkboxes__label">Afghanistan</label>
             </li>
@@ -155,7 +170,8 @@
             <li class="govuk-checkboxes__item">
               <input type="checkbox" name="filter_demo" id="trinidad" value="Trinidad and Tobago" class="govuk-checkboxes__input"{% for param in data.filter_demo %}{% if param == 'Trinidad and Tobago' %} checked{% endif %}{% endfor %}{% if query.updateApplication == "yes" %} disabled{% endif %}>
               <label for="trinidad" class="govuk-label govuk-checkboxes__label">Trinidad &amp; Tobago</label>
-            </li>
+            </li> -->
+
           </ul>
         </fieldset>
       </div>
