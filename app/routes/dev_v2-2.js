@@ -365,6 +365,10 @@ module.exports = function(router) {
         }
 
       }
+      // Direct users to the Dynamics mockup (part of ePhyto)
+      else if (service == "Dynamics") {
+        return res.redirect("ephyto/dynamics/export-application");
+      }
       // Direct users to PHES pages, designs and content
       else if (service == "PHES") {
 
@@ -751,6 +755,9 @@ module.exports = function(router) {
       }
 
     }
+
+    // Chris Harding (30.05.23) - Dynamics: Submit a phytosanitary certificate to IPPC Hub (attachments)
+    
 
     // *******************************
     // PHEATS routing
