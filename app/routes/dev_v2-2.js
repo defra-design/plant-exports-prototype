@@ -575,17 +575,10 @@ module.exports = function(router) {
 
       var return_url = req.query.return_url;
       var name = req.session.data.consignee_name;
-      var address = req.session.data.consignee_address;
       
       // Error validation - make sure user enters data into required fields
-      if ((name == "" || name == null) && (address == "" || address == null)) {
-        return res.redirect("consignee-add?change=yes&error=true&error1=true&error2=true");
-      }
-      else if (name == "" || name == null) {
+      if (name == "" || name == null) {
         return res.redirect("consignee-add?change=yes&error=true&error1=true");
-      }
-      else if (address == "" || address == null) {
-        return res.redirect("consignee-add?change=yes&error=true&error2=true");
       }
       // Routing - decide where to direct users to
       else {

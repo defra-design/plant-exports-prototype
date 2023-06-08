@@ -41,7 +41,7 @@
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
           <h1 class="govuk-fieldset__heading">Add a consignee</h1>
         </legend>
-        <p class="govuk-hint">The consignee is the importer or customer who receives your consignment when it arrives in the destination country</p>
+        <p class="govuk-hint">The consignee is the importer or customer who receives your consignment when it arrives in {{data.countrySelect[0] or "France"}}.</p>
 
         <div class="govuk-form-group{% if query.error1 == 'true' %} govuk-form-group--error{% endif %}">
           <label class="govuk-label" for="consignee_name">Consignee name</label>
@@ -52,38 +52,6 @@
         </div>
 
         {% if query.addAddressDesign == "1" %}
-        <fieldset class="govuk-fieldset">
-          <legend class="govuk-fieldset__legend">
-            <h1 class="govuk-fieldset__heading">Consignee address</h1>
-          </legend>
-
-          <div class="govuk-form-group">
-            <label class="govuk-label" for="consignee-address-line-1">Address line 1</label>
-            <input class="govuk-input" id="consignee-address-line-1" name="consigneeAddressLine1" type="text" autocomplete="address-line1">
-          </div>
-
-          <div class="govuk-form-group">
-            <label class="govuk-label" for="consignee-address-line-2">Address line 2 (optional)</label>
-            <input class="govuk-input" id="consignee-address-line-2" name="consigneeAddressLine2" type="text" autocomplete="address-line2">
-          </div>
-
-          <div class="govuk-form-group">
-            <label class="govuk-label" for="consignee-address-line-3">Address line 3 (optional)</label>
-            <input class="govuk-input" id="consignee-address-line-3" name="consigneeAddressLine3" type="text" autocomplete="address-line3">
-          </div>
-
-          <div class="govuk-form-group">
-            <label class="govuk-label" for="consignee-address-line-4">Address line 4 (optional)</label>
-            <input class="govuk-input" id="consignee-address-line-4" name="consigneeAddressLine4" type="text" autocomplete="off">
-          </div>
-
-          <div class="govuk-form-group">
-            <label class="govuk-label" for="consignee-address-line-5">Address line 5 (optional)</label>
-            <input class="govuk-input" id="consignee-address-line-5" name="consigneeAddressLine5" type="text" autocomplete="off">
-          </div>
-
-        </fieldset>
-        {% else %}
         <div class="govuk-form-group{% if query.error2 == 'true' %} govuk-form-group--error{% endif %}">
           <label class="govuk-label" for="consignee_address">Consignee address</label>
           {% if query.error2 == 'true' %}
@@ -91,6 +59,43 @@
           {% endif %}
           <textarea class="govuk-textarea" id="consignee_address" name="consignee_address" rows="5"{% if query.error2 == 'true' %} aria-describedby="consignee_address-error{% endif %}">{{data.consignee_address}}</textarea>
         </div>
+        {% else %}
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend">
+            <h1 class="govuk-fieldset__heading">Consignee address</h1>
+          </legend>
+
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="consignee-address-line-1">Address line 1</label>
+
+            <div id="consignee-address-line-1-hint" class="govuk-hint">
+              Include flat and floor numbers, where appropriate
+            </div>
+
+            <input class="govuk-input" id="consignee-address-line-1" name="consigneeAddressLine1" type="text" aria-describedby="consignee-address-line-1-hint" autocomplete="address-line1" value="{{data.consigneeAddressLine1}}">
+          </div>
+
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="consignee-address-line-2">Address line 2 (optional)</label>
+            <input class="govuk-input" id="consignee-address-line-2" name="consigneeAddressLine2" type="text" autocomplete="address-line2" value="{{data.consigneeAddressLine2}}">
+          </div>
+
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="consignee-address-line-3">Town or city</label>
+            <input class="govuk-input govuk-!-width-two-thirds" id="consignee-address-line-3" name="consigneeAddressLine3" type="text" autocomplete="address-level2" value="{{data.consigneeAddressLine3}}">
+          </div>
+
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="consignee-address-line-4">County (optional)</label>
+            <input class="govuk-input govuk-!-width-two-thirds" id="consignee-address-line-4" name="consigneeAddressLine4" type="text" autocomplete="off" value="{{data.consigneeAddressLine4}}">
+          </div>
+
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="consignee-address-line-5">Postal code or zip code</label>
+            <input class="govuk-input govuk-!-width-one-quarter" id="consignee-address-line-5" name="consigneeAddressLine5" type="text" autocomplete="postal-code" value="{{data.consigneeAddressLine5}}">
+          </div>
+
+        </fieldset>
         {% endif %}
 
       </fieldset>
