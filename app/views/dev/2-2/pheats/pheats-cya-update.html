@@ -50,7 +50,7 @@
                 {% elif query.deletedCommodity %}
                   [Commodity set to be deleted]
                 {% elif query.undoDeletedCommodity %}
-                  [Undone delete of commodiity]
+                  [Undone delete of commodity]
                 {% endif %}
               </h3>
               <p class="govuk-body">
@@ -110,20 +110,11 @@
       <h3 class="govuk-heading-m">PHEATS commodities at this address</h3>
 
       {% set _commodityCount = data['commodityCount'] or 1 | int %}
-      {% set _commodityDisplayedCount = data['commodityDisplayedCount'] or 0 | int %}
+      {% set _commodityDisplayedCount = data['commodityDisplayedCount'] or 1 | int %}
       {% set _commodityCountDeleted = _commodityDisplayedCount|int - 1 %}
       {% set _commodityCountUndoDeleted = _commodityDisplayedCount|int + 1 %}
 
-      {% if _commodityDisplayedCount == 0 %}
-      <!-- <p class="govuk-body"><strong>[all authorised people will be removed - warning about effect of this?]</strong></p> -->
-      <div class="govuk-warning-text">
-        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-        <strong class="govuk-warning-text__text">
-          <span class="govuk-warning-text__assistive">Warning</span>
-          [all commodities will be removed - warning about effect of this?]
-        </strong>
-      </div>
-      {% else %}
+      
       <dl class="govuk-summary-list govuk-!-margin-bottom-4">
 
         {% for i in range(0, _commodityCount) -%}
@@ -205,7 +196,18 @@
         {%- endfor %}
 
       </dl>
+
+      {% if _commodityDisplayedCount == 0 %}
+      <!-- <p class="govuk-body"><strong>[all authorised people will be removed - warning about effect of this?]</strong></p> -->
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-warning-text__assistive">Warning</span>
+          [all commodities will be removed - warning about effect of this?]
+        </strong>
+      </div>
       {% endif %}
+
 
       {% set _addAnotherCommodityText = "Add another commodity" %}
       {% if _commodityDisplayedCount == 0 %}
@@ -326,16 +328,7 @@
       {% set _apCountDeleted = _apDisplayedCount|int - 1 %}
       {% set _apCountUndoDeleted = _apDisplayedCount|int + 1 %}
 
-      {% if _apDisplayedCount == 0 %}
-      <!-- <p class="govuk-body"><strong>[all authorised people will be removed - warning about effect of this?]</strong></p> -->
-      <div class="govuk-warning-text">
-        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-        <strong class="govuk-warning-text__text">
-          <span class="govuk-warning-text__assistive">Warning</span>
-          [all authorised people will be removed - warning about effect of this?]
-        </strong>
-      </div>
-      {% else %}
+      
       <dl class="govuk-summary-list govuk-!-margin-bottom-4">
 
         {% for i in range(0, _apCount) -%}
@@ -386,7 +379,18 @@
         {%- endfor %}
 
       </dl>
+
+      {% if _apDisplayedCount == 0 %}
+      <!-- <p class="govuk-body"><strong>[all authorised people will be removed - warning about effect of this?]</strong></p> -->
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-warning-text__assistive">Warning</span>
+          [all authorised people will be removed - warning about effect of this?]
+        </strong>
+      </div>
       {% endif %}
+
 
       {% set _addAnotherAPText = "Add another authorised person" %}
       {% if _apDisplayedCount == 0 %}
