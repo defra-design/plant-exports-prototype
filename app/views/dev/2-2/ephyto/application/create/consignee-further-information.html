@@ -18,11 +18,32 @@
     <form action="{{query.return_url or 'task-list'}}" method="post">
 
       <div class="govuk-form-group">
-        <h1 class="govuk-label-wrapper">
-          <label class="govuk-label govuk-label--xl govuk-!-margin-bottom-9" for="consignee_more_detail">Further information{% if data.reforwarding %} or additional declarations{% endif %} (optional)</label>
-        </h1>
-        <span id="consignee_more_detail-hint" class="govuk-hint">Anything you put here will be added to your certificate. If the destination country requires information to be provided in foreign language translation, you should enter it here</span>
-        <textarea class="govuk-textarea" id="consignee_more_detail" name="consignee_more_detail" rows="5" aria-describedby="consignee_more_detail-hint">{{data.consignee_more_detail}}</textarea>
+        <fieldset class="govuk-fieldset" aria-describedby="consignee_more-hint">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
+            <h1 class="govuk-fieldset__heading">Do you need to add any further information to the certificate?</h1>
+          </legend>
+          <p id="consignee_more-hint" class="govuk-hint">Anything you put here will be added to your certificate. If the destination country requires information to be provided in foreign language translation, you should enter it here</p>
+
+          <div class="govuk-radios" data-module="govuk-radios">
+            
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="consignee_more-yes" name="consignee_more" type="radio" value="Yes" data-aria-controls="import_permit_section"{% if data.consignee_more == 'Yes' %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="consignee_more-yes">Yes</label>
+            </div>
+
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="import_permit_section">
+              <label class="govuk-label" for="consignee_more_detail">Further information{% if data.reforwarding %} or additional declarations{% endif %}</label>
+              <textarea class="govuk-textarea" id="consignee_more_detail" name="consignee_more_detail" rows="5">{{data.consignee_more_detail}}</textarea>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="consignee_more-no" name="consignee_more" type="radio" value="No"{% if data.consignee_more == 'No' %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="consignee_more-no">No</label>
+            </div>
+            
+          </div>
+
+        </fieldset>
       </div>
       
       <div class="govuk-button-group govuk-!-margin-bottom-7">

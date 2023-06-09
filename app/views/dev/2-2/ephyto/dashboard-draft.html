@@ -415,6 +415,10 @@
     max-width: none;
   }
 
+  .govuk-notification-banner__content-full-width {
+    max-width: none;
+  }
+
   /* Chris Harding (10.05.23) - To force the breaking of user entered dynamic content ('your reference' and 'consignee') in the table view */
   .force-content-break {
     overflow-wrap: break-word;
@@ -431,35 +435,43 @@
 
 <div class="govuk-grid-row">
 
+  {% if query.notificationBanner == "yes" %}
+  <div class="govuk-grid-column-two-thirds">
+
+    <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+    
+      <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">Important</h2>
+      </div>
+
+      <div class="govuk-notification-banner__content">
+        <p class="govuk-notification-banner__heading">This service will not be available between 9pm on Friday 14 April 2023 and 9am on Monday 17 April 2023.</p>
+      </div>
+
+    </div>
+
+  </div>
+  {% else %}
+  <div class="govuk-grid-column-two-thirds">
+
+    <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+    
+      <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">Important</h2>
+      </div>
+
+      <div class="govuk-notification-banner__content">
+        <p class="govuk-notification-banner__heading">From [DATE] Defra began issuing digital phytosanitary certificates (ePhytos) to some of the European Union and Northern Ireland</p>
+        <p class="govuk-body">When Defra issue an ePhyto to your destination country, you will not need to send a paper certificate with your consignment.</p>
+        <p class="govuk-body"><a href="guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#digital-phytosanitary-certificates" class="govuk-link" rel="noreferrer noopener" target="_blank">Read more about ePhyto (opens in new tab)</a></p>
+      </div>
+
+    </div>
+  
+  </div>
+  {% endif %}
+
   <div class="govuk-grid-column-full">
-
-    {% if query.notificationBanner == "yes" %}
-    <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-    
-      <div class="govuk-notification-banner__header">
-        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">Important</h2>
-      </div>
-
-      <div class="govuk-notification-banner__content">
-        <p class="govuk-notification-banner__heading govuk-notification-banner__heading-full-width">This service will not be available between 9pm on Friday 14 April 2023 and 9am on Monday 17 April 2023.</p>
-      </div>
-
-    </div>
-    {% else %}
-    <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-    
-      <div class="govuk-notification-banner__header">
-        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">Important</h2>
-      </div>
-
-      <div class="govuk-notification-banner__content">
-        <p class="govuk-notification-banner__heading govuk-notification-banner__heading-full-width">From [DATE] you will no longer need a paper phytosanitary certificate to send goods to the European Union or Northern Ireland. Instead, phytosanitary certificates will be shared electronically within these markets. The new system is known as ePhyto.</p>
-        <p class="govuk-body"><a href="../../guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#digital-phytosanitary-certificates" class="govuk-notification-banner__link">Find out more about ePhyto on GOV.UK</a></p>
-      </div>
-
-    </div>
-    {% endif %}
-
     <h1 class="govuk-heading-xl">Your applications</h1>
     {% if data.route != "new" %}
     <a class="govuk-button" href="application/setup/what-export?version={{data.version}}&build={{data.build}}&route={{data.route}}">Start a new application</a>

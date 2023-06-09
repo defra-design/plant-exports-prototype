@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  This will be an ePhyto - {{serviceName}} - GOV.UK
+  You will not receive a paper certificate for this application - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -12,9 +12,15 @@
 {% endblock %}
 
 {% block content %}
+<style>
+
+  .govuk-inset-text--inverse {
+    border-color: #ffffff;
+  }
+
+</style>
 <div class="govuk-grid-row">
 
-  <!-- <div class="govuk-grid-column-two-thirds"> -->
   <div class="govuk-grid-column-full">
 
     {% set journey = data.has_reference %}
@@ -30,14 +36,19 @@
     <form action="{{query.return_url or 'declaration'}}" method="post" action="reference" novalidate>
     {% endif %}
 
-      <!-- <div class="govuk-form-group"> -->
       <div class="govuk-panel govuk-panel--interruption">
 
         <div class="govuk-form-group">
-          <h1 class="govuk-heading-xl">This will be an ePhyto</h1>
-          <p class="govuk-body">This certificate will be issued as a digital certificate (ePhyto).</p>
-          <p class="govuk-body">You will not be sent a paper copy by post.</p>      
-          <p class="govuk-body"><a href="../../guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#digital-phytosanitary-certificates" class="govuk-link govuk-link--inverse">Find out more about ePhyto on GOV.UK</a></p>
+          <h1 class="govuk-heading-xl">You will not receive a paper certificate for this application</h1>
+          <p class="govuk-body">From [DATE] Defra began issuing digital phytosanitary certificates (ePhytos) to {{data.countrySelect[0] or "France"}}.</p>
+          <p class="govuk-body">Instead of receiving a paper certificate, Defra will issue your ePhyto to the plant health authorities in {{data.countrySelect[0] or "France"}} and any related government organisation that needs to see it.</p>
+          <p class="govuk-body">This means you will not need to send a paper certificate with your consignment.</p>
+
+          <div class="govuk-inset-text govuk-inset-text--inverse">
+            You will be able to see a copy of the ePhyto
+          </div>
+          
+          <p class="govuk-body"><a href="../../guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#digital-phytosanitary-certificates" class="govuk-link govuk-link--inverse" rel="noreferrer noopener" target="_blank">Read more about ePhyto (opens in new tab)</a></p>
         </div>
 
         <div class="govuk-button-group govuk-!-margin-top-7 govuk-!-margin-bottom-0">
@@ -45,10 +56,6 @@
         </div>
 
       </div>
-
-      <!-- <div class="govuk-button-group govuk-!-margin-top-7">
-        <button class="govuk-button" type="submit" data-module="govuk-button">Continue</button>
-      </div> -->
 
     </form>
 

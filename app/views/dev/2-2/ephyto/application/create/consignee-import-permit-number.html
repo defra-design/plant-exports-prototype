@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  Import permit number (optional) - Phytosanitary certificate - {{serviceName}} - GOV.UK
+  Do you have an import permit number? - Phytosanitary certificate - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -35,13 +35,38 @@
     {% else %}
     <form action="{{query.return_url or 'task-list'}}" method="post">
     {% endif %}
-      
+
       <div class="govuk-form-group">
-        <h1 class="govuk-label-wrapper">
-          <label class="govuk-label govuk-label--xl govuk-!-margin-bottom-9" for="consignee-import-permit">Import permit number (optional)</label>
-        </h1>
-        <span id="consignee-import-permit-hint" class="govuk-hint">If you have been given an import permit by the destination country, enter the number here. You can upload the import permit as a supporting document later on in this application</span>
-        <input class="govuk-input" id="consignee-import-permit" name="consignee_import_permit" type="text" aria-describedby="consignee-import-permit-hint" value="{{data.consignee_import_permit}}">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
+            <h1 class="govuk-fieldset__heading">Do you have an import permit number?</h1>
+          </legend>
+
+          <div class="govuk-radios" data-module="govuk-radios">
+            
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="import_permit-yes" name="import_permit" type="radio" value="Yes" data-aria-controls="import_permit_section"{% if data.import_permit == 'Yes' %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="import_permit-yes">Yes</label>
+            </div>
+
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="import_permit_section">
+                            
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="consignee-import-permit">Import permit number</label>
+                <p class="govuk-hint" id="consignee-import-permit-hint" >You can upload the import permit as a supporting document later on in this application</p>
+                <input class="govuk-input govuk-!-width-one-half" id="consignee-import-permit" name="consignee_import_permit" type="text" aria-describedby="consignee-import-permit-hint" value="{{data.consignee_import_permit}}">
+              </div>
+
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="import_permit-no" name="import_permit" type="radio" value="No"{% if data.import_permit == 'No' %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="import_permit-no">No</label>
+            </div>
+            
+          </div>
+
+        </fieldset>
       </div>
       
       <div class="govuk-button-group govuk-!-margin-bottom-7">

@@ -573,30 +573,51 @@ module.exports = function(router) {
     // Chris Harding (19.05.23) - Phytosanitary certificate: Consignee address book routing (add)
     if (baseDir === "/application/create/consignee-add-validation") {
 
+      // Parameters passed into this journey
       var return_url = req.query.return_url;
+
+      // Data objects to be retrieved and queried
       var name = req.session.data.consignee_name;
-      var address = req.session.data.consignee_address;
+      var consigneeAddressLine1 = req.session.data.consigneeAddressLine1;
+      var consigneeAddressLine3 = req.session.data.consigneeAddressLine3;
+      var consigneeAddressLine5 = req.session.data.consigneeAddressLine5;
+
+      // Logic and validation for routing
+      var errorCount = 0;
+      var error1 = "";
+      var error2 = "";
+      var error3 = "";
+      var error4 = "";
       
       // Error validation - make sure user enters data into required fields
-      if ((name == "" || name == null) && (address == "" || address == null)) {
-        return res.redirect("consignee-add?change=yes&error=true&error1=true&error2=true");
+      if (name == "" || name == null) {
+        errorCount++;
+        error1 = "&error1=true";
       }
-      else if (name == "" || name == null) {
-        return res.redirect("consignee-add?change=yes&error=true&error1=true");
+      if (consigneeAddressLine1 == "" || consigneeAddressLine1 == null) {
+        errorCount++;
+        error2 = "&error2=true";
       }
-      else if (address == "" || address == null) {
-        return res.redirect("consignee-add?change=yes&error=true&error2=true");
+      if (consigneeAddressLine3 == "" || consigneeAddressLine3 == null) {
+        errorCount++;
+        error3 = "&error3=true";
       }
+      if (consigneeAddressLine5 == "" || consigneeAddressLine5 == null) {
+        errorCount++;
+        error4 = "&error4=true";
+      }
+
+      console.log("errorCount is: " + errorCount);
+
       // Routing - decide where to direct users to
+      if (errorCount > 0) {
+        return res.redirect("consignee-add?change=yes&error=true" + error1 + error2 + error3 + error4);
+      }
+      else if (return_url) {
+        return res.redirect(return_url + "?consigneeAdded=true&addressBook=true");
+      }
       else {
-
-        if (return_url) {
-          return res.redirect(return_url + "?consigneeAdded=true&addressBook=true");
-        }
-        else {
-          return res.redirect("consignee-import-permit-number?consigneeAdded=true&addressBook=true&select_address=address_0");
-        }
-
+        return res.redirect("consignee-import-permit-number?consigneeAdded=true&addressBook=true&select_consignee_address=address_0");
       }
 
     }
