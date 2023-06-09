@@ -70,7 +70,7 @@
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Type</dt>
-        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV6('cert_info')) == 'Conformity' %}Certificate of conformity{% elif (query.id | appInformationV6('cert_info')) == 'Phytosanitary' %}Phytosanitary certificate (ePhyto){% elif (query.id | appInformationV6('cert_info')) == 'Re-forwarding' %}Re-forwarding phytosanitary certificate{% else %}Phytosanitary certificate (ePhyto){% endif %} for {{data.commodity or "plants and fresh produce"}}</dd>
+        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV6('cert_info')) == 'Conformity' %}Certificate of conformity{% elif (query.id | appInformationV6('cert_info')) == 'Phytosanitary' %}Phytosanitary certificate (ePhyto){% elif (query.id | appInformationV6('cert_info')) == 'Re-forwarding' %}Re-forwarding phytosanitary certificate{% else %}Phytosanitary certificate (ePhyto){% endif %} for {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "seeds" %}seeds for planting{% elif data.commodity == "grain" %}unprocessed cereal grains{% elif data.commodity == "everything else" %}{% if data.subCommodity != "something else" %}{{data.subCommodity or "clay"}}{% endif %}{% else %}{{data.commodity or "plants and fresh produce"}}{% endif %}</dd>
       </div>
 
       <div class="govuk-summary-list__row">
@@ -137,8 +137,8 @@
   </div>
   
 </div>
-{% if data.commodity == "plants" %}
 
+{% if data.commodity == "plants" %}
 <div class="govuk-grid-row">
   
   <div class="govuk-grid-column-full">
@@ -160,8 +160,6 @@
           <td class="govuk-table__cell">17 tonnes</td>
           <td class="govuk-table__cell govuk-table__cell--numeric">
             <a class="govuk-link govuk-link--no-visited-state" href="#">Draw down or view stock</a>
-            <!-- <br/>
-            <a class="govuk-link govuk-link--no-visited-state" href="application/create/stock-summary?stock=2">Draw down</a> -->
           </td>
         </tr>
         <tr class="govuk-table__row">
@@ -170,8 +168,6 @@
           <td class="govuk-table__cell">35 tonnes</td>
           <td class="govuk-table__cell govuk-table__cell--numeric">
             <a class="govuk-link govuk-link--no-visited-state" href="#">Draw down or view stock</a>
-            <!-- <br/>
-            <a class="govuk-link govuk-link--no-visited-state" href="application/create/stock-summary?stock=2">Draw down</a> -->
           </td>
         </tr>
         <tr class="govuk-table__row">
@@ -180,8 +176,6 @@
           <td class="govuk-table__cell">30 tonnes</td>
           <td class="govuk-table__cell govuk-table__cell--numeric">
             <a class="govuk-link govuk-link--no-visited-state" href="#">View stock</a>
-            <!-- <br/>
-            <a class="govuk-link govuk-link--no-visited-state" href="application/create/stock-summary?stock=2">Draw down</a> -->
           </td>
         </tr>
       </tbody>
@@ -221,7 +215,7 @@
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Type</dt>
-        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV6('cert_info')) == 'Conformity' %}Certificate of conformity{% elif (query.id | appInformationV6('cert_info')) == 'Phytosanitary' %}Phytosanitary certificate (ePhyto){% elif (query.id | appInformationV6('cert_info')) == 'Re-forwarding' %}Re-forwarding phytosanitary certificate{% else %}Phytosanitary certificate (ePhyto){% endif %} for {{data.commodity or "plants and fresh produce"}}</dd>
+        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV6('cert_info')) == 'Conformity' %}Certificate of conformity{% elif (query.id | appInformationV6('cert_info')) == 'Phytosanitary' %}Phytosanitary certificate (ePhyto){% elif (query.id | appInformationV6('cert_info')) == 'Re-forwarding' %}Re-forwarding phytosanitary certificate{% else %}Phytosanitary certificate (ePhyto){% endif %} for {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "seeds" %}seeds for planting{% elif data.commodity == "grain" %}unprocessed cereal grains{% elif data.commodity == "everything else" %}{% if data.subCommodity != "something else" %}{{data.subCommodity or "clay"}}{% endif %}{% else %}{{data.commodity or "plants and fresh produce"}}{% endif %}</dd>
       </div>
 
       <div class="govuk-summary-list__row">
@@ -241,21 +235,6 @@
       </div>
       {% endif %}
 
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Phytosanitary certificate number</dt>
-        <dd class="govuk-summary-list__value">UK/GB/E&W/2023/1721148004809</dd>
-      </div>
-      
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Certificate issue date</dt>
-        <dd class="govuk-summary-list__value">16 June 2023</dd>
-      </div>
-
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Certificate expiry date</dt>
-        <dd class="govuk-summary-list__value">30 June 2023</dd>
-      </div>
-
     </dl>
 
   </div>
@@ -265,12 +244,52 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
-    <ul class="govuk-list noprint">
+    <ul class="govuk-list{% if data.commodity == 'plants' %} govuk-!-margin-bottom-8{% endif %} noprint">
+      <li><a class="govuk-link govuk-link--no-visited-state" href="#">Update this application</a></li>
       <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id}}&is_group={{query.is_group}}">Copy as new application</a></li>
       <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/view-your-answers?id={{query.id}}&is_group={{query.is_group}}&commodity=plants&row1=true&row2=true&row3=true">View application details</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="#">Cancel this application</a></li>
     </ul>
   </div>
   
 </div>
+
+{% if data.commodity == "plants" %}
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-full">
+    <h2 class="govuk-heading-m">Commodities in this application</h2>
+
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">Commodity</th>
+          <th class="govuk-table__header" scope="col">Variety</th>
+          <th class="govuk-table__header" scope="col">Quantity</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">Cabbage</td>
+          <td class="govuk-table__cell">Durham Early</td>
+          <td class="govuk-table__cell">17 tonnes</td>
+        </tr>
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">Cabbage</td>
+          <td class="govuk-table__cell">Avon Crest</td>
+          <td class="govuk-table__cell">35 tonnes</td>
+        </tr>
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">Cabbage</td>
+          <td class="govuk-table__cell">Savoy</td>
+          <td class="govuk-table__cell">30 tonnes</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</div>
+{% endif %}
 {% endif %}
 {% endblock %}
