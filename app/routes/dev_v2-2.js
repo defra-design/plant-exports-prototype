@@ -617,7 +617,7 @@ module.exports = function(router) {
         return res.redirect(return_url + "?consigneeAdded=true&addressBook=true");
       }
       else {
-        return res.redirect("consignee-import-permit-number?consigneeAdded=true&addressBook=true&select_address=address_0");
+        return res.redirect("consignee-import-permit-number?consigneeAdded=true&addressBook=true&select_consignee_address=address_0");
       }
 
     }
