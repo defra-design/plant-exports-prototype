@@ -15,7 +15,17 @@
   
   <div class="govuk-grid-column-two-thirds">
 
-    <form action="{% if data.journey == 'coc' %}contact-details-simple-coc{% else %}{{query.return_url or 'contact-details-simple-short'}}{% endif %}" method="post">
+    {% set _link = query.return_url or "contact-details-simple-short" %}
+    {% set _pheats = 'false' %}
+    {% if data.journey == 'coc' %}
+      {% set _link = "contact-details-simple-coc" %}
+    {% elif data.commodity == 'plants' %}
+      {% set _pheats = 'true' %}
+      {% set _pheatsLinkRegistered = query.return_url or "pheats-check" %}
+      {% set _pheatsLinkNotRegistered = query.return_url or "pheats-notregistered" %}
+    {% endif %}
+
+    <form action="{{_link}}" method="post">
 
       <!-- {% if query.addressAdded == "yes" %}
       <div class="app-alert app-alert--success" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
@@ -81,28 +91,36 @@
             
             {% if data.addressAdded == "yes" %}
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="address_0" name="select_address" type="radio" value="Top Lane, Peterborough, Cambridgeshire, PO5 7HY" {% if data.select_address == 'Top Lane, Peterborough, Cambridgeshire, PO5 7HY' %}checked{% endif %}>
+              <input class="govuk-radios__input" id="address_0" name="select_address" type="radio" value="Top Lane, Peterborough, Cambridgeshire, PO5 7HY~{% if _pheats == 'true' %}{{_link}}{% else %}{{_link}}{% endif %}" {% if data.select_address == 'Top Lane, Peterborough, Cambridgeshire, PO5 7HY' %}checked{% endif %}>
               <label class="govuk-label govuk-radios__label" for="address_0">Top Lane, Peterborough, Cambridgeshire, PO5 7HY</label>
             </div>
             {% endif %}
             
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="address_1" name="select_address" type="radio" value="Shoggins Farm, Turnip Row, Mordor, The Shire, ZI99 7YH" {% if data.select_address == 'Shoggins Farm, Turnip Row, Mordor, The Shire, ZI99 7YH' %}checked{% endif %}>
+              <input class="govuk-radios__input" id="address_1" name="select_address" type="radio" value="Shoggins Farm, Turnip Row, Mordor, The Shire, ZI99 7YH~{% if _pheats == 'true' %}{{_link}}{% else %}{{_link}}{% endif %}" {% if data.select_address == 'Shoggins Farm, Turnip Row, Mordor, The Shire, ZI99 7YH' %}checked{% endif %}>
               <label class="govuk-label govuk-radios__label" for="address_1">Shoggins Farm, Turnip Row, Mordor, The Shire, ZI99 7YH</label>
             </div>
 
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="address_2" name="select_address" type="radio" value="Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH" {% if data.select_address == 'Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH' %}checked{% endif %}>
-              <label class="govuk-label govuk-radios__label" for="address_2">Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH</label>
+              <input class="govuk-radios__input" id="address_2" name="select_address" type="radio" value="Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH~{% if _pheats == 'true' %}{{_pheatsLinkRegistered}}{% else %}{{_link}}{% endif %}" {% if data.select_address == 'Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH' %}checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="address_2">
+                Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH
+                {% if _pheats == 'true' %}
+                <strong class="govuk-tag govuk-tag--green govuk-!-margin-top-2">
+                  PHEATS Registered
+                </strong>
+                {% endif %}
+              </label>
+              
             </div>
 
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="address_3" name="select_address" type="radio" value="Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ" {% if data.select_address == 'Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ' %}checked{% endif %}>
+              <input class="govuk-radios__input" id="address_3" name="select_address" type="radio" value="Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ~{% if _pheats == 'true' %}{{_link}}{% else %}{{_link}}{% endif %}" {% if data.select_address == 'Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ' %}checked{% endif %}>
               <label class="govuk-label govuk-radios__label" for="address_3">Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ</label>
             </div>
 
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="address_4" name="select_address" type="radio" value="Goatacre Cricket Club, Hill Lane, Goatacre, Wiltshire, SN15 6YG" {% if data.select_address == 'Goatacre Cricket Club, Hill Lane, Goatacre, Wiltshire, SN15 6YG' %}checked{% endif %}>
+              <input class="govuk-radios__input" id="address_4" name="select_address" type="radio" value="Goatacre Cricket Club, Hill Lane, Goatacre, Wiltshire, SN15 6YG~{% if _pheats == 'true' %}{{_link}}{% else %}{{_link}}{% endif %}" {% if data.select_address == 'Goatacre Cricket Club, Hill Lane, Goatacre, Wiltshire, SN15 6YG' %}checked{% endif %}>
               <label class="govuk-label govuk-radios__label" for="address_4">Goatacre Cricket Club, Hill Lane, Goatacre, Wiltshire, SN15 6YG</label>
             </div>
 
