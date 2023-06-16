@@ -29,68 +29,55 @@
   <div class="govuk-grid-column-two-thirds">
       
     <form action="commodity-list-3" method=“post”>
-      <fieldset class="govuk-fieldset" aria-describedby="has_botanicial_name_hint">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">Tell us about the commodity you are sampling</legend>
+      <h1 class="govuk-heading-xl" >Tell us about the commodity you are sampling</h1>
 
-        {% if query.updateApplication == "yes" %}
-        <div class="govuk-inset-text govuk-!-margin-top-7">
-          You can only amend some of the information on this page. This is because the application has already been submitted.
-        </div>
-        {% endif %}
+      {% if query.updateApplication == "yes" %}
+      <div class="govuk-inset-text govuk-!-margin-top-9">
+        You can only amend some of the information on this page. This is because the application has already been submitted.
+      </div>
+      {% endif %}
 
-        <label class="govuk-label govuk-!-margin-top-6 govuk-!-margin-bottom-4 govuk-visually-hidden" for="has_botanicial_name_choose">How do you want to describe your {{data.commodity or "plant products"}}?</label>
+      <div class="govuk-form-group govuk-!-margin-bottom-4">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend">How do you want to describe your processed plant products?</legend>
 
-        <div class="govuk-form-group govuk-!-margin-top-7">
+          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
 
-          <div class="govuk-radios govuk-radios--conditional" id="has_botanicial_name_choose" data-module="govuk-radios">
-            
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="botanicial_name" name="has_botanicial_name3" type="radio" value="yes" data-aria-controls="conditional_botanicial_name"{% if data.has_botanicial_name3 == "yes" %} checked{% endif %}>
-              <label class="govuk-label govuk-radios__label" for="botanicial_name">Botanical name</label>
+              <input class="govuk-radios__input" id="has_botanicial_name_yes" name="has_botanicial_name3" type="radio" value="yes" aria-describedby="has_botanicial_name_yes-hint" data-aria-controls="has_botanicial_name_yes-conditional"{% if data.has_botanicial_name3 == "yes" %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="has_botanicial_name_yes">Botanical name</label>
               
-              <div id="has_botanicial_name_hint" class="govuk-hint govuk-radios__hint">
+              <div id="has_botanicial_name_yes-hint" class="govuk-hint govuk-radios__hint">
                 Search by genus, species or common name
               </div>
 
-              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional_botanicial_name">
-                
-                {% if data.show_manual_input != "yes"%}
-                {% block genus %}
-                {% include "../modules/_genus-3.html" %}
-                {% endblock %}
-                {% else %}
-                <div class="govuk-form-group">
-                  <label class="govuk-label" for="commodity_host_genus">Genus</label>
-                  <input class="govuk-input govuk-input--width-20" id="commodity_host_genus" name="commodity_host_genus3" type="text" value="{% if query.has_commodity %}{{query.genus}}{% endif %}">
-                </div>
+            </div>
 
-                <div class="govuk-form-group">
-                  <label class="govuk-label" for="commodity_host_species">Species (optional)</label>
-                  <input class="govuk-input govuk-input--width-20" id="commodity_host_species" name="commodity_host_species3" type="text" value="{% if query.has_commodity %}{{query.species}}{% endif %}">
-                </div>
-                {% endif %}
-
-                <div id="commodity-botanical_name">
-                  
-                  <div class="govuk-form-group">
-                    <label class="govuk-label" for="commodity_genus">Genus</label>
-                    <input class="govuk-input govuk-input--width-20" id="commodity_genus" name="commodity_genus3" type="text" value="{% if query.has_commodity %}{{query.genus}}{% endif %}">
-                  </div>
-
-                  <div class="govuk-form-group">
-                    <label class="govuk-label" for="commodity_host_species">Species (optional)</label>
-                    <input class="govuk-input govuk-input--width-20" id="commodity_host_species" name="commodity_host_species3" type="text" value="{% if query.has_commodity %}{{query.species}}{% endif %}">
-                  </div>
-
-                </div>
-
-                {% if data.show_manual_input == "yes" %}
-                <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display: none;">The botanical name needs to be spelled correctly, if you are not sure <a href="?show_manual_input=no&has_botanicial_name3=yes" class="govuk-link govuk-link--no-visited-state">search for a botanical name</a></p>
-                {% else %}
-                <p id="commodity-lookup--manual" class="govuk-body govuk-!-margin-top-2" style="display: none;">If you cannot find your {{data.commodity or "plant products"}}, but you know the botanical name, <a href="?show_manual_input=yes&has_botanicial_name3=yes" class="govuk-link govuk-link--no-visited-state">enter the botanical name manually</a></p>
-                {% endif %}
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="has_botanicial_name_yes-conditional">
+              {% if data.show_manual_input != "yes" %}
+              {% block genus %}
+              {% include "../modules/_genus-3.html" %}
+              {% endblock %}
+              {% else %}
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="commodity_genus">Genus</label>
+                <input class="govuk-input govuk-input--width-20" id="commodity_genus" name="genus" type="text" value="{{data.genus}}">
               </div>
               
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="commodity_host_species">Species{% if data.build != "ux" %} (optional){% endif %}</label>
+                <input class="govuk-input govuk-input--width-20" id="commodity_host_species" name="commodity_host_species" type="text" value="{{data.commodity_host_species}}">
+              </div>
+              {% endif %}
+
+              <div class="govuk-form-block">
+                {% if data.show_manual_input == "yes" %}
+                <p id="commodity-lookup--manual" class="govuk-body" style="display: none;">The botanical name needs to be spelled correctly, if you are not sure <a href="?show_manual_input=no&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">search for a botanical name</a></p>
+                {% else %}
+                <p id="commodity-lookup--manual" class="govuk-body" style="display: none;">If you cannot find your processed plant product, but you know the botanical name, <a href="?show_manual_input=yes&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">enter the botanical name manually</a></p>
+                {% endif %}
+              </div>
+
             </div>
 
             <div class="govuk-radios__divider">
@@ -98,97 +85,97 @@
             </div>
 
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="description" name="has_botanicial_name3" type="radio" value="use_description" data-aria-controls="conditional-description"{% if data.has_botanicial_name3 == "use_description" %} checked{% endif %}>
-              <label class="govuk-label govuk-radios__label" for="description">Description</label>
+              <input class="govuk-radios__input" id="has_botanicial_name_use_description" name="has_botanicial_name3" type="radio" value="use_description" data-aria-controls="has_botanicial_name_use_description-conditional"{% if data.has_botanicial_name3 == "use_description" %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="has_botanicial_name_use_description">Description</label>
               
-              <div id="how-contacted-conditional-hint" class="govuk-hint govuk-radios__hint">
-                If you cannot find the botanical name, or your {{data.commodity or "plant products"}} are made of many species, enter a description instead
+              <div id="has_botanicial_name_use_description-hint" class="govuk-hint govuk-radios__hint">
+                If you cannot find the botanical name, or your product is made of many species, enter a description instead
               </div>
 
             </div>
 
-            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-description">
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="has_botanicial_name_use_description-conditional">
               
               <div class="govuk-form-group">
-                <label class="govuk-visually-hidden" for="description_details">Description of the {{data.commodity or "plant"}}</label>
-                <textarea class="govuk-textarea" id="description_details" name="description_details3" rows="4" aria-describedby="more-detail-hint">{% if data.description_details3 %}{{data.description_details3}}{% endif %}</textarea>
+                <label class="govuk-visually-hidden" for="commodity_description">Description of the {{data.commodity or "plants and fresh produce"}}</label>
+                <textarea class="govuk-textarea" id="commodity_description" name="commodity_description3" rows="5" aria-describedby="more-detail-hint">{{data.commodity_description3}}</textarea>
               </div>
 
             </div>
 
           </div>
 
-        </div>
+        </fieldset>
+      </div>
 
-        {% set country_module_label = "Country of origin" %}
-        {% set module_name = "country_grown3" %}
-        {% block country %}
-        {% include "../modules/_country-select-3.html" %}
-        {% endblock %}
+      {% set country_module_label = "Country of origin" %}
+      {% set module_name = "country_grown" %}
+      {% block country %}
+      {% include "../modules/_country-select-3.html" %}
+      {% endblock %}
 
-        <div class="govuk-form-group">
-          <label class="govuk-label" for="origin_other">Additional countries of origin (optional)</label>
-          <input class="govuk-input govuk-input--width-20" id="origin_other" name="origin_other3" type="text" value="{% if data.origin_other3 %}{{data.origin_other3}}{% endif %}">
-        </div>
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="origin_other">Additional countries of origin (optional)</label>
+        <input class="govuk-input govuk-input--width-20" id="origin_other" name="origin_other3" type="text" value="{{data.origin_other3}}">
+      </div>
 
-        <div class="govuk-form-group">
-          <fieldset class="govuk-fieldset">
-            <legend class="govuk-fieldset__legend">
-              <h2 class="govuk-body govuk-!-margin-bottom-0">Total amount of commodity to export and the measurement unit</h2>
-            </legend>
-            <span id="quantity-hint" class="govuk-hint">For example, 5000kg. Enter the amount of commodity that you have in your possession not the amount you will send for sampling</span>
-        
-            <div class="govuk-date-input__item">
-                      
-              <div class="govuk-form-group">
-                <label class="govuk-label" for="quantity">Quantity</label>
-                <input class="govuk-input govuk-input--width-5" id="quantity" name="quantity3" type="text" aria-label="Quantity" aria-describedby="quantity-hint" value="{{data.quantity3}}">
-              </div>
-        
-            </div>
-        
-            <div class="govuk-date-input__item">
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend">
+            <h2 class="govuk-body govuk-!-margin-bottom-0">Total amount of commodity to export and the measurement unit</h2>
+          </legend>
+          <span id="quantity-hint" class="govuk-hint">For example, 5000kg. Enter the amount of commodity that you have in your possession not the amount you will send for sampling</span>
+      
+          <div class="govuk-date-input__item">
                     
-              <div class="govuk-form-group">
-                <label class="govuk-label" for="units">Unit of measurement</label>
-                <select name="units3" id="units" class="govuk-select" aria-label="Unit of measurement">
-                  <option value="" selected>Unit of measurement</option>
-                  <option value="Grams"{% if data.units3 == "Grams" %} selected{% endif %}>Grams</option>
-                  <option value="Kilograms"{% if data.units3 == "Kilograms" %} selected{% endif %}>Kilograms</option>
-                  <option value="Litres"{% if data.units3 == "Litres" %} selected{% endif %}>Litres</option>
-                  <option value="Millilitres"{% if data.units3 == "Millilitres" %} selected{% endif %}>Millilitres</option>
-                  <option value="Tonnes"{% if data.units3 == "Tonnes" %} selected{% endif %}>Tonnes</option>
-                </select>
-              </div>
-                      
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="quantity">Quantity</label>
+              <input class="govuk-input govuk-input--width-5" id="quantity" name="quantity3" type="text" aria-label="Quantity" aria-describedby="quantity-hint" value="{{data.quantity3}}">
             </div>
-        
-          </fieldset>
-        </div>
-
-        {% block destinationCountry %}
-        {% include "../modules/_multi-select-3.html" %}
-        {% endblock %}
-
-        <div class="govuk-form-group govuk-!-margin-top-6">
-          <label class="govuk-label" for="distinguishing-marks">Distinguishing marks (optional)</label>
-          <span id="distinguishing-mark-hint" class="govuk-hint">For example, brand name or packaging marks</span>
-          <input class="govuk-input govuk-input--width-20" id="distinguishing-marks" name="distinguishing_marks3" type="text" aria-describedby="distinguishing-mark-hint" value="{% if data.distinguishing_marks3 %}{{data.distinguishing_marks3}}{% endif %}">
-        </div>
-
-        <!-- {% if query.updateApplication == "yes" %}
-        <details class="govuk-details" data-module="govuk-details">
-          <summary class="govuk-details__summary">
-            <span class="govuk-details__summary-text">Why can't I update some information?</span>
-          </summary>
-
-          <div class="govuk-details__text">
-            You can only amend some of the information on this page. This is because the application has already been submitted.
+      
           </div>
+      
+          <div class="govuk-date-input__item">
+                  
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="units">Unit of measurement</label>
+              <select name="units3" id="units" class="govuk-select" aria-label="Unit of measurement">
+                <option value="" selected>Unit of measurement</option>
+                <option value="Grams"{% if data.units3 == "Grams" %} selected{% endif %}>Grams</option>
+                <option value="Kilograms"{% if data.units3 == "Kilograms" %} selected{% endif %}>Kilograms</option>
+                <option value="Litres"{% if data.units3 == "Litres" %} selected{% endif %}>Litres</option>
+                <option value="Millilitres"{% if data.units3 == "Millilitres" %} selected{% endif %}>Millilitres</option>
+                <option value="Tonnes"{% if data.units3 == "Tonnes" %} selected{% endif %}>Tonnes</option>
+              </select>
+            </div>
+                    
+          </div>
+      
+        </fieldset>
+      </div>
 
-        </details>
-        {% endif %} -->
-      </fieldset>
+      {% block destinationCountry %}
+      {% include "../modules/_multi-select-3.html" %}
+      {% endblock %}
+
+      <div class="govuk-form-group govuk-!-margin-top-6">
+        <label class="govuk-label" for="distinguishing_marks">Distinguishing marks (optional)</label>
+        <span id="distinguishing-mark-hint" class="govuk-hint">For example, brand name or packaging marks</span>
+        <input class="govuk-input govuk-input--width-20" id="distinguishing_marks" name="distinguishing_marks3" type="text" aria-describedby="distinguishing-mark-hint" value="{{data.distinguishing_marks3}}">
+      </div>
+
+      <!-- {% if query.updateApplication == "yes" %}
+      <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+          <span class="govuk-details__summary-text">Why can't I update some information?</span>
+        </summary>
+
+        <div class="govuk-details__text">
+          You can only amend some of the information on this page. This is because the application has already been submitted.
+        </div>
+
+      </details>
+      {% endif %} -->
 
       <div class="govuk-form-group govuk-!-margin-top-6 govuk-!-margin-bottom-6">
         <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
