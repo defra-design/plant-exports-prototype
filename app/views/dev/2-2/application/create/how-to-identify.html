@@ -15,6 +15,9 @@
 
   /* Needs extracting and adding to the external Sass or CSS */
   /* Chris Harding (12.06.23) - Styling for the 'Destination countries' country multi select as part of the accessibility rework */
+  .legacyGOVUK {
+    display: none;
+  }
   .js-selected-counter {
     padding-bottom: 10px;
   }
@@ -507,13 +510,34 @@
   
 </div>
 
+<!-- JavaScript (START) -->
+<script src="/public/javascripts/jquery-3.6.0.js"></script>
+<script>
+
+  $(document).ready(function () {
+
+    // HIDE all non-JS elements
+    $(".nonJavaScriptObject").hide();
+    $(".nonJavaScriptObject").attr("aria-hidden", true);
+    $(".nonJavaScriptObject").attr("hidden");
+
+    // SHOW any hidden elements which we need for a JavaScript UX
+    $(".javaScriptObject").show();
+    $(".javaScriptObject").attr("aria-hidden", false);
+    $(".javaScriptObject").removeAttr("hidden");
+
+  });
+
+</script>
 <script type="text/javascript">
-  
+
   window.addEventListener('load', function() {
     $("#commodity-botanical_name").hide()
     $("#commoditiy-botanical-lookup").show()
     $("#commodity-lookup--manual").show()
-  });
+  })
 
 </script>
+<script src="/public/javascripts/destination-countries.js"></script>
+<!-- JavaScript (END) -->
 {% endblock %}
