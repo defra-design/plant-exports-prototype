@@ -1,0 +1,465 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  [title] - Manage account - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="../account" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
+  </ul>
+</div>
+
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-two-thirds">
+
+    <!-- Selected address -->
+    {% set _addressID = data['address'] or 1 %}
+    {% set _address = data['addresses'][0] %}
+    {% for _address2 in data['addresses'] %}
+      {% if _address2.id == _addressID %}
+        {% set _address = _address2 %}
+      {% endif %}
+    {% endfor %}
+
+    <!-- <h1 class="govuk-heading-xl">Are you applying to PHEATS? {{data.dave}}</h1> -->
+
+    {% if query.deletedAP or query.undoDeletedAP or query.deletedCommodity or query.undoDeletedCommodity %}
+      <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+          <div class="govuk-notification-banner__header">
+              <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+              Success
+              </h2>
+          </div>
+          <div class="govuk-notification-banner__content">
+              
+              <h3 class="govuk-notification-banner__heading">
+                {% if query.deletedAP %}
+                  [Authorised person set to be deleted]
+                {% elif query.undoDeletedAP %}
+                  [Undone delete of authorised person]
+                {% elif query.deletedCommodity %}
+                  [Commodity set to be deleted]
+                {% elif query.undoDeletedCommodity %}
+                  [Undone delete of commodiity]
+                {% endif %}
+              </h3>
+              <p class="govuk-body">
+                {% if query.deletedAP %}
+                  [{{data['apName' + query.deletedAP] or 'Jane Doe'}} has been set to be deleted.]
+                {% elif query.undoDeletedAP %}
+                  [Delete of {{data['apName' + query.undoDeletedAP] or 'Jane Doe'}} has been undone.]
+                {% elif query.deletedCommodity %}
+                  [{{data['commodityName' + query.deletedCommodity] or 'Dactylorhiza umbrosa (DAKUM)'}} has been set to be deleted.]
+                {% elif query.undoDeletedCommodity %}
+                  [Delete of {{data['commodityName' + query.undoDeletedCommodity] or 'Dactylorhiza umbrosa (DAKUM)'}} has been undone.]
+                {% endif %}
+              </p>
+          </div>
+      </div>
+    {% endif %}
+
+    <h1 class="govuk-heading-xl">
+      Check your details are still correct
+    </h1>
+
+    <p class="govuk-body govuk-!-margin-bottom-9">Update anything that's changed since your last PHEATS export from this address.</p>
+
+    <form method="post" novalidate action="pheats-confirmation-restart">
+
+      <!-- <h2 class="govuk-heading-m">Registration summary</h2> -->
+
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Address
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{_address.address1}}<br>
+            {{_address.address2}}<br>
+            {{_address.address3}}<br>
+            {{_address.address4}}<br>
+            {{_address.postcode}}
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            
+          </dd>
+        </div>
+
+      </dl>
+
+      <h2 class="govuk-heading-l">Address details</h2>
+
+      <h3 class="govuk-heading-m">PHEATS commodities at this address</h3>
+
+      {% set _commodityCount = data['commodityCount'] or 1 | int %}
+      {% set _commodityDisplayedCount = data['commodityDisplayedCount'] or 0 | int %}
+      {% set _commodityCountDeleted = _commodityDisplayedCount|int - 1 %}
+      {% set _commodityCountUndoDeleted = _commodityDisplayedCount|int + 1 %}
+
+      {% if _commodityDisplayedCount == 0 %}
+      <!-- <p class="govuk-body"><strong>[all authorised people will be removed - warning about effect of this?]</strong></p> -->
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-warning-text__assistive">Warning</span>
+          [all commodities will be removed - warning about effect of this?]
+        </strong>
+      </div>
+      {% else %}
+      <dl class="govuk-summary-list govuk-!-margin-bottom-4">
+
+        {% for i in range(0, _commodityCount) -%}
+
+        {% set _deleted = "false" %}
+        {% set _id = loop.index %}
+        {% set _deletedValue = data['commodityDeleted'+_id] %}
+        {% if _deletedValue == "true" %}
+          {% set _deleted = "true" %}
+        {% endif %}
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            {{data['commodityName' + _id] or 'Dactylorhiza umbrosa (DAKUM)'}}
+            {% if _deleted == "true" %}
+              <p class="govuk-body govuk-!-margin-bottom-2 govuk-!-margin-top-2">
+                <strong class="govuk-tag govuk-tag--orange">
+                  [To be deleted]
+                </strong>
+              </p>
+            {% endif %}
+          </dt>
+          <dd class="govuk-summary-list__value">
+
+            <p class="govuk-body">Countries of origin: </p>
+            {% set _originCount = data['originCount' + _id] or 1 | int %}
+            <ul class="govuk-list govuk-list--bullet">
+              {% for i in range(0, _originCount) -%}
+                {% set _show = "true" %}
+                {% set _originID = loop.index %}
+                {% set _deletedValue = data['commodityOriginDeleted' + _id + '-' + _originID] %}
+                {% if _deletedValue == "true" %}
+                  {% set _show = "false" %}
+                {% endif %}
+
+                {% if _show == "true" %}
+                <li>{{data['commodityOrigin' + _id + '-' + _originID][0] or 'United Kingdom'}}</li>
+                {% endif %}
+              {%- endfor %}
+            </ul>
+
+            <p class="govuk-body">Destinations: </p>
+            {% set _destinationCount = data['destinationCount' + _id] or 1 | int %}
+            <ul class="govuk-list govuk-list--bullet">
+              {% for i in range(0, _destinationCount) -%}
+                {% set _show = "true" %}
+                {% set _destinationID = loop.index %}
+                {% set _deletedValue = data['commodityDestinationDeleted' + _id + '-' + _destinationID] %}
+                {% if _deletedValue == "true" %}
+                  {% set _show = "false" %}
+                {% endif %}
+
+                {% if _show == "true" %}
+                <li>{{data['commodityDestination' + _id + '-' + _destinationID][0] or 'France'}}</li>
+                {% endif %}
+              {%- endfor %}
+            </ul>
+
+          </dd>
+          
+          {% set _deleteLinkSuffix = "?deletedCommodity=" + _id + "&commodityDeleted" + _id + "=true" + "&commodityDisplayedCount=" + _commodityCountDeleted | int %}
+          {% set _undoDeleteLinkSuffix = "?undoDeletedCommodity=" + _id + "&commodityDeleted" + _id + "=false" + "&commodityDisplayedCount=" + _commodityCountUndoDeleted | int %}
+          <dd class="govuk-summary-list__actions">
+            {% if _deleted == "true" %}
+              <p class="govuk-body govuk-!-margin-bottom-2">
+                <a href="pheats-cya-restart{{_undoDeleteLinkSuffix}}" class="govuk-link govuk-link--no-visited-state">[Undo delete]<span class="govuk-visually-hidden"> of this commodity</span></a>
+              </p>
+            {% else %}
+              <p class="govuk-body govuk-!-margin-bottom-2">
+                <a href="pheats-commodity?edit={{_id}}&restart=yes" class="govuk-link govuk-link--no-visited-state">Edit<span class="govuk-visually-hidden"> this commodity</span></a>
+              </p>
+              <p class="govuk-body govuk-!-margin-bottom-2">
+                <a href="pheats-cya-restart{{_deleteLinkSuffix}}" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+              </p>
+            {% endif %}
+          </dd>
+        </div>
+
+        {%- endfor %}
+
+      </dl>
+      {% endif %}
+
+      {% set _addAnotherCommodityText = "Add another commodity" %}
+      {% if _commodityDisplayedCount == 0 %}
+        {% set _addAnotherCommodityText = "Add a commodity" %}
+      {% endif %}
+      <p class="govuk-body govuk-!-margin-bottom-8"><a class="govuk-link govuk-link--no-visited-state" href="pheats-commodity?restart=yes" >{{_addAnotherCommodityText}}</a></p>
+
+      <h2 class="govuk-heading-m">Site plan</h2>
+
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            File name
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <a class="govuk-link govuk-link--no-visited-state" href="#">
+              {{_address.pheats.siteplan}}, 2MB
+            </a>
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <!-- <a class="govuk-link govuk-link--no-visited-state" href="pheats-site?restart=yes"> -->
+              <a class="govuk-link govuk-link--no-visited-state" href="#">
+                Edit<span class="govuk-visually-hidden"> </span>
+            </a>
+          </dd>
+        </div>
+
+      </dl>
+
+      <h2 class="govuk-heading-m">This site handles</h2>
+
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Plant materials of UK origin
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {% if data['ukOrigin'] %}
+              <ul class="govuk-list govuk-list--bullet">
+                {% for _ukOrigin in data['ukOrigin'] %}
+                  <li>{{_ukOrigin | lower}}</li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              None
+            {% endif %}
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <!-- <a class="govuk-link govuk-link--no-visited-state" href="pheats-site-handles"> -->
+              <a class="govuk-link govuk-link--no-visited-state" href="pheats-site-handles?restart=yes">
+              Edit<span class="govuk-visually-hidden"> </span>
+            </a>
+          </dd>
+        </div>
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Plant materials not of UK origin
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {% if data['notUKOrigin'] %}
+                <ul class="govuk-list govuk-list--bullet">
+                  {% for _notUKOrigin in data['notUKOrigin'] %}
+                    <li>{{_notUKOrigin | lower}}</li>
+                  {% endfor %}
+                </ul>
+            {% else %}
+              None
+            {% endif %}
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <!-- <a class="govuk-link govuk-link--no-visited-state" href="pheats-site-handles"> -->
+              <a class="govuk-link govuk-link--no-visited-state" href="pheats-site-handles?restart=yes">
+                Edit<span class="govuk-visually-hidden"> </span>
+            </a>
+          </dd>
+        </div>
+
+      </dl>
+
+      <h2 class="govuk-heading-l">People registered with PHEATS at this address</h2>
+
+      <h3 class="govuk-heading-m">Main contact</h3>
+
+      {% set _personResponsible = _address.pheats.personresponsible %}
+    
+      <dl class="govuk-summary-list govuk-!-margin-bottom-4">
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Main contact
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{_personResponsible.name}}<br>
+            {{_personResponsible.position or "Technical Director"}}<br>
+            {{_personResponsible.email}}
+            {% if _personResponsible.mobile %}<br>{{_personResponsible.mobile}}{% endif %}
+            {% if _personResponsible.telephone %}<br>{{_personResponsible.telephone}}{% endif %}
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <!-- <a class="govuk-link govuk-link--no-visited-state" href="pheats-pr?restart=yes"> -->
+              <a class="govuk-link govuk-link--no-visited-state" href="#">
+                Edit<span class="govuk-visually-hidden"> </span>
+            </a>
+          </dd>
+        </div>
+
+      </dl>
+
+      <p class="govuk-body govuk-!-margin-bottom-8"><a class="govuk-link govuk-link--no-visited-state" href="#" >Change main contact</a></p>
+
+      <h2 class="govuk-heading-m">Authorised people</h2>
+
+      {% set _apCount = data['apCount'] or 1 | int %}
+      {% set _apDisplayedCount = data['apDisplayedCount'] or 1 | int %}
+      {% set _apCountDeleted = _apDisplayedCount|int - 1 %}
+      {% set _apCountUndoDeleted = _apDisplayedCount|int + 1 %}
+
+      {% if _apDisplayedCount == 0 %}
+      <!-- <p class="govuk-body"><strong>[all authorised people will be removed - warning about effect of this?]</strong></p> -->
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-warning-text__assistive">Warning</span>
+          [all authorised people will be removed - warning about effect of this?]
+        </strong>
+      </div>
+      {% else %}
+      <dl class="govuk-summary-list govuk-!-margin-bottom-4">
+
+        {% for i in range(0, _apCount) -%}
+
+        {% set _deleted = "false" %}
+        {% set _id = loop.index %}
+        {% set _deletedValue = data['apDeleted'+_id] %}
+        {% if _deletedValue == "true" %}
+          {% set _deleted = "true" %}
+        {% endif %}
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            {{data['apName' + _id] or 'Jane Doe'}}
+            {% if _deleted == "true" %}
+              <p class="govuk-body govuk-!-margin-bottom-2 govuk-!-margin-top-2">
+                <strong class="govuk-tag govuk-tag--orange">
+                  [To be deleted]
+                </strong>
+              </p>
+            {% endif %}
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{data['apPosition' + _id] or 'Manager'}}<br>
+            {{data['apEmail' + _id] or 'email@email.com'}}
+          </dd>
+
+          {% set _deleteLinkSuffix = "?deletedAP=" + _id + "&apDeleted" + _id + "=true" + "&apDisplayedCount=" + _apCountDeleted | int %}
+          {% set _undoDeleteLinkSuffix = "?undoDeletedAP=" + _id + "&apDeleted" + _id + "=false" + "&apDisplayedCount=" + _apCountUndoDeleted | int %}
+          <dd class="govuk-summary-list__actions">
+            {% if _deleted == "true" %}
+              <p class="govuk-body govuk-!-margin-bottom-2">
+                <a href="pheats-cya-restart{{_undoDeleteLinkSuffix}}" class="govuk-link govuk-link--no-visited-state">[Undo delete]<span class="govuk-visually-hidden"> of this authorised person</span></a>
+              </p>
+            {% else %}
+              <p class="govuk-body govuk-!-margin-bottom-2">
+                <a href="pheats-ap?edit={{_id}}&restart=yes" class="govuk-link govuk-link--no-visited-state">Edit<span class="govuk-visually-hidden"> this authorised person</span></a>
+              </p>
+              <p class="govuk-body govuk-!-margin-bottom-2">
+                <a href="pheats-cya-restart{{_deleteLinkSuffix}}" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this authorised person</span></a>
+              </p>
+            {% endif %}
+          </dd>
+
+        </div>
+
+
+        {%- endfor %}
+
+      </dl>
+      {% endif %}
+
+      {% set _addAnotherAPText = "Add another authorised person" %}
+      {% if _apDisplayedCount == 0 %}
+        {% set _addAnotherAPText = "Add an authorised person" %}
+      {% endif %}
+      <p class="govuk-body govuk-!-margin-bottom-8"><a class="govuk-link govuk-link--no-visited-state" href="pheats-ap?restart=yes" >{{_addAnotherAPText}}</a></p>
+
+      
+
+      <h2 class="govuk-heading-m">
+        Registration declaration
+      </h2>
+  
+      <p class="govuk-body">Date of declaration: {{data['todaysDateFormatted']}}</p>
+
+      <div class="govuk-form-group govuk-!-margin-bottom-9">
+        <fieldset class="govuk-fieldset" >
+          <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+            <div class="govuk-checkboxes__item">
+              <input class="govuk-checkboxes__input" id="pheatsRestartDeclaration" name="pheatsRestartDeclaration" type="checkbox" value="Yes">
+              <label class="govuk-label govuk-checkboxes__label" for="pheatsRestartDeclaration">
+                I confirm that the information I have provided is correct to the best of my knowledge
+              </label>
+            </div>
+          </div>
+
+        </fieldset>
+      </div>
+
+
+      
+      <!-- 
+        Reset authorised people counts and data so if you add another pheats reg it is reset 
+      -->
+      {% for i in range(0, _apCount) -%}
+        {% set _id = loop.index %}
+        <input id="apName{{_id}}" name="apName{{_id}}" type="hidden" value="">
+        <input id="apPosition{{_id}}" name="apPosition{{_id}}" type="hidden" value="">
+        <input id="apEmail{{_id}}" name="apEmail{{_id}}" type="hidden" value="">
+        <input id="apDeleted{{_id}}" name="apDeleted{{_id}}" type="hidden" value="false">
+      {%- endfor %}
+      <input id="apCount" name="apCount" type="hidden" value="0">
+      <input id="apDisplayedCount" name="apDisplayedCount" type="hidden" value="0">
+
+      <!-- 
+        Reset commodity counts and data so if you add another pheats reg it is reset 
+      -->
+      {% for i in range(0, _commodityCount) -%}
+        {% set _id = loop.index %}
+        <input id="commodityVariety{{_id}}" name="commodityVariety{{_id}}" type="hidden" value="">
+        <input id="commodityName{{_id}}" name="commodityName{{_id}}" type="hidden" value="">
+        <input id="commodityDeleted{{_id}}" name="commodityDeleted{{_id}}" type="hidden" value="false">
+        {% for i in range(0, data['originCount' + _id] or 1 | int) -%}
+          <input id="commodityOriginDeleted{{_id}}-{{loop.index}}" name="commodityOriginDeleted{{_id}}-{{loop.index}}" type="hidden" value="false" >
+          <input id="commodityOrigin{{_id}}-{{loop.index}}" name="commodityOrigin{{_id}}-{{loop.index}}" type="hidden" value="" >
+        {%- endfor %}
+        <input id="originCount{{_id}}" name="originCount{{_id}}" type="hidden" value="1">
+        {% for i in range(0, data['destinationCount' + _id] or 1 | int) -%}
+          <input id="commodityDestinationDeleted{{_id}}-{{loop.index}}" name="commodityDestinationDeleted{{_id}}-{{loop.index}}" type="hidden" value="false" >
+          <input id="commodityDestination{{_id}}-{{loop.index}}" name="commodityDestination{{_id}}-{{loop.index}}" type="hidden" value="" >
+        {%- endfor %}
+        <input id="destinationCount{{_id}}" name="destinationCount{{_id}}" type="hidden" value="1">
+      {%- endfor %}
+      <input id="commodityCount" name="commodityCount" type="hidden" value="0">
+      <input id="commodityDisplayedCount" name="commodityDisplayedCount" type="hidden" value="0">
+
+      <!-- Reset site handles values -->
+      <input id="ukOrigin" name="ukOrigin" type="hidden" value="" >
+      <input id="notUKOrigin" name="notUKOrigin" type="hidden" value="" >
+
+      {{ govukButton({
+        text: "Accept and submit"
+      }) }}
+
+      {% set _pheatsReturnURL = 'pheats-cya-restart' %}
+      <p class="govuk-body govuk-!-margin-top-2"><a href="pheats-cancel-restart?pheatsReturnURL={{_pheatsReturnURL}}&address={{_addressID}}" class="govuk-link govuk-link--no-visited-state">Cancel</a></p>
+
+    </form>
+
+  </div>
+</div>
+
+{% endblock %}

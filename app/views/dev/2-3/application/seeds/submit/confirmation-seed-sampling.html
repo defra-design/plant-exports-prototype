@@ -1,0 +1,150 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.build == "development" %}Confirmation - Exports application{% else %}You have successfully submitted your application - Seed sampling - {{serviceName}}{% endif %} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../../modules/_account-banner.html" %}
+{% endblock %}
+
+{% block content %}
+<style>
+
+  /* Needs extracting and adding to the external Sass or CSS */
+  .govuk-feedback-box {
+    padding: 20px;
+    background-color: lightgray;
+    border-left-color: #666;
+  }
+
+</style>
+
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-three-quarters">
+
+    <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-6">
+      <h1 class="govuk-panel__title">You have successfully submitted your application</h1>      
+    </div>
+
+    {% if data.build != "development" %}
+    <h2 class="govuk-heading-m">Label and send your samples</h2>
+ 
+    <div class="govuk-warning-text">
+      <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+      <strong class="govuk-warning-text__text">
+        <span class="govuk-warning-text__assistive">Warning</span>
+        Your report may be delayed if you do not label your samples with <abbr title="Animal and Plant Health Agency">APHA</abbr> sample reference numbers.
+      </strong>
+    </div>
+
+    <ul class="govuk-list govuk-list--number">
+      <li>Use the same packaging you would normally use to send samples to customers.</li>
+      <li>You must clearly label each sample with its <abbr title="Animal and Plant Health Agency">APHA</abbr> sample reference.</li>
+      <li>Send your labelled samples to the address on this screen.</li>
+    </ul>
+    <h3 class="govuk-heading-s">Sampling reference information</h3>
+
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">Description</th>
+          <th scope="col" class="govuk-table__header">Weight</th>
+          <th scope="col" class="govuk-table__header">Distinguishing marks</th>
+          <th scope="col" class="govuk-table__header">
+            <abbr title="Animal and Plant Health Agency">APHA</abbr> sample
+            <br>
+            reference
+          </th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        {% set items = [
+          {ref:1, description:"Quercus acuta", country:"Denmark", quantity:"55Kg", marks:"SCU 23422"},
+          {ref:2, description:"Quercus acuta", country:"Denmark", quantity:"55Kg", marks:"SCU 23423"},
+          {ref:3, description:"Pinus albicaulis", country:"Denmark", quantity:"55Kg", marks:"SCU 23424"},
+          {ref:4, description:"Pinus albicaulis", country:"Denmark", quantity:"55Kg", marks:"SCU 23425"},
+          {ref:5, description:"Pinus albicaulis", country:"Germany", quantity:"105Kg", marks:"SCU 23426"}
+        ]
+        %}
+        {% for item in items %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">{{item.description}}</td>
+          <td class="govuk-table__cell">{{item.quantity}}</td>
+          <td class="govuk-table__cell">{{item.marks}}</td>
+          <td scope="row" class="govuk-table__cell ">{{10009346 + item.ref}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>    
+    {% endif %}
+
+    <p class="govuk-body">Send your samples to:</p>
+    <p class="govuk-body">
+      Plant Clinic
+      <br>
+      Block 4
+      <br>
+      National Agri-Food Campus
+      <br>
+      Sand Hutton
+      <br>
+      York
+      <br>
+      YO41 1LZ
+    </p>
+    {% if data.build != "development" %}
+    <p class="govuk-body"><a href="../../print-label-print?id=10" class="govuk-link govuk-link-no-visited-state" target="_blank">See, print or copy this information (opens in new tab)</a></p>
+    {% endif %}
+    <h2 class="govuk-heading-m">What happens next</h2>
+    <!-- <ol class="govuk-list govuk-list--number">
+      <li>We will check and process your application.</li>
+      <li>If there are no problems, we will issue your report.</li>
+      <li>We will then send you an invoice.</li>
+    </ol> -->
+    <ol class="govuk-list govuk-list--number">
+      <li>We will check and process your application.</li>
+      <li>If there are no problems, we will issue your report.</li>
+      <li>We will then send you an invoice.</li>
+    </ol>
+
+    <!-- <div class="govuk-inset-text">
+      Only apply for a phytosanitary report when your seed sampling application status says 'Report Issued'. If this application contains a large number of seed samples, it may take longer to receive your report.
+    </div> -->
+    <div class="govuk-inset-text">
+      You can apply for a phytosanitary report when your seed sampling application status changes to 'Report issued’.
+    </div>
+
+    <p class="govuk-body govuk-!-padding-bottom-2">We'll only contact you if there is a problem with your application.</p>
+
+    <form action="{% if data.route == 'new' %}../../../dashboard-one{% else %}../../../dashboard-submitted{% endif %}" method="post">
+      <button class="govuk-button govuk-!-margin-top-2 govuk-!-margin-bottom-7" data-module="govuk-button">View your applications</button>
+
+      <!-- Session data hook to update the dashboard so that it knows a new application has been submitted -->
+      <div class="govuk-form-group" hidden>
+        <label class="govuk-label" for="application_submission_data">Application submission status</label>
+        <input class="govuk-input" id="application_submission_data" name="application_submission_data" type="text" value="submitted">
+      </div>
+
+    </form>
+
+    <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_self">{% if data.build == "development" %}what fees you need to pay{% else %}what fees you will pay{% endif %}</a> for this application.</p>
+    <h2 class="govuk-heading-m">If you need help</h2>
+    <p class="govuk-body">Contact us quoting your <abbr title="Animal and Plant Health Agency">APHA</abbr> reference <strong>1721 14800 4809</strong>{% if data.build == "development" %}:{% else %} on:{% endif %}</p>
+    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-8">
+      <li>0300 1000 313, Monday to Sunday 7am to 7pm</li>
+      <li><a href="mailto:planthealth.info@apha.gov.uk" class="govuk-link">planthealth.info@apha.gov.uk</a></li>
+    </ul>
+
+    <div class="govuk-feedback-box govuk-!-margin-top-6">
+      <h2 class="govuk-heading-m">Give feedback on this service</h2>
+      <p class="govuk-body">Take a 3 minute survey about your application so that we can improve the service.{% if data.build == "development" %} The survey will open in a new tab.{% endif %}</p>
+      <p class="govuk-body"><a href="https://defragroup.eu.qualtrics.com/jfe/form/SV_1RDraVxZ03Ja2qy" class="govuk-link" target="_blank" class="govuk-link">Give feedback{% if data.build == "development" %}{% else %} (opens in new tab){% endif %}</a></p>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

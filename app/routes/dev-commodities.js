@@ -7,6 +7,7 @@ module.exports = function(router) {
   var client3 = new RestClient()
 
   // ADD extra routing here if needed.
+  require('./dev_v2-3.js')(router)
   require('./dev_v2-2.js')(router)
   require('./dev_v2-1.js')(router)
   require('./dev_v2-0.js')(router)
@@ -115,7 +116,6 @@ module.exports = function(router) {
         console.log('found match '+r[i].fullname.toUpperCase())
         console.log('returning the one result')
         return list
-
       }
     }
     console.log('returning the full list')
@@ -227,7 +227,6 @@ module.exports = function(router) {
     dir.forEach(function(element) {
       var path = "/" + element
       baseDir += path
-
     })
     // Attempt to render a page in the current folder
     res.render(base_url + req.params[0], {

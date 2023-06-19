@@ -1,0 +1,1685 @@
+{% extends "layout-option.html" %}
+
+{% block pageTitle %}
+  Your applications - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% if query.multi_org == "yes" %}
+<div class="login-nav multi-org">
+
+  <div class="login-nav-section-left">
+    <fieldset class="govuk-fieldset govuk-!-display-inline-block">
+      <select class="govuk-select" id="selectOrganisation" name="selectOrganisation" aria-label="Select an organisation">
+        <option value="A1OA" selected>Agency 1 - Organisation A</option>
+        <option value="A1OB">Agency 1 - Organisation B</option>
+        <option value="A2OC">Agency 2 - Organisation C</option>
+        <option value="A3">Agency 3</option>
+        <option value="OD">Organisation D</option>
+      </select>
+    </fieldset>
+    <button class="govuk-button multi-org-button" id="selectOrganisationButton">Select</button>
+  </div>
+
+  <div class="login-nav-section-right">
+    <ul class="login-nav__list multi-org-login-nav__list">
+      <li class="login-nav__list-item-new multi-org-login-nav__list-item-new">Prototype user</li>
+      <li class="login-nav__list-item-new multi-org-login-nav__list-item-new"><a href="account?returnURL=dashboard-submitted" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+      <li class="login-nav__list-item-new multi-org-login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
+    </ul>
+  </div>
+
+</div>
+{% else %}
+<div class="login-nav">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="account?returnURL=dashboard-submitted" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
+  </ul>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<style>
+  
+  /* Needs extracting and adding to the external Sass or CSS */
+  /* Chris Harding (04.04.22) - Reduction in the GOV.UK tag component font size (ONLY in this responsive table) as part of the table redesign */
+  .govuk-table__cell > .govuk-tag {
+    font-size: 12px;
+    white-space: normal;
+  }
+  @media (min-width: 62.5em) {
+    .govuk-table__cell > .govuk-tag {
+      font-size: 14px;
+      white-space: nowrap;
+    }
+  }
+
+  .govuk-tag--white-tag-blue-border-and-text {
+    font-size: 11px !important;
+  }
+  @media (min-width: 62.5em) {
+    .govuk-tag--white-tag-blue-border-and-text {
+      font-size: 13px !important;
+    }
+  }
+
+  .govuk-tag--white-tag-black-border-and-text {
+    font-size: 11px !important;
+  }
+  @media (min-width: 62.5em) {
+    .govuk-tag--white-tag-black-border-and-text {
+      font-size: 13px !important;
+    }
+  }
+
+  #filter-cert-org #filter-container {
+    bottom: 0px;
+    color: rgb(255, 255, 255);
+    height: 40px;
+    left: 0px;
+    position: relative;
+    right: 0px;
+    text-decoration: none solid rgb(255, 255, 255);
+    text-size-adjust: 100%;
+    top: 0px;
+    width: 300px;
+    column-rule-color: rgb(255, 255, 255);
+    perspective-origin: 150px 20px;
+    transform-origin: 150px 20px;
+    caret-color: rgb(255, 255, 255);
+    background: rgb(0, 94, 165) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36' width='40' height='40'%3E%3Cpath d='M25.7 24.8L21.9 21c.7-1 1.1-2.2 1.1-3.5 0-3.6-2.9-6.5-6.5-6.5S10 13.9 10 17.5s2.9 6.5 6.5 6.5c1.6 0 3-.6 4.1-1.5l3.7 3.7 1.4-1.4zM12 17.5c0-2.5 2-4.5 4.5-4.5s4.5 2 4.5 4.5-2 4.5-4.5 4.5-4.5-2-4.5-4.5z' fill='white'%3E%3C/path%3E%3C/svg%3E") no-repeat scroll 0% 0% / 40px 40px padding-box border-box;
+    border: 0px none rgb(255, 255, 255);
+    font: normal normal 400 normal 16px / normal "Times New Roman";
+    outline: rgb(255, 255, 255) none 0px;
+  }
+  #filter-cert-org #filter-container:after {
+    color: rgb(255, 255, 255);
+    text-decoration: none solid rgb(255, 255, 255);
+    text-size-adjust: 100%;
+    column-rule-color: rgb(255, 255, 255);
+    caret-color: rgb(255, 255, 255);
+    border: 0px none rgb(255, 255, 255);
+    font: normal normal 400 normal 16px / normal "Times New Roman";
+    outline: rgb(255, 255, 255) none 0px;
+  }
+  #filter-cert-org #filter-container:before {
+    color: rgb(255, 255, 255);
+    text-decoration: none solid rgb(255, 255, 255);
+    text-size-adjust: 100%;
+    column-rule-color: rgb(255, 255, 255);
+    caret-color: rgb(255, 255, 255);
+    border: 0px none rgb(255, 255, 255);
+    font: normal normal 400 normal 16px / normal "Times New Roman";
+    outline: rgb(255, 255, 255) none 0px;
+  }
+  #filter-cert-org #filter-input {
+    bottom: 0px;
+    height: 22px;
+    left: 0px;
+    position: relative;
+    right: 0px;
+    text-size-adjust: 100%;
+    top: 0px;
+    width: 260px;
+    perspective-origin: 130px 20px;
+    transform-origin: 130px 20px;
+    border: 2px solid rgb(255, 255, 255);
+    font: normal normal 400 normal 19px / 25px nta, Arial, sans-serif;
+    margin: 0px 0px 0px 40px;
+    padding: 9px 10px 5px;
+    border: solid 2px #000;
+    outline: none;
+  }
+  #filter-cert-org #filter-input:focus {
+    border: solid 2px #ffbf47;
+    outline: none;
+  }
+  #filter-cert-org #filter-input:after {
+    text-size-adjust: 100%;
+    font: normal normal 400 normal 19px / 25px nta, Arial, sans-serif;
+  }
+  #filter-cert-org #filter-input:before {
+    text-size-adjust: 100%;
+    font: normal normal 400 normal 19px / 25px nta, Arial, sans-serif;
+  }
+  
+  /* General styles */
+  .govuk-details__summary:before {
+    display: none;
+  }
+
+  .client-ref {
+    display: inline-block;
+    margin-top: 4px;
+  }
+
+  .govuk-width-one-tenth {
+    width: 10% !important;
+  }
+
+  .govuk-table__cell--numeric {
+    text-align: right !important;
+  }
+
+  /* Chris Harding (16.03.22) - Styles for new filters */
+  .govuk-grid-column-one-third-searchable-checkboxes-section {
+    padding-left: 2px !important;
+  }
+
+  .app-c-option-select__container {
+    max-height: 225px;
+    background-color: #f3f2f1;
+  }
+
+  .searchable-filters-heading {
+    padding-left: 13px !important;
+  }
+
+  .app-c-option-select {
+    background-color: #f3f2f1;
+    padding-top: 0px !important;
+  }
+
+  .app-c-option-select__filter {
+    background-color: #f3f2f1;
+    padding-top: 0px !important;
+    padding-left: 13px;
+  }
+
+  .app-c-option-select__filter-input {
+    background-color: #f3f2f1;
+  }
+
+  /* Chris Harding (24.11.22) - After splitting APHA references into 3 sets of 4 digits (e.g. to improve readability) styling to stop links spanning across more than 1 line */
+  .link-no-break  {
+    white-space: normal;
+  }
+  @media (min-width: 62.5em) {
+    .link-no-break  {
+      white-space: nowrap;
+    }
+  }
+
+  /* Chris Harding (26.08.22) - GOV.UK tab component styles */
+  .govuk-tabs {
+    margin-bottom: 15px;
+  }
+  @media (min-width: 40.0625em) {
+    .govuk-tabs {
+      margin-bottom: 20px;
+    }
+  }
+
+  .govuk-tabs__panel {
+    margin-bottom: 15px;
+  }
+  @media (min-width: 40.0625em) {
+    .govuk-tabs__panel {
+      margin-bottom: initial;
+    }
+  }
+
+  .govuk-tabs_section-heading {
+    display: inherit;
+  }
+  @media (min-width: 40.0625em) {
+    .govuk-tabs_section-heading {
+      display: none;
+    }
+  }
+
+  .govuk-tabs-links-for-desktop {
+    display: none;
+  }
+  @media (min-width: 40.0625em) {
+    .govuk-tabs-links-for-desktop {
+      display: inherit;
+    }
+  }
+
+  .govuk-tabs-links-for-mobile {
+    display: inherit;
+  }
+  @media (min-width: 40.0625em) {
+    .govuk-tabs-links-for-mobile {
+      display: none;
+    }
+  }
+
+  /* Chris Harding (19.05.22) - Styling for the draft application table */
+  .responsive-table-draft-actions-td {
+    display: initial !important;
+    text-align: left !important;
+  }
+  @media (min-width: 40.0625em) {
+    .responsive-table-draft-actions-td {
+      display: table-cell !important;
+      text-align: right !important;
+    }
+  }
+
+  .draft-actions-copy {
+    display: block;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  @media (min-width: 40.0625em) {
+    .draft-actions-copy {
+      padding-top: 0px;
+      padding-bottom: 10px;
+    }
+  }
+
+  .draft-actions-delete {
+    display: block;
+    padding-bottom: 10px;
+  }
+  @media (min-width: 40.0625em) {
+    .draft-actions-delete {
+      padding-bottom: 0px;
+    }
+  }
+
+  /* Chris Harding (10.06.22) - Defra pagination CSS fix to match the developed service implementation */
+  .defra-pagination {
+    margin: 0px;
+  }
+
+  .defra-pagination__list {
+    float: none;
+  }
+
+  .defra-pagination__link {
+    padding-top: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    padding-left: 0px;
+    text-align: left;
+    min-width: 20px;    
+  }
+  @media (min-width: 40.0625em) {
+    .defra-pagination__link {
+      padding-right: 10px;
+      min-width: 25px;
+    }
+  }
+  
+  .defra-pagination__item--prev {
+    padding-right: 10px;
+  }
+  @media (min-width: 40.0625em) {
+    .defra-pagination__item--prev {
+      padding-right: 15px;
+    }
+  }
+
+  .defra-pagination__results {
+    padding-top: 1px;
+    padding-right: 5px;
+    padding-bottom: 1px;
+    padding-left: 0px;    
+  }
+  @media (min-width: 40.0625em) {
+    .defra-pagination__results {
+      padding-right: 0px;
+      padding-left: 5px;
+    }
+  }
+
+  /* Chris Harding (19.08.22) - Styles for the multi organisation view of the dashboard in PHES */
+  .multi-org {
+    margin-top: 0;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    overflow: hidden;
+    display: block;
+    align-items: unset;
+  }
+  @media (min-width: 40.0625em) {
+    .multi-org {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .login-nav-section-left {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  @media (min-width: 40.0625em) {
+    .login-nav-section-left {
+      float: left;
+      width: 50%;
+    }
+  }
+
+  .login-nav-section-right {
+    width: 100%;
+    padding-top: 15px;
+    margin: 0;
+    overflow: hidden;
+  }
+  @media (min-width: 40.0625em) {
+    .login-nav-section-right {
+      width: 50%;
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  .multi-org-login-nav__list {
+    margin: 0;
+    padding: 0;
+  }
+
+  .multi-org-login-nav__list-item-new {
+    margin-bottom: 0;
+  }
+
+  .multi-org-button {
+    background-color: #1d70b8;
+    color: #ffffff;
+    width: auto;
+    margin-bottom: 0;
+    margin-left: 15px;
+  }
+
+  /* Chris Harding (26.08.22) - Keep consistent spacing inside the bottom of the tabs panel (2xpx) */
+  .search-and-filters-no-results-list {
+    margin-bottom: 0px;
+  }
+
+  /* Chris Harding (24.11.22) - Fixes to the responsiveness of the table so it works on mid sized devices (e.g. iPad) */
+  .govuk-body-s  {
+    font-size: 14px;
+    font-size: 0.875rem;
+  }
+  @media (min-width: 62.5em) {
+    .govuk-body-s  {
+      font-size: 16px;
+      font-size: 1rem;
+    }
+  }
+
+  /* Chris Harding (14.04.23) - Expansion on the GOV.UK Design System notification banner component (https://design-system.service.gov.uk/components/notification-banner) to make the banner full width on the dashboard (width override class) */
+  .govuk-notification-banner__heading-full-width {
+    max-width: none;
+  }
+
+  .govuk-notification-banner__content-full-width {
+    max-width: none;
+  }
+
+  /* Chris Harding (10.05.23) - To force the breaking of user entered dynamic content ('your reference' and 'consignee') in the table view */
+  .force-content-break {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -ms-word-break: break-all;
+    word-break: break-word;
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  }
+
+</style>
+
+<div class="govuk-grid-row">
+
+  {% if query.notificationBanner == "yes" %}
+  <div class="govuk-grid-column-two-thirds">
+
+    <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+    
+      <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">Important</h2>
+      </div>
+
+      <div class="govuk-notification-banner__content">
+        <p class="govuk-notification-banner__heading">This service will not be available between 9pm on Friday 14 April 2023 and 9am on Monday 17 April 2023.</p>
+      </div>
+
+    </div>
+
+  </div>
+  {% else %}
+  <div class="govuk-grid-column-two-thirds">
+
+    <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+    
+      <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">Important</h2>
+      </div>
+
+      <div class="govuk-notification-banner__content">
+        <p class="govuk-notification-banner__heading">From [DATE] Defra began issuing digital phytosanitary certificates (ePhytos) to some of the European Union and Northern Ireland</p>
+        <p class="govuk-body">When Defra issue an ePhyto to your destination country, you will not need to send a paper certificate with your consignment.</p>
+        <p class="govuk-body"><a href="guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#digital-phytosanitary-certificates" class="govuk-link" rel="noreferrer noopener" target="_blank">Read more about ePhyto (opens in new tab)</a></p>
+      </div>
+
+    </div>
+  
+  </div>
+  {% endif %}
+
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-xl">Your applications</h1>
+    {% if data.route != "new" %}
+    <a class="govuk-button" href="application/setup/what-export?version={{data.version}}&build={{data.build}}&route={{data.route}}">Start a new application</a>
+    {% else %}
+    <p class="govuk-body">You have no applications.</p>
+    <a class="govuk-button" href="application/setup/what-export?version={{data.version}}&build={{data.build}}&route={{data.route}}">Start a new application</a>
+    {% endif %}    
+  </div>
+
+</div>
+
+{% if data.route != "new" %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-full">
+    
+    <div class="govuk-tabs" data-module="govuk-tabs">
+      <h2 class="govuk-tabs__title govuk-tabs-links-for-desktop">Your applications</h2>
+      <ul class="govuk-tabs__list govuk-tabs-links-for-desktop">
+        <li class="govuk-tabs__list-item govuk-tabs__list-item--selected"><a class="govuk-tabs__tab" href="dashboard-submitted">Submitted</a></li>
+        <li class="govuk-tabs__list-item"><a class="govuk-tabs__tab" href="dashboard-draft">Draft</a></li>
+      </ul>
+
+      <div class="govuk-form-group govuk-tabs-links-for-mobile">
+        <a href="dashboard-draft" class="govuk-link">View your draft applications</a>
+      </div>
+
+      <div class="govuk-tabs__panel" id="submitted">
+
+        <div class="govuk-grid-row">
+
+          <div class="govuk-grid-column-two-thirds">
+            
+            <form method="get" novalidate>
+        
+              <div class="search-wrapper govuk-form-group">
+                <label for="search-applications" class="govuk-label">Search by <abbr title="Animal and Plant Health Agency">APHA</abbr> reference, your reference or submitted date</label>
+        
+                <div class="search-input-wrapper">
+                  <input type="search" value="{{data.search or ''}}" id="search-applications" name="search" title="Search" class="govuk-input">
+                  
+                  <div class="search-input-submit-wrapper">
+                    <button type="submit" class="search-submit">Search</button>
+                  </div>
+        
+                </div>
+        
+              </div>
+        
+            </form>
+        
+          </div>
+        
+          <div class="govuk-grid-column-one-third">
+
+            <div class="defra-filter--action" style="display: none;">
+              <button id="defra-filter--button" class="govuk-button govuk-button--secondary govuk-!-margin-top-6{% if query.filter_applied == 'yes' %} defra-filter-button--active{% endif %}" type="button" aria-expanded="false">
+                <span class="defra-filter--button-content">Show filters</span>
+                <span class="defra-filter__icon"></span>
+              </button>
+            </div>
+        
+          </div>
+        
+        </div>
+        
+        <div class="govuk-grid-row">
+        
+          <div class="govuk-grid-column-full">
+        
+            <div class="defra-filter--content">
+        
+              <form method="get" novalidate>
+                
+                <div class="govuk-grid-row govuk-!-margin-top-3">
+        
+                  <div class="govuk-grid-column-one-third">
+        
+                    <div class="govuk-form-group">
+                      <fieldset class="govuk-fieldset">
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Filter by type</legend>
+                        
+                        <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+                          
+                          <div class="govuk-checkboxes__item">
+                            <input class="govuk-checkboxes__input" id="certificate_1" name="certificate" type="checkbox" value="Certificate of conformity"{% for param in data.certificate %}{% if param == 'Certificate of conformity' %} checked{% endif %}{% endfor %}>
+                            <label class="govuk-label govuk-checkboxes__label" for="certificate_1">Certificate of conformity</label>
+                          </div>
+        
+                          <div class="govuk-checkboxes__item">
+                            <input class="govuk-checkboxes__input" id="certificate_2" name="certificate" type="checkbox" value="Growing season inspection"{% for param in data.certificate %}{% if param == 'Growing season inspection' %} checked{% endif %}{% endfor %}>
+                            <label class="govuk-label govuk-checkboxes__label" for="certificate_2">Growing season inspection</label>
+                          </div>
+        
+                          <div class="govuk-checkboxes__item">
+                            <input class="govuk-checkboxes__input" id="certificate_3" name="certificate" type="checkbox" value="Phytosanitary certificate"{% for param in data.certificate %}{% if param == 'Phytosanitary certificate' %} checked{% endif %}{% endfor %}>
+                            <label class="govuk-label govuk-checkboxes__label" for="certificate_3">Phytosanitary certificate</label>
+                          </div>
+        
+                          <div class="govuk-checkboxes__item">
+                            <input class="govuk-checkboxes__input" id="certificate_4" name="certificate" type="checkbox" value="Re-forwarding phytosanitary certificate"{% for param in data.certificate %}{% if param == 'Re-forwarding phytosanitary certificate' %} checked{% endif %}{% endfor %}>
+                            <label class="govuk-label govuk-checkboxes__label" for="certificate_4">Re-forwarding phytosanitary certificate</label>
+                          </div>
+        
+                          <div class="govuk-checkboxes__item">
+                            <input class="govuk-checkboxes__input" id="certificate_5" name="certificate" type="checkbox" value="Seed sampling"{% for param in data.certificate %}{% if param == 'Seed sampling' %} checked{% endif %}{% endfor %}>
+                            <label class="govuk-label govuk-checkboxes__label" for="certificate_5">Seed sampling</label>
+                          </div>
+
+                          <div class="govuk-checkboxes__item">
+                            <input class="govuk-checkboxes__input" id="certificate_6" name="certificate" type="checkbox" value="Set up one time testing"{% for param in data.certificate %}{% if param == 'Set up one time testing' %} checked{% endif %}{% endfor %}>
+                            <label class="govuk-label govuk-checkboxes__label" for="certificate_6">Set up one time testing</label>
+                          </div>
+        
+                          <div class="govuk-checkboxes__item">
+                            <input class="govuk-checkboxes__input" id="certificate_7" name="certificate" type="checkbox" value="Soil sampling"{% for param in data.certificate %}{% if param == 'Soil sampling' %} checked{% endif %}{% endfor %}>
+                            <label class="govuk-label govuk-checkboxes__label" for="certificate_7">Soil sampling</label>
+                          </div>
+        
+                        </div>
+        
+                      </fieldset>
+                    </div>
+        
+                  </div>
+        
+                  <div class="govuk-grid-column-one-third govuk-grid-column-one-third-searchable-checkboxes-section">
+        
+                    {% block destinationCountry %}
+                    {% include "./modules/_destination-country.html" %}
+                    {% endblock %}
+        
+                  </div>
+        
+                  <div class="govuk-grid-column-one-third govuk-grid-column-one-third-searchable-checkboxes-section">
+        
+                    {% block status %}
+                    {% include "./modules/_status-tabbed.html" %}
+                    {% endblock %}
+        
+                  </div>
+
+                </div>
+
+                {% if query.multi_user == "yes" %}
+                <div class="govuk-grid-row">
+
+                  <div class="govuk-grid-column-one-third">
+                
+                    <div class="govuk-form-group">
+                      <fieldset class="govuk-fieldset">
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Filter by user</legend>
+                        <p class="govuk-body">Show applications created by:</p>
+                        
+                        <div class="govuk-radios govuk-radios--small govuk-radios--conditional" data-module="govuk-radios">
+                          
+                          <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="show_applications_by_me" name="show_applications_by" type="radio" value="me" {% if (data.show_applications_by and data.show_applications_by == "me" ) or not data.show_applications_by %}checked="checked"{% endif %}>
+                            <label class="govuk-label govuk-radios__label" for="show_applications_by_me">Me</label>
+                          </div>
+
+                          <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="show_applications_by_everyone" name="show_applications_by" type="radio" value="everyone" {% if data.show_applications_by and data.show_applications_by == "everyone" %}checked="checked"{% endif %} data-aria-controls="conditional-how-contacted-conditional-3">
+                            <label class="govuk-label govuk-radios__label" for="show_applications_by_everyone">Someone else</label>
+                          </div>
+
+                          <div class=" govuk-form-group govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional-3">
+                            {% set logged_in_as = "Cornelius Longbottom" %}
+                            <select class="govuk-select govuk-!-width-full" id="filter_name" name="filter_name">
+                              <option value="All users"{% if not data.filter_name or data.filter_name == "All users" %} selected{% endif %}>All users</option>
+                              {% set list = [] %}
+                              {% for cert in data.applicationsv6 %}
+                              {% if not cert.name in list %}
+                              <option value="{{cert.name}}"{% if cert.name == data.filter_name %} selected{% endif %}>{{cert.name}}{% if logged_in_as == cert.name %} <strong>(you)</strong>{% endif %}</option>
+                              {{list.push(cert.name)}}
+                              {% endif %}
+                              {% endfor %}
+                            </select>
+                          </div>
+
+                        </div>
+
+                      </fieldset>
+                    </div>
+
+                  </div>
+
+                </div>
+                {% endif %}
+
+                <div class="govuk-grid-row">
+
+                  <div class="govuk-grid-column-full govuk-button-group govuk-!-margin-bottom-1">
+                    <button class="govuk-button" type="submit" data-module="govuk-button" name="filter_applied" value="yes">Apply filters</button>
+                    {% if data.filter_applied %}
+                    <a href="?certificate=&filter_demo=&filter_status=&filter_name=&show_applications_by=&filter_applied=" class="govuk-link app-button--link">Clear filters</a>
+                    {% endif %}
+                  </div>
+        
+                </div>
+        
+              </form>
+        
+            </div>
+        
+          </div>
+
+        </div>
+
+        <div class="govuk-grid-row">
+        
+          <div class="govuk-grid-column-full">
+            
+            {% if data.route != "new" %}
+            <div class="filter-tag--wrapper govuk-!-margin-bottom-6" data-module="track-click">
+              <p class="govuk-body govuk-!-margin-bottom-2">
+                {% if data.search %}
+                  {% if data.filter_applied %}
+                  Showing 0 applications matching <strong>{{data.search or "search term"}}</strong> and these filters:
+                  {% else %}
+                  Showing 0 applications matching <strong>{{data.search or "search term"}}</strong>
+                  {% endif %}
+                {% elif data.filter_applied %}
+                  {% if data.filter_demo %}
+                  Showing 0 applications matching these filters:
+                  {% else %}
+                  Showing <span id="js-case-count">&nbsp;</span> applications matching these filters:
+                  {% endif %}
+                {% else %}
+                Showing <span id="js-case-count">&nbsp;</span> applications
+                {% endif %}
+                {% if data.filter_applied %}
+                {% if data.certificate %}<br>Type is {% if data.certificate %}{% for param in data.certificate %}<strong>{{param}}</strong>{% if not loop.last %} or {% endif %}{% endfor %}{% else %}Soil sampling{% endif %}{% endif %}
+                {% if data.filter_demo %}<br>Destination country is {% if data.filter_demo %}{% for param in data.filter_demo %}<strong>{{param}}</strong>{% if not loop.last %} or {% endif %}{% endfor %}{% else %}Algeria{% endif %}{% endif %}
+                {% if data.filter_status %}<br>Status is {% if data.filter_status %}{% for param in data.filter_status %}<strong>{{param}}</strong>{% if not loop.last %} or {% endif %}{% endfor %}{% else %}Processing{% endif %}{% endif %}
+                {% if data.filter_name %}<br>User is {% if data.filter_name %}{% for param in data.filter_name %}<strong>{{param}}</strong>{% if not loop.last %} or {% endif %}{% endfor %}{% else %}Cornelius Longbottom{% endif %}{% endif %}
+                {% endif %}
+              </p>
+              {% if data.search or data.filter_applied %}
+              <p class="govuk-body">
+                <a href="?search=&certificate=&filter_demo=&filter_status=&filter_name=&show_applications_by=&filter_applied=" class="govuk-link govuk-link--no-visited-state govuk-!-font-size-19" data-module="govuk-button">
+                  Clear
+                  {% if data.search and data.filter_applied %}
+                  search and filters
+                  {% elif data.filter_applied %}
+                  filters
+                  {% else %}
+                  search
+                  {% endif %}
+                </a>
+              </p>
+              {% endif %}
+            </div>
+            {% else %}
+            <p class="govuk-body govuk-!-margin-bottom-2">Showing 0 applications</p>
+            {% if data.search or data.filter_applied %}
+            <p class="govuk-body">
+              <a href="?search=&certificate=&filter_demo=&filter_status=&filter_name=&show_applications_by=&filter_applied=" class="govuk-link govuk-link--no-visited-state govuk-!-font-size-19" data-module="govuk-button">
+                Clear
+                {% if data.search and data.filter_applied %}
+                search and filters
+                {% elif data.filter_applied %}
+                filters
+                {% else %}
+                search
+                {% endif %}
+              </a>
+            </p>
+            {% endif %}
+            {% endif %}
+        
+            {% if data.search and data.filter_applied %}
+            <div class="no-results">
+              <p class="govuk-body govuk-!-font-weight-bold">There are no applications matching your search.</p>
+              <p class="govuk-body">Improve your results by:</p>
+              <ul class="govuk-list govuk-list--bullet search-and-filters-no-results-list">
+                <li>double-checking the reference or date you searched for</li>
+                <li>searching by either a date or reference, not both</li>
+                <li>searching using dates in the format DD-MM-YYYY, for example 05-04-2022</li>
+                <li>trying different filters</li>
+              </ul>
+            </div>
+            {% elif data.search %}
+            <div class="no-results">
+              <p class="govuk-body govuk-!-font-weight-bold">There are no applications matching your search.</p>
+              <p class="govuk-body">Improve your results by:</p>
+              <ul class="govuk-list govuk-list--bullet search-and-filters-no-results-list">
+                <li>double-checking the reference or date you searched for</li>
+                <li>searching by either a date or reference, not both</li>
+                <li>searching using dates in the format DD-MM-YYYY, for example 05-04-2022</li>
+              </ul>
+            </div>
+            {% elif data.filter_demo %}
+            <div class="no-results">
+              <p class="govuk-body govuk-!-font-weight-bold">There are no applications matching your search.</p>
+              <p class="govuk-body">Improve your results by:</p>
+              <ul class="govuk-list govuk-list--bullet search-and-filters-no-results-list">
+                <li>trying different filters</li>
+                <li>searching by reference or submitted date instead</li>
+              </ul>
+            </div>
+            {% else %}
+            <!-- Chris Harding (10.06.22) - Show page 1 (1 to 30 of 32/33 results) (START) -->
+            {% if query.page != "2" %}
+            <!--
+              Chris Harding (15.03.22) - New table sorting has been defined to make finding applications simpler. The new sorting rules are:
+              1) Submitted date (most recent first)
+              2) Destination (a-z)
+              3) Type (a-z)
+            -->
+            {% if data.route != "new" %}
+            <table class="govuk-table responsive-table">
+              <thead class="govuk-table__head govuk-body-s">
+                <tr class="govuk-table__row rowCounter">
+                  <th class="govuk-table__header" scope="col"><abbr title="Animal and Plant Health Agency">APHA</abbr> reference</th>
+                  <th class="govuk-table__header" scope="col">Your reference</th>
+                  <th class="govuk-table__header" scope="col">Type</th>
+                  <th class="govuk-table__header govuk-!-width-one-seventh" scope="col">Destination</th>
+                  <th class="govuk-table__header govuk-!-width-one-seventh" scope="col">Submitted date</th>
+                  <th class="govuk-table__header" scope="col">Status</th>
+                  <th class="govuk-table__header govuk-table__header--numeric" scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody class="govuk-table__body govuk-body-s">
+                {% if data.application_submission_data == "submitted" %}
+                <tr class="govuk-table__row rowCounter result">
+                  <td id="apha-reference-1" class="govuk-table__cell table-header" scope="row">
+                    <a href="{% if data.has_reference == 'gsi' %}application-gsi{% elif data.has_reference == 'soil sampling' %}application-ss{% else %}application-ephyto{% endif %}?application_submission_data=submitted&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break"><span class="table-heading table-heading-full" aria-hidden="true">APHA reference </span>1721 14800 4809</a>
+                  </td>
+                  <td id="your-reference-1" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Your reference </span>{% if data.reference_num %}{{data.reference_num or "REFERENCE"}}{% else %}&nbsp;{% endif %}
+                  </td>
+                  <td id="type-1" class="govuk-table__cell" scope="row">
+                    <span class="table-heading" aria-hidden="true">Type </span> 
+                    {% if data.has_reference == 'phyto' %}
+                    Phytosanitary
+                    {% elif data.has_reference == 'donotneed' %}
+                    Re-forwarding
+                    {% elif data.has_reference == 'coc' %}
+                    Conformity
+                    {% elif data.has_reference == 'gsi' %}
+                    Growing season inspection
+                    {% elif data.has_reference == 'seed sampling' %}
+                    Seed sampling
+                    {% elif data.has_reference == 'soil sampling' %}
+                    Soil sampling
+                    {% elif data.has_reference == 'batch' %}
+                    Set up one time testing
+                    {% else %}
+                    Phytosanitary
+                    {% endif %}
+                  </td>
+                  <td id="destination-country-1" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Destination </span>{% if data.has_reference == 'phyto' or data.has_reference == 'donotneed' or data.has_reference == 'coc' %}{{data.consignee_name or "Acme Ltd"}}<br>{{data.countrySelect[0] or "France"}}{% else %}&nbsp;{% endif %}
+                  </td>
+                  <td id="submitted-date-1" class="govuk-table__cell" scope="row">
+                    <span class="table-heading" aria-hidden="true">Submitted date </span>{{todaysDateShort}}
+                  </td>
+                  <td id="status-1" class="govuk-table__cell" scope="row">
+                    <span class="table-heading" aria-hidden="true">Status </span>
+                    
+                    {% if data.application_submission_status == "approved" %}
+                    <div class="govuk-tag govuk-tag--green">
+                      Certificate issued
+                    </div>
+                    {% else %}
+                    <div class="govuk-tag govuk-tag--white-tag-blue-border-and-text">
+                      Submitted
+                    </div>
+                    {% endif %}
+
+                  </td>
+                  <td id="actions-1" class="govuk-table__cell govuk-table__cell--numeric" scope="row">
+                    <a href="#" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate 1721 14800 4809</span></a>
+                  </td>
+                </tr>
+                {% endif %}
+                {% for app in data.applicationsv6 %}
+                {% if app.status != "draft" %}
+
+                <!-- PAGINATED AT 30 (HACKED) RESULTS (START) -->
+                <!-- Chris Harding (10.06.22) - Make sure we only show 30 results on page 1 AFTER a user adds 1 result (e.g. either draft or submitted) to the dashboard -->
+                {% if data.application_submission_data == "submitted" %}
+                {% if app.index != "28" and app.index != "30" and app.index != "31" %}
+                {% if (data.show_applications_by == "me" and app.name == logged_in_as) or (data.show_applications_by == "me" or not data.show_applications_by) or ((app.name | upper) in (data.filter_name | upper) or data.filter_name == "All users") %}
+                {% if (data.has_filter != "yes" or data.filter_status == "any") or app.status in data.filter_status %}
+                {% if not query.search or (query.search and (query.search) == (app.applicationID)) or (query.search and (query.search) == (app.cert_info)) or (query.search and (query.search) == (app.destination)) or (query.search and (query.search) == (app.reference)) or (query.search and (query.search) == (app.EHC)) or (query.search and (query.search) == (app.certificate)) %}
+                {% if data.show_applications_by == "me" %}
+                {% if app.name == logged_in_as %}
+                <tr class="govuk-table__row rowCounter result">
+                  <td id="apha-reference-{{app.index}}" class="govuk-table__cell table-header" scope="row">
+                    {% if app.index == "6" %}
+                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% else %}
+                    <a href="application?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% endif %}
+                    <span class="table-heading table-heading-full" aria-hidden="true">APHA reference </span>{{app.applicationID}}</a>
+                  </td>
+                  <td id="your-reference-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Your reference </span>{% if app.reference %}{{app.reference or "REFERENCE"}}{% else %}&nbsp;{% endif %}
+                  </td>
+                  <td id="type-{{app.index}}" class="govuk-table__cell" scope="row">
+                    <span class="table-heading" aria-hidden="true">Type </span> {{app.cert_info}}
+                  </td>
+                  <td id="destination-country-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Destination </span>{% if app.importer == "" %}&nbsp;{% else %}{{app.importer | title}}<br>{% endif %}{% if app.destination == "" %}&nbsp;{% else %}{{app.destination}}{% endif %}
+                  </td>
+                  <td id="submitted-date-{{app.index}}" class="govuk-table__cell" scope="row">
+                    <span class="table-heading" aria-hidden="true">Submitted date </span>{% if app.date_truncated == "" %}&nbsp;{% else %}{{app.date_truncated}}{% endif %}
+                  </td>
+                  <td id="status-{{app.index}}" class="govuk-table__cell" scope="row">
+                    <span class="table-heading" aria-hidden="true">Status </span>
+                    
+                    <div class="govuk-tag govuk-tag--{{app.tag | lower}}">
+                      {{app.status}}
+                    </div>
+
+                  </td>
+                  <td id="actions-{{app.index}}" class="govuk-table__cell govuk-table__cell--numeric" scope="row">
+                    <a href="clone?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate {{app.applicationID}}</span></a>
+                  </td>
+                </tr>
+                {% endif %}
+                {% else %}
+                {% if app.index != "36" %}
+                <tr class="govuk-table__row rowCounter result">
+                  <td id="apha-reference-{{app.index}}" class="govuk-table__cell table-header" scope="row">
+                    {% if app.index == "8" or app.index == "10" or app.index == "23" %}
+                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% elif app.index == "1" %}
+                    <a href="application-plant-products?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% elif app.index == "3" %}
+                    <a href="application-ssdd?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% elif app.index == "5" or app.index == "7" or app.index == "20" or app.index == "24" %}
+                    <a href="application-coc?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% elif app.index == "9" %}
+                    <a href="application-phy?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- Soil sampling applications (START) -->
+                    {% elif app.index == "16" or app.index == "17" or app.index == "18" or app.index == "19" or app.index == "26" or app.index == "27" or app.index == "28" %}
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- Soil sampling applications (END) -->
+                    {% elif app.index == "21" %}
+                    <a href="application-ssdd-coc?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- GSI applications (START) -->
+                    {% elif app.index == "25" %}
+                    <a href="application-gsi?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% elif app.index == "33" %}
+                    <a href="application-seeds-gsi?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- GSI applications (END) -->
+                    <!-- Seed sampling applications (START) -->
+                    {% elif app.index == "30" %}
+                    <a href="application-seed-sampling?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% elif app.index == "32" %}
+                    <a href="application-seed-sampling-large-max?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- Seed sampling applications (END) -->
+                    {% elif app.index == "31" %}
+                    <a href="application-phy-bulbs?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- Re-usable batch sampling applications (START) -->
+                    {% elif app.index == "35" %}
+                    <a href="application-batch-sample?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- Re-usable batch sampling applications (END) -->
+                    <!-- Re-issue phytosanitary certificate (START) -->
+                    {% elif app.index == "0" or app.index == "34" %}
+                    <a href="application-re-issue?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- Re-issue phytosanitary certificate (END) -->
+                    <!-- Phytosanitary certificate (everything else) applications (START) -->
+                    {% elif app.index == "4" %}
+                    <a href="application-everything-else?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- Phytosanitary certificate (everything else) applications (END) -->
+                    {% else %}
+                    <a href="application?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% endif %}
+                    <span class="table-heading table-heading-full" aria-hidden="true">APHA reference </span>{{app.applicationID}}</a>
+                  </td>
+                  <td id="your-reference-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Your reference </span>{% if app.reference %}{{app.reference or "REFERENCE"}}{% else %}&nbsp;{% endif %}
+                  </td>
+                  <td id="type-{{app.index}}" class="govuk-table__cell" scope="row">
+                    <span class="table-heading" aria-hidden="true">Type </span> {{app.cert_info}}
+                  </td>
+                  <td id="destination-country-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Destination </span>{% if app.importer == "" %}&nbsp;{% else %}{{app.importer | title}}<br>{% endif %}{% if app.destination == "" %}&nbsp;{% else %}{{app.destination}}{% endif %}
+                  </td>
+                  <td id="submitted-date-{{app.index}}" class="govuk-table__cell" scope="row">
+                    <span class="table-heading" aria-hidden="true">Submitted date </span>{% if app.date_truncated == "" %}&nbsp;{% else %}{{app.date_truncated}}{% endif %}
+                  </td>
+                  <td id="status-{{app.index}}" class="govuk-table__cell" scope="row">
+                    <span class="table-heading" aria-hidden="true">Status </span>
+                    
+                    {% if app.index == "0" %}
+                    {% if data.reissue_certificate_data_ppp == "submitted" %}
+                    <div class="govuk-tag govuk-tag--white-tag-blue-border-and-text">
+                      Re-issue requested
+                    </div>
+                    {% elif data.reissue_certificate_data_ppp == "processing" %}
+                    <div class="govuk-tag govuk-tag--blue">
+                      Processing re-issue
+                    </div>
+                    {% elif data.reissue_certificate_data_ppp == "approved" %}
+                    <div class="govuk-tag govuk-tag--green">
+                      Certificate re-issued
+                    </div>
+                    {% elif data.reissue_certificate_data_ppp == "rejected" %}
+                    <div class="govuk-tag govuk-tag--red">
+                      Re-issue denied
+                    </div>
+                    {% else %}
+                    <div class="govuk-tag govuk-tag--{{app.tag | lower}}">
+                      {{app.status}}
+                    </div>
+                    {% endif %}
+                    {% elif app.index == "3" %}
+                    {% if data.reissue_certificate_data_ssdd == "submitted" %}
+                    <div class="govuk-tag govuk-tag--white-tag-blue-border-and-text">
+                      Re-issue requested
+                    </div>
+                    {% elif data.reissue_certificate_data_ssdd == "processing" %}
+                    <div class="govuk-tag govuk-tag--blue">
+                      Processing re-issue
+                    </div>
+                    {% elif data.reissue_certificate_data_ssdd == "approved" %}
+                    <div class="govuk-tag govuk-tag--green">
+                      Certificate re-issued
+                    </div>
+                    {% elif data.reissue_certificate_data_ssdd == "rejected" %}
+                    <div class="govuk-tag govuk-tag--red">
+                      Re-issue denied
+                    </div>
+                    {% else %}
+                    <div class="govuk-tag govuk-tag--{{app.tag | lower}}">
+                      {{app.status}}
+                    </div>
+                    {% endif %}
+                    {% elif app.index == "34" %}
+                    {% if data.reissue_certificate_data_pfp == "submitted" %}
+                    <div class="govuk-tag govuk-tag--white-tag-blue-border-and-text">
+                      Re-issue requested
+                    </div>
+                    {% elif data.reissue_certificate_data_pfp == "processing" %}
+                    <div class="govuk-tag govuk-tag--blue">
+                      Processing re-issue
+                    </div>
+                    {% elif data.reissue_certificate_data_pfp == "approved" %}
+                    <div class="govuk-tag govuk-tag--green">
+                      Certificate re-issued
+                    </div>
+                    {% elif data.reissue_certificate_data_pfp == "rejected" %}
+                    <div class="govuk-tag govuk-tag--red">
+                      Re-issue denied
+                    </div>
+                    {% else %}
+                    <div class="govuk-tag govuk-tag--{{app.tag | lower}}">
+                      {{app.status}}
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <div class="govuk-tag govuk-tag--{{app.tag | lower}}">
+                      {{app.status}}
+                    </div>
+                    {% endif %}
+
+                  </td>
+                  <td id="actions-{{app.index}}" class="govuk-table__cell govuk-table__cell--numeric" scope="row">
+                    <a href="clone?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate {{app.applicationID}}</span></a>
+                  </td>
+                </tr>
+                {% endif %}
+                {% endif %}
+                {% endif %}
+                {% endif %}
+                {% endif %}
+                {% endif %}
+                <!-- Chris Harding (10.06.22) - Make sure we only show 30 results WITHOUT a user adding 1 result (e.g. either draft or submitted) to page 1 of the dashboard table -->
+                {% else %}
+                {% if app.index != "30" and app.index != "31" %}
+                {% if (data.show_applications_by == "me" and app.name == logged_in_as) or (data.show_applications_by == "me" or not data.show_applications_by) or ((app.name | upper) in (data.filter_name | upper) or data.filter_name == "All users") %}
+                {% if (data.has_filter != "yes" or data.filter_status == "any") or app.status in data.filter_status %}
+                {% if not query.search or (query.search and (query.search) == (app.applicationID)) or (query.search and (query.search) == (app.cert_info)) or (query.search and (query.search) == (app.destination)) or (query.search and (query.search) == (app.reference)) or (query.search and (query.search) == (app.EHC)) or (query.search and (query.search) == (app.certificate)) %}
+                {% if data.show_applications_by == "me" %}
+                {% if app.name == logged_in_as %}
+                <tr class="govuk-table__row rowCounter result">
+                  <td id="apha-reference-{{app.index}}" class="govuk-table__cell table-header" scope="row">
+                    {% if app.index == "6" %}
+                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% else %}
+                    <a href="application?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% endif %}
+                    <span class="table-heading table-heading-full" aria-hidden="true">APHA reference </span>{{app.applicationID}}</a>
+                  </td>
+                  <td id="your-reference-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Your reference </span>{% if app.reference %}{{app.reference or "REFERENCE"}}{% else %}&nbsp;{% endif %}
+                  </td>
+                  <td id="type-{{app.index}}" class="govuk-table__cell" scope="row">
+                    <span class="table-heading" aria-hidden="true">Type </span> {{app.cert_info}}
+                  </td>
+                  <td id="destination-country-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Destination </span>{% if app.importer == "" %}&nbsp;{% else %}{{app.importer | title}}<br>{% endif %}{% if app.destination == "" %}&nbsp;{% else %}{{app.destination}}{% endif %}
+                  </td>
+                  <td id="submitted-date-{{app.index}}" class="govuk-table__cell" scope="row">
+                    <span class="table-heading" aria-hidden="true">Submitted date </span>{% if app.date_truncated == "" %}&nbsp;{% else %}{{app.date_truncated}}{% endif %}
+                  </td>
+                  <td id="status-{{app.index}}" class="govuk-table__cell" scope="row">
+                    <span class="table-heading" aria-hidden="true">Status </span>
+                    
+                    <div class="govuk-tag govuk-tag--{{app.tag | lower}}">
+                      {{app.status}}
+                    </div>
+
+                  </td>
+                  <td id="actions-{{app.index}}" class="govuk-table__cell govuk-table__cell--numeric" scope="row">
+                    <a href="clone?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate {{app.applicationID}}</span></a>
+                  </td>
+                </tr>
+                {% endif %}
+                {% else %}
+                {% if app.index != "36" %}
+                <tr class="govuk-table__row rowCounter result">
+                  <td id="apha-reference-{{app.index}}" class="govuk-table__cell table-header" scope="row">
+                    {% if app.index == "8" or app.index == "10" or app.index == "23" %}
+                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% elif app.index == "1" %}
+                    <a href="application-plant-products?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% elif app.index == "3" %}
+                    <a href="application-ssdd?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% elif app.index == "5" or app.index == "7" or app.index == "20" or app.index == "24" %}
+                    <a href="application-coc?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% elif app.index == "9" %}
+                    <a href="application-phy?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- Soil sampling applications (START) -->
+                    {% elif app.index == "16" or app.index == "17" or app.index == "18" or app.index == "19" or app.index == "26" or app.index == "27" or app.index == "28" %}
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- Soil sampling applications (END) -->
+                    {% elif app.index == "21" %}
+                    <a href="application-ssdd-coc?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- GSI applications (START) -->
+                    {% elif app.index == "25" %}
+                    <a href="application-gsi?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% elif app.index == "33" %}
+                    <a href="application-seeds-gsi?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- GSI applications (END) -->
+                    <!-- Seed sampling applications (START) -->
+                    {% elif app.index == "30" %}
+                    <a href="application-seed-sampling?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% elif app.index == "32" %}
+                    <a href="application-seed-sampling-large-max?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- Seed sampling applications (END) -->
+                    {% elif app.index == "31" %}
+                    <a href="application-phy-bulbs?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- Re-usable batch sampling applications (START) -->
+                    {% elif app.index == "35" %}
+                    <a href="application-batch-sample?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- Re-usable batch sampling applications (END) -->
+                    <!-- Re-issue phytosanitary certificate (START) -->
+                    {% elif app.index == "0" or app.index == "34" %}
+                    <a href="application-re-issue?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- Re-issue phytosanitary certificate (END) -->
+                    <!-- Phytosanitary certificate (everything else) applications (START) -->
+                    {% elif app.index == "4" %}
+                    <a href="application-everything-else?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- Phytosanitary certificate (everything else) applications (END) -->
+                    {% else %}
+                    <a href="application?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% endif %}
+                    <span class="table-heading table-heading-full" aria-hidden="true">APHA reference </span>{{app.applicationID}}</a>
+                  </td>
+                  <td id="your-reference-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Your reference </span>{% if app.reference %}{{app.reference or "REFERENCE"}}{% else %}&nbsp;{% endif %}
+                  </td>
+                  <td id="type-{{app.index}}" class="govuk-table__cell" scope="row">
+                    <span class="table-heading" aria-hidden="true">Type </span> {{app.cert_info}}
+                  </td>
+                  <td id="destination-country-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Destination </span>{% if app.importer == "" %}&nbsp;{% else %}{{app.importer | title}}<br>{% endif %}{% if app.destination == "" %}&nbsp;{% else %}{{app.destination}}{% endif %}
+                  </td>
+                  <td id="submitted-date-{{app.index}}" class="govuk-table__cell" scope="row">
+                    <span class="table-heading" aria-hidden="true">Submitted date </span>{% if app.date_truncated == "" %}&nbsp;{% else %}{{app.date_truncated}}{% endif %}
+                  </td>
+                  <td id="status-{{app.index}}" class="govuk-table__cell" scope="row">
+                    <span class="table-heading" aria-hidden="true">Status </span>
+                    
+                    {% if app.index == "0" %}
+                    {% if data.reissue_certificate_data_ppp == "submitted" %}
+                    <div class="govuk-tag govuk-tag--white-tag-blue-border-and-text">
+                      Re-issue requested
+                    </div>
+                    {% elif data.reissue_certificate_data_ppp == "processing" %}
+                    <div class="govuk-tag govuk-tag--blue">
+                      Processing re-issue
+                    </div>
+                    {% elif data.reissue_certificate_data_ppp == "approved" %}
+                    <div class="govuk-tag govuk-tag--green">
+                      Certificate re-issued
+                    </div>
+                    {% elif data.reissue_certificate_data_ppp == "rejected" %}
+                    <div class="govuk-tag govuk-tag--red">
+                      Re-issue denied
+                    </div>
+                    {% else %}
+                    <div class="govuk-tag govuk-tag--{{app.tag | lower}}">
+                      {{app.status}}
+                    </div>
+                    {% endif %}
+                    {% elif app.index == "3" %}
+                    {% if data.reissue_certificate_data_ssdd == "submitted" %}
+                    <div class="govuk-tag govuk-tag--white-tag-blue-border-and-text">
+                      Re-issue requested
+                    </div>
+                    {% elif data.reissue_certificate_data_ssdd == "processing" %}
+                    <div class="govuk-tag govuk-tag--blue">
+                      Processing re-issue
+                    </div>
+                    {% elif data.reissue_certificate_data_ssdd == "approved" %}
+                    <div class="govuk-tag govuk-tag--green">
+                      Certificate re-issued
+                    </div>
+                    {% elif data.reissue_certificate_data_ssdd == "rejected" %}
+                    <div class="govuk-tag govuk-tag--red">
+                      Re-issue denied
+                    </div>
+                    {% else %}
+                    <div class="govuk-tag govuk-tag--{{app.tag | lower}}">
+                      {{app.status}}
+                    </div>
+                    {% endif %}
+                    {% elif app.index == "34" %}
+                    {% if data.reissue_certificate_data_pfp == "submitted" %}
+                    <div class="govuk-tag govuk-tag--white-tag-blue-border-and-text">
+                      Re-issue requested
+                    </div>
+                    {% elif data.reissue_certificate_data_pfp == "processing" %}
+                    <div class="govuk-tag govuk-tag--blue">
+                      Processing re-issue
+                    </div>
+                    {% elif data.reissue_certificate_data_pfp == "approved" %}
+                    <div class="govuk-tag govuk-tag--green">
+                      Certificate re-issued
+                    </div>
+                    {% elif data.reissue_certificate_data_pfp == "rejected" %}
+                    <div class="govuk-tag govuk-tag--red">
+                      Re-issue denied
+                    </div>
+                    {% else %}
+                    <div class="govuk-tag govuk-tag--{{app.tag | lower}}">
+                      {{app.status}}
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <div class="govuk-tag govuk-tag--{{app.tag | lower}}">
+                      {{app.status}}
+                    </div>
+                    {% endif %}
+
+                  </td>
+                  <td id="actions-{{app.index}}" class="govuk-table__cell govuk-table__cell--numeric" scope="row">
+                    <a href="clone?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate {{app.applicationID}}</span></a>
+                  </td>
+                </tr>
+                {% endif %}
+                {% endif %}
+                {% endif %}
+                {% endif %}
+                {% endif %}
+                {% endif %}
+                {% endif %}
+                <!-- PAGINATED AT 30 (HACKED) RESULTS (START) -->
+
+                {% endif %}
+                {% endfor %}
+              </tbody>
+              {% endif %}
+            </table>
+
+            {% if data.route != "new" %}
+            <div class="govuk-form-block">
+              <nav class="defra-pagination" aria-labelledby="pagination-label">
+                <p class="govuk-visually-hidden" id="pagination-label" >Pagination navigation</p>
+                <ul class="defra-pagination__list">
+                  <li class="defra-pagination__item defra-pagination__item--active">
+                    <span class="defra-pagination__link" style="color: black!important; font-weight: 700;">1</span>
+                  </li>
+                  <li class="defra-pagination__item">
+                    <a class="defra-pagination__link" href="dashboard-submitted?page=2">2</a>
+                  </li>
+                  <li class="defra-pagination__item  defra-pagination__item--next">
+                    <a class="defra-pagination__link" href="dashboard-submitted?page=2">Next<span class="govuk-visually-hidden"> set of pages</span></a>
+                  </li>
+                </ul>
+                <p class="defra-pagination__results govuk-body">Showing <strong>1</strong> to <strong>30</strong> of <strong>{% if data.application_submission_data == "submitted" %}33{% else %}32{% endif %}</strong> results</p>
+              </nav>
+            </div>
+            {% else %}
+            
+            {% endif %}
+            <!-- Chris Harding (10.06.22) - Show page 1 (1 to 30 of 32/33 results) (END) -->
+
+            <!-- Chris Harding (10.06.22) - Show page 2 (31 to 32/33 of 32/33 results) (START) -->
+            {% else %}
+            <!--
+              Chris Harding (15.03.22) - New table sorting has been defined to make finding applications simpler. The new sorting rules are:
+              1) Submitted date (most recent first)
+              2) Destination (a-z)
+              3) Type (a-z)
+            -->
+            {% if data.route != "new" %}
+            <table class="govuk-table responsive-table">
+              <thead class="govuk-table__head govuk-body-s">
+                <tr class="govuk-table__row rowCounter">
+                  <th class="govuk-table__header" scope="col"><abbr title="Animal and Plant Health Agency">APHA</abbr> reference</th>
+                  <th class="govuk-table__header" scope="col">Your reference</th>
+                  <th class="govuk-table__header" scope="col">Type</th>
+                  <th class="govuk-table__header govuk-!-width-one-seventh" scope="col">Destination</th>
+                  <th class="govuk-table__header govuk-!-width-one-seventh" scope="col">Submitted date</th>
+                  <th class="govuk-table__header" scope="col">Status</th>
+                  <th class="govuk-table__header govuk-table__header--numeric" scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody class="govuk-table__body govuk-body-s">
+                {% for app in data.applicationsv6 %}
+                {% if app.status != "draft" %}
+
+                <!-- PAGINATED AT 5 OR 6 (HACKED) RESULTS (START) -->
+                <!-- Chris Harding (10.06.22) - Make sure we show 6 results on page 2 AFTER a user adds 1 result (e.g. either draft or submitted) to the dashboard -->
+                {% if data.application_submission_data == "submitted" %}
+                {% if app.index == "28" or app.index == "30" or app.index == "31" %}
+                {% if (data.show_applications_by == "me" and app.name == logged_in_as) or (data.show_applications_by == "me" or not data.show_applications_by) or ((app.name | upper) in (data.filter_name | upper) or data.filter_name == "All users") %}
+                {% if (data.has_filter != "yes" or data.filter_status == "any") or app.status in data.filter_status %}
+                {% if not query.search or (query.search and (query.search) == (app.applicationID)) or (query.search and (query.search) == (app.cert_info)) or (query.search and (query.search) == (app.destination)) or (query.search and (query.search) == (app.reference)) or (query.search and (query.search) == (app.EHC)) or (query.search and (query.search) == (app.certificate)) %}
+                {% if data.show_applications_by == "me" %}
+                {% if app.name == logged_in_as %}
+                <tr class="govuk-table__row rowCounter result">
+                  <td id="apha-reference-{{app.index}}" class="govuk-table__cell table-header" scope="row">
+                    {% if app.index == "6" %}
+                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% else %}
+                    <a href="application?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% endif %}
+                    <span class="table-heading table-heading-full" aria-hidden="true">APHA reference </span>{{app.applicationID}}</a>
+                  </td>
+                  <td id="your-reference-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Your reference </span>{% if app.reference %}{{app.reference or "REFERENCE"}}{% else %}&nbsp;{% endif %}
+                  </td>
+                  <td id="type-{{app.index}}" class="govuk-table__cell" scope="row">
+                    <span class="table-heading" aria-hidden="true">Type </span> {{app.cert_info}}
+                  </td>
+                  <td id="destination-country-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Destination </span>{% if app.importer == "" %}&nbsp;{% else %}{{app.importer | title}}<br>{% endif %}{% if app.destination == "" %}&nbsp;{% else %}{{app.destination}}{% endif %}
+                  </td>
+                  <td id="submitted-date-{{app.index}}" class="govuk-table__cell" scope="row">
+                    <span class="table-heading" aria-hidden="true">Submitted date </span>{% if app.date_truncated == "" %}&nbsp;{% else %}{{app.date_truncated}}{% endif %}
+                  </td>
+                  <td id="status-{{app.index}}" class="govuk-table__cell" scope="row">
+                    <span class="table-heading" aria-hidden="true">Status </span>
+                    
+                    <div class="govuk-tag govuk-tag--{{app.tag | lower}}">
+                      {{app.status}}
+                    </div>
+
+                  </td>
+                  <td id="actions-{{app.index}}" class="govuk-table__cell govuk-table__cell--numeric" scope="row">
+                    <a href="clone?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate {{app.applicationID}}</span></a>
+                  </td>
+                </tr>
+                {% endif %}
+                {% else %}
+                <tr class="govuk-table__row rowCounter result">
+                  <td id="apha-reference-{{app.index}}" class="govuk-table__cell table-header" scope="row">
+                    {% if app.index == "8" or app.index == "10" or app.index == "23" %}
+                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% elif app.index == "1" %}
+                    <a href="application-plant-products?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% elif app.index == "3" %}
+                    <a href="application-ssdd?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% elif app.index == "5" or app.index == "7" or app.index == "20" or app.index == "24" %}
+                    <a href="application-coc?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% elif app.index == "9" %}
+                    <a href="application-phy?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- Soil sampling applications (START) -->
+                    {% elif app.index == "16" or app.index == "17" or app.index == "18" or app.index == "19" or app.index == "26" or app.index == "27" or app.index == "28" %}
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- Soil sampling applications (END) -->
+                    {% elif app.index == "21" %}
+                    <a href="application-ssdd-coc?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- GSI applications (START) -->
+                    {% elif app.index == "25" %}
+                    <a href="application-gsi?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% elif app.index == "33" %}
+                    <a href="application-seeds-gsi?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- GSI applications (END) -->
+                    <!-- Seed sampling applications (START) -->
+                    {% elif app.index == "30" %}
+                    <a href="application-seed-sampling?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% elif app.index == "32" %}
+                    <a href="application-seed-sampling-large-max?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- Seed sampling applications (END) -->
+                    {% elif app.index == "31" %}
+                    <a href="application-phy-bulbs?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- Re-usable batch sampling applications (START) -->
+                    {% elif app.index == "35" %}
+                    <a href="application-batch-sample?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- Re-usable batch sampling applications (END) -->
+                    <!-- Re-issue phytosanitary certificate (START) -->
+                    {% elif app.index == "0" or app.index == "34" %}
+                    <a href="application-re-issue?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- Re-issue phytosanitary certificate (END) -->
+                    <!-- Phytosanitary certificate (everything else) applications (START) -->
+                    {% elif app.index == "4" %}
+                    <a href="application-everything-else?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- Phytosanitary certificate (everything else) applications (END) -->
+                    {% else %}
+                    <a href="application?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% endif %}
+                    <span class="table-heading table-heading-full" aria-hidden="true">APHA reference </span>{{app.applicationID}}</a>
+                  </td>
+                  <td id="your-reference-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Your reference </span>{% if app.reference %}{{app.reference or "REFERENCE"}}{% else %}&nbsp;{% endif %}
+                  </td>
+                  <td id="type-{{app.index}}" class="govuk-table__cell" scope="row">
+                    <span class="table-heading" aria-hidden="true">Type </span> {{app.cert_info}}
+                  </td>
+                  <td id="destination-country-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Destination </span>{% if app.importer == "" %}&nbsp;{% else %}{{app.importer | title}}<br>{% endif %}{% if app.destination == "" %}&nbsp;{% else %}{{app.destination}}{% endif %}
+                  </td>
+                  <td id="submitted-date-{{app.index}}" class="govuk-table__cell" scope="row">
+                    <span class="table-heading" aria-hidden="true">Submitted date </span>{% if app.date_truncated == "" %}&nbsp;{% else %}{{app.date_truncated}}{% endif %}
+                  </td>
+                  <td id="status-{{app.index}}" class="govuk-table__cell" scope="row">
+                    <span class="table-heading" aria-hidden="true">Status </span>
+                    
+                    <div class="govuk-tag govuk-tag--{{app.tag | lower}}">
+                      {{app.status}}
+                    </div>
+
+                  </td>
+                  <td id="actions-{{app.index}}" class="govuk-table__cell govuk-table__cell--numeric" scope="row">
+                    <a href="clone?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate {{app.applicationID}}</span></a>
+                  </td>
+                </tr>
+                {% endif %}
+                {% endif %}
+                {% endif %}
+                {% endif %}
+                {% endif %}
+                <!-- Chris Harding (10.06.22) - Make sure we only show 5 results on page 2 WITHOUT a user adding 1 result (e.g. either draft or submitted) to the dashboard -->
+                {% else %}
+                {% if app.index == "30" or app.index == "31" %}
+                {% if (data.show_applications_by == "me" and app.name == logged_in_as) or (data.show_applications_by == "me" or not data.show_applications_by) or ((app.name | upper) in (data.filter_name | upper) or data.filter_name == "All users") %}
+                {% if (data.has_filter != "yes" or data.filter_status == "any") or app.status in data.filter_status %}
+                {% if not query.search or (query.search and (query.search) == (app.applicationID)) or (query.search and (query.search) == (app.cert_info)) or (query.search and (query.search) == (app.destination)) or (query.search and (query.search) == (app.reference)) or (query.search and (query.search) == (app.EHC)) or (query.search and (query.search) == (app.certificate)) %}
+                {% if data.show_applications_by == "me" %}
+                {% if app.name == logged_in_as %}
+                <tr class="govuk-table__row rowCounter result">
+                  <td id="apha-reference-{{app.index}}" class="govuk-table__cell table-header" scope="row">
+                    {% if app.index == "6" %}
+                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% else %}
+                    <a href="application?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% endif %}
+                    <span class="table-heading table-heading-full" aria-hidden="true">APHA reference </span>{{app.applicationID}}</a>
+                  </td>
+                  <td id="your-reference-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Your reference </span>{% if app.reference %}{{app.reference or "REFERENCE"}}{% else %}&nbsp;{% endif %}
+                  </td>
+                  <td id="type-{{app.index}}" class="govuk-table__cell" scope="row">
+                    <span class="table-heading" aria-hidden="true">Type </span> {{app.cert_info}}
+                  </td>
+                  <td id="destination-country-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Destination </span>{% if app.importer == "" %}&nbsp;{% else %}{{app.importer | title}}<br>{% endif %}{% if app.destination == "" %}&nbsp;{% else %}{{app.destination}}{% endif %}
+                  </td>
+                  <td id="submitted-date-{{app.index}}" class="govuk-table__cell" scope="row">
+                    <span class="table-heading" aria-hidden="true">Submitted date </span>{% if app.date_truncated == "" %}&nbsp;{% else %}{{app.date_truncated}}{% endif %}
+                  </td>
+                  <td id="status-{{app.index}}" class="govuk-table__cell" scope="row">
+                    <span class="table-heading" aria-hidden="true">Status </span>
+                    
+                    <div class="govuk-tag govuk-tag--{{app.tag | lower}}">
+                      {{app.status}}
+                    </div>
+
+                  </td>
+                  <td id="actions-{{app.index}}" class="govuk-table__cell govuk-table__cell--numeric" scope="row">
+                    <a href="clone?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate {{app.applicationID}}</span></a>
+                  </td>
+                </tr>
+                {% endif %}
+                {% else %}
+                <tr class="govuk-table__row rowCounter result">
+                  <td id="apha-reference-{{app.index}}" class="govuk-table__cell table-header" scope="row">
+                    {% if app.index == "8" or app.index == "10" or app.index == "23" %}
+                    <a href="application-amend?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% elif app.index == "1" %}
+                    <a href="application-plant-products?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% elif app.index == "3" %}
+                    <a href="application-ssdd?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% elif app.index == "5" or app.index == "7" or app.index == "20" or app.index == "24" %}
+                    <a href="application-coc?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% elif app.index == "9" %}
+                    <a href="application-phy?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- Soil sampling applications (START) -->
+                    {% elif app.index == "16" or app.index == "17" or app.index == "18" or app.index == "19" or app.index == "26" or app.index == "27" or app.index == "28" %}
+                    <a href="application-ss?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- Soil sampling applications (END) -->
+                    {% elif app.index == "21" %}
+                    <a href="application-ssdd-coc?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- GSI applications (START) -->
+                    {% elif app.index == "25" %}
+                    <a href="application-gsi?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% elif app.index == "33" %}
+                    <a href="application-seeds-gsi?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- GSI applications (END) -->
+                    <!-- Seed sampling applications (START) -->
+                    {% elif app.index == "30" %}
+                    <a href="application-seed-sampling?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% elif app.index == "32" %}
+                    <a href="application-seed-sampling-large-max?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- Seed sampling applications (END) -->
+                    {% elif app.index == "31" %}
+                    <a href="application-phy-bulbs?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- Re-usable batch sampling applications (START) -->
+                    {% elif app.index == "35" %}
+                    <a href="application-batch-sample?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- Re-usable batch sampling applications (END) -->
+                    <!-- Re-issue phytosanitary certificate (START) -->
+                    {% elif app.index == "0" or app.index == "34" %}
+                    <a href="application-re-issue?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- Re-issue phytosanitary certificate (END) -->
+                    <!-- Phytosanitary certificate (everything else) applications (START) -->
+                    {% elif app.index == "4" %}
+                    <a href="application-everything-else?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    <!-- Phytosanitary certificate (everything else) applications (END) -->
+                    {% else %}
+                    <a href="application?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state link-no-break">
+                    {% endif %}
+                    <span class="table-heading table-heading-full" aria-hidden="true">APHA reference </span>{{app.applicationID}}</a>
+                  </td>
+                  <td id="your-reference-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Your reference </span>{% if app.reference %}{{app.reference or "REFERENCE"}}{% else %}&nbsp;{% endif %}
+                  </td>
+                  <td id="type-{{app.index}}" class="govuk-table__cell" scope="row">
+                    <span class="table-heading" aria-hidden="true">Type </span> {{app.cert_info}}
+                  </td>
+                  <td id="destination-country-{{app.index}}" class="govuk-table__cell force-content-break" scope="row">
+                    <span class="table-heading" aria-hidden="true">Destination </span>{% if app.importer == "" %}&nbsp;{% else %}{{app.importer | title}}<br>{% endif %}{% if app.destination == "" %}&nbsp;{% else %}{{app.destination}}{% endif %}
+                  </td>
+                  <td id="submitted-date-{{app.index}}" class="govuk-table__cell" scope="row">
+                    <span class="table-heading" aria-hidden="true">Submitted date </span>{% if app.date_truncated == "" %}&nbsp;{% else %}{{app.date_truncated}}{% endif %}
+                  </td>
+                  <td id="status-{{app.index}}" class="govuk-table__cell" scope="row">
+                    <span class="table-heading" aria-hidden="true">Status </span>
+                    
+                    <div class="govuk-tag govuk-tag--{{app.tag | lower}}">
+                      {{app.status}}
+                    </div>
+
+                  </td>
+                  <td id="actions-{{app.index}}" class="govuk-table__cell govuk-table__cell--numeric" scope="row">
+                    <a href="clone?id={{app.index}}&returnURL=dashboard-submitted" class="govuk-link govuk-link--no-visited-state">Copy<span class="govuk-visually-hidden"> certificate {{app.applicationID}}</span></a>
+                  </td>
+                </tr>
+                {% endif %}
+                {% endif %}
+                {% endif %}
+                {% endif %}
+                {% endif %}
+                {% endif %}
+                <!-- PAGINATED AT 5 OR 6 (HACKED) RESULTS (START) -->
+                
+                {% endif %}
+                {% endfor %}
+              </tbody>
+              {% endif %}
+            </table>
+
+            {% if data.route != "new" %}
+            <div class="govuk-form-block">
+              <nav class="defra-pagination" aria-labelledby="pagination-label">
+                <p class="govuk-visually-hidden" id="pagination-label" >Pagination navigation</p>
+                <ul class="defra-pagination__list">
+                  <li class="defra-pagination__item  defra-pagination__item--prev">
+                    <a class="defra-pagination__link" href="dashboard-submitted">Previous<span class="govuk-visually-hidden"> set of pages</span></a>
+                  </li>
+                  <li class="defra-pagination__item defra-pagination__item--active">
+                    <a class="defra-pagination__link" href="dashboard-submitted">1</a>
+                  </li>
+                  <li class="defra-pagination__item">
+                    <span class="defra-pagination__link" style="color: black!important; font-weight: 700;">2</span>
+                  </li>
+                </ul>
+                <p class="defra-pagination__results govuk-body">Showing <strong>31</strong> to <strong>{% if data.application_submission_data == "submitted" %}33{% else %}32{% endif %}</strong> of <strong>{% if data.application_submission_data == "submitted" %}33{% else %}32{% endif %}</strong> results</p>
+              </nav>
+            </div>
+            {% else %}
+
+            {% endif %}
+            {% endif %}
+            <!-- Chris Harding (10.06.22) - Show page 2 (31 to 35) of the 35 results (END) -->
+            {% endif %}
+        
+          </div>
+        
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+{% else %}
+    
+{% endif %}
+
+<!-- JavaScript (START) -->
+<script>
+
+  window.addEventListener('load', function() {
+    $(".clear-search-holder").hide()
+    $(".search-what-cont").hide()
+    $("#search").click(function(e) {
+      $(".search-what-text").text($("#search-input").val());
+      $(".search-what-cont").show();
+      $(".result").each(function(e) {
+        var text = $(this).text().toLowerCase();
+        if (text.indexOf($("#search-input").val().toLowerCase()) > -1) {
+          $(this).show();
+        } else {
+          $(this).hide();
+        }
+      });
+    });
+    $("#clear-search, .search-what-close").click(function(e) {
+      $(".clear-search-holder").show()
+      $(".search-what-text").text($("#search-input").val());
+      $(".search-what-cont").show()
+      clear - search - holder
+      $(".search-what-cont").hide();
+      $("#search-input").val("");
+      $(".result").each(function(e) {
+        $(this).show();
+      });
+      $(this).blur();
+    });
+  });
+
+</script>
+<script type="text/javascript">
+  
+  window.addEventListener('load', function() {
+    
+    var count = $('.rowCounter').length - 1;
+
+    // Show hide content
+    $('.defra-filter--content').hide();
+    $('.defra-filter--action').show();
+    $('#js-case-count').text(count);
+    $('.js-case-count').text(count);
+    
+    if (count == 0) {
+      $('.govuk-tbody').hide();
+    }
+
+    $('.defra-filter--content').hide();
+    $('#defra-filter--button').on("click", function() {
+      
+      if (!$('.defra-filter--action').hasClass('defra-filter--open')) {
+        $('.defra-filter--content').show().focus();
+        $('.defra-filter--action').addClass('defra-filter--open');
+        $('#defra-filter--button').attr('aria-expanded', 'true');
+        $(".defra-filter--button-content").text('Hide filters');
+      }
+      else {
+        $('.defra-filter--content').hide();
+        $('.defra-filter--action').removeClass('defra-filter--open');
+        $('#defra-filter--button').attr('aria-expanded', 'false');
+        $(".defra-filter--button-content").text('Show filters');
+      }
+
+    });
+  });
+  
+</script>
+<script>
+
+  document.addEventListener("DOMContentLoaded", function(event) {
+    if (document.querySelectorAll('.sm-daterange-component').length) {
+      SmDateRangePicker('#from', '#to').init();
+    }
+  });
+
+</script>
+<script type="text/javascript" src="/public/javascripts/accessible-autocomplete.min.js"></script>
+<script type="text/javascript">
+
+  // dropdownArrow: function (config) {
+  //   return '<svg class="' + config.className + '" style="top: 8px;" viewBox="0 0 512 512" ><path d="M256,298.3L256,298.3L256,298.3l174.2-167.2c4.3-4.2,11.4-4.1,15.8,0.2l30.6,29.9c4.4,4.3,4.5,11.3,0.2,15.5L264.1,380.9  c-2.2,2.2-5.2,3.2-8.1,3c-3,0.1-5.9-0.9-8.1-3L35.2,176.7c-4.3-4.2-4.2-11.2,0.2-15.5L66,131.3c4.4-4.3,11.5-4.4,15.8-0.2L256,298.3  z"/></svg>'
+  // },
+  selectEl = document.querySelector('#passport-location')
+  accessibleAutocomplete.enhanceSelectElement({
+    autoselect: false,
+    placeholder: "Select name",
+    showAllValues: true,
+    selectElement: selectEl,
+    defaultValue: '',
+    dropdownArrow: function(config) {
+      return '<svg class="' + config.className +
+        '" style="top: 8px; z-index:1" viewBox="0 0 512 512" ><path d="M256,298.3L256,298.3L256,298.3l174.2-167.2c4.3-4.2,11.4-4.1,15.8,0.2l30.6,29.9c4.4,4.3,4.5,11.3,0.2,15.5L264.1,380.9  c-2.2,2.2-5.2,3.2-8.1,3c-3,0.1-5.9-0.9-8.1-3L35.2,176.7c-4.3-4.2-4.2-11.2,0.2-15.5L66,131.3c4.4-4.3,11.5-4.4,15.8-0.2L256,298.3  z"/></svg>'
+    },
+  })
+
+  // var queryStringParameters = window.location.search
+  // var previouslySubmitted = queryStringParameters.length > 0
+
+</script>
+<!-- JavaScript (END) -->
+{% endblock %}

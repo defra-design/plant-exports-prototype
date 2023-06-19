@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Check whether you can get a re-issue - Re-issue a phytosanitary certificate - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="../../application-re-issue?id={{query.id}}&is_group={{query.is_group}}" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <div class="govuk-form-group">
+      <h1 class="govuk-heading-xl">Check whether you can get a re-issue</h1>
+      <p class="govuk-body">You can ask for a certificate to be re-issued, for example if the original certificate is damaged or if the date has expired.</p>
+      <p class="govuk-body">You cannot increase the quantity of goods. You may be able to reduce it.</p>
+      <p class="govuk-body">You cannot change:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>what you are exporting</li>
+        <li>the destination country</li>
+      </ul>
+      <p class="govuk-body">You may be able to change:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>the expiry date</li>
+        <li>transport details</li>
+      </ul>
+      {% if (query.id | appInformationV6('cert_info')) != 'Conformity' %}
+      <p class="govuk-body">You will pay a <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_blank">lower fee (opens in new tab)</a> to get a phytosanitary certificate re-issued. If you need a re-issue because <abbr title="Animal and Plant Health Agency">APHA</abbr> made an error, you will not be charged.</p>
+      {% endif %}
+    </div>
+
+    <div class="govuk-button-group">
+      <a href="reason?id={{query.id}}&is_group={{query.is_group}}" role="button" draggable="false" class="govuk-button" data-module="govuk-button">Continue</a>
+      {% if data.reissue_certificate_data_pfp != "draft" %}
+      <a class="govuk-link app-button--link" href="../../application-re-issue?id={{query.id}}&is_group={{query.is_group}}">Cancel</a>
+      {% endif %}
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

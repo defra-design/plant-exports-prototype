@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.build == "development" %}Farm machinery details - Exports application{% else %}Farm machinery details - Phytosanitary certificate - {{serviceName}}{% endif %} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">Farm machinery details</h1>
+    <!-- <p class="govuk-body">Your stock numbers and variety must match the stock number certificate</p> -->
+    
+    <form method="post">
+      <fieldset class="govuk-fieldset">
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="machinery_type">Machinery type</label>
+          <input class="govuk-input govuk-input--width-20" id="machinery_type" name="machinery_type" type="text" value="{{data.machinery_type}}">
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="machinery_make">Make</label>
+          <input class="govuk-input govuk-input--width-20" id="machinery_make" name="machinery_make" type="text" value="{{data.machinery_make}}">
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="machinery_model">Model</label>
+          <input class="govuk-input govuk-input--width-20" id="machinery_model" name="machinery_model" type="text" value="{{data.machinery_model}}">
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="machinery_id">Unique ID</label>
+          <span class="govuk-hint">Example, chassis number</span>
+          <input class="govuk-input govuk-input--width-20" id="machinery_id" name="machinery_id" type="text" value="{{data.machinery_id}}">
+        </div>
+
+        {% set country_module_label = "Country where this machinery was last used" %}
+        {% block country %}
+        {% include "../modules/_country-of-origin-select.html" %}
+        {% endblock %}
+
+      </fieldset>
+
+      <div class="govuk-form-group">
+        <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue">
+      </div>
+
+      {% block continueLater %}
+      {% include "../modules/_save-continue-later.html" %}
+      {% endblock %}
+    </form>
+    
+  </div>
+
+</div>
+{% endblock %}

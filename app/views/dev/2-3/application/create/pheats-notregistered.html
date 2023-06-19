@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.build == "development" %}
+  Pheats Check - Exports application - GOV.UK
+  {% else %}
+  Are you applying as part of the Plant Health Exports Audited Trader Scheme? - Phytosanitary certificate - {{serviceName}} - GOV UK
+  {% endif %}
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  {% if data.build == "development" %}
+  <div class="govuk-grid-column-three-quarters">
+  {% else %}
+  <div class="govuk-grid-column-two-thirds">
+  {% endif %}
+
+    <form method="post" action="{{query.return_url or 'contact-details-simple-short'}}">
+
+      <h1 class="govuk-heading-xl">Confirm you are not applying under PHEATS</h1>
+
+      <p class="govuk-body">The selected inspection address is not registered for the PHEATS scheme.</p>
+
+      <p class="govuk-body">You can manage your PHEATS registrations later on in the 'Manage account' area.</p>
+        
+      <h2 class="govuk-heading-m">Continue to apply for this phytosanitary certificate.</h2>
+
+      {{ govukButton({
+        classes: "govuk-!-margin-top-4 govuk-!-margin-bottom-9",
+        text: "Save and continue"
+      }) }}
+
+      {% include "../modules/_save-continue-later.html" %}
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+<div class="commodityDestinationWrapper" >
+  <div class="govuk-form-group govuk-!-margin-bottom-0">
+    <fieldset class="govuk-fieldset">
+
+      <input id="{{_commodityDestinationDeletedID}}" name="{{_commodityDestinationDeletedID}}" type="hidden" value="false" class="deleteDestinationVisibility">
+
+      <label class="govuk-label" for="{{_commodityDestinationID}}">
+        Destination country
+      </label>
+      <div class="deleteWrapper">
+        <div class="govuk-form-group autocomplete-wrapper" >
+
+          {% set _selectedDestinationCountry = '' %}
+          {% for param in data[_commodityDestinationID] %}
+            {% set _selectedDestinationCountry = param %}
+          {% endfor %}
+
+          <select class="govuk-select" id="{{_commodityDestinationID}}" name="{{_commodityDestinationID}}" >
+            <option value="none"></option>
+            {% for _country in data['countries-eu-ni'] %}
+              <option value="{{_country.code}}"{% if _selectedDestinationCountry == _country.code %} selected{% endif %}>{{_country.name}}</option>
+            {% endfor %}
+          </select>
+
+        </div>
+        <div class="deleteButtonWrapper">
+          <a class="govuk-button govuk-button--secondary deleteDestination" href="#" >Remove</a>
+        </div>
+      </div>
+      
+
+    </fieldset>
+  </div>
+
+</div>

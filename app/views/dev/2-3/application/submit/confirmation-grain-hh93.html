@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  You have successfully submitted your application - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+{% endblock %}
+
+{% block content %}
+<style>
+
+  /* Needs extracting and adding to the external Sass or CSS */
+  .govuk-feedback-box {
+    padding: 20px;
+    background-color: lightgray;
+    border-left-color: #666;
+  }
+
+</style>
+
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-three-quarters">
+
+    <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-6">
+      <h1 class="govuk-panel__title">You have successfully submitted your application {% if data.reforwarding %}for a re-forwarding certificate{% endif %}</h1>
+      
+      <div class="govuk-panel__body">
+        The <abbr title="Animal and Plant Health Agency">APHA</abbr> reference is
+        <br>
+        <strong class="bold">1721 14800 4809</strong>
+      </div>
+
+    </div>
+
+    <h2 class="govuk-heading-m">What happens next</h2>
+    <ol class="govuk-list govuk-list--number">
+      <li>We will check and process your application.</li>
+      <li>If there are no problems, we will issue your  {% if data.reforwarding %}re-forwarding{% endif %} certificate.</li>
+      <li>We will then send you an invoice.</li>
+    </ol>
+    <p class="govuk-body govuk-!-padding-bottom-2">We'll only contact you if there is a problem with your application.</p>
+
+    <form action="{% if data.route == 'new' %}../../dashboard-one{% else %}../../dashboard-submitted{% endif %}" method="post">
+      <button class="govuk-button govuk-!-margin-top-2 govuk-!-margin-bottom-7" data-module="govuk-button">View your applications</button>
+
+      <!-- Session data hook to update the dashboard so that it knows a new application has been submitted -->
+      <div class="govuk-form-group" hidden>
+        <label class="govuk-label" for="application_submission_data">Application submission status</label>
+        <input class="govuk-input" id="application_submission_data" name="application_submission_data" type="text" value="submitted">
+      </div>
+
+    </form>
+
+    <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="{% if data.build == 'development' %}_self{% else %}_blank{% endif %}">what fees you {% if data.build == "development" %}need to pay{% else %}will pay (opens in new tab){% endif %}</a> for this application.</p>
+    <h2 class="govuk-heading-m govuk-!-padding-top-4">If you need help</h2>
+    <p class="govuk-body">Contact us quoting your <abbr title="Animal and Plant Health Agency">APHA</abbr> reference <strong>1721 14800 4809</strong>{% if data.build == "development" %}:{% else %} on:{% endif %}</p>
+    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-8">
+      <li><span id="phoneNumber">0300 1000 313</span>, Monday to Sunday 7am to 7pm</li>
+      <li><a href="mailto:planthealth.info@apha.gov.uk" class="govuk-link" id="emailLink">planthealth.info@apha.gov.uk</a></li>
+    </ul>
+
+    <div class="govuk-feedback-box govuk-!-margin-top-6">
+      <h2 class="govuk-heading-m">Give feedback on this service</h2>
+      <p class="govuk-body">Take a 3 minute survey about your application so that we can improve the service.{% if data.build == "development" %} The survey will open in a new tab.{% endif %}</p>
+      <p class="govuk-body"><a href="https://defragroup.eu.qualtrics.com/jfe/form/SV_1RDraVxZ03Ja2qy" class="govuk-link" target="_blank" class="govuk-link">Give feedback{% if data.build == "development" %}{% else %} (opens in new tab){% endif %}</a></p>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}
