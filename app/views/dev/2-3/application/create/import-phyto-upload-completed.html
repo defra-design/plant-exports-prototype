@@ -16,63 +16,123 @@ Upload completed - {{serviceName}} - GOV UK
 <div class="govuk-width-container">
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
-        
-        <div class="app-alert app-alert--success" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
-          <p class="govuk-body" id="govuk-notification-banner-message">Import phytosanitary certificate uploaded successfully</p>
-        </div>
 
-        <form method="post">
-          <h1 class="govuk-heading-xl govuk-!-margin-top-9">Upload completed</h1>
-          <p class="govuk-body">If you have more than one import certificate, you must upload the additional certificates in the supporting documents section.</p>
-          <table class="govuk-table govuk-!-margin-bottom-9">
+        {% if query.deleted %}
+          <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+              <div class="govuk-notification-banner__header">
+                  <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+                  Success
+                  </h2>
+              </div>
+              <div class="govuk-notification-banner__content">
+                  <h3 class="govuk-notification-banner__heading">
+                    Certificate deleted
+                  </h3>
+                  <p class="govuk-body">Import certificate number {{data['importCertNumber' + query.deleted] or '1234567'}} has been deleted.</p>
+              </div>
+          </div>
+        {% endif %}
+        
+        <!-- <div class="app-alert app-alert--success" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
+          <p class="govuk-body" id="govuk-notification-banner-message">Import phytosanitary certificate uploaded successfully</p>
+        </div> -->
+
+
+
+          <h1 class="govuk-heading-xl govuk-!-margin-top-">Import certificates</h1>
+
+          <p class="govuk-body">Here are the import phytosanitary certificates you have uploaded so far.</p>
+
+          {% set _importCertCount = data['importCertCount'] or 1 | int %}
+          {% set _importCertDisplayedCount = data['importCertDisplayedCount'] or 1 | int %}
+          {% set _importCertCountDeleted = _importCertDisplayedCount|int - 1 %}
+
+          <table class="govuk-table govuk-!-margin-bottom-7" >
             <thead class="govuk-table__head">
               <tr class="govuk-table__row">
-                <th class="govuk-table__header">
-                  Import phytosanitary certificate
-                </th>
+                <th class="govuk-table__header" scope="col">Certificate number</th>
+                <th class="govuk-table__header" scope="col">File name</th>
+                <th class="govuk-table__header" scope="col"></th>
               </tr>
             </thead>
-            <tbody class="govuk-table__body">
-              <tr class="govuk-table__row">
-                <td class="govuk-table__cell">
-                  <a href="#" class="govuk-link">phyto-cert-456678.pdf</a>
-                  <input type="hidden" id="import-phyto" name="import-phyto" value="1">
-                </td>
-              </tr>
-            </tbody>
+
+          {% for i in range(0, _importCertCount) -%}
+
+            {% set _show = "true" %}
+            {% set _id = loop.index %}
+            {% set _deletedValue = data['importCertDeleted'+_id] %}
+            {% if _deletedValue == "true" %}
+              {% set _show = "false" %}
+            {% endif %}
+
+            {% if _show == "true" %}
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">
+                {{data['importCertNumber' + _id] or '1234567'}}
+              </td>
+              <td class="govuk-table__cell">
+                <a class="govuk-link govuk-link--no-visited-state" href="#">{{data['importCertFile' + _id] or 'file-name.pdf'}}</a>
+              </td>
+              
+              {% set _deleteLinkSuffix = "?deleted=" + _id + "&importCertDeleted" + _id + "=true" + "&importCertDisplayedCount=" + _importCertCountDeleted | int %}
+              {% set _deleteLink = "import-phyto-upload-completed" %}
+              {% if _importCertDisplayedCount | int == 1 %}
+                {% set _deleteLink = "import-phyto-upload" %}
+              {% endif %}
+              <td class="govuk-table__cell" style="text-align: right;">
+
+                <p class="govuk-body govuk-!-margin-bottom-2">
+                  <a href="import-phyto-upload?edit={{_id}}" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> import certificate</span></a>
+                </p>
+                <p class="govuk-body govuk-!-margin-bottom-2">
+                  <a href="{{_deleteLink}}{{_deleteLinkSuffix}}" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> import certificate</span></a>
+                </p>
+
+              </td>
+            </tr>
+            {% endif %}
+          {%- endfor %}
+
+
+          </tbody>
           </table>
 
-          {{ govukRadios({
-            idPrefix: "next",
-            name: "next",
-            fieldset:
-            {
-              legend:
-              {
-                text: "Do you want to keep this certificate?",
-                isPageHeading: true,
-                classes: "govuk-fieldset__legend--m govuk-!-margin-top-4"
-              }
-            },
-            items: [
-            {
-              value: "confirm~task-list",
-              text: "Yes, keep this certificate"
-            },
-            {
-              value: "upload~import-phyto-upload",
-              text: "No, upload a different file and delete this one"
-            }
-            ]
-          }) }}
 
-          {{ govukButton({
-            text: "Save and continue"
-          }) }}
+          <form method="post" novalidate>
+            <div class="govuk-form-group ">
+              <fieldset class="govuk-fieldset">
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                  Add another import certificate?
+                </legend>
+                
+                <div class="govuk-radios" data-module="govuk-radios">
+                  <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="addImportCert-1" name="addImportCert" type="radio" value="Yes~import-phyto-upload">
+                    <label class="govuk-label govuk-radios__label" for="addImportCert-1">
+                      Yes
+                    </label>
+                  </div>
+                  <div class="govuk-radios__item">
+                    <input class="govuk-radios__input" id="addImportCert-2" name="addImportCert" type="radio" value="No~task-list">
+                    <label class="govuk-label govuk-radios__label" for="addImportCert-2">
+                      No
+                    </label>
+                  </div>
+      
+                </div>
+              </fieldset>
+            </div>
+      
+            {{ govukButton({
+              text: "Save and continue"
+            }) }}
+      
+      
+          </form>
 
-        </form>
 
       </div>
     </div>
+    {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
 </div>
 {% endblock %}

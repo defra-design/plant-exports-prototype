@@ -13,7 +13,23 @@
 {% block content %}
 <div class="govuk-grid-row">
 
-  <div class="govuk-grid-column-three-quarters">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if query.deleted %}
+      <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+          <div class="govuk-notification-banner__header">
+              <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+              Success
+              </h2>
+          </div>
+          <div class="govuk-notification-banner__content">
+              <h3 class="govuk-notification-banner__heading">
+                Certificate deleted
+              </h3>
+              <p class="govuk-body">Import certificate number {{data['importCertNumber' + query.deleted] or '1234567'}} has been deleted.</p>
+          </div>
+      </div>
+    {% endif %}
 
     {% if query.cloned == "yes" %}
     <div class="app-alert app-alert--success" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
@@ -131,7 +147,7 @@
       <h2 class="govuk-heading-m govuk-!-margin-top-9">Import details</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
         
-        <div class="govuk-summary-list__row">
+        <!-- <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Import phytosanitary certificate number</dt>
           <dd class="govuk-summary-list__value">{{data.import_no or "1234567890"}}</dd>
           <dd class="govuk-summary-list__actions">
@@ -145,7 +161,7 @@
           <dd class="govuk-summary-list__actions">
             <a class="govuk-link" href="import-details?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden"></span></a>
           </dd>
-        </div>
+        </div> -->
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Origin</dt>
@@ -163,7 +179,7 @@
           </dd>
         </div>
 
-        <div class="govuk-summary-list__row">
+        <!-- <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Import phytosanitary certificate</dt>
           <dd class="govuk-summary-list__value">
             <a href="#" class="govuk-link">phyto-cert-456678.pdf</a>
@@ -171,9 +187,65 @@
           <dd class="govuk-summary-list__actions">
             <a class="govuk-link" href="import-phyto-upload?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">import phytosanitary certificate</span></a>
           </dd>
-        </div>
+        </div> -->
 
       </dl>
+      
+      <h2 class="govuk-heading-m govuk-!-margin-top-9">Import phytosanitary certificates</h2>
+      {% set _importCertCount = data['importCertCount'] or 1 | int %}
+          {% set _importCertDisplayedCount = data['importCertDisplayedCount'] or 1 | int %}
+          {% set _importCertCountDeleted = _importCertDisplayedCount|int - 1 %}
+
+          <table class="govuk-table govuk-!-margin-bottom-4" >
+            <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header" scope="col">Certificate number</th>
+                <th class="govuk-table__header" scope="col">File name</th>
+                <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
+              </tr>
+            </thead>
+
+          {% for i in range(0, _importCertCount) -%}
+
+            {% set _show = "true" %}
+            {% set _id = loop.index %}
+            {% set _deletedValue = data['importCertDeleted'+_id] %}
+            {% if _deletedValue == "true" %}
+              {% set _show = "false" %}
+            {% endif %}
+
+            {% if _show == "true" %}
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">
+                {{data['importCertNumber' + _id] or '1234567'}}
+              </td>
+              <td class="govuk-table__cell">
+                <a class="govuk-link govuk-link--no-visited-state" href="#">{{data['importCertFile' + _id] or 'file-name.pdf'}}</a>
+              </td>
+              
+              {% set _deleteLinkSuffix = "?deleted=" + _id + "&importCertDeleted" + _id + "=true" + "&importCertDisplayedCount=" + _importCertCountDeleted | int + "&changeanswers=true" %}
+              {% set _deleteLink = "check-your-answers" %}
+              {% if _importCertDisplayedCount | int == 1 %}
+                {% set _deleteLink = "import-phyto-upload" %}
+              {% endif %}
+              <td class="govuk-table__cell" style="text-align: right;">
+
+                <p class="govuk-body govuk-!-margin-bottom-2">
+                  <a href="import-phyto-upload?edit={{_id}}&changeanswers=true" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> import certificate</span></a>
+                </p>
+                <p class="govuk-body govuk-!-margin-bottom-2">
+                  <a href="{{_deleteLink}}{{_deleteLinkSuffix}}" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> import certificate</span></a>
+                </p>
+
+              </td>
+            </tr>
+            {% endif %}
+          {%- endfor %}
+
+
+          </tbody>
+          </table>
+      <p class="govuk-body govuk-!-margin-bottom-9"><a href="import-phyto-upload?changeanswers=true">Add more</a></p>
       {% endif %}
 
       <!-- Your commodities -->
