@@ -355,23 +355,26 @@
           5. Unprocessed cereal grains
           6. Everything else
       -->
-      {% if data.commodity == "plants" or data.commodity == "seeds" %}
-      <!-- Multi select (up to 10 countries) -->
-      {% set _multiSelectLabel = "Countries of origin" %}
-      <div class="govuk-form-group">
-      {% include "../modules/_multi-select.html" %}
-      </div>
+      
+      {% if data.commodity == "plant products" %}
+      
+        <!-- Autocomplete (1 country) -->
+        {% block country %}
+          {% set country_module_label = "Primary country of origin" %}
+          {% include "../modules/_country-of-origin-select.html" %}
+        {% endblock %}
+
       {% else %}
-      <!-- Autocomplete (1 country) -->
-      {% block country %}
-      {% if data.commodity == "plant products" or data.build == "development" %}
-      {% set country_module_label = "Primary country of origin" %}
-      {% else %}
-      {% set country_module_label = "Country of origin" %}
+
+        <!-- Multi select (up to 10 countries) -->
+        {% set _multiSelectLabel = "Countries of origin" %}
+        <div class="govuk-form-group">
+        {% include "../modules/_multi-select.html" %}
+        </div>
+
       {% endif %}
-      {% include "../modules/_country-of-origin-select.html" %}
-      {% endblock %}
-      {% endif %}
+
+
       <!-- 'Country/Countries of origin' section (END) -->
 
       <!-- 'Additional countries of origin' section (START) -->
@@ -386,6 +389,10 @@
       </div>
       {% endif %}
       <!-- 'Additional countries of origin' section (END) -->
+
+
+
+
 
       <!-- 'Lot reference' and 'APHA sample reference' sections (START) -->
       <!-- 
