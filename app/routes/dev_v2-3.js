@@ -653,6 +653,50 @@ module.exports = function(router) {
 
     }
 
+    // *******************************
+    // MICROSOFT DYNAMICS 365 routing
+    // *******************************
+
+    // Chris Harding (21.06.23) - Microsoft Dynamics 365: Supporting documents (add)
+    if (baseDir === "/dynamics/portal/supporting-documents/upload-validation") {
+
+      // Parameters passed into this journey
+      var return_url = req.session.data.return_url;
+
+      // Data objects to be retrieved and queried
+      var supportingDocument = req.session.data.supportingDocument;
+      var fileDescription = req.session.data.fileDescription;
+
+      // Logic and validation for routing
+      var errorCount = 0;
+      var error1 = "";
+      var error2 = "";
+      
+      // Error validation - make sure user enters data into required fields
+      if (supportingDocument == "" || supportingDocument == null) {
+        errorCount++;
+        error1 = "&error1=true";
+      }
+      if (fileDescription == "" || fileDescription == null) {
+        errorCount++;
+        error2 = "&error2=true";
+      }
+
+      console.log("errorCount is: " + errorCount);
+
+      // Routing - decide where to direct users to
+      if (errorCount > 0) {
+        return res.redirect("upload?error=true" + error1 + error2);
+      }
+      else if (return_url) {
+        return res.redirect(return_url + "?supportingDocumentAdded=true&supportingDocumentsExist=true&row1=true");
+      }
+      else {
+        return res.redirect("view?supportingDocumentAdded=true&supportingDocumentsExist=true&row1=true");
+      }
+
+    }
+
     // Phytosanitary certificate: Decide whether to redirect to import permit upload if they enter a permit number
     // console.log(baseDir);
     // console.log(req.session.data['consignee-import-permit']);

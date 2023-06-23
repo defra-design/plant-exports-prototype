@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if query.error == "true" %}Error: {% endif %}Add supporting documents - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../../../application/modules/_account-banner.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if query.error == "true" %}
+    <div class="govuk-error-summary" data-module="govuk-error-summary" tabindex="-1" autofocus>
+      
+      <div role="alert">
+        <h2 class="govuk-error-summary__title">There is a problem</h2>       
+        <div class="govuk-error-summary__body">
+          <ul class="govuk-list govuk-error-summary__list">
+            {% if query.error1 == "true" %}
+            <li><a href="#supportingDocument">Choose a file to upload</a></li>
+            {% endif %}
+            {% if query.error2 == "true" %}
+            <li><a href="#fileDescription">Enter a file description</a></li>
+            {% endif %}
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+    {% endif %}
+
+    <form action="upload-validation" method="post">
+      
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
+            <span class="govuk-caption-xl">Phytosanitary certificate 1760 96928 9066</span>
+            <h1 class="govuk-fieldset__heading">Add supporting documents</h1>
+          </legend>
+          <p class="govuk-body">If Acme Ltd has sent you any supporting documents for this application, you can attach them here.</p>
+          <p class="govuk-body">You can only upload one at a time. Each file must:</p>
+          <ul class="govuk-list govuk-list--bullet">
+            <li>be in PDF, Word, Excel or JPEG format</li>
+            <li>be smaller than 10 megabytes (10MB)</li>
+            <li>have a unique, meaningful file name</li>
+            <li>upload with a file description</li>
+          </ul>
+
+          <div class="govuk-form-group{% if query.error1 == 'true' %} govuk-form-group--error{% endif %}">
+            <label class="govuk-label" for="supportingDocument">Upload a file</label>
+            {% if query.error1 == "true" %}
+            <p id="supportingDocument-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Choose a file to upload</p>
+            {% endif %}
+            <input class="govuk-file-upload{% if query.error1 == 'true' %} govuk-file-upload--error{% endif %}" id="supportingDocument" name="supportingDocument" type="file" aria-describedby="supportingDocument-error" value="{{data.supportingDocument}}">
+          </div>
+
+          <div class="govuk-form-group{% if query.error2 == 'true' %} govuk-form-group--error{% endif %}">
+            <label class="govuk-label" for="fileDescription">File description</label>
+            {% if query.error2 == "true" %}
+            <p id="supportingDocument-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Enter a file description</p>
+            {% endif %}
+            <textarea class="govuk-textarea{% if query.error2 == 'true' %} govuk-input--error{% endif %}" id="fileDescription" name="fileDescription" rows="5">{{data.fileDescription}}</textarea>
+          </div>
+
+        </fieldset>
+      </div>
+
+      <div class="govuk-button-group">
+        <button class="govuk-button" data-module="govuk-button">Upload</button>
+        <!-- <a href="{{data.return_url or 'view'}}?supportingDocumentAdded=true&supportingDocumentsExist=true&row1=true" class="govuk-button" data-module="govuk-button">Upload</a> -->
+        <a class="govuk-link" href="{{data.return_url or 'view'}}">Cancel</a>
+      </div>
+
+    </form>
+    
+  </div>
+
+</div>
+{% endblock %}
