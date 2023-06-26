@@ -365,9 +365,9 @@ module.exports = function(router) {
         }
 
       }
-      // Direct users to the Dynamics mockup (part of ePhyto)
+      // Direct users to the Microsoft Dynamics 365 mockup (part of ePhyto)
       else if (service == "Dynamics") {
-        return res.redirect("ephyto/dynamics/export-application");
+        return res.redirect("ephyto/dynamics/work-orders/index");
       }
       // Direct users to PHES pages, designs and content
       else if (service == "PHES") {
