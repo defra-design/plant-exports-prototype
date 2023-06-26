@@ -26,6 +26,7 @@ var sample = require('./sample.json');
 var countries = require('./countries-full.json');
 var countries2 = require('./countries-eu-ni.json');
 var addresses = require('./addresses.json');
+var pheatsapplications = require('./pheats-applications.json');
 
 module.exports = {
   "applications" : applications,
@@ -40,7 +41,8 @@ module.exports = {
   "plants" : [],
   "countries-full": countries,
   "countries-eu-ni": countries2,
-  "addresses": addresses
+  "addresses": addresses,
+  "pheatsapplications": pheatsapplications
   // Insert values here
   
 }

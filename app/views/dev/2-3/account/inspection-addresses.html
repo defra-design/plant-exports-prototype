@@ -19,146 +19,59 @@
 
 {% block content %}
 <div class="govuk-grid-row">
+
   <div class="govuk-grid-column-two-thirds">
-
-    {% if query.addressAdded == "yes" or query.addressDeleted == "yes" %}
-    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-        <div class="govuk-notification-banner__header">
-            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-            Success
-            </h2>
-        </div>
-        <div class="govuk-notification-banner__content">
-            <h3 class="govuk-notification-banner__heading">
-                {% if query.addressAdded == "yes" %}
-                Address added successfully
-                {% elif query.addressDeleted == "yes" %}
-                Address deleted successfully
-                {% endif %}
-            </h3>
-        </div>
-    </div>
-    {% endif %}
-
     <h1 class="govuk-heading-xl">Inspection addresses</h1>
-    
-    <p class="govuk-body">Add or edit the addresses where inspections will take place.</p> 
-
-    <h2 class="govuk-heading-m">Information for PHEATS exporters only</h2>
-    <p class="govuk-body">If you add a new address for use with PHEATS, it will need to be approved before you can start using it.</p> 
-
+    <p class="govuk-body">If you add a new PHEATS address, it will need to be approved before you can use it.</p>
     <a href="address-lookup" class="govuk-button" role="button" draggable="false" data-module="govuk-button">Add a new inspection address</a>
+
+    <table class="govuk-table govuk-!-margin-bottom-9">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">Address</th>
+          <th class="govuk-table__header" scope="col">Main contact</th>
+          <th class="govuk-table__header govuk-table__header--numeric" scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH</td>
+          <td class="govuk-table__cell">
+            Bill Shoggins
+            <br>
+            bill.shoggins@acmeltd.com
+            <br>
+            01234 567890
+            <br>
+            07123 456789
+          </td>
+          <td class="govuk-table__cell govuk-table__cell--numeric">
+            <a href="address-lookup-edit" class="govuk-link govuk-link--no-visited-state">Edit</a>
+            <br>
+            <a href="confirm-delete" class="govuk-link govuk-link--no-visited-state">Delete</a>
+          </td>
+        </tr>
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">Long Acre Lane, Riverford, Peterborough, Cambridgeshire, PO5 8HJ</td>
+          <td class="govuk-table__cell">
+            Bill Shoggins
+            <br>
+            bill.shoggins@acmeltd.com
+            <br>
+            01234 567890
+            <br>
+            07123 456789
+          </td>
+          <td class="govuk-table__cell govuk-table__cell--numeric">
+            <a href="address-lookup-edit" class="govuk-link govuk-link--no-visited-state">Edit</a>
+            <br>
+            <a href="confirm-delete" class="govuk-link govuk-link--no-visited-state">Delete</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
   </div>
+
 </div>
-
-
-<div class="govuk-grid-row">
-
-  <div class="govuk-grid-column-full">
-
-    <table class="govuk-table responsive">
-        <thead class="govuk-table__head">
-            <tr class="govuk-table__row">
-                <th scope="col" class="govuk-table__header ">Address</th>
-                <th scope="col" class="govuk-table__header  address-column" >Main contact</th>
-                <th scope="col" class="govuk-table__header  name-column" >PHEATS registration</th>
-                <th scope="col" class="govuk-table__header ">Action</th>
-            </tr>
-        </thead>
-
-        <tbody class="govuk-table__body">
-
-          {% for _address in data['addresses'] %}
-          <tr class="govuk-table__row">
-
-            <th scope="row" class="govuk-table__header">
-              <p class="govuk-body govuk-!-margin-bottom-2">
-                <!-- <a href="#?address={{_address.id}}" class="govuk-link govuk-link--no-visited-state"> -->
-                  {{_address.address1}}<br>
-                  {{_address.address2}}<br>
-                  {{_address.address3}}<br>
-                  {{_address.address4}}<br>
-                  {{_address.postcode}}
-                <!-- </a> -->
-              </p>
-            </th>
-
-            <td class="govuk-table__cell address-column" >  
-              <p class="govuk-body govuk-!-margin-bottom-2">
-                {{_address.maincontact.name}}<br>
-                {{_address.maincontact.email}}<br>
-                {% if _address.maincontact.mobile %}
-                  {{_address.maincontact.mobile}}<br>
-                {% endif %}
-                {% if _address.maincontact.telephone %}
-                  {{_address.maincontact.telephone}}
-                {% endif %}
-              </p>
-            </td>
-
-            <td class="govuk-table__cell">
-              <p class="govuk-body govuk-!-margin-bottom-2">
-
-                {% set _pheatsHREF = "../pheats/pheats-manage?address=" + _address.id %}
-                {% set _pheatsLinkText = "Manage PHEATS" %}
-
-                {% if _address.pheats.status == "notregistered" %}
-                  <!-- NOT REGISTERED -->
-                  <strong class="govuk-tag govuk-tag--grey">
-                      Not registered
-                  </strong>
-                  {% set _pheatsHREF = "../pheats/pheats-start?address=" + _address.id %}
-                  {% set _pheatsLinkText = "Add to PHEATS" %}
-                {% elif _address.pheats.status == "registered" %}
-                  <!-- REGISTERED -->
-                  <strong class="govuk-tag govuk-tag--green">
-                    Registered
-                  </strong>
-                {% elif _address.pheats.status == "updated" %}
-                  <!-- REGISTERED and UPDATED-->
-                  <strong class="govuk-tag govuk-tag--green">
-                    Registered
-                  </strong>
-                  <!-- <span class="govuk-!-margin-bottom-2 govuk-!-margin-top-2" style="display: block">and </span>
-                  <span class="govuk-!-font-weight-bold">Updating</span> -->
-                  <span class="govuk-!-margin-bottom-2 govuk-!-margin-top-2" style="display: block">and </span>
-                  <strong class="govuk-tag govuk-tag--orange">
-                    Updating
-                  </strong>
-                {% elif _address.pheats.status == "pending" %}
-                  <!-- PENDING -->
-                  <strong class="govuk-tag govuk-tag--orange">
-                    In progress
-                  </strong>
-                {% elif _address.pheats.status == "paused" %}
-                  <!-- PAUSED -->
-                  <strong class="govuk-tag govuk-tag--grey">
-                    Not active
-                  </strong>
-                {% endif %}
-              </p>
-              <!-- <p class="govuk-body govuk-!-margin-bottom-2">
-                <a href="{{_pheatsHREF}}" class="govuk-link govuk-link--no-visited-state" >{{_pheatsLinkText}}</a>
-              </p> -->
-            </td>
-
-            <td class="govuk-table__cell">
-              <p class="govuk-body govuk-!-margin-bottom-2">
-                <a href="{{_pheatsHREF}}" class="govuk-link govuk-link--no-visited-state" >{{_pheatsLinkText}}</a>
-              </p>
-              <p class="govuk-body govuk-!-margin-bottom-2">
-                <a href="confirm-delete" class="govuk-link govuk-link--no-visited-state" >Delete</a>
-              </p>
-            </td>
-
-          </tr>
-          {% endfor %}
-
-        </tbody>
-
-      </table>
-  </div>
-</div>
-
-    
 {% endblock %}
