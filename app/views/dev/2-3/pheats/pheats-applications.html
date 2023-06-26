@@ -31,34 +31,18 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
 
-    {% if query.addressAdded == "yes" or query.addressDeleted == "yes" %}
-    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-        <div class="govuk-notification-banner__header">
-            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-            Success
-            </h2>
-        </div>
-        <div class="govuk-notification-banner__content">
-            <h3 class="govuk-notification-banner__heading">
-                {% if query.addressAdded == "yes" %}
-                Address added successfully
-                {% elif query.addressDeleted == "yes" %}
-                Address deleted successfully
-                {% endif %}
-            </h3>
-        </div>
-    </div>
-    {% endif %}
-
-    <h1 class="govuk-heading-xl">Inspection addresses</h1>
+    <h1 class="govuk-heading-xl">[pheats applications]</h1>
     
-    <p class="govuk-body">Add or edit the addresses where inspections will take place.</p> 
+    <!-- <p class="govuk-body">Add or edit the addresses where inspections will take place.</p> 
 
     <h2 class="govuk-heading-m">Information for PHEATS exporters only</h2>
-    <p class="govuk-body">If you add a new address for use with PHEATS, it will need to be approved before you can start using it.</p> 
+    <p class="govuk-body">If you add a new address for use with PHEATS, it will need to be approved before you can start using it.</p>  -->
 
     <!-- <a href="address-lookup" class="govuk-button" role="button" draggable="false" data-module="govuk-button">Add a new inspection address</a> -->
-    <a href="pheats-select" class="govuk-button" role="button" draggable="false" data-module="govuk-button">[Start new PHEATS application]</a>
+
+    <a href="pheats-start" class="govuk-button" role="button" draggable="false" data-module="govuk-button">[Start new PHEATS application]</a>
+
+
   </div>
 </div>
 
@@ -79,7 +63,9 @@
 
         <tbody class="govuk-table__body">
 
-          {% for _address in data['pheatsapplications'] %}
+          {% for _address in data['addresses'] %}
+          
+          {% if _address.pheats.status != "notregistered" %}
           <tr class="govuk-table__row">
 
             <th scope="row" class="govuk-table__header">
@@ -157,12 +143,14 @@
               <p class="govuk-body govuk-!-margin-bottom-2">
                 <a href="{{_pheatsHREF}}" class="govuk-link govuk-link--no-visited-state" >{{_pheatsLinkText}}</a>
               </p>
-              <p class="govuk-body govuk-!-margin-bottom-2">
+              <!-- <p class="govuk-body govuk-!-margin-bottom-2">
                 <a href="confirm-delete" class="govuk-link govuk-link--no-visited-state" >Delete</a>
-              </p>
+              </p> -->
             </td>
 
           </tr>
+          {% endif %}
+
           {% endfor %}
 
         </tbody>

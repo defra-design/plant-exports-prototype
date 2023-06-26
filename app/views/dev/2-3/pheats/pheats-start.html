@@ -22,62 +22,39 @@
   
   <div class="govuk-grid-column-two-thirds">
 
-    
-    {% if query.addressAdded == "yes" %}
-    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-        <div class="govuk-notification-banner__header">
-            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-            Success
-            </h2>
-        </div>
-        <div class="govuk-notification-banner__content">
-            <h3 class="govuk-notification-banner__heading">
-                You've added a new inspection address
-            </h3>
-            <!-- <p class="govuk-body">Contact <a class="govuk-notification-banner__link" href="#">example@department.gov.uk</a> if you think there’s a problem.</p> -->
-        </div>
-    </div>
-    {% endif %}
-
-    <h1 class="govuk-heading-xl">Will you do PHEATS inspections at this address?</h1>
+    <h1 class="govuk-heading-xl">[heading]</h1>
 
     <!-- <div class="govuk-form-group"> -->
         <p class="govuk-body">If you are sending fruit, vegetables and cut flowers to the European Union or Northern Ireland then you could be eligible to join the plant health exports audited trader scheme (PHEATS). The scheme trains you to do your own inspections, which can help you get export certificates more quickly.</p>
         <p class="govuk-body">It can take several months to register and complete training. You can find out more about PHEATS on GOV.UK.</p>
     <!-- </div> -->
 
-    <form method="post" novalidate>
-        <div class="govuk-form-group ">
-          <fieldset class="govuk-fieldset">
-            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l govuk-visually-hidden">
-                Will you do PHEATS inspections at this address?
-            </legend>
+    {% set _goToSelect = false %}
+    {% set _linkStartNew = 'pheats-select' %}
+    {% set _addressCount = 0 %}
 
-            
-            
-            <div class="govuk-radios" data-module="govuk-radios">
-              <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="pheatsStart-1" name="pheatsStart" type="radio" value="Yes~pheats-site-handles">
-                <label class="govuk-label govuk-radios__label" for="pheatsStart-1">
-                  Yes
-                </label>
-              </div>
-              <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="pheatsStart-2" name="pheatsStart" type="radio" value="No~pheats-applications">
-                <label class="govuk-label govuk-radios__label" for="pheatsStart-2">
-                  No
-                </label>
-              </div>
+    {% for _address in data.addresses %}
+      {% set _addressCount = _addressCount + 1 %}
+      {% if _address.pheats.status == "notregistered" %}
+        {% set _goToSelect = true %}
+      {% endif %}
+    {% endfor %}
 
+    {% if _goToSelect == false %}
+      {% set _addressCountPlus = _addressCount + 1 %}
+      {% set _linkStartNew = '../account/address-lookup?address=' + _addressCountPlus + '&pheats=true' %}
+    {% endif %}
 
-              
+    <!-- <form method="post" novalidate action="{{_linkStartNew}}"> -->
+    <form method="post" novalidate action="pheats-select">
 
-            </div>
-          </fieldset>
-        </div>
         <button class="govuk-button" data-module="govuk-button">
-          Continue
+          [Continue]
         </button>
+
+        <p class="govuk-body govuk-!-margin-top-2"><a href="pheats-applications" class="govuk-link govuk-link--no-visited-state">[Cancel]</a></p>
+
+
     </form>
 
   </div>
