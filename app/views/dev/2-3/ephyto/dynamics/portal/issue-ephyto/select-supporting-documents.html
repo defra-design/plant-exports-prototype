@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  Select the supporting documents to include - {{serviceName}} - GOV.UK
+  {% if data.supportingDocumentsExist == "false" %}Supporting documents{% else %}Select the supporting documents to include{% endif %} - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -51,14 +51,13 @@
   <div class="govuk-grid-column-two-thirds">
 
     <form action="review-certificate" method="post">
-      <span class="govuk-caption-xl">Phytosanitary certificate 1760 96928 9066</span>
-      <h1 class="govuk-heading-xl">There are no supporting documents attached to this application</h1>
-      <p class="govuk-body">If Acme Ltd has sent you any supporting documents for this application, you can attach them below.</p>
-      <p class="govuk-body">Otherwise select 'Save and continue'.</p>
+      <span class="govuk-caption-xl">Issue ePhyto 1760 96929 3035</span>
+      <h1 class="govuk-heading-xl">Supporting documents</h1>
+      <p class="govuk-body">There are no supporting documents attached to this application.</p>
       
       <div class="govuk-button-group">
         <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
-        <a href="../supporting-documents/upload?return_url=../issue-ephyto/select-supporting-documents" class="govuk-button govuk-button--secondary" data-module="govuk-button">Add supporting documents</a>
+        <a href="../supporting-documents/upload?return_url=../issue-ephyto/select-supporting-documents&subHeading=issue" class="govuk-button govuk-button--secondary" data-module="govuk-button">Add supporting documents</a>
       </div>
 
     </form>
@@ -82,10 +81,9 @@
     </div>
     {% endif %}
 
-    <span class="govuk-caption-xl">Issue phytosanitary certificate 1760 96928 9066</span>
+    <span class="govuk-caption-xl">Issue ePhyto 1760 96929 3035</span>
     <h1 class="govuk-heading-xl">Select the supporting documents to include</h1>
     <p class="govuk-hint">This certificate will be issued as an ePhyto. You do not need to print any supporting documents. Choose the documents that need to be sent with the digital certificate.</p>
-    <!-- <a href="upload?return_url=view" class="govuk-button govuk-button--secondary" data-module="govuk-button">Add supporting documents</a> -->
     <h2 class="govuk-heading-s" id="documentsSelected">0 selected</h2>
   </div>
 
@@ -98,9 +96,9 @@
         <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
         
           <div class="govuk-checkboxes__item">
-            <input class="govuk-checkboxes__input" id="selectAllCheckboxMobile" name="selectAllCheckbox" type="checkbox" data-aria-controls="supporting-documents-table" value="Select all supporting documents on this page">
+            <input class="govuk-checkboxes__input" id="selectAllCheckboxMobile" name="selectAllCheckbox" type="checkbox" data-aria-controls="supporting-documents-table" value="Select all supporting documents">
             <label class="govuk-label govuk-checkboxes__label" for="selectAllCheckbox">
-              <span class="govuk-visually-hidden">Select all supporting documents on this page</span>
+              <span class="govuk-visually-hidden">Select all supporting documents</span>
             </label>
           </div>
     
@@ -109,18 +107,18 @@
       </div>
 
       <table id="supporting-documents-table" class="govuk-table responsive-table">
-        <caption class="govuk-table__caption"><span class="govuk-visually-hidden">Select all supporting documents on this page</span></caption>
+        <caption class="govuk-table__caption"><span class="govuk-visually-hidden">Select all supporting documents</span></caption>
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">
-              <span class="responsive-table-select-all-mobile">Select all supporting documents on this page</span>
+              <span class="responsive-table-select-all-mobile">Select all supporting documents</span>
             
               <div class="govuk-checkboxes govuk-checkboxes--small responsive-table-select-all-desktop" data-module="govuk-checkboxes">
       
                 <div class="govuk-checkboxes__item">
-                  <input class="govuk-checkboxes__input" id="selectAllCheckbox" name="selectAllCheckbox" type="checkbox" data-aria-controls="supporting-documents-table" value="Select all supporting documents on this page">
+                  <input class="govuk-checkboxes__input" id="selectAllCheckbox" name="selectAllCheckbox" type="checkbox" data-aria-controls="supporting-documents-table" value="Select all supporting documents">
                   <label class="govuk-label govuk-checkboxes__label" for="selectAllCheckbox">
-                    <span class="govuk-visually-hidden">Select all supporting documents on this page</span>
+                    <span class="govuk-visually-hidden">Select all supporting documents</span>
                   </label>
                 </div>
           
@@ -151,7 +149,7 @@
             </td>
             <td class="govuk-table__cell" scope="row"><span class="table-heading" aria-hidden="true">File name</span> {{data.supportingDocument or "Filename.jpg"}}</td>
             <td class="govuk-table__cell" scope="row"><span class="table-heading" aria-hidden="true">File description</span> {{data.fileDescription or "Description of file"}}</td>
-            <td class="govuk-table__cell govuk-table__cell--numeric"><a href="#" class="govuk-link govuk-link--no-visited-state">View<span class="govuk-visually-hidden"> {{data.supportingDocument or "Filename.jpg"}}</span></a></td>
+            <td class="govuk-table__cell govuk-table__cell--numeric"><a href="#" class="govuk-link govuk-link--no-visited-state">Download<span class="govuk-visually-hidden"> {{data.supportingDocument or "Filename.jpg"}}</span></a></td>
           </tr>
           {% endif %}
           <tr class="govuk-table__row result">
@@ -171,7 +169,7 @@
             </td>
             <td class="govuk-table__cell" scope="row"><span class="table-heading" aria-hidden="true">File name</span> Packing list.docx</td>
             <td class="govuk-table__cell" scope="row"><span class="table-heading" aria-hidden="true">File description</span> All packing details for this certificate</td>
-            <td class="govuk-table__cell govuk-table__cell--numeric"><a href="#" class="govuk-link govuk-link--no-visited-state">View<span class="govuk-visually-hidden"> Packing list.docx</span></a></td>
+            <td class="govuk-table__cell govuk-table__cell--numeric"><a href="#" class="govuk-link govuk-link--no-visited-state">Download<span class="govuk-visually-hidden"> Packing list.docx</span></a></td>
           </tr>
           <tr class="govuk-table__row result">
             <td class="govuk-table__cell">
@@ -194,7 +192,7 @@
             {% else %}
             <td class="govuk-table__cell" scope="row"><span class="table-heading" aria-hidden="true">File description</span> Additional information from our customer</td>
             {% endif %}
-            <td class="govuk-table__cell govuk-table__cell--numeric"><a href="#" class="govuk-link govuk-link--no-visited-state">View<span class="govuk-visually-hidden"> Email from Customer (24.05.23).jpg</span></a></td>
+            <td class="govuk-table__cell govuk-table__cell--numeric"><a href="#" class="govuk-link govuk-link--no-visited-state">Download<span class="govuk-visually-hidden"> Email from Customer (24.05.23).jpg</span></a></td>
           </tr>
           <tr class="govuk-table__row result">
             <td class="govuk-table__cell">
@@ -213,18 +211,18 @@
             </td>
             <td class="govuk-table__cell" scope="row"><span class="table-heading" aria-hidden="true">File name</span> Import permit (901837657).pdf</td>
             <td class="govuk-table__cell" scope="row"><span class="table-heading" aria-hidden="true">File description</span> Import permit needed for export</td>
-            <td class="govuk-table__cell govuk-table__cell--numeric"><a href="#" class="govuk-link govuk-link--no-visited-state">View<span class="govuk-visually-hidden"> Import permit (901837657).pdf</span></a></td>
+            <td class="govuk-table__cell govuk-table__cell--numeric"><a href="#" class="govuk-link govuk-link--no-visited-state">Download<span class="govuk-visually-hidden"> Import permit (901837657).pdf</span></a></td>
           </tr>
         </tbody>
       </table>
 
       <div class="govuk-form-block govuk-!-margin-top-4 govuk-!-margin-bottom-9">
-        <p class="govuk-body"><a class="govuk-link" href="#" id="selectAll">Select all supporting documents on this page</a><p>
+        <p class="govuk-body"><a class="govuk-link" href="#" id="selectAll">Select all supporting documents</a><p>
       </div>
 
       <div class="govuk-button-group">
         <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
-        <a href="../supporting-documents/upload?return_url=../issue-ephyto/select-supporting-documents" class="govuk-button govuk-button--secondary" data-module="govuk-button">Add supporting documents</a>
+        <a href="../supporting-documents/upload?return_url=../issue-ephyto/select-supporting-documents&subHeading=issue" class="govuk-button govuk-button--secondary" data-module="govuk-button">Add supporting documents</a>
       </div>
 
     </form>
@@ -252,12 +250,12 @@
       e.preventDefault();
       var txt = $("#selectAll").text();
 
-      if (txt == "Deselect all supporting documents on this page") {
-        $("#selectAll").text("Select all supporting documents on this page");
+      if (txt == "Deselect all supporting documents") {
+        $("#selectAll").text("Select all supporting documents");
         checkBoxes.prop("checked", false)
       }
       else {
-        $("#selectAll").text("Deselect all supporting documents on this page");
+        $("#selectAll").text("Deselect all supporting documents");
         checkBoxes.prop("checked", true)
       }
 
@@ -265,17 +263,17 @@
       $("#documentsSelected").text(len + " selected");
     });
 
-    /* Chris Harding (31.05.23) - Adding a checkbox allowing users to 'Select all supporting documents on this page' another way */
+    /* Chris Harding (31.05.23) - Adding a checkbox allowing users to 'Select all supporting documents' another way */
     /* DESKTOP */
     $("#selectAllCheckbox").bind('click onKeyDown', function() {
       var txt = $("#selectAll").text();
 
-      if (txt == "Deselect all supporting documents on this page") {
-        $("#selectAll").text("Select all supporting documents on this page");
+      if (txt == "Deselect all supporting documents") {
+        $("#selectAll").text("Select all supporting documents");
         checkBoxes.prop("checked", false)
       }
       else {
-        $("#selectAll").text("Deselect all supporting documents on this page");
+        $("#selectAll").text("Deselect all supporting documents");
         checkBoxes.prop("checked", true)
       }
 
@@ -287,12 +285,12 @@
     $("#selectAllCheckboxMobile").bind('click onKeyDown', function() {
       var txt = $("#selectAll").text();
 
-      if (txt == "Deselect all supporting documents on this page") {
-        $("#selectAll").text("Select all supporting documents on this page");
+      if (txt == "Deselect all supporting documents") {
+        $("#selectAll").text("Select all supporting documents");
         checkBoxes.prop("checked", false)
       }
       else {
-        $("#selectAll").text("Deselect all supporting documents on this page");
+        $("#selectAll").text("Deselect all supporting documents");
         checkBoxes.prop("checked", true)
       }
 
