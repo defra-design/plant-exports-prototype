@@ -93,33 +93,45 @@
       {% if data.reforwarding %}
       <h2 class="govuk-heading-m govuk-!-margin-top-9">Import details</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-        
-        <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-          <dt class="govuk-summary-list__key">Import phytosanitary certificate number</dt>
-          <dd class="govuk-summary-list__value">{{data.import_no or "1234567890"}}</dd>
-        </div>
 
-        <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-          <dt class="govuk-summary-list__key">Additional import certificate numbers</dt>
-          <dd class="govuk-summary-list__value">{{data.import_additional_numbers or "9999567890"}}</dd>
-        </div>
-
-        <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-          <dt class="govuk-summary-list__key">Country of origin</dt>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Origin</dt>
           <dd class="govuk-summary-list__value">{{data.countrySelect[0] or "Netherlands"}}</dd>
         </div>
 
-        <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+        <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">If the consignment was repacked, what type of packaging did you use?</dt>
           <dd class="govuk-summary-list__value">{{data.repacked or "Original packaging"}}</dd>
         </div>
 
-        <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-          <dt class="govuk-summary-list__key">Import phytosanitary certificate</dt>
-          <dd class="govuk-summary-list__value"><a href="#" class="govuk-link">phyto-cert-456678.pdf</a></dd>
-        </div>
-
       </dl>
+      
+      <h2 class="govuk-heading-m govuk-!-margin-top-9">Import phytosanitary certificates</h2>
+      {% set _importCertCount = 2 | int %}
+
+          <table class="govuk-table govuk-!-margin-bottom-9" >
+            <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th class="govuk-table__header" scope="col">Certificate number</th>
+                <th class="govuk-table__header" scope="col">File name</th>
+              </tr>
+            </thead>
+
+          {% for i in range(0, _importCertCount) -%}
+
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">
+                {{data['importCertNumber' + _id] or '1234567'}}
+              </td>
+              <td class="govuk-table__cell">
+                <a class="govuk-link govuk-link--no-visited-state" href="#">{{data['importCertFile' + _id] or 'file-name.pdf'}}</a>
+              </td>
+            </tr>
+
+          {%- endfor %}
+
+          </tbody>
+        </table>
       {% endif %}
 
       <!-- Your commodities -->
