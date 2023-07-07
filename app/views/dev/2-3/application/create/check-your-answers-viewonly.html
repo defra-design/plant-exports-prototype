@@ -760,17 +760,47 @@
       </dl>
 
       <h2 class="govuk-heading-m">Supporting documents</h2>
+      
+
+
+
+
       {% if data.build != "development" and data['consignee-import-permit'] %}
-      {% if data.file %}
-      {# do nothing if we have a file uploaded #}
-      {% else %}
-      <div class="govuk-inset-text app-alert--info">
-        If you have an import permit, upload it as a supporting document.
-      </div>
+        {% if data.file %}
+        {# do nothing if we have a file uploaded #}
+        {% else %}
+        <div class="govuk-inset-text app-alert--info">
+          If you have an import permit, upload it as a supporting document.
+        </div>
+        {% endif %}
       {% endif %}
-      {% endif %}
+
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
         
+        {% if data.reforwarding %}
+        
+          {% for i in range(0, _importCertCount) -%}
+            <div class="govuk-summary-list__row ">
+              <dt class="govuk-summary-list__key">
+                File name
+                <br>
+                File description
+              </dt>
+              <dd class="govuk-summary-list__value" >
+                
+                {{data['importCertFile' + _id] or 'file-name.pdf'}}
+                <br>
+
+                Import phytosanitary certificate ({{data['importCertNumber' + _id] or '1234567'}})
+                
+              </dd>
+              <dd class="govuk-summary-list__actions" >
+                <a class="govuk-link govuk-link--no-visited-state" href="#">Download <span class="govuk-visually-hidden">{{data['importCertFile' + _id] or 'file-name.pdf'}}</span></a>
+              </dd>
+            </div>
+          {%- endfor %}
+        
+        {% else %}
         <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
           <dt class="govuk-summary-list__key">
             File name
@@ -787,6 +817,7 @@
             {% endif %}
           </dd>
         </div>
+        {% endif %}
 
       </dl>
 
