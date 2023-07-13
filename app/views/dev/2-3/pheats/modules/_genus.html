@@ -5,7 +5,7 @@
     <span class="data-species">{{obj.species}}</span>
     <span class="data-fullname">{{obj.fullname}}</span>
     <span class="data-eppocode">{{obj.eppocode}}</span>
-    <span class="data-common">{{obj.common_names}}</span>
+    <span class="data-common">{% if obj.common_names %}{{obj.common_names | join(", ")}}{% endif %}</span>
   </li>
   {% endfor %}
 </ul>
@@ -17,10 +17,10 @@
 
     <div class="govuk-form-group autocomplete-wrapper" >
       <label class="govuk-label" for="{{_commodityNameID}}">
-        Botanical name
+        Botanical name of the fruit, vegetables or flower you will send
       </label>
       <div class="govuk-hint">
-        Search by genus, species or common name
+        Search by genus, species, EPPO code or common name
       </div>
 
       <div id="tt-customTemplates" class="autocomplete-wrapper">
@@ -77,7 +77,8 @@
     }
 
     function suggestionTemplate (result) {
-      return result && '<span lang=' + result.eppocode + '><strong>' + result.fullname+ '</strong> </span>' + ' ('+result.eppocode+')'
+      let _commonNameSuffix = (result.common) && ("<span>, " + result.common + "</span>") || ""
+      return result && '<span lang=' + result.eppocode + '><strong>' + result.fullname+ '</strong> </span>' + ' ('+result.eppocode+')' + _commonNameSuffix
     }
 
     element = document.querySelector('#tt-customTemplates')
