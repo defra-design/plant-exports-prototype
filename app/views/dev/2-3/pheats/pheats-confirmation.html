@@ -17,6 +17,15 @@
 <!-- <a href="javascript:history.back()" class="govuk-back-link">Back</a> -->
 {% endblock %}
 
+<!-- Selected address -->
+{% set _addressID = data['address'] or 1 %}
+{% set _address = data['addresses'][0] %}
+{% for _address2 in data['addresses'] %}
+  {% if _address2.id == _addressID %}
+    {% set _address = _address2 %}
+  {% endif %}
+{% endfor %}
+
 {% block content %}
 <div class="govuk-grid-row">
   
@@ -27,6 +36,16 @@
         PHEATS application submitted
       </h1>
     </div>
+
+    <p class="govuk-body">You’ve applied to join the Plant health exports audited trader scheme (PHEATS) for this address:</p>
+
+    <p class="govvuk-body">
+      {{_address.address1}}<br>
+      {{_address.address2}}<br>
+      {{_address.address3}}<br>
+      {{_address.address4}}<br>
+      {{_address.postcode}}
+    </p>
 
     <h2 class="govuk-heading-m">What happens next</h2>
 
