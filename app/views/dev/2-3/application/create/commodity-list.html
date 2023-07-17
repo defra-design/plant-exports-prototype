@@ -93,60 +93,65 @@
         <tbody class="govuk-table__body">
           <!-- BULK UPLOAD (plants and fresh produce) -->
           {% if data.id == "34" %}
-          {% block summaryBulkUploadAfterClone %}{% include "../modules/_summary-bulk-upload-after-clone.html" %}{% endblock %}
+            {% block summaryBulkUploadAfterClone %}{% include "../modules/_summary-bulk-upload-after-clone.html" %}{% endblock %}
           <!-- EVERYTHING ELSE -->
           {% elif data.commodity == "everything else" %}
-          {% block summarySomethingElse %}{% include "../modules/_summary-something-else.html" %}{% endblock %}
+            {% block summarySomethingElse %}{% include "../modules/_summary-something-else.html" %}{% endblock %}
           <!-- PROCESSED PLANT PRODUCTS -->
           {% elif data.commodity == "plant products" %}
-          {% set commodity_page = "commodity-page-plant-products" %}
-          {% block summaryPlantProducts %}{% include "../modules/_summary-plant-products-check-answers.html" %}{% endblock %}
+            {% set commodity_page = "commodity-page-plant-products" %}
+            {% block summaryPlantProducts %}{% include "../modules/_summary-plant-products-check-answers.html" %}{% endblock %}
           <!-- SEEDS -->
           {% elif data.commodity == "seeds" %}
-          {% set showChange = "true" %}
-          {% set showDelete = "true" %}
-          {% include "../modules/_summary-seed-cya.html" %}
+            {% set showChange = "true" %}
+            {% set showDelete = "true" %}
+            {% include "../modules/_summary-seed-cya.html" %}
           {% elif data.upload == 1 %}
-          {% include "../modules/_summary-bulk.html" %}
+            {% include "../modules/_summary-bulk.html" %}
           <!-- Smart commodity looping (START) - Added by a previous designer to always add another row to the commodity table each time a new commodity is added -->
           {% elif data.commodities and (data.commodities | length) > 0 %}
-          {% for commodity in data.commodities %}
-          <!-- BULBS -->
-          {% if data.commodity == "bulbs" %}
-          {% set commodity_page = "bulbs" %}
-          {% block summaryBulbs %}{% include "../modules/_summary-bulbs.html" %}{% endblock %}
-          <!-- USED FARM MACHINERY -->
-          {% elif data.commodity == "used farm machinery" %}
-          {% set commodity_page = "commodity-page-machinery" %}
-          {% block summaryUsedFarmMachinery %}{% include "../modules/_summary-machinery-check-answers.html" %}{% endblock %}
-          <!-- POTATOES -->
-          {% elif data.commodity == "potatoes" %}
-          {% set commodity_page = "commodity-page" %}
-          {% block summaryPotatoes1 %}{% include "../modules/_summary-potatoes.html" %}{% endblock %}
-          <!-- OTHER COMMODITES (when at least one commodity has been manually added)-->
-          {% else %}
-          {% set commodity_page = "commodity-page" %}
-          {% block summaryOther %}{% include "../modules/_summary-general-check-answers.html" %}{% endblock %}
-          {% endif %}
-          {% endfor %}
+
+            {% for commodity in data.commodities %}
+              <!-- BULBS -->
+              {% if data.commodity == "bulbs" %}
+                {% set commodity_page = "bulbs" %}
+                {% block summaryBulbs %}{% include "../modules/_summary-bulbs.html" %}{% endblock %}
+              <!-- USED FARM MACHINERY -->
+              {% elif data.commodity == "used farm machinery" %}
+                {% set commodity_page = "commodity-page-machinery" %}
+                {% block summaryUsedFarmMachinery %}{% include "../modules/_summary-machinery-check-answers.html" %}{% endblock %}
+              <!-- POTATOES -->
+                {% elif data.commodity == "potatoes" %}
+                {% set commodity_page = "commodity-page" %}
+                {% block summaryPotatoes1 %}{% include "../modules/_summary-potatoes.html" %}{% endblock %}
+              <!-- PLANTS (fresh produce) -->
+              {% elif data.commodity == "plants" %}
+                {% set commodity_page = "commodity-page" %}
+                {% block summaryPlants %}{% include "../modules/_summary-plants.html" %}{% endblock %}
+              <!-- OTHER COMMODITES (when at least one commodity has been manually added)-->
+              {% else %}
+                {% set commodity_page = "commodity-page" %}
+                {% block summaryOther %}{% include "../modules/_summary-general-check-answers.html" %}{% endblock %}
+              {% endif %}
+            {% endfor %}
           <!-- Smart commodity looping (END) - Added by a previous designer to always add another row to the commodity table each time a new commodity is added -->
           <!-- OTHER COMMODITES (when nothing has been manually added)-->
           {% else %}
-          {% if data.commodity == "potatoes" %}
-          {% set commodity_page = "commodity-page" %}
-          {% block summaryPotatoes2 %}{% include "../modules/_summary-potatoes.html" %}{% endblock %}
-          {% else %}
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">{{data.commodity_host_species or data.genus or data.commodity_common_name or "Oxalis tuberosa (OXATU)"}}</td>
-            <td class="govuk-table__cell">{{commodity.countryOfOriginSelect[0] or "United Kingdom"}}</td>
-            <td class="govuk-table__cell govuk-table__cell">{{commodity.quantity or "100"}}{{commodity.unit or "kg"}}</td>
-            <td class="govuk-table__cell" style="text-align: right;">
-              <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
-              <br>
-              <a href="#" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
-            </td>
-          </tr>
-          {% endif %}
+            {% if data.commodity == "potatoes" %}
+              {% set commodity_page = "commodity-page" %}
+              {% block summaryPotatoes2 %}{% include "../modules/_summary-potatoes.html" %}{% endblock %}
+            {% else %}
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">{{data.commodity_host_species or data.genus or data.commodity_common_name or "Oxalis tuberosa (OXATU)"}}</td>
+                <td class="govuk-table__cell">{{commodity.countryOfOriginSelect[0] or "United Kingdom"}}</td>
+                <td class="govuk-table__cell govuk-table__cell">{{commodity.quantity or "100"}}{{commodity.unit or "kg"}}</td>
+                <td class="govuk-table__cell" style="text-align: right;">
+                  <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+                  <br>
+                  <a href="#" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+                </td>
+              </tr>
+            {% endif %}
           {% endif %}
         </tbody>
       </table>

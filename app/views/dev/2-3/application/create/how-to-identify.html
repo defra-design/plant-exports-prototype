@@ -58,7 +58,14 @@
 
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="has_botanicial_name_yes" name="has_botanicial_name" type="radio" value="yes" aria-describedby="has_botanicial_name_yes-hint" data-aria-controls="has_botanicial_name_yes-conditional"{% if data.has_botanicial_name == "yes" %} checked{% endif %}>
-              <label class="govuk-label govuk-radios__label" for="has_botanicial_name_yes">{% if data.commodity == "everything else" %}Scientific{% else %}Botanical{% endif %} name</label>
+
+              <label class="govuk-label govuk-radios__label" for="has_botanicial_name_yes">
+                  {% if data.commodity == "everything else" %}
+                    Scientific name
+                  {% else %}
+                    Botanical name
+                {% endif %}
+              </label>
               
               <div id="has_botanicial_name_yes-hint" class="govuk-hint govuk-radios__hint">
                 Search by genus, species or common name
@@ -67,20 +74,21 @@
             </div>
 
             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="has_botanicial_name_yes-conditional">
-              {% if data.show_manual_input != "yes" %}
-              {% block genus %}
-              {% include "../modules/_genus.html" %}
-              {% endblock %}
-              {% else %}
-              <div class="govuk-form-group">
-                <label class="govuk-label" for="commodity_genus">Genus</label>
-                <input class="govuk-input govuk-input--width-20" id="commodity_genus" name="genus" type="text" value="{{data.genus}}">
-              </div>
               
-              <div class="govuk-form-group">
-                <label class="govuk-label" for="commodity_host_species">Species{% if data.build != "ux" %} (optional){% endif %}</label>
-                <input class="govuk-input govuk-input--width-20" id="commodity_host_species" name="commodity_host_species" type="text" value="{{data.commodity_host_species}}">
-              </div>
+              {% if data.show_manual_input != "yes" %}
+                {% block genus %}
+                  {% include "../modules/_genus.html" %}
+                {% endblock %}
+              {% else %}
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="commodity_genus">Genus</label>
+                  <input class="govuk-input govuk-input--width-20" id="commodity_genus" name="genus" type="text" value="{{data.genus}}">
+                </div>
+                
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="commodity_host_species">Species{% if data.build != "ux" %} (optional){% endif %}</label>
+                  <input class="govuk-input govuk-input--width-20" id="commodity_host_species" name="commodity_host_species" type="text" value="{{data.commodity_host_species}}">
+                </div>
               {% endif %}
 
               {% if data.show_manual_input == "yes" %}

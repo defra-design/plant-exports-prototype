@@ -1,0 +1,59 @@
+
+
+
+<!-- 
+  
+  example {{commodity.quantity}}
+  
+  {
+          "filter_demo":["Afghanistan","Åland Islands","Albania"],
+  "has_botanicial_name":"yes",
+          "botanical_name":"Rhus erosa (ZSAER)",
+          "commodity_variety":"red blossom",
+  "commodity_description":"",
+          "commodity_type":"plants",
+  "gsi_number":"1233435",
+  "ss_number":"cfddfsfds",
+  "option-select-filter":"",
+          "quantity":"911",
+          "units":"Grams",
+          "number_of_packages":"2",
+          "packaging":["Bottle - protected cylindrical","BQ"],
+          "packing_material_used":"plastic",
+          "distinguishing_marks":"brown marks"
+} -->
+
+
+<tr class="govuk-table__row">
+  <td class="govuk-table__cell">
+
+    <span style="display: block; margin-bottom:7px">
+      <strong>{{commodity.botanical_name or "Rosa ecae (ROSEC)"}}</strong>
+    </span>
+
+    {% if commodity.commodity_variety != "" %}
+      <span style="display: block; margin-bottom:7px">'{{commodity.commodity_variety or "Red blossom"}}'</span>
+    {% endif %}
+
+    <span style="display: block; margin-bottom:7px">
+      Commodity type: <br>
+      {% if commodity.commodity_type == "produce" %}
+        Produce (fruit, flowers or vegetables)
+      {% else %}
+        {{commodity.commodity_type | capitalize or "Plants"}}
+      {% endif %}
+    </span>
+
+  </td>
+  <td class="govuk-table__cell">
+    {{commodity.stock_number or "912345"}}
+  </td>
+  <td class="govuk-table__cell govuk-table__cell">
+    {{commodity.quantity or "25"}}{{commodity.unit or "kg"}}
+  </td>
+  <td class="govuk-table__cell" style="text-align: right;">
+    <a href="commodity-page" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+    <br>
+    <a href="#" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+  </td>
+</tr>
