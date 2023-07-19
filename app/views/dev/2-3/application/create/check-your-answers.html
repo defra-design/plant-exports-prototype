@@ -13,7 +13,7 @@
 {% block content %}
 <div class="govuk-grid-row">
 
-  <div class="govuk-grid-column-two-thirds">
+  <div class="govuk-grid-column-full">
 
     {% if query.deleted %}
       <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
@@ -288,6 +288,39 @@
       </table>
 
       <p class="govuk-body"><a href="input-method?change=yes&return_url=check-your-answers">Add more</a></p>
+      {% elif data.commodity == "plants" %}
+      <h2 class="govuk-heading-m" id="your-consignment">Your consignment</h2>
+      
+      <table class="govuk-table govuk-!-margin-bottom-4">
+        <thead class="govuk-table__head">
+          {% if query.design == "b" %}
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Description</th>
+            <th class="govuk-table__header" scope="col">Origin</th>
+            <th class="govuk-table__header" scope="col">Quantity and number of packages</th>
+            <th class="govuk-table__header" scope="col">Type of packaging</th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
+          </tr>
+          {% else %}
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Description</th>
+            <th class="govuk-table__header" scope="col">Origin</th>
+            <th class="govuk-table__header" scope="col">Quantity and number of packages</th>
+            <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks</th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
+          </tr>
+          {% endif %}
+        </thead>
+        <tbody class="govuk-table__body" style="text-align: right;">
+          {% for commodity in data.commodities %}
+            {% block summaryPlantsAndFreshProduce %}
+            {% include "../modules/_summary-plants-check-answers.html" %}
+            {% endblock %}
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <p class="govuk-body"><a href="input-method?change=yes&return_url=check-your-answers">Add more</a></p>
       {% elif data.commodity == "potatoes" %}
       <h2 class="govuk-heading-m">Your consignment</h2>
       
@@ -304,6 +337,39 @@
           {% for commodity in data.commodities %}
             {% block summaryPotatoes %}
             {% include "../modules/_summary-potatoes-check-answers.html" %}
+            {% endblock %}
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <p class="govuk-body"><a href="input-method?change=yes&return_url=check-your-answers">Add more</a></p>
+      {% elif data.commodity == "plant products" %}
+      <h2 class="govuk-heading-m" id="your-consignment">Your consignment</h2>
+      
+      <table class="govuk-table govuk-!-margin-bottom-4">
+        <thead class="govuk-table__head">
+          {% if query.design == "b" %}
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Description</th>
+            <th class="govuk-table__header" scope="col">Origin</th>
+            <th class="govuk-table__header" scope="col">Quantity and number of packages</th>
+            <th class="govuk-table__header" scope="col">Type of packaging</th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
+          </tr>
+          {% else %}
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Description</th>
+            <th class="govuk-table__header" scope="col">Origin</th>
+            <th class="govuk-table__header" scope="col">Quantity and number of packages</th>
+            <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks</th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
+          </tr>
+          {% endif %}
+        </thead>
+        <tbody class="govuk-table__body" style="text-align: right;">
+          {% for commodity in data.commodities %}
+            {% block summaryPlantProducts %}
+            {% include "../modules/_summary-processed-plant-products-check-answers.html" %}
             {% endblock %}
           {% endfor %}
         </tbody>
@@ -424,9 +490,9 @@
           <!-- Smart commodity looping (START) - Added by a previous designer to always add another row to the commodity table each time a new commodity is added -->
           {% elif data.commodities and (data.commodities | length) > 0 %}
           {% for commodity in data.commodities %}
-            {% block summaryGeneral %}
-            {% include "../modules/_summary-general-check-answers.html" %}
-            {% endblock %}
+          {% block summaryGeneral %}
+          {% include "../modules/_summary-general-check-answers.html" %}
+          {% endblock %}
           {% endfor %}
           <!-- Smart commodity looping (END) - Added by a previous designer to always add another row to the commodity table each time a new commodity is added -->
           {% else %}
