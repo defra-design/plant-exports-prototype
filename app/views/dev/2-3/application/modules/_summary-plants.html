@@ -43,13 +43,33 @@
         {{commodity.commodity_type | capitalize or "Plants"}}
       {% endif %}
     </span>
-
   </td>
   <td class="govuk-table__cell">
-    {{commodity.stock_number or "912345"}}
+    <!-- {% if commodity.filter_demo %}
+    {{commodity.filter_demo or "United Kingdom"}}
+    {% else %}
+    United Kingdom 
+    {% endif %} -->
+
+    {% set _defaultCountry = "United Kingdom" %}
+    {% if commodity.filter_demo == "_unchecked" or commodity.filter_demo == undefined %}
+      {{_defaultCountry}}
+    {% else %}
+      {{commodity.filter_demo | join(", ") or _defaultCountry}}
+    {% endif %}
+
+    <!-- "filter_demo":["Afghanistan","Åland Islands","Albania"], -->
+   
   </td>
+  <td class="govuk-table__cell">
+    <span style="display: block; margin-bottom:7px">{{commodity.quantity or "20"}} {{commodity.units or "kilograms"}}</span>
+    <span style="display: block; margin-bottom:7px">{{commodity.number_of_packages or "5"}} packages</span>
+
+  </td>
+
   <td class="govuk-table__cell govuk-table__cell">
-    {{commodity.quantity or "25"}}{{commodity.unit or "kg"}}
+    <span style="display: block; margin-bottom:7px">{{commodity.packaging or "Crate - bulk - cardboard"}}</span>
+    <span style="display: block; margin-bottom:7px">{{commodity.packing_material_used or "Cardboard"}} <br> {{commodity.distinguishing_marks or "brown marks"}}</span>
   </td>
   <td class="govuk-table__cell" style="text-align: right;">
     <a href="commodity-page" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>

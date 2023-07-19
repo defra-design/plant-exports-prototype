@@ -47,13 +47,23 @@
             <th class="govuk-table__header" scope="col">Quantity</th>
             <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
           </tr>
-          {% elif data.commodity == "grain" or data.commodity == "plants" %}
+          {% elif data.commodity == "grain" %}
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">Description</th>
             <th class="govuk-table__header" scope="col">Country of origin</th>
             <th class="govuk-table__header" scope="col">Quantity</th>
             <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
           </tr>
+
+          {% elif data.commodity == "plants" %}
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Description</th>
+            <th class="govuk-table__header" scope="col">Origin</th>
+            <th class="govuk-table__header" scope="col">Quantity <br> Number of packages</th>
+            <th class="govuk-table__header" scope="col">Packaging <br> Distinguishing marks</th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
+          </tr>
+
           {% elif data.commodity == "plant products" %}
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">Description</th>
@@ -126,6 +136,7 @@
                 {% block summaryPotatoes1 %}{% include "../modules/_summary-potatoes.html" %}{% endblock %}
               <!-- PLANTS (fresh produce) -->
               {% elif data.commodity == "plants" %}
+
                 {% set commodity_page = "commodity-page" %}
                 {% block summaryPlants %}{% include "../modules/_summary-plants.html" %}{% endblock %}
               <!-- OTHER COMMODITES (when at least one commodity has been manually added)-->
@@ -140,6 +151,9 @@
             {% if data.commodity == "potatoes" %}
               {% set commodity_page = "commodity-page" %}
               {% block summaryPotatoes2 %}{% include "../modules/_summary-potatoes.html" %}{% endblock %}
+            {% elif data.commodity == "plants" %}
+              {% set commodity_page = "commodity-page" %}
+              {% block summaryPlants2 %}{% include "../modules/_summary-plants.html" %}{% endblock %}
             {% else %}
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">{{data.commodity_host_species or data.genus or data.commodity_common_name or "Oxalis tuberosa (OXATU)"}}</td>
