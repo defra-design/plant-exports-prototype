@@ -1,0 +1,200 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.build == "development" %}
+  {% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %} {{query.id | appInformationV6('applicationID')}} - {{serviceName}} - GOV.UK
+  {% else %}
+  Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %} {{query.id | appInformationV6('applicationID')}} - {{serviceName}} - GOV.UK
+  {% endif %}
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="account?returnURL={{query.returnURL or 'dashboard-submitted'}}" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
+  </ul>
+</div>
+
+<a href="javascript:history.back()" class="govuk-back-link">Return to your applications</a>
+<style>
+
+  /* Needs extracting and adding to the external Sass or CSS */
+  .govuk-status--warning {
+    width: auto !important;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    padding-bottom: 1px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    display: inline-block;
+    color: #0b0c0c;
+    background: #FFBF47;
+    border: 3px solid #FFBF47;
+  }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if data.status == "not required" %}
+    <div class="app-alert app-alert--warning" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
+      <p class="govuk-body" id="govuk-notification-banner-message">The inspector decided that you do not need a phytosanitary certificate to export these goods.</p>
+      <p class="govuk-body">You will not be charged for this application.</p>
+    </div>
+    {% endif %}
+
+    <h1 class="govuk-heading-xl">
+      {% if data.build == "development" %}
+      {% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %} 
+      <br>
+      {{query.id | appInformationV6('applicationID')}}
+      {% else %}
+      Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %}
+      <br>
+      {{query.id | appInformationV6('applicationID')}}
+      {% endif %}
+    </h1>
+  </div>
+
+</div>
+
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-two-thirds">
+    {% if query.is_block == "yes" %}
+    <p class="govuk-body">This is a block application of 100 certificates</p>
+    {% elif query.is_group == "yes" %}
+    <p class="govuk-body">This is an application of 5 certificates</p>
+    {% endif %}
+    <dl class="govuk-summary-list govuk-summary-list--no-border">
+      
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Status</dt>
+        <dd class="govuk-summary-list__value">
+
+          {% if data.status == "submitted" %}
+          <div class="govuk-tag govuk-tag--white-tag-blue-border-and-text">
+            Submitted
+          </div>
+          {% elif data.status == "processing" %}
+          <div class="govuk-tag govuk-tag--blue">
+            Processing
+          </div>
+          {% elif data.status == "with inspector" %}
+          <div class="govuk-tag govuk-tag--purple">
+            With inspector
+          </div>
+          {% elif data.status == "exporter action" %}
+          <div class="govuk-tag govuk-tag--orange">
+            Exporter action
+          </div>
+          {% elif data.status == "preparing certificate" %}
+          <div class="govuk-tag govuk-tag--indigo">
+            Preparing certificate
+          </div>
+          {% elif data.status == "certificate issued" %}
+          <div class="govuk-tag govuk-tag--green">
+            Certificate issued
+          </div>
+          {% elif data.status == "not required" %}
+          <div class="govuk-tag govuk-tag--red">
+            Not required
+          </div>
+          {% elif data.status == "rejected" %}
+          <div class="govuk-tag govuk-tag--red">
+            Rejected
+          </div>
+          {% elif data.status == "returned" %}
+          <div class="govuk-tag govuk-tag--pink">
+            Returned
+          </div>
+          {% elif data.status == "cancelled" %}
+          <div class="govuk-tag govuk-tag--yellow">
+            Cancelled
+          </div>
+          {% else %}
+          <div class="govuk-tag govuk-tag--blue">
+            Processing
+          </div>
+          {% endif %}
+
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Your reference</dt>
+        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV6('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformationV6('reference')}}{% endif %}</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Type</dt>
+        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV6('cert_info')) == 'Conformity' %}Certificate of conformity{% elif (query.id | appInformationV6('cert_info')) == 'Phytosanitary' %}Phytosanitary certificate{% elif (query.id | appInformationV6('cert_info')) == 'Re-forwarding' %}Re-forwarding phytosanitary certificate{% else %}Phytosanitary certificate{% endif %} for clay</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Destination country</dt>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV6('destination')}}</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">{% if data.build == "development" %}Customer{% else %}Consignee{% endif %}</dt>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV6('importer') | title or "Example consignee name"}}</dd>
+      </div>
+
+      {% if query.id == 0 %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Agent</dt>
+        <dd class="govuk-summary-list__value">Bill Shoggins</dd>
+      </div>
+      {% endif %}
+
+      {% if data.status == "certificate issued" %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Phytosanitary certificate number</dt>
+        <dd class="govuk-summary-list__value">UK/GB/E&W/2023/1347286332908</dd>
+      </div>
+      
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Certificate issue date</dt>
+        <dd class="govuk-summary-list__value">6 April 2023</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Certificate expiry date</dt>
+        <dd class="govuk-summary-list__value">20 April 2023</dd>
+      </div>
+      {% endif %}
+
+    </dl>
+
+  </div>
+
+</div>
+
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+    <ul class="govuk-list noprint">
+      <li><a class="govuk-link govuk-link--no-visited-state" href="#">View application details</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 4}}&is_group={{query.is_group}}">Copy as new application</a></li>
+      {% if data.status != 'certificate issued' and data.status != 'rejected' and data.status != 'not required' and data.status != 'returned' and data.status != 'cancelled' %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="cancel-reason?id={{query.id or 4}}&is_group={{query.is_group}}">Cancel this application</a></li>
+      {% endif %}
+      {% if data.status == 'certificate issued' %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="#">Ask for certificate to be re-issued</a></li>
+      {% endif %}
+    </ul>
+  </div>
+  
+</div>
+{% endblock %}

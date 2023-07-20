@@ -1,0 +1,425 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  [title] - Manage account - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="../account" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
+  </ul>
+</div>
+
+<div class="govuk-breadcrumbs">
+  <ol class="govuk-breadcrumbs__list">
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="../dashboard-submitted">Your applications</a>
+    </li>
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="../account">Manage account</a>
+    </li>
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="pheats-applications">PHEATS addresses</a>
+    </li>
+  </ol>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-two-thirds">
+
+    <!-- Selected address -->
+    {% set _addressID = data['address'] or 1 %}
+    {% set _address = data['addresses'][0] %}
+    {% for _address2 in data['addresses'] %}
+      {% if _address2.id == _addressID %}
+        {% set _address = _address2 %}
+      {% endif %}
+    {% endfor %}
+
+    <!-- Paused state or not -->
+    {% set _showEditLinks = true %}
+    {% set _dontShowEditLinks = false %}
+    {% if _address.pheats.status == "paused" %}
+      {% set _showEditLinks = false %}
+      {% set _dontShowEditLinks = true %}
+    {% endif %}
+
+    {% set _showEditLinks = false %}
+    {% set _dontShowEditLinks = true %}
+
+
+    <h1 class="govuk-heading-xl">
+      <span class="govuk-caption-xl">{{_address.postcode}}, {{_address.address1}}</span>
+      Manage PHEATS for this address
+    </h1>
+
+    <!-- <h2 class="govuk-heading-m">Registration summary</h2> -->
+
+    <dl class="govuk-summary-list">
+
+      <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            PHEATS registration status
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <p class="govuk-body govuk-!-margin-bottom-2">
+              {% if _address.pheats.status == "notregistered" %}
+                <!-- NOT REGISTERED -->
+                <strong class="govuk-tag govuk-tag--grey">
+                    Not registered
+                </strong>
+              {% elif _address.pheats.status == "registered" %}
+                <!-- REGISTERED -->
+                <strong class="govuk-tag govuk-tag--green">
+                  Registered
+                </strong>
+              {% elif _address.pheats.status == "updated" %}
+                <!-- REGISTERED and UPDATED-->
+                <strong class="govuk-tag govuk-tag--green">
+                  Registered
+                </strong>
+                <!-- <span class="govuk-!-margin-bottom-2 govuk-!-margin-top-2" style="display: block">and </span>
+                <span class="govuk-!-font-weight-bold">Updating</span> -->
+                <span class="govuk-!-margin-bottom-2 govuk-!-margin-top-2" style="display: block">and </span>
+                <strong class="govuk-tag govuk-tag--orange">
+                  Updating
+                </strong>
+              {% elif _address.pheats.status == "pending" %}
+                <!-- PENDING -->
+                <strong class="govuk-tag govuk-tag--orange">
+                  In progress
+                </strong>
+              {% elif _address.pheats.status == "paused" %}
+                <!-- PAUSED -->
+                <strong class="govuk-tag govuk-tag--grey">
+                  Not active
+                </strong>
+              {% endif %}
+            </p>
+          </dd>
+      </div>
+      <!-- <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key govuk-!-width-one-third">
+          [further information]
+        </dt>
+        <dd class="govuk-summary-list__value">
+          [further information here related to status]
+        </dd>
+      </div> -->
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key govuk-!-width-one-third">
+          Address
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <p class="govuk-body govuk-!-margin-bottom-2">
+              {{_address.address1}}<br>
+              {{_address.address2}}<br>
+              {{_address.address3}}<br>
+              {{_address.address4}}<br>
+              {{_address.postcode}}
+          </p>
+        </dd>
+      </div>
+    </dl>
+
+    {% if _address.pheats.status == "pending" %}
+    <!-- <p class="govuk-body">
+      <a href="#" class="govuk-button govuk-button--secondary" >
+        [Cancel]
+      </a>
+    </p> -->
+    {% endif %}
+
+    <!-- PAUSE -->
+    {% if _address.pheats.status == "registered" or _address.pheats.status == "updated" %}
+      <p class="govuk-body govuk-!-margin-bottom-0">
+        <a href="pheats-pause?address={{_addressID}}" class="govuk-button govuk-button--secondary" >
+          Take a break from PHEATS
+        </a>
+      </p>
+      <p class="govuk-body">You will not be able to do PHEATS exports at this address until you start your registration again.</p>
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+    {% endif %}
+
+    <!-- UPDATE or RESTART -->
+    {% if _address.pheats.status == "registered" or _address.pheats.status == "paused" %}
+    {% set _cyaLink = "pheats-cya-update?address=" + _addressID %}
+    {% if _address.pheats.status == "paused" %}
+      {% set _cyaLink = "pheats-cya-restart?address=" + _addressID %}
+    {% endif %}
+    <form method="post" novalidate action="{{_cyaLink}}">
+
+      <!-- 
+        Set authorised people counts and data before update
+      -->
+      {% for _authorisedperson in _address.pheats.authorisedpeople %}
+        {% set _id = loop.index %}
+        <input id="apName{{_id}}" name="apName{{_id}}" type="hidden" value="{{_authorisedperson.name}}">
+        <input id="apPosition{{_id}}" name="apPosition{{_id}}" type="hidden" value="{{_authorisedperson.position}}">
+        <input id="apEmail{{_id}}" name="apEmail{{_id}}" type="hidden" value="{{_authorisedperson.email}}">
+        <input id="apDeleted{{_id}}" name="apDeleted{{_id}}" type="hidden" value="false">
+      {% endfor %}
+      <input id="apCount" name="apCount" type="hidden" value="{{_address.pheats.authorisedpeople.length}}">
+      <input id="apDisplayedCount" name="apDisplayedCount" type="hidden" value="{{_address.pheats.authorisedpeople.length}}">
+      <!-- 
+        Set commodity counts and data before update
+      -->
+      {% for _commodity in _address.pheats.commodities %}
+        {% set _id = loop.index %}
+        <input id="commodityName{{_id}}" name="commodityName{{_id}}" type="hidden" value="{{_commodity.name}}">
+        <input id="commodityDeleted{{_id}}" name="commodityDeleted{{_id}}" type="hidden" value="{{_commodity.deleted or false}}">
+        <!-- Origins -->
+        {% for _origin in _commodity.origins %}
+          <input id="commodityOriginDeleted{{_id}}-{{loop.index}}" name="commodityOriginDeleted{{_id}}-{{loop.index}}" type="hidden" value="{{_origin.deleted or false}}" >
+          {% set _originName = 'commodityOrigin' + _id + '-' + loop.index %}
+          {% for _item in _origin %}
+            <input name="{{_originName}}" type="hidden" value="{{_item}}" >
+          {% endfor %}
+          <input name="{{_originName}}" type="hidden" value="_unchecked" >
+        {% endfor %}
+        <input id="originCount{{_id}}" name="originCount{{_id}}" type="hidden" value="{{_commodity.origins.length}}">
+        <!-- Destinations -->
+        {% for _destination in _commodity.destinations %}
+          <input id="commodityDestinationDeleted{{_id}}-{{loop.index}}" name="commodityDestinationDeleted{{_id}}-{{loop.index}}" type="hidden" value="{{_destination.deleted or false}}" >
+          {% set _destinationName = 'commodityDestination' + _id + '-' + loop.index %}
+          {% for _item in _destination %}
+            <input name="{{_destinationName}}" type="hidden" value="{{_item}}" >
+          {% endfor %}
+          <input name="{{_destinationName}}" type="hidden" value="_unchecked" >
+        {% endfor %}
+        <input id="destinationCount{{_id}}" name="destinationCount{{_id}}" type="hidden" value="{{_commodity.destinations.length}}">
+      {%- endfor %}
+      <!-- Commodity counts -->
+      <input id="commodityCount" name="commodityCount" type="hidden" value="{{_address.pheats.commodities.length}}">
+      <input id="commodityDisplayedCount" name="commodityDisplayedCount" type="hidden" value="{{_address.pheats.commodities.length}}">
+      
+
+      <!-- RESTART -->
+      {% if _address.pheats.status == "paused" %}
+        <button class="govuk-button" data-module="govuk-button">
+          Start PHEATS again
+        </button>
+        <p class="govuk-body">You will need to do an audit and repeat your training. It may take around a month to start doing PHEATS exports again.</p>
+        <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+      {% endif %}
+
+      <!-- UPDATE -->
+      {% if _address.pheats.status == "registered" %}
+      <button class="govuk-button govuk-button--secondary govuk-!-margin-bottom-9" data-module="govuk-button">
+        Edit address details
+      </button>
+      {% endif %}
+
+    {% endif %}
+    </form>
+
+    <h2 class="govuk-heading-l">Address details</h2>
+
+
+
+    <h3 class="govuk-heading-m">Site plan</h3>
+
+    <dl class="govuk-summary-list govuk-!-margin-bottom-">
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          File name
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <a class="govuk-link govuk-link--no-visited-state" href="#">
+            {{_address.pheats.siteplan}}, 2MB
+          </a>
+        </dd>
+        {% if _showEditLinks %}
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link govuk-link--no-visited-state" href="#">
+            [Edit]<span class="govuk-visually-hidden"> </span>
+          </a>
+        </dd>
+        {% endif %}
+      </div>
+
+    </dl>
+
+    <h3 class="govuk-heading-m ">PHEATS commodities at this address</h3>
+
+    <dl class="govuk-summary-list {% if _dontShowEditLinks %}govuk-!-margin-bottom-{% endif %}">
+
+      {% for _commodity in _address.pheats.commodities %}
+      <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            {{_commodity.name}}
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <p class="govuk-body govuk-!-margin-bottom-2">
+              Countries of origin:
+            </p>
+            <ul class="govuk-list govuk-list--bullet">
+              {% for _origin in _commodity.origins %}
+                <li>{{_origin[0]}}</li>
+              {% endfor %}
+            </ul>
+            <p class="govuk-body govuk-!-margin-bottom-2">
+              Destinations:
+            </p>
+            <ul class="govuk-list govuk-list--bullet">
+              {% for _destination in _commodity.destinations %}
+                <li>{{_destination[0]}}</li>
+              {% endfor %}
+            </ul>
+          </dd>
+          {% if _showEditLinks %}
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link govuk-link--no-visited-state" href="#">
+              [Edit]<span class="govuk-visually-hidden"> </span>
+            </a>
+          </dd>
+          {% endif %}
+      </div>
+      {% endfor %}
+
+      {% if _address.pheats.status == "updated" %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Allium cepa<br>
+          <strong class="govuk-tag govuk-tag--orange govuk-!-margin-top-2">
+            Updating
+          </strong>
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <p class="govuk-body govuk-!-margin-bottom-2">
+            Countries of origin:
+          </p>
+          <ul class="govuk-list govuk-list--bullet">
+              <li>Germany</li>
+          </ul>
+          <p class="govuk-body govuk-!-margin-bottom-2">
+            Destinations:
+          </p>
+          <ul class="govuk-list govuk-list--bullet">
+              <li>France</li>
+          </ul>
+        </dd>
+        {% if _showEditLinks %}
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link govuk-link--no-visited-state" href="#">
+            [Edit]<span class="govuk-visually-hidden"> </span>
+          </a>
+        </dd>
+        {% endif %}
+      </div>
+      {% endif %}
+     
+    </dl>
+
+    {% if _showEditLinks %}
+    <p class="govuk-body govuk-!-margin-bottom-">
+      <a href="#" class="govuk-link govuk-link--no-visited-state" >
+          [Add new commodity]
+      </a>
+    </p>
+    {% endif %}
+
+    <h3 class="govuk-heading-l">People registered with PHEATS at this address</h3>
+
+    <h3 class="govuk-heading-m">Person responsible</h3>
+
+    {% set _personResponsible = _address.pheats.personresponsible %}
+
+    <dl class="govuk-summary-list {% if _dontShowEditLinks %}govuk-!-margin-bottom-{% endif %}">
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          {{_personResponsible.name}}
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{_personResponsible.position or "Technical Director"}}<br>
+          {{_personResponsible.email}}
+          {% if _personResponsible.mobile %}<br>{{_personResponsible.mobile}}{% endif %}
+          {% if _personResponsible.telephone %}<br>{{_personResponsible.telephone}}{% endif %}
+        </dd>
+        {% if _showEditLinks %}
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link govuk-link--no-visited-state" href="#">
+            [Edit]<span class="govuk-visually-hidden"> </span>
+          </a>
+        </dd>
+        {% endif %}
+      </div>
+
+    </dl>
+
+    {% if _showEditLinks %}
+    <p class="govuk-body govuk-!-margin-bottom-">
+      <a href="#" class="govuk-link govuk-link--no-visited-state" >
+          [Change person responsible]
+      </a>
+    </p>
+    {% endif %}
+
+    <h3 class="govuk-heading-m">Authorised people</h3>
+
+    <dl class="govuk-summary-list {% if _dontShowEditLinks %}govuk-!-margin-bottom-9{% endif %}">
+
+      {% for _authorisedperson in _address.pheats.authorisedpeople %}
+      <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key ">
+            {{_authorisedperson.name}}
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{_authorisedperson.position or "Technical Director"}}<br>
+            {{_authorisedperson.email}}
+          </dd>
+          {% if _showEditLinks %}
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link govuk-link--no-visited-state" href="#">
+              [Edit]<span class="govuk-visually-hidden"> </span>
+            </a>
+            
+          </dd>
+          {% endif %}
+      </div>
+      {% endfor %}
+
+      {% if _address.pheats.status == "updated" %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Alison Reed Smith<br>
+          <strong class="govuk-tag govuk-tag--orange govuk-!-margin-top-2">
+            Updating
+          </strong>
+        </dt>
+        <dd class="govuk-summary-list__value">
+          Site supervisor<br>
+          a.smith@acmeltd.com
+        </dd>
+        {% if _showEditLinks %}
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link govuk-link--no-visited-state" href="#">
+            [Edit]<span class="govuk-visually-hidden"> </span>
+          </a>
+        </dd>
+        {% endif %}
+      </div>
+      {% endif %}
+     
+    </dl>
+
+    {% if _showEditLinks %}
+    <p class="govuk-body govuk-!-margin-bottom-9">
+      <a href="#" class="govuk-link govuk-link--no-visited-state" >
+          [Add new authorised person]
+      </a>
+    </p>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  [title] - Manage account - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="../account" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
+  </ul>
+</div>
+
+<!-- <a href="javascript:history.back()" class="govuk-back-link">Back</a> -->
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-two-thirds">
+
+    <!-- Selected address -->
+    {% set _addressID = data['address'] or 1 %}
+    {% set _address = data['addresses'][0] %}
+    {% for _address2 in data['addresses'] %}
+      {% if _address2.id == _addressID %}
+        {% set _address = _address2 %}
+      {% endif %}
+    {% endfor %}
+
+    <div class="govuk-panel govuk-panel--confirmation">
+      <h1 class="govuk-panel__title">
+        You're restarting PHEATS
+      </h1>
+      <!-- <div class="govuk-panel__body">
+        Your reference number<br><strong>HDJ2123F</strong>
+      </div> -->
+    </div>
+
+    <!-- <p class="govuk-body" >
+      <span class="govuk-!-margin-bottom-2" style="display: block;">
+      [PHEATS registration restarted for:]<br>
+      </span>
+      {{_address.address1}}<br>
+      {{_address.address2}}<br>
+      {{_address.address3}}<br>
+      {{_address.address4}}<br>
+      {{_address.postcode}}
+    </p> -->
+
+    <h2 class="govuk-heading-m">What happens next</h2>
+    
+    <!-- <p class="govuk-body">What happens next:</p> -->
+
+    <ol class="govuk-list govuk-list--number">
+      <li>We'll email the authorised people to ask them to agree to the terms and conditions.</li>
+      <li>We will arrange for authorised people to do training.</li>
+      <li>An inspector will be in touch to arrange a site visit and audit.</li>
+    </ol>
+
+    <p class="govuk-body">It may take around a month before you can do PHEATS exports again.</p>
+    
+    <a href="pheats-manage?address={{_addressID}}" class="govuk-button" role="button" draggable="false" data-module="govuk-button">Back to your account</a>
+
+    <!-- <p class="govuk-body">
+      <a href="#" class="govuk-link">What did you think of this service?</a> (takes 30 seconds)
+    </p> -->
+
+
+  </div>
+</div>
+{% endblock %}

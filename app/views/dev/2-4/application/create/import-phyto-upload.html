@@ -1,0 +1,136 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-width-container">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if query.deleted %}
+        <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+            <div class="govuk-notification-banner__header">
+                <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+                Success
+                </h2>
+            </div>
+            <div class="govuk-notification-banner__content">
+              <h3 class="govuk-notification-banner__heading">
+                Certificate deleted
+              </h3>
+              <p class="govuk-body">Import certificate number {{data['importCertNumber' + query.deleted] or '1234567'}} has been deleted.</p>
+            </div>
+        </div>
+      {% endif %}
+
+      {% set _link = 'import-phyto-upload-completed' %}
+      {% if query.changeanswers == 'true' %}
+      {% set _link = 'check-your-answers' %}
+      {% endif %}
+
+      <form action="{{_link}}" method="post" novalidate>
+        <div class="govuk-form-group  govuk-!-margin-bottom-9">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+              <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">
+                Add an import certificate
+              </h1>
+            </legend>
+          </fieldset>
+
+          <!-- IF editing an existing one or not -->
+          {% set _editing = false %}
+          {% set _notEditing = true %}
+          {% if query.edit %}
+            {% set _editing = true %}
+            {% set _notEditing = false %}
+          {% endif %}
+
+          <!-- Set counts -->
+          {% set _importCertCount = data['importCertCount'] or 0 | int %}
+          {% set _importCertDisplayedCount = data['importCertDisplayedCount'] or 0 | int %}
+          {% if _notEditing %}
+            {% set _importCertCount = _importCertCount|int + 1 %}
+            {% set _importCertDisplayedCount = _importCertDisplayedCount|int + 1 %}
+          {% endif %}
+          <input id="importCertCount" name="importCertCount" type="hidden" value="{{_importCertCount}}">
+          <input id="importCertDisplayedCount" name="importCertDisplayedCount" type="hidden" value="{{_importCertDisplayedCount}}">
+
+          <!-- Set id to use -->
+          {% set _id = _importCertCount %} <!--1-->
+          {% if _editing %}
+            {% set _id = query.edit %}
+          {% endif %}
+
+          <!-- Set deleted false default  -->
+          <input id="importCertDeleted{{_id}}" name="importCertDeleted{{_id}}" type="hidden" value="false">
+
+          <p class="govuk-body">If you have more than one import phytosanitary certificate you can add the rest later.</p>
+
+
+
+          {{ govukInput({
+            label: {
+              text: "Import phytosanitary certificate number",
+              classes: "govuk-!-font-weight-bold govuk-label--s"
+            },
+            hint: {
+              text: "Enter an import phytosanitary certificate number."
+            },
+            classes: "govuk-input--width-20",
+            id: "importCertNumber"+_id,
+            name: "importCertNumber"+_id,
+            value: data['importCertNumber' + _id] or ''
+          }) }}
+
+        <div class="govuk-form-group ">
+          <h2 class="govuk-heading-s">Upload the import certificate</h2>
+
+          <p class="govuk-body">The file must:</p>
+          <ul class="govuk-list govuk-list--bullet">
+            <li>be in PDF format</li>
+            <li>be fewer than 10 megabytes (10MB)</li>
+          </ul>
+
+          {{ govukFileUpload({
+            id: "importCertFile"+_id,
+            name: "importCertFile"+_id,
+            label: {
+              text: "Upload file"
+            }
+          }) }}
+
+        </div>
+      </div>
+
+        {{ govukButton({
+          text: "Upload"
+        }) }}
+
+        <!--<hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+        <p class="govuk-body govuk-!-margin-top-9">
+          <a href="upload-validation-error-singular" class="govuk-link govuk-link-no-visited-state">View Upload screen with single validation error</a>
+        </p>
+        <p class="govuk-body">
+          <a href="upload-validation-errors" class="govuk-link govuk-link-no-visited-state">View Upload screen with validation errors</a>
+        </p>
+        <p class="govuk-body">
+          <a href="upload-error" class="govuk-link govuk-link-no-visited-state">View Upload screen with file type error</a>
+        </p>-->
+
+      </form>
+    </div>
+  </div>
+  {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+</div>
+{% endblock %}

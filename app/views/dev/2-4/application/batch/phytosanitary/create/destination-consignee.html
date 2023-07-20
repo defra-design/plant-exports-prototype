@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Who will receive this consignment? - Phytosanitary certificate using one time testing - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../../../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{# set label as bold #}
+{% set label_class = "govuk-label govuk-!-font-weight-bold" %}
+{% set label_class = "govuk-label" %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <form action="{{query.return_url or 'task-list'}}" method="post">
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
+          <h1 class="govuk-fieldset__heading">Who will receive this consignment?</h1>
+        </legend>
+        <p class="govuk-body">The consignee is the importer or customer who receives your consignment when it arrives in the destination country.</p>
+
+        <div class="govuk-form-group">
+          <label class="{{label_class}}" for="consignee-name">Name of the consignee</label>
+          <input class="govuk-input" id="consignee-name" name="consigneeName" type="text" value="{% if data.consigneeName %}{{data.consigneeName}}{% endif %}">
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="{{label_class}}" for="consignee-address">Address of the consignee</label>
+          <textarea class="govuk-textarea" id="consignee-address" name="consigneeAddress" rows="5">{% if data.consigneeAddress %}{{data.consigneeAddress}}{% endif %}</textarea>
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="{{label_class}}" for="consignee-import-permit">Import permit number (optional)</label>
+          <span id="consignee-import-permit-hint" class="govuk-hint">If you have been given an import permit by the destination country, enter the number here. You can upload the import permit as a supporting document later on in this application.</span>
+          <input class="govuk-input" id="consignee-import-permit" name="consigneeImportPermit" type="text" aria-describedby="consignee-import-permit-hint" value="{% if data.consigneeImportPermit %}{{data.consigneeImportPermit}}{% endif %}">
+        </div>
+
+      </fieldset>
+
+      <div class="govuk-button-group govuk-!-margin-top-3 govuk-!-margin-bottom-8">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      </div>
+
+      <!-- Session data hook to update the task list so that this section is marked as 'COMPLETED' -->
+      <div class="govuk-form-group" hidden>
+        <label class="govuk-label" for="consignee_task_list_data">Task list section URL</label>
+        <input class="govuk-input" id="consignee_task_list_data" name="consignee_task_list_data" type="text" value="Complete">
+      </div>
+
+    </form>
+
+    {% block continueLater %}
+    {% include "../../modules/_save-continue-later.html" %}
+    {% endblock %}
+  </div>
+
+</div>
+{% endblock %}

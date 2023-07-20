@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+Add class to your commodity - {{serviceName}} - GOV.UK
+{% endblock %}
+{% block beforeContent %}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+<style>
+  .app-result-list li{
+    padding: 15px 0;
+    border-top:1px solid #b1b4b6;
+    position:relative;
+
+  }
+  .app-result-list{
+    padding-bottom: 0;
+    border-bottom:1px solid #b1b4b6;
+  }
+  .app-result-list li .govuk-button--secondary{
+    position:absolute;
+    right:0;
+    top:20px;
+
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <form method="post" action="commodity-list-copy-as-coc-done">
+      <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
+          Add class to your commodity
+        </legend>
+
+        {{ govukRadios({
+          idPrefix: "class",
+          name: "class",
+          fieldset: {
+            legend: {
+              text: "What quality class is your commodity?",
+              isPageHeading: false,
+              classes: "govuk-fieldset__legend--s"
+            }
+          },
+          items: [
+          {
+            value: "extra",
+            text: "Extra"
+          },
+          {
+            value: "class I",
+            text: "Class I"
+          },
+          {
+            value: "class II",
+            text: "Class II"
+          },
+          {
+            value: "none stated",
+            text: "None stated"
+          }
+          ]
+        }) }}
+
+      </fieldset>
+      <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+    </form>
+    {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

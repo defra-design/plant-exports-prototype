@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  [title] - Manage account - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="../account" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
+  </ul>
+</div>
+
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-two-thirds">
+
+    <!-- <h1 class="govuk-heading-xl">Are you applying to PHEATS? {{data.dave}}</h1> -->
+
+    <h1 class="govuk-heading-xl">
+      Upload the site plan
+    </h1>
+
+    <div class="govuk-form-group">
+      <p class="govuk-body">Upload a scale plan of the PHEATS address site.</p>
+      <p class="govuk-body">On the site plan, you must label:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>the inspection point</li>
+        <li>the holding area for commodities that have passed inspection</li>
+        <li>the holding area for commodities that are not suitable for export or are in quarantine</li>
+      </ul>
+    </div>
+
+    <form method="post" novalidate action="pheats-commodity">
+      <div class="govuk-form-group ">
+        <fieldset class="govuk-fieldset" >
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                <h2 class="govuk-fieldset__heading">
+                  Upload your completed file
+                </h2>
+            </legend>
+
+            <div class="govuk-form-group">
+                <p class="govuk-body">The file must:</p>
+                <ul class="govuk-list govuk-list--bullet">
+                  <li>be in PDF, Word, Excel or JPEG format</li>
+                  <li>be smaller than 10 megabytes (10MB)</li>
+                </ul>
+            </div>
+
+            <label class="govuk-label" for="pheatsSite">
+                Upload a file
+            </label>
+            <input class="govuk-file-upload" id="pheatsSite" name="pheatsSite" type="file">
+
+        </fieldset>
+      </div>
+
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+        {% set _pheatsReturnURL = 'pheats-site' %}
+        <p class="govuk-body govuk-!-margin-top-2"><a href="pheats-cancel?pheatsReturnURL={{_pheatsReturnURL}}" class="govuk-link govuk-link--no-visited-state">Cancel PHEATS application</a></p>
+
+    </form>
+
+  </div>
+</div>
+{% endblock %}

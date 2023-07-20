@@ -1,0 +1,184 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+Add commodities to your consignment - {{serviceName}} - GOV.UK
+{% endblock %}
+{% block beforeContent %}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+<style>
+  .app-result-list li{
+    padding: 15px 0;
+    border-top:1px solid #b1b4b6;
+    position:relative;
+
+  }
+  .app-result-list{
+    padding-bottom: 0;
+    border-bottom:1px solid #b1b4b6;
+  }
+  .app-result-list li .govuk-button--secondary{
+    position:absolute;
+    right:0;
+    top:20px;
+
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <form method="post" action="commodity-list-coc">
+      <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+          Add commodities to your {%if data.reforwarding%}<br>re-forwarding{% endif %} consignment
+        </legend>
+
+        <p class="govuk-body govuk-!-margin-top-6 " for="how-contacted-conditional">
+          Describe your commodity
+        </p>
+
+        <div class="govuk-form-group govuk-!-margin-top-6">
+          <div class="govuk-form-group">
+            <label class="govuk-label " for="common_name">
+              Common name
+            </label>
+            <input class="govuk-input govuk-input--width-20" id="common_name" name="common_name" type="text" value="">
+          </div>
+
+          <label class="govuk-label " for="botanical_name">
+            Species (optional)
+          </label>
+          <div id="botanical_name-hint" class="govuk-hint">
+            Search by species or common name
+          </div>
+          {% if data.show_manual_input != "yes"%}
+          <!-- the module is called genus but is used for the species here -->
+          {% block genus %}{% include "../modules/_genus.html" %}{% endblock %}
+          {% else %}
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="commodity_host_species">
+                Genus
+              </label>
+              <input class="govuk-input govuk-input--width-20" id="commodity_genus" name="genus" type="text" value="{% if query.has_commodity %}{{query.genus}}{% endif %}">
+            </div>
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="commodity_host_species">
+                Species
+              </label>
+              <input class="govuk-input govuk-input--width-20" id="commodity_host_species" name="commodity_host_species" type="text" value="{% if query.has_commodity %}{{query.species}}{% endif %}">
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="govuk-form-group govuk-!-margin-top-6">
+          <label class="govuk-label " for="commodity_variety">
+            Variety (optional)
+          </label>
+          <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety" type="text">
+        </div>
+{# 
+  NOT required for GMS
+        {{ govukRadios({
+          idPrefix: "class",
+          name: "class",
+          fieldset: {
+            legend: {
+              text: "What quality class is your commodity?",
+              isPageHeading: false,
+              classes: ""
+            }
+          },
+          items: [
+            {
+              value: "extra",
+              text: "Extra"
+            },
+            {
+              value: "class I",
+              text: "Class I"
+            },
+            {
+              value: "class II",
+              text: "Class II"
+            },
+            {
+              value: "none stated",
+              text: "None stated"
+            }
+          ]
+        }) }}
+#}
+        {% set country_module_label = "Country of origin"%}
+        {% set module_name = "country_origin"%}
+        {% block country %}{% include "../modules/_country-select.html" %}{% endblock %}
+
+        <!--<div class="govuk-form-group">
+          <label class="govuk-label govuk-!-font-weight-bold" for="total_weight">
+            Total net weight, in kilograms
+          </label>
+          <div class="govuk-input__wrapper" style="display:flex;">
+            <input class="govuk-input govuk-input--width-5" id="total_weight" name="total_weight" type="number" spellcheck="false">
+            <div class="govuk-input__suffix" style="box-sizing:border-box; background-color:#f3f2f1; border:2px solid #0b0b0c; padding:5px; font-family:'GDS Transport',arial,sans-serif; height:2.5rem; min-width:2.5rem; text-align:center; font-size:1.2rem;" aria-hidden="true">kg</div>
+          </div>
+        </div>-->
+
+        <div class="govuk-form-group">
+          <label class="govuk-label " for="weight">
+            Net weight per package, in kilograms
+          </label>
+          <div class="govuk-input__wrapper" style="display:flex;">
+            <input class="govuk-input govuk-input--width-5" id="weight" name="weight" type="number" spellcheck="false">
+            <div class="govuk-input__suffix" style="box-sizing:border-box; background-color:#f3f2f1; border:2px solid #0b0b0c; padding:5px; font-family:'GDS Transport',arial,sans-serif; height:2.5rem; min-width:2.5rem; text-align:center; font-size:1.2rem;" aria-hidden="true">kg</div>
+          </div>
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="number_of_packages">Number of packages</label>
+          <input class="govuk-input govuk-input--width-5" id="number_of_packages" name="number_of_packages" type="text" inputmode="numeric" pattern="[0-9]*" value="{{data.number_of_packages}}">
+        </div>
+
+        {% set country_module_label = "Packaging type"%}
+        {% block packing %}{% include "../modules/_packaging_not_bold.html" %}{% endblock %}
+
+        <fieldset class="govuk-fieldset" >
+          <legend class="govuk-fieldset__legend ">
+            <h1 class="govuk-fieldset__heading">
+              Is the packaging reusable or reclaimed?
+            </h1>
+          </legend>
+<!--           <p class="govuk-body">You can find it again by searching in your applications for reference <strong>{{data.reference_num or "342342234-USA"}}</strong>.</p> -->
+          <div class="govuk-form-group">
+          <div class="govuk-radios govuk-radios--inline" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="how-contacted-conditional" name="exit" type="radio" value="yes" data-aria-controls="conditional-how-contacted-conditional">
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional">
+                Yes
+              </label>
+            </div>
+      
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="how-contacted-conditional-2" name="exit" type="radio" value="no" data-aria-controls="conditional-how-contacted-conditional-2">
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-2">
+                No
+              </label>
+            </div>
+          </div>
+          </div>
+          </fieldset>
+
+      </fieldset>
+      <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+    </form>
+    {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+  </div>
+</div>
+
+<script type="text/javascript">
+  window.addEventListener('load', function() {
+    $("#commodity-botanical_name").hide()
+    $("#commoditiy-botanical-lookup").show()
+    $("#commodity-lookup--manual").show()
+  })
+</script>
+{% endblock %}

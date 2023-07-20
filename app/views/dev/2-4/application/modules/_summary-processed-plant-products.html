@@ -1,0 +1,62 @@
+<!--
+example {{commodity.quantity}}
+  
+{
+  "filter_demo":["Afghanistan","Åland Islands","Albania"],
+  "has_botanicial_name":"yes",
+  "botanical_name":"Rhus erosa (ZSAER)",
+  "commodity_variety":"red blossom",
+  "commodity_description":"",
+  "commodity_type":"plants",
+  "gsi_number":"1233435",
+  "ss_number":"cfddfsfds",
+  "option-select-filter":"",
+  "quantity":"911",
+  "units":"Grams",
+  "number_of_packages":"2",
+  "packaging":["Bottle - protected cylindrical","BQ"],
+  "packing_material_used":"plastic",
+  "distinguishing_marks":"brown marks"
+}
+-->
+<tr class="govuk-table__row">
+  <td class="govuk-table__cell">
+    <span style="display: block; margin-bottom: 7px;">
+      <strong>{{commodity.botanical_name or "Rosa ecae (ROSEC)"}}</strong>
+    </span>
+  </td>
+  <td class="govuk-table__cell">
+    <!-- {% if commodity.filter_demo %}
+    {{commodity.filter_demo or "United Kingdom"}}
+    {% else %}
+    United Kingdom 
+    {% endif %} -->
+    {% set _defaultCountry = "United Kingdom" %}
+    {% if commodity.filter_demo == "_unchecked" or commodity.filter_demo == undefined %}
+    {{_defaultCountry}}
+    {% else %}
+    {{commodity.filter_demo | join(", ") or _defaultCountry}}
+    {% endif %}
+    <!-- "filter_demo":["Afghanistan","Åland Islands","Albania"], -->
+  </td>
+  <td class="govuk-table__cell">
+    <span style="display: block; margin-bottom: 7px;">{{commodity.quantity or "20"}} {{commodity.units or "kilograms"}}</span>
+    <span style="display: block; margin-bottom: 7px;">{{commodity.number_of_packages or "5"}} packages</span>
+  </td>
+  <td class="govuk-table__cell">
+    <span style="display: block; margin-bottom: 7px;">{{commodity.packaging[0] or "Crate - bulk - cardboard"}}</span>
+    {% if query.design != "b" %}
+    {% if commodity.packing_material_used != "" %}
+    <span style="display: block; margin-bottom: 7px;">{{commodity.packing_material_used or "Cardboard"}}</span>
+    {% endif %}
+    {% if commodity.distinguishing_marks != "" %}
+    <span style="display: block; margin-bottom: 7px;">{{commodity.distinguishing_marks or "Brown marks"}}</span>
+    {% endif %}
+    {% endif %}
+  </td>
+  <td class="govuk-table__cell" style="text-align: right;">
+    <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+    <br>
+    <a href="#" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+  </td>
+</tr>

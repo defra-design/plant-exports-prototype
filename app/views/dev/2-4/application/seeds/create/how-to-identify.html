@@ -1,0 +1,239 @@
+{% extends "layout-option.html" %}
+
+{% block pageTitle %}
+  Describe the seeds to be sampled - Seed sampling - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../../modules/_account-banner.html" %}
+<a href="{{page.content.prev or 'javascript:history.back()'}}" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<style>
+
+  /* Needs extracting and adding to the external Sass or CSS */
+  /* Chris Harding (12.06.23) - Styling for the 'Destination countries' country multi select as part of the accessibility rework */
+  .legacyGOVUK {
+    display: none;
+  }
+  .js-selected-counter {
+    padding-bottom: 10px;
+  }
+
+</style>
+
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <form action="{{query.return_url or 'commodity-list'}}" method="post">
+      <h1 class="govuk-heading-xl" >Describe the seeds to be sampled</h1>
+
+      {% if query.updateApplication == "yes" %}
+      <div class="govuk-inset-text govuk-!-margin-top-9">
+        You can only amend some of the information on this page. This is because the application has already been submitted.
+      </div>
+      {% endif %}
+
+      <div class="govuk-form-group govuk-!-margin-bottom-4">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend">How do you want to describe your seeds?</legend>
+
+          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="has_botanicial_name_yes" name="has_botanicial_name" type="radio" value="yes" aria-describedby="has_botanicial_name_yes-hint" data-aria-controls="has_botanicial_name_yes-conditional"{% if data.has_botanicial_name == "yes" %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="has_botanicial_name_yes">Botanical name</label>
+              
+              <div id="has_botanicial_name_yes-hint" class="govuk-hint govuk-radios__hint">
+                Search by genus, species or common name
+              </div>
+
+            </div>
+
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="has_botanicial_name_yes-conditional">
+              {% if data.show_manual_input != "yes" %}
+              {% block genus %}
+              {% include "../../modules/_genus.html" %}
+              {% endblock %}
+              {% else %}
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="commodity_genus">Genus</label>
+                <input class="govuk-input govuk-input--width-20" id="commodity_genus" name="genus" type="text" value="{{data.genus}}">
+              </div>
+              
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="commodity_host_species">Species{% if data.build != "ux" %} (optional){% endif %}</label>
+                <input class="govuk-input govuk-input--width-20" id="commodity_host_species" name="commodity_host_species" type="text" value="{{data.commodity_host_species}}">
+              </div>
+              {% endif %}
+
+              <div class="govuk-form-block">
+                {% if data.show_manual_input == "yes" %}
+                <p id="commodity-lookup--manual" class="govuk-body" style="display: none;">The botanical name needs to be spelled correctly, if you are not sure <a href="?show_manual_input=no&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">search for a botanical name</a></p>
+                {% else %}
+                <p id="commodity-lookup--manual" class="govuk-body" style="display: none;">If you cannot find your seed, but you know the botanical name, <a href="?show_manual_input=yes&has_botanicial_name=yes" class="govuk-link govuk-link--no-visited-state">enter the botanical name manually</a></p>
+                {% endif %}
+              </div>
+
+            </div>
+
+            <div class="govuk-radios__divider">
+              or
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="has_botanicial_name_use_description" name="has_botanicial_name" type="radio" value="use_description" data-aria-controls="has_botanicial_name_use_description-conditional"{% if data.has_botanicial_name == "use_description" %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="has_botanicial_name_use_description">Description</label>
+              
+              <div id="has_botanicial_name_use_description-hint" class="govuk-hint govuk-radios__hint">
+                If you cannot find the botanical name, or your seeds are made of many species, enter a description instead
+              </div>
+
+            </div>
+
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="has_botanicial_name_use_description-conditional">
+              
+              <div class="govuk-form-group">
+                <label class="govuk-visually-hidden" for="commodity_description">Description of the {{data.commodity or "plants and fresh produce"}}</label>
+                <textarea class="govuk-textarea" id="commodity_description" name="commodity_description" rows="5" aria-describedby="more-detail-hint">{{data.commodity_description}}</textarea>
+              </div>
+
+            </div>
+
+          </div>
+
+        </fieldset>
+      </div>
+
+      <div class="govuk-form-group govuk-!-margin-top-4">
+        <label class="govuk-label" for="commodity_lot">Lot reference</label>
+        <input class="govuk-input govuk-input--width-20" id="commodity_lot" name="commodity_lot" type="text">
+      </div>
+
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="gsi_number">GSI reference (optional)</label>
+        <input class="govuk-input govuk-!-width-one-half" id="gsi_number" name="gsi_number" type="text" spellcheck="false">
+      </div>
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend">
+            <h2 class="govuk-body govuk-!-margin-bottom-0">Quantity and unit of measurement</h2>
+          </legend>
+          <span id="quantity-hint" class="govuk-hint">For example, 50 kilograms</span>
+      
+          <div class="govuk-date-input__item">
+                    
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="quantity">Quantity</label>
+              <input class="govuk-input govuk-input--width-5" id="quantity" name="quantity" type="text" aria-label="Quantity" aria-describedby="quantity-hint" value="{{data.quantity}}">
+            </div>
+      
+          </div>
+      
+          <div class="govuk-date-input__item">
+                  
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="units">Unit of measurement</label>
+              <select name="units" id="units" class="govuk-select" aria-label="Unit of measurement">
+                <option value="" selected>Unit of measurement</option>
+                <option value="Grams"{% if data.units == "Grams" %} selected{% endif %}>Grams</option>
+                <option value="Kilograms"{% if data.units == "Kilograms" %} selected{% endif %}>Kilograms</option>
+                <option value="Tonnes"{% if data.units == "Tonnes" %} selected{% endif %}>Tonnes</option>
+              </select>
+            </div>
+                    
+          </div>
+      
+        </fieldset>
+      </div>
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--s govuk-!-font-weight-regular">
+            <h2 class="govuk-fieldset__heading">Has the seed been chemically treated?</h2>
+          </legend>
+
+          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+            
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="chemically_treated_yes" name="chemically_treated" type="radio" value="Yes" data-aria-controls="conditional-chemically_treated">
+              <label class="govuk-label govuk-radios__label" for="chemically_treated_yes">Yes</label>
+            </div>
+
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-chemically_treated">
+
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="chemically_treated_details">List the chemicals used, including any active ingredient (if applicable)</label>
+                <textarea class="govuk-textarea" id="chemically_treated_details" name="chemically_treated_details" rows="5"></textarea>
+              </div>
+
+            </div>
+            
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="chemically_treated_no" name="chemically_treated" type="radio" value="No">
+              <label class="govuk-label govuk-radios__label" for="chemically_treated_no">No</label>
+            </div>
+
+          </div>
+        
+        </fieldset>
+      </div>
+
+      {% set country_module_label = "Country where grown"%}
+      {% set module_name = "country_grown"%}
+      {% block country %}
+      {% include "../../modules/_country-select.html" %}
+      {% endblock %}
+
+      {% set country_module_label2 = "Destination country"%}
+      {% set module_name2 = "destination_country"%}
+      {% include "../modules/_multi-select.html" %}
+
+      <div class="govuk-form-group govuk-!-margin-top-7 govuk-!-margin-bottom-6">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      </div>
+
+      {% block continueLater %}
+      {% include "../../modules/_save-continue-later.html" %}
+      {% endblock %}
+    </form>
+
+  </div>
+
+</div>
+
+<!-- JavaScript (START) -->
+<script src="/public/javascripts/jquery-3.6.0.js"></script>
+<script>
+
+  $(document).ready(function () {
+
+    // HIDE all non-JS elements
+    $(".nonJavaScriptObject").hide();
+    $(".nonJavaScriptObject").attr("aria-hidden", true);
+    $(".nonJavaScriptObject").attr("hidden");
+
+    // SHOW any hidden elements which we need for a JavaScript UX
+    $(".javaScriptObject").show();
+    $(".javaScriptObject").attr("aria-hidden", false);
+    $(".javaScriptObject").removeAttr("hidden");
+
+  });
+
+</script>
+<script type="text/javascript">
+
+  window.addEventListener('load', function() {
+    $("#commodity-botanical_name").hide()
+    $("#commoditiy-botanical-lookup").show()
+    $("#commodity-lookup--manual").show()
+  })
+
+</script>
+<script src="/public/javascripts/destination-countries.js"></script>
+<!-- JavaScript (END) -->
+{% endblock %}

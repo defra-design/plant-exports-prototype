@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Are you sure you want to delete this consignee? - Phytosanitary certificate - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <form action="{{query.return_url or 'consignee-manage-address-book?consigneeDeleted=true'}}" method="post">
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+            <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-7">Are you sure you want to delete this consignee?</h1>
+          </legend>
+          <dl class="govuk-summary-list govuk-summary-list--no-border">
+    
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Name</dt>
+              <dd class="govuk-summary-list__value">{% if data.address == '0' %}{{data.consignee_name or 'Zheng Fruits'}}{% elif data.address == '1' %}Frukta LLC{% elif data.address == '2' %}Alpine Furnishings Ltd{% elif data.address == '3' %}PINDI LLC{% elif data.address == '4' %}Globex Corporation{% else %}Zheng Fruits{% endif %}</dd>
+            </div>
+      
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Address</dt>
+              <dd class="govuk-summary-list__value">{% if data.address == '0' %}{{data.consignee_address or "88 Jianguo Rd, 朝阳区, 北京市, China, 3208"}}{% elif data.address == '1' %}Lillegardsvagen 1, Falkenberg, South-East, Sweden, 311 50{% elif data.address == '2' %}Piazza Pietro Nenni, 4, Orta Nova Foggia, Foggia, Italy, 71045{% elif data.address == '3' %}Phase 3 St, Vaibhav Nagar, Katpadi, Vellore, Tamil Nadu, India, 632014{% elif data.address == '4' %}6347 Pacific Blvd, Huntington Park, California, United States, 90255{% else %}88 Jianguo Rd, 朝阳区, 北京市, China, 3208{% endif %}</dd>
+            </div>
+      
+          </dl>
+          
+          <div class="govuk-radios" data-module="govuk-radios">
+            
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="delete_yes" name="delete" type="radio" value="Yes~{{query.return_url or 'consignee-manage-address-book'}}?consigneeDeleted=true{% if query.address == '0' %}&row1=false{% elif query.address == '1' %}&row2=false{% elif query.address == '2' %}&row3=false{% elif query.address == '3' %}&row4=false{% elif query.address == '4' %}&row5=false{% else %}&row1=false{% endif %}">
+              <label class="govuk-label govuk-radios__label govuk-radios-long-label" for="delete_yes">Yes, delete consignee</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="delete_no" name="delete" type="radio" value="No~consignee-manage-address-book">
+              <label class="govuk-label govuk-radios__label govuk-radios-long-label" for="delete_no">No, cancel</label>
+            </div>
+
+          </div>
+
+        </fieldset>
+      </div>
+
+      <div class="govuk-button-group">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Confirm</button>
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

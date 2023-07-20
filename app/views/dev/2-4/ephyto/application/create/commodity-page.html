@@ -1,0 +1,323 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.build == "development" %}{{data.commodity | capitalize or 'Potatoes' }} Details - Exports application{% else %}Add {{data.commodity or 'potatoes'}} to your {% if data.reforwarding %} re-forwarding{% endif %} consignment - Phytosanitary certificate - {{serviceName}}{% endif %} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+    
+    <form method="post">
+      <h1 class="govuk-heading-xl">Add {{data.commodity or 'potatoes'}} to your {% if data.reforwarding %}<br>re-forwarding{% endif %} consignment</h1>
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend">Type of potato</legend>
+            
+          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+              
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="potato_1" name="potato" type="radio" value="ware" data-aria-controls="conditional-contact"{% if data.potato == "ware" %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="potato_1">Ware</label>
+            </div>
+
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-contact">
+
+              <div class="govuk-form-group">
+                {% if data.build == "development" %}
+                <label class="govuk-label" for="stock_number">Soil sampling application number (optional)</label>
+                {% else %}
+                <label class="govuk-label" for="stock_number">Stock number</label>
+                <span id="quantity-hint" class="govuk-hint">Enter the stock number for stock that was soil sampled<br/> For ware potatoes grown in a seed certification scheme, enter "Seed"</span>                
+                {% endif %}
+                <input class="govuk-input govuk-!-width-one-half" id="stock_number" name="stock_number" type="text" spellcheck="false" value="{{data.stock_number}}">
+              </div>
+
+              <div class="govuk-form-group">
+                {% if data.build == "development" %}
+                <label class="govuk-label" for="lot_reference">Lot reference (optional)</label>
+                <span id="quantity-hint" class="govuk-hint">This is the number that will go on the bag labels</span>
+                {% else %}
+                <label class="govuk-label" for="lot_reference">Lot reference</label>
+                <span id="quantity-hint" class="govuk-hint">This is the number that will go on the bag labels.<br/> For ware potatoes grown in a seed certification scheme, enter the certification number</span>
+                {% endif %}
+                <input class="govuk-input govuk-!-width-one-half" id="lot_reference" name="lot_reference" type="text" spellcheck="false" value="{{data.lot_reference}}">
+              </div>
+
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="potato_2" name="potato" type="radio" value="seed" data-aria-controls="conditional-contact-2"{% if data.potato == "seed" %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="potato_2">Seed</label>
+            </div>
+
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-contact-2">
+              <div class="govuk-form-group">
+                {% if data.build == "development" %}
+                <label class="govuk-label" for="certification_number">Stock number</label>
+                <span id="quantity-hint" class="govuk-hint">You may know this as the lot reference</span>
+                {% else %}
+                <label class="govuk-label" for="certification_number">Certification number</label>                
+                {% endif %}
+                <input class="govuk-input govuk-!-width-one-half" id="certification_number" name="certification_number" type="text" value="{{data.certification_number}}">
+              </div>
+
+            </div>
+
+          </div>
+
+        </fieldset>
+      </div>
+
+      <!-- These are the countries which require different information to be provided -->
+      {% if data.countrySelect == "Norway,NO" or data.countrySelect == "Iceland,IS" or data.countrySelect == "Canary Islands,CI" or data.countrySelect == "Nigeria,NG" or data.countrySelect == "Ghana,GH" or data.countrySelect == "Falkland Islands,FK" %}
+      <!-- DOES NOTHING! -->
+      {% endif %}
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend">What variety are your potatoes?</legend>
+
+          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="how-contacted-conditional" name="has_botanicial_name" type="radio" value="yes" data-aria-controls="conditional-how-contacted-conditional"{% if data.has_botanicial_name == "yes" %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional">Variety</label>
+            </div>
+
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional">
+              {% if data.build == "development" %}
+              <label class="govuk-label" for="stock_number">Search for a variety</label>
+              {% endif %}
+              {% if data.show_manual_input != "yes" %}
+              {% block potatoVariety %}
+              {% include "../modules/_potatoes-variety-select.html" %}
+              {% endblock %}
+              {% else %}
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="commodity_host_species">Variety</label>
+                <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety" type="text" value="{% if query.has_commodity %}{{query.genus}}{% endif %}">
+              </div>
+              {% endif %}
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="how-contacted-conditional-3" name="has_botanicial_name" type="radio" value="other" data-aria-controls="conditional-how-contacted-conditional-3"{% if data.has_botanicial_name == "other" %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-3">Other</label>
+              
+              <div id="more-detail-hint" class="govuk-hint govuk-radios__hint">
+                {% if data.build == "development" %}
+                If you can't find the name of your variety, enter the variety name in the 'other' field instead
+                {% else %}
+                If you can't find the variety by searching in the field above, select other and enter the variety              
+                {% endif %}
+              </div>
+
+            </div>
+
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional-3">
+              
+              <div class="govuk-form-group">
+                <label class="govuk-visually-hidden" for="plant-identify--description">Variety</label>
+                <input class="govuk-input" id="plant-identify--description" name="other_commodity_variety" aria-describedby="more-detail-hint" value="{{data.other_commodity_variety}}">
+              </div>
+
+            </div>
+
+          </div>
+
+        </fieldset>
+
+      </div>
+
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="chemicals_used">Growing season inspection number</label>
+
+        <div id="gsi-number-hint" class="govuk-hint govuk-input--width-20">
+          {% if data.build == "development" %}
+          Enter ‘eDomero’ if the application for a growing season inspection was done using the eDomero system
+          {% else %}
+          Enter the growing season inspection number.
+          <br>
+          Enter ‘eDomero’ if the application for a growing season inspection was done using the eDomero system          
+          {% endif %}
+        </div>
+
+        <input class="govuk-input govuk-input--width-20" id="gsi_number" name="gsi_number" type="text" aria-describedby="gsi-number-hint" value="{{data.gsi_number}}">
+      </div>
+      
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="chemicals_used">Chemical used on tubers (optional)</label>
+        <input class="govuk-input govuk-input--width-20" id="chemicals_used" name="chemicals_used" type="text" value="{{data.chemicals_used}}">
+      </div>
+
+      {% set country_module_label = "Country of origin" %}
+
+      {% block country %}
+      {% include "../modules/_country-of-origin-select.html" %}
+      {% endblock %}
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend">
+            <h2 class="govuk-body govuk-!-margin-bottom-0">Net quantity and unit of measurement</h2>
+          </legend>
+          <span id="quantity-hint" class="govuk-hint">Net quantity means the quantity of commodity without including the weight or volume of the packaging. For example, 50 kilograms</span>
+
+          <div class="govuk-date-input__item">
+            
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="quantity">Net quantity</label>
+              <input class="govuk-input govuk-input--width-5" id="quantity" name="quantity" type="text" aria-label="Net quantity" aria-describedby="quantity-hint" value="{{data.quantity}}">
+            </div>
+
+          </div>
+
+          <div class="govuk-date-input__item">
+          
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="units">Unit of measurement</label>
+              <select name="units" id="units" class="govuk-select" aria-label="Unit of measurement">
+                <option value="" selected>Unit of measurement</option>             
+                <option value="Grams"{% if data.units == "Grams" %} selected{% endif %}>Grams</option>
+                <option value="Kilograms"{% if data.units == "Kilograms" %} selected{% endif %}>Kilograms</option>
+                <option value="Litres"{% if data.units == "Litres" %} selected{% endif %}>Litres</option>
+                <option value="Tonnes"{% if data.units == "Tonnes" %} selected{% endif %}>Tonnes</option>
+                <option value="Units"{% if data.units == "Units" %} selected{% endif %}>Units</option>
+              </select>
+            </div>
+            
+          </div>
+
+        </fieldset>
+      </div>     
+
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="number_of_packages">Number of packages</label>
+        <input class="govuk-input govuk-input--width-5" id="number_of_packages" name="number_of_packages" type="packaging_type" value="{{data.number_of_packages}}">
+      </div>
+
+      {% set country_module_label = "Packaging type" %}
+
+      {% block packing %}
+      {% include "../modules/_packaging_not_bold.html" %}
+      {% endblock %}
+
+      {% if data.service == "ePhyto" %}
+      <!-- ePhyto: Intended use (START) -->
+      {% if data.intended_use == "Consumption (eating)" %}
+      {% set radio1CheckedStatus = true %}
+      {% set radio2CheckedStatus = false %}
+      {% set radio3CheckedStatus = false %}
+      {% set radio4CheckedStatus = false %}
+      {% set radio5CheckedStatus = false %}
+      {% elif data.intended_use == "Decoration" %}
+      {% set radio1CheckedStatus = false %}
+      {% set radio2CheckedStatus = true %}
+      {% set radio3CheckedStatus = false %}
+      {% set radio4CheckedStatus = false %}
+      {% set radio5CheckedStatus = false %}
+      {% elif data.intended_use == "Planting" %}
+      {% set radio1CheckedStatus = false %}
+      {% set radio2CheckedStatus = false %}
+      {% set radio3CheckedStatus = true %}
+      {% set radio4CheckedStatus = false %}
+      {% set radio5CheckedStatus = false %}
+      {% elif data.intended_use == "Processing" %}
+      {% set radio1CheckedStatus = false %}
+      {% set radio2CheckedStatus = false %}
+      {% set radio3CheckedStatus = false %}
+      {% set radio4CheckedStatus = true %}
+      {% set radio5CheckedStatus = false %}
+      {% elif data.intended_use == "Sprouting for consumption" %}
+      {% set radio1CheckedStatus = false %}
+      {% set radio2CheckedStatus = false %}
+      {% set radio3CheckedStatus = false %}
+      {% set radio4CheckedStatus = false %}
+      {% set radio5CheckedStatus = true %}
+      {% else %}
+      {% set radio1CheckedStatus = false %}
+      {% set radio2CheckedStatus = false %}
+      {% set radio3CheckedStatus = false %}
+      {% set radio4CheckedStatus = false %}
+      {% set radio5CheckedStatus = false %}
+      {% endif %}
+      
+      {{ govukRadios({
+        idPrefix: "intended_use",
+        name: "intended_use",
+        fieldset: {
+          legend: {
+            text: "To be used for",
+            classes: class
+          }
+        },
+        items: [
+          {
+            value: "Consumption (eating)",
+            text: "Consumption (eating)",
+            checked: radio1CheckedStatus
+          },
+          {
+            value: "Decoration",
+            text: "Decoration",
+            checked: radio2CheckedStatus
+          },
+          {
+            value: "Planting",
+            text: "Planting",
+            checked: radio3CheckedStatus
+          },
+          {
+            value: "Processing",
+            text: "Processing",
+            checked: radio4CheckedStatus
+          },
+          {
+            value: "Sprouting for consumption",
+            text: "Sprouting for consumption",
+            checked: radio5CheckedStatus
+          }
+        ]
+      }) }}
+      <!-- ePhyto: Intended use (END) -->
+      {% endif %}
+
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="packing_material_used">Packing material (optional)</label>
+        <input class="govuk-input govuk-input--width-20" id="packing_material_used" name="packing_material_used" type="text" value="{{data.packing_material_used}}">
+      </div>
+
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="distinguishing-marks">Distinguishing marks (optional)</label>
+        <span id="distinguishing-mark-hint" class="govuk-hint">
+          {% if data.commodity == "potatoes" %}
+          For example, bag marks
+          {% else %}
+          For example, container numbers, lot numbers
+          {% endif %}
+        </span>
+        <input class="govuk-input govuk-input--width-20" id="distinguishing-marks" name="distinguishing_marks" type="text" aria-describedby="distinguishing-mark-hint" value="{{data.distinguishing_marks}}">
+      </div>
+
+      <div class="govuk-form-group govuk-!-margin-top-3 govuk-!-margin-bottom-6">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      </div>
+
+      {% block continueLater %}
+      {% include "../modules/_save-continue-later.html" %}
+      {% endblock %}
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

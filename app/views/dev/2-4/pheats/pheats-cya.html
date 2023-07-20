@@ -1,0 +1,279 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  [title] - Manage account - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="../account" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
+  </ul>
+</div>
+
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-two-thirds">
+
+    <!-- <h1 class="govuk-heading-xl">Are you applying to PHEATS? {{data.dave}}</h1> -->
+
+    <h1 class="govuk-heading-xl">
+      Check your answers
+    </h1>
+
+    <p class="govuk-body govuk-!-margin-bottom-9">Your application is now ready to be submitted. Check that the answers you've provided are correct.</p>
+
+    <form method="post" novalidate action="pheats-confirmation">
+
+      <h2 class="govuk-heading-m">Registration summary</h2>
+
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            PHEATS address
+          </dt>
+          <dd class="govuk-summary-list__value">
+            Top Lane<br>
+            Peterborough<br>
+            Cambridgeshire<br>
+            PO5 7HY
+          </dd>
+          <dd class="govuk-summary-list__actions">
+          </dd>
+        </div>
+
+      </dl>
+
+      <h2 class="govuk-heading-m">Site plan</h2>
+
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            File name
+          </dt>
+          <dd class="govuk-summary-list__value">
+            <a class="govuk-link govuk-link--no-visited-state" href="#">
+              {{data['pheatsSite'] or 'site-plan.pdf'}}, 2MB
+            </a>
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link govuk-link--no-visited-state" href="pheats-site">
+              Change<span class="govuk-visually-hidden"> </span>
+            </a>
+          </dd>
+        </div>
+
+      </dl>
+
+      <h2 class="govuk-heading-m">Commodities</h2>
+
+      {% set _commodityCount = data['commodityCount'] or 1 | int %}
+
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+
+        {% for i in range(0, _commodityCount) -%}
+
+        {% set _show = "true" %}
+        {% set _id = loop.index %}
+        {% set _deletedValue = data['commodityDeleted' + _id] %}
+        {% if _deletedValue == "true" %}
+          {% set _show = "false" %}
+        {% endif %}
+
+        {% if _show == "true" %}
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            {{data['commodityName' + _id] or 'Dactylorhiza umbrosa (DAKUM)'}}
+            {% if data['commodityVariety' + _id] %} <span style="font-weight:normal"><br>{{data['commodityVariety' + _id]}}</span>{% endif %}
+          </dt>
+          <dd class="govuk-summary-list__value">
+
+            <p class="govuk-body">Origins: </p>
+            {% set _originCount = data['originCount' + _id] or 1 | int %}
+            <ul class="govuk-list govuk-list--bullet">
+              {% for i in range(0, _originCount) -%}
+                {% set _show = "true" %}
+                {% set _originID = loop.index %}
+                {% set _deletedValue = data['commodityOriginDeleted' + _id + '-' + _originID] %}
+                {% if _deletedValue == "true" %}
+                  {% set _show = "false" %}
+                {% endif %}
+
+                {% if _show == "true" %}
+                <li>{{data['commodityOrigin' + _id + '-' + _originID][0] or 'United Kingdom'}}</li>
+                {% endif %}
+              {%- endfor %}
+            </ul>
+
+            <p class="govuk-body">Destinations: </p>
+            {% set _destinationCount = data['destinationCount' + _id] or 1 | int %}
+            <ul class="govuk-list govuk-list--bullet">
+              {% for i in range(0, _destinationCount) -%}
+                {% set _show = "true" %}
+                {% set _destinationID = loop.index %}
+                {% set _deletedValue = data['commodityDestinationDeleted' + _id + '-' + _destinationID] %}
+                {% if _deletedValue == "true" %}
+                  {% set _show = "false" %}
+                {% endif %}
+
+                {% if _show == "true" %}
+                <li>{{data['commodityDestination' + _id + '-' + _destinationID][0] or 'France'}}</li>
+                {% endif %}
+              {%- endfor %}
+            </ul>
+
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link govuk-link--no-visited-state" href="pheats-commodities-added">
+              Change<span class="govuk-visually-hidden"> </span>
+            </a>
+          </dd>
+        </div>
+        {% endif %}
+
+        {%- endfor %}
+
+      </dl>
+
+      <h2 class="govuk-heading-m">People</h2>
+    
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            Person responsible
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{data['pheats-main-contact-name'] or 'Bill Shoggins'}}<br>
+            {{data['pheats-main-contact-position'] or 'Manager'}}<br>
+            {{data['pheats-main-contact-email'] or 'bill.shoggins@acmeltd.com'}}<br>
+            {{data['pheats-main-contact-phone'] or '01234 567890'}}<br>
+            {{data['pheats-main-contact-mobile'] or '07123 456789'}}
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link govuk-link--no-visited-state" href="pheats-pr">
+              Change<span class="govuk-visually-hidden"> </span>
+            </a>
+          </dd>
+        </div>
+
+      </dl>
+
+      <h2 class="govuk-heading-m">Authorised people</h2>
+
+      {% set _apCount = data['apCount'] or 1 | int %}
+
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+
+        {% for i in range(0, _apCount) -%}
+
+        {% set _show = "true" %}
+        {% set _id = loop.index %}
+        {% set _deletedValue = data['apDeleted'+_id] %}
+        {% if _deletedValue == "true" %}
+          {% set _show = "false" %}
+        {% endif %}
+
+        {% if _show == "true" %}
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">
+            {{data['apName' + _id] or 'Jane Doe'}}
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{data['apPosition' + _id] or 'Manager'}}<br>
+            {{data['apEmail' + _id] or 'email@email.com'}}
+          </dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link govuk-link--no-visited-state" href="pheats-aps-added">
+              Change<span class="govuk-visually-hidden"> </span>
+            </a>
+          </dd>
+        </div>
+        {% endif %}
+
+        {%- endfor %}
+
+      </dl>
+
+      <h2 class="govuk-heading-m">
+        Declaration
+      </h2>
+  
+      <p class="govuk-body">
+        By submitting this application form, you are agreeing with the <a class="govuk-link govuk-link--no-visited-state" href="#" target="_blank">terms and conditions (opens in new tab)</a> of the plant health exports audited trader scheme (PHEATS).
+      </p>
+
+      <div class="govuk-form-group govuk-!-margin-bottom-9">
+        <fieldset class="govuk-fieldset" >
+          <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+            <div class="govuk-checkboxes__item">
+              <input class="govuk-checkboxes__input" id="pheatsDeclaration" name="pheatsDeclaration" type="checkbox" value="Yes">
+              <label class="govuk-label govuk-checkboxes__label" for="pheatsDeclaration">
+                I confirm that I have understood and followed the terms and conditions.
+              </label>
+            </div>
+          </div>
+
+        </fieldset>
+      </div>
+
+      <!-- 
+        Reset authorised people counts and data so if you add another pheats reg it is reset 
+      -->
+      {% for i in range(0, _apCount) -%}
+        {% set _id = loop.index %}
+        <input id="apName{{_id}}" name="apName{{_id}}" type="hidden" value="">
+        <input id="apPosition{{_id}}" name="apPosition{{_id}}" type="hidden" value="">
+        <input id="apEmail{{_id}}" name="apEmail{{_id}}" type="hidden" value="">
+        <input id="apDeleted{{_id}}" name="apDeleted{{_id}}" type="hidden" value="false">
+      {%- endfor %}
+      <input id="apCount" name="apCount" type="hidden" value="0">
+      <input id="apDisplayedCount" name="apDisplayedCount" type="hidden" value="0">
+
+      <!-- 
+        Reset commodity counts and data so if you add another pheats reg it is reset 
+      -->
+      {% for i in range(0, _commodityCount) -%}
+        {% set _id = loop.index %}
+        <input id="commodityVariety{{_id}}" name="commodityVariety{{_id}}" type="hidden" value="">
+        <input id="commodityName{{_id}}" name="commodityName{{_id}}" type="hidden" value="">
+        <input id="commodityDeleted{{_id}}" name="commodityDeleted{{_id}}" type="hidden" value="false">
+        {% for i in range(0, data['originCount' + _id] or 1 | int) -%}
+          <input id="commodityOriginDeleted{{_id}}-{{loop.index}}" name="commodityOriginDeleted{{_id}}-{{loop.index}}" type="hidden" value="false" >
+          <input id="commodityOrigin{{_id}}-{{loop.index}}" name="commodityOrigin{{_id}}-{{loop.index}}" type="hidden" value="" >
+        {%- endfor %}
+        <input id="originCount{{_id}}" name="originCount{{_id}}" type="hidden" value="1">
+        {% for i in range(0, data['destinationCount' + _id] or 1 | int) -%}
+          <input id="commodityDestinationDeleted{{_id}}-{{loop.index}}" name="commodityDestinationDeleted{{_id}}-{{loop.index}}" type="hidden" value="false" >
+          <input id="commodityDestination{{_id}}-{{loop.index}}" name="commodityDestination{{_id}}-{{loop.index}}" type="hidden" value="" >
+        {%- endfor %}
+        <input id="destinationCount{{_id}}" name="destinationCount{{_id}}" type="hidden" value="1">
+      {%- endfor %}
+      <input id="commodityCount" name="commodityCount" type="hidden" value="0">
+      <input id="commodityDisplayedCount" name="commodityDisplayedCount" type="hidden" value="0">
+
+
+      {{ govukButton({
+        text: "Accept and submit"
+      }) }}
+
+        
+        {% set _pheatsReturnURL = 'pheats-cya' %}
+        <p class="govuk-body govuk-!-margin-top-2"><a href="pheats-cancel?pheatsReturnURL={{_pheatsReturnURL}}" class="govuk-link govuk-link--no-visited-state">Cancel PHEATS application</a></p>
+
+    </form>
+
+  </div>
+</div>
+
+{% endblock %}

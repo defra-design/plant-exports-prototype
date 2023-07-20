@@ -1,0 +1,420 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  [title] - Manage account - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="../account" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
+  </ul>
+</div>
+
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<style>
+  .deleteWrapper {
+    display: table; 
+    width: 100%;
+  }
+  .deleteButtonWrapper {
+    position: relative;
+    display: table-cell; 
+    width: 1%;
+  }
+  .deleteOrigin,
+  .deleteDestination {
+    margin-left: 20px; 
+    margin-bottom: 0; 
+    margin-top: -13px;
+    box-sizing: border-box;
+  }
+</style>
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-two-thirds">
+
+    <!-- <h1 class="govuk-heading-xl">Are you applying to PHEATS? {{data.dave}}</h1> -->
+
+    {% if query.deleted %}
+    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+            Success
+            </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+            <h3 class="govuk-notification-banner__heading">
+              Commodity deleted
+            </h3>
+            <p class="govuk-body">{{data['commodityName' + query.deleted] or 'Dactylorhiza umbrosa (DAKUM)'}} has been deleted.</p>
+        </div>
+    </div>
+    {% endif %}
+
+    <h1 class="govuk-heading-xl">
+      What will you send from this address using PHEATS?
+    </h1>
+
+    <p class="govuk-body">You will be able to add more commodities later.</p>
+
+    <!-- If updating or restarting existing address or not -->
+    {% set _link = "pheats-commodities-added" %}
+    {% if query.update %}
+      {% set _link = "pheats-cya-update" %}
+    {% endif %}
+    {% if query.restart %}
+      {% set _link = "pheats-cya-restart" %}
+    {% endif %}
+
+    <form method="post" novalidate action="{{_link}}">
+        <div class="govuk-form-group ">
+          <fieldset class="govuk-fieldset">
+
+            <!-- IF editing an existing one or not -->
+            {% set _editing = false %}
+            {% set _notEditing = true %}
+            {% if query.edit %}
+              {% set _editing = true %}
+              {% set _notEditing = false %}
+            {% endif %}
+
+            <!-- Set counts -->
+            {% set _commodityCount = data['commodityCount'] or 0 | int %}
+            {% set _commodityDisplayedCount = data['commodityDisplayedCount'] or 0 | int %}
+            {% if _notEditing %}
+              {% set _commodityCount = _commodityCount|int + 1 %}
+              {% set _commodityDisplayedCount = _commodityDisplayedCount|int + 1 %}
+            {% endif %}
+            <input id="commodityCount" name="commodityCount" type="hidden" value="{{_commodityCount}}">
+            <input id="commodityDisplayedCount" name="commodityDisplayedCount" type="hidden" value="{{_commodityDisplayedCount}}">
+
+            <!-- Set id to use -->
+            {% set _id = _commodityCount %} <!--1-->
+            {% if _editing %}
+              {% set _id = query.edit %}
+            {% endif %}
+
+            <!-- Set deleted false default  -->
+            <input id="commodityDeleted{{_id}}" name="commodityDeleted{{_id}}" type="hidden" value="false">
+
+            <script type="text/javascript" src="/public/javascripts/accessible-autocomplete.min.js"></script>
+
+            <h2 class="govuk-heading-m">Commodity</h2>
+
+            {% set _commodityNameID = 'commodityName' + _id %}
+            {% include "./modules/_genus.html" %}
+
+            <h2 class="govuk-heading-m">Countries of origin</h2>
+            {% set _originCount = data['originCount' + _id] or 1 | int %}
+            {% include "./modules/_country-of-origin-select-for-clone.html" %}
+            <div id="originCountriesWrapper">
+              {% for i in range(0, _originCount) -%}
+
+                {% set _show = "true" %}
+                {% set _originID = loop.index %}
+                {% set _deletedValue = data['commodityOriginDeleted' + _id + '-' + _originID] %}
+                {% if _deletedValue == "true" %}
+                  {% set _show = "false" %}
+                {% endif %}
+
+                {% if _show == "true" %}
+
+                  {% set _commodityOriginID = 'commodityOrigin' + _id + '-' + _originID %}
+                  {% set _commodityOriginDeletedID = 'commodityOriginDeleted' + _id + '-' + _originID %}
+
+                  {% include "./modules/_country-of-origin-select.html" %}
+                  <script type="text/javascript">
+                    window.addEventListener('load', function() {
+                      var _commodityOriginIDJQ = {{_commodityOriginID | dump | safe }};
+                      accessibleAutocomplete.enhanceSelectElement({
+                        selectElement: document.querySelector('#'+_commodityOriginIDJQ),
+                        id: _commodityOriginIDJQ,
+                        name: _commodityOriginIDJQ
+                      });
+                    });
+                  </script>
+
+                {% endif %}
+
+              {%- endfor %}
+            </div>
+            <input id="originCount{{_id}}" name="originCount{{_id}}" type="hidden" value="{{_originCount}}">
+
+            <p class="govuk-body govuk-!-margin-bottom-2"><a class="govuk-link govuk-link--no-visited-state govuk-button govuk-button--secondary" href="#" id="addOrigin">Add another country of origin</a></p>
+
+
+
+
+            <h2 class="govuk-heading-m">Destination countries</h2>
+            <div class="govuk-hint">
+              You can only add countries that have agreed to accept goods sent using PHEATS
+            </div>
+            {% set _destinationCount = data['destinationCount' + _id] or 1 | int %}
+            {% include "./modules/_country-of-export-select-for-clone.html" %}
+            <div id="destinationCountriesWrapper">
+              {% for i in range(0, _destinationCount) -%}
+
+                {% set _show = "true" %}
+                {% set _destinationID = loop.index %}
+                {% set _deletedValue = data['commodityDestinationDeleted' + _id + '-' + _destinationID] %}
+                {% if _deletedValue == "true" %}
+                  {% set _show = "false" %}
+                {% endif %}
+
+                {% if _show == "true" %}
+
+                  {% set _commodityDestinationID = 'commodityDestination' + _id + '-' + loop.index %}
+                  {% set _commodityDestinationDeletedID = 'commodityDestinationDeleted' + _id + '-' + _destinationID %}
+                  
+                  {% include "./modules/_country-of-export-select.html" %}
+                  <script type="text/javascript">
+                    window.addEventListener('load', function() {
+                      var _commodityDestinationIDJQ = {{_commodityDestinationID | dump | safe }};
+                      accessibleAutocomplete.enhanceSelectElement({
+                        selectElement: document.querySelector('#'+_commodityDestinationIDJQ),
+                        id: _commodityDestinationIDJQ,
+                        name: _commodityDestinationIDJQ
+                      });
+                    });
+                  </script>
+
+                {% endif %}
+
+              {%- endfor %}
+            </div>
+            <input id="destinationCount{{_id}}" name="destinationCount{{_id}}" type="hidden" value="{{_destinationCount}}">
+
+            <p class="govuk-body govuk-!-margin-bottom-0"><a class="govuk-link govuk-link--no-visited-state govuk-button govuk-button--secondary" href="#" id="addDestination">Add another destination country</a></p>
+
+
+            
+          </fieldset>
+        </div>
+
+        {{ govukButton({
+          text: "Continue"
+        }) }}
+
+        <!-- Cancel link -->
+        {% set _addressID = data['address'] or 1 %}
+        {% set _pheatsReturnURL = 'pheats-commodity' %}
+        {% set _urlReturnURL = "pheats-cancel?pheatsReturnURL=" + _pheatsReturnURL + "&address=" + _addressID %}
+        {% set _urlReturnText = "Cancel PHEATS application" %}
+        {% if query.update %}
+          <!-- If updating an existing application -->
+          {% set _urlReturnText = "Cancel" %}
+          {% set _urlReturnURL = "pheats-cya-update?address=" + _addressID %}
+        {% elif query.restart %}
+          <!-- If updating an existing application before restarting -->
+          {% set _urlReturnText = "Cancel" %}
+          {% set _urlReturnURL = "pheats-cya-restart?address=" + _addressID %}
+        {% endif %}
+        <p class="govuk-body govuk-!-margin-top-2"><a href="{{_urlReturnURL}}" class="govuk-link govuk-link--no-visited-state">{{_urlReturnText}}</a></p>
+
+    </form>
+
+  </div>
+</div>
+
+<script type="text/javascript">
+
+  window.addEventListener('load', function() {
+
+    //DELETE ORIGIN START
+    var _deleteOriginLinks = $(".deleteOrigin"),
+        _visibleWrappers = _deleteOriginLinks.closest('.commodityOriginWrapper:visible'),
+        _visibleWrappersLength = _visibleWrappers.length
+
+    function deleteOriginLinkVisibility(){
+      _deleteOriginLinks = $(".deleteOrigin"),
+      _visibleWrappers = _deleteOriginLinks.closest('.commodityOriginWrapper:visible'),
+      _visibleWrappersLength = _visibleWrappers.length
+      if(_visibleWrappersLength > 1){
+        _deleteOriginLinks.show()
+      } else {
+        _deleteOriginLinks.hide()
+      }
+    }
+    deleteOriginLinkVisibility()
+
+    _deleteOriginLinks.on( "click", function() {
+        event.preventDefault();
+        var _this = $(this),
+            _wrapper = _this.closest('.commodityOriginWrapper');
+
+        _wrapper.find($(".deleteOriginVisibility")).val('true')
+        _wrapper.hide()
+
+        deleteOriginLinkVisibility()
+
+    });
+    //DELETE ORIGIN END
+
+    //DELETE DESTINATION START
+    var _deleteDestinationLinks = $(".deleteDestination"),
+        _visibleWrappers = _deleteDestinationLinks.closest('.commodityDestinationWrapper:visible'),
+        _visibleWrappersLength = _visibleWrappers.length
+
+    function deleteDestinationLinkVisibility(){
+      _deleteDestinationLinks = $(".deleteDestination"),
+      _visibleWrappers = _deleteDestinationLinks.closest('.commodityDestinationWrapper:visible'),
+      _visibleWrappersLength = _visibleWrappers.length
+      if(_visibleWrappersLength > 1){
+        _deleteDestinationLinks.show()
+      } else {
+        _deleteDestinationLinks.hide()
+      }
+    }
+    deleteDestinationLinkVisibility()
+
+    _deleteDestinationLinks.on( "click", function() {
+        event.preventDefault();
+        var _this = $(this),
+            _wrapper = _this.closest('.commodityDestinationWrapper');
+
+        _wrapper.find($(".deleteDestinationVisibility")).val('true')
+        _wrapper.hide()
+
+        deleteDestinationLinkVisibility()
+
+    });
+    //DELETE DESTINATION END
+
+
+
+    //ADD ANOTHER ORIGIN FIELD
+    var _originCountInput = $("#originCount"+{{_id|dump|safe}}),
+        _originCount = parseInt(_originCountInput.val()),
+        _addOriginLink = $("#addOrigin"),
+        _commodityOriginWrapper = $("#commodityOriginWrapper")
+
+    _addOriginLink.on( "click", function() {
+        event.preventDefault();
+        var _this = $(this)
+
+        // iterate value
+        _originCount = _originCount + 1
+
+        //Set new value on hidden input
+        _originCountInput.val(_originCount)
+
+        //Clone origin wrapper
+        var _commodityOriginWrapperClone = _commodityOriginWrapper.clone();
+
+        //new id
+        var _newID = 'commodityOrigin' + {{_id|dump|safe}} + '-' + _originCount,
+            _newDeletedID = 'commodityOriginDeleted' + {{_id|dump|safe}} + '-' + _originCount;
+
+        //Change values of clone
+        _commodityOriginWrapperClone.find('label').eq(0).attr("for", _newID);
+        _commodityOriginWrapperClone.find('select').eq(0).attr("id", _newID);
+        _commodityOriginWrapperClone.find('select').eq(0).attr("name", _newID);
+        _commodityOriginWrapperClone.find('.deleteOriginVisibility').eq(0).attr("name", _newDeletedID);
+        _commodityOriginWrapperClone.find('.deleteOriginVisibility').eq(0).attr("id", _newDeletedID);
+      
+
+        //Insert into DOM
+        _commodityOriginWrapperClone.appendTo($("#originCountriesWrapper")).show()
+
+
+        //Setup event for inserted delete link
+        _commodityOriginWrapperClone.find($(".deleteOrigin")).on( "click", function() {
+            event.preventDefault();
+            var _this = $(this),
+                _wrapper = _this.closest('.commodityOriginWrapper');
+
+            _wrapper.find($(".deleteOriginVisibility")).val('true')
+            _wrapper.hide()
+
+            deleteOriginLinkVisibility()
+
+        });
+
+        //Add new script for new object
+        accessibleAutocomplete.enhanceSelectElement({
+          selectElement: document.querySelector('#'+_newID),
+          id: _newID,
+          name: _newID
+        });
+
+        deleteOriginLinkVisibility()
+   
+    });
+
+
+
+    //ADD ANOTHER DESTINATION FIELD
+    var _destinationCountInput = $("#destinationCount"+{{_id|dump|safe}}),
+        _destinationCount = parseInt(_destinationCountInput.val()),
+        _addDestinationLink = $("#addDestination"),
+        _commodityDestinationWrapper = $("#commodityDestinationWrapper")
+
+    _addDestinationLink.on( "click", function() {
+        event.preventDefault();
+        var _this = $(this)
+
+        // iterate value
+        _destinationCount = _destinationCount + 1
+
+        //Set new value on hidden input
+        _destinationCountInput.val(_destinationCount)
+
+        //Clone destination wrapper
+        var _commodityDestinationWrapperClone = _commodityDestinationWrapper.clone();
+
+        //new id
+        var _newID = 'commodityDestination' + {{_id|dump|safe}} + '-' + _destinationCount,
+            _newDeletedID = 'commodityDestinationDeleted' + {{_id|dump|safe}} + '-' + _destinationCount;
+
+        //Change values of clone
+        _commodityDestinationWrapperClone.find('label').eq(0).attr("for", _newID);
+        _commodityDestinationWrapperClone.find('select').eq(0).attr("id", _newID);
+        _commodityDestinationWrapperClone.find('select').eq(0).attr("name", _newID);
+        _commodityDestinationWrapperClone.find('.deleteDestinationVisibility').eq(0).attr("name", _newDeletedID);
+        _commodityDestinationWrapperClone.find('.deleteDestinationVisibility').eq(0).attr("id", _newDeletedID);
+
+        //Insert into DOM
+        _commodityDestinationWrapperClone.appendTo($("#destinationCountriesWrapper")).show()
+
+        //Setup event for inserted delete link
+        _commodityDestinationWrapperClone.find($(".deleteDestination")).on( "click", function() {
+            event.preventDefault();
+            var _this = $(this),
+                _wrapper = _this.closest('.commodityDestinationWrapper');
+
+            _wrapper.find($(".deleteDestinationVisibility")).val('true')
+            _wrapper.hide()
+
+            deleteDestinationLinkVisibility()
+
+        });
+
+        //Add new script for new object
+        accessibleAutocomplete.enhanceSelectElement({
+          selectElement: document.querySelector('#'+_newID),
+          id: _newID,
+          name: _newID
+        });
+
+        deleteDestinationLinkVisibility()
+   
+    });
+
+    
+
+    
+
+
+  });
+
+</script>
+
+{% endblock %}
+
