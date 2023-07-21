@@ -1,0 +1,54 @@
+{% extends "layout-certificate-checker.html" %}
+
+{% block pageTitle %}
+  {% if query.error == "true" %}Error: {% endif %}What is the certificate number? - GOV.UK
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if query.error == "true" %}
+    <div class="govuk-error-summary" data-module="govuk-error-summary">
+      <div role="alert">
+        <h2 class="govuk-error-summary__title">There is a problem</h2>
+        
+        <div class="govuk-error-summary__body">
+          <ul class="govuk-list govuk-error-summary__list">
+            <li><a href="#">Enter the certificate number</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+    {% endif %}
+
+    <form action="certificate-number-validation" method="post" novalidate>
+
+      <div class="govuk-form-group{% if query.error == 'true' %} govuk-form-group--error{% endif %}">
+        <h1 class="govuk-label-wrapper govuk-!-margin-bottom-8">
+          <label class="govuk-label govuk-label--xl" for="certificate-number">What is the certificate number?</label>
+        </h1>
+
+        <div id="certificate-number-hint" class="govuk-hint">
+          The certificate number is on the top right corner of the certificate. For example, UK/GB/E&W/2023/1234567891234
+        </div>
+
+        {% if query.error == "true" %}
+        <p id="certificate-number-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Enter the certificate number</p>
+        {% endif %}
+        <input class="govuk-input govuk-input--width-20{% if query.error == 'true' %} govuk-input--error{% endif %}" id="certificate-number" name="certificateNumber" type="text" aria-describedby="certificate-number-hint{% if query.error == 'true' %} certificate-number-error{% endif %}">
+      </div>
+
+      <div class="govuk-button-group">
+        <button class="govuk-button" data-module="govuk-button">Continue</button>
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

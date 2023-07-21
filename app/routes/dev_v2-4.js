@@ -351,8 +351,12 @@ module.exports = function(router) {
       var service = req.session.data.service;
       var entryPoint = req.session.data.start_page;
 
+      // Direct users to certificate checker pages, designs and content
+      if (service == "Certificate checker") {
+        return res.redirect("certificate-checker/start-page");
+      }
       // Direct users to ePhyto pages, designs and content
-      if (service == "ePhyto") {
+      else if (service == "ePhyto") {
 
         if (entryPoint == "Start") {
           return res.redirect("ephyto/start-page");
@@ -908,6 +912,33 @@ module.exports = function(router) {
         }
     }
 
+    // *******************************
+    // CERTIFICATE CHECKER routing
+    // *******************************
+
+    // Chris Harding (21.07.23) - Certificate number: Error validation and routing
+    if (baseDir === "/certificate-number-validation") {
+
+      var number = req.session.data.certificateNumber;
+      
+      // Make sure user enters something
+      if (number == "") {
+        return res.redirect("certificate-number?error=true");
+      }
+      // User enters a valid phytosanitary certificate number
+      else if (number == "UK/GB/E&W/2023/7800562125823") {
+        req.session.data.certificateValid = "yes";
+
+        return res.redirect("place-of-issue");
+      }
+      // Not a valid phytosanitary certificate number
+      else {
+        req.session.data.certificateValid = "no";
+
+        return res.redirect("place-of-issue");
+      }
+
+    }
 
     // Attempt to render a page in the current folder
     res.render(page, {
