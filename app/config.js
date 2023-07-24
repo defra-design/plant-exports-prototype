@@ -8,6 +8,9 @@ module.exports = {
   // Micro service name (PHEATS)
   microServiceName: 'Plant health exports audited trader scheme',
 
+  // Micro service name (Check a UK issued phytosanitary certificate)
+  microServiceName2: 'Check a UK issued phytosanitary certificate',
+
   // Default port that prototype runs on
   port: '3000',
 
