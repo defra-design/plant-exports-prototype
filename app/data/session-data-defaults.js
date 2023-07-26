@@ -26,6 +26,22 @@ var sample = require('./sample.json');
 var countries = require('./countries-full.json');
 var countries2 = require('./countries-eu-ni.json');
 var addresses = require('./addresses.json');
+var addresses2 = require('./addresses-2.json');
+
+//Order addresses by status (draft first)
+addresses2.sort(function(a,b){
+
+  var returnValue = 0;
+
+  if(a.pheats.status == 'draft' && b.pheats.status != 'draft') {
+    returnValue = -1
+  } else if(a.pheats.status != 'draft' && b.pheats.status == 'draft') {
+    returnValue = 1
+  }
+
+  return returnValue;
+
+});
 
 module.exports = {
   "applications" : applications,
@@ -40,7 +56,8 @@ module.exports = {
   "plants" : [],
   "countries-full": countries,
   "countries-eu-ni": countries2,
-  "addresses": addresses
+  "addresses": addresses,
+  "addresses2": addresses2
   // Insert values here
   
 }

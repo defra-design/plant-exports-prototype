@@ -63,7 +63,7 @@
 
         <tbody class="govuk-table__body">
 
-          {% for _address in data['addresses'] %}
+          {% for _address in data['addresses2'] %}
           
           {% if _address.pheats.status != "notregistered" %}
           <tr class="govuk-table__row">
@@ -82,13 +82,13 @@
 
             <td class="govuk-table__cell address-column" >  
               <p class="govuk-body govuk-!-margin-bottom-2">
-                {{_address.maincontact.name}}<br>
-                {{_address.maincontact.email}}<br>
-                {% if _address.maincontact.mobile %}
-                  {{_address.maincontact.mobile}}<br>
+                {{_address.pheats.personresponsible.name}}<br>
+                {{_address.pheats.personresponsible.email}}<br>
+                {% if _address.pheats.personresponsible.mobile %}
+                  {{_address.pheats.personresponsible.mobile}}<br>
                 {% endif %}
-                {% if _address.maincontact.telephone %}
-                  {{_address.maincontact.telephone}}
+                {% if _address.pheats.personresponsible.telephone %}
+                  {{_address.pheats.personresponsible.telephone}}
                 {% endif %}
               </p>
             </td>
@@ -106,6 +106,12 @@
                   </strong>
                   {% set _pheatsHREF = "../pheats/pheats-start?address=" + _address.id %}
                   {% set _pheatsLinkText = "Add to PHEATS" %}
+                {% elif _address.pheats.status == "draft" %}
+                  {% set _pheatsLinkText = "Continue" %}
+                  <!-- DRAFT -->
+                  <strong class="govuk-tag govuk-tag--grey">
+                    Draft
+                  </strong>
                 {% elif _address.pheats.status == "registered" %}
                   <!-- REGISTERED -->
                   <strong class="govuk-tag govuk-tag--green">
@@ -141,7 +147,9 @@
 
             <td class="govuk-table__cell">
               <p class="govuk-body govuk-!-margin-bottom-2">
-                <a href="{{_pheatsHREF}}" class="govuk-link govuk-link--no-visited-state" >{{_pheatsLinkText}}</a>
+                <a href="{{_pheatsHREF}}" class="govuk-link govuk-link--no-visited-state" >
+                  {{_pheatsLinkText}}
+                </a>
               </p>
               <!-- <p class="govuk-body govuk-!-margin-bottom-2">
                 <a href="confirm-delete" class="govuk-link govuk-link--no-visited-state" >Delete</a>

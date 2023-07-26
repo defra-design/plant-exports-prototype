@@ -36,8 +36,8 @@
 
     <!-- Selected address -->
     {% set _addressID = data['address'] or 1 %}
-    {% set _address = data['addresses'][0] %}
-    {% for _address2 in data['addresses'] %}
+    {% set _address = data['addresses2'][0] %}
+    {% for _address2 in data['addresses2'] %}
       {% if _address2.id == _addressID %}
         {% set _address = _address2 %}
       {% endif %}
@@ -57,7 +57,11 @@
 
     <h1 class="govuk-heading-xl">
       <span class="govuk-caption-xl">{{_address.postcode}}, {{_address.address1}}</span>
+      {% if _address.pheats.status == "draft" %}
+      Continue PHEATS registration
+      {% else %}
       Manage PHEATS for this address
+      {% endif %}
     </h1>
 
     <!-- <h2 class="govuk-heading-m">Registration summary</h2> -->
@@ -74,6 +78,11 @@
                 <!-- NOT REGISTERED -->
                 <strong class="govuk-tag govuk-tag--grey">
                     Not registered
+                </strong>
+              {% elif _address.pheats.status == "draft" %}
+                <!-- DRAFT -->
+                <strong class="govuk-tag govuk-tag--grey">
+                  Draft
                 </strong>
               {% elif _address.pheats.status == "registered" %}
                 <!-- REGISTERED -->
@@ -149,10 +158,12 @@
     {% endif %}
 
     <!-- UPDATE or RESTART -->
-    {% if _address.pheats.status == "registered" or _address.pheats.status == "paused" %}
+    {% if _address.pheats.status == "registered" or _address.pheats.status == "paused" or _address.pheats.status == "draft" %}
     {% set _cyaLink = "pheats-cya-update?address=" + _addressID %}
     {% if _address.pheats.status == "paused" %}
       {% set _cyaLink = "pheats-cya-restart?address=" + _addressID %}
+    {% elif _address.pheats.status == "draft" %}
+      {% set _cyaLink = "pheats-site-confirm?address=" + _addressID %}
     {% endif %}
     <form method="post" novalidate action="{{_cyaLink}}">
 
@@ -199,7 +210,6 @@
       <!-- Commodity counts -->
       <input id="commodityCount" name="commodityCount" type="hidden" value="{{_address.pheats.commodities.length}}">
       <input id="commodityDisplayedCount" name="commodityDisplayedCount" type="hidden" value="{{_address.pheats.commodities.length}}">
-      
 
       <!-- RESTART -->
       {% if _address.pheats.status == "paused" %}
@@ -217,16 +227,25 @@
       </button>
       {% endif %}
 
+      <!-- DRAFT -->
+      {% if _address.pheats.status == "draft" %}
+      <button class="govuk-button govuk-!-margin-bottom-9" data-module="govuk-button">
+        Continue
+      </button>
+      {% endif %}
+
     {% endif %}
     </form>
 
+    {% if _address.pheats.status == "draft" %}
+    <h2 class="govuk-heading-l">Details already entered</h2>
+    {% else %}
     <h2 class="govuk-heading-l">Address details</h2>
-
-
-
+    {% endif %}
+    
     <h3 class="govuk-heading-m">Site plan</h3>
 
-    <dl class="govuk-summary-list govuk-!-margin-bottom-">
+    <dl class="govuk-summary-list govuk-!-margin-bottom-7">
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
@@ -250,174 +269,207 @@
 
     <h3 class="govuk-heading-m ">PHEATS commodities at this address</h3>
 
-    <dl class="govuk-summary-list {% if _dontShowEditLinks %}govuk-!-margin-bottom-{% endif %}">
-
-      {% for _commodity in _address.pheats.commodities %}
-      <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            {{_commodity.name}}
-          </dt>
-          <dd class="govuk-summary-list__value">
-            <p class="govuk-body govuk-!-margin-bottom-2">
-              Countries of origin:
-            </p>
-            <ul class="govuk-list govuk-list--bullet">
-              {% for _origin in _commodity.origins %}
-                <li>{{_origin[0]}}</li>
-              {% endfor %}
-            </ul>
-            <p class="govuk-body govuk-!-margin-bottom-2">
-              Destinations:
-            </p>
-            <ul class="govuk-list govuk-list--bullet">
-              {% for _destination in _commodity.destinations %}
-                <li>{{_destination[0]}}</li>
-              {% endfor %}
-            </ul>
-          </dd>
+    <table class="govuk-table {% if _dontShowEditLinks %}govuk-!-margin-bottom-9{% else %}govuk-!-margin-bottom-5{% endif %}" id="commodityTable">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">Description</th>
+          <th class="govuk-table__header" scope="col">Origin</th>
+          <th class="govuk-table__header" scope="col">Destination</th>
           {% if _showEditLinks %}
-          <dd class="govuk-summary-list__actions">
+          <th class="govuk-table__header" scope="col"></th>
+          {% endif %}
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for _commodity in _address.pheats.commodities %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            {{_commodity.name}} ({{_commodity.eppo}})
+          </td>
+          <td class="govuk-table__cell">
+            {% for _origin in _commodity.origins %}{{_origin[0]}}{% if loop.last %}{% else %}, {% endif %}{% endfor %}
+          </td>
+          <td class="govuk-table__cell">
+            {% for _destination in _commodity.destinations %}{{_destination[0]}}{% if loop.last %}{% else %}, {% endif %}{% endfor %}
+          </td>
+          {% if _showEditLinks %}
+          <td class="govuk-table__cell" style="text-align: right;">
             <a class="govuk-link govuk-link--no-visited-state" href="#">
               [Edit]<span class="govuk-visually-hidden"> </span>
             </a>
-          </dd>
+          </td>
           {% endif %}
-      </div>
-      {% endfor %}
+        </tr>
+        {% endfor %}
 
-      {% if _address.pheats.status == "updated" %}
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Allium cepa<br>
-          <strong class="govuk-tag govuk-tag--orange govuk-!-margin-top-2">
-            Updating
-          </strong>
-        </dt>
-        <dd class="govuk-summary-list__value">
-          <p class="govuk-body govuk-!-margin-bottom-2">
-            Countries of origin:
-          </p>
-          <ul class="govuk-list govuk-list--bullet">
-              <li>Germany</li>
-          </ul>
-          <p class="govuk-body govuk-!-margin-bottom-2">
-            Destinations:
-          </p>
-          <ul class="govuk-list govuk-list--bullet">
-              <li>France</li>
-          </ul>
-        </dd>
-        {% if _showEditLinks %}
-        <dd class="govuk-summary-list__actions">
-          <a class="govuk-link govuk-link--no-visited-state" href="#">
-            [Edit]<span class="govuk-visually-hidden"> </span>
-          </a>
-        </dd>
+        {% if _address.pheats.status == "updated" %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            Allium cepa (CEEP)<br>
+            <strong class="govuk-tag govuk-tag--orange govuk-!-margin-top-2">
+              Updating
+            </strong>
+          </td>
+          <td class="govuk-table__cell">
+            Germany
+          </td>
+          <td class="govuk-table__cell">
+            France
+          </td>
+          {% if _showEditLinks %}
+          <td class="govuk-table__cell" style="text-align: right;">
+            <a class="govuk-link govuk-link--no-visited-state" href="#">
+              [Edit]<span class="govuk-visually-hidden"> </span>
+            </a>
+          </td>
+          {% endif %}
+        </tr>
         {% endif %}
-      </div>
-      {% endif %}
-     
-    </dl>
+
+      </tbody>
+    </table>
 
     {% if _showEditLinks %}
-    <p class="govuk-body govuk-!-margin-bottom-">
+    <p class="govuk-body govuk-!-margin-bottom-6">
       <a href="#" class="govuk-link govuk-link--no-visited-state" >
           [Add new commodity]
       </a>
     </p>
     {% endif %}
 
-    <h3 class="govuk-heading-l">People registered with PHEATS at this address</h3>
+    {% if _address.pheats.status == "draft" %}
+    
+    {% else %}
 
-    <h3 class="govuk-heading-m">Person responsible</h3>
+        <h3 class="govuk-heading-l">People registered with PHEATS at this address</h3>
 
-    {% set _personResponsible = _address.pheats.personresponsible %}
+        <h3 class="govuk-heading-m">Person responsible</h3>
 
-    <dl class="govuk-summary-list {% if _dontShowEditLinks %}govuk-!-margin-bottom-{% endif %}">
+        {% set _personResponsible = _address.pheats.personresponsible %}
 
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          {{_personResponsible.name}}
-        </dt>
-        <dd class="govuk-summary-list__value">
-          {{_personResponsible.position or "Technical Director"}}<br>
-          {{_personResponsible.email}}
-          {% if _personResponsible.mobile %}<br>{{_personResponsible.mobile}}{% endif %}
-          {% if _personResponsible.telephone %}<br>{{_personResponsible.telephone}}{% endif %}
-        </dd>
+        <table class="govuk-table {% if _showEditLinks %}govuk-!-margin-bottom-5{% endif %}" id="commodityTable">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header" scope="col">Name</th>
+              <th class="govuk-table__header" scope="col">Position</th>
+              <th class="govuk-table__header" scope="col">Contact details</th>
+              {% if _showEditLinks %}
+              <th class="govuk-table__header" scope="col"></th>
+              {% endif %}
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">
+                {{_personResponsible.name}}
+              </td>
+              <td class="govuk-table__cell">
+                {{_personResponsible.position or "Technical Director"}}
+              </td>
+              <td class="govuk-table__cell">
+                <span class="govuk-!-margin-bottom-1" style="display:block">
+                  {{_personResponsible.email}}
+                </span>
+                <span class="govuk-!-margin-bottom-1" style="display:block">
+                  {{_personResponsible.telephone}}
+                </span>
+                {% if _personResponsible.mobile %}
+                <span class="govuk-!-margin-bottom-1" style="display:block">
+                  {{_personResponsible.mobile}}
+                </span>
+                {% endif %}
+              </td>
+              {% if _showEditLinks %}
+              <td class="govuk-table__cell" style="text-align: right;">
+                <a class="govuk-link govuk-link--no-visited-state" href="#">
+                  [Edit]<span class="govuk-visually-hidden"> </span>
+                </a>
+              </td>
+              {% endif %}
+            </tr>
+          </tbody>
+        </table>
+
         {% if _showEditLinks %}
-        <dd class="govuk-summary-list__actions">
-          <a class="govuk-link govuk-link--no-visited-state" href="#">
-            [Edit]<span class="govuk-visually-hidden"> </span>
+        <p class="govuk-body govuk-!-margin-bottom-6">
+          <a href="#" class="govuk-link govuk-link--no-visited-state" >
+              [Change person responsible]
           </a>
-        </dd>
+        </p>
         {% endif %}
-      </div>
 
-    </dl>
+        <h3 class="govuk-heading-m">Authorised people</h3>
 
-    {% if _showEditLinks %}
-    <p class="govuk-body govuk-!-margin-bottom-">
-      <a href="#" class="govuk-link govuk-link--no-visited-state" >
-          [Change person responsible]
-      </a>
-    </p>
-    {% endif %}
+        <table class="govuk-table {% if _showEditLinks %}govuk-!-margin-bottom-5{% endif %}" id="commodityTable">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header" scope="col">Name</th>
+              <th class="govuk-table__header" scope="col">Position</th>
+              <th class="govuk-table__header" scope="col">Contact details</th>
+              {% if _showEditLinks %}
+              <th class="govuk-table__header" scope="col"></th>
+              {% endif %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for _authorisedperson in _address.pheats.authorisedpeople %}
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">
+                {{_authorisedperson.name}}
+              </td>
+              <td class="govuk-table__cell">
+                {{_authorisedperson.position or "Technical Director"}}
+              </td>
+              <td class="govuk-table__cell">
+                {{_authorisedperson.email}}
+              </td>
+              {% if _showEditLinks %}
+              <td class="govuk-table__cell">
+                <a class="govuk-link govuk-link--no-visited-state" href="#">
+                  [Edit]<span class="govuk-visually-hidden"> </span>
+                </a>
+              </td>
+              {% endif %}
+            </tr>
+            {% endfor %}
 
-    <h3 class="govuk-heading-m">Authorised people</h3>
+            {% if _address.pheats.status == "updated" %}
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">
+                Alison Reed Smith<br>
+                <strong class="govuk-tag govuk-tag--orange govuk-!-margin-top-2">
+                  Updating
+                </strong>
+              </td>
+              <td class="govuk-table__cell">
+                Site supervisor
+              </td>
+              <td class="govuk-table__cell">
+                a.smith@acmeltd.com
+              </td>
+              {% if _showEditLinks %}
+              <td class="govuk-table__cell" style="text-align: right;">
+                <a class="govuk-link govuk-link--no-visited-state" href="#">
+                  [Edit]<span class="govuk-visually-hidden"> </span>
+                </a>
+              </td>
+              {% endif %}
+            </tr>
+            {% endif %}
 
-    <dl class="govuk-summary-list {% if _dontShowEditLinks %}govuk-!-margin-bottom-9{% endif %}">
 
-      {% for _authorisedperson in _address.pheats.authorisedpeople %}
-      <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key ">
-            {{_authorisedperson.name}}
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{_authorisedperson.position or "Technical Director"}}<br>
-            {{_authorisedperson.email}}
-          </dd>
-          {% if _showEditLinks %}
-          <dd class="govuk-summary-list__actions">
-            <a class="govuk-link govuk-link--no-visited-state" href="#">
-              [Edit]<span class="govuk-visually-hidden"> </span>
-            </a>
-            
-          </dd>
-          {% endif %}
-      </div>
-      {% endfor %}
+          </tbody>
+        </table>
 
-      {% if _address.pheats.status == "updated" %}
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Alison Reed Smith<br>
-          <strong class="govuk-tag govuk-tag--orange govuk-!-margin-top-2">
-            Updating
-          </strong>
-        </dt>
-        <dd class="govuk-summary-list__value">
-          Site supervisor<br>
-          a.smith@acmeltd.com
-        </dd>
         {% if _showEditLinks %}
-        <dd class="govuk-summary-list__actions">
-          <a class="govuk-link govuk-link--no-visited-state" href="#">
-            [Edit]<span class="govuk-visually-hidden"> </span>
+        <p class="govuk-body govuk-!-margin-bottom-9">
+          <a href="#" class="govuk-link govuk-link--no-visited-state" >
+              [Add new authorised person]
           </a>
-        </dd>
+        </p>
         {% endif %}
-      </div>
-      {% endif %}
-     
-    </dl>
 
-    {% if _showEditLinks %}
-    <p class="govuk-body govuk-!-margin-bottom-9">
-      <a href="#" class="govuk-link govuk-link--no-visited-state" >
-          [Add new authorised person]
-      </a>
-    </p>
     {% endif %}
 
   </div>

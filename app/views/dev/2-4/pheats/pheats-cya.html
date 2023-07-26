@@ -22,6 +22,15 @@
   
   <div class="govuk-grid-column-two-thirds">
 
+    <!-- Selected address -->
+    {% set _addressID = data['address'] or 1 %}
+    {% set _address = data['addresses2'][0] %}
+    {% for _address2 in data['addresses2'] %}
+      {% if _address2.id == _addressID %}
+        {% set _address = _address2 %}
+      {% endif %}
+    {% endfor %}
+
     <!-- <h1 class="govuk-heading-xl">Are you applying to PHEATS? {{data.dave}}</h1> -->
 
     <h1 class="govuk-heading-xl">
@@ -41,10 +50,15 @@
             PHEATS address
           </dt>
           <dd class="govuk-summary-list__value">
-            Top Lane<br>
+            <!-- Top Lane<br>
             Peterborough<br>
             Cambridgeshire<br>
-            PO5 7HY
+            PO5 7HY -->
+            {{_address.address1}}<br>
+            {{_address.address2}}<br>
+            {{_address.address3}}<br>
+            {{_address.address4}}<br>
+            {{_address.postcode}}
           </dd>
           <dd class="govuk-summary-list__actions">
           </dd>
@@ -54,7 +68,7 @@
 
       <h2 class="govuk-heading-m">Site plan</h2>
 
-      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+      <dl class="govuk-summary-list govuk-!-margin-bottom-7">
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">
@@ -78,7 +92,16 @@
 
       {% set _commodityCount = data['commodityCount'] or 1 | int %}
 
-      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+      <table class="govuk-table govuk-!-margin-bottom-7" >
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Description</th>
+            <th class="govuk-table__header" scope="col">Origin</th>
+            <th class="govuk-table__header" scope="col">Destination</th>
+            <th class="govuk-table__header" scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
 
         {% for i in range(0, _commodityCount) -%}
 
@@ -91,16 +114,13 @@
 
         {% if _show == "true" %}
 
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
             {{data['commodityName' + _id] or 'Dactylorhiza umbrosa (DAKUM)'}}
-            {% if data['commodityVariety' + _id] %} <span style="font-weight:normal"><br>{{data['commodityVariety' + _id]}}</span>{% endif %}
-          </dt>
-          <dd class="govuk-summary-list__value">
+          </td>
+          <td class="govuk-table__cell">
 
-            <p class="govuk-body">Origins: </p>
             {% set _originCount = data['originCount' + _id] or 1 | int %}
-            <ul class="govuk-list govuk-list--bullet">
               {% for i in range(0, _originCount) -%}
                 {% set _show = "true" %}
                 {% set _originID = loop.index %}
@@ -110,14 +130,13 @@
                 {% endif %}
 
                 {% if _show == "true" %}
-                <li>{{data['commodityOrigin' + _id + '-' + _originID][0] or 'United Kingdom'}}</li>
+                {{data['commodityOrigin' + _id + '-' + _originID][0] or 'United Kingdom'}}{% if loop.last %}{% else %}, {% endif %}
                 {% endif %}
               {%- endfor %}
-            </ul>
-
-            <p class="govuk-body">Destinations: </p>
+            </td>
+            <td class="govuk-table__cell">
             {% set _destinationCount = data['destinationCount' + _id] or 1 | int %}
-            <ul class="govuk-list govuk-list--bullet">
+
               {% for i in range(0, _destinationCount) -%}
                 {% set _show = "true" %}
                 {% set _destinationID = loop.index %}
@@ -127,53 +146,72 @@
                 {% endif %}
 
                 {% if _show == "true" %}
-                <li>{{data['commodityDestination' + _id + '-' + _destinationID][0] or 'France'}}</li>
+                {{data['commodityDestination' + _id + '-' + _destinationID][0] or 'France'}}{% if loop.last %}{% else %}, {% endif %}
                 {% endif %}
               {%- endfor %}
-            </ul>
-
-          </dd>
-          <dd class="govuk-summary-list__actions">
-            <a class="govuk-link govuk-link--no-visited-state" href="pheats-commodities-added">
-              Change<span class="govuk-visually-hidden"> </span>
-            </a>
-          </dd>
-        </div>
+            </td>
+            <td class="govuk-table__cell" style="text-align: right;">
+              <a class="govuk-link govuk-link--no-visited-state" href="pheats-commodities-added">
+                Change<span class="govuk-visually-hidden"> </span>
+              </a>
+            </td>
+          </tr>
         {% endif %}
 
         {%- endfor %}
 
-      </dl>
+        </tbody>
+      </table>
 
-      <h2 class="govuk-heading-m">People</h2>
+      <h2 class="govuk-heading-m">Person responsible</h2>
     
-      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+      <table class="govuk-table govuk-!-margin-bottom-7" >
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Name</th>
+            <th class="govuk-table__header" scope="col">Position</th>
+            <th class="govuk-table__header" scope="col">Contact details</th>
+            <th class="govuk-table__header" scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
 
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            Person responsible
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{data['pheats-main-contact-name'] or 'Bill Shoggins'}}<br>
-            {{data['pheats-main-contact-position'] or 'Manager'}}<br>
-            {{data['pheats-main-contact-email'] or 'bill.shoggins@acmeltd.com'}}<br>
-            {{data['pheats-main-contact-phone'] or '01234 567890'}}<br>
-            {{data['pheats-main-contact-mobile'] or '07123 456789'}}
-          </dd>
-          <dd class="govuk-summary-list__actions">
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              {{data['pheats-main-contact-name'] or 'Bill Shoggins'}}
+            </td>
+            <td class="govuk-table__cell">
+              {{data['pheats-main-contact-position'] or 'Manager'}}
+            </td>
+            <td class="govuk-table__cell">
+              <span class="govuk-!-margin-bottom-1" style="display:block">{{data['pheats-main-contact-email'] or 'bill.shoggins@acmeltd.com'}}</span>
+              <span class="govuk-!-margin-bottom-1" style="display:block">{{data['pheats-main-contact-phone'] or '01234 567890'}}</span>
+              <span class="govuk-!-margin-bottom-1" style="display:block">{{data['pheats-main-contact-mobile'] or '07123 456789'}}</span>
+            </td>
+          <td class="govuk-table__cell" style="text-align: right;">
             <a class="govuk-link govuk-link--no-visited-state" href="pheats-pr">
               Change<span class="govuk-visually-hidden"> </span>
             </a>
-          </dd>
-        </div>
+          </td>
+        </tr>
 
-      </dl>
+      </tbody>
+    </table>
 
       <h2 class="govuk-heading-m">Authorised people</h2>
 
       {% set _apCount = data['apCount'] or 1 | int %}
 
-      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+      <table class="govuk-table govuk-!-margin-bottom-9">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Name</th>
+            <th class="govuk-table__header" scope="col">Position</th>
+            <th class="govuk-table__header" scope="col">Contact details</th>
+            <th class="govuk-table__header" scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
 
         {% for i in range(0, _apCount) -%}
 
@@ -185,25 +223,28 @@
         {% endif %}
 
         {% if _show == "true" %}
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
             {{data['apName' + _id] or 'Jane Doe'}}
-          </dt>
-          <dd class="govuk-summary-list__value">
-            {{data['apPosition' + _id] or 'Manager'}}<br>
+          </td>
+          <td class="govuk-table__cell">
+            {{data['apPosition' + _id] or 'Manager'}}
+          </td>
+          <td class="govuk-table__cell">
             {{data['apEmail' + _id] or 'email@email.com'}}
-          </dd>
-          <dd class="govuk-summary-list__actions">
+          </td>
+          <td class="govuk-table__cell" style="text-align: right;">
             <a class="govuk-link govuk-link--no-visited-state" href="pheats-aps-added">
               Change<span class="govuk-visually-hidden"> </span>
             </a>
-          </dd>
-        </div>
+          </td>
+        </tr>
         {% endif %}
 
         {%- endfor %}
 
-      </dl>
+      </tbody>
+    </table>
 
       <h2 class="govuk-heading-m">
         Declaration
@@ -268,8 +309,7 @@
       }) }}
 
         
-        {% set _pheatsReturnURL = 'pheats-cya' %}
-        <p class="govuk-body govuk-!-margin-top-2"><a href="pheats-cancel?pheatsReturnURL={{_pheatsReturnURL}}" class="govuk-link govuk-link--no-visited-state">Cancel PHEATS application</a></p>
+        <p class="govuk-body govuk-!-margin-top-2"><a href="pheats-applications" class="govuk-link govuk-link--no-visited-state">Save and continue later</a></p>
 
     </form>
 

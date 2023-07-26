@@ -60,10 +60,11 @@
         <tr class="govuk-table__row">
           <th class="govuk-table__header" scope="col">Description</th>
           <th class="govuk-table__header" scope="col">Origin</th>
-          <th class="govuk-table__header" scope="col">Destinations</th>
+          <th class="govuk-table__header" scope="col">Destination</th>
           <th class="govuk-table__header" scope="col"></th>
         </tr>
       </thead>
+      <tbody>
 
       {% for i in range(0, _commodityCount) -%}
 
@@ -79,11 +80,10 @@
         <tr class="govuk-table__row">
           <td class="govuk-table__cell">
             {{data['commodityName' + _id] or 'Dactylorhiza umbrosa (DAKUM)'}}
-            {% if data['commodityVariety' + loop.index] %} ({{data['commodityVariety' + loop.index]}}){% endif %}
           </td>
           <td class="govuk-table__cell">
             {% set _originCount = data['originCount' + _id] or 1 | int %}
-            <ul class="govuk-list govuk-list--bullet">
+
               {% for i in range(0, _originCount) -%}
                 {% set _show = "true" %}
                 {% set _originID = loop.index %}
@@ -93,14 +93,14 @@
                 {% endif %}
 
                 {% if _show == "true" %}
-                <li>{{data['commodityOrigin' + _id + '-' + _originID][0] or 'United Kingdom'}}</li>
+                {{data['commodityOrigin' + _id + '-' + _originID][0] or 'United Kingdom'}}{% if loop.last %}{% else %}, {% endif %}
                 {% endif %}
               {%- endfor %}
-            </ul>
+
           </td>
           <td class="govuk-table__cell govuk-table__cell">
             {% set _destinationCount = data['destinationCount' + _id] or 1 | int %}
-            <ul class="govuk-list govuk-list--bullet">
+
               {% for i in range(0, _destinationCount) -%}
                 {% set _show = "true" %}
                 {% set _destinationID = loop.index %}
@@ -111,10 +111,10 @@
 
                 {% if _show == "true" %}
                 
-                <li>{{data['commodityDestination' + _id + '-' + _destinationID][0] or 'France'}}</li>
+                {{data['commodityDestination' + _id + '-' + _destinationID][0] or 'France'}}{% if loop.last %}{% else %}, {% endif %}
                 {% endif %}
               {%- endfor %}
-            </ul>
+
 
           </td>
 
@@ -168,11 +168,11 @@
       </div>
 
       <button class="govuk-button" data-module="govuk-button">
-        Continue
+        Save and continue
       </button>
 
       {% set _pheatsReturnURL = 'pheats-commodities-added' %}
-      <p class="govuk-body govuk-!-margin-top-2"><a href="pheats-cancel?pheatsReturnURL={{_pheatsReturnURL}}" class="govuk-link govuk-link--no-visited-state">Cancel PHEATS application</a></p>
+      <p class="govuk-body govuk-!-margin-top-2"><a href="pheats-applications" class="govuk-link govuk-link--no-visited-state">Save and continue later</a></p>
 
     </form>
 
