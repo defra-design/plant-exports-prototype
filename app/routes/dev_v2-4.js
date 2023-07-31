@@ -920,22 +920,77 @@ module.exports = function(router) {
     if (baseDir === "/certificate-number-validation") {
 
       var number = req.session.data.certificateNumber;
+      var foundMatch = number.includes("2023/7800562125823");
       
       // Make sure user enters something
       if (number == "") {
         return res.redirect("certificate-number?error=true");
       }
       // User enters a valid phytosanitary certificate number
-      else if (number == "UK/GB/E&W/2023/7800562125823") {
+      else if (foundMatch == true) {
         req.session.data.certificateValid = "yes";
 
-        return res.redirect("place-of-issue");
+        return res.redirect("issue-date");
       }
       // Not a valid phytosanitary certificate number
       else {
         req.session.data.certificateValid = "no";
 
-        return res.redirect("place-of-issue");
+        return res.redirect("issue-date");
+      }
+
+    }
+
+    // Chris Harding (31.07.23) - Issue date: Error validation and routing
+    if (baseDir === "/issue-date-validation") {
+
+      // Linked parameters passed into this journey
+      var certificateValid = req.session.data.certificateValid;
+
+      // Data objects to be retrieved and queried
+      var day = req.session.data.certificateIssuedDay;
+      var month = req.session.data.certificateIssuedMonth;
+      var year = req.session.data.certificateIssuedYear;
+
+      // Logic and validation for routing
+      var errorCount = 0;
+      var error1 = "";
+      var error2 = "";
+      var error3 = "";
+
+      // Error validation - make sure user enters data into required fields
+      if (day == "") {
+        errorCount++;
+        error1 = "&error1=true";
+      }
+      if (month == "") {
+        errorCount++;
+        error2 = "&error2=true";
+      }
+      if (year == "") {
+        errorCount++;
+        error3 = "&error3=true";
+      }
+
+      // Routing - decide where to direct users to
+      if (errorCount > 0) {
+        return res.redirect("issue-date?error=true" + error1 + error2 + error3);
+      }
+      // FAIL: User has already entered a non-valid certificate number
+      else if (certificateValid == "no") {
+        return res.redirect("not-valid");
+      }
+      else {
+
+        // SUCCESS: User enters the correct details and finds a valid certificate
+        if ((day == "16") && (month == "6" || month == "06") && (year == "2023")) {
+          return res.redirect("valid");
+        }
+        // FAIL: User enters an issue date that doesn't match the previously provided certificate number
+        else {
+          return res.redirect("not-valid");
+        }
+
       }
 
     }
