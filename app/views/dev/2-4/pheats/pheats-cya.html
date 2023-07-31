@@ -133,29 +133,29 @@
                 {{data['commodityOrigin' + _id + '-' + _originID][0] or 'United Kingdom'}}{% if loop.last %}{% else %}, {% endif %}
                 {% endif %}
               {%- endfor %}
-            </td>
-            <td class="govuk-table__cell">
-            {% set _destinationCount = data['destinationCount' + _id] or 1 | int %}
+          </td>
+          <td class="govuk-table__cell">
+          {% set _destinationCount = data['destinationCount' + _id] or 1 | int %}
 
-              {% for i in range(0, _destinationCount) -%}
-                {% set _show = "true" %}
-                {% set _destinationID = loop.index %}
-                {% set _deletedValue = data['commodityDestinationDeleted' + _id + '-' + _destinationID] %}
-                {% if _deletedValue == "true" %}
-                  {% set _show = "false" %}
-                {% endif %}
+            {% for i in range(0, _destinationCount) -%}
+              {% set _show = "true" %}
+              {% set _destinationID = loop.index %}
+              {% set _deletedValue = data['commodityDestinationDeleted' + _id + '-' + _destinationID] %}
+              {% if _deletedValue == "true" %}
+                {% set _show = "false" %}
+              {% endif %}
 
-                {% if _show == "true" %}
-                {{data['commodityDestination' + _id + '-' + _destinationID][0] or 'France'}}{% if loop.last %}{% else %}, {% endif %}
-                {% endif %}
-              {%- endfor %}
-            </td>
-            <td class="govuk-table__cell" style="text-align: right;">
-              <a class="govuk-link govuk-link--no-visited-state" href="pheats-commodities-added">
-                Change<span class="govuk-visually-hidden"> </span>
-              </a>
-            </td>
-          </tr>
+              {% if _show == "true" %}
+              {{data['commodityDestination' + _id + '-' + _destinationID][0] or 'France'}}{% if loop.last %}{% else %}, {% endif %}
+              {% endif %}
+            {%- endfor %}
+          </td>
+          <td class="govuk-table__cell" style="text-align: right;">
+            <a class="govuk-link govuk-link--no-visited-state" href="pheats-commodities-added">
+              Change<span class="govuk-visually-hidden"> </span>
+            </a>
+          </td>
+        </tr>
         {% endif %}
 
         {%- endfor %}
