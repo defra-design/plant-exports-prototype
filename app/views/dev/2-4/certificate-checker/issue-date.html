@@ -1,7 +1,7 @@
 {% extends "layout-certificate-checker.html" %}
 
 {% block pageTitle %}
-  When was the certificate issued? - GOV.UK
+  {% if query.error == "true" %}Error: {% endif %}When was the certificate issued? - GOV.UK
 {% endblock %}
 
 {% block content %}
@@ -9,10 +9,41 @@
 
   <div class="govuk-grid-column-two-thirds">
 
-    <form action="{% if data.certificateValid == 'no' %}not-valid{% else %}valid{% endif %}?providedSecurityData=date" method="post" novalidate>
+    {% if query.error == "true" %}
+    <div class="govuk-error-summary" data-module="govuk-error-summary">
+      
+      <div role="alert">
+        <h2 class="govuk-error-summary__title">There is a problem</h2>
 
-      <div class="govuk-form-group">
-        <fieldset class="govuk-fieldset" role="group" aria-describedby="certificate-issued-hint">
+        <div class="govuk-error-summary__body">
+          <ul class="govuk-list govuk-error-summary__list">
+            {% if query.error1 == "true" and query.error2 == "true" and query.error3 == "true" %}
+            <li><a href="#certificate-issued-day">Enter the certificate issue date</a></li>
+            {% elif query.error1 == "true" and query.error2 == "true" %}
+            <li><a href="#certificate-issued-day">Certificate issue date must include a day and month</a></li>
+            {% elif query.error1 == "true" and query.error3 == "true" %}
+            <li><a href="#certificate-issued-day">Certificate issue date must include a day and year</a></li>
+            {% elif query.error2 == "true" and query.error3 == "true" %}
+            <li><a href="#certificate-issued-month">Certificate issue date must include a month and year</a></li>
+            {% elif query.error1 == "true" %}
+            <li><a href="#certificate-issued-day">Certificate issue date must include a day</a></li>
+            {% elif query.error2 == "true" %}
+            <li><a href="#certificate-issued-month">Certificate issue date must include a month</a></li>
+            {% elif query.error3 == "true" %}
+            <li><a href="#certificate-issued-year">Certificate issue date must include a year</a></li>
+            {% endif %}
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+    {% endif %}
+
+    <form action="issue-date-validation?providedSecurityData=date" method="post" novalidate>
+
+      <div class="govuk-form-group{% if query.error == 'true' %} govuk-form-group--error{% endif %}">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="certificate-issued-hint{% if query.error == 'true' %} certificate-issued-error{% endif %}">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-8">
             <h1 class="govuk-fieldset__heading">When was the certificate issued?</h1>
           </legend>
@@ -21,13 +52,29 @@
             For example, 27 3 2007
           </div>
 
+          {% if query.error1 == "true" and query.error2 == "true" and query.error3 == "true" %}
+          <p id="certificate-issued-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Enter the certificate issue date</p>
+          {% elif query.error1 == "true" and query.error2 == "true" %}
+          <p id="certificate-issued-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Certificate issue date must include a day and month</p>
+          {% elif query.error1 == "true" and query.error3 == "true" %}
+          <p id="certificate-issued-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Certificate issue date must include a day and year</p>
+          {% elif query.error2 == "true" and query.error3 == "true" %}
+          <p id="certificate-issued-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Certificate issue date must include a month and year</p>
+          {% elif query.error1 == "true" %}
+          <p id="certificate-issued-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Certificate issue date must include a day</p>
+          {% elif query.error2 == "true" %}
+          <p id="certificate-issued-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Certificate issue date must include a month</p>
+          {% elif query.error3 == "true" %}
+          <p id="certificate-issued-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Certificate issue date must include a year</p>
+          {% endif %}
+
           <div class="govuk-date-input" id="certificate-issued">
             
             <div class="govuk-date-input__item">
               
               <div class="govuk-form-group">
                 <label class="govuk-label govuk-date-input__label" for="certificate-issued-day">Day</label>
-                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="certificate-issued-day" name="certificateIssuedDay" type="text" inputmode="numeric">
+                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="certificate-issued-day" name="certificateIssuedDay" type="text" inputmode="numeric" value="{{data.certificateIssuedDay}}">
               </div>
 
             </div>
@@ -36,7 +83,7 @@
               
               <div class="govuk-form-group">
                 <label class="govuk-label govuk-date-input__label" for="certificate-issued-month">Month</label>
-                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="certificate-issued-month" name="certificateIssuedMonth" type="text" inputmode="numeric">
+                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="certificate-issued-month" name="certificateIssuedMonth" type="text" inputmode="numeric" value="{{data.certificateIssuedMonth}}">
               </div>
 
             </div>
@@ -45,7 +92,7 @@
               
               <div class="govuk-form-group">
                 <label class="govuk-label govuk-date-input__label" for="certificate-issued-year">Year</label>
-                <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="certificate-issued-year" name="certificateIssuedYear" type="text" inputmode="numeric">
+                <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="certificate-issued-year" name="certificateIssuedYear" type="text" inputmode="numeric" value="{{data.certificateIssuedYear}}">
               </div>
 
             </div>
