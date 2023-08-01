@@ -33,6 +33,37 @@
 
     <!-- <h1 class="govuk-heading-xl">Are you applying to PHEATS? {{data.dave}}</h1> -->
 
+    {% if query.deletedC %}
+    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+            Success
+            </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+            <h3 class="govuk-notification-banner__heading">
+              Commodity deleted
+            </h3>
+            <p class="govuk-body">{{data['commodityName' + query.deleted] or 'Dactylorhiza umbrosa (DAKUM)'}} has been deleted.</p>
+        </div>
+    </div>
+    {% endif %}
+    {% if query.deletedAP %}
+      <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+          <div class="govuk-notification-banner__header">
+              <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+              Success
+              </h2>
+          </div>
+          <div class="govuk-notification-banner__content">
+              <h3 class="govuk-notification-banner__heading">
+                Authorised person deleted
+              </h3>
+              <p class="govuk-body">{{data['apName' + query.deleted] or 'Jane Doe'}} has been deleted.</p>
+          </div>
+      </div>
+    {% endif %}
+
     <h1 class="govuk-heading-xl">
       Check your answers
     </h1>
@@ -91,8 +122,10 @@
       <h2 class="govuk-heading-m">Commodities</h2>
 
       {% set _commodityCount = data['commodityCount'] or 1 | int %}
+      {% set _commodityDisplayedCount = data['commodityDisplayedCount'] or 1 | int %}
+      {% set _commodityCountDeleted = _commodityDisplayedCount|int - 1 %}
 
-      <table class="govuk-table govuk-!-margin-bottom-7" >
+      <table class="govuk-table  govuk-!-margin-bottom-5" >
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">Description</th>
@@ -150,10 +183,25 @@
               {% endif %}
             {%- endfor %}
           </td>
+
+          {% set _deleteLinkSuffix = "?deletedC=" + _id + "&commodityDeleted" + _id + "=true" + "&commodityDisplayedCount=" + _commodityCountDeleted | int + "&cya=true" %}
+          {% set _deleteLink = "pheats-cya" %}
+          {% if _commodityDisplayedCount | int == 1 %}
+            {% set _deleteLink = "pheats-commodity" %}
+          {% endif %}
+
           <td class="govuk-table__cell" style="text-align: right;">
-            <a class="govuk-link govuk-link--no-visited-state" href="pheats-commodities-added">
-              Change<span class="govuk-visually-hidden"> </span>
-            </a>
+            <span class="govuk-!-margin-bottom-2" style="display:block">
+              <a href="pheats-commodity?edit={{_id}}&cya=true" class="govuk-link govuk-link--no-visited-state">
+                Change<span class="govuk-visually-hidden"> this commodity</span>
+              </a>
+            </span>
+            <span class="govuk-!-margin-bottom-2" style="display:block">
+              <a href="{{_deleteLink}}{{_deleteLinkSuffix}}" class="govuk-link govuk-link--no-visited-state">
+                Delete<span class="govuk-visually-hidden"> this commodity</span>
+              </a>
+            </span>
+            
           </td>
         </tr>
         {% endif %}
@@ -162,6 +210,12 @@
 
         </tbody>
       </table>
+
+      <p class="govuk-body govuk-!-margin-bottom-7">
+        <a href="pheats-commodity?cya=true" class="govuk-link govuk-link--no-visited-state">
+          Add another commodity
+        </a>
+      </p>
 
       <h2 class="govuk-heading-m">Person responsible</h2>
     
@@ -201,8 +255,10 @@
       <h2 class="govuk-heading-m">Authorised people</h2>
 
       {% set _apCount = data['apCount'] or 1 | int %}
+      {% set _apDisplayedCount = data['apDisplayedCount'] or 1 | int %}
+      {% set _apCountDeleted = _apDisplayedCount|int - 1 %}
 
-      <table class="govuk-table govuk-!-margin-bottom-9">
+      <table class="govuk-table govuk-!-margin-bottom-5">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">Name</th>
@@ -238,11 +294,23 @@
               {{data['apPhone' + _id] or '01234 567890'}}
             </span>
           </td>
+          
+          {% set _deleteLinkSuffix = "?deletedAP=" + _id + "&apDeleted" + _id + "=true" + "&apDisplayedCount=" + _apCountDeleted | int  + "&cya=true" %}
+          {% set _deleteLink = "pheats-cya" %}
+          {% if _apDisplayedCount | int == 1 %}
+            {% set _deleteLink = "pheats-ap" %}
+          {% endif %}
           <td class="govuk-table__cell" style="text-align: right;">
-            <a class="govuk-link govuk-link--no-visited-state" href="pheats-aps-added">
-              Change<span class="govuk-visually-hidden"> </span>
-            </a>
+
+            <p class="govuk-body govuk-!-margin-bottom-2">
+              <a href="pheats-ap?edit={{_id}}&cya=true" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this authorised person</span></a>
+            </p>
+            <p class="govuk-body govuk-!-margin-bottom-2">
+              <a href="{{_deleteLink}}{{_deleteLinkSuffix}}" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this authorised person</span></a>
+            </p>
+
           </td>
+
         </tr>
         {% endif %}
 
@@ -250,6 +318,12 @@
 
       </tbody>
     </table>
+
+      <p class="govuk-body govuk-!-margin-bottom-9">
+        <a href="pheats-ap?cya=true" class="govuk-link govuk-link--no-visited-state">
+          Add another authorised person
+        </a>
+      </p>
 
       <h2 class="govuk-heading-m">
         Declaration
