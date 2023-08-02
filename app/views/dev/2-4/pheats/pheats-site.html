@@ -38,7 +38,7 @@
       </ul>
     </div>
 
-    <form method="post" novalidate action="pheats-site-confirm">
+    <form method="post" novalidate >
       <div class="govuk-form-group ">
         <fieldset class="govuk-fieldset" >
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
@@ -63,9 +63,11 @@
         </fieldset>
       </div>
 
-        {{ govukButton({
-          text: "Save and continue"
-        }) }}
+      {% if query.cya %}
+        {% set _suffix = "&cya=true" %}
+      {% endif %}
+      
+      <p class="govuk-body"><a href="pheats-site-confirm?uploaded=true{{_suffix}}" class="govuk-button">Save and continue</a></p>
 
         <!-- <p class="govuk-body govuk-!-margin-top-2"><a href="pheats-applications" class="govuk-link govuk-link--no-visited-state">Save and continue later</a></p> -->
 
