@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.build == "development" %}Exports application{% else %}Do you want to select this inspection address? - Phytosanitary certificate - {{serviceName}}{% endif %} - GOV.UK
+  {% if data.build == "development" %}Exports application{% else %}Do you want to select this{% if data.commodity != "everything else" %} inspection{% endif %} address? - Phytosanitary certificate - {{serviceName}}{% endif %} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -16,7 +16,7 @@
   <div class="govuk-grid-column-two-thirds">
 
     {% if data.build == "development" %}
-    <h1 class="govuk-heading-xl">Do you want to select this inspection address?</h1>
+    <h1 class="govuk-heading-xl">Do you want to select this{% if data.commodity != "everything else" %} inspection{% endif %} address?</h1>
 
     <table class="govuk-table">
       <thead class="govuk-table__head">
@@ -54,12 +54,12 @@
             
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="confirm_address_yes" name="confirm_address" type="radio" value="Yes~{% if data.pheats_check == 'yes' %}task-list{% elif data.journey == 'coc' %}contact-details-simple-coc{% elif data.commodity == 'everything else' %}contact-details-potential{% else %}contact-details-simple-short{% endif %}">
-              <label class="govuk-label govuk-radios__label" for="confirm_address_yes">Yes, select this inspection address</label>
+              <label class="govuk-label govuk-radios__label" for="confirm_address_yes">Yes, select this{% if data.commodity != "everything else" %} inspection{% endif %} address</label>
             </div>
 
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="confirm_address_no" name="confirm_address" type="radio" value="No~{% if data.pheats_check == 'yes' %}pheats-inspection-addresses{% elif data.commodity == 'everything else' %}inspection-addresses-potential{% else %}inspection-addresses{% endif %}">
-              <label class="govuk-label govuk-radios__label" for="confirm_address_no">No, don't select this inspection address</label>
+              <label class="govuk-label govuk-radios__label" for="confirm_address_no">No, don't select this{% if data.commodity != "everything else" %} inspection{% endif %} address</label>
             </div>
 
           </div>
