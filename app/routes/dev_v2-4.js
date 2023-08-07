@@ -598,14 +598,17 @@ module.exports = function(router) {
         errorCount++;
         error1 = "&error1=true";
       }
+
       if (consigneeAddressLine1 == "" || consigneeAddressLine1 == null) {
         errorCount++;
         error2 = "&error2=true";
       }
+
       if (consigneeAddressLine3 == "" || consigneeAddressLine3 == null) {
         errorCount++;
         error3 = "&error3=true";
       }
+
       if (consigneeAddressLine5 == "" || consigneeAddressLine5 == null) {
         errorCount++;
         error4 = "&error4=true";
@@ -657,6 +660,49 @@ module.exports = function(router) {
 
     }
 
+    // Chris Harding (04.08.23) - Phytosanitary certificate: Add a supporting document
+    if (baseDir === "/application/create/attachments-add-validation") {
+
+      // Data objects to be retrieved and queried
+      var supportingDocument = req.session.data.supportingDocument;
+      var fileDescription = req.session.data.fileDescription;
+      var manualFileDescription = req.session.data.manualFileDescription;
+
+      // Logic and validation for routing
+      var errorCount = 0;
+      var error1 = "";
+      var error2 = "";
+      var error3 = "";
+      
+      // Error validation - make sure user enters data into required fields
+      if (supportingDocument == "" || supportingDocument == null) {
+        errorCount++;
+        error1 = "&error1=true";
+      }
+
+      if (fileDescription == "" || fileDescription == null) {
+        errorCount++;
+        error2 = "&error2=true";
+      }
+      else {
+
+        if (fileDescription == "Something else" && (manualFileDescription == "" || manualFileDescription == null)) {
+          errorCount++;
+          error3 = "&error3=true";
+        }
+
+      }
+
+      // Routing - decide where to direct users to
+      if (errorCount > 0) {
+        return res.redirect("attachments-add?error=true" + error1 + error2 + error3);
+      }
+      else {
+        return res.redirect("attachments-view?supportingDocumentAdded=true&supportingDocumentsExist=true");
+      }
+
+    }
+
     // *******************************
     // MICROSOFT DYNAMICS 365 routing
     // *******************************
@@ -670,27 +716,36 @@ module.exports = function(router) {
       // Data objects to be retrieved and queried
       var supportingDocument = req.session.data.supportingDocument;
       var fileDescription = req.session.data.fileDescription;
+      var manualFileDescription = req.session.data.manualFileDescription;
 
       // Logic and validation for routing
       var errorCount = 0;
       var error1 = "";
       var error2 = "";
+      var error3 = "";
       
       // Error validation - make sure user enters data into required fields
       if (supportingDocument == "" || supportingDocument == null) {
         errorCount++;
         error1 = "&error1=true";
       }
+
       if (fileDescription == "" || fileDescription == null) {
         errorCount++;
         error2 = "&error2=true";
       }
+      else {
 
-      console.log("errorCount is: " + errorCount);
+        if (fileDescription == "Something else" && (manualFileDescription == "" || manualFileDescription == null)) {
+          errorCount++;
+          error3 = "&error3=true";
+        }
+
+      }
 
       // Routing - decide where to direct users to
       if (errorCount > 0) {
-        return res.redirect("upload?error=true" + error1 + error2);
+        return res.redirect("upload?error=true" + error1 + error2 + error3);
       }
       else if (return_url) {
         return res.redirect(return_url + "?supportingDocumentAdded=true&supportingDocumentsExist=true&row1=true");
@@ -963,10 +1018,12 @@ module.exports = function(router) {
         errorCount++;
         error1 = "&error1=true";
       }
+
       if (month == "") {
         errorCount++;
         error2 = "&error2=true";
       }
+
       if (year == "") {
         errorCount++;
         error3 = "&error3=true";
