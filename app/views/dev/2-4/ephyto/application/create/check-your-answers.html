@@ -813,12 +813,14 @@
 
       <h2 class="govuk-heading-m">Supporting documents</h2>
       {% if data.build != "development" and data['consignee-import-permit'] %}
-      {% if data.file %}
+      {% if data.supportingDocumentsExist == "true" %}
       {# do nothing if we have a file uploaded #}
       {% else %}
+
       <div class="govuk-inset-text app-alert--info">
         If you have an import permit, upload it as a supporting document.
       </div>
+
       {% endif %}
       {% endif %}
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
@@ -830,16 +832,16 @@
             File description
           </dt>
           <dd class="govuk-summary-list__value">
-            {% if data.file %}
-            <a href="#" class="govuk-link">{{data.file}}</a>
+            {% if data.supportingDocumentsExist == "true" %}
+            <a href="#" class="govuk-link">{{data.supportingDocument or "Filename.jpg"}}</a>
             <br>
-            {{data.description or "Map of fields for inspection"}}
+            {% if data.fileDescription == "Something else" %}{{data.manualFileDescription or "Description of file"}}{% else %}{{data.fileDescription or "Description of file"}}{% endif %}
             {% else %}
             No documents uploaded
             {% endif %}
           </dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="attachments?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> supporting documents</span></a>
+            <a class="govuk-link" href="attachments-view?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> supporting documents</span></a>
           </dd>
         </div>
 

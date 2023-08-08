@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if query.error == "true" %}Error: {% endif %}Add supporting documents - {{serviceName}} - GOV.UK
+  {% if query.error == "true" %}Error: {% endif %}Add a supporting document - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -25,7 +25,10 @@
             <li><a href="#supportingDocument">Choose a file to upload</a></li>
             {% endif %}
             {% if query.error2 == "true" %}
-            <li><a href="#fileDescription">Enter a file description</a></li>
+            <li><a href="#fileDescription-1">Select a file description</a></li>
+            {% endif %}
+            {% if query.error3 == "true" %}
+            <li><a href="#manualFileDescription">Enter a file description</a></li>
             {% endif %}
           </ul>
         </div>
@@ -41,7 +44,7 @@
         <fieldset class="govuk-fieldset">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
             <span class="govuk-caption-xl">{% if query.subHeading == "view" %}Application reference{% elif query.subHeading == "issue" %}Issue ePhyto{% else %}Application reference{% endif %} 1760 96929 3035</span>
-            <h1 class="govuk-fieldset__heading">Add supporting documents</h1>
+            <h1 class="govuk-fieldset__heading">Add a supporting document</h1>
           </legend>
           <p class="govuk-body">Upload document files one at a time. Each file must:</p>
           <ul class="govuk-list govuk-list--bullet">
@@ -60,12 +63,69 @@
           </div>
 
           <div class="govuk-form-group{% if query.error2 == 'true' %} govuk-form-group--error{% endif %}">
+            <fieldset class="govuk-fieldset"{% if query.error2 == 'true' %} aria-describedby="fileDescription-error"{% endif %}>
+              <legend class="govuk-fieldset__legend">
+                <h1 class="govuk-fieldset__heading">Select a file description</h1>
+              </legend>
+              {% if query.error2 == "true" %}
+              <p id="fileDescription-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Select a file description</p>
+              {% endif %}
+  
+              <div class="govuk-radios" data-module="govuk-radios">
+                
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="fileDescription-1" name="fileDescription" type="radio" value="File description 1"{% if data.fileDescription == 'File description 1' %} checked{% endif %}>
+                  <label class="govuk-label govuk-radios__label" for="fileDescription-1">File description 1</label>
+                </div>
+  
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="fileDescription-2" name="fileDescription" type="radio" value="File description 2"{% if data.fileDescription == 'File description 2' %} checked{% endif %}>
+                  <label class="govuk-label govuk-radios__label" for="fileDescription-2">File description 2</label>
+                </div>
+  
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="fileDescription-3" name="fileDescription" type="radio" value="File description 3"{% if data.fileDescription == 'File description 3' %} checked{% endif %}>
+                  <label class="govuk-label govuk-radios__label" for="fileDescription-3">File description 3</label>
+                </div>
+  
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="fileDescription-4" name="fileDescription" type="radio" value="File description 4"{% if data.fileDescription == 'File description 4' %} checked{% endif %}>
+                  <label class="govuk-label govuk-radios__label" for="fileDescription-4">File description 4</label>
+                </div>
+  
+                <div class="govuk-radios__divider">
+                  or
+                </div>
+  
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="fileDescription-5" name="fileDescription" type="radio" data-aria-controls="fileDescription-5-hidden" value="Something else"{% if data.fileDescription == 'Something else' %} checked{% endif %}>
+                  <label class="govuk-label govuk-radios__label" for="fileDescription-5">Something else</label>
+                </div>
+  
+                <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="fileDescription-5-hidden">
+                  
+                  <div class="govuk-form-group{% if query.error3 == 'true' %} govuk-form-group--error{% endif %}">
+                    <label class="govuk-label" for="manualFileDescription">Enter a file description</label>
+                    {% if query.error3 == "true" %}
+                    <p id="manualFileDescription-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Enter a file description</p>
+                    {% endif %}
+                    <input class="govuk-input" id="manualFileDescription" name="manualFileDescription" type="text"{% if query.error3 == "true" %}aria-describedby="manualFileDescription-error"{% endif %} value="{{data.manualFileDescription}}">
+                  </div>
+  
+                </div>
+  
+              </div>
+  
+            </fieldset>
+          </div>
+
+          <!-- <div class="govuk-form-group{% if query.error2 == 'true' %} govuk-form-group--error{% endif %}">
             <label class="govuk-label" for="fileDescription">File description</label>
             {% if query.error2 == "true" %}
             <p id="supportingDocument-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Enter a file description</p>
             {% endif %}
             <textarea class="govuk-textarea{% if query.error2 == 'true' %} govuk-input--error{% endif %}" id="fileDescription" name="fileDescription" rows="5">{{data.fileDescription}}</textarea>
-          </div>
+          </div> -->
 
         </fieldset>
       </div>

@@ -135,8 +135,7 @@
       </li>
       {% if data.journey != "coc" %}
       <li>
-        <h2 class="app-task-list__section"><span class="app-task-list__section-number">2. </span> 
-          {% if data.build == "development" %}Additional documents{% else %}Upload supporting documents{% endif %} (optional)</h2>
+        <h2 class="app-task-list__section"><span class="app-task-list__section-number">2. </span>{% if data.build == "development" %}Additional documents{% else %}Upload supporting documents{% endif %} (optional)</h2>
         <ul class="app-task-list__items">
           <li class="app-task-list__item" style="border-top: none;">Upload packing lists, schedules and other supporting documents to attach to your application</li>
           <li class="app-task-list__item">
@@ -158,8 +157,8 @@
             </div>
 
             {% endif %}
-            <span class="app-task-list__task-name"><a href="attachments" aria-describedby="attachments">Supporting documents</a></span>
-            {% if data.supporting_documents_task_list_data or data.file or data.import-phyto %}
+            <span class="app-task-list__task-name"><a href="{% if data.supportingDocumentsExist == 'true' %}attachments-view{% else %}attachments-add{% endif %}" aria-describedby="attachments">Supporting documents</a></span>
+            {% if data.supportingDocumentsExist == "true" or data.supporting_documents_task_list_data or data.file or data.import-phyto %}
             <strong class="govuk-tag app-task-list__tag" id="attachments">1 file attached</strong>
             {% else %}
             <strong class="govuk-tag app-task-list__tag" id="attachments">None added</strong>
