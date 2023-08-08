@@ -26,6 +26,21 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
+
+    {% if query.supportingDocumentDeleted == "true" %}
+    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+  
+      <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">Success</h2>
+      </div>
+
+      <div class="govuk-notification-banner__content">
+        <h3 class="govuk-notification-banner__heading">You deleted {{data.supportingDocument or "Filename.jpg"}} from this application</h3>
+      </div>
+
+    </div>
+    {% endif %}
+
     {% if data.build != "development" %}
     {% if data.reference_num %}<span class="govuk-caption-xl">{{data.reference_num}}</span>{% endif %}
     {% endif %}
@@ -113,7 +128,7 @@
           </li>
           {% if data.journey != "coc" %}
           <li class="app-task-list__item">
-            <span class="app-task-list__task-name"><a href="{% if data.build == 'development' %}destination-consignee{% else %}{% if data.addressBook == 'true' %}consignee-address-book?row1=true{% else %}consignee-add{% endif %}{% endif %}" aria-describedby="consignee">Who will receive this consignment?</a></span>
+            <span class="app-task-list__task-name"><a href="{% if data.build == 'development' %}destination-consignee{% else %}{% if data.addressBook == 'false' %}consignee-add{% else %}consignee-address-book?row1=true&row2=true&row3=true&row4=true&row5=true{% endif %}{% endif %}" aria-describedby="consignee">Who will receive this consignment?</a></span>
             {% if data.consignee_task_list_data or data.consignee %}
             <strong class="govuk-tag app-task-list__tag" id="consignee">Complete</strong>
             {% else %}
@@ -137,7 +152,7 @@
       <li>
         <h2 class="app-task-list__section"><span class="app-task-list__section-number">2. </span>{% if data.build == "development" %}Additional documents{% else %}Upload supporting documents{% endif %} (optional)</h2>
         <ul class="app-task-list__items">
-          <li class="app-task-list__item" style="border-top: none;">Upload packing lists, schedules and other supporting documents to attach to your application</li>
+          <li class="app-task-list__item" style="border-top: none;">Attach import phytosanitary certificates, certificates of conformity and other supporting documents to your application</li>
           <li class="app-task-list__item">
             {% if data['consignee-import-permit'] %}
             {% if data.supporting_documents_task_list_data or data.file or data.import-phyto %}

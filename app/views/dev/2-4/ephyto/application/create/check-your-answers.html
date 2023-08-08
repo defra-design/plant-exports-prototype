@@ -39,6 +39,19 @@
       <p class="govuk-body" id="govuk-notification-banner-message"><strong>{{data.fileUpload1 or "21.01.23 XXXXXXX C154189.csv"}}</strong> with 4 commodity records uploaded successfully</p>
     </div>
     {% endif %}
+    {% elif query.consigneeAdded == "true" %}
+    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+  
+      <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">Success</h2>
+      </div>
+
+      <div class="govuk-notification-banner__content">
+        <h3 class="govuk-notification-banner__heading">You added {{data.consignee_name or "Zheng Fruits"}} to this application</h3>
+        <p class="govuk-body">The consignee details will be saved in your account so you can add them to future applications.</p>
+      </div>
+
+    </div>
     {% endif %}
 
     <form action="{% if data.journey == 'coc' %}../submit/submit-date-coc{% else %}../submit/submit-date{% endif %}" method="post">
@@ -781,12 +794,12 @@
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Name and address of consignee</dt>          
           <dd class="govuk-summary-list__value">
-            {{data.consignee_name or "Zheng Fruits"}}
+            {% if data.select_consignee_address == "address_0" %}Zheng Fruits{% elif data.select_consignee_address == "address_1" %}Frukta LLC{% elif data.select_consignee_address == "address_2" %}Alpine Furnishings Ltd{% elif data.select_consignee_address == "address_3" %}PINDI LLC{% elif data.select_consignee_address == "address_4" %}Globex Corporation{% else %}{{data.consignee_name or "Zheng Fruits"}}{% endif %}
             <br>
-            {{data.consigneeAddressLine1 or "88 Jianguo Rd" }}{% if data.consigneeAddressLine2 %}, {{data.consigneeAddressLine2}}{% endif %}, {{data.consigneeAddressLine3 or "北京市"}}{% if data.consigneeAddressLine4 %}, {{data.consigneeAddressLine4}}{% endif %}, {{data.consigneeAddressLine5 or "3208"}}, {{data.countrySelect[0] or "France"}}
+            {% if data.select_consignee_address == "address_0" %}88 Jianguo Rd, 北京市, 3208, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_1" %}Lillegardsvagen 1, Falkenberg, South-East, 311 50, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_2" %}Piazza Pietro Nenni, 4, Orta Nova Foggia, Foggia, 71045, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_3" %}Phase 3 St, Vaibhav Nagar, Katpadi, Vellore, Tamil Nadu, 632014, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_4" %}6347 Pacific Blvd, Huntington Park, California, 90255, {{data.countrySelect[0] or "France"}}{% else %}{{data.consigneeAddressLine1 or "88 Jianguo Rd" }}{% if data.consigneeAddressLine2 %}, {{data.consigneeAddressLine2}}{% endif %}, {{data.consigneeAddressLine3 or "北京市"}}{% if data.consigneeAddressLine4 %}, {{data.consigneeAddressLine4}}{% endif %}, {{data.consigneeAddressLine5 or "3208"}}, {{data.countrySelect[0] or "France"}}{% endif %}
           </dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="consignee-address-book?change=yes&row1=true&return_url=check-your-answers">Change <span class="govuk-visually-hidden">who will receive this consignment</span></a>
+            <a class="govuk-link" href="{% if data.addressBook == 'false' %}consignee-add?change=yes&return_url=check-your-answers{% else %} consignee-address-book?change=yes&return_url=check-your-answers{% endif %}">Change <span class="govuk-visually-hidden">who will receive this consignment</span></a>
           </dd>
         </div>
         
@@ -835,13 +848,13 @@
             {% if data.supportingDocumentsExist == "true" %}
             <a href="#" class="govuk-link">{{data.supportingDocument or "Filename.jpg"}}</a>
             <br>
-            {% if data.fileDescription == "Something else" %}{{data.manualFileDescription or "Description of file"}}{% else %}{{data.fileDescription or "Description of file"}}{% endif %}
+            {% if data.fileDescription == "Add your own description" %}{{data.manualFileDescription or "Description of file"}}{% else %}{{data.fileDescription or "Description of file"}}{% endif %}
             {% else %}
             No documents uploaded
             {% endif %}
           </dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="attachments-view?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> supporting documents</span></a>
+            <a class="govuk-link" href="{% if data.supportingDocumentsExist == 'true' %}attachments-view{% else %}attachments-add{% endif %}?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> supporting documents</span></a>
           </dd>
         </div>
 
