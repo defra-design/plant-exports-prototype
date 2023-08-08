@@ -70,14 +70,21 @@
           </dt>
           <dd class="govuk-summary-list__value">
             <p class="govuk-body govuk-!-margin-bottom-2">
+
+              {% set _pheatsHREF = "../pheats/pheats-manage?address=" + _address.id %}
+              {% set _pheatsLinkText = "Manage" %}
+
               {% if _address.pheats.status == "notregistered" %}
                 <!-- NOT REGISTERED -->
                 <strong class="govuk-tag govuk-tag--grey">
                     Not registered
                 </strong>
+                {% set _pheatsHREF = "../pheats/pheats-start?address=" + _address.id %}
+                {% set _pheatsLinkText = "Add to PHEATS" %}
               {% elif _address.pheats.status == "draft" %}
+
                 <!-- DRAFT -->
-                <strong class="govuk-tag govuk-tag--grey">
+                <strong class="govuk-tag govuk-tag--red">
                   Draft
                 </strong>
               {% elif _address.pheats.status == "registered" %}
@@ -87,7 +94,7 @@
                 </strong>
               {% elif _address.pheats.status == "updated" %}
                 <!-- REGISTERED and UPDATED-->
-                <strong class="govuk-tag govuk-tag--green">
+                <strong class="govuk-tag govuk-tag--blue">
                   Registered
                 </strong>
                 <!-- <span class="govuk-!-margin-bottom-2 govuk-!-margin-top-2" style="display: block">and </span>
@@ -98,7 +105,7 @@
                 </strong>
               {% elif _address.pheats.status == "pending" %}
                 <!-- PENDING -->
-                <strong class="govuk-tag govuk-tag--orange">
+                <strong class="govuk-tag govuk-tag--blue">
                   In progress
                 </strong>
               {% elif _address.pheats.status == "paused" %}
@@ -106,6 +113,16 @@
                 <strong class="govuk-tag govuk-tag--grey">
                   Not active
                 </strong>
+              {% elif _address.pheats.status == "rejected" %}
+                  <!-- REJECTED -->
+                  <strong class="govuk-tag govuk-tag--grey">
+                    [Rejected]
+                  </strong>
+              {% elif _address.pheats.status == "withtrader" %}
+                  <!-- WITH TRADER -->
+                  <strong class="govuk-tag govuk-tag--red">
+                    [With trader]
+                  </strong>
               {% endif %}
             </p>
           </dd>
@@ -153,13 +170,20 @@
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
     {% endif %}
 
+    {% set _version = 'mvp' %}
+
     <!-- UPDATE or RESTART -->
-    {% if _address.pheats.status == "registered" or _address.pheats.status == "paused" or _address.pheats.status == "draft" %}
+    {% if _address.pheats.status == "registered" or _address.pheats.status == "paused" or _address.pheats.status == "draft" or _address.pheats.status == "rejected" %}
     {% set _cyaLink = "pheats-cya-update?address=" + _addressID %}
+    {% if _version == 'mvp' %}
+      {% set _cyaLink = "pheats-update?address=" + _addressID %}
+    {% endif %}
     {% if _address.pheats.status == "paused" %}
       {% set _cyaLink = "pheats-cya-restart?address=" + _addressID %}
     {% elif _address.pheats.status == "draft" %}
       {% set _cyaLink = "pheats-site-confirm?address=" + _addressID %}
+    {% elif _address.pheats.status == "rejected" %}
+      {% set _cyaLink = "pheats-cya-reapply?address=" + _addressID %}
     {% endif %}
     <form method="post" novalidate action="{{_cyaLink}}">
 
@@ -222,6 +246,14 @@
       <button class="govuk-button govuk-button--secondary govuk-!-margin-bottom-9" data-module="govuk-button">
         Edit address details
       </button>
+      {% endif %}
+
+      <!-- REJECTED -->
+      {% if _address.pheats.status == "rejected" %}
+      <button class="govuk-button govuk-!-margin-bottom-" data-module="govuk-button">
+        Reapply
+      </button>
+
       {% endif %}
 
       <!-- DRAFT -->

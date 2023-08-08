@@ -313,7 +313,7 @@ module.exports = function(router) {
   // This adds query to all pages and will be used if no other get routing exists to override this.
   router.get('/' + base_url + '*', function(req, res) {
 
-    console.log("(dev_v2-3.js)");
+    console.log("(dev_v2-4.js)");
     console.log("default global GET routing page for: " + base_url + " plus " + req.params[0]);
     
     var dir = req.params[0].split(/\/+/g);
@@ -876,14 +876,14 @@ module.exports = function(router) {
 
     //SUBMITTED
     if (baseDir === "/pheats-confirmation") {
-      req.session.data.addresses[0].pheats.status = "pending"
+      req.session.data.addresses2[0].pheats.status = "pending"
     }
 
     //PAUSED
     if (baseDir === "/pheats-confirmation-pause") {
       var _addressID = req.session.data.address || "1"
-        for (var a = 0; a < req.session.data.addresses.length; a++) {
-          var _address = req.session.data.addresses[a]
+        for (var a = 0; a < req.session.data.addresses2.length; a++) {
+          var _address = req.session.data.addresses2[a]
           if(_addressID.toString() == _address.id.toString()){
             _address.pheats.status = "paused"
           }
@@ -892,11 +892,34 @@ module.exports = function(router) {
 
     //RESTARTED
     if (baseDir === "/pheats-confirmation-restart") {
+      var _amendments = req.session.data.pheatsChanges || "Yes"
       var _addressID = req.session.data.address || "1"
-        for (var a = 0; a < req.session.data.addresses.length; a++) {
-          var _address = req.session.data.addresses[a]
+        for (var a = 0; a < req.session.data.addresses2.length; a++) {
+          var _address = req.session.data.addresses2[a]
           if(_addressID.toString() == _address.id.toString()){
-            _address.pheats.status = "pending"
+            if(_amendments == "Yes"){
+              _address.pheats.status = "withtrader"
+            } else {
+              _address.pheats.status = "pending"
+            }
+            
+          }
+        }
+    }
+
+    //REAPPLIED
+    if (baseDir === "/pheats-confirmation-reapply") {
+      var _amendments = req.session.data.pheatsChanges || "Yes"
+      var _addressID = req.session.data.address || "1"
+        for (var a = 0; a < req.session.data.addresses2.length; a++) {
+          var _address = req.session.data.addresses2[a]
+          if(_addressID.toString() == _address.id.toString()){
+            if(_amendments == "Yes"){
+              _address.pheats.status = "withtrader"
+            } else {
+              _address.pheats.status = "pending"
+            }
+            
           }
         }
     }
@@ -904,8 +927,8 @@ module.exports = function(router) {
     //UPDATED
     if (baseDir === "/pheats-confirmation-update") {
       var _addressID = req.session.data.address || "1"
-        for (var a = 0; a < req.session.data.addresses.length; a++) {
-          var _address = req.session.data.addresses[a]
+        for (var a = 0; a < req.session.data.addresses2.length; a++) {
+          var _address = req.session.data.addresses2[a]
           if(_addressID.toString() == _address.id.toString()){
             _address.pheats.status = "updated"
           }

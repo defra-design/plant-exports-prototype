@@ -33,11 +33,56 @@ addresses2.sort(function(a,b){
 
   var returnValue = 0;
 
+  //DRAFT
   if(a.pheats.status == 'draft' && b.pheats.status != 'draft') {
     returnValue = -1
   } else if(a.pheats.status != 'draft' && b.pheats.status == 'draft') {
     returnValue = 1
+  //WITH TRADER
+  } else {
+    if(a.pheats.status == 'withtrader' && b.pheats.status != 'withtrader') {
+      returnValue = -1
+    } else if(a.pheats.status != 'withtrader' && b.pheats.status == 'withtrader') {
+      returnValue = 1
+    //PENDING
+    } else {
+      if(a.pheats.status == 'pending' && b.pheats.status != 'pending') {
+        returnValue = -1
+      } else if(a.pheats.status != 'pending' && b.pheats.status == 'pending') {
+        returnValue = 1
+      //UPDATED
+      } else {
+        if(a.pheats.status == 'updated' && b.pheats.status != 'updated') {
+          returnValue = -1
+        } else if(a.pheats.status != 'updated' && b.pheats.status == 'updated') {
+          returnValue = 1
+        //REGISTERED
+        } else {
+          if(a.pheats.status == 'registered' && b.pheats.status != 'registered') {
+            returnValue = -1
+          } else if(a.pheats.status != 'registered' && b.pheats.status == 'registered') {
+            returnValue = 1
+          } else {
+            //PAUSED
+            if(a.pheats.status == 'paused' && b.pheats.status != 'paused') {
+              returnValue = -1
+            } else if(a.pheats.status != 'paused' && b.pheats.status == 'paused') {
+              returnValue = 1
+            } else {
+              //REJECTED
+              if(a.pheats.status == 'rejected' && b.pheats.status != 'rejected') {
+                returnValue = -1
+              } else if(a.pheats.status != 'rejected' && b.pheats.status == 'rejected') {
+                returnValue = 1
+              }
+            }
+          }
+        }
+      }
+    }
   }
+
+  
 
   return returnValue;
 
