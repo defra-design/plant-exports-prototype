@@ -574,6 +574,51 @@ module.exports = function(router) {
 
     }
 
+    // Chris Harding (09.08.23) - Phytosanitary certificate: Consignee address book routing (selection)
+    if (baseDir === "/application/create/consignee-address-book-validation") {
+
+      // Parameters passed into this journey
+      var return_url = req.session.data.return_url;
+
+      // Data objects to be retrieved and queried
+      var consigneeAddress = req.session.data.select_consignee_address;
+
+      // Error validation - make sure user enters data into required fields
+      if (consigneeAddress == "" || consigneeAddress == null) {
+        return res.redirect("consignee-address-book?error=true");
+      }
+      // Routing - decide where to direct users to
+      else if (consigneeAddress == "new_consignee") {
+
+        if (return_url) {
+          return res.redirect("consignee-add?return_url=" + return_url);
+        }
+        else {
+          return res.redirect("consignee-add");
+        }
+
+      }
+      else {
+
+        // Clear down any newly added consignee data
+        req.session.data.consignee_name = "";
+        req.session.data.consigneeAddressLine1 = "";
+        req.session.data.consigneeAddressLine2 = "";
+        req.session.data.consigneeAddressLine3 = "";
+        req.session.data.consigneeAddressLine4 = "";
+        req.session.data.consigneeAddressLine5 = "";
+
+        if (return_url) {
+          return res.redirect(return_url + "?return_url=");
+        }
+        else {
+          return res.redirect("consignee-import-permit-number");
+        }
+
+      }
+
+    }
+    
     // Chris Harding (19.05.23) - Phytosanitary certificate: Consignee address book routing (add)
     if (baseDir === "/application/create/consignee-add-validation") {
 
