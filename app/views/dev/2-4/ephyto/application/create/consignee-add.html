@@ -42,7 +42,7 @@
     </div>
     {% endif %}
 
-    <form action="consignee-add-validation?return_url={{query.return_url}}" method="post">
+    <form action="consignee-add-validation?return_url={{data.return_url}}" method="post">
       <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
           <h1 class="govuk-fieldset__heading">Add a consignee</h1>
@@ -115,12 +115,7 @@
 
       </fieldset>
       
-      {% if data.addressBook == "true" %}
-      <div class="govuk-button-group">
-        <button class="govuk-button" type="submit" data-module="govuk-button">Add consignee</button>
-        <a class="govuk-link app-button--link" href="consignee-address-book">Cancel</a>
-      </div>
-      {% else %}
+      {% if data.addressBook == "false" %}
       <div class="govuk-button-group govuk-!-margin-bottom-7">
         <button class="govuk-button" type="submit" data-module="govuk-button">Add consignee</button>
       </div>
@@ -128,6 +123,12 @@
       {% block continueLater %}
 			{% include "../modules/_save-continue-later.html" %}
 			{% endblock %}
+      {% else %}
+      <div class="govuk-button-group">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Add consignee</button>
+        <a class="govuk-link app-button--link" href="consignee-address-book">Cancel</a>
+      </div>
+
       {% endif %}
     </form>
 

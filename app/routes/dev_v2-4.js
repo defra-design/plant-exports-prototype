@@ -578,7 +578,7 @@ module.exports = function(router) {
     if (baseDir === "/application/create/consignee-add-validation") {
 
       // Parameters passed into this journey
-      var return_url = req.query.return_url;
+      var return_url = req.session.data.return_url;
 
       // Data objects to be retrieved and queried
       var name = req.session.data.consignee_name;
@@ -614,17 +614,15 @@ module.exports = function(router) {
         error4 = "&error4=true";
       }
 
-      console.log("errorCount is: " + errorCount);
-
       // Routing - decide where to direct users to
       if (errorCount > 0) {
         return res.redirect("consignee-add?change=yes&error=true" + error1 + error2 + error3 + error4);
       }
       else if (return_url) {
-        return res.redirect(return_url + "?consigneeAdded=true&addressBook=true");
+        return res.redirect(return_url + "?consigneeAdded=true&return_url=");
       }
       else {
-        return res.redirect("consignee-import-permit-number?consigneeAdded=true&addressBook=true&select_consignee_address=address_0");
+        return res.redirect("consignee-import-permit-number?consigneeAdded=true");
       }
 
     }
