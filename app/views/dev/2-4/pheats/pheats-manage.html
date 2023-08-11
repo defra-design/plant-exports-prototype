@@ -54,6 +54,27 @@
     {% set _showEditLinks = false %}
     {% set _dontShowEditLinks = true %}
 
+    {% if _address.pheats.status == "withtrader" %}
+    <div class="govuk-notification-banner" role="region"
+      aria-labelledby="govuk-notification-banner-title"
+      data-module="govuk-notification-banner">
+      <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+          Important
+        </h2>
+      </div>
+      <div class="govuk-notification-banner__content">
+        <p class="govuk-notification-banner__heading">Respond now</p>
+        <p class="govuk-body">We are waiting for you to contact us with the updated address details.</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>telephone: 0300 1000 313 from 8:30am to 5pm, Monday to Friday</li>
+          <li>email: planthealth.info@apha.gov.uk</li>
+        </ul>
+        
+      </div>
+    </div>
+    {% endif %}
+
 
     <h1 class="govuk-heading-xl">
       <span class="govuk-caption-xl">{{_address.postcode}}, {{_address.address1}}</span>
@@ -116,7 +137,7 @@
               {% elif _address.pheats.status == "rejected" %}
                   <!-- REJECTED -->
                   <strong class="govuk-tag govuk-tag--grey">
-                    [Rejected]
+                    Denied
                   </strong>
               {% elif _address.pheats.status == "withtrader" %}
                   <!-- WITH TRADER -->
@@ -127,6 +148,20 @@
             </p>
           </dd>
       </div>
+      {% if _address.pheats.status == "withtrader" %}
+      <!-- <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key govuk-!-width-one-third">
+          Respond now
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <p class="govuk-body">We are waiting for you to contact us with the updated address details.</p>
+          <ul class="govuk-list govuk-list--bullet">
+            <li>telephone: 0300 1000 313 from 8:30am to 5pm, Monday to Friday</li>
+            <li>email: planthealth.info@apha.gov.uk</li>
+          </ul>
+        </dd>
+      </div> -->
+      {% endif %}
       <!-- <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key govuk-!-width-one-third">
           [further information]
@@ -272,6 +307,15 @@
 
     {% endif %}
     </form>
+
+    {% if _address.pheats.status == "withtrader" %}
+    <!-- <h2 class="govuk-heading-l">Respond now</h2>
+    <p class="govuk-body">We are waiting for you to contact us with the updated address details.</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>telephone: 0300 1000 313 from 8:30am to 5pm, Monday to Friday</li>
+      <li>email: planthealth.info@apha.gov.uk</li>
+    </ul> -->
+    {% endif %}
 
     {% if _address.pheats.status == "draft" %}
     <h2 class="govuk-heading-l">Details already entered</h2>

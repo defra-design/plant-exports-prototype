@@ -22,6 +22,37 @@
   
   <div class="govuk-grid-column-two-thirds">
 
+    {% set _errorState = query.cyaError or 'false' %}
+
+    {% if _errorState == 'true' %}
+    <div class="govuk-error-summary" data-module="govuk-error-summary">
+      <div role="alert">
+        <h2 class="govuk-error-summary__title">
+          There is a problem
+        </h2>
+        <div class="govuk-error-summary__body">
+          <ul class="govuk-list govuk-error-summary__list">
+            <li>
+              <a href="#input-s">[error message site plan]</a>
+            </li>
+            <li>
+              <a href="#input-c">[error message commodity]</a>
+            </li>
+            <li>
+              <a href="#input-pr">[error message pr]</a>
+            </li>
+            <li>
+              <a href="#input-ap">[error message ap]</a>
+            </li>
+            <li>
+              <a href="#pheatsDeclaration">[error message declaration]</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
     <!-- Selected address -->
     {% set _addressID = data['address'] or 1 %}
     {% set _address = data['addresses2'][0] %}
@@ -97,8 +128,8 @@
 
       </dl>
 
+      {% if _errorState != 'true' %}
       <h2 class="govuk-heading-m">Site plan</h2>
-
       <dl class="govuk-summary-list govuk-!-margin-bottom-7">
 
         <div class="govuk-summary-list__row">
@@ -118,13 +149,24 @@
         </div>
 
       </dl>
-
-      <h2 class="govuk-heading-m">Commodities</h2>
+      {% else %}
+      <div class="govuk-form-group--error">
+        <h2 class="govuk-heading-m">Site plan</h2>
+        <p class="govuk-error-message" id="pheats-error-s"><span class="govuk-visually-hidden">Error: </span>[error message site plan]</p>
+        <p class="govuk-body govuk-!-margin-bottom-7">
+          <a href="pheats-site?cya=true" class="govuk-link govuk-link--no-visited-state" {% if _errorState == 'true' %}aria-describedby="pheats-error-s"{% endif %} id="input-s">
+            Add a site plan
+          </a>
+        </p>
+      </div>
+      {% endif %}
 
       {% set _commodityCount = data['commodityCount'] or 1 | int %}
       {% set _commodityDisplayedCount = data['commodityDisplayedCount'] or 1 | int %}
       {% set _commodityCountDeleted = _commodityDisplayedCount|int - 1 %}
 
+      {% if _errorState != 'true' or _commodityDisplayedCount != 0 %}
+      <h2 class="govuk-heading-m">Commodities</h2>
       <table class="govuk-table  govuk-!-margin-bottom-5" >
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
@@ -210,15 +252,27 @@
 
         </tbody>
       </table>
-
       <p class="govuk-body govuk-!-margin-bottom-7">
         <a href="pheats-commodity?cya=true" class="govuk-link govuk-link--no-visited-state">
           Add another commodity
         </a>
       </p>
+      {% else %}
+      <div class="govuk-form-group--error">
+        <h2 class="govuk-heading-m">Commodities</h2>
+        <p class="govuk-error-message" id="pheats-error-c"><span class="govuk-visually-hidden">Error: </span>[error message commodity]</p>
+        <p class="govuk-body govuk-!-margin-bottom-7">
+          <a href="pheats-commodity?cya=true" class="govuk-link govuk-link--no-visited-state" {% if _errorState == 'true' %}aria-describedby="pheats-error-c"{% endif %} id="input-c">
+            Add a commodity
+          </a>
+        </p>
+      </div>
+      {% endif %}
 
-      <h2 class="govuk-heading-m">Person responsible</h2>
+      
     
+      {% if _errorState != 'true' %}
+      <h2 class="govuk-heading-m">Person responsible</h2>
       <table class="govuk-table govuk-!-margin-bottom-7" >
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
@@ -250,14 +304,25 @@
         </tr>
 
       </tbody>
-    </table>
-
-      <h2 class="govuk-heading-m">Authorised people</h2>
+      </table>
+      {% else %}
+      <div class="govuk-form-group--error">
+        <h2 class="govuk-heading-m">Person responsible</h2>
+        <p class="govuk-error-message" id="pheats-error-pr"><span class="govuk-visually-hidden">Error: </span>[error message pr]</p>
+        <p class="govuk-body govuk-!-margin-bottom-7">
+          <a href="pheats-pr?cya=true" class="govuk-link govuk-link--no-visited-state" {% if _errorState == 'true' %}aria-describedby="pheats-error-pr"{% endif %} id="input-pr">
+            Add the person repsonsible
+          </a>
+        </p>
+      </div>
+      {% endif %}
 
       {% set _apCount = data['apCount'] or 1 | int %}
       {% set _apDisplayedCount = data['apDisplayedCount'] or 1 | int %}
       {% set _apCountDeleted = _apDisplayedCount|int - 1 %}
 
+      {% if _errorState != 'true' or _apDisplayedCount != 0 %}
+      <h2 class="govuk-heading-m">Authorised people</h2>
       <table class="govuk-table govuk-!-margin-bottom-5">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
@@ -317,33 +382,45 @@
         {%- endfor %}
 
       </tbody>
-    </table>
-
+      </table>
       <p class="govuk-body govuk-!-margin-bottom-9">
         <a href="pheats-ap?cya=true" class="govuk-link govuk-link--no-visited-state">
           Add another authorised person
         </a>
       </p>
+      {% else %}
+      <div class="govuk-form-group--error">
+        <h2 class="govuk-heading-m">Authorised people</h2>
+        <p class="govuk-error-message" id="pheats-error-ap"><span class="govuk-visually-hidden">Error: </span>[error message ap]</p>
+        <p class="govuk-body govuk-!-margin-bottom-9">
+          <a href="pheats-ap?cya=true" class="govuk-link govuk-link--no-visited-state" {% if _errorState == 'true' %}aria-describedby="pheats-error-ap"{% endif %} id="input-ap">
+            Add an authorised person
+          </a>
+        </p>
+      </div>
+      {% endif %}
 
-      <h2 class="govuk-heading-m">
-        Declaration
-      </h2>
-  
-      <p class="govuk-body">
-        By submitting this application form, you are agreeing with the <a class="govuk-link govuk-link--no-visited-state" href="#" target="_blank">terms and conditions (opens in new tab)</a> of the plant health exports audited trader scheme (PHEATS).
-      </p>
-
-      <div class="govuk-form-group govuk-!-margin-bottom-9">
-        <fieldset class="govuk-fieldset" >
+      <div class="govuk-form-group {% if _errorState == 'true' %}govuk-form-group--error{% endif %} govuk-!-margin-bottom-9">
+        <fieldset class="govuk-fieldset" aria-describedby="nationality-hint nationality-error">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              Declaration
+          </legend>
+          <p class="govuk-body">
+            By submitting this application form, you are agreeing with the <a class="govuk-link govuk-link--no-visited-state" href="#" target="_blank">terms and conditions (opens in new tab)</a> of the plant health exports audited trader scheme (PHEATS).
+          </p>
+          {% if _errorState == 'true' %}
+          <p id="pheats-error-dec" class="govuk-error-message">
+            <span class="govuk-visually-hidden">Error:</span> [error message declaration]
+          </p>
+          {% endif %}
           <div class="govuk-checkboxes" data-module="govuk-checkboxes">
             <div class="govuk-checkboxes__item">
-              <input class="govuk-checkboxes__input" id="pheatsDeclaration" name="pheatsDeclaration" type="checkbox" value="Yes">
+              <input class="govuk-checkboxes__input" id="pheatsDeclaration" name="pheatsDeclaration" type="checkbox" value="Yes" {% if _errorState == 'true' %}aria-describedby="pheats-error-dec"{% endif %}>
               <label class="govuk-label govuk-checkboxes__label" for="pheatsDeclaration">
                 I confirm that I have understood and followed the terms and conditions.
               </label>
             </div>
           </div>
-
         </fieldset>
       </div>
 

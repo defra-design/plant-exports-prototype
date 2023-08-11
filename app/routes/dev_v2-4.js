@@ -967,6 +967,68 @@ module.exports = function(router) {
     }
 
     // Dave Haigh
+
+    // sort pheats addresses
+    //Order addresses by status (draft first)
+    req.session.data.addresses2.sort(function(a,b){
+
+      var returnValue = 0;
+
+      //DRAFT
+      if(a.pheats.status == 'draft' && b.pheats.status != 'draft') {
+        returnValue = -1
+      } else if(a.pheats.status != 'draft' && b.pheats.status == 'draft') {
+        returnValue = 1
+      //WITH TRADER
+      } else {
+        if(a.pheats.status == 'withtrader' && b.pheats.status != 'withtrader') {
+          returnValue = -1
+        } else if(a.pheats.status != 'withtrader' && b.pheats.status == 'withtrader') {
+          returnValue = 1
+        //PENDING
+        } else {
+          if(a.pheats.status == 'pending' && b.pheats.status != 'pending') {
+            returnValue = -1
+          } else if(a.pheats.status != 'pending' && b.pheats.status == 'pending') {
+            returnValue = 1
+          //UPDATED
+          } else {
+            if(a.pheats.status == 'updated' && b.pheats.status != 'updated') {
+              returnValue = -1
+            } else if(a.pheats.status != 'updated' && b.pheats.status == 'updated') {
+              returnValue = 1
+            //REGISTERED
+            } else {
+              if(a.pheats.status == 'registered' && b.pheats.status != 'registered') {
+                returnValue = -1
+              } else if(a.pheats.status != 'registered' && b.pheats.status == 'registered') {
+                returnValue = 1
+              } else {
+                //PAUSED
+                if(a.pheats.status == 'paused' && b.pheats.status != 'paused') {
+                  returnValue = -1
+                } else if(a.pheats.status != 'paused' && b.pheats.status == 'paused') {
+                  returnValue = 1
+                } else {
+                  //REJECTED
+                  if(a.pheats.status == 'rejected' && b.pheats.status != 'rejected') {
+                    returnValue = -1
+                  } else if(a.pheats.status != 'rejected' && b.pheats.status == 'rejected') {
+                    returnValue = 1
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      
+
+      return returnValue;
+
+    });
+
     //commision date
     var today = new Date();
     req.session.data.todaysDateFormatted = today.getDate() + " " + ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][today.getMonth()] + " " + today.getFullYear()
@@ -995,7 +1057,7 @@ module.exports = function(router) {
         for (var a = 0; a < req.session.data.addresses2.length; a++) {
           var _address = req.session.data.addresses2[a]
           if(_addressID.toString() == _address.id.toString()){
-            if(_amendments == "Yes"){
+            if(_amendments == "No"){
               _address.pheats.status = "withtrader"
             } else {
               _address.pheats.status = "pending"
@@ -1012,7 +1074,7 @@ module.exports = function(router) {
         for (var a = 0; a < req.session.data.addresses2.length; a++) {
           var _address = req.session.data.addresses2[a]
           if(_addressID.toString() == _address.id.toString()){
-            if(_amendments == "Yes"){
+            if(_amendments == "No"){
               _address.pheats.status = "withtrader"
             } else {
               _address.pheats.status = "pending"
