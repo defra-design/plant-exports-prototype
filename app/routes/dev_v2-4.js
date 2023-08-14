@@ -1099,9 +1099,37 @@ module.exports = function(router) {
     // CERTIFICATE CHECKER routing
     // *******************************
 
-    // Chris Harding (21.07.23) - Certificate number: Error validation and routing
+    // Chris Harding (14.08.23) - Verification number: Error validation and routing
+    if (baseDir === "/verification-number-validation") {
+
+      var verificationNumber = req.session.data.verificationNumber;
+      
+      // Make sure user enters something
+      if (verificationNumber == "") {
+        return res.redirect("verification-number?error=true");
+      }
+      // User enters a valid phytosanitary certificate number
+      else if (verificationNumber == "1103-2488-3517" || verificationNumber == "110324883517" || verificationNumber == "1103 2488 3517") {
+        req.session.data.certificateValid = "yes";
+
+        return res.redirect("certificate-number");
+      }
+      // Not a valid phytosanitary certificate number
+      else {
+        req.session.data.certificateValid = "no";
+
+        return res.redirect("certificate-number");
+      }
+
+    }
+   
+    // Chris Harding (14.08.23) - Certificate number: Error validation and routing
     if (baseDir === "/certificate-number-validation") {
 
+      // Linked parameters passed into this journey
+      var certificateValid = req.session.data.certificateValid;
+
+      // Data objects to be retrieved and queried
       var number = req.session.data.certificateNumber;
       var foundMatch = number.includes("2023/7800562125823");
       
@@ -1109,17 +1137,21 @@ module.exports = function(router) {
       if (number == "") {
         return res.redirect("certificate-number?error=true");
       }
-      // User enters a valid phytosanitary certificate number
-      else if (foundMatch == true) {
-        req.session.data.certificateValid = "yes";
-
-        return res.redirect("issue-date");
+      // FAIL: User has already entered a non-valid certificate number
+      else if (certificateValid == "no") {
+        return res.redirect("not-valid");
       }
-      // Not a valid phytosanitary certificate number
       else {
-        req.session.data.certificateValid = "no";
 
-        return res.redirect("issue-date");
+        // SUCCESS: User enters the correct details and finds a valid certificate
+        if (foundMatch == true) {
+          return res.redirect("valid");
+        }
+        // FAIL: User enters a phytosanitary certificate number that doesn't match the certificate being checked
+        else {
+          return res.redirect("not-valid");
+        }
+
       }
 
     }
@@ -1171,7 +1203,7 @@ module.exports = function(router) {
         if ((day == "16") && (month == "6" || month == "06") && (year == "2023")) {
           return res.redirect("valid");
         }
-        // FAIL: User enters an issue date that doesn't match the previously provided certificate number
+        // FAIL: User enters an issue date that doesn't match the certificate being checked
         else {
           return res.redirect("not-valid");
         }
