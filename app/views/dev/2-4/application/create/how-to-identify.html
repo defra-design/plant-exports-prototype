@@ -1,7 +1,32 @@
 {% extends "layout-option.html" %}
 
+{% set _errorValidation = "false" %}
+{% if query.error1 == 'true' or query.error2 == 'true' or query.error3 == 'true' or query.error4 == 'true' %}
+  {% set _errorValidation = "true" %}
+{% endif %}
+
+{% set _error1 = "false" %}
+{% if query.error1 == 'true' %}
+  {% set _error1 = "true" %}
+{% endif %}
+
+{% set _error2 = "false" %}
+{% if query.error2 == 'true' %}
+  {% set _error2 = "true" %}
+{% endif %}
+
+{% set _error3 = "false" %}
+{% if query.error3 == 'true' %}
+  {% set _error3 = "true" %}
+{% endif %}
+
+{% set _error4 = "false" %}
+{% if query.error4 == 'true' %}
+  {% set _error4 = "true" %}
+{% endif %}
+
 {% block pageTitle %}
-  {% if data.build == "development" %}{% if data.commodity == "plant products" %}Plant Products{% else %}{{data.commodity | capitalize or 'Plant Products' }}{% endif %} Details - Exports application{% else %}Add {% if data.pheats_check != "yes" %}{% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "everything else" %}your commodity{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your {% if data.reforwarding %} re-forwarding{% endif %} consignment - Phytosanitary certificate - {{serviceName}}{% endif %} - GOV.UK
+  {% if _errorValidation == 'true' %}Error: {% endif %}{% if data.build == "development" %}{% if data.commodity == "plant products" %}Plant Products{% else %}{{data.commodity | capitalize or 'Plant Products' }}{% endif %} Details - Exports application{% else %}Add {% if data.pheats_check != "yes" %}{% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "everything else" %}your commodity{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your {% if data.reforwarding %} re-forwarding{% endif %} consignment - Phytosanitary certificate - {{serviceName}}{% endif %} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -22,11 +47,76 @@
     padding-bottom: 10px;
   }
 
+  .error-1-2 .autocomplete__input {
+    border-color: #d4351c;
+  }
+
 </style>
+
+
 
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
+
+    <!-- 
+      https://defra-phes-prototype.herokuapp.com/dev/2-4/application/create/how-to-identify?error1=true&show_manual_input=no&has_botanicial_name=yes&commodity=plants
+      1 - [species] not registered for PHEATS at selected inspection address
+
+      https://defra-phes-prototype.herokuapp.com/dev/2-4/application/create/how-to-identify?error2=true&show_manual_input=no&has_botanicial_name=yes&commodity=plants
+      2 - [species] registered for PHEATS at selected inspection address, but not for selected destination country of [country]
+
+      https://defra-phes-prototype.herokuapp.com/dev/2-4/application/create/how-to-identify?error3=true&show_manual_input=no&has_botanicial_name=yes&commodity=plants
+      3 - [species] registered for PHEATS at selected inspection address, but not for selected countries of origin of [country], [country]
+
+      https://defra-phes-prototype.herokuapp.com/dev/2-4/application/create/how-to-identify?error4=true&show_manual_input=yes&has_botanicial_name=yes&commodity=plants
+      4 - [country], [country] not registered for PHEATS registered for any species at selected inspection address 
+    -->
+
+
+    {% if _errorValidation == 'true' %}
+    <div class="govuk-error-summary" data-module="govuk-error-summary">
+      <div role="alert">
+        <h2 class="govuk-error-summary__title">
+          There is a problem
+        </h2>
+        <div class="govuk-error-summary__body">
+          <ul class="govuk-list govuk-error-summary__list">
+            
+            {% if _error1 == 'true' %}
+            <li>
+              <a href="#autocomplete-customTemplates">1 - [species] not registered for PHEATS at selected inspection address</a>
+            </li>
+            {% endif %}
+
+            {% if _error2 == 'true' %}
+            <li>
+              <a href="#autocomplete-customTemplates">2 - [species] registered for PHEATS, but not for selected destination country of [country]</a>
+            </li>
+            {% endif %}
+
+            {% if _error3 == 'true' %}
+            <li>
+              <a href="#Afghanistan">3 - [species] registered for PHEATS, but not for selected countries of origin of [country], [country]</a>
+            </li>
+            {% endif %}
+
+            {% if _error4 == 'true' %}
+            <li>
+              <a href="#Afghanistan">4 -[country], [country] not PHEATS registered for any species at selected inspection address</a>
+            </li>
+            {% endif %}
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+
+
+
 
     <!-- Chris Harding (11.01.23) - Added this different scenario for usability testing of the HPUI 'Clone' designs -->
     {% if query.change == "yes" %}
@@ -57,6 +147,7 @@
           <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
 
             <div class="govuk-radios__item">
+
               <input class="govuk-radios__input" id="has_botanicial_name_yes" name="has_botanicial_name" type="radio" value="yes" aria-describedby="has_botanicial_name_yes-hint" data-aria-controls="has_botanicial_name_yes-conditional"{% if data.has_botanicial_name == "yes" %} checked{% endif %}>
 
               <label class="govuk-label govuk-radios__label" for="has_botanicial_name_yes">
@@ -76,9 +167,28 @@
             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="has_botanicial_name_yes-conditional">
               
               {% if data.show_manual_input != "yes" %}
-                {% block genus %}
-                  {% include "../modules/_genus.html" %}
-                {% endblock %}
+
+                <div class="govuk-form-group {% if _error1 == 'true' or _error2 == 'true' %} govuk-form-group--error error-1-2 {% endif %}">
+
+                  {% if _error1 == 'true' %}
+                  <p id="error-1" class="govuk-error-message">
+                    <span class="govuk-visually-hidden">Error:</span>1 - [species] not registered for PHEATS at selected inspection address
+                  </p>
+                  {% endif %}
+
+                  {% if _error2 == 'true' %}
+                  <p id="error-2" class="govuk-error-message">
+                    <span class="govuk-visually-hidden">Error:</span>2 - [species] registered for PHEATS, but not for selected destination country of [country]
+                  </p>
+                  {% endif %}
+                  
+                  
+                  {% block genus %}
+                    {% include "../modules/_genus.html" %}
+                  {% endblock %}
+
+                </div>
+
               {% else %}
                 <div class="govuk-form-group">
                   <label class="govuk-label" for="commodity_genus">Genus</label>
