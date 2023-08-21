@@ -139,18 +139,23 @@
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th scope="col" class="govuk-table__header">Description</th>
-            <th scope="col" class="govuk-table__header">Country of origin</th>
-            <th scope="col" class="govuk-table__header">Quantity</th>
+            <th scope="col" class="govuk-table__header">Origin</th>
+            <th scope="col" class="govuk-table__header">Quantity and number of packages</th>
+            <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks </th>
             <th scope="col" class="govuk-table__header govuk-table__header--numeric">Action</th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">
           <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Spondias tuberosa (SPXTU) 'Dry'</th>
+            <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Spondias tuberosa (SPXTU) 'Dry'<br>Commodity type:
+              <br>Bulb</th></th>
             <td class="govuk-table__cell">United Kingdom</td>
-            <td class="govuk-table__cell">{{data.quantity or "30"}}t</td>
+            <td class="govuk-table__cell">20 kilograms <br> 5 packages</td>
+            <td class="govuk-table__cell">Crate - bulk - cardboard<br>Brown spots</td>
             <td class="govuk-table__cell govuk-table__cell--numeric">
               <a href="edit/how-to-identify?change=yes&commodity=bulbs&return_url=../amend-your-certificate&reissue=yes" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+              <!-- <br>
+              <a href="delete-commodity?deleteRow1=true&change=yes&return_url=amend-your-certificate" class="govuk-link govuk-link--no-visited-state delete-link">Delete<span class="govuk-visually-hidden"> this commodity</span></a> -->
             </td>
           </tr>
         </tbody>
@@ -161,26 +166,29 @@
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th scope="col" class="govuk-table__header">Description</th>
-            <th scope="col" class="govuk-table__header">Country of origin</th>
-            <th scope="col" class="govuk-table__header">Quantity</th>
+            <th scope="col" class="govuk-table__header">Origin</th>
+            <th scope="col" class="govuk-table__header">Quantity and number of packages</th>
+            <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks </th>
             <th scope="col" class="govuk-table__header govuk-table__header--numeric">{% if data.rowCount == '1' %}Action{% else %}Actions{% endif %}</th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">
-          {% if data.row1 == "true" %}
+          
           <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Cabbage 'Durham Early'</th>
+            <th scope="row" class="govuk-table__header govuk-table__header-no-bold"><strong>Rosa ecae (ROSEC)</strong><br>Commodity type:
+              <br>Plants</th>
             <td class="govuk-table__cell">United Kingdom</td>
-            <td class="govuk-table__cell">{{data.quantity3 or "17"}}t</td>
+            <td class="govuk-table__cell">20 kilograms <br> 5 packages</td>
+            <td class="govuk-table__cell">Crate - bulk - cardboard<br>Brown spots</td>
             <td class="govuk-table__cell govuk-table__cell--numeric">
               <a href="edit/how-to-identify-3?change=yes&commodity=plants&return_url=../amend-your-certificate&reissue=yes" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
-              {% if data.rowCount != '1' %}
+              <!-- {% if data.rowCount != '1' %}
               <br>
               <a href="delete-commodity?deleteRow1=true&change=yes&return_url=amend-your-certificate" class="govuk-link govuk-link--no-visited-state delete-link">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
-              {% endif %}
+              {% endif %} -->
             </td>
           </tr>
-          {% endif %}
+         
           {% if data.row2 == "true" %}
           <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Cabbage 'Avon Crest'</th>
@@ -217,18 +225,82 @@
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th scope="col" class="govuk-table__header">Description</th>
-            <th scope="col" class="govuk-table__header">Stock number</th>
-            <th scope="col" class="govuk-table__header">Quantity</th>
+            <th scope="col" class="govuk-table__header">Origin</th>
+            <th scope="col" class="govuk-table__header">Quantity and number of packages</th>
+            <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks </th>
             <th scope="col" class="govuk-table__header govuk-table__header--numeric">Action</th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">
-          <tr class="govuk-table__row">
+          <!-- <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Maris piper</th>
             <td class="govuk-table__cell">00001827389</td>
             <td class="govuk-table__cell">{{data.quantity or "30"}}t</td>
             <td class="govuk-table__cell govuk-table__cell--numeric">
               <a href="edit/how-to-identify?change=yes&commodity=potatoes&return_url=../amend-your-certificate&reissue=yes" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+            </td>
+          </tr> -->
+
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              <span style="display: block; margin-bottom: 7px;">
+                <strong>{{commodity.botanical_name or "Type of potato:"}}</strong>
+              </span>
+              {% if commodity.commodity_variety != "" %}
+              <span style="display: block; margin-bottom: 7px;">'{{commodity.commodity_variety or "Ware"}}'</span>
+              {% endif %}
+              {% if query.design != "b" %}
+              <span style="display: block; margin-bottom: 7px;">
+                Variety:
+                <br>
+                {% if commodity.commodity_type == "produce" %}
+                Produce (fruit, flowers or vegetables)
+                {% else %}
+                {{commodity.commodity_type | capitalize or "Other"}}
+                {% endif %}
+              </span>
+              <span>Chemicals used:
+                <br>
+                Benzine
+              </span>
+              <br>
+              <span>Stock number:</span>
+              {{commodity.stock_number or "912345"}}
+              {% endif %}
+            </td>
+            <td class="govuk-table__cell">
+              <!-- {% if commodity.filter_demo %}
+              {{commodity.filter_demo or "United Kingdom"}}
+              {% else %}
+              United Kingdom 
+              {% endif %} -->
+              {% set _defaultCountry = "United Kingdom" %}
+              {% if commodity.filter_demo == "_unchecked" or commodity.filter_demo == undefined %}
+              {{_defaultCountry}}
+              {% else %}
+              {{commodity.filter_demo | join(", ") or _defaultCountry}}
+              {% endif %}
+              <!-- "filter_demo":["Afghanistan","Åland Islands","Albania"], -->
+            </td>
+            <td class="govuk-table__cell">
+              <span style="display: block; margin-bottom: 7px;">{{commodity.quantity or "20"}} {{commodity.units or "kilograms"}}</span>
+              <span style="display: block; margin-bottom: 7px;">{{commodity.number_of_packages or "5"}} packages</span>
+            </td>
+            <td class="govuk-table__cell">
+              <span style="display: block; margin-bottom: 7px;">{{commodity.packaging[0] or "Crate - bulk - cardboard"}}</span>
+              {% if query.design != "b" %}
+              {% if commodity.packing_material_used != "" %}
+              <span style="display: block; margin-bottom: 7px;">{{commodity.packing_material_used or "Cardboard"}}</span>
+              {% endif %}
+              {% if commodity.distinguishing_marks != "" %}
+              <span style="display: block; margin-bottom: 7px;">{{commodity.distinguishing_marks or "Brown marks"}}</span>
+              {% endif %}
+              {% endif %}
+            </td>
+            <td class="govuk-table__cell" style="text-align: right;">
+              <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+              <br>
+              <!-- <a href="#" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a> -->
             </td>
           </tr>
         </tbody>
@@ -239,8 +311,9 @@
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th scope="col" class="govuk-table__header">Description</th>
-            <th scope="col" class="govuk-table__header">Primary country where grown</th>
-            <th scope="col" class="govuk-table__header">Quantity</th>
+            <th scope="col" class="govuk-table__header">Origin</th>
+            <th scope="col" class="govuk-table__header">Quantity and number of packages</th>
+            <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks </th>
             <th scope="col" class="govuk-table__header govuk-table__header--numeric">Action</th>
           </tr>
         </thead>
@@ -248,7 +321,8 @@
           <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Protea erosa (LCSGR)</th>
             <td class="govuk-table__cell">United Kingdom</td>
-            <td class="govuk-table__cell">{{data.quantity or "30"}}t</td>
+            <td class="govuk-table__cell">20 kilograms <br> 5 packages</td>
+            <td class="govuk-table__cell">Crate - bulk - cardboard<br>Brown spots</td>
             <td class="govuk-table__cell govuk-table__cell--numeric">
               <a href="edit/how-to-identify?change=yes&commodity=plant products&return_url=../amend-your-certificate&reissue=yes{% if data.packaging %}{% else %}&packaging=BG{% endif %}" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
             </td>
@@ -281,37 +355,82 @@
         <caption class="govuk-table__caption govuk-visually-hidden">Your consignment</caption>
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
-            <th scope="col" class="govuk-table__header">Description</th>
-            <th scope="col" class="govuk-table__header">Lot reference</th>
-            {% if data.build != "development" %}
-            <th class="govuk-table__header" scope="col"><abbr title="Animal and Plant Health Agency">APHA</abbr> sample reference</th> 
-            {% endif %}
-            <th scope="col" class="govuk-table__header">Quantity</th>
+            <tr class="govuk-table__row">
+              <th scope="col" class="govuk-table__header">Description</th>
+              <th scope="col" class="govuk-table__header">Origin</th>
+              <th scope="col" class="govuk-table__header">Quantity and number of packages</th>
+              <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks </th>
             <th scope="col" class="govuk-table__header govuk-table__header--numeric">Actions</th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">
+          
           <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Solanum lycopersicum 'F1'</th>
-            <td class="govuk-table__cell">83471-*-*-1</td>
-            <td class="govuk-table__cell">S12345008</td>
-            <td class="govuk-table__cell">{{data.quantity2 or "35"}}t</td>
-            <td class="govuk-table__cell govuk-table__cell--numeric">
-              <a href="edit/how-to-identify-2?change=yes&commodity=seeds&return_url=../amend-your-certificate&reissue=yes" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
-              <br>
-              <a href="#" class="govuk-link govuk-link--no-visited-state delete-link">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
-            </td>
-          </tr>
-          <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Solanum lycopersicum 'ST'</th>
-            <td class="govuk-table__cell">80091-*-*-1</td>
-            <td class="govuk-table__cell">S12345009</td>
-            <td class="govuk-table__cell">{{data.quantity or "30"}}t</td>
-            <td class="govuk-table__cell govuk-table__cell--numeric">
-              <a href="edit/how-to-identify?change=yes&commodity=seeds&return_url=../amend-your-certificate&reissue=yes" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
-              <br>
-              <a href="#" class="govuk-link govuk-link--no-visited-state delete-link">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
-            </td>
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">
+                <span style="display: block; margin-bottom: 7px;">
+                  <strong>{{commodity.botanical_name or "Rosa ecae (ROSEC)"}}</strong>
+                </span>
+                {% if commodity.commodity_variety != "" %}
+                <span style="display: block; margin-bottom: 7px;">'{{commodity.commodity_variety or "Red blossom"}}'</span>
+                {% endif %}
+                {% if query.design != "b" %}
+                <span style="display: block; margin-bottom: 7px;">
+                  Lot reference:
+                  <br>
+                  {% if commodity.commodity_type == "produce" %}
+                  Produce (fruit, flowers or vegetables)
+                  {% else %}
+                  {{commodity.commodity_type | capitalize or "12345678"}}
+                  {% endif %}
+                </span>
+                <span style="display: block; margin-bottom: 7px;">
+                  APHA reference:
+                  <br>
+                  {% if commodity.commodity_type == "produce" %}
+                  Produce (fruit, flowers or vegetables)
+                  {% else %}
+                  {{commodity.commodity_type | capitalize or "000012345678"}}
+                  {% endif %}
+                </span>
+                {% endif %}
+              </td>
+              <td class="govuk-table__cell">
+                <!-- {% if commodity.filter_demo %}
+                {{commodity.filter_demo or "United Kingdom"}}
+                {% else %}
+                United Kingdom 
+                {% endif %} -->
+                {% set _defaultCountry = "United Kingdom" %}
+                {% if commodity.filter_demo == "_unchecked" or commodity.filter_demo == undefined %}
+                {{_defaultCountry}}
+                {% else %}
+                {{commodity.filter_demo | join(", ") or _defaultCountry}}
+                {% endif %}
+                <!-- "filter_demo":["Afghanistan","Åland Islands","Albania"], -->
+              </td>
+              <td class="govuk-table__cell">
+                <span style="display: block; margin-bottom: 7px;">{{commodity.quantity or "20"}} {{commodity.units or "kilograms"}}</span>
+                <span style="display: block; margin-bottom: 7px;">{{commodity.number_of_packages or "5"}} packages</span>
+              </td>
+              <td class="govuk-table__cell">
+                <span style="display: block; margin-bottom: 7px;">{{commodity.packaging[0] or "Crate - bulk - cardboard"}}</span>
+                {% if query.design != "b" %}
+                {% if commodity.packing_material_used != "" %}
+                <span style="display: block; margin-bottom: 7px;">{{commodity.packing_material_used or "Cardboard"}}</span>
+                {% endif %}
+                {% if commodity.distinguishing_marks != "" %}
+                <span style="display: block; margin-bottom: 7px;">{{commodity.distinguishing_marks or "Brown marks"}}</span>
+                {% endif %}
+                {% endif %}
+              </td>
+              <td class="govuk-table__cell" style="text-align: right;">
+                <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+                <!-- <br>
+                <a href="#" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a> -->
+              </td>
+            </tr>
+            
           </tr>
         </tbody>
       </table>
@@ -320,7 +439,72 @@
       <table class="govuk-table govuk-!-margin-bottom-4" id="commodityTable">
         <caption class="govuk-table__caption govuk-visually-hidden">Your consignment</caption>
         <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
+          <table class="govuk-table govuk-!-margin-bottom-4" id="commodityTable">
+            <caption class="govuk-table__caption govuk-visually-hidden">Your consignment</caption>
+            <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <tr class="govuk-table__row">
+                  <th class="govuk-table__header" scope="col">Description</th>
+                  <th class="govuk-table__header" scope="col">Origin</th>
+                  <th class="govuk-table__header" scope="col">Quantity and number of packages</th>
+                  <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks</th>
+                  <th class="govuk-table__header" scope="col">Actions</th>
+                  
+                  </tr>
+              </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+              <tr class="govuk-table__row">
+                <tr class="govuk-table__row">
+                  <td class="govuk-table__cell">
+                    <span style="display: block; margin-bottom: 7px;">
+                      <strong>{{commodity.botanical_name or "Rosa ecae (ROSEC)"}}</strong>
+                    </span>
+                    {% if commodity.commodity_variety != "" %}
+                    <span style="display: block; margin-bottom: 7px;">'{{commodity.commodity_variety or "Red blossom"}}'</span>
+                    
+                    <!-- {% endif %}
+                    {% if query.design != "b" %}
+                    <span style="display: block; margin-bottom: 7px;">
+                      Commodity type:
+                      <br>
+                      {% if commodity.commodity_type == "produce" %}
+                      Produce (fruit, flowers or vegetables)
+                      {% else %}
+                      {{commodity.commodity_type | capitalize or "Unprocessed cereal grains"}}
+                      {% endif %}
+                    </span>
+                    {% endif %} -->
+                    
+                  </td>
+                  <td class="govuk-table__cell">
+                    <!-- {% if commodity.filter_demo %}
+                    {{commodity.filter_demo or "United Kingdom"}}
+                    {% else %}
+                    United Kingdom 
+                    {% endif %} -->
+                    {% set _defaultCountry = "United Kingdom" %}
+                    {% if commodity.filter_demo == "_unchecked" or commodity.filter_demo == undefined %}
+                    {{_defaultCountry}}
+                    {% else %}
+                    {{commodity.filter_demo | join(", ") or _defaultCountry}}
+                    {% endif %}
+                    <!-- "filter_demo":["Afghanistan","Åland Islands","Albania"], -->
+                  </td>
+                  <td class="govuk-table__cell">
+                    <span style="display: block; margin-bottom: 7px;">{{commodity.quantity or "20"}} {{commodity.units or "kilograms"}}</span>
+                    <span style="display: block; margin-bottom: 7px;">{{commodity.number_of_packages or "5"}} packages</span>
+                  </td>
+                  <td class="govuk-table__cell">
+                    <span style="display: block; margin-bottom: 7px;">{{commodity.packaging[0] or "Crate - bulk - cardboard"}}</span>
+                    
+                    <!-- <span style="display: block; margin-bottom: 7px;">{{commodity.packing_material_used or "Cardboard"}}</span>
+                    
+                    <span style="display: block; margin-bottom: 7px;">{{commodity.distinguishing_marks or "Brown marks"}}</span> -->
+                  
+                  </td>
+                 
+          <!-- <tr class="govuk-table__row">
             <th scope="col" class="govuk-table__header">Description</th>
             <th scope="col" class="govuk-table__header">Country of origin</th>
             <th scope="col" class="govuk-table__header">Quantity</th>
@@ -336,7 +520,7 @@
               <a href="edit/how-to-identify?change=yes&commodity=grain&return_url=../amend-your-certificate&reissue=yes{% if data.packaging %}{% else %}&packaging=BG{% endif %}" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
             </td>
           </tr>
-        </tbody>
+        </tbody> -->
       </table>
       {% elif data.commodity == "used farm machinery" %} 
       <table class="govuk-table govuk-!-margin-bottom-4" id="commodityTable">
@@ -346,13 +530,20 @@
             <th scope="col" class="govuk-table__header">Description</th>
             <th scope="col" class="govuk-table__header">{% if data.build == "development" %}Country of last use{% else %}Country of origin{% endif %}</th>
             <th scope="col" class="govuk-table__header">Unique ID</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Action</th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">
           <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Massey Ferguson B2741</th>
+            <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Massey Ferguson B2741<br>Machinery type:<br>Tractor</th>
             <td class="govuk-table__cell">United Kingdom</td>
             <td class="govuk-table__cell">5456987452Z</td>
+            <td class="govuk-table__cell" style="text-align: right;">
+              <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+              <!-- <br>
+              <a href="#" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a> -->
+            </td>
+
           </tr>
         </tbody>
       </table>
@@ -384,8 +575,9 @@
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th scope="col" class="govuk-table__header">Description</th>
-            <th scope="col" class="govuk-table__header">Country of origin</th>
-            <th scope="col" class="govuk-table__header">Quantity</th>
+            <th scope="col" class="govuk-table__header">Origin</th>
+            <th scope="col" class="govuk-table__header">Quantity and number of packages</th>
+            <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks </th>
             <th scope="col" class="govuk-table__header govuk-table__header--numeric">{% if data.rowCount == '1' %}Action{% else %}Actions{% endif %}</th>
           </tr>
         </thead>
@@ -394,7 +586,9 @@
           <tr class="govuk-table__row">
             <th scope="row" class="govuk-table__header govuk-table__header-no-bold">Cabbage 'Durham Early'</th>
             <td class="govuk-table__cell">United Kingdom</td>
-            <td class="govuk-table__cell">{{data.quantity3 or "17"}}t</td>
+            <td class="govuk-table__cell">20 kilograms <br> 5 packages</td>
+            <td class="govuk-table__cell">Crate - bulk - cardboard<br>Brown spots</td>
+            <!-- <td class="govuk-table__cell">{{data.quantity3 or "17"}}t</td> -->
             <td class="govuk-table__cell govuk-table__cell--numeric">
               <a href="edit/how-to-identify-3?change=yes&commodity=plants&return_url=../amend-your-certificate&reissue=yes" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
               {% if data.rowCount != '1' %}
