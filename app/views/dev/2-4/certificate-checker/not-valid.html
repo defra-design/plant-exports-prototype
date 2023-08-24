@@ -5,6 +5,8 @@
 {% endblock %}
 
 {% block content %}
+<!-- Chris Harding (23.08.23) - Font Awesome (4) external CSS library for new icons -->
+<link rel="stylesheet" href="/public/css/font-awesome-4.7.0/css/font-awesome.min.css">
 <style>
 
   /* Chris Harding (21.07.23) - Expanded on the GOV.UK Design System panel component (https://design-system.service.gov.uk/components/panel) to include a red coloured 'not valid' */
@@ -19,23 +21,27 @@
   <div class="govuk-grid-column-two-thirds">
 
     <div class="govuk-panel govuk-panel--confirmation govuk-panel--rejection govuk-!-margin-bottom-6">
-      <h1 class="govuk-panel__title">This is not a valid certificate</h1>
+      <h1 class="govuk-panel__title">
+        <i class="fa fa-times" alt="This is not a valid certificate" title="This is not a valid certificate" aria-hidden="true"></i>
+        <br>
+        This is not a valid certificate
+      </h1>
     </div>
 
     <p class="govuk-body">The information you provided doesn't match any authentic UK issued phytosanitary certificate.</p>
-    <p class="govuk-body">If you think you've made a mistake, <a class="govuk-link" href="verification-number">enter the certificate details again</a>.</p>
+    <p class="govuk-body">If you think you've made a mistake, <a class="govuk-link" href="certificate-number">enter the certificate details again</a>.</p>
 
     <h2 class="govuk-heading-m">Your details</h2>
     <dl class="govuk-summary-list">
       
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Verification number</dt>
-        <dd class="govuk-summary-list__value">{{data.verificationNumber or "1111-2222-3333"}}</dd>
-      </div>
-
-      <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Phytosanitary certificate number</dt>
         <dd class="govuk-summary-list__value">{{data.certificateNumber or "2013/1234567891234"}}</dd>
+      </div>
+      
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Verification number</dt>
+        <dd class="govuk-summary-list__value">{{data.verificationNumber or "1111-2222-3333"}}</dd>
       </div>
 
       {% if data.providedSecurityData == "place" %}
@@ -79,8 +85,8 @@
 
     </dl>
 
-    <p class="govuk-body"><a class="govuk-link" href="verification-number?verificationNumber=&certificateNumber=">Check another certificate</a></p>
-    <!-- <a href="verification-number" class="govuk-button govuk-button--secondary" data-module="govuk-button">Check another certificate</a> -->
+    <p class="govuk-body"><a class="govuk-link" href="certificate-number?certificateNumber=&verificationNumber=">Check another certificate</a></p>
+    <!-- <a href="certificate-number?certificateNumber=&verificationNumber=" class="govuk-button govuk-button--secondary" data-module="govuk-button">Check another certificate</a> -->
 
     <h3 class="govuk-heading-s">Advice on certificate authenticity</h3>
     <p class="govuk-body">If you are concerned that this certificate is not authentic, contact <a href="mailto:planthealth.info@apha.gov.uk" class="govuk-link">planthealth.info@apha.gov.uk</a> for advice. You must include a photo or scan of the certificate.</p>
