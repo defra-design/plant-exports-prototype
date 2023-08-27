@@ -39,9 +39,20 @@
 
 <tr class="govuk-table__row">
   <td class="govuk-table__cell">
+    
     <span style="display: block; margin-bottom: 7px;">
-      <strong>{{commodity.botanical_name or "Rosa ecae (ROSEC)"}}</strong>
-    </span>
+      {% if commodity.has_botanicial_name == "use_description" %}
+          <!-- use DESCRIPTION -->
+          <strong>{{commodity.commodity_description or "Description for plant"}}</strong>
+      {% elif commodity.genus %}
+          <!-- use GENUS + SPECIES -->
+          <strong>{{commodity.genus or "Genus unknown"}}, {{commodity.commodity_host_species or "Species unknown"}}</strong>
+      {% else %}
+          <!-- use BOTANICAL NAME -->
+          <strong>{{commodity.botanical_name or "RRRosa ecae (ROSEC)"}}</strong>
+      {% endif %}
+  </span>
+
     {% if commodity.commodity_variety != "" %}
     <span style="display: block; margin-bottom: 7px;">'{{commodity.commodity_variety or "Red blossom"}}'</span>
     {% endif %}
@@ -55,7 +66,7 @@
       {{commodity.commodity_type | capitalize or "12345678"}}
       {% endif %}
     </span>
-    <span style="display: block; margin-bottom: 7px;">
+    <!-- <span style="display: block; margin-bottom: 7px;">
       APHA reference:
       <br>
       {% if commodity.commodity_type == "produce" %}
@@ -63,7 +74,7 @@
       {% else %}
       {{commodity.commodity_type | capitalize or "000012345678"}}
       {% endif %}
-    </span>
+    </span> -->
     {% endif %}
   </td>
   <td class="govuk-table__cell">
