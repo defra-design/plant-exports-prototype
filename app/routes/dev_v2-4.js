@@ -1103,7 +1103,7 @@ module.exports = function(router) {
     // CERTIFICATE CHECKER routing
     // *******************************
 
-    // Chris Harding (14.08.23) - Certificate number: Error validation and routing
+    /* LEGACY CODE #1 - CERTIFICATE NUMBER ASKED AT THE END */
     // if (baseDir === "/certificate-number-validation") {
 
     //   // Linked parameters passed into this journey
@@ -1135,18 +1135,62 @@ module.exports = function(router) {
     //   }
 
     // }
+
+    /* LEGACY CODE #2 - ONE DATA INPUT FIELD */
+    // if (baseDir === "/certificate-number-validation") {
+
+    //   // Data objects to be retrieved and queried
+    //   var number = req.session.data.certificateNumber;
+    //   var foundMatch = number.includes("2023/7800562125823");
+      
+    //   // Make sure user enters something
+    //   if (number == "") {
+    //     return res.redirect("certificate-number?error=true");
+    //   }
+    //   // User enters a valid phytosanitary certificate number
+    //   else if (foundMatch == true) {
+    //     req.session.data.certificateValid = "yes";
+
+    //     return res.redirect("verification-number");
+    //   }
+    //   // Not a valid phytosanitary certificate number
+    //   else {
+    //     req.session.data.certificateValid = "no";
+
+    //     return res.redirect("verification-number");
+    //   }
+
+    // }
+
+    // Chris Harding (14.08.23) - Certificate number: Error validation and routing
     if (baseDir === "/certificate-number-validation") {
 
       // Data objects to be retrieved and queried
-      var number = req.session.data.certificateNumber;
-      var foundMatch = number.includes("2023/7800562125823");
+      var certificateNumberPart1 = req.session.data.certificateNumberPart1;
+      var certificateNumberPart2 = req.session.data.certificateNumberPart2;
+
+      // Logic and validation for routing
+      var errorCount = 0;
+      var error1 = "";
+      var error2 = "";
+
+      // Error validation - make sure user enters data into required fields
+      if (certificateNumberPart1 == "") {
+        errorCount++;
+        error1 = "&error1=true";
+      }
+
+      if (certificateNumberPart2 == "") {
+        errorCount++;
+        error2 = "&error2=true";
+      }
       
-      // Make sure user enters something
-      if (number == "") {
-        return res.redirect("certificate-number?error=true");
+      // Routing - decide where to direct users to
+      if (errorCount > 0) {
+        return res.redirect("certificate-number?error=true" + error1 + error2);
       }
       // User enters a valid phytosanitary certificate number
-      else if (foundMatch == true) {
+      else if (certificateNumberPart1 == "2023" && certificateNumberPart2 == "7800562125823") {
         req.session.data.certificateValid = "yes";
 
         return res.redirect("verification-number");
@@ -1160,7 +1204,7 @@ module.exports = function(router) {
 
     }
     
-    // Chris Harding (14.08.23) - Verification number: Error validation and routing
+    /* LEGACY CODE #1 - CERTIFICATE NUMBER ASKED AT THE START */
     // if (baseDir === "/verification-number-validation") {
 
     //   var verificationNumber = req.session.data.verificationNumber;
@@ -1183,17 +1227,75 @@ module.exports = function(router) {
     //   }
 
     // }
+
+    /* LEGACY CODE #2 - ONE DATA INPUT FIELD */
+    // if (baseDir === "/verification-number-validation") {
+
+    //   // Linked parameters passed into this journey
+    //   var certificateValid = req.session.data.certificateValid;
+
+    //   // Data objects to be retrieved and queried
+    //   var verificationNumber = req.session.data.verificationNumber;
+      
+    //   // Make sure user enters something
+    //   if (verificationNumber == "") {
+    //     return res.redirect("verification-number?error=true");
+    //   }
+    //   // FAIL: User has already failed to enter valid certificate details in the previous step
+    //   else if (certificateValid == "no") {
+    //     return res.redirect("not-valid");
+    //   }
+    //   else {
+
+    //     // SUCCESS: User enters the correct details and finds a valid certificate
+    //     if (verificationNumber == "1103-2488-3517" || verificationNumber == "110324883517" || verificationNumber == "1103 2488 3517") {
+    //       return res.redirect("valid");
+    //     }
+    //     // FAIL: User enters a verification number that doesn't match the certificate being checked
+    //     else {
+    //       return res.redirect("not-valid");
+    //     }
+
+    //   }
+
+    // }    
+
+    // Chris Harding (14.08.23) - Verification number: Error validation and routing
     if (baseDir === "/verification-number-validation") {
 
       // Linked parameters passed into this journey
       var certificateValid = req.session.data.certificateValid;
 
       // Data objects to be retrieved and queried
-      var verificationNumber = req.session.data.verificationNumber;
-      
-      // Make sure user enters something
-      if (verificationNumber == "") {
-        return res.redirect("verification-number?error=true");
+      var verificationNumberPart1 = req.session.data.verificationNumberPart1;
+      var verificationNumberPart2 = req.session.data.verificationNumberPart2;
+      var verificationNumberPart3 = req.session.data.verificationNumberPart3;
+
+      // Logic and validation for routing
+      var errorCount = 0;
+      var error1 = "";
+      var error2 = "";
+      var error3 = "";
+
+      // Error validation - make sure user enters data into required fields
+      if (verificationNumberPart1 == "") {
+        errorCount++;
+        error1 = "&error1=true";
+      }
+
+      if (verificationNumberPart2 == "") {
+        errorCount++;
+        error2 = "&error2=true";
+      }
+
+      if (verificationNumberPart3 == "") {
+        errorCount++;
+        error3 = "&error3=true";
+      }
+
+      // Routing - decide where to direct users to
+      if (errorCount > 0) {
+        return res.redirect("verification-number?error=true" + error1 + error2 + error3);
       }
       // FAIL: User has already failed to enter valid certificate details in the previous step
       else if (certificateValid == "no") {
@@ -1202,7 +1304,7 @@ module.exports = function(router) {
       else {
 
         // SUCCESS: User enters the correct details and finds a valid certificate
-        if (verificationNumber == "1103-2488-3517" || verificationNumber == "110324883517" || verificationNumber == "1103 2488 3517") {
+        if (verificationNumberPart1 == "1103" && verificationNumberPart2 == "2488" && verificationNumberPart3 == "3517") {
           return res.redirect("valid");
         }
         // FAIL: User enters a verification number that doesn't match the certificate being checked

@@ -5,32 +5,103 @@
 {% endblock %}
 
 {% block content %}
+<style>
+
+  /* Chris Harding (25.08.23) - Added CSS used on the 'Apply for a passport' service (https://www.gov.uk/apply-renew-passport) to add separators between text input fields (e.g. using the '-' symbol) */
+  .verification-number .verification-number__separator {
+    margin-top: .5em;
+    font-weight: bold;
+    font-size: 25px
+  }
+
+  .verification-number .govuk-input {
+    display: inline-block
+  }
+
+  .verification-number .govuk-form-group {
+    display: inline-block;
+    margin-bottom: 0
+  }
+
+  /* Chris Harding (25.08.23) - Styling for custom images and illustrations created  */
+  
+  /* DESIGN 1 - STACKED */
+  .image-wrapper {
+    padding-bottom: 20px;
+  }
+  @media (min-width: 40.0625em) {
+    .image-wrapper {
+      padding-bottom: 30px;
+    }
+  }
+
+  .image-wrapper img {
+    width: 70%;
+  }
+  @media (min-width: 40.0625em) {
+    .image-wrapper img {
+      width: 60%;
+    }
+  }
+
+  /* DESIGN 2 - SIDE SECTION */
+  .app-related-items {
+    border-top: none;
+    padding-top: 0px;
+  }
+  @media (min-width: 40.0625em) {
+    .app-related-items {
+      border-top: 2px solid #1d70b8;
+      padding-top: 10px;
+    }
+  }
+
+  .image-side-bar {
+    padding-bottom: 20px;
+  }
+  @media (min-width: 40.0625em) {
+    .image-side-bar {
+      padding-bottom: 30px;
+    }
+  }
+
+  .image-side-bar img {
+    width: 100%;
+  }
+
+</style>
+
 <div class="govuk-grid-row">
 
-  <div class="govuk-grid-column-two-thirds">
+  <form action="verification-number-validation" method="post" novalidate>
 
-    {% if query.error == "true" %}
-    <div class="govuk-error-summary" data-module="govuk-error-summary">
-      <div role="alert">
-        <h2 class="govuk-error-summary__title">There is a problem</h2>
-        
-        <div class="govuk-error-summary__body">
-          <ul class="govuk-list govuk-error-summary__list">
-            <li><a href="#verification-number">Enter the verification number</a></li>
-          </ul>
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if query.error == "true" %}
+      <div class="govuk-error-summary" data-module="govuk-error-summary">
+        <div role="alert">
+          <h2 class="govuk-error-summary__title">There is a problem</h2>
+          
+          <div class="govuk-error-summary__body">
+            <ul class="govuk-list govuk-error-summary__list">
+              <li><a href="#{% if query.error1 == 'true' %}verification-number-part-1{% elif query.error2 == 'true' %}verification-number-part-2{% elif query.error3 == 'true' %}verification-number-part-3{% endif %}">Enter a complete verification number</a></li>
+            </ul>
+          </div>
+
         </div>
 
       </div>
+      {% endif %}     
 
-    </div>
-    {% endif %}
-
-    <form action="verification-number-validation" method="post" novalidate>
-
-      <div class="govuk-form-group{% if query.error == 'true' %} govuk-form-group--error{% endif %}">
+      <!-- <div class="govuk-form-group{% if query.error == 'true' %} govuk-form-group--error{% endif %}">
         <h1 class="govuk-label-wrapper govuk-!-margin-bottom-8">
           <label class="govuk-label govuk-label--xl" for="verification-number">What is the verification number?</label>
         </h1>
+        {% if data.design != "b" %}
+        <div class="image-wrapper">
+          <img src="/public/images/where-to-find-your-verification-number.svg" alt="The 12 digit verification number is on the bottom right corner of the certificate.">
+        </div>
+        {% endif %}
 
         <div id="verification-number-hint" class="govuk-hint">
           The 12 digit verification number is on the bottom right corner of the certificate. For example, 1111-2222-3333
@@ -40,15 +111,83 @@
         <p id="verification-number-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Enter the verification number</p>
         {% endif %}
         <input class="govuk-input govuk-input--width-10{% if query.error == 'true' %} govuk-input--error{% endif %}" id="verification-number" name="verificationNumber" type="text" aria-describedby="verification-number-hint{% if query.error == 'true' %} verification-number-error{% endif %}" value="{{data.verificationNumber}}">
+      </div> -->
+      <div class="govuk-form-group verification-number{% if query.error == 'true' %} govuk-form-group--error{% endif %}">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="verification-number-hint">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+            <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-7">What is the verification number?</h1>
+          </legend>
+
+          {% if data.design != "b" %}
+          <div class="image-wrapper">
+            <img src="/public/images/where-to-find-your-verification-number.svg" alt="The 12 digit verification number is on the bottom right corner of the certificate.">
+          </div>
+          {% endif %}
+
+          <div id="verification-number-hint" class="govuk-hint">
+            The 12 digit verification number is on the bottom right corner of the certificate. For example, 1111-2222-3333
+          </div>
+
+          {% if query.error == "true" %}
+          <p id="verification-number-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Enter a complete verification number</p>
+          {% endif %}
+
+          <div class="govuk-input__wrapper">
+
+            <div class="govuk-form-group">
+              <label class="govuk-label govuk-visually-hidden" id="verification-number-part-1-label" for="verification-number-part-1">Enter verification number part 1</label>
+              <input class="govuk-input govuk-input--width-4{% if query.error1 == 'true' %} govuk-input--error{% endif %}" id="verification-number-part-1" name="verificationNumberPart1" type="text"{% if query.error1 == 'true' %} aria-describedby="verification-number-error"{% endif %} maxlength="4" value="{{data.verificationNumberPart1}}">
+            </div>
+
+            <!-- <span class="verification-number__separator">-</span> -->
+            <div class="govuk-input__prefix govuk-input__suffix" aria-hidden="true">
+              -
+            </div>
+
+            <div class="govuk-form-group">
+              <label class="govuk-label govuk-visually-hidden" id="verification-number-part-2-label" for="verification-number-part-2">Enter verification number part 2</label>
+              <input class="govuk-input govuk-input--width-4{% if query.error2 == 'true' %} govuk-input--error{% endif %}" id="verification-number-part-2" name="verificationNumberPart2" type="text"{% if query.error2 == 'true' %} aria-describedby="verification-number-error"{% endif %} maxlength="4" value="{{data.verificationNumberPart2}}">
+            </div>
+
+            <!-- <span class="verification-number__separator">-</span> -->
+            <div class="govuk-input__prefix govuk-input__suffix" aria-hidden="true">
+              -
+            </div>
+
+            <div class="govuk-form-group">
+              <label class="govuk-label govuk-visually-hidden" id="verification-number-part-3-label" for="verification-number-part-3">Enter verification number part 3</label>
+              <input class="govuk-input govuk-input--width-4{% if query.error3 == 'true' %} govuk-input--error{% endif %}" id="verification-number-part-3" name="verificationNumberPart3" type="text"{% if query.error3 == 'true' %} aria-describedby="verification-number-error"{% endif %} maxlength="4" value="{{data.verificationNumberPart3}}">
+            </div>
+
+          </div>          
+
+        </fieldset>
       </div>
 
       <div class="govuk-button-group">
         <button class="govuk-button" data-module="govuk-button">Continue</button>
       </div>
 
-    </form>
+    </div>
 
-  </div>
+    {% if data.design == "b" %}
+    <div class="govuk-grid-column-one-third">
+
+      <aside class="app-related-items" role="complementary">
+        <h2 class="govuk-heading-m" id="related-content-title">Where to find your verification number</h2>
+        <nav role="navigation" aria-labelledby="related-content-title">
+          
+          <div class="image-side-bar">
+            <img src="/public/images/where-to-find-your-verification-number.svg" alt="The 12 digit verification number is on the bottom right corner of the certificate.">
+          </div>
+          
+        </nav>
+      </aside>
+
+    </div>
+    {% endif %}
+
+  </form>
 
 </div>
 {% endblock %}
