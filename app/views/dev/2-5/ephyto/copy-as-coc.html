@@ -1,0 +1,99 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+Copy application - {{serviceName}} - GOV.UK
+{% endblock %}
+{% block beforeContent %}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Return to your applications</a>
+{% endblock %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      Are you sure you want to use this application to apply for a certificate of conformity?
+    </h1>
+    <p class=govuk-body">This will copy across some of the details from your phytosanitary application and use them to create a new application for a certificate of conformity.</p>
+    <p class=govuk-body">You’ll be able to edit these details before you submit your new application. You will also be asked for some additional details.</p>
+    <dl class="govuk-summary-list govuk-summary-list--no-border">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Application
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <!-- appInformationV6() can be found in app/filters.js -->
+          {{query.id | appInformationV6('applicationID')}}
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Reference
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{query.id | appInformationV6('reference')}}
+        </dd>
+      </div>
+      <!--<div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Certificate
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {% if query.id == 2 %}Re-forwarding phytosanitary certificate for plants and fresh produce{% elif query.id == 0 %}Phytosanitary certificate for plants and fresh produce{% elif query.id == 6 %}Growing season inspection for plants and fresh produce{% else %}Phytosanitary certificate for commodity{% endif %}
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Destination
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{query.id | appInformationV6('destination')}}
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Exporter
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{query.id | appInformationV6('importer') | title}}
+        </dd>
+      </div>-->
+    </dl>
+    <form method="post" novalidate>
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <div class="govuk-radios" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+
+              {% if (query.id | appInformationV6('reference')) != "" %}
+ <!--              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~reuse-ref-coc"> -->
+              {% else %}
+<!--               <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/create/check-your-answers-copy-as-coc"> -->
+              {% endif %}
+              <input class="govuk-radios__input" id="application_type_clone" name="application_type" type="radio" value="yes~application/create/commodity-prelist">
+              <label class="govuk-label govuk-radios__label" for="application_type_clone">
+                Yes, start a new application using the same details
+              </label>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="application_type_new" name="application_type" type="radio" value="no~{{query.returnURL or 'dashboard-submitted'}}">
+              <label class="govuk-label govuk-radios__label" for="application_type_new">
+                No
+              </label>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <button class="govuk-button" data-module="govuk-button">
+        Continue
+      </button>
+    </form>
+  </div>
+</div>
+
+
+
+
+
+
+{% endblock %}

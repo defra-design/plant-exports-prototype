@@ -1,0 +1,204 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Your {% if data.commodity == "potatoes" %}ware potatoes{% elif data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}micropropagation material{% else %}{{data.commodity or "crops"}}{% endif %} for inspection - Growing season inspection - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="{{page.content.prev or 'javascript:history.back()'}}" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-three-quarters">
+    <h1 class="govuk-heading-xl">Your {% if data.commodity == "potatoes" %}ware potatoes{% elif data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}micropropagation material{% else %}{{data.commodity or "crops"}}{% endif %} for inspection</h1>
+    <p class="govuk-body">Here's what you currently have listed for inspection.</p>
+    {% if data.location2 == "true" %}
+    <h2 class="govuk-heading-l" id="2">Location: {{data.nurseryplotno2 or "Bottom field"}}</h2>
+    <dl class="govuk-summary-list govuk-summary-list--no-border">
+      
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">{% if data.addfielddetails2 == "Google Maps" %}Google Maps{% elif data.addfielddetails2 == "iacs" %}IACS or RLR number{% elif data.addfielddetails2 == "gridgps" %}Grid reference or GPS reading{% elif data.addfielddetails2 == "what3words" %}what3words address{% else %}Grid reference or GPS reading{% endif %}</dt>
+        <dd class="govuk-summary-list__value">{% if data.addfielddetails2 == "Google Maps" %}{{data.navigation_googlemaps2 or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails2 == "iacs" %}{{data.navigation_iacs2 or "NF 4321 0000"}}{% elif data.addfielddetails2 == "gridgps" %}{{data.navigation_gridgps2 or "NX 123 123"}}{% elif data.addfielddetails2 == "what3words" %}///{{data.navigation_what3words2 or "one.two.three"}}{% else %}NX 509 582{% endif %}</dd>
+        <dd class="govuk-summary-list__actions">&nbsp;</dd>
+      </div>
+
+      {% if data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}
+      <!-- Chris Harding (05.10.22) - Hide this when the commodity is 'Plants and fresh produce' plus the sub commodity is 'Micropropagation material' -->
+      {% else %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Location area (hectares)</dt>
+        <dd class="govuk-summary-list__value">{{data.areaoffield2 or "8"}}</dd>
+        <dd class="govuk-summary-list__actions">&nbsp;</dd>
+      </div>
+      {% endif %}
+      
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Map</dt>
+        <dd class="govuk-summary-list__value">{% if data.send_inspector_map2 == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload2 or "Another Filename.jpg"}}</a>{% else %}Not provided{% endif %}</dd>
+        <dd class="govuk-summary-list__actions">&nbsp;</dd>
+      </div>
+
+    </dl>
+    <ul class="govuk-list govuk-list--no-bullet">
+      <li><a class="govuk-link govuk-link--no-visited-state" href="field-2">Change this location</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="delete-field?deleteLocation2=true">Delete this location</a></li>
+    </ul>
+    <h2 class="govuk-heading-s govuk-!-margin-top-7">1 crop {% if data.commodity == "potatoes" %}variety{% endif %} added to {% if data.nurseryplotno2 or "Bottom Field" %}<span>{{data.nurseryplotno2 or "Bottom Field"}}</span>{% endif %}</h2>
+
+    <table class="govuk-table govuk-!-margin-bottom-4">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">Description</th>
+          <th class="govuk-table__header govuk-table__header--numeric govuk-!-width-one-quarter" scope="col">{% if data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}Number of containers{% else %}Inspection area (hectares){% endif %}</th>
+          <th class="govuk-table__header govuk-!-width-one-half" scope="col">Destination countries</th>
+          <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        {% if data.location2Row1 == "true" %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            {% if data.commodity == "bulbs" %}
+            {% if data.has_botanicial_name3 == "use_description" %}{{data.commodity_description3 or "Bulbs" }}{% else %}{{data.botanical_name3 or "Androsace sp. (ANSSS)"}}{% if data.commodity_variety3 %} '{{data.commodity_variety3 or 'Batch 1'}}'{% endif %}{% endif %}
+            {% elif data.commodity == "plants" %}
+            {% if data.has_botanicial_name3 == "use_description" %}{{data.commodity_description3 or "Plants and fresh produce" }}{% else %}{{data.botanical_name3 or "Corylus avellana (CYLAV)"}}{% endif %}
+            {% elif data.commodity == "potatoes" %}
+            {% if data.has_botanicial_name3 == "use_description" %}{{data.commodity_variety_manual3 or "King Smith" }}{% else %}{{data.commodity_variety3[0] or 'Maris piper'}}{% endif %}
+            {% else %}
+            {% if data.has_botanicial_name3 == "use_description" %}{{data.commodity_description3 or "Plants and fresh produce" }}{% else %}{{data.botanical_name3 or "Corylus avellana (CYLAV)"}}{% endif %}
+            {% endif %}
+          </td>
+          <td class="govuk-table__cell govuk-table__cell--numeric">{% if data.commodity == "plants" %}{% if data.subCommodityType == "Micropropagation material" %}{{data.quantityContainers3 or "2"}}{% else %}{{data.quantityHectarage3 or "4"}}{% endif %}{% else %}{{data.approxhectofplot3 or "12"}}{% endif %}</td>
+          <td class="govuk-table__cell">{% if data['filter_demo3'] %}{{data['filter_demo3']| join(", ")}}{% else %}France{% endif %}</td>
+          <td class="govuk-table__cell govuk-table__cell--numeric">
+            <a href="how-to-identify-3" class="govuk-link govuk-link--no-visited-state">Change</a>
+            <br>
+            <a href="delete-crop?deleteLocation2Row1=true" class="govuk-link govuk-link--no-visited-state">Delete</a>
+          </td>
+        </tr>
+        {% endif %}
+      </tbody>
+    </table>
+
+    <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="how-to-identify-3">Add more crops to this location</a></p>
+    {% endif %}
+    {% if data.location1 == "true" %}
+    <h2 class="govuk-heading-l govuk-!-margin-top-6" id="1">Location: {{data.nurseryplotno or "Top field"}}</h2>
+    <dl class="govuk-summary-list govuk-summary-list--no-border">
+      
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">{% if data.addfielddetails == "Google Maps" %}Google Maps{% elif data.addfielddetails == "iacs" %}IACS or RLR number{% elif data.addfielddetails == "gridgps" %}Grid reference or GPS reading{% elif data.addfielddetails == "what3words" %}what3words address{% else %}Grid reference or GPS reading{% endif %}</dt>
+        <dd class="govuk-summary-list__value">{% if data.addfielddetails == "Google Maps" %}{{data.navigation_googlemaps or "https://goo.gl/maps/98VGxiqvRwDcg4eP9"}}{% elif data.addfielddetails == "iacs" %}{{data.navigation_iacs or "NF 1234 1234"}}{% elif data.addfielddetails == "gridgps" %}{{data.navigation_gridgps or "NX 509 582"}}{% elif data.addfielddetails == "what3words" %}///{{data.navigation_what3words or "pretty.needed.chill"}}{% else %}NX 509 582{% endif %}</dd>
+        <dd class="govuk-summary-list__actions">&nbsp;</dd>
+      </div>
+
+      {% if data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}
+      <!-- Chris Harding (05.10.22) - Hide this when the commodity is 'Plants and fresh produce' plus the sub commodity is 'Micropropagation material' -->
+      {% else %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Location area (hectares)</dt>
+        <dd class="govuk-summary-list__value">{{data.areaoffield or "5"}}</dd>
+        <dd class="govuk-summary-list__actions">&nbsp;</dd>
+      </div>
+      {% endif %}
+      
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Map</dt>
+        <dd class="govuk-summary-list__value">{% if data.send_inspector_map == "Yes" %}<a class="govuk-link govuk-link--no-visited-state" href="#">{{data.map_upload or "Filename.jpg"}}</a>{% else %}Not provided{% endif %}</dd>
+        <dd class="govuk-summary-list__actions">&nbsp;</dd>
+      </div>
+
+    </dl>
+    <ul class="govuk-list govuk-list--no-bullet">
+      <li><a class="govuk-link govuk-link--no-visited-state" href="field">Change this location</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="delete-field?deleteLocation1=true">Delete this location</a></li>
+    </ul>
+    <h2 class="govuk-heading-s govuk-!-margin-top-7">{% if data.location1Row2 == "true" and data.location1Row1 == "true" %}2 crops{% else %}1 crop{% endif %} {% if data.commodity == "potatoes" %}variety{% endif %} added to {% if data.nurseryplotno or "Top Field" %}<span>{{data.nurseryplotno or "Top Field"}}</span>{% endif %}</h2>
+
+    <table class="govuk-table govuk-!-margin-bottom-4">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header govuk-!-width-one-quarter" scope="col">Description</th>
+          <th class="govuk-table__header govuk-table__header--numeric govuk-!-width-one-quarter" scope="col">{% if data.commodity == "plants" and data.subCommodityType == "Micropropagation material" %}Number of containers{% else %}Inspection area (hectares){% endif %}</th>
+          <th class="govuk-table__header govuk-!-width-one-half" scope="col">Destination countries</th>
+          <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        {% if data.location1Row2 == "true" %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            {% if data.commodity == "bulbs" %}
+            {% if data.has_botanicial_name2 == "use_description" %}{{data.commodity_description2 or "Bulbs" }}{% else %}{{data.botanical_name2 or "Androsace sp. (ANSSS)"}}{% if data.commodity_variety2 %} '{{data.commodity_variety2 or 'Batch 1'}}'{% endif %}{% endif %}
+            {% elif data.commodity == "plants" %}
+            {% if data.has_botanicial_name2 == "use_description" %}{{data.commodity_description2 or "Plants and fresh produce" }}{% else %}{{data.botanical_name2 or "Corylus avellana (CYLAV)"}}{% endif %}
+            {% elif data.commodity == "potatoes" %}
+            {% if data.has_botanicial_name2 == "use_description" %}{{data.commodity_variety_manual2 or "King Smith" }}{% else %}{{data.commodity_variety2[0] or 'Maris piper'}}{% endif %}
+            {% else %}
+            {% if data.has_botanicial_name2 == "use_description" %}{{data.commodity_description2 or "Plants and fresh produce" }}{% else %}{{data.botanical_name2 or "Corylus avellana (CYLAV)"}}{% endif %}
+            {% endif %}
+          </td>
+          <td class="govuk-table__cell govuk-table__cell--numeric">{% if data.commodity == "plants" %}{% if data.subCommodityType == "Micropropagation material" %}{{data.quantityContainers2 or "2"}}{% else %}{{data.quantityHectarage2 or "4"}}{% endif %}{% else %}{{data.approxhectofplot2 or "12"}}{% endif %}</td>
+          <td class="govuk-table__cell">{% if data['filter_demo2'] %}{{data['filter_demo2']| join(", ")}}{% else %}Japan{% endif %}</td>
+          <td class="govuk-table__cell govuk-table__cell--numeric">
+            <a href="how-to-identify-2" class="govuk-link govuk-link--no-visited-state">Change</a>
+            <br>
+            <a href="delete-crop?deleteLocation1Row2=true" class="govuk-link govuk-link--no-visited-state">Delete</a>
+          </td>
+        </tr>
+        {% endif %}
+        {% if data.location1Row1 == "true" %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            {% if data.commodity == "bulbs" %}
+            {% if data.has_botanicial_name == "use_description" %}{{data.commodity_description or "Bulbs" }}{% else %}{{data.botanical_name or "Androsace sp. (ANSSS)"}}{% if data.commodity_variety %} '{{data.commodity_variety or 'Batch 1'}}'{% endif %}{% endif %}
+            {% elif data.commodity == "plants" %}
+            {% if data.has_botanicial_name == "use_description" %}{{data.commodity_description or "Plants and fresh produce" }}{% else %}{{data.botanical_name or "Corylus avellana (CYLAV)"}}{% endif %}
+            {% elif data.commodity == "potatoes" %}
+            {% if data.has_botanicial_name == "use_description" %}{{data.commodity_variety_manual or "King Smith" }}{% else %}{{data.commodity_variety3[0] or 'Maris piper'}}{% endif %}
+            {% else %}
+            {% if data.has_botanicial_name == "use_description" %}{{data.commodity_description or "Plants and fresh produce" }}{% else %}{{data.botanical_name or "Corylus avellana (CYLAV)"}}{% endif %}
+            {% endif %}
+          </td>
+          <td class="govuk-table__cell govuk-table__cell--numeric">{% if data.commodity == "plants" %}{% if data.subCommodityType == "Micropropagation material" %}{{data.quantityContainers or "12"}}{% else %}{{data.quantityHectarage or "6"}}{% endif %}{% else %}{{data.approxhectofplot or "3.5"}}{% endif %}</td>
+          <td class="govuk-table__cell">{% if data['filter_demo'] %}{{data['filter_demo']| join(", ")}}{% else %}Belize{% endif %}</td>
+          <td class="govuk-table__cell govuk-table__cell--numeric">
+            <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">Change</a>
+            <br>
+            <a href="delete-crop?deleteLocation1Row1=true" class="govuk-link govuk-link--no-visited-state">Delete</a>
+          </td>
+        </tr>
+        {% endif %}
+      </tbody>
+    </table>
+
+    <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="how-to-identify-2">Add more crops to this location</a></p>
+    {% endif %}
+
+    <form action="{{query.return_url or 'task-list'}}" method="post">
+    
+      <div class="govuk-button-group govuk-!-margin-top-7 govuk-!-margin-bottom-8">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+        <a class="govuk-link" href="{% if data.location1 == 'false' %}field{% else %}field-2{% endif %}">Add another location</a>
+      </div>
+
+
+      <!-- Session data hook to update the task list so that this section is marked as 'COMPLETED' -->
+      <div class="govuk-form-group" hidden>
+        <label class="govuk-label" for="commodity_task_list_data">Task list section URL</label>
+        <input class="govuk-input" id="commodity_task_list_data" name="commodity_task_list_data" type="text" value="commodity-list">
+      </div>
+
+    </form>
+
+    {% block continueLater %}
+    {% include "../modules/_save-continue-later.html" %}
+    {% endblock %}
+  </div>
+
+</div>
+{% endblock %}

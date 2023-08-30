@@ -1,0 +1,80 @@
+<!-- <tr class="govuk-table__row">
+  <td class="govuk-table__cell">{{commodity.variety or "Example variety"}}</td>
+  <td class="govuk-table__cell">{{commodity.countrySelect[0] or "United Kingdom"}}</td>
+  <td class="govuk-table__cell">{{commodity.stock_weight or "25"}}{% if data.build == "development" %} Kilograms{% else %}kg{% endif %}</td>
+  <td class="govuk-table__cell govuk-table__header--numeric">
+    <a href="how-to-identify?change=yes" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+    <br>
+    <a href="delete-commodity" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+  </td>
+</tr> -->
+
+
+
+
+<tr class="govuk-table__row">
+  <td class="govuk-table__cell">
+    
+    <span style="display: block; margin-bottom: 7px;">
+      {% if commodity.has_botanicial_name == "use_description" %}
+          <!-- use DESCRIPTION -->
+          <strong>{{commodity.commodity_description or "Description for plant"}}</strong>
+      {% elif commodity.genus %}
+          <!-- use GENUS + SPECIES -->
+          <strong>{{commodity.genus or "Genus unknown"}}, {{commodity.commodity_host_species or "Species unknown"}}</strong>
+      {% else %}
+          <!-- use BOTANICAL NAME -->
+          <strong>{{commodity.botanical_name or "RRRosa ecae (ROSEC)"}}</strong>
+      {% endif %}
+  </span>
+
+    {% if commodity.commodity_variety != "" %}
+    <span style="display: block; margin-bottom: 7px;">Variety: '{{commodity.commodity_variety or "Red blossom"}}'</span>
+    {% endif %}
+    {% if query.design != "b" %}
+    <span style="display: block; margin-bottom: 7px;">
+      Commodity type:
+      <br>
+      {% if commodity.commodity_type == "produce" %}
+      Produce (fruit, flowers or vegetables)
+      {% else %}
+      {{commodity.commodity_type | capitalize or "Bulbs"}}
+      {% endif %}
+    </span>
+    {% endif %}
+  </td>
+  <td class="govuk-table__cell">
+    <!-- {% if commodity.filter_demo %}
+    {{commodity.filter_demo or "United Kingdom"}}
+    {% else %}
+    United Kingdom 
+    {% endif %} -->
+    {% set _defaultCountry = "United Kingdom" %}
+    {% if commodity.filter_demo == "_unchecked" or commodity.filter_demo == undefined %}
+    {{_defaultCountry}}
+    {% else %}
+    {{commodity.filter_demo | join(", ") or _defaultCountry}}
+    {% endif %}
+    <!-- "filter_demo":["Afghanistan","Åland Islands","Albania"], -->
+  </td>
+  <td class="govuk-table__cell">
+    <span style="display: block; margin-bottom: 7px;">{{commodity.quantity or "20"}} {{commodity.units or "kilograms"}}</span>
+    <span style="display: block; margin-bottom: 7px;">{{commodity.number_of_packages or "5"}} packages</span>
+  </td>
+  <td class="govuk-table__cell">
+    <span style="display: block; margin-bottom: 7px;">{{commodity.packaging[0] or "Crate - bulk - cardboard"}}</span>
+    {% if query.design != "b" %}
+    {% if commodity.packing_material_used != "" %}
+    <span style="display: block; margin-bottom: 7px;">{{commodity.packing_material_used or "Cardboard"}}</span>
+    {% endif %}
+    {% if commodity.distinguishing_marks != "" %}
+    <span style="display: block; margin-bottom: 7px;">{{commodity.distinguishing_marks or "Brown marks"}}</span>
+    {% endif %}
+    {% endif %}
+  </td>
+  <td class="govuk-table__cell" style="text-align: right;">
+    <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+    <br>
+    <a href="#" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+  </td>
+</tr>

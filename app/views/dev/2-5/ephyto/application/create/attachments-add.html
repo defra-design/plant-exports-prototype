@@ -1,0 +1,145 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.reissue == "yes" %}Make your changes - Re-issue a phytosanitary certificate - {{serviceName}} - GOV.UK{% else %}Add a supporting document - Phytosanitary certificate - {{serviceName}} - GOV.UK{% endif %}
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if query.error == "true" %}
+    <div class="govuk-error-summary" data-module="govuk-error-summary" tabindex="-1" autofocus>
+      
+      <div role="alert">
+        <h2 class="govuk-error-summary__title">There is a problem</h2>       
+        <div class="govuk-error-summary__body">
+          <ul class="govuk-list govuk-error-summary__list">
+            {% if query.error1 == "true" %}
+            <li><a href="#supportingDocument">Choose a file to upload</a></li>
+            {% endif %}
+            {% if query.error2 == "true" %}
+            <li><a href="#fileDescription-1">Select a file description</a></li>
+            {% endif %}
+            {% if query.error3 == "true" %}
+            <li><a href="#manualFileDescription">Enter a description for the file</a></li>
+            {% endif %}
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+    {% endif %}
+
+    <form action="attachments-add-validation" method="post">
+      
+      <div class="govuk-form-group">
+        <h1 class="govuk-heading-xl">Add a supporting document</h1>
+        <p class="govuk-body">Each file must:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>be in PDF, Word, Excel or JPEG format</li>
+          <li>be smaller than 10 megabytes (10MB)</li>
+          <li>have a unique, meaningful file name</li>
+        </ul>
+
+        <div class="govuk-form-group{% if query.error1 == 'true' %} govuk-form-group--error{% endif %}">
+          <label class="govuk-label" for="supportingDocument">Upload a file</label>
+          {% if query.error1 == "true" %}
+          <p id="supportingDocument-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Choose a file to upload</p>
+          {% endif %}
+          <input class="govuk-file-upload{% if query.error1 == 'true' %} govuk-file-upload--error{% endif %}" id="supportingDocument" name="supportingDocument" type="file" aria-describedby="supportingDocument-error" value="{{data.supportingDocument}}">
+        </div>
+
+        <div class="govuk-form-group{% if query.error2 == 'true' %} govuk-form-group--error{% endif %}">
+          <fieldset class="govuk-fieldset"{% if query.error2 == 'true' %} aria-describedby="fileDescription-error"{% endif %}>
+            <legend class="govuk-fieldset__legend">
+              <h1 class="govuk-fieldset__heading">Select a file description</h1>
+            </legend>
+            {% if query.error2 == "true" %}
+            <p id="fileDescription-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Select a file description</p>
+            {% endif %}
+
+            <div class="govuk-radios" data-module="govuk-radios">
+              
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="fileDescription-1" name="fileDescription" type="radio" value="Import phytosanitary certificate"{% if data.fileDescription == 'Import phytosanitary certificate' %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="fileDescription-1">Import phytosanitary certificate</label>
+              </div>
+
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="fileDescription-2" name="fileDescription" type="radio" value="Certificate of conformity"{% if data.fileDescription == 'Certificate of conformity' %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="fileDescription-2">Certificate of conformity</label>
+              </div>
+
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="fileDescription-3" name="fileDescription" type="radio" value="Packing list"{% if data.fileDescription == 'Packing list' %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="fileDescription-3">Packing list</label>
+              </div>
+
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="fileDescription-4" name="fileDescription" type="radio" value="Invoice"{% if data.fileDescription == 'Invoice' %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="fileDescription-4">Invoice</label>
+              </div>
+
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="fileDescription-5" name="fileDescription" type="radio" value="Traces NT Proforma"{% if data.fileDescription == 'Traces NT Proforma' %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="fileDescription-5">Traces NT Proforma</label>
+              </div>
+
+              <div class="govuk-radios__divider">
+                or
+              </div>
+
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="fileDescription-6" name="fileDescription" type="radio" data-aria-controls="fileDescription-6-hidden" value="Add your own description"{% if data.fileDescription == 'Add your own description' %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="fileDescription-6">Add your own description</label>
+              </div>
+
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="fileDescription-6-hidden">
+                
+                <div class="govuk-form-group{% if query.error3 == 'true' %} govuk-form-group--error{% endif %}">
+                  <label class="govuk-label" for="manualFileDescription">Enter a description for the file</label>
+                  {% if query.error3 == "true" %}
+                  <p id="manualFileDescription-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Enter a description for the file</p>
+                  {% endif %}
+                  <input class="govuk-input" id="manualFileDescription" name="manualFileDescription" type="text"{% if query.error3 == "true" %}aria-describedby="manualFileDescription-error"{% endif %} value="{{data.manualFileDescription}}">
+                </div>
+
+              </div>
+
+            </div>
+
+          </fieldset>
+        </div>
+
+        <!-- <div class="govuk-form-group{% if query.error2 == 'true' %} govuk-form-group--error{% endif %}">
+          <label class="govuk-label" for="fileDescription">File description</label>
+          {% if query.error2 == "true" %}
+          <p id="supportingDocument-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Enter a description for the file</p>
+          {% endif %}
+          <textarea class="govuk-textarea{% if query.error2 == 'true' %} govuk-input--error{% endif %}" id="fileDescription" name="fileDescription" rows="5">{{data.fileDescription}}</textarea>
+        </div> -->
+
+      </div>
+
+      <div class="govuk-form-group">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Upload</button>
+      </div>
+
+      {% block continueLater %}
+      {% include "../modules/_save-continue-later.html" %}
+      {% endblock %}
+    </form>
+    
+  </div>
+
+</div>
+{% endblock %}

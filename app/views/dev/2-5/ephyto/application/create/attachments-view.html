@@ -1,0 +1,91 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.reissue == "yes" %}Make your changes - Re-issue a phytosanitary certificate - {{serviceName}} - GOV.UK{% else %}Supporting documents - Phytosanitary certificate - {{serviceName}} - GOV.UK{% endif %}
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <form action="{{query.return_url or 'task-list'}}" method="post" novalidate>
+
+      {% if query.supportingDocumentAdded == "true" %}
+      <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+    
+        <div class="govuk-notification-banner__header">
+          <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">Success</h2>
+        </div>
+
+        <div class="govuk-notification-banner__content">
+          <h3 class="govuk-notification-banner__heading">You added {{data.supportingDocument or "Filename.jpg"}} to this application</h3>
+        </div>
+
+      </div>
+      {% endif %}
+
+      <h1 class="govuk-heading-xl">Supporting documents</h1>
+
+      <table class="govuk-table govuk-!-margin-bottom-7">
+        <caption class="govuk-table__caption"><span class="govuk-visually-hidden">Supporting documents for your phytosanitary certificate application</span></caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">File name</th>
+            <th scope="col" class="govuk-table__header">Description</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <td scope="row" class="govuk-table__cell">{{data.supportingDocument or "Filename.jpg"}}</td>
+            <td class="govuk-table__cell">{% if data.fileDescription == "Add your own description" %}{{data.manualFileDescription or "Description of file"}}{% else %}{{data.fileDescription or "Description of file"}}{% endif %}</td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              <a href="#" class="govuk-link govuk-link--no-visited-state">Download<span class="govuk-visually-hidden"> {{data.supportingDocument or "Filename.jpg"}}</span></a>
+              <br>
+              <a href="attachments-delete" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> {{data.supportingDocument or "Filename.jpg"}}</span></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-!-margin-top-4">Do you want to upload another supporting document?</legend>
+      
+          <div class="govuk-radios govuk-!-margin-bottom-4">
+            
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="uploadAnother_yes" name="uploadAnother" type="radio" value="Yes~attachments-add">
+              <label class="govuk-label govuk-radios__label" for="uploadAnother_yes">Yes, upload another</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="uploadAnother_no" name="uploadAnother" type="radio" value="No~{% if query.change == 'yes' %}{{query.return_url or 'check-your-answers'}}{% else %}task-list{% endif %}">
+              <label class="govuk-label govuk-radios__label" for="uploadAnother_no">No, I have finished uploading</label>
+            </div>
+
+          </div>
+
+        </fieldset>
+      </div>
+
+      <div class="govuk-form-group govuk-!-margin-bottom-6">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      </div>
+
+      {% block continueLater %}
+      {% include "../modules/_save-continue-later.html" %}
+      {% endblock %}
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}
