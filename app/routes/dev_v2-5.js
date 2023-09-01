@@ -729,7 +729,7 @@ module.exports = function(router) {
       }
       else {
 
-        if (fileDescription == "Something else" && (manualFileDescription == "" || manualFileDescription == null)) {
+        if (fileDescription == "Add your own description" && (manualFileDescription == "" || manualFileDescription == null)) {
           errorCount++;
           error3 = "&error3=true";
         }
@@ -779,7 +779,7 @@ module.exports = function(router) {
       }
       else {
 
-        if (fileDescription == "Something else" && (manualFileDescription == "" || manualFileDescription == null)) {
+        if (fileDescription == "Add your own description" && (manualFileDescription == "" || manualFileDescription == null)) {
           errorCount++;
           error3 = "&error3=true";
         }
