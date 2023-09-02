@@ -59,19 +59,14 @@
 
   <div class="govuk-grid-column-two-thirds">
 
-    <!-- 
-      https://defra-phes-prototype.herokuapp.com/dev/2-4/application/create/how-to-identify?error1=true&show_manual_input=no&has_botanicial_name=yes&commodity=plants
-      1 - [species] not registered for PHEATS at selected inspection address
-
-      https://defra-phes-prototype.herokuapp.com/dev/2-4/application/create/how-to-identify?error2=true&show_manual_input=no&has_botanicial_name=yes&commodity=plants
-      2 - [species] registered for PHEATS at selected inspection address, but not for selected destination country of [country]
-
-      https://defra-phes-prototype.herokuapp.com/dev/2-4/application/create/how-to-identify?error3=true&show_manual_input=no&has_botanicial_name=yes&commodity=plants
-      3 - [species] registered for PHEATS at selected inspection address, but not for selected countries of origin of [country], [country]
-
-      https://defra-phes-prototype.herokuapp.com/dev/2-4/application/create/how-to-identify?error4=true&show_manual_input=yes&has_botanicial_name=yes&commodity=plants
-      4 - [country], [country] not registered for PHEATS registered for any species at selected inspection address 
-    -->
+    {% set _pheatsErrors = 
+      {
+        "error1": "You have chosen to apply using PHEATS. Enter a commodity you are approved to send using PHEATS.",
+        "error2": "You have chosen to apply using PHEATS. Enter a commodity you are approved to send to the destination country you have chosen.",
+        "error3": "You have chosen to apply using PHEATS. You must only choose countries of origin that you have approval to send to.",
+        "error4": "You have chosen to apply using PHEATS. You must only choose countries of origin that you have approval to send to."
+      }
+    %}
 
 
     {% if _errorValidation == 'true' %}
@@ -85,25 +80,25 @@
             
             {% if _error1 == 'true' %}
             <li>
-              <a href="#autocomplete-customTemplates">1 - [species] not registered for PHEATS at selected inspection address</a>
+              <a href="#autocomplete-customTemplates">{{_pheatsErrors.error1}}</a>
             </li>
             {% endif %}
 
             {% if _error2 == 'true' %}
             <li>
-              <a href="#autocomplete-customTemplates">2 - [species] registered for PHEATS, but not for selected destination country of [country]</a>
+              <a href="#autocomplete-customTemplates">{{_pheatsErrors.error2}}</a>
             </li>
             {% endif %}
 
             {% if _error3 == 'true' %}
             <li>
-              <a href="#Afghanistan">3 - [species] registered for PHEATS, but not for selected countries of origin of [country], [country]</a>
+              <a href="#Afghanistan">{{_pheatsErrors.error3}}</a>
             </li>
             {% endif %}
 
             {% if _error4 == 'true' %}
             <li>
-              <a href="#Afghanistan">4 -[country], [country] not PHEATS registered for any species at selected inspection address</a>
+              <a href="#Afghanistan">{{_pheatsErrors.error4}}</a>
             </li>
             {% endif %}
 
@@ -172,13 +167,13 @@
 
                   {% if _error1 == 'true' %}
                   <p id="error-1" class="govuk-error-message">
-                    <span class="govuk-visually-hidden">Error:</span>1 - [species] not registered for PHEATS at selected inspection address
+                    <span class="govuk-visually-hidden">Error: </span>{{_pheatsErrors.error1}}
                   </p>
                   {% endif %}
 
                   {% if _error2 == 'true' %}
                   <p id="error-2" class="govuk-error-message">
-                    <span class="govuk-visually-hidden">Error:</span>2 - [species] registered for PHEATS, but not for selected destination country of [country]
+                    <span class="govuk-visually-hidden">Error: </span>{{_pheatsErrors.error2}}
                   </p>
                   {% endif %}
                   
