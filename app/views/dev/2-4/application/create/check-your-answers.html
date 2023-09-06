@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.build == "development" %}Review Answers - Exports application{% else %}Check your answers before sending your application - Phytosanitary certificate - {{serviceName}}{% endif %} - GOV.UK  
+  {% if query.pheatsError1 == "true" or query.pheatsError2 == "true" %}Error: {% endif %}{% if data.build == "development" %}Review Answers - Exports application{% else %}Check your answers before sending your application - Phytosanitary certificate - {{serviceName}}{% endif %} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -14,6 +14,36 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-three-quarters">
+
+    {% set _pheatsErrors = {
+      "pheatsError1": "<<commodity row error>>",
+      "pheatsError2": "<<apply under PHEATS error>>"
+    }
+    %}
+
+    {% if query.pheatsError1 == "true" or query.pheatsError2 == "true" %}
+    <div class="govuk-error-summary" data-module="govuk-error-summary">
+      <div role="alert">
+        <h2 class="govuk-error-summary__title">
+          There is a problem
+        </h2>
+        <div class="govuk-error-summary__body">
+          <ul class="govuk-list govuk-error-summary__list">
+            {% if query.pheatsError1 == "true" %}
+            <li>
+              <a href="#changeCommodity">{{_pheatsErrors.pheatsError1}}</a>
+            </li>
+            {% endif %}
+            {% if query.pheatsError2 == "true" %}
+            <li>
+              <a href="#changePHEATS">{{_pheatsErrors.pheatsError2}}</a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    {% endif %}
 
     {% if query.deleted %}
       <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
@@ -313,11 +343,15 @@
           {% endif %}
         </thead>
         <tbody class="govuk-table__body" style="text-align: right;">
-          {% for commodity in data.commodities %}
-            {% block summaryPlantsAndFreshProduce %}
+          {% if query.pheatsError1 == "true" %}
             {% include "../modules/_summary-plants-check-answers.html" %}
-            {% endblock %}
-          {% endfor %}
+          {% else %}
+            {% for commodity in data.commodities %}
+              {% block summaryPlantsAndFreshProduce %}
+              {% include "../modules/_summary-plants-check-answers.html" %}
+              {% endblock %}
+            {% endfor %}
+          {% endif %}
         </tbody>
       </table>
 
@@ -536,11 +570,25 @@
         </div>
 
         {% if data.commodity == "plants" %}
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Are you applying under PHEATS?</dt>
-          <dd class="govuk-summary-list__value">{% if data.pheats_check == "yes" %}Yes{% else %}No{% endif %}</dd>
+        <div class="govuk-summary-list__row {% if query.pheatsError2 == 'true' %} govuk-form-group--error {% endif %} ">
+          <dt class="govuk-summary-list__key"  {% if query.pheatsError2 == 'true' %} style="padding-left:15px" {% endif %} >
+            {% if query.pheatsError2 == 'true' %}
+            <p id="pheats2-error" class="govuk-error-message">
+              <span class="govuk-visually-hidden">Error:</span> {{_pheatsErrors.pheatsError2}}
+            </p>
+            {% endif %}
+
+            Are you applying under PHEATS?
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {% if query.pheatsError2 == 'true' %} 
+            Yes
+            {% else %}
+            {% if data.pheats_check == "yes" %}Yes{% else %}No{% endif %}
+            {% endif %}
+          </dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="pheats-check?change=yes&return_url=check-your-answers">Change <span class="govuk-visually-hidden">whether you are applying under PHEATS</span></a>
+            <a class="govuk-link" href="pheats-check?change=yes&return_url=check-your-answers" {% if query.pheatsError2 == 'true' %}id="changePHEATS" aria-describedby="pheats2-error"{% endif %}>Change <span class="govuk-visually-hidden">whether you are applying under PHEATS</span></a>
           </dd>
         </div>
         {% endif %}
