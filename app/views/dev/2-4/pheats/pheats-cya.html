@@ -23,8 +23,10 @@
   <div class="govuk-grid-column-two-thirds">
 
     {% set _errorState = query.cyaError or 'false' %}
+    {% set _errorState2 = query.cyaError2 or 'false' %}
 
-    {% if _errorState == 'true' %}
+
+    {% if _errorState == 'true' or _errorState2 == 'true' %}
     <div class="govuk-error-summary" data-module="govuk-error-summary">
       <div role="alert">
         <h2 class="govuk-error-summary__title">
@@ -32,6 +34,7 @@
         </h2>
         <div class="govuk-error-summary__body">
           <ul class="govuk-list govuk-error-summary__list">
+            {% if _errorState == 'true' %}
             <li>
               <a href="#input-s">[error message site plan]</a>
             </li>
@@ -47,6 +50,11 @@
             <li>
               <a href="#pheatsDeclaration">[error message declaration]</a>
             </li>
+            {% elif _errorState2 == 'true' %}
+            <li>
+              <a href="#commodity-change">[error message commodity row]</a>
+            </li>
+            {% endif %}
           </ul>
         </div>
       </div>
@@ -175,6 +183,78 @@
           </a>
         </p>
       </div>
+      {% elif _errorState2 == 'true' %}
+      <h2 class="govuk-heading-m">Commodities</h2>
+      <table class="govuk-table  govuk-!-margin-bottom-5" >
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Description</th>
+            <th class="govuk-table__header" scope="col">Origin</th>
+            <th class="govuk-table__header" scope="col">Destination</th>
+            <th class="govuk-table__header" scope="col" style="text-align: right;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            Dactylorhiza umbrosa (DAKUM)
+          </td>
+          <td class="govuk-table__cell">
+            United Kingdom
+          </td>
+          <td class="govuk-table__cell">
+            France
+          </td>
+
+          <td class="govuk-table__cell" style="text-align: right;">
+            <span class="govuk-!-margin-bottom-2" style="display:block">
+              <a href="#" class="govuk-link govuk-link--no-visited-state">
+                Change<span class="govuk-visually-hidden"> this commodity</span>
+              </a>
+            </span>
+            <span class="govuk-!-margin-bottom-2" style="display:block">
+              <a href="#" class="govuk-link govuk-link--no-visited-state">
+                Delete<span class="govuk-visually-hidden"> this commodity</span>
+              </a>
+            </span>
+            
+          </td>
+        </tr>
+        <tr class="govuk-table__row govuk-form-group--error">
+          <td class="govuk-table__cell" style="padding-left:15px">
+            <p id="commodity-error" class="govuk-error-message">
+              <span class="govuk-visually-hidden">Error:</span> [error message commodity row]
+            </p>
+            Dodgy umbrosia (DODUM)
+          </td>
+          <td class="govuk-table__cell">
+            United Kingdom
+          </td>
+          <td class="govuk-table__cell">
+            Germany
+          </td>
+
+          <td class="govuk-table__cell" style="text-align: right;">
+            <span class="govuk-!-margin-bottom-2" style="display:block">
+              <a href="#" class="govuk-link govuk-link--no-visited-state" aria-describedby="commodity-error" id="commodity-change">
+                Change<span class="govuk-visually-hidden"> this commodity</span>
+              </a>
+            </span>
+            <span class="govuk-!-margin-bottom-2" style="display:block">
+              <a href="#" class="govuk-link govuk-link--no-visited-state">
+                Delete<span class="govuk-visually-hidden"> this commodity</span>
+              </a>
+            </span>
+            
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <p class="govuk-body govuk-!-margin-bottom-7">
+        <a href="#" class="govuk-link govuk-link--no-visited-state">
+          Add another commodity
+        </a>
+      </p>
       {% else %}
       <h2 class="govuk-heading-m">Commodities</h2>
       <table class="govuk-table  govuk-!-margin-bottom-5" >
