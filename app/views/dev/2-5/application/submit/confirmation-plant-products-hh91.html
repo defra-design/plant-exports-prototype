@@ -60,7 +60,8 @@
   <thead class="govuk-table__head">
     <tr class='govuk-table__row'>
       <th scope="col" class="govuk-table__header">Description</th>
-      <th scope="col" class="govuk-table__header">Country of origin</th>
+      <th scope="col" class="govuk-table__header">Origin</th>
+      <th scope="col" class="govuk-table__header">APHA sample reference</th>
       <th scope="col" class="govuk-table__header ">Quantity and number of packages</th>
       <th scope="col" class="govuk-table__header">Packaging, packing material and distinguishing marks</th>
     </tr>
@@ -97,14 +98,14 @@
           <strong>{{commodity.genus or "Genus unknown"}}, {{commodity.commodity_host_species or "Species unknown"}}</strong>
       {% else %}
           <!-- use BOTANICAL NAME -->
-          <strong>{{commodity.botanical_name or "RRRosa ecae (ROSEC)"}}</strong>
+          <strong>{{commodity.botanical_name or "Rosa ecae (ROSEC)"}}</strong>
       {% endif %}
   </span>
     
   </td>
   <td class="govuk-table__cell">
     
-    {% set _defaultCountry = "United Kingdom" %}
+    {% set _defaultCountry = "United Kingdom, United States of America, Costa Rica, Columbia" %}
     {% if commodity.filter_demo == "_unchecked" or commodity.filter_demo == undefined %}
     {{_defaultCountry}}
     {% else %}
@@ -112,6 +113,65 @@
     {% endif %}
     <!-- "filter_demo":["Afghanistan","Åland Islands","Albania"], -->
   </td>
+  
+  <td class="govuk-table__cell">
+    <span style="display: block; margin-bottom: 7px;">1721 1480 04808</span>
+  </td>
+
+  <td class="govuk-table__cell">
+    <span style="display: block; margin-bottom: 7px;">{{commodity.quantity or "20"}} {{commodity.units or "kilograms"}}</span>
+    <span style="display: block; margin-bottom: 7px;">{{commodity.number_of_packages or "5"}} packages</span>
+  </td>
+  <td class="govuk-table__cell">
+    <span style="display: block; margin-bottom: 7px;">{{commodity.packaging[0] or "Crate - bulk - cardboard"}}</span>
+    {% if query.design != "b" %}
+    {% if commodity.packing_material_used != "" %}
+    <span style="display: block; margin-bottom: 7px;">{{commodity.packing_material_used or "Cardboard"}}</span>
+    {% endif %}
+    {% if commodity.distinguishing_marks != "" %}
+    <span style="display: block; margin-bottom: 7px;">{{commodity.distinguishing_marks or "Brown marks"}}</span>
+    {% endif %}
+    {% endif %}
+  </td>
+  
+  <!-- <td class="govuk-table__cell" style="text-align: right;">
+    <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+    <br>
+    <a href="#" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+  </td> -->
+</tr>
+
+<tr class="govuk-table__row">
+  <td class="govuk-table__cell">
+    <span style="display: block; margin-bottom: 7px;">
+      {% if commodity.has_botanicial_name == "use_description" %}
+          <!-- use DESCRIPTION -->
+          <strong>{{commodity.commodity_description or "Description for plant"}}</strong>
+      {% elif commodity.genus %}
+          <!-- use GENUS + SPECIES -->
+          <strong>{{commodity.genus or "Genus unknown"}}, {{commodity.commodity_host_species or "Species unknown"}}</strong>
+      {% else %}
+          <!-- use BOTANICAL NAME -->
+          <strong>{{commodity.botanical_name or "Rosa ecae (ROSEC)"}}</strong>
+      {% endif %}
+  </span>
+    
+  </td>
+  <td class="govuk-table__cell">
+    
+    {% set _defaultCountry = "United Kingdom, United States of America, Costa Rica" %}
+    {% if commodity.filter_demo == "_unchecked" or commodity.filter_demo == undefined %}
+    {{_defaultCountry}}
+    {% else %}
+    {{commodity.filter_demo | join(", ") or _defaultCountry}}
+    {% endif %}
+    <!-- "filter_demo":["Afghanistan","Åland Islands","Albania"], -->
+  </td>
+
+  <td class="govuk-table__cell">
+    <span style="display: block; margin-bottom: 7px;">1721 1480 04809</span>
+  </td>
+
   <td class="govuk-table__cell">
     <span style="display: block; margin-bottom: 7px;">{{commodity.quantity or "20"}} {{commodity.units or "kilograms"}}</span>
     <span style="display: block; margin-bottom: 7px;">{{commodity.number_of_packages or "5"}} packages</span>
@@ -145,7 +205,7 @@
           <strong>{{commodity.genus or "Genus unknown"}}, {{commodity.commodity_host_species or "Species unknown"}}</strong>
       {% else %}
           <!-- use BOTANICAL NAME -->
-          <strong>{{commodity.botanical_name or "RRRosa ecae (ROSEC)"}}</strong>
+          <strong>{{commodity.botanical_name or "Rosa ecae (ROSEC)"}}</strong>
       {% endif %}
   </span>
     
@@ -160,6 +220,11 @@
     {% endif %}
     <!-- "filter_demo":["Afghanistan","Åland Islands","Albania"], -->
   </td>
+
+  <td class="govuk-table__cell">
+    <span style="display: block; margin-bottom: 7px;">1721 1480 04810</span>
+  </td>
+
   <td class="govuk-table__cell">
     <span style="display: block; margin-bottom: 7px;">{{commodity.quantity or "20"}} {{commodity.units or "kilograms"}}</span>
     <span style="display: block; margin-bottom: 7px;">{{commodity.number_of_packages or "5"}} packages</span>
@@ -193,7 +258,7 @@
           <strong>{{commodity.genus or "Genus unknown"}}, {{commodity.commodity_host_species or "Species unknown"}}</strong>
       {% else %}
           <!-- use BOTANICAL NAME -->
-          <strong>{{commodity.botanical_name or "RRRosa ecae (ROSEC)"}}</strong>
+          <strong>{{commodity.botanical_name or "Rosa ecae (ROSEC)"}}</strong>
       {% endif %}
   </span>
     
@@ -208,54 +273,11 @@
     {% endif %}
     <!-- "filter_demo":["Afghanistan","Åland Islands","Albania"], -->
   </td>
-  <td class="govuk-table__cell">
-    <span style="display: block; margin-bottom: 7px;">{{commodity.quantity or "20"}} {{commodity.units or "kilograms"}}</span>
-    <span style="display: block; margin-bottom: 7px;">{{commodity.number_of_packages or "5"}} packages</span>
-  </td>
-  <td class="govuk-table__cell">
-    <span style="display: block; margin-bottom: 7px;">{{commodity.packaging[0] or "Crate - bulk - cardboard"}}</span>
-    {% if query.design != "b" %}
-    {% if commodity.packing_material_used != "" %}
-    <span style="display: block; margin-bottom: 7px;">{{commodity.packing_material_used or "Cardboard"}}</span>
-    {% endif %}
-    {% if commodity.distinguishing_marks != "" %}
-    <span style="display: block; margin-bottom: 7px;">{{commodity.distinguishing_marks or "Brown marks"}}</span>
-    {% endif %}
-    {% endif %}
-  </td>
-  <!-- <td class="govuk-table__cell" style="text-align: right;">
-    <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
-    <br>
-    <a href="#" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
-  </td> -->
-</tr>
 
-<tr class="govuk-table__row">
   <td class="govuk-table__cell">
-    <span style="display: block; margin-bottom: 7px;">
-      {% if commodity.has_botanicial_name == "use_description" %}
-          <!-- use DESCRIPTION -->
-          <strong>{{commodity.commodity_description or "Description for plant"}}</strong>
-      {% elif commodity.genus %}
-          <!-- use GENUS + SPECIES -->
-          <strong>{{commodity.genus or "Genus unknown"}}, {{commodity.commodity_host_species or "Species unknown"}}</strong>
-      {% else %}
-          <!-- use BOTANICAL NAME -->
-          <strong>{{commodity.botanical_name or "RRRosa ecae (ROSEC)"}}</strong>
-      {% endif %}
-  </span>
-    
+    <span style="display: block; margin-bottom: 7px;">1721 1480 04811</span>
   </td>
-  <td class="govuk-table__cell">
-    
-    {% set _defaultCountry = "United Kingdom" %}
-    {% if commodity.filter_demo == "_unchecked" or commodity.filter_demo == undefined %}
-    {{_defaultCountry}}
-    {% else %}
-    {{commodity.filter_demo | join(", ") or _defaultCountry}}
-    {% endif %}
-    <!-- "filter_demo":["Afghanistan","Åland Islands","Albania"], -->
-  </td>
+
   <td class="govuk-table__cell">
     <span style="display: block; margin-bottom: 7px;">{{commodity.quantity or "20"}} {{commodity.units or "kilograms"}}</span>
     <span style="display: block; margin-bottom: 7px;">{{commodity.number_of_packages or "5"}} packages</span>
