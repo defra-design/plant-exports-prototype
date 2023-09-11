@@ -78,7 +78,32 @@ Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
           <p class="govuk-body">If you have more than one import phytosanitary certificate you can add the rest later.</p>
 
 
+          <!-- pre-pop values -->
+          {% set _prepopNumber = data['importCertNumber' + _id] or '' %}
+          {% if _editing %}
+            {% set _prepopNumber = _prepopNumber or '1234567' %}
+          {% endif %}
 
+          {% set _prepopPacking = data['importCertPacking' + _id] or '' %}
+          {% if _editing %}
+            {% set _prepopPacking = _prepopPacking or 'New packaging' %}
+          {% endif %}
+
+          {% set _prepopCountry = '' %}
+
+          {% for param in data['importCertCountry' + _id] %}
+            {% set _prepopCountry = param %}
+          {% endfor %}
+
+          {% if _editing %}
+            {% set _prepopCountry = _prepopCountry or 'BS' %}
+            {% if _prepopCountry == 'none' %}
+              {% set _prepopCountry = 'BS' %}
+            {% endif %}
+          {% endif %}
+
+
+          <!-- NUMBER -->
           {{ govukInput({
             label: {
               text: "Import phytosanitary certificate number",
@@ -90,28 +115,68 @@ Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
             classes: "govuk-input--width-20",
             id: "importCertNumber"+_id,
             name: "importCertNumber"+_id,
-            value: data['importCertNumber' + _id] or ''
+            value: _prepopNumber
           }) }}
 
-        <div class="govuk-form-group ">
-          <h2 class="govuk-heading-s">Upload the import certificate</h2>
+          <!-- COUNTRY -->
+          {% set country_module_label = "Country of origin"%}
+          {% set module_name = "country_origin"%}
+          {% block country %}{% include "../modules/_country-select-import.html" %}{% endblock %}
 
-          <p class="govuk-body">The file must:</p>
-          <ul class="govuk-list govuk-list--bullet">
-            <li>be in PDF format</li>
-            <li>be fewer than 10 megabytes (10MB)</li>
-          </ul>
+          <!-- PACKING -->
+          <div class="govuk-form-group">
+            <fieldset class="govuk-fieldset">
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                  If the consignment was repacked, what type of packaging did you use?
+              </legend>
+              <div class="govuk-radios" data-module="govuk-radios">
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="importCertPackin{{_id}}-1" name="importCertPacking{{_id}}" type="radio" value="New packaging" {% if _editing and _prepopPacking == 'New packaging' %} checked {% endif %}>
+                  <label class="govuk-label govuk-radios__label" for="importCertPackin{{_id}}-1">
+                    New packaging
+                  </label>
+                </div>
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="importCertPackin{{_id}}-2" name="importCertPacking{{_id}}" type="radio" value="Original packaging" {% if _editing and _prepopPacking == 'Original packaging' %} checked {% endif %}>
+                  <label class="govuk-label govuk-radios__label" for="importCertPackin{{_id}}-2">
+                    Original packaging
+                  </label>
+                </div>
+                <div class="govuk-radios__divider">or</div>
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="importCertPackin{{_id}}-3" name="importCertPacking{{_id}}" type="radio" value="The consignment has not been repacked" {% if _editing and _prepopPacking == 'The consignment has not been repacked' %} checked {% endif %}>
+                  <label class="govuk-label govuk-radios__label" for="importCertPackin{{_id}}-3">
+                    The consignment has not been repacked
+                  </label>
+                </div>
+              </div>
+            </fieldset>
+          </div>
 
-          {{ govukFileUpload({
-            id: "importCertFile"+_id,
-            name: "importCertFile"+_id,
-            label: {
-              text: "Upload file"
-            }
-          }) }}
+
+          <!-- FILE -->
+          <div class="govuk-form-group ">
+            <h2 class="govuk-heading-m">Upload the import certificate</h2>
+
+            <p class="govuk-body">The file must:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>be in PDF format</li>
+              <li>be fewer than 10 megabytes (10MB)</li>
+            </ul>
+
+            {{ govukFileUpload({
+              id: "importCertFile"+_id,
+              name: "importCertFile"+_id,
+              label: {
+                text: "Upload file"
+              }
+            }) }}
+
+          </div>
+
+
 
         </div>
-      </div>
 
         {{ govukButton({
           text: "Upload"
