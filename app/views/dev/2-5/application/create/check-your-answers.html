@@ -200,6 +200,8 @@
             <thead class="govuk-table__head">
               <tr class="govuk-table__row">
                 <th class="govuk-table__header" scope="col">Certificate number</th>
+                <th class="govuk-table__header" scope="col">Origin</th>
+                <th class="govuk-table__header" scope="col">Repacked</th>
                 <th class="govuk-table__header" scope="col">File name</th>
                 <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
               </tr>
@@ -218,13 +220,19 @@
             <tr class="govuk-table__row">
               <td class="govuk-table__cell">
                 {{data['importCertNumber' + _id] or '1234567'}}
-
-                <span style="font-size:12px" >
-
-                  <br><span style="color:red;" >Temporary: {{data['importCertPacking' + _id] or 'New packaging'}}</span>
-                  <br><span style="color:red;" >Temporary: {{data['importCertCountry' + _id][0] or 'Bahamas'}}</span>
-                </span>
-                
+              </td>
+              <td class="govuk-table__cell">
+                {{data['importCertCountry' + _id][0] or 'Bahamas'}}
+              </td>
+              <td class="govuk-table__cell">
+                {% set _packingValue = data['importCertPacking' + _id] or 'New packaging' %}
+                {% if _packingValue == 'Original packaging' %}
+                  Yes - original packaging
+                {% elif _packingValue == 'The consignment has not been repacked' %}
+                  No
+                {% else %}
+                  Yes - new packaging
+                {% endif %}
               </td>
               <td class="govuk-table__cell">
                 <a class="govuk-link govuk-link--no-visited-state" href="#">{{data['importCertFile' + _id] or 'file-name.pdf'}}</a>
