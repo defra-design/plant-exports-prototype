@@ -31,6 +31,9 @@
             {% if query.error3 == "true" %}
             <li><a href="#manualFileDescription">Enter a description for the file</a></li>
             {% endif %}
+            {% if query.error4 == "true" %}
+            <li><a href="#supportingDocument">Upload a GIF, JPEG, PDF or PNG file</a></li>
+            {% endif %}
           </ul>
         </div>
 
@@ -50,12 +53,15 @@
           <li>have a unique, meaningful file name</li>
         </ul>
 
-        <div class="govuk-form-group{% if query.error1 == 'true' %} govuk-form-group--error{% endif %}">
+        <div class="govuk-form-group{% if query.error1 == 'true' or query.error4 == 'true' %} govuk-form-group--error{% endif %}">
           <label class="govuk-label" for="supportingDocument">Upload a file</label>
           {% if query.error1 == "true" %}
           <p id="supportingDocument-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Choose a file to upload</p>
           {% endif %}
-          <input class="govuk-file-upload{% if query.error1 == 'true' %} govuk-file-upload--error{% endif %}" id="supportingDocument" name="supportingDocument" type="file"{% if query.error1 == 'true' %} aria-describedby="supportingDocument-error"{% endif %} value="{{data.supportingDocument}}">
+          {% if query.error4 == "true" %}
+          <p id="supportingDocument-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Upload a GIF, JPEG, PDF or PNG file</p>
+          {% endif %}
+          <input class="govuk-file-upload{% if query.error1 == 'true' or query.error4 == 'true' %} govuk-file-upload--error{% endif %}" id="supportingDocument" name="supportingDocument" type="file"{% if query.error1 == 'true' or query.error4 == 'true' %} aria-describedby="supportingDocument-error"{% endif %} value="{{data.supportingDocument}}">
         </div>
 
         <div class="govuk-form-group{% if query.error2 == 'true' %} govuk-form-group--error{% endif %}">
@@ -70,8 +76,8 @@
             <div class="govuk-radios" data-module="govuk-radios">
               
               <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="fileDescription-1" name="fileDescription" type="radio" value="Change of address requests"{% if data.fileDescription == 'Change of address requests' %} checked{% endif %}>
-                <label class="govuk-label govuk-radios__label" for="fileDescription-1">Change of address requests</label>
+                <input class="govuk-radios__input" id="fileDescription-1" name="fileDescription" type="radio" value="Change of address"{% if data.fileDescription == 'Change of address' %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="fileDescription-1">Change of address</label>
               </div>
 
               <div class="govuk-radios__item">
@@ -95,8 +101,8 @@
               </div>
 
               <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="fileDescription-6" name="fileDescription" type="radio" value="Packing lists and invoice"{% if data.fileDescription == 'Packing lists and invoice' %} checked{% endif %}>
-                <label class="govuk-label govuk-radios__label" for="fileDescription-6">Packing lists and invoice</label>
+                <input class="govuk-radios__input" id="fileDescription-6" name="fileDescription" type="radio" value="Packing list or invoice"{% if data.fileDescription == 'Packing list or invoice' %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="fileDescription-6">Packing list or invoice</label>
               </div>
 
               <div class="govuk-radios__item">

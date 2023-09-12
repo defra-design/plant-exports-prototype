@@ -708,6 +708,7 @@ module.exports = function(router) {
 
       // Data objects to be retrieved and queried
       var supportingDocument = req.session.data.supportingDocument;
+      var supportingDocumentType = supportingDocument.split('.').pop();
       var fileDescription = req.session.data.fileDescription;
       var manualFileDescription = req.session.data.manualFileDescription;
 
@@ -716,11 +717,16 @@ module.exports = function(router) {
       var error1 = "";
       var error2 = "";
       var error3 = "";
+      var error4 = "";
       
       // Error validation - make sure user enters data into required fields
       if (supportingDocument == "" || supportingDocument == null) {
         errorCount++;
         error1 = "&error1=true";
+      }
+      else if (supportingDocumentType != "gif" && supportingDocumentType != "jpeg" && supportingDocumentType != "jpg" && supportingDocumentType != "pdf" && supportingDocumentType != "png") {
+        errorCount++;
+        error4 = "&error4=true";
       }
 
       if (fileDescription == "" || fileDescription == null) {
@@ -734,11 +740,11 @@ module.exports = function(router) {
           error3 = "&error3=true";
         }
 
-      }
+      }      
 
       // Routing - decide where to direct users to
       if (errorCount > 0) {
-        return res.redirect("attachments-add?error=true" + error1 + error2 + error3);
+        return res.redirect("attachments-add?error=true" + error1 + error2 + error3 + error4);
       }
       else {
         return res.redirect("attachments-view?supportingDocumentAdded=true&supportingDocumentsExist=true");
@@ -758,6 +764,7 @@ module.exports = function(router) {
 
       // Data objects to be retrieved and queried
       var supportingDocument = req.session.data.supportingDocument;
+      var supportingDocumentType = supportingDocument.split('.').pop();
       var fileDescription = req.session.data.fileDescription;
       var manualFileDescription = req.session.data.manualFileDescription;
 
@@ -766,11 +773,16 @@ module.exports = function(router) {
       var error1 = "";
       var error2 = "";
       var error3 = "";
+      var error4 = "";
       
       // Error validation - make sure user enters data into required fields
       if (supportingDocument == "" || supportingDocument == null) {
         errorCount++;
         error1 = "&error1=true";
+      }
+      else if (supportingDocumentType != "gif" && supportingDocumentType != "jpeg" && supportingDocumentType != "jpg" && supportingDocumentType != "pdf" && supportingDocumentType != "png") {
+        errorCount++;
+        error4 = "&error4=true";
       }
 
       if (fileDescription == "" || fileDescription == null) {
@@ -784,7 +796,7 @@ module.exports = function(router) {
           error3 = "&error3=true";
         }
 
-      }
+      }   
 
       // Routing - decide where to direct users to
       if (errorCount > 0) {
