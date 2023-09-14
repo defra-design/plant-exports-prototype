@@ -58,11 +58,94 @@
 
 </div>
 
+{% if query.importCerts == 'true' %}
+
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-full">
-    <!-- <h2 class="govuk-heading-m">{% if not data.file %}<span class="file_count">0</span> files{% else %}<span class="file_count">1</span> file{% endif %} uploaded</h2> -->
-    {% if not data.file %}{% else %}<h2 class="govuk-heading-m"><span class="file_count">1</span> file uploaded</h2>{% endif %}
+
+    {% if data.reissue == "yes" %}
+    <form action="../re-issue/amend-your-certificate?id={{data.id}}&is_group={{data.is_group}}&commodity={{data.commodity or 'plants'}}&reissue_certificate_data_pfp=draft" method="post">
+    {% else %}
+    <form action="{{query.return_url or 'task-list'}}" method="post">
+    {% endif %}
+
+    {% set _importCertsList = ["12345678","ABC123456"] %}
+
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header app-custom-class govuk-!-width-one-half">File name</th>
+          <th scope="col" class="govuk-table__header app-custom-class govuk-!-width-two-fifths">File description</th>
+          <th scope="col" class="govuk-table__header app-custom-class">Action</th>
+        </tr>
+      </thead>
+
+      <tbody class="govuk-table__body">
+
+        {% for _importCert in _importCertsList %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            {{_importCert}}.pdf
+          </td>
+          <td class="govuk-table__cell">
+            Import Phytosanitary Certificate ({{_importCert}})
+          </td>
+          <td class="govuk-table__cell">
+            <p class="govuk-body govuk-!-margin-bottom-2">
+              <a href="#" class="govuk-link">Download<span class="govuk-visually-hidden"> {{_importCert}}</span></a>
+            </p>
+            <p class="govuk-body govuk-!-margin-bottom-2">
+              <a href="#" class="govuk-link">Delete<span class="govuk-visually-hidden"> {{_importCert}}</span></a>
+            </p>
+          </td>
+        </tr>
+        {% endfor %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            <input class="govuk-file-upload" id="file" name="file" type="file">
+          </td>
+          <td class="govuk-table__cell">
+            <textarea rows="2" id="description" name="description" class="govuk-textarea govuk-!-margin-bottom-0" maxlength="100">{% if data.description %}{{data.description}}{% else %}{% endif %}</textarea>
+          </td>
+          <td class="govuk-table__cell">
+            <a href="#" class="govuk-link govuk-link--no-visited-link">Upload</a>
+          </td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+    <div class="govuk-button-group">
+      <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      {% if data.reissue == "yes" %}
+      <a class="govuk-link app-button--link" href="../../application-re-issue?id={{data.id}}&is_group={{data.is_group}}">Cancel</a>
+      {% endif %}
+    </div>
+
+    <!-- Session data hook to update the task list so that this section is marked as 'COMPLETED' -->
+    <div class="govuk-form-group" hidden>
+      <label class="govuk-label" for="supporting_documents_task_list_data">Task list section URL</label>
+      <input class="govuk-input" id="supporting_documents_task_list_data" name="supporting_documents_task_list_data" type="text" value="Complete">
+    </div>
+
+  </form>
+
+  </div>
+
+</div>
+
+{% else %}
+
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-full">
+
+    {% if not data.file %}
+    {% else %}
+      <h2 class="govuk-heading-m"><span class="file_count">1</span> file uploaded</h2>
+    {% endif %}
 
     <table class="govuk-table">
       {% if data.file and query.delete_file != "yes" %}
@@ -74,19 +157,31 @@
         </tr>
       </thead>
       {% endif %}
+
       <tbody class="govuk-table__body">
         {% if data.file and query.delete_file != "yes" %}
         <tr class="govuk-table__row">
-          <th scope="row" class="govuk-table__header"><a href="#"><span class="govuk-visually-hidden">View </span>{{data.file}}</a></th>
-          <td class="govuk-table__cell">{{data.description}}</td>
           <td class="govuk-table__cell">
-            <a href="#" class="govuk-link">Download<span class="govuk-visually-hidden"> {{data.file}}</span></a>
-            <br>
-            <a href="#" class="govuk-link">Delete<span class="govuk-visually-hidden"> {{data.file}}</span></a>
+            {{data.file}}
+          </td>
+          <td class="govuk-table__cell">
+            {{data.description}}
+          </td>
+          <td class="govuk-table__cell">
+
+            <p class="govuk-body govuk-!-margin-bottom-2">
+              <a href="#" class="govuk-link">Download<span class="govuk-visually-hidden"> {{data.file}}</span></a>
+            </p>
+
+            <p class="govuk-body govuk-!-margin-bottom-2">
+              <a href="#" class="govuk-link">Delete<span class="govuk-visually-hidden"> {{data.file}}</span></a>
+            </p>
+
           </td>
         </tr>
         {% endif %}
       </tbody>
+
     </table>
 
   </div>
@@ -144,6 +239,8 @@
   </div>
 
 </div>
+
+{% endif %}
 
 <!-- <script type="text/javascript">
   
