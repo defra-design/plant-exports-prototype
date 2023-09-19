@@ -84,11 +84,6 @@ Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
             {% set _prepopNumber = _prepopNumber or '1234567' %}
           {% endif %}
 
-          {% set _prepopPacking = data['importCertPacking' + _id] or '' %}
-          {% if _editing %}
-            {% set _prepopPacking = _prepopPacking or 'New packaging' %}
-          {% endif %}
-
           {% set _prepopCountry = '' %}
 
           {% for param in data['importCertCountry' + _id] %}
@@ -122,37 +117,6 @@ Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
           {% set country_module_label = "Country of origin"%}
           {% set module_name = "country_origin"%}
           {% block country %}{% include "../modules/_country-select-import.html" %}{% endblock %}
-
-          <!-- PACKING -->
-          <div class="govuk-form-group">
-            <fieldset class="govuk-fieldset">
-              <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-                  If the consignment was repacked, what type of packaging did you use?
-              </legend>
-              <div class="govuk-radios" data-module="govuk-radios">
-                <div class="govuk-radios__item">
-                  <input class="govuk-radios__input" id="importCertPackin{{_id}}-1" name="importCertPacking{{_id}}" type="radio" value="New packaging" {% if _editing and _prepopPacking == 'New packaging' %} checked {% endif %}>
-                  <label class="govuk-label govuk-radios__label" for="importCertPackin{{_id}}-1">
-                    New packaging
-                  </label>
-                </div>
-                <div class="govuk-radios__item">
-                  <input class="govuk-radios__input" id="importCertPackin{{_id}}-2" name="importCertPacking{{_id}}" type="radio" value="Original packaging" {% if _editing and _prepopPacking == 'Original packaging' %} checked {% endif %}>
-                  <label class="govuk-label govuk-radios__label" for="importCertPackin{{_id}}-2">
-                    Original packaging
-                  </label>
-                </div>
-                <div class="govuk-radios__divider">or</div>
-                <div class="govuk-radios__item">
-                  <input class="govuk-radios__input" id="importCertPackin{{_id}}-3" name="importCertPacking{{_id}}" type="radio" value="The consignment has not been repacked" {% if _editing and _prepopPacking == 'The consignment has not been repacked' %} checked {% endif %}>
-                  <label class="govuk-label govuk-radios__label" for="importCertPackin{{_id}}-3">
-                    The consignment has not been repacked
-                  </label>
-                </div>
-              </div>
-            </fieldset>
-          </div>
-
 
           <!-- FILE -->
           <div class="govuk-form-group ">
