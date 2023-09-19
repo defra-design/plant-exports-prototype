@@ -800,7 +800,7 @@ module.exports = function(router) {
 
       // Routing - decide where to direct users to
       if (errorCount > 0) {
-        return res.redirect("upload?error=true" + error1 + error2 + error3);
+        return res.redirect("upload?error=true" + error1 + error2 + error3 + error4);
       }
       else if (return_url) {
         return res.redirect(return_url + "?supportingDocumentAdded=true&supportingDocumentsExist=true&row1=true");
