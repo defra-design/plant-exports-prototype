@@ -1,0 +1,110 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Add an import permit - Phytosanitary certificate - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+    {% set _link = 'import-permits-view' %}
+    {% if query.changeanswers == 'true' %}
+      {% set _link = 'check-your-answers' %}
+    {% endif %}
+
+    <form action="{{_link}}" method="post" novalidate>
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+            <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">Add an import permit</h1>
+          </legend>
+
+          <!-- IF editing an existing one or not -->
+          {% set _editing = false %}
+          {% set _notEditing = true %}
+          {% if query.edit %}
+            {% set _editing = true %}
+            {% set _notEditing = false %}
+          {% endif %}
+
+          <!-- Set counts -->
+          {% set _importPermitCount = data['importPermitCount'] or 0 | int %}
+          {% set _importPermitDisplayedCount = data['importPermitDisplayedCount'] or 0 | int %}
+          {% if _notEditing %}
+            {% set _importPermitCount = _importPermitCount|int + 1 %}
+            {% set _importPermitDisplayedCount = _importPermitDisplayedCount|int + 1 %}
+          {% endif %}
+          <input id="importPermitCount" name="importPermitCount" type="hidden" value="{{_importPermitCount}}">
+          <input id="importPermitDisplayedCount" name="importPermitDisplayedCount" type="hidden" value="{{_importPermitDisplayedCount}}">
+
+          <!-- Set id to use -->
+          {% set _id = _importPermitCount %} <!--1-->
+          {% if _editing %}
+            {% set _id = query.edit %}
+          {% endif %}
+
+          <!-- Set deleted false default  -->
+          <input id="importPermitDeleted{{_id}}" name="importPermitDeleted{{_id}}" type="hidden" value="false">
+
+          <p class="govuk-body">If you have more than one import permit you can add the rest later.</p>
+
+          <!-- Pre-populate values -->
+          {% set _prepopNumber = data['importPermitNumber' + _id] or '' %}
+          {% if _editing %}
+            {% set _prepopNumber = _prepopNumber or '3982842743' %}
+          {% endif %}
+
+          <!-- Import permit number -->
+          {{ govukInput({
+            label: {
+              text: "Import permit number",
+              classes: "govuk-label"
+            },
+            classes: "govuk-!-width-one-half",
+            id: "importPermitNumber" + _id,
+            name: "importPermitNumber" + _id,
+            value: _prepopNumber
+          }) }}
+
+          <!-- File -->
+          <div class="govuk-form-group">
+            <h2 class="govuk-heading-m">Upload the import permit</h2>
+            <p class="govuk-body">The file must:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>be in PDF format</li>
+              <li>be fewer than 10 megabytes (10MB)</li>
+            </ul>
+
+            {{ govukFileUpload({
+              id: "importPermitFile" + _id,
+              name: "importPermitFile" + _id,
+              label: {
+                text: "Upload file"
+              }
+            }) }}
+          </div>
+
+        </fieldset>
+      </div>
+
+      <div class="govuk-button-group govuk-!-margin-bottom-7">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Upload</button>
+      </div>
+
+      {% block continueLater %}
+			{% include "../modules/_save-continue-later.html" %}
+			{% endblock %}
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}
