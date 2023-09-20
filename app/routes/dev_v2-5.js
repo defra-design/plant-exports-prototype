@@ -623,6 +623,7 @@ module.exports = function(router) {
     if (baseDir === "/application/create/consignee-add-validation") {
 
       // Parameters passed into this journey
+      var commodity = req.session.data.commodity;
       var return_url = req.session.data.return_url;
 
       // Data objects to be retrieved and queried
@@ -664,10 +665,18 @@ module.exports = function(router) {
         return res.redirect("consignee-add?change=yes&error=true" + error1 + error2 + error3 + error4);
       }
       else if (return_url) {
-        return res.redirect(return_url + "?consigneeAdded=true&return_url=");
+        return res.redirect(return_url + "?return_url=");
       }
       else {
-        return res.redirect("consignee-import-permit-number?consigneeAdded=true");
+        
+        if (commodity == "grain") {
+          return res.redirect("consignee-further-information");
+        }
+        else {
+          req.session.data.consignee_task_list_data = "Completed";
+          return res.redirect("task-list");
+        }
+        
       }
 
     }
@@ -708,7 +717,7 @@ module.exports = function(router) {
 
       // Data objects to be retrieved and queried
       var supportingDocument = req.session.data.supportingDocument;
-      var supportingDocumentType = supportingDocument.split('.').pop();
+      // var supportingDocumentType = supportingDocument.split('.').pop();
       var fileDescription = req.session.data.fileDescription;
       var manualFileDescription = req.session.data.manualFileDescription;
 
@@ -717,17 +726,17 @@ module.exports = function(router) {
       var error1 = "";
       var error2 = "";
       var error3 = "";
-      var error4 = "";
+      // var error4 = "";
       
       // Error validation - make sure user enters data into required fields
       if (supportingDocument == "" || supportingDocument == null) {
         errorCount++;
         error1 = "&error1=true";
       }
-      else if (supportingDocumentType != "gif" && supportingDocumentType != "jpeg" && supportingDocumentType != "jpg" && supportingDocumentType != "pdf" && supportingDocumentType != "png") {
-        errorCount++;
-        error4 = "&error4=true";
-      }
+      // else if (supportingDocumentType != "gif" && supportingDocumentType != "jpeg" && supportingDocumentType != "jpg" && supportingDocumentType != "pdf" && supportingDocumentType != "png") {
+      //   errorCount++;
+      //   error4 = "&error4=true";
+      // }
 
       if (fileDescription == "" || fileDescription == null) {
         errorCount++;
@@ -744,7 +753,76 @@ module.exports = function(router) {
 
       // Routing - decide where to direct users to
       if (errorCount > 0) {
-        return res.redirect("attachments-add?error=true" + error1 + error2 + error3 + error4);
+        return res.redirect("attachments-add?error=true" + error1 + error2 + error3);
+      }
+      else {
+        return res.redirect("attachments-view?supportingDocumentAdded=true&supportingDocumentsExist=true");
+      }
+
+    }
+
+    // Chris Harding (19.09.23) - Alternate (split) design for adding supporting deocuments (over two pages)
+    // Part 1 (select a file description)
+    if (baseDir === "/application/create/attachments-add-type-validation") {
+
+      // Data objects to be retrieved and queried
+      var fileDescription = req.session.data.fileDescription;
+      var manualFileDescription = req.session.data.manualFileDescription;
+
+      // Logic and validation for routing
+      var errorCount = 0;
+      var error2 = "";
+      var error3 = "";
+      
+      // Error validation - make sure user enters data into required fields
+      if (fileDescription == "" || fileDescription == null) {
+        errorCount++;
+        error2 = "&error2=true";
+      }
+      else {
+
+        if (fileDescription == "Add your own description" && (manualFileDescription == "" || manualFileDescription == null)) {
+          errorCount++;
+          error3 = "&error3=true";
+        }
+
+      }
+
+      // Routing - decide where to direct users to
+      if (errorCount > 0) {
+        return res.redirect("attachments-add-type?error=true" + error2 + error3);
+      }
+      else {
+        return res.redirect("attachments-add-file");
+      }
+
+    }
+
+    // Part 2 (upload a file)
+    if (baseDir === "/application/create/attachments-add-file-validation") {
+
+      // Data objects to be retrieved and queried
+      var supportingDocument = req.session.data.supportingDocument;
+      // var supportingDocumentType = supportingDocument.split('.').pop();
+
+      // Logic and validation for routing
+      var errorCount = 0;
+      var error1 = "";
+      // var error4 = "";
+      
+      // Error validation - make sure user enters data into required fields
+      if (supportingDocument == "" || supportingDocument == null) {
+        errorCount++;
+        error1 = "&error1=true";
+      }
+      // else if (supportingDocumentType != "gif" && supportingDocumentType != "jpeg" && supportingDocumentType != "jpg" && supportingDocumentType != "pdf" && supportingDocumentType != "png") {
+      //   errorCount++;
+      //   error4 = "&error4=true";
+      // }
+
+      // Routing - decide where to direct users to
+      if (errorCount > 0) {
+        return res.redirect("attachments-add-file?error=true" + error1);
       }
       else {
         return res.redirect("attachments-view?supportingDocumentAdded=true&supportingDocumentsExist=true");

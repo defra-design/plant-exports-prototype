@@ -41,6 +41,21 @@
     </div>
     {% endif %}
 
+    {% if query.deleted %}
+    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="gzovuk-notification-banner-title" data-module="govuk-notification-banner">
+        
+      <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">Success</h2>
+      </div>
+
+      <div class="govuk-notification-banner__content">
+        <h3 class="govuk-notification-banner__heading">Permit deleted</h3>
+        <p class="govuk-body">Import permit number {{data['importPermitNumber' + query.deleted] or '3982842743'}} has been deleted.</p>
+      </div>
+
+    </div>
+    {% endif %}
+
     {% if data.build != "development" %}
     {% if data.reference_num %}<span class="govuk-caption-xl">{{data.reference_num}}</span>{% endif %}
     {% endif %}
@@ -128,13 +143,21 @@
           </li>
           {% if data.journey != "coc" %}
           <li class="app-task-list__item">
-            <span class="app-task-list__task-name"><a href="{% if data.build == 'development' %}destination-consignee{% else %}{% if data.addressBook == 'false' %}consignee-add{% else %}consignee-address-book?row1=true&row2=true&row3=true&row4=true&row5=true{% endif %}{% endif %}" aria-describedby="consignee">Who will receive this consignment?</a></span>
+            <span class="app-task-list__task-name"><a href="consignee-add" aria-describedby="consignee">Who will receive this consignment?</a></span>
             {% if data.consignee_task_list_data or data.consignee %}
             <strong class="govuk-tag app-task-list__tag" id="consignee">Complete</strong>
             {% else %}
             <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="consignee">Not started</strong>
             {% endif %}
           </li>
+          <!-- <li class="app-task-list__item">
+            <span class="app-task-list__task-name"><a href="{% if data.import_permits ==  'Yes' %}import-permits-view{% else %}import-permits{% endif %}" aria-describedby="import-permits">Do you have any import permits?</a></span>
+            {% if data.import_permits %}
+            <strong class="govuk-tag app-task-list__tag" id="import-permits">Complete</strong>
+            {% else %}
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="import-permits">Not started</strong>
+            {% endif %}
+          </li> -->
           {% endif %}
           {% if data.journey == "coc" or data.journey == "both" %}
           <li class="app-task-list__item">
@@ -152,7 +175,17 @@
       <li>
         <h2 class="app-task-list__section"><span class="app-task-list__section-number">2. </span>{% if data.build == "development" %}Additional documents{% else %}Upload supporting documents{% endif %} (optional)</h2>
         <ul class="app-task-list__items">
-          <li class="app-task-list__item" style="border-top: none;">Attach documents such as the import permit to your application</li>
+          <li class="app-task-list__item" style="border-top: none; color: red;">Attach documents such as the import permit to your application</li>
+          <li class="app-task-list__item">
+            {% set _importPermitCount = data['importPermitCount'] or 0 | int %}
+            {% set _importPermitDisplayedCount = data['importPermitDisplayedCount'] or 0 | int %}
+            <span class="app-task-list__task-name"><a href="{% if _importPermitDisplayedCount > 0 %}import-permits-view{% else %}import-permits-add{% endif %}" aria-describedby="import-permits">Import permits</a></span>
+            {% if _importPermitDisplayedCount > 0 %}
+            <strong class="govuk-tag app-task-list__tag" id="import-permits">{{_importPermitDisplayedCount or "1"}} {% if _importPermitDisplayedCount > 1 %}files{% else %}file{% endif %} attached</strong>
+            {% else %}
+            <strong class="govuk-tag app-task-list__tag" id="import-permits">None added</strong>
+            {% endif %}
+          </li>
           <li class="app-task-list__item">
             {% if data['consignee-import-permit'] %}
             {% if data.supporting_documents_task_list_data or data.file or data.import-phyto %}
