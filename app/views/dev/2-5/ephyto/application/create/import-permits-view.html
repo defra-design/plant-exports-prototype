@@ -17,6 +17,20 @@
 
     <form action="{{query.return_url or 'task-list'}}" method="post" novalidate>
 
+      {% if query.supportingDocumentAdded == "true" %}
+      <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+    
+        <div class="govuk-notification-banner__header">
+          <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">Success</h2>
+        </div>
+
+        <div class="govuk-notification-banner__content">
+          <h3 class="govuk-notification-banner__heading">Import permit number {{data['importPermitNumber' + query.deleted] or '3982842743'}} has been added</h3>
+        </div>
+
+      </div>
+      {% endif %}
+
       {% if query.deleted %}
       <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="gzovuk-notification-banner-title" data-module="govuk-notification-banner">
           
@@ -67,7 +81,7 @@
             {% set _deleteLinkSuffix = "?deleted=" + _id + "&importPermitDeleted" + _id + "=true" + "&importPermitDisplayedCount=" + _importPermitCountDeleted | int %}
             {% set _deleteLink = "import-permits-view" %}
             {% if _importPermitDisplayedCount | int == 1 %}
-              {% set _deleteLink = "task-list" %}
+              {% set _deleteLink = "import-permits" %}
             {% endif %}
             <td class="govuk-table__cell govuk-table__cell--numeric">
               <a href="import-permits-add?edit={{_id}}" class="govuk-link govuk-link--no-visited-state">Change <span class="govuk-visually-hidden">import permit {{data['importPermitNumber' + _id] or '1234567'}}</span></a>

@@ -809,7 +809,7 @@
           <dd class="govuk-summary-list__actions">
             <a class="govuk-link" href="consignee-import-permit-number?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> the import permit number</span></a>
           </dd>
-        </div>         -->
+        </div> -->
 
         {% if data.commodity == "grain" %}
         <div class="govuk-summary-list__row">
@@ -824,11 +824,18 @@
 
       </dl>
 
-      <!-- <h2 class="govuk-heading-m">Do you have any import permits?</h2> -->
       <h2 class="govuk-heading-m">Import permits</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
         
-        <!-- {% if data.import_permits ==  "Yes" %}
+        
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Do you have any import permits?</dt>
+          <dd class="govuk-summary-list__value">{{data.import_permits or 'Yes'}}</dd>
+          <dd class="govuk-summary-list__actions">
+            <a class="govuk-link" href="import-permits?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> whether you have any import permits</span></a>
+          </dd>
+        </div>
+        {% if data.import_permits ==  "Yes" %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Import permits</dt>
           <dd class="govuk-summary-list__value">
@@ -837,19 +844,13 @@
             <a class="govuk-link govuk-link--no-visited-state" href="#">{{data['importPermitFile' + _id] or 'file-name.pdf'}}</a>
           </dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="import-permits-view?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> whether you have any import permits</span></a>
+            <a class="govuk-link" href="import-permits-view?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> your import permits</span></a>
           </dd>
         </div>
         {% else %}
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Import permits</dt>
-          <dd class="govuk-summary-list__value">{{data.import_permits or 'No'}}</dd>
-          <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="import-permits?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> whether you have any import permits</span></a>
-          </dd>
-        </div>
-        {% endif %} -->
-        {% set _importPermitCount = data['importPermitCount'] or 0 | int %}
+        
+        {% endif %}
+        <!-- {% set _importPermitCount = data['importPermitCount'] or 0 | int %}
         {% set _importPermitDisplayedCount = data['importPermitDisplayedCount'] or 0 | int %}
         {% if _importPermitDisplayedCount > 0 %}
         <div class="govuk-summary-list__row">
@@ -881,11 +882,11 @@
             <a class="govuk-link" href="import-permits-add?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> whether you have any import permits</span></a>
           </dd>
         </div>
-        {% endif %}
+        {% endif %} -->
 
       </dl>
 
-      <h2 class="govuk-heading-m">Supporting documents</h2>
+      <h2 class="govuk-heading-m">Supporting documents (optional)</h2>
       {% if data.build != "development" and data['consignee-import-permit'] %}
       {% if data.supportingDocumentsExist == "true" %}
       {# do nothing if we have a file uploaded #}
@@ -900,16 +901,12 @@
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
         
         <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">
-            File name
-            <br>
-            File description
-          </dt>
+          <dt class="govuk-summary-list__key">Supporting documents</dt>
           <dd class="govuk-summary-list__value">
             {% if data.supportingDocumentsExist == "true" %}
-            <a href="#" class="govuk-link">{{data.supportingDocument or "Filename.jpg"}}</a>
-            <br>
             {% if data.fileDescription == "Add your own description" %}{{data.manualFileDescription or "Description of file"}}{% else %}{{data.fileDescription or "Description of file"}}{% endif %}
+            <br>
+            <a href="#" class="govuk-link">{{data.supportingDocument or "Filename.jpg"}}</a>
             {% else %}
             No documents uploaded
             {% endif %}
