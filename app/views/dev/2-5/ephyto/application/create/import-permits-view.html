@@ -17,6 +17,28 @@
 
     <form action="{{query.return_url or 'task-list'}}" method="post" novalidate>
 
+      <!-- Set counts -->
+      {% set _importPermitCount = data['importPermitCount'] or 1 | int %}
+      {% set _importPermitDisplayedCount = data['importPermitDisplayedCount'] or 1 | int %}
+      {% set _importPermitCountDeleted = _importPermitDisplayedCount | int - 1 %}
+
+      <!-- Set id to use -->
+      {% set _id = _importPermitCount %} <!-- 1 -->
+
+      {% if query.importPermitsAdded == "true" %}
+      <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+    
+        <div class="govuk-notification-banner__header">
+          <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">Success</h2>
+        </div>
+
+        <div class="govuk-notification-banner__content">
+          <h3 class="govuk-notification-banner__heading">Import permit number {{data['importPermitNumber' + _id] or '123456789ABC'}} has been added</h3>
+        </div>
+
+      </div>
+      {% endif %}
+
       {% if query.deleted %}
       <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="gzovuk-notification-banner-title" data-module="govuk-notification-banner">
           
@@ -26,7 +48,7 @@
 
         <div class="govuk-notification-banner__content">
           <h3 class="govuk-notification-banner__heading">Permit deleted</h3>
-          <p class="govuk-body">Import permit number {{data['importPermitNumber' + query.deleted] or '3982842743'}} has been deleted.</p>
+          <p class="govuk-body">Import permit number {{data['importPermitNumber' + query.deleted] or '123456789ABC'}} has been deleted.</p>
         </div>
 
       </div>
@@ -34,10 +56,6 @@
 
       <h1 class="govuk-heading-xl">Import permits</h1>
       <p class="govuk-body">Here are the import permits you have uploaded so far.</p>
-
-      {% set _importPermitCount = data['importPermitCount'] or 1 | int %}
-      {% set _importPermitDisplayedCount = data['importPermitDisplayedCount'] or 1 | int %}
-      {% set _importPermitCountDeleted = _importPermitDisplayedCount | int - 1 %}
 
       <table class="govuk-table govuk-!-margin-bottom-7">
         <caption class="govuk-table__caption"><span class="govuk-visually-hidden">Import permits for your phytosanitary certificate application</span></caption>
@@ -59,20 +77,20 @@
           {% if _show == "true" %}
           <tr class="govuk-table__row">
             <td class="govuk-table__cell">
-              {{data['importPermitNumber' + _id] or '1234567'}}
+              {{data['importPermitNumber' + _id] or '123456789ABC'}}
             </td>
             <td class="govuk-table__cell">
               <a class="govuk-link govuk-link--no-visited-state" href="#">{{data['importPermitFile' + _id] or 'file-name.pdf'}}</a>
             </td>
-            {% set _deleteLinkSuffix = "?deleted=" + _id + "&importPermitDeleted" + _id + "=true" + "&importPermitDisplayedCount=" + _importPermitCountDeleted | int %}
-            {% set _deleteLink = "import-permits-view" %}
+            <!-- {% set _deleteLinkSuffix = "?deleted=" + _id + "&importPermitDeleted" + _id + "=true" + "&importPermitDisplayedCount=" + _importPermitCountDeleted | int %} -->
+            {% set _deleteReturnLink = "import-permits-view" %}
             {% if _importPermitDisplayedCount | int == 1 %}
-              {% set _deleteLink = "task-list" %}
+              {% set _deleteReturnLink = "import-permits" %}
             {% endif %}
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              <a href="import-permits-add?edit={{_id}}" class="govuk-link govuk-link--no-visited-state">Change <span class="govuk-visually-hidden">import permit {{data['importPermitNumber' + _id] or '1234567'}}</span></a>
+              <a href="import-permits-add?edit={{_id}}" class="govuk-link govuk-link--no-visited-state">Change <span class="govuk-visually-hidden">import permit {{data['importPermitNumber' + _id] or '123456789ABC'}}</span></a>
               <br>
-              <a href="{{_deleteLink}}{{_deleteLinkSuffix}}" class="govuk-link govuk-link--no-visited-state">Delete <span class="govuk-visually-hidden">import permit {{data['importPermitNumber' + _id] or '1234567'}}</span></a>
+              <a href="import-permits-delete?deleteReturnLink={{_deleteReturnLink}}&deleteID={{_id}}&count={{_importPermitCountDeleted}}" class="govuk-link govuk-link--no-visited-state">Delete <span class="govuk-visually-hidden">import permit {{data['importPermitNumber' + _id] or '123456789ABC'}}</span></a>
             </td>
           </tr>
           {% endif %}
@@ -88,12 +106,12 @@
             
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="uploadAnother_yes" name="uploadAnother" type="radio" value="Yes~import-permits-add">
-              <label class="govuk-label govuk-radios__label" for="uploadAnother_yes">Yes, add another</label>
+              <label class="govuk-label govuk-radios__label" for="uploadAnother_yes">Yes</label>
             </div>
 
             <div class="govuk-radios__item">
               <input class="govuk-radios__input" id="uploadAnother_no" name="uploadAnother" type="radio" value="No~task-list">
-              <label class="govuk-label govuk-radios__label" for="uploadAnother_no">No, I have finished adding</label>
+              <label class="govuk-label govuk-radios__label" for="uploadAnother_no">No</label>
             </div>
 
           </div>

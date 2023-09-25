@@ -761,6 +761,22 @@ module.exports = function(router) {
 
     }
 
+    // Chris Harding (21.09.23) - Phytosanitary certificate: Add an import permit
+    if (baseDir === "/application/create/import-permits-add-validation") {
+
+      // Parameters passed into this journey
+      var return_url = req.session.data.return_url;
+
+      // Routing - decide where to direct users to
+      if (return_url) {
+        return res.redirect(return_url + "?importPermitsAdded=true");
+      }
+      else {
+        return res.redirect("import-permits-view?importPermitsAdded=true");
+      }
+
+    }
+
     // Chris Harding (19.09.23) - Alternate (split) design for adding supporting deocuments (over two pages)
     // Part 1 (select a file description)
     if (baseDir === "/application/create/attachments-add-type-validation") {
