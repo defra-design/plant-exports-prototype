@@ -41,21 +41,6 @@
     </div>
     {% endif %}
 
-    {% if query.deleted %}
-    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="gzovuk-notification-banner-title" data-module="govuk-notification-banner">
-        
-      <div class="govuk-notification-banner__header">
-        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">Success</h2>
-      </div>
-
-      <div class="govuk-notification-banner__content">
-        <h3 class="govuk-notification-banner__heading">Permit deleted</h3>
-        <p class="govuk-body">Import permit number {{data['importPermitNumber' + query.deleted] or '3982842743'}} has been deleted</p>
-      </div>
-
-    </div>
-    {% endif %}
-
     {% if data.build != "development" %}
     {% if data.reference_num %}<span class="govuk-caption-xl">{{data.reference_num}}</span>{% endif %}
     {% endif %}
@@ -186,6 +171,11 @@
             {% endif %}
           </li> -->
           <li class="app-task-list__item">
+            {% set _importPermitCount = data['importPermitCount'] or 0 | int %}
+            {% set _importPermitDisplayedCount = data['importPermitDisplayedCount'] or 0 | int %}
+            {% set _supportingDocumentsDisplayedCount = data['supportingDocumentsDisplayedCount'] or 0 | int %}
+            {% set _totalDocumentsDisplayedCount = _importPermitDisplayedCount | float + _supportingDocumentsDisplayedCount | float %}
+
             {% if data['consignee-import-permit'] %}
             {% if data.supporting_documents_task_list_data or data.file or data.import-phyto %}
             {# do nothing if we have a file uploaded #}
@@ -204,9 +194,9 @@
             </div>
 
             {% endif %}
-            <span class="app-task-list__task-name"><a href="{% if data.supportingDocumentsExist == 'true' %}attachments-view{% else %}attachments-add{% endif %}" aria-describedby="attachments">Supporting documents</a></span>
-            {% if data.supportingDocumentsExist == "true" or data.supporting_documents_task_list_data or data.file or data.import-phyto %}
-            <strong class="govuk-tag app-task-list__tag" id="attachments">1 file attached</strong>
+            <span class="app-task-list__task-name"><a href="{% if _totalDocumentsDisplayedCount > 0 %}attachments-view{% else %}attachments-add{% endif %}" aria-describedby="attachments">Supporting documents</a></span>
+            {% if _totalDocumentsDisplayedCount > 0 %}
+            <strong class="govuk-tag app-task-list__tag" id="attachments">{{_totalDocumentsDisplayedCount}} {% if _totalDocumentsDisplayedCount > 1 %}files{% else %}file{% endif %} attached</strong>
             {% else %}
             <strong class="govuk-tag app-task-list__tag" id="attachments">None added</strong>
             {% endif %}

@@ -387,10 +387,6 @@ module.exports = function(router) {
         }
         
       }
-      // Direct users to the PHEATS start page
-      else {
-        return res.redirect("pheats/start-page");
-      }
 
     }
     
@@ -756,7 +752,7 @@ module.exports = function(router) {
         return res.redirect("attachments-add?error=true" + error1 + error2 + error3);
       }
       else {
-        return res.redirect("attachments-view?supportingDocumentAdded=true&supportingDocumentsExist=true");
+        return res.redirect("attachments-view?supportingDocumentAdded=true&supportingDocumentsExist=true&supportingDocumentsDisplayedCount=1");
       }
 
     }

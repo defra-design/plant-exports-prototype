@@ -826,7 +826,16 @@
 
       <h2 class="govuk-heading-m">Import permits</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-        
+
+        <!-- Set counts -->
+        {% set _importPermitCount = data['importPermitCount'] or 1 | int %}
+        {% set _importPermitDisplayedCount = data['importPermitDisplayedCount'] or 1 | int %}
+        {% set _importPermitCountDeleted = _importPermitDisplayedCount | int - 1 %}
+        {% set _supportingDocumentsDisplayedCount = data['supportingDocumentsDisplayedCount'] or 0 | int %}
+        {% set _totalDocumentsDisplayedCount = _importPermitDisplayedCount | float + _supportingDocumentsDisplayedCount | float %}
+
+        <!-- Set id to use -->
+        {% set _id = _importPermitCount %} <!-- 1 -->
         
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Do you have any import permits?</dt>
@@ -839,9 +848,23 @@
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Import permits</dt>
           <dd class="govuk-summary-list__value">
-            {{data['importPermitNumber' + _id] or '123456789ABC'}}
-            <br>
-            <a class="govuk-link govuk-link--no-visited-state" href="#">{{data['importPermitFile' + _id] or 'file-name.pdf'}}</a>
+            <ul class="govuk-list govuk-list--bullet">
+              {% for i in range(0, _importPermitCount) -%}
+              {% set _show = "true" %}
+              {% set _id = loop.index %}
+              {% set _deletedValue = data['importPermitDeleted' + _id] %}
+              {% if _deletedValue == "true" %}
+                {% set _show = "false" %}
+              {% endif %}
+              {% if _show == "true" %}
+              <li>
+                {{data['importPermitNumber' + _id] or '123456789ABC'}}
+                <br>
+                <a class="govuk-link govuk-link--no-visited-state" href="#">{{data['importPermitFile' + _id] or 'file-name.pdf'}}</a>
+              </li>
+              {% endif %}
+              {%- endfor %}
+            </ul>
           </dd>
           <dd class="govuk-summary-list__actions">
             <a class="govuk-link" href="import-permits-view?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> your import permits</span></a>
@@ -903,10 +926,33 @@
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Supporting documents</dt>
           <dd class="govuk-summary-list__value">
-            {% if data.supportingDocumentsExist == "true" %}
-            {% if data.fileDescription == "Add your own description" %}{{data.manualFileDescription or "Description of file"}}{% else %}{{data.fileDescription or "Description of file"}}{% endif %}
-            <br>
-            <a href="#" class="govuk-link">{{data.supportingDocument or "Filename.jpg"}}</a>
+            {% if _totalDocumentsDisplayedCount > 0 %}
+            <ul class="govuk-list govuk-list--bullet">
+              {% if _supportingDocumentsDisplayedCount > 0 %}
+              <li>
+                {% if data.fileDescription == "Add your own description" %}{{data.manualFileDescription or "Description of file"}}{% else %}{{data.fileDescription or "Description of file"}}{% endif %}
+                <br>
+                <a href="#" class="govuk-link">{{data.supportingDocument or "Filename.jpg"}}</a>
+              </li>
+              {% endif %}
+              {% if data.import_permits ==  "Yes" %}
+              {% for i in range(0, _importPermitCount) -%}
+              {% set _show = "true" %}
+              {% set _id = loop.index %}
+              {% set _deletedValue = data['importPermitDeleted' + _id] %}
+              {% if _deletedValue == "true" %}
+                {% set _show = "false" %}
+              {% endif %}
+              {% if _show == "true" %}
+              <li>
+                Import permit ({{data['importPermitNumber' + _id] or '123456789ABC'}})
+                <br>
+                <a class="govuk-link govuk-link--no-visited-state" href="#">{{data['importPermitFile' + _id] or 'file-name.pdf'}}</a>
+              </li>
+              {% endif %}
+              {%- endfor %}
+              {% endif %}
+            </ul>
             {% else %}
             No documents uploaded
             {% endif %}

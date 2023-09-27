@@ -17,6 +17,16 @@
 
     <form action="{{query.return_url or 'task-list'}}" method="post" novalidate>
 
+      <!-- Set counts -->
+      {% set _importPermitCount = data['importPermitCount'] or 1 | int %}
+      {% set _importPermitDisplayedCount = data['importPermitDisplayedCount'] or 1 | int %}
+      {% set _importPermitCountDeleted = _importPermitDisplayedCount | int - 1 %}
+      {% set _supportingDocumentsDisplayedCount = data['supportingDocumentsDisplayedCount'] or 0 | int %}
+      {% set _totalDocumentsDisplayedCount = _importPermitDisplayedCount | float + _supportingDocumentsDisplayedCount | float %}
+
+      <!-- Set id to use -->
+      {% set _id = _importPermitCount %} <!-- 1 -->
+
       {% if query.supportingDocumentAdded == "true" %}
       <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
     
@@ -26,6 +36,35 @@
 
         <div class="govuk-notification-banner__content">
           <h3 class="govuk-notification-banner__heading">You added {{data.supportingDocument or "Filename.jpg"}} to this application</h3>
+        </div>
+
+      </div>
+      {% endif %}
+
+      {% if query.deleted %}
+      <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="gzovuk-notification-banner-title" data-module="govuk-notification-banner">
+          
+        <div class="govuk-notification-banner__header">
+          <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">Success</h2>
+        </div>
+
+        <div class="govuk-notification-banner__content">
+          <h3 class="govuk-notification-banner__heading">Permit deleted</h3>
+          <p class="govuk-body">Import permit number {{data['importPermitNumber' + query.deleted] or '123456789ABC'}} has been deleted.</p>
+        </div>
+
+      </div>
+      {% endif %}
+
+      {% if query.supportingDocumentDeleted == "true" %}
+      <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+    
+        <div class="govuk-notification-banner__header">
+          <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">Success</h2>
+        </div>
+
+        <div class="govuk-notification-banner__content">
+          <h3 class="govuk-notification-banner__heading">You deleted {{data.supportingDocument or "Filename.jpg"}} from this application</h3>
         </div>
 
       </div>
@@ -43,15 +82,53 @@
           </tr>
         </thead>
         <tbody class="govuk-table__body">
+          <!-- Supporting documents (START) -->
+          {% set _deleteReturnLink = "attachments-view" %}
+          {% if _totalDocumentsDisplayedCount | int == 1 %}
+            {% set _deleteReturnLink = "task-list" %}
+          {% endif %}
+          {% if _supportingDocumentsDisplayedCount > 0 %}
           <tr class="govuk-table__row">
             <td class="govuk-table__cell">{% if data.fileDescription == "Add your own description" %}{{data.manualFileDescription or "Description of file"}}{% else %}{{data.fileDescription or "Description of file"}}{% endif %}</td>
             <td scope="row" class="govuk-table__cell"><a href="#" class="govuk-link govuk-link--no-visited-state"><span class="govuk-visually-hidden">Download </span>{{data.supportingDocument or "Filename.jpg"}}</a></td>
             <td class="govuk-table__cell govuk-table__cell--numeric">
               <a href="attachments-add" class="govuk-link govuk-link--no-visited-state">Change <span class="govuk-visually-hidden">{{data.supportingDocument or "Filename.jpg"}}</span></a>
               <br>
-              <a href="attachments-delete" class="govuk-link govuk-link--no-visited-state">Delete <span class="govuk-visually-hidden">{{data.supportingDocument or "Filename.jpg"}}</span></a>
+              <a href="attachments-delete?deleteReturnLink={{_deleteReturnLink}}" class="govuk-link govuk-link--no-visited-state">Delete <span class="govuk-visually-hidden">{{data.supportingDocument or "Filename.jpg"}}</span></a>
             </td>
           </tr>
+          {% endif %}
+          <!-- Supporting documents (END) -->
+          <!-- Import permits (START) -->
+          {% for i in range(0, _importPermitCount) -%}
+          {% set _show = "true" %}
+          {% set _id = loop.index %}
+          {% set _deletedValue = data['importPermitDeleted' + _id] %}
+          {% if _deletedValue == "true" %}
+            {% set _show = "false" %}
+          {% endif %}
+          {% if _show == "true" %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              Import permit ({{data['importPermitNumber' + _id] or '123456789ABC'}})
+            </td>
+            <td class="govuk-table__cell">
+              <a class="govuk-link govuk-link--no-visited-state" href="#">{{data['importPermitFile' + _id] or 'file-name.pdf'}}</a>
+            </td>
+            <!-- {% set _deleteLinkSuffix = "?deleted=" + _id + "&importPermitDeleted" + _id + "=true" + "&importPermitDisplayedCount=" + _importPermitCountDeleted | int %} -->
+            {% set _deleteReturnLink = "attachments-view" %}
+            {% if _totalDocumentsDisplayedCount | int == 1 %}
+              {% set _deleteReturnLink = "import-permits" %}
+            {% endif %}
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              <a href="import-permits-add?edit={{_id}}" class="govuk-link govuk-link--no-visited-state">Change <span class="govuk-visually-hidden">import permit {{data['importPermitNumber' + _id] or '123456789ABC'}}</span></a>
+              <br>
+              <a href="attachments-ip-delete?deleteReturnLink={{_deleteReturnLink}}&deleteID={{_id}}&count={{_importPermitCountDeleted}}" class="govuk-link govuk-link--no-visited-state">Delete <span class="govuk-visually-hidden">import permit {{data['importPermitNumber' + _id] or '123456789ABC'}}</span></a>
+            </td>
+          </tr>
+          {% endif %}
+          {%- endfor %}
+          <!-- Import permits (END) -->
         </tbody>
       </table>
 
