@@ -35,7 +35,7 @@
             
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
               <dt class="govuk-summary-list__key">Name</dt>
-              <dd class="govuk-summary-list__value">R.W. Crawford Agricultural Machinery Limited Ltd</dd>
+              <dd class="govuk-summary-list__value">B.K. Shoggins Agricultural Machinery Limited Ltd</dd>
             </div>
 
             <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
@@ -330,7 +330,50 @@
       </div>
 
       <div class="govuk-form-group">
-        ...
+        <h2 class="govuk-heading-m">Supporting documents to include</h2>
+        {% if data.documentsToSubmit == "" or data.documentsToSubmit == null %}
+        <p class="govuk-body">No supporting documents have been selected to be issued with this ePhyto.</p>
+        {% else %}
+        <p class="govuk-body">These are the supporting documents that have been selected to be issued with this ePhyto:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          {% for param in data.documentsToSubmit %}
+          {% if param == 'Row 0' %}
+          <li>
+            {% if data.fileDescription == "Add your own description" %}{{data.manualFileDescription or "Description of file"}}{% elif data.fileDescription == "Import permit" %}Import permit ({{data.importPermitNumber or "123456789ABC"}}){% else %}{{data.fileDescription or "Description of file"}}{% endif %}
+            <br>
+            <a href="#" class="govuk-link govuk-link--no-visited-state">{{data.supportingDocument or "Filename.jpg"}}</a>
+          </li>
+          {% endif %}
+          {% endfor %}
+          {% for param in data.documentsToSubmit %}
+          {% if param == 'Row 1' %}
+          <li>
+            All packing details for this certificate
+            <br>
+            <a href="#" class="govuk-link govuk-link--no-visited-state">Packing list.docx</a>
+          </li>
+          {% endif %}
+          {% endfor %}
+          {% for param in data.documentsToSubmit %}
+          {% if param == 'Row 2' %}
+          <li>
+            Additional information from our customer
+            <br>
+            <a href="#" class="govuk-link govuk-link--no-visited-state">Email from Customer (24.05.23).jpg</a>
+          </li>
+          {% endif %}
+          {% endfor %}
+          {% for param in data.documentsToSubmit %}
+          {% if param == 'Row 3' %}
+          <li>
+            Import permit needed for export
+            <br>
+            <a href="#" class="govuk-link govuk-link--no-visited-state">Import permit (901837657).pdf</a>
+          </li>
+          {% endif %}
+          {% endfor %}
+        </ul>
+        {% endif %}
       </div>
 
       <div class="govuk-button-group">

@@ -846,23 +846,63 @@ module.exports = function(router) {
     // MICROSOFT DYNAMICS 365 routing
     // *******************************
 
-    // Chris Harding (21.06.23) - Microsoft Dynamics 365: Supporting documents (add)
-    if (baseDir === "/dynamics/portal/supporting-documents/upload-validation") {
-
-      // Parameters passed into this journey
-      var return_url = req.session.data.return_url;
+    // Chris Harding (27.09.23) - Microsoft Dynamics 365: Supporting documents (add)
+    // Part 1 (select a file description)
+    if (baseDir === "/dynamics/portal/supporting-documents/upload-type-validation") {
 
       // Data objects to be retrieved and queried
-      var supportingDocument = req.session.data.supportingDocument;
-      var supportingDocumentType = supportingDocument.split('.').pop();
       var fileDescription = req.session.data.fileDescription;
+      var importPermitNumber = req.session.data.importPermitNumber;
       var manualFileDescription = req.session.data.manualFileDescription;
 
       // Logic and validation for routing
       var errorCount = 0;
-      var error1 = "";
       var error2 = "";
       var error3 = "";
+      var error5 = "";
+      
+      // Error validation - make sure user enters data into required fields
+      if (fileDescription == "" || fileDescription == null) {
+        errorCount++;
+        error2 = "&error2=true";
+      }
+      else {
+
+        if (fileDescription == "Import permit" && (importPermitNumber == "" || importPermitNumber == null)) {
+          errorCount++;
+          error5 = "&error5=true";
+        }
+        else if (fileDescription == "Add your own description" && (manualFileDescription == "" || manualFileDescription == null)) {
+          errorCount++;
+          error3 = "&error3=true";
+        }
+
+      }
+
+      // Routing - decide where to direct users to
+      if (errorCount > 0) {
+        return res.redirect("upload-type?error=true" + error2 + error3 + error5);
+      }
+      else {
+        return res.redirect("upload-file");
+      }
+
+    }
+
+    // Part 2 (upload a file)
+    if (baseDir === "/dynamics/portal/supporting-documents/upload-file-validation") {
+
+      // Parameters passed into this journey
+      var return_url = req.session.data.return_url;
+      var fileDescription = req.session.data.fileDescription;
+      
+      // Data objects to be retrieved and queried
+      var supportingDocument = req.session.data.supportingDocument;
+      var supportingDocumentType = supportingDocument.split('.').pop();
+
+      // Logic and validation for routing
+      var errorCount = 0;
+      var error1 = "";
       var error4 = "";
       
       // Error validation - make sure user enters data into required fields
@@ -870,27 +910,19 @@ module.exports = function(router) {
         errorCount++;
         error1 = "&error1=true";
       }
-      else if (supportingDocumentType != "gif" && supportingDocumentType != "jpeg" && supportingDocumentType != "jpg" && supportingDocumentType != "pdf" && supportingDocumentType != "png") {
-        errorCount++;
-        error4 = "&error4=true";
-      }
+      // Make sure users upload permitted IPPC Hub (ePhyto) file types (GIF, JPEG, PDF or PNG)
+      else if (fileDescription == "Import phytosanitary certificate") {
 
-      if (fileDescription == "" || fileDescription == null) {
-        errorCount++;
-        error2 = "&error2=true";
-      }
-      else {
-
-        if (fileDescription == "Add your own description" && (manualFileDescription == "" || manualFileDescription == null)) {
+        if (supportingDocumentType != "gif" && supportingDocumentType != "jpeg" && supportingDocumentType != "jpg" && supportingDocumentType != "pdf" && supportingDocumentType != "png") {
           errorCount++;
-          error3 = "&error3=true";
+          error4 = "&error4=true";
         }
 
-      }   
+      }
 
       // Routing - decide where to direct users to
       if (errorCount > 0) {
-        return res.redirect("upload?error=true" + error1 + error2 + error3 + error4);
+        return res.redirect("upload-file?error=true" + error1 + error4);
       }
       else if (return_url) {
         return res.redirect(return_url + "?supportingDocumentAdded=true&supportingDocumentsExist=true&row1=true");
