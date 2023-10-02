@@ -13,38 +13,134 @@ Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block content %}
-<div class="govuk-width-container">
+
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <form action="/form-handler" method="post" novalidate>
+
+      {% if query.deleted %}
+        <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+            <div class="govuk-notification-banner__header">
+                <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+                Success
+                </h2>
+            </div>
+            <div class="govuk-notification-banner__content">
+              <h3 class="govuk-notification-banner__heading">
+                Certificate deleted
+              </h3>
+              <p class="govuk-body">Import certificate number {{data['importCertNumber' + query.deleted] or '1234567'}} has been deleted.</p>
+            </div>
+        </div>
+      {% endif %}
+
+      {% set _link = 'import-phyto-upload-completed' %}
+      {% if query.changeanswers == 'true' %}
+      {% set _link = 'check-your-answers' %}
+      {% endif %}
+
+      <form action="{{_link}}" method="post" novalidate>
         <div class="govuk-form-group  govuk-!-margin-bottom-9">
           <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
               <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">
-                  Upload an import phytosanitary certificate
+                Add an import certificate
               </h1>
             </legend>
           </fieldset>
 
-          <p class="govuk-body">The file must:</p>
-          <ul class="govuk-list govuk-list--bullet">
-            <li>be in PDF format</li>
-            <li>be smaller than 10 megabytes (10MB)</li>
-          </ul>
+          <!-- IF editing an existing one or not -->
+          {% set _editing = false %}
+          {% set _notEditing = true %}
+          {% if query.edit %}
+            {% set _editing = true %}
+            {% set _notEditing = false %}
+          {% endif %}
 
-          {{ govukFileUpload({
-            id: "fileUpload1",
-            name: "fileUpload1",
+          <!-- Set counts -->
+          {% set _importCertCount = data['importCertCount'] or 0 | int %}
+          {% set _importCertDisplayedCount = data['importCertDisplayedCount'] or 0 | int %}
+          {% if _notEditing %}
+            {% set _importCertCount = _importCertCount|int + 1 %}
+            {% set _importCertDisplayedCount = _importCertDisplayedCount|int + 1 %}
+          {% endif %}
+          <input id="importCertCount" name="importCertCount" type="hidden" value="{{_importCertCount}}">
+          <input id="importCertDisplayedCount" name="importCertDisplayedCount" type="hidden" value="{{_importCertDisplayedCount}}">
+
+          <!-- Set id to use -->
+          {% set _id = _importCertCount %} <!--1-->
+          {% if _editing %}
+            {% set _id = query.edit %}
+          {% endif %}
+
+          <!-- Set deleted false default  -->
+          <input id="importCertDeleted{{_id}}" name="importCertDeleted{{_id}}" type="hidden" value="false">
+
+          <p class="govuk-body">If you have more than one import phytosanitary certificate you can add the rest later.</p>
+
+
+          <!-- pre-pop values -->
+          {% set _prepopNumber = data['importCertNumber' + _id] or '' %}
+          {% if _editing %}
+            {% set _prepopNumber = _prepopNumber or '1234567' %}
+          {% endif %}
+
+          {% set _prepopCountry = '' %}
+
+          {% for param in data['importCertCountry' + _id] %}
+            {% set _prepopCountry = param %}
+          {% endfor %}
+
+          {% if _editing %}
+            {% set _prepopCountry = _prepopCountry or 'BS' %}
+            {% if _prepopCountry == 'none' %}
+              {% set _prepopCountry = 'BS' %}
+            {% endif %}
+          {% endif %}
+
+
+          <!-- NUMBER -->
+          {{ govukInput({
             label: {
-              text: "Upload an import phytosanitary certificate."
-            }
+              text: "Import phytosanitary certificate number",
+              classes: "govuk-!-font-weight-bold govuk-label--s"
+            },
+            classes: "govuk-input--width-20",
+            id: "importCertNumber"+_id,
+            name: "importCertNumber"+_id,
+            value: _prepopNumber
           }) }}
+
+          <!-- COUNTRY -->
+          {% set country_module_label = "Country of origin"%}
+          {% set module_name = "country_origin"%}
+          {% block country %}{% include "../modules/_country-select-import.html" %}{% endblock %}
+
+          <!-- FILE -->
+          <div class="govuk-form-group ">
+            <h2 class="govuk-heading-m">Upload the import certificate</h2>
+
+            <p class="govuk-body">The file must:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>be in PDF format</li>
+              <li>be fewer than 10 megabytes (10MB)</li>
+            </ul>
+
+            {{ govukFileUpload({
+              id: "importCertFile"+_id,
+              name: "importCertFile"+_id,
+              label: {
+                text: "Upload file"
+              }
+            }) }}
+
+          </div>
+
+
 
         </div>
 
         {{ govukButton({
-          text: "Upload",
-          href: "import-phyto-upload-wip"
+          text: "Upload"
         }) }}
 
         <!--<hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
@@ -59,7 +155,9 @@ Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
         </p>-->
 
       </form>
+      {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
     </div>
   </div>
-</div>
+  
+
 {% endblock %}
