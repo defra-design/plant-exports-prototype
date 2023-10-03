@@ -35,6 +35,8 @@
         <thead class="govuk-table__head">
           {% if data.commodity == "bulbs" %}
           <tr class="govuk-table__row">
+
+            
             <th class="govuk-table__header" scope="col">Description</th>
             <th class="govuk-table__header" scope="col">Origin</th>
             <th class="govuk-table__header" scope="col">Quantity and number of packages</th>
@@ -104,8 +106,8 @@
           {% elif data.commodity == "used farm machinery" %}
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">Description</th>
+            <th class="govuk-table__header" scope="col">{% if data.build == "development" %}Country where this machinery was last used{% else %}Country of last use{% endif %}</th>
             <th class="govuk-table__header" scope="col">Unique ID</th>
-            <th class="govuk-table__header" scope="col">{% if data.build == "development" %}Country of last use{% else %}Country where this machinery was last used{% endif %}</th>
             <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
           </tr>
           {% else %}
@@ -172,9 +174,10 @@
               {% block summaryPlants2 %}{% include "../modules/_summary-plants.html" %}{% endblock %}
             {% else %}
               <tr class="govuk-table__row">
-                <td class="govuk-table__cell">{{data.commodity_host_species or data.genus or data.commodity_common_name or "Oxalis tuberosa (OXATU)"}}</td>
+                <td class="govuk-table__cell"><strong>{{data.commodity_host_species or data.genus or data.commodity_common_name or "Oxalis tuberosa (OXATU)"}}</strong></td>
                 <td class="govuk-table__cell">{{commodity.countryOfOriginSelect[0] or "United Kingdom"}}</td>
-                <td class="govuk-table__cell govuk-table__cell">{{commodity.quantity or "100"}}{{commodity.unit or "kg"}}</td>
+                <td class="govuk-table__cell govuk-table__cell">{{commodity.quantity or "100"}}{{commodity.unit or " kilograms"}} <br> {{commodity.number_of_packages or "5"}} packages</td>
+                <td class="govuk-table__cell govuk-table__cell">{{commodity.packing_material_used or "Cardboard"}}</td>
                 <td class="govuk-table__cell" style="text-align: right;">
                   <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
                   <br>
