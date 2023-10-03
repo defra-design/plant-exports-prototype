@@ -1,0 +1,130 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Who will receive this consignment? - Phytosanitary certificate - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if query.error == "true" %}
+    <div class="govuk-error-summary" data-module="govuk-error-summary" tabindex="-1" autofocus>
+      
+      <div role="alert">
+        <h2 class="govuk-error-summary__title">There is a problem</h2>       
+        <div class="govuk-error-summary__body">
+          <ul class="govuk-list govuk-error-summary__list">
+            <li><a href="#address_0">Select who will receive this consignment</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+    {% endif %}
+
+    <form action="consignee-address-book-validation" method="post">
+
+      <div class="govuk-form-group{% if query.error == 'true' %} govuk-form-group--error{% endif %}">
+        <fieldset class="govuk-fieldset" aria-describedby="select_consignee_address-hint{% if query.error == 'true' %} select_consignee_address-error{% endif %}">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
+            <h1 class="govuk-fieldset__heading">Who will receive this consignment?</h1>
+          </legend>
+          <p class="govuk-hint" id="select_consignee_address-hint">These are the most recent consignees you’ve had in {{data.countrySelect[0] or "France"}}</p>
+          {% if query.error == "true" %}
+          <p id="select_consignee_address-error" class="govuk-error-message">
+            <span class="govuk-visually-hidden">Error:</span> Select who will receive this consignment
+          </p>
+          {% endif %}
+          <div class="govuk-radios" data-module="govuk-radios">
+            
+            {% if data.row1 == "true" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="address_0" name="select_consignee_address" type="radio" value="address_0"{% if data.select_consignee_address == 'address_0' %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="address_0">
+                Zheng Fruits
+                <br>
+                88 Jianguo Rd, 北京市, 3208, {{data.countrySelect[0] or "France"}}
+              </label>
+            </div>
+            {% endif %}
+            
+            {% if data.row2 == "true" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="address_1" name="select_consignee_address" type="radio" value="address_1"{% if data.select_consignee_address == 'address_1' %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="address_1">
+                Frukta LLC
+                <br>
+                Lillegardsvagen 1, Falkenberg, South-East, 311 50, {{data.countrySelect[0] or "France"}}
+              </label>
+            </div>
+            {% endif %}
+
+            {% if data.row3 == "true" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="address_2" name="select_consignee_address" type="radio" value="address_2"{% if data.select_consignee_address == 'address_2' %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="address_2">
+                Alpine Furnishings Ltd
+                <br>
+                Piazza Pietro Nenni, 4, Orta Nova Foggia, Foggia, 71045, {{data.countrySelect[0] or "France"}}
+              </label>
+            </div>
+            {% endif %}  
+
+            {% if data.row4 == "true" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="address_3" name="select_consignee_address" type="radio" value="address_3"{% if data.select_consignee_address == 'address_3' %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="address_3">
+                PINDI LLC
+                <br>
+                Phase 3 St, Vaibhav Nagar, Katpadi, Vellore, Tamil Nadu, 632014, {{data.countrySelect[0] or "France"}}
+              </label>
+            </div>
+            {% endif %}  
+
+            {% if data.row5 == "true" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="address_4" name="select_consignee_address" type="radio" value="address_4"{% if data.select_consignee_address == 'address_4' %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="address_4">
+                Globex Corporation
+                <br>
+                6347 Pacific Blvd, Huntington Park, California, 90255, {{data.countrySelect[0] or "France"}}
+              </label>
+            </div>
+            {% endif %}
+
+            <div class="govuk-radios__divider">
+              or
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="new_consignee" name="select_consignee_address" type="radio" value="new_consignee"{% if data.select_consignee_address == 'new_consignee' %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="new_consignee">Add a different consignee</label>
+            </div>
+
+          </div>
+
+        </fieldset>
+      </div>
+      
+      <div class="govuk-button-group govuk-!-margin-bottom-7">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      </div>
+
+      {% block continueLater %}
+			{% include "../modules/_save-continue-later.html" %}
+			{% endblock %}
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,305 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.supportingDocumentsExist == "false" %}Supporting documents{% else %}Select the supporting documents to include{% endif %} - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../../../application/modules/_account-banner.html" %}
+{% endblock %}
+
+{% block content %}
+<style>
+
+  /* Needs extracting and adding to the external Sass or CSS */
+  .govuk-checkboxes__item {
+    top: -10px;
+  }
+
+  /* Chris Harding (20.10.22) - Expansion on the responsive PHES GOV.UK table component to always ensure the final 'Action' columnn aligns fully right */
+  .govuk-table__cell--numeric {
+    text-align: right !important;
+  }
+
+  /* Chris Harding (20.10.22) - Styles for the select all checkbox for mobile */
+  .responsive-table-select-all-desktop {
+    display: none;
+  }
+  @media (min-width: 40.0625em) {
+    .responsive-table-select-all-desktop {
+      display: inherit;
+    }
+  }
+
+  .responsive-table-select-all-mobile {
+    display: table;
+    margin-bottom: 15px;
+  }
+  @media (min-width: 40.0625em) {
+    .responsive-table-select-all-mobile {
+      display: none;
+    }
+  }
+
+</style>
+
+<div class="govuk-grid-row">
+
+  {% if data.supportingDocumentsExist == "false" %}
+  <!-- Scenario where 0 supporting documents have been added for an application -->
+  <div class="govuk-grid-column-two-thirds">
+
+    <form action="review-certificate" method="post">
+      <span class="govuk-caption-xl">Issue ePhyto 1760 96929 3035</span>
+      <h1 class="govuk-heading-xl">Supporting documents</h1>
+      <p class="govuk-body">There are no supporting documents attached to this application.</p>
+      
+      <div class="govuk-button-group">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+        <a href="../supporting-documents/upload-type?return_url=../issue-ephyto/select-supporting-documents&subHeading=issue" class="govuk-button govuk-button--secondary" data-module="govuk-button">Add a supporting document</a>
+      </div>
+
+    </form>
+
+  </div>
+  {% else %}
+  <!-- Scenario where 1 or more supporting documents have been added for an application -->
+  <div class="govuk-grid-column-two-thirds">
+  
+    {% if query.supportingDocumentAdded == "true" %}
+    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+  
+      <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">Success</h2>
+      </div>
+
+      <div class="govuk-notification-banner__content">
+        <h3 class="govuk-notification-banner__heading">You added {{data.supportingDocument or "Filename.jpg"}} to this application</h3>
+      </div>
+
+    </div>
+    {% endif %}
+
+    <span class="govuk-caption-xl">Issue ePhyto 1760 96929 3035</span>
+    <h1 class="govuk-heading-xl">Select the supporting documents to include</h1>
+    <p class="govuk-hint">This certificate will be issued as an ePhyto. You do not need to print any supporting documents. Choose the documents that need to be sent with the digital certificate.</p>
+    <h2 class="govuk-heading-s" id="documentsSelected">0 selected</h2>
+  </div>
+
+  <div class="govuk-grid-column-full">
+
+    <form action="review-certificate" method="post">
+
+      <div class="govuk-form-block responsive-table-select-all-mobile">
+
+        <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+        
+          <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="selectAllCheckboxMobile" name="selectAllCheckbox" type="checkbox" data-aria-controls="supporting-documents-table" value="Select all supporting documents">
+            <label class="govuk-label govuk-checkboxes__label" for="selectAllCheckbox">
+              <span class="govuk-visually-hidden">Select all supporting documents</span>
+            </label>
+          </div>
+    
+        </div>
+
+      </div>
+
+      <table id="supporting-documents-table" class="govuk-table responsive-table">
+        <caption class="govuk-table__caption"><span class="govuk-visually-hidden">Select all supporting documents</span></caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">
+              <span class="responsive-table-select-all-mobile">Select all supporting documents</span>
+            
+              <div class="govuk-checkboxes govuk-checkboxes--small responsive-table-select-all-desktop" data-module="govuk-checkboxes">
+      
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input" id="selectAllCheckbox" name="selectAllCheckbox" type="checkbox" data-aria-controls="supporting-documents-table" value="Select all supporting documents"{% for param in data.selectAllCheckbox %}{% if param == 'Select all supporting documents' %} checked{% endif %}{% endfor %}>
+                  <label class="govuk-label govuk-checkboxes__label" for="selectAllCheckbox">
+                    <span class="govuk-visually-hidden">Select all supporting documents</span>
+                  </label>
+                </div>
+          
+              </div>
+
+            </th>
+            <th class="govuk-table__header" scope="col">Description</th>
+            <th class="govuk-table__header" scope="col">File name</th>
+            <th class="govuk-table__header" scope="col">Added by</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          {% if data.row1 == "true" %}
+          <tr class="govuk-table__row result">
+            <td class="govuk-table__cell">
+          
+              <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+                
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input commodity_checkbox" id="line_0" name="documentsToSubmit" type="checkbox" value="Row 0"{% for param in data.documentsToSubmit %}{% if param == 'Row 0' %} checked{% endif %}{% endfor %}>
+                  <label class="govuk-label govuk-checkboxes__label" for="line_0">
+                    <span class="govuk-visually-hidden">Row 0</span>
+                  </label>
+                </div>
+          
+              </div>
+          
+            </td>
+            <td class="govuk-table__cell" scope="row"><span class="table-heading" aria-hidden="true">Description</span> {% if data.fileDescription == "Add your own description" %}{{data.manualFileDescription or "Description of file"}}{% elif data.fileDescription == "Import permit" %}Import permit ({{data.importPermitNumber or "123456789ABC"}}){% else %}{{data.fileDescription or "Description of file"}}{% endif %}</td>
+            <td class="govuk-table__cell" scope="row"><span class="table-heading" aria-hidden="true">File name </span><a href="#" class="govuk-link govuk-link--no-visited-state">{{data.supportingDocument or "Filename.jpg"}}</a></td>
+            <td class="govuk-table__cell" scope="row"><span class="table-heading" aria-hidden="true">Added by </span>Prototype user</td>
+          </tr>
+          {% endif %}
+          <tr class="govuk-table__row result">
+            <td class="govuk-table__cell">
+          
+              <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+                
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input commodity_checkbox" id="line_1" name="documentsToSubmit" type="checkbox" value="Row 1"{% for param in data.documentsToSubmit %}{% if param == 'Row 1' %} checked{% endif %}{% endfor %}>
+                  <label class="govuk-label govuk-checkboxes__label" for="line_1">
+                    <span class="govuk-visually-hidden">Row 1</span>
+                  </label>
+                </div>
+          
+              </div>
+          
+            </td>
+            <td class="govuk-table__cell" scope="row"><span class="table-heading" aria-hidden="true">Description</span> All packing details for this certificate</td>
+            <td class="govuk-table__cell" scope="row"><span class="table-heading" aria-hidden="true">File name </span><a href="#" class="govuk-link govuk-link--no-visited-state">Packing list.docx</a></td>
+            <td class="govuk-table__cell" scope="row"><span class="table-heading" aria-hidden="true">Added by </span>Bill Shoggins (B.K. Shoggins Agricultural Machinery Limited)</td>
+          </tr>
+          <tr class="govuk-table__row result">
+            <td class="govuk-table__cell">
+          
+              <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+                
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input commodity_checkbox" id="line_2" name="documentsToSubmit" type="checkbox" value="Row 2"{% for param in data.documentsToSubmit %}{% if param == 'Row 2' %} checked{% endif %}{% endfor %}>
+                  <label class="govuk-label govuk-checkboxes__label" for="line_2">
+                    <span class="govuk-visually-hidden">Row 2</span>
+                  </label>
+                </div>
+          
+              </div>
+          
+            </td>
+            {% if query.description == "blank" %}
+            <td class="govuk-table__cell govuk-hint" scope="row"><span class="table-heading" aria-hidden="true">Description</span> No description given</td>
+            {% else %}
+            <td class="govuk-table__cell" scope="row"><span class="table-heading" aria-hidden="true">Description</span> Additional information from our customer</td>
+            {% endif %}
+            <td class="govuk-table__cell" scope="row"><span class="table-heading" aria-hidden="true">File name </span><a href="#" class="govuk-link govuk-link--no-visited-state">Email from Customer (24.05.23).jpg</a></td>
+            <td class="govuk-table__cell" scope="row"><span class="table-heading" aria-hidden="true">Added by </span>Ruth Shoggins (B.K. Shoggins Agricultural Machinery Limited)</td>
+          </tr>
+          <tr class="govuk-table__row result">
+            <td class="govuk-table__cell">
+          
+              <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+                
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input commodity_checkbox" id="line_3" name="documentsToSubmit" type="checkbox" value="Row 3"{% for param in data.documentsToSubmit %}{% if param == 'Row 3' %} checked{% endif %}{% endfor %}>
+                  <label class="govuk-label govuk-checkboxes__label" for="line_3">
+                    <span class="govuk-visually-hidden">Row 3</span>
+                  </label>
+                </div>
+          
+              </div>
+          
+            </td>
+            <td class="govuk-table__cell" scope="row"><span class="table-heading" aria-hidden="true">Description</span> Import permit needed for export</td>
+            <td class="govuk-table__cell" scope="row"><span class="table-heading" aria-hidden="true">File name </span><a href="#" class="govuk-link govuk-link--no-visited-state">Import permit (901837657).pdf</a></td>
+            <td class="govuk-table__cell" scope="row"><span class="table-heading" aria-hidden="true">Added by </span>Bill Shoggins (B.K. Shoggins Agricultural Machinery Limited)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="govuk-form-block govuk-!-margin-top-4 govuk-!-margin-bottom-9">
+        <p class="govuk-body"><a class="govuk-link" href="#" id="selectAll">Select all supporting documents</a><p>
+      </div>
+
+      <div class="govuk-button-group">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+        <a href="../supporting-documents/upload-type?return_url=../issue-ephyto/select-supporting-documents&subHeading=issue" class="govuk-button govuk-button--secondary" data-module="govuk-button">Add a supporting document</a>
+      </div>
+
+    </form>
+
+  </div>
+  {% endif %}
+
+</div>
+
+<!-- JavaScript (START) -->
+<script>
+
+  window.addEventListener('load', function() {
+    console.log('load');
+    var checkBoxes = $(".govuk-checkboxes__input");
+
+    /* Get the count for number of checkboxes selected on the page  */
+    checkBoxes.change(function() {
+      var len = $('.commodity_checkbox:checked').length;
+      $("#documentsSelected").text(len + " selected");
+    });
+
+    /* Select all link  */
+    $("#selectAll").bind('click onKeyDown', function(e) {
+      e.preventDefault();
+      var txt = $("#selectAll").text();
+
+      if (txt == "Deselect all supporting documents") {
+        $("#selectAll").text("Select all supporting documents");
+        checkBoxes.prop("checked", false)
+      }
+      else {
+        $("#selectAll").text("Deselect all supporting documents");
+        checkBoxes.prop("checked", true)
+      }
+
+      var len = $('.commodity_checkbox:checked').length;
+      $("#documentsSelected").text(len + " selected");
+    });
+
+    /* Chris Harding (31.05.23) - Adding a checkbox allowing users to 'Select all supporting documents' another way */
+    /* DESKTOP */
+    $("#selectAllCheckbox").bind('click onKeyDown', function() {
+      var txt = $("#selectAll").text();
+
+      if (txt == "Deselect all supporting documents") {
+        $("#selectAll").text("Select all supporting documents");
+        checkBoxes.prop("checked", false)
+      }
+      else {
+        $("#selectAll").text("Deselect all supporting documents");
+        checkBoxes.prop("checked", true)
+      }
+
+      var len = $('.commodity_checkbox:checked').length;
+      $("#documentsSelected").text(len + " selected");
+    });
+
+    /* MOBILE */
+    $("#selectAllCheckboxMobile").bind('click onKeyDown', function() {
+      var txt = $("#selectAll").text();
+
+      if (txt == "Deselect all supporting documents") {
+        $("#selectAll").text("Select all supporting documents");
+        checkBoxes.prop("checked", false)
+      }
+      else {
+        $("#selectAll").text("Deselect all supporting documents");
+        checkBoxes.prop("checked", true)
+      }
+
+      var len = $('.commodity_checkbox:checked').length;
+      $("#documentsSelected").text(len + " selected");
+    });
+
+  });
+
+</script>
+<!-- JavaScript (END) -->
+{% endblock %}
