@@ -57,18 +57,8 @@
             <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="exporter_address">Not started</strong>
             {% endif %}
           </li>
-          {% if data.reforwarding %}
-          <li class="app-task-list__item">
-            {% set _importCertDisplayedCount = data['importCertDisplayedCount'] or 0 | int %}
-            {% if _importCertDisplayedCount > 0 %}
-            <span class="app-task-list__task-name"><a href="import-phyto-upload-completed" aria-describedby="import_details">What are the import details?</a></span>
-            <strong class="govuk-tag app-task-list__tag" id="import_details">Complete</strong>
-            {% else %}
-            <span class="app-task-list__task-name"><a href="import-phyto-upload" aria-describedby="import_details">What are the import details?</a></span>
-            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="import_details">Not started</strong>
-            {% endif %}
-          </li>
-          {% endif %}
+
+          {% set _consignmentComplete = data.commodities and (data.commodities | length) > 0 or data.stock_number or data.upload or data.variety or data.number_of_packages or data.machinery_id %}
           <li class="app-task-list__item">
             <span class="app-task-list__task-name">
               {% if data.commodity == "grain" %}
@@ -82,12 +72,63 @@
               <a href="{% if data.upload %}{% if data.commodity == 'seeds' %}commodity-list-summary?return_url=task-list{% else %}upload-completed{% endif %}{% elif data.commodities and (data.commodities | length) > 0 %}commodity-list{% else %}input-method{% endif %}" aria-describedby="your_consignment">What's in your consignment?</a>
               {% endif %}
             </span>
-            {% if data.commodities and (data.commodities | length) > 0 or data.stock_number or data.upload or data.variety or data.number_of_packages or data.machinery_id %}
+            {% if _consignmentComplete %}
             <strong class="govuk-tag app-task-list__tag" id="your_consignment">Complete</strong>
             {% else %}
             <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="your_consignment">Not started</strong>
             {% endif %}
           </li>
+
+
+
+          {% if data.reforwarding %}
+          <li class="app-task-list__item">
+
+            {% set _importCertsComplete = true %}
+            {% set _numbersRemaining = 0 %}
+            {% set _numbersAdded = 0 %}
+            {% for _number in data.ipcNumbers %}
+              {% if data['ipcAdded'+loop.index] != 'true' %}
+                {% set _numbersRemaining = _numbersRemaining + 1 %}
+              {% else %}
+                {% set _numbersAdded = _numbersAdded + 1 %}
+              {% endif %}
+            {% endfor %}
+            {% if _numbersRemaining > 0 %}
+              {% set _importCertsComplete = false %}
+            {% endif %}
+
+            <!-- Link -->
+            {% if _consignmentComplete %}
+              {% if _numbersAdded > 0 %}
+                <span class="app-task-list__task-name"><a href="import-phyto-select-uploaded" aria-describedby="import_details">What are the import details?</a></span>
+              {% else %}
+                <span class="app-task-list__task-name"><a href="import-phyto-select" aria-describedby="import_details">What are the import details?</a></span>
+              {% endif %}
+            {% else %}
+              <span class="app-task-list__task-name">What are the import details?</span>
+            {% endif %}
+
+            <!-- Tag -->
+            {% if _consignmentComplete %}
+              {% if _importCertsComplete %}
+                <strong class="govuk-tag app-task-list__tag" id="import_details">Complete</strong>
+              {% elif _numbersAdded > 0 %}
+                <strong class="govuk-tag govuk-tag--blue app-task-list__tag" id="import_details">In progress</strong>
+              {% else %}
+                <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="import_details">Not started</strong>
+              {% endif %}
+            {% else %}
+              <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="import_details">Cannot start yet</strong>
+            {% endif %}
+
+          </li>
+          {% endif %}
+
+
+
+
+
           {% if data.commodity == "bulbs" and data.countrySelect[0] == "United States" %}
           <!-- Chris Harding (08.06.23) - Don't show the inspection section for bulb exports to the USA -->
           {% elif data.commodity != "plant products" and data.commodity != "seeds" and data.commodity != "grain" and data.commodity != "everything else" %}

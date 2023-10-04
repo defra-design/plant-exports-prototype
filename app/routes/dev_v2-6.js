@@ -1105,6 +1105,9 @@ module.exports = function(router) {
     //commision date
     var today = new Date();
     req.session.data.todaysDateFormatted = today.getDate() + " " + ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][today.getMonth()] + " " + today.getFullYear()
+
+    req.session.data.ipcNumbers = ["123-456-789-0","ABC-123-456-789-0"]
+
     //page specific
 
     //PHEATS APPLICATIONS

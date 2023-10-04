@@ -37,6 +37,21 @@
 
 {% block content %}
 <style>
+  .deleteWrapper {
+    display: table; 
+    width: 100%;
+  }
+  .deleteButtonWrapper {
+    position: relative;
+    display: table-cell; 
+    width: 1%;
+  }
+  .deleteIPCN {
+    margin-left: 20px; 
+    margin-bottom: 0; 
+    margin-top: -13px;
+    box-sizing: border-box;
+  }
 
   /* Needs extracting and adding to the external Sass or CSS */
   /* Chris Harding (12.06.23) - Styling for the 'Destination countries' country multi select as part of the accessibility rework */
@@ -577,6 +592,92 @@
       {% include "../modules/_multi-select.html" %}
       </div>
 
+
+
+
+      {% if data.reforwarding %}
+
+        <!-- Set id to use -->
+        {% set _id = "1" %} <!--1-->
+        {% if _editing %}
+          {% set _id = query.edit %}
+        {% endif %}
+
+
+        <h2 class="govuk-heading-m govuk-!-margin-top-8">Import phytosanitary certificate numbers</h2>
+
+        {% set _ipcnCount = data['ipcnCount' + _id] or 1 | int %}
+        {% set _ipcnCount = 1 | int %}
+
+        <div id="commodityIPCNWrapper" class="commodityIPCNWrapper" style="display:none"  >
+          <div class="govuk-form-group govuk-!-margin-bottom-0">
+            <fieldset class="govuk-fieldset">
+              <input id="" name="" type="hidden" value="false" class="deleteIPCNVisibility">
+              <label class="govuk-label" for="">
+                Import phytosanitary certificate number
+              </label>
+              <div class="deleteWrapper">
+                <div class="govuk-form-group" >
+                  <input class="govuk-input inputIPCN" id="" name="" type="text" >
+                </div>
+                <div class="deleteButtonWrapper">
+                  <a class="govuk-button govuk-button--secondary deleteIPCN" href="#" >Remove</a>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+          
+        </div>
+        
+        <div id="ipcnCountriesWrapper">
+          {% for i in range(0, _ipcnCount) -%}
+
+
+            {% set _ipcnID = loop.index %}
+            
+
+              {% set _commodityIPCNID = 'commodityIPCN' + _id + '-' + _ipcnID %}
+              {% set _commodityIPCNDeletedID = 'commodityIPCNDeleted' + _id + '-' + _ipcnID %}
+
+              <div class="commodityIPCNWrapper" >
+                <div class="govuk-form-group govuk-!-margin-bottom-0">
+                  <fieldset class="govuk-fieldset">
+              
+                    <input id="{{_commodityIPCNDeletedID}}" name="{{_commodityIPCNDeletedID}}" type="hidden" value="false" class="deleteIPCNVisibility">
+              
+                    <label class="govuk-label" for="{{_commodityIPCNID}}">
+                      Import phytosanitary certificate number
+                    </label>
+                    <div class="deleteWrapper">
+                      <div class="govuk-form-group" >
+                        <input class="govuk-input" id="{{_commodityIPCNID}}" name="{{_commodityIPCNID}}" type="text" value="">
+                        <!-- <input class="govuk-input" id="{{_commodityIPCNID}}" name="{{_commodityIPCNID}}" type="text" value="{{data[_commodityIPCNID]}}"> -->
+                      </div>
+                      <div class="deleteButtonWrapper">
+                        <a class="govuk-button govuk-button--secondary deleteIPCN" href="#" >Remove</a>
+                      </div>
+                    </div>
+                  </fieldset>
+                </div>
+              
+              </div>
+
+
+
+          {%- endfor %}
+        </div>
+        <input id="ipcnCount{{_id}}" name="ipcnCount{{_id}}" type="hidden" value="{{_ipcnCount}}">
+
+        <p class="govuk-body govuk-!-margin-bottom-6"><a class="govuk-link govuk-link--no-visited-state govuk-button govuk-button--secondary" href="#" id="addIPCN">Add another import phytosanitary certificate number</a></p>
+
+
+        {% endif %}
+
+
+
+
+
+
       <div class="govuk-form-group govuk-!-margin-top-3 govuk-!-margin-bottom-6">
         <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
       </div>
@@ -615,6 +716,95 @@
     $("#commodity-botanical_name").hide()
     $("#commoditiy-botanical-lookup").show()
     $("#commodity-lookup--manual").show()
+
+
+
+    //DELETE IPCN START
+    var _deleteIPCNLinks = $(".deleteIPCN"),
+        _visibleWrappers = _deleteIPCNLinks.closest('.commodityIPCNWrapper:visible'),
+        _visibleWrappersLength = _visibleWrappers.length
+
+    function deleteIPCNLinkVisibility(){
+      _deleteIPCNLinks = $(".deleteIPCN"),
+      _visibleWrappers = _deleteIPCNLinks.closest('.commodityIPCNWrapper:visible'),
+      _visibleWrappersLength = _visibleWrappers.length
+      if(_visibleWrappersLength > 1){
+        _deleteIPCNLinks.show()
+      } else {
+        _deleteIPCNLinks.hide()
+      }
+    }
+    deleteIPCNLinkVisibility()
+
+    _deleteIPCNLinks.on( "click", function() {
+        event.preventDefault();
+        var _this = $(this),
+            _wrapper = _this.closest('.commodityIPCNWrapper');
+
+        _wrapper.find($(".deleteIPCNVisibility")).val('true')
+        _wrapper.hide()
+
+        deleteIPCNLinkVisibility()
+
+    });
+    //DELETE IPCN END
+
+    //ADD ANOTHER IPCN FIELD
+    var _ipcnCountInput = $("#ipcnCount"+{{_id|dump|safe}}),
+        _ipcnCount = parseInt(_ipcnCountInput.val()),
+        _addIPCNLink = $("#addIPCN"),
+        _commodityIPCNWrapper = $("#commodityIPCNWrapper")
+
+    _addIPCNLink.on( "click", function() {
+        event.preventDefault();
+        var _this = $(this)
+
+        // iterate value
+        _ipcnCount = _ipcnCount + 1
+
+        //Set new value on hidden input
+        _ipcnCountInput.val(_ipcnCount)
+
+        //Clone ipcn wrapper
+        var _commodityIPCNWrapperClone = _commodityIPCNWrapper.clone();
+
+        //new id
+        var _newID = 'commodityIPCN' + {{_id|dump|safe}} + '-' + _ipcnCount,
+            _newDeletedID = 'commodityIPCNDeleted' + {{_id|dump|safe}} + '-' + _ipcnCount;
+
+        //Change values of clone
+        _commodityIPCNWrapperClone.find('label').eq(0).attr("for", _newID);
+        _commodityIPCNWrapperClone.find('.inputIPCN').eq(0).attr("id", _newID);
+        _commodityIPCNWrapperClone.find('.inputIPCN').eq(0).attr("name", _newID);
+        _commodityIPCNWrapperClone.find('.deleteIPCNVisibility').eq(0).attr("name", _newDeletedID);
+        _commodityIPCNWrapperClone.find('.deleteIPCNVisibility').eq(0).attr("id", _newDeletedID);
+      
+
+        //Insert into DOM
+        _commodityIPCNWrapperClone.appendTo($("#ipcnCountriesWrapper")).show()
+
+
+        //Setup event for inserted delete link
+        _commodityIPCNWrapperClone.find($(".deleteIPCN")).on( "click", function() {
+            event.preventDefault();
+            var _this = $(this),
+                _wrapper = _this.closest('.commodityIPCNWrapper');
+
+            _wrapper.find($(".deleteIPCNVisibility")).val('true')
+            _wrapper.hide()
+
+            deleteIPCNLinkVisibility()
+
+        });
+
+        deleteIPCNLinkVisibility()
+   
+    });
+    //ADD ANOTHER IPCN FIELD END
+
+
+
+
   })
 
 </script>
