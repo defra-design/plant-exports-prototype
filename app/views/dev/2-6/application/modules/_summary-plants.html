@@ -89,24 +89,10 @@ example {{commodity.quantity}}
     {% if data.reforwarding %}
     <span style="display: block; margin-bottom: 7px;" >
       Import certificates:<br>
-
-      {% if commodity.ipcnCount1 > 0 %}
-        {% for i in range(0, commodity.ipcnCount1) -%}
-
-          {% set _show = "true" %}
-          {% set _id = loop.index %}
-          {% set _deletedValue = commodity['commodityIPCNDeleted1-'+_id] %}
-          {% if _deletedValue == "true" %}
-            {% set _show = "false" %}
-          {% endif %}
-
-          {% if _show == "true" %}
-            {{commodity['commodityIPCN1-'+_id] or "123-456-789-0, ABC-123-456-789-0"}}{% if loop.last %}{% else %}, {% endif %}
-          {% endif %}
-
-        {%- endfor %}
+      {% if commodity['commodityIPCN-2'] %}
+        {{commodity['commodityIPCN-1'] or "123-456-789-0"}} and {{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
       {% else %}
-        123-456-789-0, ABC-1234567890
+        {{commodity['commodityIPCN-1'] or "123-456-789-0"}}
       {% endif %}
     </span>
     {% endif %}
