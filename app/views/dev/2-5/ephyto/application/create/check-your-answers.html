@@ -876,19 +876,23 @@
         {% set _importPermitDisplayedCount = data['importPermitDisplayedCount'] or 1 | int %}
         {% set _importPermitCountDeleted = _importPermitDisplayedCount | int - 1 %}
         {% set _supportingDocumentsDisplayedCount = data['supportingDocumentsDisplayedCount'] or 0 | int %}
+
         {% set _totalDocumentsDisplayedCount = _importPermitDisplayedCount | float + _supportingDocumentsDisplayedCount | float %}
+        {% set _totalDocumentsDisplayedCount = _supportingDocumentsDisplayedCount | float %}
 
         <!-- Set id to use -->
         {% set _id = _importPermitCount %} <!-- 1 -->
+
+        {% set _haveImportPermits = data.import_permits or 'Yes' %}
         
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Do you have any import permits?</dt>
-          <dd class="govuk-summary-list__value">{{data.import_permits or 'Yes'}}</dd>
+          <dd class="govuk-summary-list__value">{{_haveImportPermits}}</dd>
           <dd class="govuk-summary-list__actions">
             <a class="govuk-link" href="import-permits?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> whether you have any import permits</span></a>
           </dd>
         </div>
-        {% if data.import_permits ==  "Yes" %}
+        {% if _haveImportPermits ==  "Yes" %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Import permits</dt>
           <dd class="govuk-summary-list__value">
@@ -987,6 +991,11 @@
               {% if _deletedValue == "true" %}
                 {% set _show = "false" %}
               {% endif %}
+
+              <!-- ADDED SO IMPORT PERMITS DONT SHOW HERE. BUT LEAVING CODE IN CASE NEEDED LATER. -->
+              {% set _show = "false" %}
+              <!-- -->
+
               {% if _show == "true" %}
               <li>
                 Import permit ({{data['importPermitNumber' + _id] or '123456789ABC'}})
