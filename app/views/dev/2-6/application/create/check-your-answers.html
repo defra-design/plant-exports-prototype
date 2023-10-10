@@ -1023,16 +1023,9 @@
         {% set _importCertCountDeleted = _importCertDisplayedCount|int - 1 %}
 
         <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-          {% for i in range(0, _importCertCount) -%}
-
-            {% set _show = "true" %}
+          {% for _number in data.ipcNumbers %}
             {% set _id = loop.index %}
-            {% set _deletedValue = data['importCertDeleted'+_id] %}
-            {% if _deletedValue == "true" %}
-              {% set _show = "false" %}
-            {% endif %}
-
-            {% if _show == "true" %}
+            {% if data['ipcAdded'+_id] == 'true' or query.prepop == "true" %}
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">
                 File name
@@ -1040,9 +1033,9 @@
                 File description
               </dt>
               <dd class="govuk-summary-list__value">
-                <a class="govuk-link govuk-link--no-visited-state" href="#">{{data['importCertFile' + _id] or 'file-name.pdf'}}</a>
+                <a class="govuk-link govuk-link--no-visited-state" href="#">{{data['ipcFile'+_id] or "file-name.pdf"}}</a>
                 <br>
-                Import phytosanitary certificate ({{data['importCertNumber' + _id] or '1234567'}})
+                Import phytosanitary certificate ({{_number}})
               </dd>
               <dd class="govuk-summary-list__actions">
                 <a class="govuk-link" href="attachments?change=yes&return_url=check-your-answers&importCerts=true">Change<span class="govuk-visually-hidden"> supporting documents</span></a>

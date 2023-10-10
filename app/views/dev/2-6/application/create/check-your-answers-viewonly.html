@@ -1214,7 +1214,38 @@
       <h2 class="govuk-heading-m">Supporting documents</h2>
       
 
+      {% if data.reforwarding %}
 
+        
+        {% set _importCertCount = data['importCertCount'] or 1 | int %}
+        {% set _importCertDisplayedCount = data['importCertDisplayedCount'] or 1 | int %}
+        {% set _importCertCountDeleted = _importCertDisplayedCount|int - 1 %}
+
+        <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+          {% for _number in data.ipcNumbers %}
+            {% set _id = loop.index %}
+            {% if data['ipcAdded'+_id] == 'true' or query.prepop == "true" %}
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                File name
+                <br>
+                File description
+              </dt>
+              <dd class="govuk-summary-list__value">
+                <a class="govuk-link govuk-link--no-visited-state" href="#">{{data['ipcFile'+_id] or "file-name.pdf"}}</a>
+                <br>
+                Import phytosanitary certificate ({{_number}})
+              </dd>
+              <dd class="govuk-summary-list__actions">
+                <a class="govuk-link" href="attachments?change=yes&return_url=check-your-answers&importCerts=true">Change<span class="govuk-visually-hidden"> supporting documents</span></a>
+              </dd>
+            </div>
+            {% endif %}
+
+          {%- endfor %}
+        </dl>
+
+      {% else %}
 
 
       {% if data.build != "development" and data['consignee-import-permit'] %}
@@ -1272,6 +1303,12 @@
         {% endif %}
 
       </dl>
+
+
+      {% endif %}
+
+
+
 
       <div class="govuk-form-group govuk-!-margin-top-9">
         <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_blank">what fees you need to pay{% if data.build != "development" %} (opens in a new window){% endif %}</a> for this application.</p>      
