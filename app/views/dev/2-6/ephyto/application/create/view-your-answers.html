@@ -744,6 +744,7 @@
         {% set _importPermitCountDeleted = _importPermitDisplayedCount | int - 1 %}
         {% set _supportingDocumentsDisplayedCount = data['supportingDocumentsDisplayedCount'] or 0 | int %}
         {% set _totalDocumentsDisplayedCount = _importPermitDisplayedCount | float + _supportingDocumentsDisplayedCount | float %}
+        {% set _totalDocumentsDisplayedCount = _supportingDocumentsDisplayedCount | float %}
 
         <!-- Set id to use -->
         {% set _id = _importPermitCount %} <!-- 1 -->
@@ -848,6 +849,10 @@
               {% if _deletedValue == "true" %}
                 {% set _show = "false" %}
               {% endif %}
+              <!-- ADDED SO IMPORT PERMITS DONT SHOW HERE. BUT LEAVING CODE IN CASE NEEDED LATER. -->
+              {% set _show = "false" %}
+              <!-- -->
+
               {% if _show == "true" %}
               <li>
                 Import permit ({{data['importPermitNumber' + _id] or '123456789ABC'}})
