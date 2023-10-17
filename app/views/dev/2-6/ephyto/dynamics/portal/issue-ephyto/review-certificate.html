@@ -7,7 +7,7 @@
 {% block beforeContent %}
 {{super()}}
 {% include "../../../application/modules/_account-banner.html" %}
-<a href="select-supporting-documents" class="govuk-back-link">Back to select attachments</a>
+<a href="select-supporting-documents" class="govuk-back-link">Back</a>
 {% endblock %}
 
 {% block content %}
@@ -331,7 +331,74 @@
 
       <div class="govuk-form-group">
         <h2 class="govuk-heading-m">Supporting documents to include</h2>
-        {% if data.documentsToSubmit == "" or data.documentsToSubmit == null %}
+
+        <dl class="govuk-summary-list govuk-!-margin-bottom-7">
+        
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Supporting documents</dt>
+            <dd class="govuk-summary-list__value">
+              {% if data.documentsToSubmit == "" or data.documentsToSubmit == null %}
+              No supporting documents have been selected to be issued with this ePhyto
+              {% else %}
+              <ul class="govuk-list govuk-list--bullet">
+                {% for param in data.documentsToSubmit %}
+                {% if param == 'Row 0' %}
+                <li>
+                  {% if data.fileDescription == "Add your own description" %}{{data.manualFileDescription or "Description of file"}}{% elif data.fileDescription == "Import permit" %}Import permit ({{data.importPermitNumber or "123456789ABC"}}){% else %}{{data.fileDescription or "Description of file"}}{% endif %}
+                  <br>
+                  <a href="#" class="govuk-link govuk-link--no-visited-state">{{data.supportingDocument or "Filename.jpg"}}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+                {% for param in data.documentsToSubmit %}
+                {% if param == 'Row 1' %}
+                <li>
+                  Packing list or invoice
+                  <br>
+                  <a href="#" class="govuk-link govuk-link--no-visited-state">Packing list.docx</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+                {% for param in data.documentsToSubmit %}
+                {% if param == 'Row 2' %}
+                <li>
+                  Additional information from our customer
+                  <br>
+                  <a href="#" class="govuk-link govuk-link--no-visited-state">Email from Customer (24.05.23).jpg</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+                {% for param in data.documentsToSubmit %}
+                {% if param == 'Row 3' %}
+                <li>
+                  Import permit (DK11223344)
+                  <br>
+                  <a href="#" class="govuk-link govuk-link--no-visited-state">Import permit (DK11223344).pdf</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+                {% if data.manualLinkOverride == 'true' %}
+                <li>
+                  Packing list or invoice
+                  <br>
+                  <a href="#" class="govuk-link govuk-link--no-visited-state">Packing list.docx</a>
+                </li>
+                <li>
+                  Import permit (DK11223344)
+                  <br>
+                  <a href="#" class="govuk-link govuk-link--no-visited-state">Import permit (DK11223344).pdf</a>
+                </li>
+                {% endif %}
+              </ul>
+              {% endif %}
+            </dd>
+            <dd class="govuk-summary-list__actions">
+              <a class="govuk-link" href="select-supporting-documents">Change<span class="govuk-visually-hidden"> supporting documents</span></a>
+            </dd>
+          </div>
+  
+        </dl>
+        <!-- {% if data.documentsToSubmit == "" or data.documentsToSubmit == null %}
         <p class="govuk-body">No supporting documents have been selected to be issued with this ePhyto.</p>
         {% else %}
         <p class="govuk-body">These are the supporting documents that have been selected to be issued with this ePhyto:</p>
@@ -385,7 +452,7 @@
           </li>
           {% endif %}
         </ul>
-        {% endif %}
+        {% endif %} -->
       </div>
 
       <div class="govuk-button-group">
