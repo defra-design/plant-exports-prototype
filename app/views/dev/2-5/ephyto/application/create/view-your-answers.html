@@ -64,7 +64,7 @@
 
         <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
           <dt class="govuk-summary-list__key">Your reference</dt>
-          <dd class="govuk-summary-list__value">{% if data.reference_num %}{{data.reference_num or "REFERENCE" }}{% else %}&nbsp;{% endif %}</dd>
+          <dd class="govuk-summary-list__value">{% if (query.id | appInformationV6('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformationV6('reference')}}{% endif %}</dd>
         </div>
 
       </dl>
@@ -714,7 +714,7 @@
         <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
           <dt class="govuk-summary-list__key">Name and address of consignee</dt>          
           <dd class="govuk-summary-list__value">
-            {{data.consignee_name or "Zheng Fruits"}}
+            {{data.consignee_name or query.id | appInformationV6('importer') | title or "Cubix"}}
             <br>
             {{data.consigneeAddressLine1 or "88 Jianguo Rd" }}{% if data.consigneeAddressLine2 %}, {{data.consigneeAddressLine2}}{% endif %}, {{data.consigneeAddressLine3 or "北京市"}}{% if data.consigneeAddressLine4 %}, {{data.consigneeAddressLine4}}{% endif %}, {{data.consigneeAddressLine5 or "3208"}}, {{data.countrySelect[0] or "China"}}
           </dd>
