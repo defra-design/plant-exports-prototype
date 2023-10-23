@@ -648,10 +648,10 @@
         
         {% if data.journey != "coc" %}
         <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Point of entry into the destination country</dt>
-          <dd class="govuk-summary-list__value">{{data.port_entry or "Calais"}}</dd>
+          <dt class="govuk-summary-list__key">{% if data.do_you_know_point_of_entry == "Yes" %}Point of entry{% else %}Point of entry country{% endif %}</dt>
+          <dd class="govuk-summary-list__value">{% if data.do_you_know_point_of_entry == "Yes" %}{{data.port_entry[0] or "Carrieres-sous-Poissy (FR CSP)"}}{% else %}{{data.point_entry_country[0] or "France"}}{% endif %}</dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="shipping?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> the point of entry into the destination country</span></a>
+            <a class="govuk-link" href="shipping?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> the {% if data.do_you_know_point_of_entry == "Yes" %}point of entry{% else %}point of entry country{% endif %}</span></a>
           </dd>
         </div>
         {% endif %}
@@ -788,53 +788,6 @@
       <h2 class="govuk-heading-m">Who will receive this consignment?</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
         
-        <!-- {% if data.build == "development" %}
-        {% if data.commodity == "bulbs" %}
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Import permit number</dt>
-          <dd class="govuk-summary-list__value">{{data.consignee_import_permit or '2244668800'}}</dd>
-          <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="destination-consignee?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> the import permit number</span></a>
-          </dd>
-        </div>
-        {% endif %}
-
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Name of the consignee</dt>
-          <dd class="govuk-summary-list__value">{{data.consignee_name or 'Consignee name'}}</dd>
-          <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="destination-consignee?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> who will receive this consignment</span></a>
-          </dd>
-        </div>
-
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Address of the consignee</dt>
-          <dd class="govuk-summary-list__value">{{data.consignee_address or 'XYZ China Imports Ltd, Kaiser Centre, Phase III, 9-11 Hok Yuen St., Kowloon, China'}}</dd>
-          <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="destination-consignee?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> the address of the consignee</span></a>
-          </dd>
-        </div>
-
-        {% if data.commodity == "grain" %}
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Further information</dt>
-          <dd class="govuk-summary-list__value">{{data.consignee_more_detail or 'More information'}}</dd>
-          <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="destination-consignee?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> the further information</span></a>
-          </dd>
-        </div>
-        {% endif %}
-
-        {% if data.commodity != "bulbs" %}
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Import permit number</dt>
-          <dd class="govuk-summary-list__value">{{data.consignee_import_permit or '2244668800'}}</dd>
-          <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="destination-consignee?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> the import permit number</span></a>
-          </dd>
-        </div>
-        {% endif %}
-        {% else %} -->
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Name and address of consignee</dt>          
           <dd class="govuk-summary-list__value">
@@ -846,14 +799,6 @@
             <a class="govuk-link" href="consignee-add">Change <span class="govuk-visually-hidden">who will receive this consignment</span></a>
           </dd>
         </div>
-        
-        <!-- <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Import permit number</dt>
-          <dd class="govuk-summary-list__value">{% if data.import_permit == "Yes" %}{{data.consignee_import_permit or '2244668800'}}{% else %}<span class="govuk-hint">Not entered</span>{% endif %}</dd>
-          <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="consignee-import-permit-number?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> the import permit number</span></a>
-          </dd>
-        </div> -->
 
         {% if data.commodity == "grain" %}
         <div class="govuk-summary-list__row">
@@ -864,7 +809,6 @@
           </dd>
         </div>
         {% endif %}
-        <!-- {% endif %} -->
 
       </dl>
 

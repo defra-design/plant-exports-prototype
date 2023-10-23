@@ -417,7 +417,7 @@
             <dd class="govuk-summary-list__value">
               {% if data.documentsToSubmit == "" or data.documentsToSubmit == null %}
               No supporting documents have been selected for submission
-              {% else %}
+              {% elif data.documentsToSubmit.length > 1 %}
               <ul class="govuk-list govuk-list--bullet">
                 {% for param in data.documentsToSubmit %}
                 {% if param == 'Row 0' %}
@@ -427,8 +427,6 @@
                   <a href="#" class="govuk-link govuk-link--no-visited-state">{{data.supportingDocument or "Filename.jpg"}}</a>
                 </li>
                 {% endif %}
-                {% endfor %}
-                {% for param in data.documentsToSubmit %}
                 {% if param == 'Row 1' %}
                 <li>
                   Packing list or invoice
@@ -436,8 +434,6 @@
                   <a href="#" class="govuk-link govuk-link--no-visited-state">Packing list.docx</a>
                 </li>
                 {% endif %}
-                {% endfor %}
-                {% for param in data.documentsToSubmit %}
                 {% if param == 'Row 2' %}
                 <li>
                   Additional information from our customer
@@ -445,8 +441,6 @@
                   <a href="#" class="govuk-link govuk-link--no-visited-state">Email from Customer (24.05.23).jpg</a>
                 </li>
                 {% endif %}
-                {% endfor %}
-                {% for param in data.documentsToSubmit %}
                 {% if param == 'Row 3' %}
                 <li>
                   Import permit (DK11223344)
@@ -468,6 +462,26 @@
                 </li>
                 {% endif %}
               </ul>
+              {% else %}
+              {% for param in data.documentsToSubmit %}
+              {% if param == 'Row 0' %}
+              {% if data.fileDescription == "Add your own description" %}{{data.manualFileDescription or "Description of file"}}{% elif data.fileDescription == "Import permit" %}Import permit ({{data.importPermitNumber or "123456789ABC"}}){% else %}{{data.fileDescription or "Description of file"}}{% endif %}
+              <br>
+              <a href="#" class="govuk-link govuk-link--no-visited-state">{{data.supportingDocument or "Filename.jpg"}}</a>
+              {% elif param == 'Row 1' %}
+              Packing list or invoice
+              <br>
+              <a href="#" class="govuk-link govuk-link--no-visited-state">Packing list.docx</a>
+              {% elif param == 'Row 2' %}
+              Additional information from our customer
+              <br>
+              <a href="#" class="govuk-link govuk-link--no-visited-state">Email from Customer (24.05.23).jpg</a>
+              {% elif param == 'Row 3' %}
+              Import permit (DK11223344)
+              <br>
+              <a href="#" class="govuk-link govuk-link--no-visited-state">Import permit (DK11223344).pdf</a>
+              {% endif %}
+              {% endfor %}
               {% endif %}
             </dd>
             <dd class="govuk-summary-list__actions">
