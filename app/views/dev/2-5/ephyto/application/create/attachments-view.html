@@ -72,17 +72,28 @@
 
       <h1 class="govuk-heading-xl">Supporting documents</h1>
 
-      <table class="govuk-table govuk-!-margin-bottom-5">
+      <table class="govuk-table govuk-!-margin-bottom-7">
         <caption class="govuk-table__caption"><span class="govuk-visually-hidden">Supporting documents for your phytosanitary certificate application</span></caption>
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th scope="col" class="govuk-table__header">Description</th>
             <th scope="col" class="govuk-table__header">File name</th>
-            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Actions</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Action</th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">
           <!-- Supporting documents (START) -->
+          {% if query.manualLinkOverride == "true" %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Another description of file</td>
+            <td scope="row" class="govuk-table__cell"><a href="#" class="govuk-link govuk-link--no-visited-state"><span class="govuk-visually-hidden">Download </span>Another filename.pdf</a></td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              <!-- <a href="attachments-add" class="govuk-link govuk-link--no-visited-state">Change <span class="govuk-visually-hidden">{{data.supportingDocument or "Filename.jpg"}}</span></a>
+              <br> -->
+              <a href="#" class="govuk-link govuk-link--no-visited-state">Delete <span class="govuk-visually-hidden">Another filename.pdf</span></a>
+            </td>
+          </tr>
+          {% endif %}
           {% set _deleteReturnLink = "attachments-view" %}
           {% if _totalDocumentsDisplayedCount | int == 1 %}
             {% set _deleteReturnLink = "task-list" %}
@@ -92,9 +103,9 @@
             <td class="govuk-table__cell">{% if data.fileDescription == "Add your own description" %}{{data.manualFileDescription or "Description of file"}}{% else %}{{data.fileDescription or "Description of file"}}{% endif %}</td>
             <td scope="row" class="govuk-table__cell"><a href="#" class="govuk-link govuk-link--no-visited-state"><span class="govuk-visually-hidden">Download </span>{{data.supportingDocument or "Filename.jpg"}}</a></td>
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              <a href="attachments-add" class="govuk-link govuk-link--no-visited-state">Change <span class="govuk-visually-hidden">{{data.supportingDocument or "Filename.jpg"}}</span></a>
-              <br>
-              <a href="attachments-delete?deleteReturnLink={{_deleteReturnLink}}" class="govuk-link govuk-link--no-visited-state">Delete <span class="govuk-visually-hidden">{{data.supportingDocument or "Filename.jpg"}}</span></a>
+              <!-- <a href="attachments-add" class="govuk-link govuk-link--no-visited-state">Change <span class="govuk-visually-hidden">{{data.supportingDocument or "Filename.jpg"}}</span></a>
+              <br> -->
+              <a href="attachments-delete?deleteReturnLink=task-list" class="govuk-link govuk-link--no-visited-state">Delete <span class="govuk-visually-hidden">{{data.supportingDocument or "Filename.jpg"}}</span></a>
             </td>
           </tr>
           {% endif %}
@@ -126,8 +137,8 @@
               {% set _deleteReturnLink = "import-permits" %}
             {% endif %}
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              <a href="import-permits-add?edit={{_id}}" class="govuk-link govuk-link--no-visited-state">Change <span class="govuk-visually-hidden">import permit {{data['importPermitNumber' + _id] or '123456789ABC'}}</span></a>
-              <br>
+              <!-- <a href="import-permits-add?edit={{_id}}" class="govuk-link govuk-link--no-visited-state">Change <span class="govuk-visually-hidden">import permit {{data['importPermitNumber' + _id] or '123456789ABC'}}</span></a>
+              <br> -->
               <a href="attachments-ip-delete?deleteReturnLink={{_deleteReturnLink}}&deleteID={{_id}}&count={{_importPermitCountDeleted}}" class="govuk-link govuk-link--no-visited-state">Delete <span class="govuk-visually-hidden">import permit {{data['importPermitNumber' + _id] or '123456789ABC'}}</span></a>
             </td>
           </tr>
@@ -136,8 +147,6 @@
           <!-- Import permits (END) -->
         </tbody>
       </table>
-
-      <p class="govuk-body govuk-!-margin-bottom-7"><a href="{% if data.import_permits ==  'Yes' %}import-permits-view{% else %}import-permits{% endif %}" class="govuk-link govuk-link--no-visited-state">View or add import permits</a></p>
 
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">
