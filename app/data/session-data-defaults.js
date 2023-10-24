@@ -42,7 +42,8 @@ module.exports = {
   "countries-full": countries,
   "countries-eu-ni": countries2,
   "addresses": addresses,
-  "addresses2": addresses2
+  "addresses2": addresses2,
+  "ephytoEmailNotifications": "All"
   // Insert values here
   
 }

@@ -23,7 +23,9 @@
 
 <div class="govuk-grid-row">
     
-  <div class="govuk-grid-column-three-quarters">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% set _notificationSetting = data["ephytoEmailNotifications"] %}
     
     <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-6">
       <h1 class="govuk-panel__title">You have successfully submitted your application{% if data.reforwarding %} for a re-forwarding certificate{% endif %}</h1>
@@ -35,6 +37,20 @@
       </div>
 
     </div>
+
+    {% if query.test == "true" %}
+    <p class="govuk-body" style="color:red">
+    {% if data.service == "ePhyto" %}
+      {% if _notificationSetting == "None" %}
+        [ePhyto - not opted in]
+      {% else %}
+        [ePhyto - opted in]
+      {% endif %}
+    {% else %}
+      [non ePhyto]
+    {% endif %}
+    </p>
+    {% endif %}
 
     <h2 class="govuk-heading-m">What happens next</h2>
     <ol class="govuk-list govuk-list--number">
