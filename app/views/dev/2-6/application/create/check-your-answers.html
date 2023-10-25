@@ -18,11 +18,12 @@
     {% set _ipcErrors = {
       "ipcError1": "You must add details for import phytosanitary certificate numbers",
       "ipcError2": "Select the repacking container type",
-      "ipcError3": "You must add details of what you are exporting before you can submit your application"
+      "ipcError3": "You must add details of what you are exporting before you can submit your application",
+      "ipcError4": "An import phytosanitary certificate which is linked to the updated commodity does not seem to be from any of the countries of origin listed for the commodity. Check that the details of your import phytosanitary certificates and commodities are all correct."
     }
     %}
 
-    {% if query.ipcError1 == "true" or query.ipcError2 == "true" or query.ipcError3 == "true" %}
+    {% if query.ipcError1 == "true" or query.ipcError2 == "true" or query.ipcError3 == "true" or query.ipcError4 == "true" %}
     <div class="govuk-error-summary" data-module="govuk-error-summary">
       <div role="alert">
         <h2 class="govuk-error-summary__title">
@@ -43,6 +44,11 @@
             {% if query.ipcError3 == "true" %}
             <li>
               <a href="#changeIPC2">{{_ipcErrors.ipcError3}}</a>
+            </li>
+            {% endif %}
+            {% if query.ipcError4 == "true" %}
+            <li>
+              <a href="#changeCommodity">{{_ipcErrors.ipcError4}}</a>
             </li>
             {% endif %}
           </ul>
@@ -279,7 +285,7 @@
           {% endif %}
         </thead>
         <tbody class="govuk-table__body" style="text-align: right;">
-          {% if query.pheatsError1 == "true" or query.prepop == "true" %}
+          {% if query.pheatsError1 == "true" or query.prepop == "true" or query.ipcError4 == "true"  %}
             {% include "../modules/_summary-plants-check-answers.html" %}
           {% else %}
             {% for commodity in data.commodities %}
