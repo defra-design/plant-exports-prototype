@@ -48,7 +48,7 @@
             {% endif %}
             {% if query.ipcError4 == "true" %}
             <li>
-              <a href="#changeCommodity">{{_ipcErrors.ipcError4}}</a>
+              <a href="#changeIPC3">{{_ipcErrors.ipcError4}}</a>
             </li>
             {% endif %}
           </ul>
@@ -285,7 +285,7 @@
           {% endif %}
         </thead>
         <tbody class="govuk-table__body" style="text-align: right;">
-          {% if query.pheatsError1 == "true" or query.prepop == "true" or query.ipcError4 == "true"  %}
+          {% if query.pheatsError1 == "true" or query.prepop == "true" %}
             {% include "../modules/_summary-plants-check-answers.html" %}
           {% else %}
             {% for commodity in data.commodities %}
@@ -504,6 +504,12 @@
       <!-- Re-forwarding import details. START -->
       {% if data.reforwarding %}
       <h2 class="govuk-heading-m govuk-!-margin-top-9">Import phytosanitary certificates</h2>
+
+      {% if query.ipcError4 == 'true' %}
+      <p id="ipc4-error" class="govuk-error-message">
+        <span class="govuk-visually-hidden">Error:</span> {{_ipcErrors.ipcError4}}
+      </p>
+      {% endif %}
       
       <table class="govuk-table govuk-!-margin-bottom-7" >
         <thead class="govuk-table__head">
@@ -522,6 +528,11 @@
             {% set _ipcError1 = "false" %}
             {% if query.ipcError1 == "true" and loop.last %}
               {% set _ipcError1 = "true" %}
+            {% endif %}
+
+            {% set _ipcError4 = "false" %}
+            {% if query.ipcError4 == "true" and loop.first %}
+              {% set _ipcError4 = "true" %}
             {% endif %}
 
             <tr class="govuk-table__row">
@@ -550,7 +561,7 @@
 
               <td class="govuk-table__cell" style="text-align: right;">
                 <p class="govuk-body govuk-!-margin-bottom-2">
-                  <a href="import-phyto-select-upload?edit={{_id}}&ipcNumber={{_id}}&changeanswers=true" class="govuk-link govuk-link--no-visited-state" {% if _ipcError1 == "true" %} id="changeIPC" aria-describedby="ipc1-error" {% endif %} >Change<span class="govuk-visually-hidden"> import certificate {{_number}}</span></a>
+                  <a href="import-phyto-select-upload?edit={{_id}}&ipcNumber={{_id}}&changeanswers=true" class="govuk-link govuk-link--no-visited-state" {% if _ipcError1 == "true" %} id="changeIPC" aria-describedby="ipc1-error" {% endif %} {% if _ipcError4 == "true" %} id="changeIPC3" aria-describedby="ipc4-error" {% endif %} >Change<span class="govuk-visually-hidden"> import certificate {{_number}}</span></a>
                 </p>
               </td>
 
