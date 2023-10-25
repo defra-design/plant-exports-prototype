@@ -15,6 +15,42 @@
 
   <div class="govuk-grid-column-three-quarters">
 
+    {% set _ipcErrors = {
+      "ipcError1": "You must add details for import phytosanitary certificate numbers",
+      "ipcError2": "Select the repacking container type",
+      "ipcError3": "You must add details of what you are exporting before you can submit your application"
+    }
+    %}
+
+    {% if query.ipcError1 == "true" or query.ipcError2 == "true" or query.ipcError3 == "true" %}
+    <div class="govuk-error-summary" data-module="govuk-error-summary">
+      <div role="alert">
+        <h2 class="govuk-error-summary__title">
+          There is a problem
+        </h2>
+        <div class="govuk-error-summary__body">
+          <ul class="govuk-list govuk-error-summary__list">
+            {% if query.ipcError1 == "true" %}
+            <li>
+              <a href="#changeIPC">{{_ipcErrors.ipcError1}}</a>
+            </li>
+            {% endif %}
+            {% if query.ipcError2 == "true" %}
+            <li>
+              <a href="#changeRepacking">{{_ipcErrors.ipcError2}}</a>
+            </li>
+            {% endif %}
+            {% if query.ipcError3 == "true" %}
+            <li>
+              <a href="#changeIPC2">{{_ipcErrors.ipcError3}}</a>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
     {% set _pheatsErrors = {
       "pheatsError1": "<<commodity row error>>",
       "pheatsError2": "This consignment does not match what you are authorised to send using PHEATS. To continue, you must answer 'no' to ‘Are you applying under PHEATS?’"
@@ -215,6 +251,12 @@
       <p class="govuk-body"><a href="input-method?change=yes&return_url=check-your-answers">Add more</a></p>
       {% elif data.commodity == "plants" %}
       <h2 class="govuk-heading-m" id="your-consignment">Your consignment</h2>
+
+      {% if query.ipcError3 == 'true' %}
+      <p id="ipc3-error" class="govuk-error-message">
+        <span class="govuk-visually-hidden">Error:</span> {{_ipcErrors.ipcError3}}
+      </p>
+      {% endif %}
       
       <table class="govuk-table govuk-!-margin-bottom-4">
         <thead class="govuk-table__head">
@@ -249,7 +291,7 @@
         </tbody>
       </table>
 
-      <p class="govuk-body"><a href="input-method?change=yes&return_url=check-your-answers">Add more</a></p>
+      <p class="govuk-body"><a href="input-method?change=yes&return_url=check-your-answers" {% if query.ipcError3 == 'true' %} id="changeIPC2" aria-describedby="ipc3-error" {% endif %}>Add more</a></p>
       {% elif data.commodity == "potatoes" %}
       <h2 class="govuk-heading-m">Your consignment</h2>
       
@@ -443,7 +485,9 @@
       {% if data.commodity == "grain" or data.commodity == "everything else" %}
       <p class="govuk-body"><a href="how-to-identify?change=yes&return_url=check-your-answers"{% if data.commodity == 'everything else' %} id="dynamic-add-more"{% endif %}>Add more</a></p>
       {% else %}
-      <p class="govuk-body"><a href="input-method?change=yes&return_url=check-your-answers">Add more</a></p>
+      <p class="govuk-body">
+        <a href="input-method?change=yes&return_url=check-your-answers" >Add more</a>
+      </p>
       {% endif %}
       {% endif %}
 
@@ -468,22 +512,39 @@
           {% for _number in data.ipcNumbers %}
             {% set _id = loop.index %}
             {% if data['ipcAdded'+_id] == 'true' or query.prepop == "true" %}
+
+            {% set _ipcError1 = "false" %}
+            {% if query.ipcError1 == "true" and loop.last %}
+              {% set _ipcError1 = "true" %}
+            {% endif %}
+
             <tr class="govuk-table__row">
-              <td class="govuk-table__cell">
+              <td class="govuk-table__cell {% if _ipcError1 == 'true' %} govuk-form-group--error {% endif %}" {% if _ipcError1 == 'true' %} style="padding-left:15px" {% endif %}>
+
+                {% if _ipcError1 == 'true' %}
+                <p id="ipc1-error" class="govuk-error-message">
+                  <span class="govuk-visually-hidden">Error:</span> {{_ipcErrors.ipcError1}}
+                </p>
+                {% endif %}
+
                 {{_number}}
               </td>
               <td class="govuk-table__cell">
+                {% if _ipcError1 != "true" %}
                 {{data['ipcCountry'+_id][0] or "Bahamas"}}
+                {% endif %}
               </td>
               <td class="govuk-table__cell">
+                {% if _ipcError1 != "true" %}
                 <a class="govuk-link govuk-link--no-visited-state" href="#">
                   {{data['ipcFile'+_id] or "file-name.pdf"}}
                 </a>
+                {% endif %}
               </td>
 
               <td class="govuk-table__cell" style="text-align: right;">
                 <p class="govuk-body govuk-!-margin-bottom-2">
-                  <a href="import-phyto-select-upload?edit={{_id}}&ipcNumber={{_id}}&changeanswers=true" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> import certificate {{_number}}</span></a>
+                  <a href="import-phyto-select-upload?edit={{_id}}&ipcNumber={{_id}}&changeanswers=true" class="govuk-link govuk-link--no-visited-state" {% if _ipcError1 == "true" %} id="changeIPC" aria-describedby="ipc1-error" {% endif %} >Change<span class="govuk-visually-hidden"> import certificate {{_number}}</span></a>
                 </p>
               </td>
 
@@ -494,22 +555,36 @@
       </table>
 
       <h2 class="govuk-heading-m govuk-!-margin-top-9">Were imported consignments repacked?</h2>
+      
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Repacked</dt>
+        <div class="govuk-summary-list__row {% if query.ipcError2 == 'true' %} govuk-form-group--error {% endif %} ">
+          <dt class="govuk-summary-list__key"  {% if query.ipcError2 == 'true' %} style="padding-left:15px" {% endif %} >
+            {% if query.ipcError2 == 'true' %}
+            <p id="ipc2-error" class="govuk-error-message">
+              <span class="govuk-visually-hidden">Error:</span> {{_ipcErrors.ipcError2}}
+            </p>
+            {% endif %}
+            Repacked
+          </dt>
           <dd class="govuk-summary-list__value">
-            {% set _packingValue = data['importCertPacking'] or 'New packaging' %}
-            {% if _packingValue == 'Original packaging' %}
-              Yes - original packaging
-            {% elif _packingValue == 'The consignment has not been repacked' %}
-              No
+            {% if query.ipcError2 == 'true' or query.prepop == "false" %}
+              <!-- blank -->
             {% else %}
-              Yes - new packaging
+              {% set _packingValue = data['importCertPacking'] or 'New packaging' %}
+              {% if _packingValue == 'Original packaging' %}
+                Yes - original packaging
+              {% elif _packingValue == 'The consignment has not been repacked' %}
+                No
+              {% else %}
+                Yes - new packaging
+              {% endif %}
             {% endif %}
           </dd>
           <dd class="govuk-summary-list__actions">
-            <a class="govuk-link" href="import-phyto-repack?changeanswers=true&return_url=check-your-answers">Change <span class="govuk-visually-hidden">repacking</span></a>
+            {% if query.ipcError3 != 'true' %}
+            <a class="govuk-link" href="import-phyto-repack?changeanswers=true&return_url=check-your-answers" {% if query.ipcError2 == 'true' %}id="changeRepacking" aria-describedby="ipc2-error"{% endif %} >Change <span class="govuk-visually-hidden">repacking</span></a>
+            {% endif %}
           </dd>
         </div>
 
@@ -1025,7 +1100,12 @@
         <dl class="govuk-summary-list govuk-!-margin-bottom-9">
           {% for _number in data.ipcNumbers %}
             {% set _id = loop.index %}
+            {% set _ipcError1 = "false" %}
+            {% if query.ipcError1 == "true" and loop.last %}
+              {% set _ipcError1 = "true" %}
+            {% endif %}
             {% if data['ipcAdded'+_id] == 'true' or query.prepop == "true" %}
+            {% if _ipcError1 != "true" %}
             <div class="govuk-summary-list__row">
               <dt class="govuk-summary-list__key">
                 File name
@@ -1041,6 +1121,7 @@
                 <a class="govuk-link" href="attachments?change=yes&return_url=check-your-answers&importCerts=true">Change<span class="govuk-visually-hidden"> supporting documents</span></a>
               </dd>
             </div>
+            {% endif %}
             {% endif %}
 
           {%- endfor %}
