@@ -934,18 +934,24 @@ module.exports = function(router) {
     }
 
     // Chris Harding (16.10.23) - Microsoft Dynamics 365: Issue ePhyto (issue ePhyto)
-    if (baseDir === "/dynamics/portal/issue-ephyto/when-to-issue-validation") {
+    if (baseDir === "/dynamics/portal/ephyto/when-to-issue-validation") {
 
       // Data objects to be retrieved and queried
       var whenToIssue = req.session.data.whenToIssue;
       
       // Issue the ePhyto ASAP
       if (whenToIssue == "Now") {
-        return res.redirect("certificate-issued");
+
+        req.session.data.ePhytoState = "submitted";
+
+        return res.redirect("confirmation");
       }
       // Delay issuing for the agreed Defra grace period (2 hours)
       else if (whenToIssue == "Delay by 2 hours") {
-        return res.redirect("delay-certificate-issue");
+
+        req.session.data.ePhytoState = "delayedIssue";
+
+        return res.redirect("confirmation-with-delay");
       }
       // Error validation - make sure user enters data into required fields
       else {
