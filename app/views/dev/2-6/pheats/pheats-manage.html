@@ -36,8 +36,8 @@
 
     <!-- Selected address -->
     {% set _addressID = data['address'] or 1 %}
-    {% set _address = data['addresses2'][0] %}
-    {% for _address2 in data['addresses2'] %}
+    {% set _address = data['addresses3'][0] %}
+    {% for _address2 in data['addresses3'] %}
       {% if _address2.id == _addressID %}
         {% set _address = _address2 %}
       {% endif %}
@@ -138,6 +138,11 @@
                   <strong class="govuk-tag govuk-tag--grey">
                     Denied
                   </strong>
+              {% elif _address.pheats.status == "withdrew" %}
+                  <!-- WITHDREW -->
+                  <strong class="govuk-tag govuk-tag--grey">
+                    Withdrew
+                  </strong>
               {% elif _address.pheats.status == "withtrader" %}
                   <!-- WITH TRADER -->
                   <strong class="govuk-tag govuk-tag--red">
@@ -213,7 +218,7 @@
     {% set _version = 'mvp' %}
 
     <!-- UPDATE or RESTART -->
-    {% if _address.pheats.status == "registered" or _address.pheats.status == "paused" or _address.pheats.status == "draft" or _address.pheats.status == "rejected" %}
+    {% if _address.pheats.status == "registered" or _address.pheats.status == "paused" or _address.pheats.status == "draft" or _address.pheats.status == "rejected" or _address.pheats.status == "withdrew" %}
     {% set _cyaLink = "pheats-cya-update?address=" + _addressID %}
     {% if _version == 'mvp' %}
       {% set _cyaLink = "pheats-update?address=" + _addressID %}
@@ -222,7 +227,7 @@
       {% set _cyaLink = "pheats-cya-restart?address=" + _addressID %}
     {% elif _address.pheats.status == "draft" %}
       {% set _cyaLink = "pheats-start-draft?address=" + _addressID %}
-    {% elif _address.pheats.status == "rejected" %}
+    {% elif _address.pheats.status == "rejected" or _address.pheats.status == "withdrew" %}
       {% set _cyaLink = "pheats-cya-reapply?address=" + _addressID %}
     {% endif %}
     <form method="post" novalidate action="{{_cyaLink}}">
@@ -292,6 +297,14 @@
       <!-- REJECTED -->
       {% if _address.pheats.status == "rejected" %}
       <p class="govuk-body govuk-!-margin-bottom">Your inspector can tell you why your application to join PHEATS was denied for this address.</p>
+      <button class="govuk-button govuk-!-margin-bottom-9" data-module="govuk-button">
+        Reapply to PHEATS
+      </button>
+      {% endif %}
+
+      <!-- WITHDREW -->
+      {% if _address.pheats.status == "withdrew" %}
+      <p class="govuk-body govuk-!-margin-bottom">You asked to withdraw from doing PHEATS at this address.</p>
       <button class="govuk-button govuk-!-margin-bottom-9" data-module="govuk-button">
         Reapply to PHEATS
       </button>

@@ -27,6 +27,7 @@ var countries = require('./countries-full.json');
 var countries2 = require('./countries-eu-ni.json');
 var addresses = require('./addresses.json');
 var addresses2 = require('./addresses-2.json');
+var addresses3 = require('./addresses-3.json');
 
 module.exports = {
   "applications" : applications,
@@ -43,6 +44,7 @@ module.exports = {
   "countries-eu-ni": countries2,
   "addresses": addresses,
   "addresses2": addresses2,
+  "addresses3": addresses3,
   "ephytoEmailNotifications": "All"
   // Insert values here
   

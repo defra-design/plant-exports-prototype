@@ -1141,7 +1141,7 @@ module.exports = function(router) {
     if (baseDir === "/pheats-applications") {
 
       //Order addresses by status (draft first)
-      req.session.data.addresses2.sort(function(a,b){
+      req.session.data.addresses3.sort(function(a,b){
 
         var returnValue = 0;
 
@@ -1186,6 +1186,13 @@ module.exports = function(router) {
                       returnValue = -1
                     } else if(a.pheats.status != 'rejected' && b.pheats.status == 'rejected') {
                       returnValue = 1
+                    } else {
+                      //WITHDREW
+                      if(a.pheats.status == 'withdrew' && b.pheats.status != 'withdrew') {
+                        returnValue = -1
+                      } else if(a.pheats.status != 'withdrew' && b.pheats.status == 'withdrew') {
+                        returnValue = 1
+                      }
                     }
                   }
                 }
@@ -1204,14 +1211,14 @@ module.exports = function(router) {
 
     //SUBMITTED
     if (baseDir === "/pheats-confirmation") {
-      req.session.data.addresses2[0].pheats.status = "pending"
+      req.session.data.addresses3[0].pheats.status = "pending"
     }
 
     //PAUSED
     if (baseDir === "/pheats-confirmation-pause") {
       var _addressID = req.session.data.address || "1"
-        for (var a = 0; a < req.session.data.addresses2.length; a++) {
-          var _address = req.session.data.addresses2[a]
+        for (var a = 0; a < req.session.data.addresses3.length; a++) {
+          var _address = req.session.data.addresses3[a]
           if(_addressID.toString() == _address.id.toString()){
             _address.pheats.status = "paused"
           }
@@ -1222,8 +1229,8 @@ module.exports = function(router) {
     if (baseDir === "/pheats-confirmation-restart") {
       var _amendments = req.session.data.pheatsChanges || "Yes"
       var _addressID = req.session.data.address || "1"
-        for (var a = 0; a < req.session.data.addresses2.length; a++) {
-          var _address = req.session.data.addresses2[a]
+        for (var a = 0; a < req.session.data.addresses3.length; a++) {
+          var _address = req.session.data.addresses3[a]
           if(_addressID.toString() == _address.id.toString()){
             if(_amendments == "No"){
               _address.pheats.status = "withtrader"
@@ -1239,8 +1246,8 @@ module.exports = function(router) {
     if (baseDir === "/pheats-confirmation-reapply") {
       var _amendments = req.session.data.pheatsChanges || "Yes"
       var _addressID = req.session.data.address || "1"
-        for (var a = 0; a < req.session.data.addresses2.length; a++) {
-          var _address = req.session.data.addresses2[a]
+        for (var a = 0; a < req.session.data.addresses3.length; a++) {
+          var _address = req.session.data.addresses3[a]
           if(_addressID.toString() == _address.id.toString()){
             if(_amendments == "No"){
               _address.pheats.status = "withtrader"
@@ -1255,8 +1262,8 @@ module.exports = function(router) {
     //UPDATED
     if (baseDir === "/pheats-confirmation-update") {
       var _addressID = req.session.data.address || "1"
-        for (var a = 0; a < req.session.data.addresses2.length; a++) {
-          var _address = req.session.data.addresses2[a]
+        for (var a = 0; a < req.session.data.addresses3.length; a++) {
+          var _address = req.session.data.addresses3[a]
           if(_addressID.toString() == _address.id.toString()){
             _address.pheats.status = "updated"
           }
