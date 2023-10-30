@@ -48,7 +48,7 @@
 
 
     <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-6">
-      <h1 class="govuk-panel__title">You have successfully submitted your application{% if data.reforwarding %} for a re-forwarding certificate{% endif %}</h1>
+      <h1 class="govuk-panel__title">You have successfully submitted your application{% if data.reforwarding == "1" %} for a re-forwarding certificate{% endif %}</h1>
 
       <div class="govuk-panel__body">
         The <abbr title="Animal and Plant Health Agency">APHA</abbr> reference is
@@ -74,12 +74,13 @@
 
     <ol class="govuk-list govuk-list--number">
 
-      <li>We will check and process your application{% if data.reforwarding %} and decide if an inspection is necessary{% endif %}.</li>
+      {% if data.reforwarding == "1" %}<li>We will decide if an inspection is necessary.</li>{% endif %}
+
       <li>We will arrange an inspection of your consignment within 7 working days.</li>
 
       <!-- NON ephyto -->
       {% if _ePhyto == "false" %}
-        <li>If there are no problems, we will issue your paper {% if data.reforwarding %}re-forwarding{% endif %} certificate by post.</li>
+        <li>If there are no problems, we will issue your paper {% if data.reforwarding == "1" %}re-forwarding{% endif %} certificate.</li>
       {% endif %}
 
       <!-- EPHYTO -->
