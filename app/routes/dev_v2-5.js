@@ -633,7 +633,7 @@ module.exports = function(router) {
       var error1 = "";
       var error2 = "";
       var error3 = "";
-      var error4 = "";
+      // var error4 = "";
       
       // Error validation - make sure user enters data into required fields
       if (name == "" || name == null) {
@@ -651,14 +651,14 @@ module.exports = function(router) {
         error3 = "&error3=true";
       }
 
-      if (consigneeAddressLine5 == "" || consigneeAddressLine5 == null) {
-        errorCount++;
-        error4 = "&error4=true";
-      }
+      // if (consigneeAddressLine5 == "" || consigneeAddressLine5 == null) {
+      //   errorCount++;
+      //   error4 = "&error4=true";
+      // }
 
       // Routing - decide where to direct users to
       if (errorCount > 0) {
-        return res.redirect("consignee-add?change=yes&error=true" + error1 + error2 + error3 + error4);
+        return res.redirect("consignee-add?change=yes&error=true" + error1 + error2 + error3);
       }
       else if (return_url) {
         return res.redirect(return_url + "?return_url=");
