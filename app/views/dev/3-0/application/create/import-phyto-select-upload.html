@@ -1,0 +1,126 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if query.deleted %}
+        <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+            <div class="govuk-notification-banner__header">
+                <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+                Success
+                </h2>
+            </div>
+            <div class="govuk-notification-banner__content">
+              <h3 class="govuk-notification-banner__heading">
+                Certificate deleted
+              </h3>
+              <p class="govuk-body">Import certificate number {{data['importCertNumber' + query.deleted] or '1234567'}} has been deleted.</p>
+            </div>
+        </div>
+      {% endif %}
+
+      {% set _link = 'import-phyto-select-uploaded' %}
+      {% if query.changeanswers == 'true' %}
+        {% set _link = 'check-your-answers' %}
+      {% endif %}
+
+      <!-- Selected ipc number -->
+      {% set _ipcID = data['ipcNumber'] or 1 %}
+      {% if query.edit %}
+        {% set _ipcID = query.edit %}
+      {% endif %}
+
+      {% set _selectedipcNumber = data['ipcNumbers'][0] %}
+      {% for _ipcNumber2 in data['ipcNumbers'] %}
+        {% if loop.index == _ipcID %}
+          {% set _selectedipcNumber = _ipcNumber2 %}
+        {% endif %}
+      {% endfor %}
+
+      <form action="{{_link}}" method="post" novalidate>
+        <div class="govuk-form-group  govuk-!-margin-bottom-9">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+              <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">
+                {% if query.edit %}
+                  Edit details for import phytosanitary certificate number {{_selectedipcNumber}}
+                {% else %}
+                  Add details
+                {% endif %}
+              </h1>
+            </legend>
+          </fieldset>
+
+          {% if query.edit %}
+            <!-- nothing -->
+          {% else %}
+            <p class="govuk-body">You're adding details for import phytosanitary certificate {{_selectedipcNumber}}.</p>
+          {% endif %}
+          
+
+          <!-- prepop values if editing -->
+          {% set _prepopCountry = '' %}
+          {% for param in data['importCertCountry' + _id] %}
+            {% set _prepopCountry = param %}
+          {% endfor %}
+          {% if query.edit %}
+            {% set _prepopCountry = _prepopCountry or 'BS' %}
+            {% if _prepopCountry == 'none' %}
+              {% set _prepopCountry = 'BS' %}
+            {% endif %}
+          {% endif %}
+
+
+          <!-- Sets a value to say whether details were added for this number in the loop or not -->
+          <input id="ipcAdded{{_ipcID}}" name="ipcAdded{{_ipcID}}" type="hidden" value="true">
+
+          <!-- COUNTRY -->
+          {% set country_module_label = "Country of origin"%}
+          {% set module_name = "country_origin"%}
+          {% block country %}{% include "../modules/_country-select-import-2.html" %}{% endblock %}
+
+          <!-- FILE -->
+          <div class="govuk-form-group ">
+            <h2 class="govuk-heading-m">Upload the import phytosanitary certificate</h2>
+            <p class="govuk-body">The file must:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>be in PDF format</li>
+              <li>be fewer than 3 megabytes (3MB)</li>
+            </ul>
+            {{ govukFileUpload({
+              id: "ipcFile"+_ipcID,
+              name: "ipcFile"+_ipcID,
+              label: {
+                text: "Upload file"
+              }
+            }) }}
+          </div>
+
+        </div>
+
+        {{ govukButton({
+          text: "Save and continue"
+        }) }}
+
+
+      </form>
+      {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+    </div>
+  </div>
+  
+
+{% endblock %}

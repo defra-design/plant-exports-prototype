@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% set isEmailTemplate = true %}
+
+{% set serviceName = "" %}
+
+{% block pageTitle %}
+{% endblock %}
+
+{% block beforeContent %}
+{% endblock %}
+
+<!-- Selected address -->
+{% set _addressID = data['address'] or 1 %}
+{% set _address = data['addresses3'][0] %}
+{% for _address2 in data['addresses3'] %}
+  {% if _address2.id == _addressID %}
+    {% set _address = _address2 %}
+  {% endif %}
+{% endfor %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <p class="govvuk-body">You’ve applied to join the plant health exports audited trader scheme (PHEATS) for this address:</p>
+
+    <p class="govvuk-body">
+      {{_address.address1}}<br>
+      {{_address.address2}}<br>
+      {{_address.address3}}<br>
+      {{_address.address4}}<br>
+      {{_address.postcode}}
+    </p>
+
+    <h2 class="govuk-heading-m">What happens next</h2>
+
+    <p class="govvuk-body">We’ll email the responsible person and all authorised people to ask them to agree to the terms and conditions. It’s important that they respond to this email. Your application will not move forward until they have all agreed to the terms and conditions.</p>
+    
+    <p class="govvuk-body">We will then arrange for your team to do training and for a site visit.</p>
+
+    <h2 class="govuk-heading-m">How to speed up your application</h2>
+  
+    <p class="govvuk-body">You can help the application process go quickly by encouraging the responsible person and all authorised people to respond to the email asking them to agree to the terms and conditions.</p>
+
+    <p class="govvuk-body">It’s also a good idea to <a class="govuk-link govuk-link--no-visited-state" href="https://planthealthportal.defra.gov.uk/trade/exports/exports-to-the-eu/pheats/pheats-user-guide/#Inspecting" target="_blank" rel="noreferrer noopener">get your inspection station and holding point set up</a> properly. If these areas aren’t set up properly, this can delay your application.</p>
+
+    <h2 class="govuk-heading-m">Contact us</h2>
+
+    <p class="govvuk-body">If you have any questions about your application contact APHA:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>telephone: 0300 1000 313</li>
+      <li>email: <a class="govuk-link govuk-link--no-visited-state" href="mailto:planthealth.info@apha.gov.uk">planthealth.info@apha.gov.uk</a></li>
+    </ul>
+
+    <p class="govvuk-body">Regards,</p>
+    <p class="govvuk-body">Animal and Plant Health Agency (APHA)</p>
+    <p class="govvuk-body">Centre for International Trade – York</p>
+
+  </div>
+</div>
+{% endblock %}

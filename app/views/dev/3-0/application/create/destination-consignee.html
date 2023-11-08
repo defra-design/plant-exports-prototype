@@ -1,0 +1,148 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.reissue == "yes" %}Make your changes - Re-issue a phytosanitary certificate - {{serviceName}} - GOV.UK{% else %}{% if data.build == "development" %}Display question - Exports application - GOV.UK{% else %}Who will receive this consignment? - {{serviceName}} - GOV.UK{% endif %}{% endif %}
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{# set label as bold #}
+{% set label_class = "govuk-label govuk-!-font-weight-bold" %}
+{% if data.build != "development" %}
+{% set label_class = "govuk-label" %}
+{% endif %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if data.journey == "coc" %}
+    <form action="{{query.return_url or 'complete-phyto'}}" method="post">
+    {% else %}
+    {% if data.reissue == "yes" %}
+    <form action="../re-issue/amend-your-certificate?id={{data.id}}&is_group={{data.is_group}}&commodity={{data.commodity or 'plants'}}&reissue_certificate_data_pfp=draft" method="post">
+    {% else %}
+    <form action="{{query.return_url or '../create/task-list'}}" method="post">
+    {% endif %}
+    {% endif %}
+      <fieldset class="govuk-fieldset">
+        {% if data.reissue == "yes" %}
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
+          <span class="govuk-caption-xl">Consignee details</span>
+          Make your changes
+        </legend>
+        {% else %}
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
+          <h1 class="govuk-fieldset__heading">Who will receive this {% if data.reforwarding %}<br>re-forwarding{% endif %} consignment?</h1>
+        </legend>
+        {% endif %}
+        {% if data.build == "development" %}
+        {% if data.commodity != "bulbs" %}
+        <p class="govuk-hint">This is the consignee - the importer or customer who receives your consignment when it arrives in the importing country</p>
+        {% endif %}
+
+        {% if data.commodity == "bulbs" %}
+        {% if data.reissue != "yes" %}
+        <div class="govuk-form-group">
+          <label class="{{label_class}}" for="consignee-import-permit">Import permit number</label>
+          <span id="consignee-import-permit-hint" class="govuk-hint">If you have been given an import permit by the destination country, enter the number here</span>
+          <input class="govuk-input" id="consignee-import-permit" name="consignee_import_permit" type="text" aria-describedby="consignee-import-permit-hint" value="{{data.consignee_import_permit}}">
+        </div>
+        {% endif %}
+        {% endif %}
+
+        <div class="govuk-form-group">
+          <label class="{{label_class}}" for="consignee-name">Name of the consignee</label>
+          <input class="govuk-input" id="consignee-name" name="consignee_name" type="text" value="{{data.consignee_name}}">
+        </div>
+
+        <div class="govuk-form-group">
+          {% if data.commodity == "potatoes" %}
+          <label class="{{label_class}}" for="consignee-address">Consignee Address</label>
+          {% else %}
+          <label class="{{label_class}}" for="consignee-address">Address of the consignee</label>
+          {% endif %}
+          <textarea class="govuk-textarea" id="consignee-address" name="consignee_address" rows="3">{{data.consignee_address}}</textarea>
+        </div>
+
+        {% if data.commodity == "grain" %}
+        <div class="govuk-form-group">
+          <label class="{{label_class}}" for="consignee_more_detail">Further information{% if data.reforwarding %} or additional declarations{% endif %}</label>
+          <span id="consignee_more_detail-hint" class="govuk-hint">Anything you put here will be added to your certificate. If the destination country requires information to be provided in foreign language translation, you should enter it here</span>
+          <textarea class="govuk-textarea" id="consignee_more_detail" name="consignee_more_detail" rows="5" aria-describedby="consignee_more_detail-hint">{{data.consignee_more_detail}}</textarea>
+        </div>
+        {% endif %}
+
+        {% if data.commodity != "bulbs" and data.commodity != "seeds" %}
+        {% if data.reissue != "yes" %}
+        <div class="govuk-form-group">
+          <label class="{{label_class}}" for="consignee-import-permit">Import permit number</label>
+          <span id="consignee-import-permit-hint" class="govuk-hint">If you have been given an import permit by the destination country, enter the number here</span>
+          <input class="govuk-input" id="consignee-import-permit" name="consignee_import_permit" type="text" aria-describedby="consignee-import-permit-hint" value="{{data.consignee_import_permit}}">
+        </div>
+        {% endif %}
+        {% endif %}
+
+        {% else %}
+        <p class="govuk-hint">The consignee is the importer or customer who receives your consignment when it arrives in the destination country</p>
+
+        <div class="govuk-form-group">
+          <label class="{{label_class}}" for="consignee_name">Name of the consignee</label>
+          <input class="govuk-input" id="consignee_name" name="consignee_name" type="text" value="{{data.consignee_name}}">
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="{{label_class}}" for="consignee_address">Address of the consignee</label>
+          <textarea class="govuk-textarea" id="consignee_address" name="consignee_address" rows="5">{{data.consignee_address}}</textarea>
+        </div>
+
+        {% if data.commodity == "grain" %}
+        <div class="govuk-form-group">
+          <label class="{{label_class}}" for="consignee_more_detail">Further information{% if data.reforwarding %} or additional declarations{% endif %} (optional)</label>
+          <span id="consignee_more_detail-hint" class="govuk-hint">Anything you put here will be added to your certificate. If the destination country requires information to be provided in foreign language translation, you should enter it here</span>
+          <textarea class="govuk-textarea" id="consignee_more_detail" name="consignee_more_detail" rows="5" aria-describedby="consignee_more_detail-hint">{{data.consignee_more_detail}}</textarea>
+        </div>
+        {% endif %}
+
+        {% if data.reissue != "yes" %}
+        <div class="govuk-form-group">
+          <label class="{{label_class}}" for="consignee-import-permit">Import permit number (optional)</label>
+          <span id="consignee-import-permit-hint" class="govuk-hint">
+            If you have been given an import permit by the destination country, enter the number here. You can upload the import permit as a supporting document later on in this application
+          </span>
+          <input class="govuk-input" id="consignee-import-permit" name="consignee_import_permit" type="text" aria-describedby="consignee-import-permit-hint" value="{{data.consignee_import_permit}}">
+        </div>
+        {% endif %}
+        {% endif %}
+
+      </fieldset>
+      
+      <div class="govuk-button-group{% if data.reissue != 'yes' %} govuk-!-margin-bottom-9{% endif %}">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+        {% if data.reissue == "yes" %}
+        <a class="govuk-link app-button--link" href="../../application-re-issue?id={{data.id}}&is_group={{data.is_group}}">Cancel</a>
+        {% endif %}
+      </div>
+
+      <!-- Session data hook to update the task list so that this section is marked as 'COMPLETED' -->
+      <div class="govuk-form-group" hidden>
+        <label class="govuk-label" for="consignee_task_list_data">Task list section URL</label>
+        <input class="govuk-input" id="consignee_task_list_data" name="consignee_task_list_data" type="text" value="Complete">
+      </div>
+
+      {% if data.reissue != "yes" %}
+      {% block continueLater %}
+			{% include "../modules/_save-continue-later.html" %}
+			{% endblock %}
+      {% endif %}
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

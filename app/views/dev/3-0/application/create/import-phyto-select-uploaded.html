@@ -1,0 +1,174 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <h1 class="govuk-heading-xl govuk-!-margin-top-">Import phytosanitary certificates</h1>
+
+      <p class="govuk-body">Here are the import phytosanitary certificates you have uploaded so far.</p>
+
+      <table class="govuk-table govuk-!-margin-bottom-7" >
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Import phytosanitary certificate number </th>
+            <th class="govuk-table__header" scope="col">Origin</th>
+            <th class="govuk-table__header" scope="col">File name</th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          {% set _addedOne = false %}
+          {% for _number in data.ipcNumbers %}
+            {% set _id = loop.index %}
+            {% if data['ipcAdded'+_id] == 'true' %}
+            {% set _addedOne = true %}
+            <tr class="govuk-table__row">
+              <td class="govuk-table__cell">
+                {{_number}}
+              </td>
+              <td class="govuk-table__cell">
+                {{data['ipcCountry'+_id][0] or "Bahamas"}}
+              </td>
+              <td class="govuk-table__cell">
+                <a class="govuk-link govuk-link--no-visited-state" href="#">
+                  {{data['ipcFile'+_id] or "file-name.pdf"}}
+                </a>
+              </td>
+
+              <td class="govuk-table__cell" style="text-align: right;">
+                <p class="govuk-body govuk-!-margin-bottom-2">
+                  <a href="import-phyto-select-upload?edit={{_id}}&ipcNumber={{_id}}" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> import certificate {{_number}}</span></a>
+                </p>
+              </td>
+
+            </tr>
+            {% endif %}
+          {% endfor %}
+          {% if _addedOne == false %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              RC-NL-123-456-789-0
+            </td>
+            <td class="govuk-table__cell">
+              Bahamas
+            </td>
+            <td class="govuk-table__cell">
+              <a class="govuk-link govuk-link--no-visited-state" href="#">
+                file-name.pdf
+              </a>
+            </td>
+
+            <td class="govuk-table__cell" style="text-align: right;">
+              <p class="govuk-body govuk-!-margin-bottom-2">
+                <a href="import-phyto-select-upload?edit=1&ipcNumber=1" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> import certificate {{_number}}</span></a>
+              </p>
+            </td>
+
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+
+
+      <!-- Selected address -->
+
+      <!-- {% for _defaultipcNumber in data['ipcNumbers'] %}
+
+          {% set _id = loop.index %}
+          {{_id}}<br>
+          {{_defaultipcNumber}}<br>
+          saved values:<br>
+          - data.ipcAdded{{_id}} = {{data['ipcAdded'+_id]}}<br>
+          - data.ipcCountry{{_id}} = {{data['ipcCountry'+_id] or "dave country"}}<br>
+          - data.ipcFile{{_id}} = {{data['ipcFile'+_id] or "dave file"}}<br>
+
+      {% endfor %} -->
+
+
+
+
+
+      <!-- IF there are still some to add details for. START. -->
+      {% set _numbersRemaining = 0 %}
+      {% for _number in data.ipcNumbers %}
+        {% if data['ipcAdded'+loop.index] != 'true' %}
+          {% set _numbersRemaining = _numbersRemaining + 1 %}
+        {% endif %}
+      {% endfor %}
+      {% if _numbersRemaining > 0 %}
+      <form method="post" novalidate>
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              <h1 class="govuk-fieldset__heading">
+                Which import phytosanitary certificate will you add details for next?
+              </h1>
+            </legend>
+            <!-- <div id="contact-hint" class="govuk-hint">
+              Select one option.
+            </div> -->
+            <div class="govuk-radios" data-module="govuk-radios">
+
+
+              {% for _number in data.ipcNumbers %}
+                {% if data['ipcAdded'+loop.index] != 'true' %}
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="ipcNumber{{loop.index}}" name="ipcNumber" type="radio" value="{{loop.index}}~import-phyto-select-upload">
+                  <label class="govuk-label govuk-radios__label" for="ipcNumber{{loop.index}}">
+                    {{_number}}
+                  </label>
+                </div>
+                {% endif %}
+              {% endfor %}
+
+              <div class="govuk-radios__divider">or</div>
+
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="ipcNumberLater" name="ipcNumber" type="radio" value="later~import-phyto-repack">
+                <label class="govuk-label govuk-radios__label" for="ipcNumberLater">
+                  I will add details later
+                </label>
+              </div>
+             
+            </div>
+          </fieldset>
+        </div>
+        {{ govukButton({
+          text: "Save and continue"
+        }) }}
+      </form>
+      {% else %}
+      <form action="import-phyto-repack" method="post" novalidate>
+        {{ govukButton({
+          text: "Save and continue"
+        }) }}
+      </form>
+      {% endif %}
+      <!-- IF there are still some to add details for. END. -->
+
+
+
+
+
+
+      {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+    </div>
+  </div>
+  
+
+{% endblock %}

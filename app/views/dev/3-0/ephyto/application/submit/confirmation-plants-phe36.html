@@ -1,0 +1,152 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.build == "development" %}Confirmation - Exports application{% else %}You have successfully submitted your application - {{serviceName}}{% endif %} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+{% endblock %}
+
+{% block content %}
+<style>
+
+  /* Needs extracting and adding to the external Sass or CSS */
+  .govuk-feedback-box {
+    padding: 20px;
+    background-color: lightgray;
+    border-left-color: #666;
+  }
+
+</style>
+
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    {% set _notificationSetting = data["ephytoEmailNotifications"] %}
+
+    {% set _ePhyto = "false" %}
+    {% set _ePhytoOptedIn = "false" %}
+    {% set _ePhytoOptedOut = "false" %}
+
+    {% if data.service == "ePhyto" %}
+      <!-- ephyto -->
+      {% set _ePhyto = "true" %}
+      {% if _notificationSetting == "None" %}
+        <!-- ephyto opted out -->
+        {% set _ePhytoOptedOut = "true" %}
+      {% else %}
+        <!-- ephyto opted in -->
+        {% set _ePhytoOptedIn = "true" %}
+      {% endif %}
+    {% else %}
+      <!-- [non ePhyto] -->
+    {% endif %}
+    
+    <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-6">
+      <h1 class="govuk-panel__title">You have successfully submitted your application {% if data.pheats_check == "yes" %}under PHEATS {% endif %}{% if data.reforwarding == "1" %}for a re-forwarding certificate{% endif %}{% if data.journey == "coc" %}for a conformity certificate{% endif %}</h1>
+
+      <div class="govuk-panel__body">
+        The <abbr title="Animal and Plant Health Agency">APHA</abbr> reference is
+        <br>
+        <strong class="bold">1721 14800 4809</strong>
+      </div>
+
+    </div>
+
+    {% if _ePhyto == "true" %}
+    <div class="govuk-inset-text">
+      <p class="govuk-body govuk-!-margin-bottom-1">You will not get a paper certificate.</p>
+      <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="../../guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#digital-phytosanitary-certificates" target="_blank">Read more about ePhyto (opens in new tab)</a></p>
+    </div>
+    {% endif %}
+
+    <h2 class="govuk-heading-m">What happens next</h2>
+    <ol class="govuk-list govuk-list--number">
+
+        {% if data.pheats_check != "yes" %}
+          {% if data.reforwarding == "1" %}
+            <li>We will decide if an inspection is necessary. If we decide that you need an inspection, the inspector will contact you.</li>
+            <li>If an inspection is necessary, we will arrange it within 7 working days.</li>
+          {% else %}
+            {% if data.journey != "coc" %}
+            <li>We will arrange an inspection of your consignment within 7 working days.</li>
+            {% else %}
+            <li>If an inspection is required, we will arrange one.</li>
+            {% endif %}
+          {% endif %}
+        {% endif %}
+
+        <!-- NON ephyto -->
+        {% if _ePhyto == "false" %}
+        <li>If there are no problems, we will issue your paper {% if data.reforwarding == "1" %}re-forwarding{% endif %} certificate.</li>
+        {% endif %}
+
+        <!-- EPHYTO -->
+        {% if _ePhyto == "true" %}
+
+        <!-- OPTED OUT -->
+        {% if _ePhytoOptedOut == "true" %}
+          <li>Your applications page will show when your digital certificate is issued. If you'd prefer to get an email, go to <a href="../../account/notifications" class="govuk-link govuk-link--no-visited-state">manage your email settings</a>.</li>
+        {% endif %}
+
+        {% if _ePhytoOptedIn == "true" %}
+        <li>We'll send an email to your.email@email.com when your digital certificate is issued and sent. If other users get email notifications from this account, we'll email them too.
+          <br>
+          <a href="../../account/notifications" class="govuk-link govuk-link--no-visited-state">Manage email settings</a>
+        </li>
+        {% endif %}
+
+        <li>You do not need to print or email your digital certificate. We'll make it available to anyone that needs to see it.</li>
+
+        {% endif %}
+
+        <li>We will then send you an invoice.</li>
+
+      
+      </ol>
+
+      
+    
+    {# Need to check conditionals here: ONLY display for phyto #}
+    {% if data.build != "development" %}
+    {% if (data.reuse !=  "yes") %}
+    {% include "../modules/_confirmation_applyforcoc.html" %}
+    {% endif %}
+    {% endif %}
+  
+    {% if data.service != "ePhyto" %}
+    <p class="govuk-body govuk-!-margin-bottom-2">We'll only contact you if there is a problem with your application.</p>
+    {% endif %}
+
+    <form action="{% if data.route == 'new' %}../../dashboard-one{% else %}../../dashboard-submitted{% endif %}" method="post">
+      <button class="govuk-button govuk-!-margin-top-2 govuk-!-margin-bottom-7" data-module="govuk-button">View your applications</button>
+
+      <!-- Session data hook to update the dashboard so that it knows a new application has been submitted -->
+      <div class="govuk-form-group" hidden>
+        <label class="govuk-label" for="application_submission_data">Application submission status</label>
+        <input class="govuk-input" id="application_submission_data" name="application_submission_data" type="text" value="submitted">
+      </div>
+
+    </form>
+
+    <p class="govuk-body">Find out <a href="../../guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="{% if data.build == 'development' %}_self{% else %}_blank{% endif %}">what fees you {% if data.build == "development" %}need to pay{% else %}will pay (opens in new tab){% endif %}</a> for this application.</p>
+    <h2 class="govuk-heading-m govuk-!-padding-top-4">If you need help</h2>
+    <p class="govuk-body">Contact us quoting your <abbr title="Animal and Plant Health Agency">APHA</abbr> reference <strong>1721 14800 4809</strong>{% if data.build == "development" %}:{% else %} on:{% endif %}</p>
+    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-8">
+      <li><span id="phoneNumber">0300 1000 313</span>, Monday to Sunday 7am to 7pm</li>
+      <li><a href="mailto:planthealth.info@apha.gov.uk" class="govuk-link" id="emailLink">planthealth.info@apha.gov.uk</a></li>
+    </ul>
+
+    <div class="govuk-feedback-box govuk-!-margin-top-6">
+      <h2 class="govuk-heading-m">Give feedback on this service</h2>
+      <p class="govuk-body">Take a 3 minute survey about your application so that we can improve the service.{% if data.build == "development" %} The survey will open in a new tab.{% endif %}</p>
+      <p class="govuk-body"><a href="https://defragroup.eu.qualtrics.com/jfe/form/SV_1RDraVxZ03Ja2qy" class="govuk-link" target="_blank" class="govuk-link">Give feedback{% if data.build == "development" %}{% else %} (opens in new tab){% endif %}</a></p>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

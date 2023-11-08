@@ -1,0 +1,84 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if query.error == "true" %}Error: {% endif %}Make your changes - Re-issue a phytosanitary certificate - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if query.error == "true" %}
+    <div class="govuk-error-summary" data-module="govuk-error-summary" tabindex="-1" autofocus>
+      
+      <div role="alert">
+        <h2 class="govuk-error-summary__title">There is a problem</h2>       
+        <div class="govuk-error-summary__body">
+          <ul class="govuk-list govuk-error-summary__list">
+            {% if query.error1 == "true" %}
+            <li><a href="#quantity">You cannot increase the quantity, you can only decrease it</a></li>
+            {% endif %}
+            {% if query.error2 == "true" %}
+            <li><a href="#number_of_packages">You cannot increase the number of packages, you can only decrease it</a></li>
+            {% endif %}
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+    {% endif %}
+
+    <form action="how-to-identify-3-validation" method="post">
+      <fieldset class="govuk-fieldset" aria-describedby="your-consignment-hint">
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+          <span class="govuk-caption-xl">Your consignment</span>
+          Make your changes
+        </legend>
+
+        <div id="your-consignment-hint" class="govuk-hint govuk-!-margin-top-6">
+          You are changing the commodity described as: <strong>Cabbage 'Durham Early'</strong>
+        </div>
+        
+        <div class="govuk-form-group{% if query.error1 == 'true' %} govuk-form-group--error{% endif %} govuk-!-margin-top-6">
+          <label class="govuk-label" for="quantity3">Net quantity, in tonnes</label>
+
+          <div id="quantity-hint" class="govuk-hint">
+            Net quantity means the quantity of commodity without including the weight or volume of the packaging. For example, 50 kilograms
+          </div>
+
+          {% if query.error1 == "true" %}
+          <p id="quantity-input-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> You cannot increase the quantity, you can only decrease it</p>
+          {% endif %}
+          <input class="govuk-input{% if query.error1 == 'true' %} govuk-input--error{% endif %} govuk-input--width-5" id="quantity3" name="quantity3" type="text" aria-describedby="quantity-hint{% if query.error1 == 'true' %} quantity-input-error{% endif %}" value="{% if query.change == 'yes' %}{{data.quantity3 or '17'}}{% endif %}">
+          <span class="govuk-body" aria-hidden="true">Tonnes</span>
+        </div>
+
+        <div class="govuk-form-group{% if query.error2 == 'true' %} govuk-form-group--error{% endif %}">
+          <label class="govuk-label" for="number_of_packages">Number of packages</label>
+          {% if query.error2 == "true" %}
+            <p id="number_of_packages-input-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> You cannot increase the number of packages, you can only decrease it</p>
+            {% endif %}
+          <input class="govuk-input{% if query.error2 == 'true' %} govuk-input--error{% endif %} govuk-input--width-5" id="number_of_packages" name="number_of_packages3" type="packaging_type"{% if query.error2 == 'true' %}aria-describedby="number_of_packages-input-error"{% endif %} value="{% if query.change == 'yes' %}{{data.number_of_packages3 or '68'}}{% endif %}">
+        </div>
+
+      </fieldset>
+
+      <div class="govuk-button-group">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+        <a class="govuk-link app-button--link" href="../../../application-re-issue?id={{data.id}}&is_group={{data.is_group}}">Cancel</a>
+      </div>
+
+    </form>
+
+  </div>
+  
+</div>
+{% endblock %}
