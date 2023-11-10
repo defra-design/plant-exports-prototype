@@ -36,18 +36,18 @@
             {% if data.reforwarding %}
             Re-forwarding phytosanitary certificate for 
             {% if data.build == "development" %}
-            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% else %}{{data.commodity or data.id | appInformationV6('commodity_info') or "plants"}}{% endif %}
+            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% else %}{{data.commodity or data.id | appInformationV7('commodity_info') or "plants"}}{% endif %}
             {% else %}
-            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "seeds" %}seeds for planting{% elif data.commodity == "grain" %}unprocessed cereal grains{% else %}{{data.commodity or data.id | appInformationV6('commodity_info') or "plants"}}{% endif %}
+            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "seeds" %}seeds for planting{% elif data.commodity == "grain" %}unprocessed cereal grains{% else %}{{data.commodity or data.id | appInformationV7('commodity_info') or "plants"}}{% endif %}
             {% endif %}
             {% elif data.journey == "coc" %}
             Certificate of conformity
             {% else %}
             Phytosanitary certificate{% if data.commodity == "everything else" and data.subCommodity == "something else"%}{% else %} for{% endif %} 
             {% if data.build == "development" %}
-            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "everything else" %}{% if data.subCommodity != "something else" %}{{data.subCommodity or "clay"}}{% endif %}{% else %}{{data.commodity or data.id | appInformationV6('commodity_info') or "plants"}}{% endif %}
+            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "everything else" %}{% if data.subCommodity != "something else" %}{{data.subCommodity or "clay"}}{% endif %}{% else %}{{data.commodity or data.id | appInformationV7('commodity_info') or "plants"}}{% endif %}
             {% else %}
-            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "seeds" %}seeds for planting{% elif data.commodity == "grain" %}unprocessed cereal grains{% elif data.commodity == "everything else" %}{% if data.subCommodity != "something else" %}{{data.subCommodity or "clay"}}{% endif %}{% else %}{{data.commodity or data.id | appInformationV6('commodity_info') or "plants"}}{% endif %}
+            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "seeds" %}seeds for planting{% elif data.commodity == "grain" %}unprocessed cereal grains{% elif data.commodity == "everything else" %}{% if data.subCommodity != "something else" %}{{data.subCommodity or "clay"}}{% endif %}{% else %}{{data.commodity or data.id | appInformationV7('commodity_info') or "plants"}}{% endif %}
             {% endif %}
             {% endif %}
             {% else %}
@@ -59,7 +59,7 @@
 
         <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
           <dt class="govuk-summary-list__key">Destination</dt>
-          <dd class="govuk-summary-list__value">{{data.countrySelect[0] or (data.id | appInformationV6('destination')) or "France"}}</dd>
+          <dd class="govuk-summary-list__value">{{data.countrySelect[0] or (data.id | appInformationV7('destination')) or "France"}}</dd>
         </div>
 
         <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
@@ -1066,8 +1066,8 @@
         
         {% if data.journey != "coc" %}
         <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-          <dt class="govuk-summary-list__key">Point of entry into the destination country</dt>
-          <dd class="govuk-summary-list__value">{{data.port_entry or "Calais"}}</dd>
+          <dt class="govuk-summary-list__key">{% if data.do_you_know_point_of_entry == "Yes" %}Point of entry{% else %}Point of entry country{% endif %}</dt>
+          <dd class="govuk-summary-list__value">{% if data.do_you_know_point_of_entry == "Yes" %}{{data.port_entry[0] or "Carrieres-sous-Poissy (FR CSP)"}}{% else %}{{data.point_entry_country[0] or "France"}}{% endif %}</dd>
         </div>
         {% endif %}
 
@@ -1121,8 +1121,8 @@
         </div>
 
         <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-          <dt class="govuk-summary-list__key">Point of entry into the destination country</dt>
-          <dd class="govuk-summary-list__value">{{data.port_entry or "Calais"}}</dd>
+          <dt class="govuk-summary-list__key">{% if data.do_you_know_point_of_entry == "Yes" %}Point of entry{% else %}Point of entry country{% endif %}</dt>
+          <dd class="govuk-summary-list__value">{% if data.do_you_know_point_of_entry == "Yes" %}{{data.port_entry[0] or "Carrieres-sous-Poissy (FR CSP)"}}{% else %}{{data.point_entry_country[0] or "France"}}{% endif %}</dd>
         </div>
         {% endif %}
 
@@ -1164,161 +1164,112 @@
       <h2 class="govuk-heading-m">Who will receive this consignment?</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
         
-        {% if data.build == "development" %}
-        {% if data.commodity == "bulbs" %}
         <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-          <dt class="govuk-summary-list__key">Import permit number</dt>
-          <dd class="govuk-summary-list__value">{{data.consignee_import_permit or '2244668800'}}</dd>
-        </div>
-        {% endif %}
-
-        <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-          <dt class="govuk-summary-list__key">Name of the consignee</dt>
-          <dd class="govuk-summary-list__value">{{data.consignee_name or 'Consignee name'}}</dd>
-        </div>
-
-        <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-          <dt class="govuk-summary-list__key">Address of the consignee</dt>
-          <dd class="govuk-summary-list__value">{{data.consignee_address or 'XYZ China Imports Ltd, Kaiser Centre, Phase III, 9-11 Hok Yuen St., Kowloon, China'}}</dd>
+          <dt class="govuk-summary-list__key">Name and address of consignee</dt>          
+          <dd class="govuk-summary-list__value">
+            {{data.consignee_name or query.id | appInformationV7('importer') | title or "Cubix"}}
+            <br>
+            {% if data.select_consignee_address == "address_0" %}88 Jianguo Rd, 北京市, 3208, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_1" %}Lillegardsvagen 1, Falkenberg, South-East, 311 50, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_2" %}Piazza Pietro Nenni, 4, Orta Nova Foggia, Foggia, 71045, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_3" %}Phase 3 St, Vaibhav Nagar, Katpadi, Vellore, Tamil Nadu, 632014, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_4" %}6347 Pacific Blvd, Huntington Park, California, 90255, {{data.countrySelect[0] or "France"}}{% else %}{{data.consigneeAddressLine1 or "88 Jianguo Rd" }}{% if data.consigneeAddressLine2 %}, {{data.consigneeAddressLine2}}{% endif %}, {{data.consigneeAddressLine3 or "北京市"}}{% if data.consigneeAddressLine4 %}, {{data.consigneeAddressLine4}}{% endif %}, {{data.consigneeAddressLine5 or "3208"}}, {{data.countrySelect[0] or "France"}}{% endif %}
+          </dd>
         </div>
 
         {% if data.commodity == "grain" %}
         <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
           <dt class="govuk-summary-list__key">Further information</dt>
-          <dd class="govuk-summary-list__value">{{data.consignee_more_detail or 'More information'}}</dd>
+          <dd class="govuk-summary-list__value">{% if data.consignee_more == "Yes" %}{{data.consignee_more_detail or 'More information'}}{% else %}<span class="govuk-hint">Not entered</span>{% endif %}</dd>
         </div>
-        {% endif %}
-
-        {% if data.commodity != "bulbs" %}
-        <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-          <dt class="govuk-summary-list__key">Import permit number</dt>
-          <dd class="govuk-summary-list__value">{{data.consignee_import_permit or '2244668800'}}</dd>
-        </div>
-        {% endif %}
-        {% else %}
-        <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-          <dt class="govuk-summary-list__key">Name of consignee</dt>          
-          <dd class="govuk-summary-list__value">{{data.consignee_name or 'Consignee name'}}</dd>
-        </div>
-
-        <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-          <dt class="govuk-summary-list__key">Address of the consignee</dt>
-          <dd class="govuk-summary-list__value">{{data.consignee_address or 'XYZ China Imports Ltd, Kaiser Centre, Phase III, 9-11 Hok Yuen St., Kowloon, China'}}</dd>
-        </div>
-
-        {% if data.commodity == "grain" %}
-        <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-          <dt class="govuk-summary-list__key">Further information</dt>
-          <dd class="govuk-summary-list__value">{{data.consignee_more_detail or 'More information'}}</dd>
-        </div>
-        {% endif %}
-        
-        <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-          <dt class="govuk-summary-list__key">Import permit number</dt>
-          <dd class="govuk-summary-list__value">{{data.consignee_import_permit or '2244668800'}}</dd>
-        </div>        
         {% endif %}
 
       </dl>
 
-      <h2 class="govuk-heading-m">Supporting documents</h2>
-      
+      <h2 class="govuk-heading-m">Import permits</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
-      {% if data.reforwarding %}
+        <!-- Set counts -->
+        {% set _importPermitCount = data['importPermitCount'] or 1 | int %}
+        {% set _importPermitDisplayedCount = data['importPermitDisplayedCount'] or 1 | int %}
+        {% set _importPermitCountDeleted = _importPermitDisplayedCount | int - 1 %}
+        {% set _supportingDocumentsDisplayedCount = data['supportingDocumentsDisplayedCount'] or 0 | int %}
+        {% set _totalDocumentsDisplayedCount = _importPermitDisplayedCount | float + _supportingDocumentsDisplayedCount | float %}
+        {% set _totalDocumentsDisplayedCount = _supportingDocumentsDisplayedCount | float %}
 
+        <!-- Set id to use -->
+        {% set _id = _importPermitCount %} <!-- 1 -->
+        {% set _haveImportPermits = data.import_permits or "Yes" %}
         
-        {% set _importCertCount = data['importCertCount'] or 1 | int %}
-        {% set _importCertDisplayedCount = data['importCertDisplayedCount'] or 1 | int %}
-        {% set _importCertCountDeleted = _importCertDisplayedCount|int - 1 %}
-
-        <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-          {% for _number in data.ipcNumbers %}
-            {% set _id = loop.index %}
-            {% if data['ipcAdded'+_id] == 'true' or query.prepop == "true" %}
-            <div class="govuk-summary-list__row">
-              <dt class="govuk-summary-list__key">
-                File name
-                <br>
-                File description
-              </dt>
-              <dd class="govuk-summary-list__value">
-                <a class="govuk-link govuk-link--no-visited-state" href="#">{{data['ipcFile'+_id] or "file-name.pdf"}}</a>
-                <br>
-                Import phytosanitary certificate ({{_number}})
-              </dd>
-              <dd class="govuk-summary-list__actions">
-                <a class="govuk-link" href="attachments?change=yes&return_url=check-your-answers&importCerts=true">Change<span class="govuk-visually-hidden"> supporting documents</span></a>
-              </dd>
-            </div>
-            {% endif %}
-
-          {%- endfor %}
-        </dl>
-
-      {% else %}
-
-
-      {% if data.build != "development" and data['consignee-import-permit'] %}
-        {% if data.file %}
-        {# do nothing if we have a file uploaded #}
-        {% else %}
-        <div class="govuk-inset-text app-alert--info">
-          If you have an import permit, upload it as a supporting document.
+        <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+          <dt class="govuk-summary-list__key">Do you have any import permits?</dt>
+          <dd class="govuk-summary-list__value">{{_haveImportPermits}}</dd>
         </div>
-        {% endif %}
-      {% endif %}
 
+        {% if _haveImportPermits ==  "Yes" %}
+        <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+          <dt class="govuk-summary-list__key">Import permits</dt>
+          <dd class="govuk-summary-list__value">
+            {% if _importPermitCount == 1 %}
+            {{data['importPermitNumber' + _id] or '123456789ABC'}}
+            <br>
+            <a class="govuk-link govuk-link--no-visited-state" href="#">{{data['importPermitFile' + _id] or 'file-name.pdf'}}</a>
+            {% else %}
+            <ul class="govuk-list govuk-list--bullet">
+              {% for i in range(0, _importPermitCount) -%}
+              {% set _show = "true" %}
+              {% set _id = loop.index %}
+              {% set _deletedValue = data['importPermitDeleted' + _id] %}
+              {% if _deletedValue == "true" %}
+                {% set _show = "false" %}
+              {% endif %}
+              {% if _show == "true" %}
+              <li>
+                {{data['importPermitNumber' + _id] or '123456789ABC'}}
+                <br>
+                <a class="govuk-link govuk-link--no-visited-state" href="#">{{data['importPermitFile' + _id] or 'file-name.pdf'}}</a>
+              </li>
+              {% endif %}
+              {%- endfor %}
+            </ul>
+            {% endif %}
+          </dd>
+        </div>
+        {% else %}
+        
+        {% endif %}
+      </dl>
+
+      <h2 class="govuk-heading-m">Supporting documents (optional)</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
         
-        {% if data.reforwarding %}
-        
-          {% for i in range(0, _importCertCount) -%}
-            <div class="govuk-summary-list__row ">
-              <dt class="govuk-summary-list__key">
-                File name
-                <br>
-                File description
-              </dt>
-              <dd class="govuk-summary-list__value" >
-                
-                {{data['importCertFile' + _id] or 'file-name.pdf'}}
-                <br>
-
-                Import Phytosanitary Certificate ({{data['importCertNumber' + _id] or '1234567'}})
-                
-              </dd>
-              <dd class="govuk-summary-list__actions" >
-                <a class="govuk-link govuk-link--no-visited-state" href="#">Download <span class="govuk-visually-hidden">{{data['importCertFile' + _id] or 'file-name.pdf'}}</span></a>
-              </dd>
-            </div>
-          {%- endfor %}
-        
-        {% else %}
         <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-          <dt class="govuk-summary-list__key">
-            File name
-            <br>
-            File description
-          </dt>
+          <dt class="govuk-summary-list__key">Supporting documents</dt>
           <dd class="govuk-summary-list__value">
-            {% if data.file %}
-            <a href="#" class="govuk-link">{{data.file}}</a>
+            {% if _totalDocumentsDisplayedCount > 0 %}
+            {% if _supportingDocumentsDisplayedCount > 0 %}
+            {% if _supportingDocumentsDisplayedCount == 2 %}
+            <ul class="govuk-list govuk-list--bullet">
+              <li>
+                Another description of file
+                <br>
+                <a href="#" class="govuk-link">Another filename.pdf</a>
+              </li>
+              <li>
+                {% if data.fileDescription == "Add your own description" %}{{data.manualFileDescription or "Description of file"}}{% else %}{{data.fileDescription or "Description of file"}}{% endif %}
+                <br>
+                <a href="#" class="govuk-link">{{data.supportingDocument or "Filename.jpg"}}</a>
+              </li>
+            </ul>
+            {% else %}
+            {% if data.fileDescription == "Add your own description" %}{{data.manualFileDescription or "Description of file"}}{% else %}{{data.fileDescription or "Description of file"}}{% endif %}
             <br>
-            {{data.description or "Map of fields for inspection"}}
+            <a href="#" class="govuk-link">{{data.supportingDocument or "Filename.jpg"}}</a>
+            {% endif %}
+            {% endif %}
             {% else %}
             No documents uploaded
             {% endif %}
           </dd>
         </div>
-        {% endif %}
 
       </dl>
-
-
-      {% endif %}
-
-
-
 
       <div class="govuk-form-group govuk-!-margin-top-9">
         <p class="govuk-body">Find out <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_blank">what fees you need to pay{% if data.build != "development" %} (opens in a new window){% endif %}</a> for this application.</p>      

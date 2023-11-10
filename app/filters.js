@@ -7,6 +7,7 @@ var applicationsv3 = require('./data/applications-v3.json');
 var applicationsv4 = require('./data/applications-v4.json');
 var applicationsv5 = require('./data/applications-v5.json');
 var applicationsv6 = require('./data/applications-v6.json');
+var applicationsv7 = require('./data/applications-v7.json');
 var sample = require('./data/sample.json');
 const e = require('express');
 
@@ -104,22 +105,39 @@ module.exports = function (env) {
     return app[key];
   }
 
-    // Get application information (v6)
-    // Prototype version 1-42 onward
-    filters.appInformationV6 = function (id, key) {
+  // Get application information (v6)
+  // Prototype version 1-42 onward
+  filters.appInformationV6 = function (id, key) {
+    
+    var app = {};
+    
+    applicationsv6.forEach(function (item) {
       
-      var app = {};
+      if (item.index == id) {
+        app = item;
+      }
+
+    })
+
+    return app[key];
+  }
+
+  // Get application information (v7)
+  // Prototype version 3-0 onward
+  filters.appInformationV7 = function (id, key) {
+    
+    var app = {};
+    
+    applicationsv7.forEach(function (item) {
       
-      applicationsv6.forEach(function (item) {
-        
-        if (item.index == id) {
-          app = item;
-        }
+      if (item.index == id) {
+        app = item;
+      }
 
-      })
+    })
 
-      return app[key];
-    }
+    return app[key];
+  }
 
   // Show hide infomation based on search results
   filters.showHide = function (obj, text) {

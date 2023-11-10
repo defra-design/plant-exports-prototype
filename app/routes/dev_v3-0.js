@@ -137,7 +137,7 @@ module.exports = function(router) {
     for (const item of d) {
       
       if (!hasDuplicates(list, item.eppocode)) {
-        // if its latin then we can add.
+        // If it's Latin then we can add
         console.log("language is " + item.lang);
 
         if (item.lang == "la") {
@@ -179,7 +179,7 @@ module.exports = function(router) {
     return list;
   }
 
-  // static inspector dashboad of tasks
+  // Static inspector dashboad of tasks
   let tasks = [
     { ref:"PO24521GSI", name:"ABC TRADING LTD", address:"New Farm, Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH", inspectionDate:"8 Jul 2021", dispatchDate: "8 Jul 2021", status:"completed", tag:"green"},
     { ref:"PO24522GSI", name:"ABC TRADING LTD", address:"New Farm, Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH", inspectionDate:"8 Jul 2021", dispatchDate: "9 Jul 2021", status:"awaiting<br/>decision", tag:"blue"},
@@ -191,7 +191,6 @@ module.exports = function(router) {
     { ref:"PO 29300", name:"Rowell XP LTD", address:"Eye Farm, Boro Road, Peterborough, Cambridgeshire, PO5 4GH", inspectionDate:"18 Jul 2021", dispatchDate: "22 Jul 2021", status:"todo", tag:"grey"},
   ];
   let months = [null, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  // let timeLog = [{id:0, name:"Inspector X", date:"19 July 2021", admin:"15", travel:"", inspection:"", day:"19", month:"7", year:"2021"}];
 
   router.get('/' + base_url + '*' + 'inspector/time-entry', function(req, res) {
     console.log("id", req.query.id);
@@ -215,7 +214,7 @@ module.exports = function(router) {
 
   router.all('/' + base_url + '*'+ 'inspector/check-answers', function(req, res) {
     console.log("default get routing page for cya: " + base_url + req.params[0])
-    // add logged time to table
+    // Add logged time to table
 
     let loggedDate = "20 July 2021";
 
@@ -256,7 +255,6 @@ module.exports = function(router) {
 
     // Attempt to render a page in the current folder
     console.log("------- check-answers ------ ");
-    // console.log(req.body);
     console.log(req.session.data.timeLog);
 
     res.render(base_url + req.params[0] + 'inspector/check-answers', {
@@ -297,7 +295,11 @@ module.exports = function(router) {
 
   });
 
-  // **** POST TEMPLATE ***
+  // *******************************
+  // Global page POST TEMPLATE
+  // *******************************
+
+  // Add by a previous designer to save all added commodity data on the 'commodity-page' HTML page
   router.post('/' + base_url + '*/application/create/commodity-page*', function(req, res) {
     
     var page = req.query.return_url || '/' + base_url + req.params[0] + '/application/create/commodity-list'
@@ -327,8 +329,6 @@ module.exports = function(router) {
       var path = "/" + element;
       baseDir += path;
     });
-
-    // console.log("baseDir = " + baseDir)
      
     // Clear previous session data if the user has selected commodity and certificate type
     if (baseDir === "/setup/what-export") {
@@ -355,24 +355,6 @@ module.exports = function(router) {
       if (service == "Certificate checker") {
         return res.redirect("certificate-checker/start-page");
       }
-      // Direct users to ePhyto pages, designs and content
-      else if (service == "ePhyto") {
-
-        if (entryPoint == "Start") {
-          return res.redirect("ephyto/start-page");
-        }
-        else if (entryPoint == "Gateway") {
-          return res.redirect("ephyto/gateway/gov-sign-in");
-        }
-        else {
-          return res.redirect("ephyto/dashboard-submitted");
-        }
-
-      }
-      // Direct users to the Microsoft Dynamics 365 mockup (part of ePhyto)
-      else if (service == "Dynamics") {
-        return res.redirect("dynamics/work-orders/1760969293035/export");
-      }
       // Direct users to PHES pages, designs and content
       else if (service == "PHES") {
 
@@ -387,13 +369,140 @@ module.exports = function(router) {
         }
         
       }
+      // Direct users to the Microsoft Dynamics 365 mockup
+      else if (service == "Dynamics") {
+        return res.redirect("dynamics/work-orders/1760969293035/export");
+      }
+
+    }
+
+    // *******************************
+    // CERTIFICATE CHECKER routing
+    // *******************************
+
+    // Chris Harding (14.08.23) - Certificate number: Error validation and routing
+    if (baseDir === "/certificate-number-validation") {
+
+      // Data objects to be retrieved and queried
+      var certificateNumberPart1 = req.session.data.certificateNumberPart1;
+      var certificateNumberPart2 = req.session.data.certificateNumberPart2;
+
+      // Logic and validation for routing
+      var errorCount = 0;
+      var error1 = "";
+      var error2 = "";
+
+      // Error validation - make sure user enters data into required fields
+      if (certificateNumberPart1 == "") {
+        errorCount++;
+        error1 = "&error1=true";
+      }
+
+      if (certificateNumberPart2 == "") {
+        errorCount++;
+        error2 = "&error2=true";
+      }
+      
+      // Routing - decide where to direct users to
+      if (errorCount > 0) {
+        return res.redirect("certificate-number?error=true" + error1 + error2);
+      }
+      // User enters a valid phytosanitary certificate number
+      else if (certificateNumberPart1 == "2023" && certificateNumberPart2 == "7800562125823") {
+        req.session.data.certificateValid = "yes";
+
+        return res.redirect("verification-number");
+      }
+      // Not a valid phytosanitary certificate number
+      else {
+        req.session.data.certificateValid = "no";
+
+        return res.redirect("verification-number");
+      }
+
+    }
+
+    // Chris Harding (14.08.23) - Verification number: Error validation and routing
+    if (baseDir === "/verification-number-validation") {
+
+      // Linked parameters passed into this journey
+      var certificateValid = req.session.data.certificateValid;
+
+      // Data objects to be retrieved and queried
+      var verificationNumberPart1 = req.session.data.verificationNumberPart1;
+      var verificationNumberPart2 = req.session.data.verificationNumberPart2;
+      var verificationNumberPart3 = req.session.data.verificationNumberPart3;
+
+      // Logic and validation for routing
+      var errorCount = 0;
+      var error1 = "";
+      var error2 = "";
+      var error3 = "";
+
+      // Error validation - make sure user enters data into required fields
+      if (verificationNumberPart1 == "") {
+        errorCount++;
+        error1 = "&error1=true";
+      }
+
+      if (verificationNumberPart2 == "") {
+        errorCount++;
+        error2 = "&error2=true";
+      }
+
+      if (verificationNumberPart3 == "") {
+        errorCount++;
+        error3 = "&error3=true";
+      }
+
+      // Routing - decide where to direct users to
+      if (errorCount > 0) {
+        return res.redirect("verification-number?error=true" + error1 + error2 + error3);
+      }
+      // FAIL: User has already failed to enter valid certificate details in the previous step
+      else if (certificateValid == "no") {
+        return res.redirect("not-valid");
+      }
+      else {
+
+        // SUCCESS: User enters the correct details and finds a valid certificate
+        if (verificationNumberPart1 == "1103" && verificationNumberPart2 == "2488" && verificationNumberPart3 == "3517") {
+          return res.redirect("valid");
+        }
+        // FAIL: User enters a verification number that doesn't match the certificate being checked
+        else {
+          return res.redirect("not-valid");
+        }
+
+      }
 
     }
     
     // *******************************
     // PHES routing
+    // Contains: 
+    //  1. GENERAL
+    //  2. RE-ISSUE 
+    //  3. PHEATS
     // *******************************
 
+    // *******************************
+    // PHES - 1. GENERAL
+    // *******************************
+
+    // Chris Harding (09.11.23) - Phytosanitary certificate: Destination country > ensure all applications for exports to United Kingdom (Northern Ireland) result in an ePhyto (digital certificate)
+    if (baseDir === "/setup/what-country-validation") {
+
+      var countrySelect = req.session.data.countrySelect[0];
+      
+      if (countrySelect == "United Kingdom (Northern Ireland)") {
+        req.session.data.certificateFormat = "digital";
+      }
+
+      return res.redirect("declaration");
+
+    }
+    
     // Chris Harding - USDA Bulbs: Decide whether to redirect users to the USDA page when they are exporting bulbs to the United States
     if (baseDir === "/setup/bulbs-declaration") {
 
@@ -417,10 +526,6 @@ module.exports = function(router) {
       }
 
     }
-
-    // Phytosanitary certificate: Decide whether to redirect to import permit upload if they enter a permit number
-    // console.log(baseDir);
-    // console.log(req.session.data['consignee-import-permit']);
     
     // This is only triggered when the consignee page is submitted 
     if (baseDir === "/create/task-list") {
@@ -441,6 +546,133 @@ module.exports = function(router) {
 
     }
 
+    // Chris Harding (19.05.23) - Phytosanitary certificate: Who will receive this consignment?
+    if (baseDir === "/create/consignee-add-validation") {
+
+      // Parameters passed into this journey
+      var commodity = req.session.data.commodity;
+      var return_url = req.session.data.return_url;
+
+      // Data objects to be retrieved and queried
+      var name = req.session.data.consignee_name;
+      var consigneeAddressLine1 = req.session.data.consigneeAddressLine1;
+      var consigneeAddressLine3 = req.session.data.consigneeAddressLine3;
+      var consigneeAddressLine5 = req.session.data.consigneeAddressLine5;
+
+      // Logic and validation for routing
+      var errorCount = 0;
+      var error1 = "";
+      var error2 = "";
+      var error3 = "";
+      // var error4 = "";
+      
+      // Error validation - make sure user enters data into required fields
+      if (name == "" || name == null) {
+        errorCount++;
+        error1 = "&error1=true";
+      }
+
+      if (consigneeAddressLine1 == "" || consigneeAddressLine1 == null) {
+        errorCount++;
+        error2 = "&error2=true";
+      }
+
+      if (consigneeAddressLine3 == "" || consigneeAddressLine3 == null) {
+        errorCount++;
+        error3 = "&error3=true";
+      }
+
+      // if (consigneeAddressLine5 == "" || consigneeAddressLine5 == null) {
+      //   errorCount++;
+      //   error4 = "&error4=true";
+      // }
+
+      // Routing - decide where to direct users to
+      if (errorCount > 0) {
+        return res.redirect("consignee-add?change=yes&error=true" + error1 + error2 + error3);
+      }
+      else if (return_url) {
+        return res.redirect(return_url + "?return_url=");
+      }
+      else {
+        
+        if (commodity == "grain") {
+          return res.redirect("consignee-further-information");
+        }
+        else {
+          req.session.data.consignee_task_list_data = "Completed";
+          return res.redirect("task-list");
+        }
+        
+      }
+
+    }
+
+    // Chris Harding (04.08.23) - Phytosanitary certificate: Add a supporting document
+    if (baseDir === "/create/attachments-add-validation") {
+
+      // Data objects to be retrieved and queried
+      var supportingDocument = req.session.data.supportingDocument;
+      // var supportingDocumentType = supportingDocument.split('.').pop();
+      var fileDescription = req.session.data.fileDescription;
+      var manualFileDescription = req.session.data.manualFileDescription;
+
+      // Logic and validation for routing
+      var errorCount = 0;
+      var error1 = "";
+      var error2 = "";
+      var error3 = "";
+      // var error4 = "";
+      
+      // Error validation - make sure user enters data into required fields
+      if (supportingDocument == "" || supportingDocument == null) {
+        errorCount++;
+        error1 = "&error1=true";
+      }
+      // else if (supportingDocumentType != "gif" && supportingDocumentType != "jpeg" && supportingDocumentType != "jpg" && supportingDocumentType != "pdf" && supportingDocumentType != "png") {
+      //   errorCount++;
+      //   error4 = "&error4=true";
+      // }
+
+      if (fileDescription == "" || fileDescription == null) {
+        errorCount++;
+        error2 = "&error2=true";
+      }
+      else {
+
+        if (fileDescription == "Add your own description" && (manualFileDescription == "" || manualFileDescription == null)) {
+          errorCount++;
+          error3 = "&error3=true";
+        }
+
+      }      
+
+      // Routing - decide where to direct users to
+      if (errorCount > 0) {
+        return res.redirect("attachments-add?error=true" + error1 + error2 + error3);
+      }
+      else {
+        return res.redirect("attachments-view?supportingDocumentAdded=true&supportingDocumentsExist=true&supportingDocumentsDisplayedCount=1");
+      }
+
+    }
+
+    // Chris Harding (21.09.23) - Phytosanitary certificate: Add an import permit
+    if (baseDir === "/create/import-permits-add-validation") {
+
+      // Parameters passed into this journey
+      var return_url = req.session.data.return_url;
+
+      // Routing - decide where to direct users to
+      if (return_url) {
+        return res.redirect(return_url + "?importPermitsAdded=true");
+      }
+      else {
+        return res.redirect("import-permits-view?importPermitsAdded=true");
+      }
+
+    } 
+
     // Chris Harding (06.01.23) - Copy application: Validate the copied date so we can either a) throw an error b) direct to the task list
     if (baseDir === "/create/inspection-dates-validation") {
 
@@ -456,6 +688,10 @@ module.exports = function(router) {
       }
 
     }
+
+    // *******************************
+    // PHES - 2. RE-ISSUE
+    // *******************************
 
     // Chris Harding (18.01.23) - Re-issue: Error validation (how-to-identify) for the commodity page (re-issue)
     if (baseDir === "/re-issue/edit/how-to-identify-validation") {
@@ -543,303 +779,146 @@ module.exports = function(router) {
     }
 
     // *******************************
-    // EPHYTO routing (delete all of this when we merge ePhyto with PHES)
+    // PHES - 3. PHEATS
     // *******************************
 
-    // Chris Harding - USDA Bulbs: Decide whether to redirect users to the USDA page when they are exporting bulbs to the United States
-    if (baseDir === "/application/setup/bulbs-declaration") {
+    // Dave Haigh
+    // Commision date
+    var today = new Date();
+    req.session.data.todaysDateFormatted = today.getDate() + " " + ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][today.getMonth()] + " " + today.getFullYear()
 
-      var commodity = req.session.data.commodity;
-      var countrySelect = req.session.data.countrySelect[0];
-      
-      if (commodity == "bulbs") {
+    req.session.data.ipcNumbers = ["123-456-789-0","ABC-123-456-789-0"]
 
-        if (countrySelect == "United States") {
-          // Redirect users to the USDA page when they are exporting bulbs to the United States
-          return res.redirect("usda");
+    // Page specific
+    // PHEATS APPLICATIONS
+    if (baseDir === "/pheats-applications") {
+
+      // Order addresses by status (draft first)
+      req.session.data.addresses3.sort(function(a,b){
+
+        var returnValue = 0;
+
+        // DRAFT
+        if(a.pheats.status == 'draft' && b.pheats.status != 'draft') {
+          returnValue = -1
+        } else if(a.pheats.status != 'draft' && b.pheats.status == 'draft') {
+          returnValue = 1
+        // WITH TRADER
+        } else {
+          if(a.pheats.status == 'withtrader' && b.pheats.status != 'withtrader') {
+            returnValue = -1
+          } else if(a.pheats.status != 'withtrader' && b.pheats.status == 'withtrader') {
+            returnValue = 1
+          // PENDING
+          } else {
+            if(a.pheats.status == 'pending' && b.pheats.status != 'pending') {
+              returnValue = -1
+            } else if(a.pheats.status != 'pending' && b.pheats.status == 'pending') {
+              returnValue = 1
+            // UPDATED
+            } else {
+              if(a.pheats.status == 'updated' && b.pheats.status != 'updated') {
+                returnValue = -1
+              } else if(a.pheats.status != 'updated' && b.pheats.status == 'updated') {
+                returnValue = 1
+              // REGISTERED
+              } else {
+                if(a.pheats.status == 'registered' && b.pheats.status != 'registered') {
+                  returnValue = -1
+                } else if(a.pheats.status != 'registered' && b.pheats.status == 'registered') {
+                  returnValue = 1
+                } else {
+                  // PAUSED
+                  if(a.pheats.status == 'paused' && b.pheats.status != 'paused') {
+                    returnValue = -1
+                  } else if(a.pheats.status != 'paused' && b.pheats.status == 'paused') {
+                    returnValue = 1
+                  } else {
+                    // REJECTED
+                    if(a.pheats.status == 'rejected' && b.pheats.status != 'rejected') {
+                      returnValue = -1
+                    } else if(a.pheats.status != 'rejected' && b.pheats.status == 'rejected') {
+                      returnValue = 1
+                    } else {
+                      // WITHDREW
+                      if(a.pheats.status == 'withdrew' && b.pheats.status != 'withdrew') {
+                        returnValue = -1
+                      } else if(a.pheats.status != 'withdrew' && b.pheats.status == 'withdrew') {
+                        returnValue = 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
-        else {
-          // Continue to the declaration page
-          return res.redirect("declaration");
-        }
 
-      }
-      else {
-        // Don't do the USDA check or change the page parameter
-      }
+        return returnValue;
+
+      });
 
     }
 
-    // Chris Harding (09.08.23) - Phytosanitary certificate: Consignee address book routing (selection)
-    if (baseDir === "/application/create/consignee-address-book-validation") {
-
-      // Parameters passed into this journey
-      var return_url = req.session.data.return_url;
-
-      // Data objects to be retrieved and queried
-      var consigneeAddress = req.session.data.select_consignee_address;
-
-      // Error validation - make sure user enters data into required fields
-      if (consigneeAddress == "" || consigneeAddress == null) {
-        return res.redirect("consignee-address-book?error=true");
-      }
-      // Routing - decide where to direct users to
-      else if (consigneeAddress == "new_consignee") {
-
-        if (return_url) {
-          return res.redirect("consignee-add?return_url=" + return_url);
-        }
-        else {
-          return res.redirect("consignee-add");
-        }
-
-      }
-      else {
-
-        // Clear down any newly added consignee data
-        req.session.data.consignee_name = "";
-        req.session.data.consigneeAddressLine1 = "";
-        req.session.data.consigneeAddressLine2 = "";
-        req.session.data.consigneeAddressLine3 = "";
-        req.session.data.consigneeAddressLine4 = "";
-        req.session.data.consigneeAddressLine5 = "";
-
-        if (return_url) {
-          return res.redirect(return_url + "?return_url=");
-        }
-        else {
-          return res.redirect("consignee-import-permit-number");
-        }
-
-      }
-
-    }
-    
-    // Chris Harding (19.05.23) - Phytosanitary certificate: Consignee address book routing (add)
-    if (baseDir === "/application/create/consignee-add-validation") {
-
-      // Parameters passed into this journey
-      var commodity = req.session.data.commodity;
-      var return_url = req.session.data.return_url;
-
-      // Data objects to be retrieved and queried
-      var name = req.session.data.consignee_name;
-      var consigneeAddressLine1 = req.session.data.consigneeAddressLine1;
-      var consigneeAddressLine3 = req.session.data.consigneeAddressLine3;
-      var consigneeAddressLine5 = req.session.data.consigneeAddressLine5;
-
-      // Logic and validation for routing
-      var errorCount = 0;
-      var error1 = "";
-      var error2 = "";
-      var error3 = "";
-      // var error4 = "";
-      
-      // Error validation - make sure user enters data into required fields
-      if (name == "" || name == null) {
-        errorCount++;
-        error1 = "&error1=true";
-      }
-
-      if (consigneeAddressLine1 == "" || consigneeAddressLine1 == null) {
-        errorCount++;
-        error2 = "&error2=true";
-      }
-
-      if (consigneeAddressLine3 == "" || consigneeAddressLine3 == null) {
-        errorCount++;
-        error3 = "&error3=true";
-      }
-
-      // if (consigneeAddressLine5 == "" || consigneeAddressLine5 == null) {
-      //   errorCount++;
-      //   error4 = "&error4=true";
-      // }
-
-      // Routing - decide where to direct users to
-      if (errorCount > 0) {
-        return res.redirect("consignee-add?change=yes&error=true" + error1 + error2 + error3);
-      }
-      else if (return_url) {
-        return res.redirect(return_url + "?return_url=");
-      }
-      else {
-        
-        if (commodity == "grain") {
-          return res.redirect("consignee-further-information");
-        }
-        else {
-          req.session.data.consignee_task_list_data = "Completed";
-          return res.redirect("task-list");
-        }
-        
-      }
-
+    // SUBMITTED
+    if (baseDir === "/pheats-confirmation") {
+      req.session.data.addresses3[0].pheats.status = "pending"
     }
 
-    // Chris Harding (19.05.23) - Phytosanitary certificate: Consignee address book routing (edit)
-    if (baseDir === "/application/create/consignee-edit-validation") {
-
-      var return_url = req.query.return_url;
-      var name = req.session.data.consignee_name;
-      var address = req.session.data.consignee_address;
-      
-      // Error validation - make sure user enters data into required fields
-      if ((name == "" || name == null) && (address == "" || address == null)) {
-        return res.redirect("consignee-edit?change=yes&error=true&error1=true&error2=true");
-      }
-      else if (name == "" || name == null) {
-        return res.redirect("consignee-edit?change=yes&error=true&error1=true");
-      }
-      else if (address == "" || address == null) {
-        return res.redirect("consignee-edit?change=yes&error=true&error2=true");
-      }
-      // Routing - decide where to direct users to
-      else {
-
-        if (return_url) {
-          return res.redirect(return_url + "?consigneeEdited=true");
+    // PAUSED
+    if (baseDir === "/pheats-confirmation-pause") {
+      var _addressID = req.session.data.address || "1"
+        for (var a = 0; a < req.session.data.addresses3.length; a++) {
+          var _address = req.session.data.addresses3[a]
+          if(_addressID.toString() == _address.id.toString()){
+            _address.pheats.status = "paused"
+          }
         }
-        else {
-          return res.redirect("consignee-manage-address-book?consigneeEdited=true");
-        }
-
-      }
-
     }
 
-    // Chris Harding (04.08.23) - Phytosanitary certificate: Add a supporting document
-    if (baseDir === "/application/create/attachments-add-validation") {
-
-      // Data objects to be retrieved and queried
-      var supportingDocument = req.session.data.supportingDocument;
-      // var supportingDocumentType = supportingDocument.split('.').pop();
-      var fileDescription = req.session.data.fileDescription;
-      var manualFileDescription = req.session.data.manualFileDescription;
-
-      // Logic and validation for routing
-      var errorCount = 0;
-      var error1 = "";
-      var error2 = "";
-      var error3 = "";
-      // var error4 = "";
-      
-      // Error validation - make sure user enters data into required fields
-      if (supportingDocument == "" || supportingDocument == null) {
-        errorCount++;
-        error1 = "&error1=true";
-      }
-      // else if (supportingDocumentType != "gif" && supportingDocumentType != "jpeg" && supportingDocumentType != "jpg" && supportingDocumentType != "pdf" && supportingDocumentType != "png") {
-      //   errorCount++;
-      //   error4 = "&error4=true";
-      // }
-
-      if (fileDescription == "" || fileDescription == null) {
-        errorCount++;
-        error2 = "&error2=true";
-      }
-      else {
-
-        if (fileDescription == "Add your own description" && (manualFileDescription == "" || manualFileDescription == null)) {
-          errorCount++;
-          error3 = "&error3=true";
+    // RESTARTED
+    if (baseDir === "/pheats-confirmation-restart") {
+      var _amendments = req.session.data.pheatsChanges || "Yes"
+      var _addressID = req.session.data.address || "1"
+        for (var a = 0; a < req.session.data.addresses3.length; a++) {
+          var _address = req.session.data.addresses3[a]
+          if(_addressID.toString() == _address.id.toString()){
+            if(_amendments == "No"){
+              _address.pheats.status = "withtrader"
+            } else {
+              _address.pheats.status = "pending"
+            }
+            
+          }
         }
-
-      }      
-
-      // Routing - decide where to direct users to
-      if (errorCount > 0) {
-        return res.redirect("attachments-add?error=true" + error1 + error2 + error3);
-      }
-      else {
-        return res.redirect("attachments-view?supportingDocumentAdded=true&supportingDocumentsExist=true&supportingDocumentsDisplayedCount=1");
-      }
-
     }
 
-    // Chris Harding (21.09.23) - Phytosanitary certificate: Add an import permit
-    if (baseDir === "/application/create/import-permits-add-validation") {
-
-      // Parameters passed into this journey
-      var return_url = req.session.data.return_url;
-
-      // Routing - decide where to direct users to
-      if (return_url) {
-        return res.redirect(return_url + "?importPermitsAdded=true");
-      }
-      else {
-        return res.redirect("import-permits-view?importPermitsAdded=true");
-      }
-
-    }
-
-    // Chris Harding (19.09.23) - Alternate (split) design for adding supporting deocuments (over two pages)
-    // Part 1 (select a file description)
-    if (baseDir === "/application/create/attachments-add-type-validation") {
-
-      // Data objects to be retrieved and queried
-      var fileDescription = req.session.data.fileDescription;
-      var manualFileDescription = req.session.data.manualFileDescription;
-
-      // Logic and validation for routing
-      var errorCount = 0;
-      var error2 = "";
-      var error3 = "";
-      
-      // Error validation - make sure user enters data into required fields
-      if (fileDescription == "" || fileDescription == null) {
-        errorCount++;
-        error2 = "&error2=true";
-      }
-      else {
-
-        if (fileDescription == "Add your own description" && (manualFileDescription == "" || manualFileDescription == null)) {
-          errorCount++;
-          error3 = "&error3=true";
+    // REAPPLIED
+    if (baseDir === "/pheats-confirmation-reapply") {
+      var _amendments = req.session.data.pheatsChanges || "Yes"
+      var _addressID = req.session.data.address || "1"
+        for (var a = 0; a < req.session.data.addresses3.length; a++) {
+          var _address = req.session.data.addresses3[a]
+          if(_addressID.toString() == _address.id.toString()){
+            if(_amendments == "No"){
+              _address.pheats.status = "withtrader"
+            } else {
+              _address.pheats.status = "pending"
+            }
+            
+          }
         }
-
-      }
-
-      // Routing - decide where to direct users to
-      if (errorCount > 0) {
-        return res.redirect("attachments-add-type?error=true" + error2 + error3);
-      }
-      else {
-        return res.redirect("attachments-add-file");
-      }
-
     }
 
-    // Part 2 (upload a file)
-    if (baseDir === "/application/create/attachments-add-file-validation") {
-
-      // Data objects to be retrieved and queried
-      var supportingDocument = req.session.data.supportingDocument;
-      // var supportingDocumentType = supportingDocument.split('.').pop();
-
-      // Logic and validation for routing
-      var errorCount = 0;
-      var error1 = "";
-      // var error4 = "";
-      
-      // Error validation - make sure user enters data into required fields
-      if (supportingDocument == "" || supportingDocument == null) {
-        errorCount++;
-        error1 = "&error1=true";
-      }
-      // else if (supportingDocumentType != "gif" && supportingDocumentType != "jpeg" && supportingDocumentType != "jpg" && supportingDocumentType != "pdf" && supportingDocumentType != "png") {
-      //   errorCount++;
-      //   error4 = "&error4=true";
-      // }
-
-      // Routing - decide where to direct users to
-      if (errorCount > 0) {
-        return res.redirect("attachments-add-file?error=true" + error1);
-      }
-      else {
-        return res.redirect("attachments-view?supportingDocumentAdded=true&supportingDocumentsExist=true");
-      }
-
+    // UPDATED
+    if (baseDir === "/pheats-confirmation-update") {
+      var _addressID = req.session.data.address || "1"
+        for (var a = 0; a < req.session.data.addresses3.length; a++) {
+          var _address = req.session.data.addresses3[a]
+          if(_addressID.toString() == _address.id.toString()){
+            _address.pheats.status = "updated"
+          }
+        }
     }
 
     // *******************************
@@ -956,589 +1035,6 @@ module.exports = function(router) {
       // Error validation - make sure user enters data into required fields
       else {
         return res.redirect("when-to-issue?error=true");
-      }
-
-    }
-
-    // Phytosanitary certificate: Decide whether to redirect to import permit upload if they enter a permit number
-    // console.log(baseDir);
-    // console.log(req.session.data['consignee-import-permit']);
-    
-    // This is only triggered when the consignee page is submitted 
-    if (baseDir === "/application/create/task-list") {
-
-      if (req.session.data.build && req.session.data.build == "ux") {
-
-        // Only check when the consignee page is submitted
-        if (res.locals.prevURL && res.locals.prevURL.indexOf("destination-consignee") >- 1) {
-
-          if (req.session.data['consignee-import-permit']) {
-            // Redirect the page to show true url 
-            return res.redirect("upload-permit")
-          }
-
-        }
-
-      }
-
-    }
-
-    // Chris Harding (06.01.23) - Copy application: Validate the copied date so we can either a) throw an error b) direct to the task list
-    if (baseDir === "/application/create/inspection-dates-validation") {
-
-      var day = req.session.data.inpection_date_day;
-      var month = req.session.data.inpection_date_month;
-      var year = Number(req.session.data.inpection_date_year);
-      
-      if (year < 2023) {
-        return res.redirect("inspection-dates?error=true");
-      }
-      else {
-        return res.redirect("task-list");
-      }
-
-    }
-
-    // Chris Harding (18.01.23) - Re-issue: Error validation (how-to-identify) for the commodity page (re-issue)
-    if (baseDir === "/application/re-issue/edit/how-to-identify-validation") {
-
-      var return_url = req.session.data.return_url;
-      var quantity = Number(req.session.data.quantity);
-      var number_of_packages = Number(req.session.data.number_of_packages);
-      
-      if (quantity > 30 && number_of_packages > 120) {
-        return res.redirect("how-to-identify?change=yes&error=true&error1=true&error2=true");
-      }
-      else if (quantity > 30) {
-        return res.redirect("how-to-identify?change=yes&error=true&error1=true");
-      }
-      else if (number_of_packages > 120) {
-        return res.redirect("how-to-identify?change=yes&error=true&error2=true");
-      }
-      else {
-
-        if (return_url) {
-          return res.redirect(return_url + "?reissue_certificate_data_pfp=draft");
-        }
-        else {
-          return res.redirect("../amend-your-certificate?reissue_certificate_data_pfp=draft");
-        }
-
-      }
-
-    }
-
-    if (baseDir === "/application/re-issue/edit/how-to-identify-2-validation") {
-
-      var return_url = req.session.data.return_url;
-      var quantity = Number(req.session.data.quantity2);
-      var number_of_packages = Number(req.session.data.number_of_packages2);
-      
-      if (quantity > 35 && number_of_packages > 140) {
-        return res.redirect("how-to-identify-2?change=yes&error=true&error1=true&error2=true");
-      }
-      else if (quantity > 35) {
-        return res.redirect("how-to-identify-2?change=yes&error=true&error1=true");
-      }
-      else if (number_of_packages > 140) {
-        return res.redirect("how-to-identify-2?change=yes&error=true&error2=true");
-      }
-      else {
-
-        if (return_url) {
-          return res.redirect(return_url + "?reissue_certificate_data_pfp=draft");
-        }
-        else {
-          return res.redirect("../amend-your-certificate?reissue_certificate_data_pfp=draft");
-        }
-
-      }
-
-    }
-
-    if (baseDir === "/application/re-issue/edit/how-to-identify-3-validation") {
-
-      var return_url = req.session.data.return_url;
-      var quantity = Number(req.session.data.quantity3);
-      var number_of_packages = Number(req.session.data.number_of_packages3);
-      
-      if (quantity > 17 && number_of_packages > 68) {
-        return res.redirect("how-to-identify-3?change=yes&error=true&error1=true&error2=true");
-      }
-      else if (quantity > 17) {
-        return res.redirect("how-to-identify-3?change=yes&error=true&error1=true");
-      }
-      else if (number_of_packages > 68) {
-        return res.redirect("how-to-identify-3?change=yes&error=true&error2=true");
-      }
-      else {
-
-        if (return_url) {
-          return res.redirect(return_url + "?reissue_certificate_data_pfp=draft");
-        }
-        else {
-          return res.redirect("../amend-your-certificate?reissue_certificate_data_pfp=draft");
-        }
-
-      }
-
-    }    
-
-    // *******************************
-    // PHEATS routing
-    // *******************************
-
-    // Chris Harding (30.03.23) - Eligibility checker: Q1
-    if (baseDir === "/eligibility-checker/1-validation") {
-
-      var ecq1 = req.session.data.ecq1;
-      
-      // Force users to enter at least one value
-      if (ecq1 == "" || ecq1 == null) {
-        return res.redirect("1?error=true");
-      }
-      // Eligible: continue...
-      else if (ecq1 == "Plants and fresh produce") {
-        return res.redirect("2");
-      }
-      // Not eligible: end
-      else {
-        return res.redirect("not-eligible");
-      }
-
-    }
-
-    if (baseDir === "/eligibility-checker/2-validation") {
-
-      var ecq2 = req.session.data.ecq2;
-      
-      // Force users to enter at least one value
-      if (ecq2 == "" || ecq2 == null) {
-        return res.redirect("2?error=true");
-      }
-      // Not eligible: end
-      else if (ecq2 == "EU,Rest of the world" || ecq2 == "Northern Ireland,Rest of the world" || ecq2 == "EU,Northern Ireland,Rest of the world" || ecq2 == "Rest of the world") {
-        return res.redirect("not-eligible");
-      }
-      // Eligible: continue...
-      else {
-        return res.redirect("eligible");
-      }
-
-    }
-
-    // Dave Haigh
-
-    //commision date
-    var today = new Date();
-    req.session.data.todaysDateFormatted = today.getDate() + " " + ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][today.getMonth()] + " " + today.getFullYear()
-
-    req.session.data.ipcNumbers = ["123-456-789-0","ABC-123-456-789-0"]
-
-    //page specific
-
-    //PHEATS APPLICATIONS
-    if (baseDir === "/pheats-applications") {
-
-      //Order addresses by status (draft first)
-      req.session.data.addresses3.sort(function(a,b){
-
-        var returnValue = 0;
-
-        //DRAFT
-        if(a.pheats.status == 'draft' && b.pheats.status != 'draft') {
-          returnValue = -1
-        } else if(a.pheats.status != 'draft' && b.pheats.status == 'draft') {
-          returnValue = 1
-        //WITH TRADER
-        } else {
-          if(a.pheats.status == 'withtrader' && b.pheats.status != 'withtrader') {
-            returnValue = -1
-          } else if(a.pheats.status != 'withtrader' && b.pheats.status == 'withtrader') {
-            returnValue = 1
-          //PENDING
-          } else {
-            if(a.pheats.status == 'pending' && b.pheats.status != 'pending') {
-              returnValue = -1
-            } else if(a.pheats.status != 'pending' && b.pheats.status == 'pending') {
-              returnValue = 1
-            //UPDATED
-            } else {
-              if(a.pheats.status == 'updated' && b.pheats.status != 'updated') {
-                returnValue = -1
-              } else if(a.pheats.status != 'updated' && b.pheats.status == 'updated') {
-                returnValue = 1
-              //REGISTERED
-              } else {
-                if(a.pheats.status == 'registered' && b.pheats.status != 'registered') {
-                  returnValue = -1
-                } else if(a.pheats.status != 'registered' && b.pheats.status == 'registered') {
-                  returnValue = 1
-                } else {
-                  //PAUSED
-                  if(a.pheats.status == 'paused' && b.pheats.status != 'paused') {
-                    returnValue = -1
-                  } else if(a.pheats.status != 'paused' && b.pheats.status == 'paused') {
-                    returnValue = 1
-                  } else {
-                    //REJECTED
-                    if(a.pheats.status == 'rejected' && b.pheats.status != 'rejected') {
-                      returnValue = -1
-                    } else if(a.pheats.status != 'rejected' && b.pheats.status == 'rejected') {
-                      returnValue = 1
-                    } else {
-                      //WITHDREW
-                      if(a.pheats.status == 'withdrew' && b.pheats.status != 'withdrew') {
-                        returnValue = -1
-                      } else if(a.pheats.status != 'withdrew' && b.pheats.status == 'withdrew') {
-                        returnValue = 1
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-
-        
-
-        return returnValue;
-
-      });
-
-    }
-
-    //SUBMITTED
-    if (baseDir === "/pheats-confirmation") {
-      req.session.data.addresses3[0].pheats.status = "pending"
-    }
-
-    //PAUSED
-    if (baseDir === "/pheats-confirmation-pause") {
-      var _addressID = req.session.data.address || "1"
-        for (var a = 0; a < req.session.data.addresses3.length; a++) {
-          var _address = req.session.data.addresses3[a]
-          if(_addressID.toString() == _address.id.toString()){
-            _address.pheats.status = "paused"
-          }
-        }
-    }
-
-    //RESTARTED
-    if (baseDir === "/pheats-confirmation-restart") {
-      var _amendments = req.session.data.pheatsChanges || "Yes"
-      var _addressID = req.session.data.address || "1"
-        for (var a = 0; a < req.session.data.addresses3.length; a++) {
-          var _address = req.session.data.addresses3[a]
-          if(_addressID.toString() == _address.id.toString()){
-            if(_amendments == "No"){
-              _address.pheats.status = "withtrader"
-            } else {
-              _address.pheats.status = "pending"
-            }
-            
-          }
-        }
-    }
-
-    //REAPPLIED
-    if (baseDir === "/pheats-confirmation-reapply") {
-      var _amendments = req.session.data.pheatsChanges || "Yes"
-      var _addressID = req.session.data.address || "1"
-        for (var a = 0; a < req.session.data.addresses3.length; a++) {
-          var _address = req.session.data.addresses3[a]
-          if(_addressID.toString() == _address.id.toString()){
-            if(_amendments == "No"){
-              _address.pheats.status = "withtrader"
-            } else {
-              _address.pheats.status = "pending"
-            }
-            
-          }
-        }
-    }
-
-    //UPDATED
-    if (baseDir === "/pheats-confirmation-update") {
-      var _addressID = req.session.data.address || "1"
-        for (var a = 0; a < req.session.data.addresses3.length; a++) {
-          var _address = req.session.data.addresses3[a]
-          if(_addressID.toString() == _address.id.toString()){
-            _address.pheats.status = "updated"
-          }
-        }
-    }
-
-    // *******************************
-    // CERTIFICATE CHECKER routing
-    // *******************************
-
-    /* LEGACY CODE #1 - CERTIFICATE NUMBER ASKED AT THE END */
-    // if (baseDir === "/certificate-number-validation") {
-
-    //   // Linked parameters passed into this journey
-    //   var certificateValid = req.session.data.certificateValid;
-
-    //   // Data objects to be retrieved and queried
-    //   var number = req.session.data.certificateNumber;
-    //   var foundMatch = number.includes("2023/7800562125823");
-      
-    //   // Make sure user enters something
-    //   if (number == "") {
-    //     return res.redirect("certificate-number?error=true");
-    //   }
-    //   // FAIL: User has already failed to enter valid certificate details in the previous step
-    //   else if (certificateValid == "no") {
-    //     return res.redirect("not-valid");
-    //   }
-    //   else {
-
-    //     // SUCCESS: User enters the correct details and finds a valid certificate
-    //     if (foundMatch == true) {
-    //       return res.redirect("valid");
-    //     }
-    //     // FAIL: User enters a phytosanitary certificate number that doesn't match the certificate being checked
-    //     else {
-    //       return res.redirect("not-valid");
-    //     }
-
-    //   }
-
-    // }
-
-    /* LEGACY CODE #2 - ONE DATA INPUT FIELD */
-    // if (baseDir === "/certificate-number-validation") {
-
-    //   // Data objects to be retrieved and queried
-    //   var number = req.session.data.certificateNumber;
-    //   var foundMatch = number.includes("2023/7800562125823");
-      
-    //   // Make sure user enters something
-    //   if (number == "") {
-    //     return res.redirect("certificate-number?error=true");
-    //   }
-    //   // User enters a valid phytosanitary certificate number
-    //   else if (foundMatch == true) {
-    //     req.session.data.certificateValid = "yes";
-
-    //     return res.redirect("verification-number");
-    //   }
-    //   // Not a valid phytosanitary certificate number
-    //   else {
-    //     req.session.data.certificateValid = "no";
-
-    //     return res.redirect("verification-number");
-    //   }
-
-    // }
-
-    // Chris Harding (14.08.23) - Certificate number: Error validation and routing
-    if (baseDir === "/certificate-number-validation") {
-
-      // Data objects to be retrieved and queried
-      var certificateNumberPart1 = req.session.data.certificateNumberPart1;
-      var certificateNumberPart2 = req.session.data.certificateNumberPart2;
-
-      // Logic and validation for routing
-      var errorCount = 0;
-      var error1 = "";
-      var error2 = "";
-
-      // Error validation - make sure user enters data into required fields
-      if (certificateNumberPart1 == "") {
-        errorCount++;
-        error1 = "&error1=true";
-      }
-
-      if (certificateNumberPart2 == "") {
-        errorCount++;
-        error2 = "&error2=true";
-      }
-      
-      // Routing - decide where to direct users to
-      if (errorCount > 0) {
-        return res.redirect("certificate-number?error=true" + error1 + error2);
-      }
-      // User enters a valid phytosanitary certificate number
-      else if (certificateNumberPart1 == "2023" && certificateNumberPart2 == "7800562125823") {
-        req.session.data.certificateValid = "yes";
-
-        return res.redirect("verification-number");
-      }
-      // Not a valid phytosanitary certificate number
-      else {
-        req.session.data.certificateValid = "no";
-
-        return res.redirect("verification-number");
-      }
-
-    }
-    
-    /* LEGACY CODE #1 - CERTIFICATE NUMBER ASKED AT THE START */
-    // if (baseDir === "/verification-number-validation") {
-
-    //   var verificationNumber = req.session.data.verificationNumber;
-      
-    //   // Make sure user enters something
-    //   if (verificationNumber == "") {
-    //     return res.redirect("verification-number?error=true");
-    //   }
-    //   // User enters a valid verification number
-    //   else if (verificationNumber == "1103-2488-3517" || verificationNumber == "110324883517" || verificationNumber == "1103 2488 3517") {
-    //     req.session.data.certificateValid = "yes";
-
-    //     return res.redirect("certificate-number");
-    //   }
-    //   // Not a valid verification number
-    //   else {
-    //     req.session.data.certificateValid = "no";
-
-    //     return res.redirect("certificate-number");
-    //   }
-
-    // }
-
-    /* LEGACY CODE #2 - ONE DATA INPUT FIELD */
-    // if (baseDir === "/verification-number-validation") {
-
-    //   // Linked parameters passed into this journey
-    //   var certificateValid = req.session.data.certificateValid;
-
-    //   // Data objects to be retrieved and queried
-    //   var verificationNumber = req.session.data.verificationNumber;
-      
-    //   // Make sure user enters something
-    //   if (verificationNumber == "") {
-    //     return res.redirect("verification-number?error=true");
-    //   }
-    //   // FAIL: User has already failed to enter valid certificate details in the previous step
-    //   else if (certificateValid == "no") {
-    //     return res.redirect("not-valid");
-    //   }
-    //   else {
-
-    //     // SUCCESS: User enters the correct details and finds a valid certificate
-    //     if (verificationNumber == "1103-2488-3517" || verificationNumber == "110324883517" || verificationNumber == "1103 2488 3517") {
-    //       return res.redirect("valid");
-    //     }
-    //     // FAIL: User enters a verification number that doesn't match the certificate being checked
-    //     else {
-    //       return res.redirect("not-valid");
-    //     }
-
-    //   }
-
-    // }    
-
-    // Chris Harding (14.08.23) - Verification number: Error validation and routing
-    if (baseDir === "/verification-number-validation") {
-
-      // Linked parameters passed into this journey
-      var certificateValid = req.session.data.certificateValid;
-
-      // Data objects to be retrieved and queried
-      var verificationNumberPart1 = req.session.data.verificationNumberPart1;
-      var verificationNumberPart2 = req.session.data.verificationNumberPart2;
-      var verificationNumberPart3 = req.session.data.verificationNumberPart3;
-
-      // Logic and validation for routing
-      var errorCount = 0;
-      var error1 = "";
-      var error2 = "";
-      var error3 = "";
-
-      // Error validation - make sure user enters data into required fields
-      if (verificationNumberPart1 == "") {
-        errorCount++;
-        error1 = "&error1=true";
-      }
-
-      if (verificationNumberPart2 == "") {
-        errorCount++;
-        error2 = "&error2=true";
-      }
-
-      if (verificationNumberPart3 == "") {
-        errorCount++;
-        error3 = "&error3=true";
-      }
-
-      // Routing - decide where to direct users to
-      if (errorCount > 0) {
-        return res.redirect("verification-number?error=true" + error1 + error2 + error3);
-      }
-      // FAIL: User has already failed to enter valid certificate details in the previous step
-      else if (certificateValid == "no") {
-        return res.redirect("not-valid");
-      }
-      else {
-
-        // SUCCESS: User enters the correct details and finds a valid certificate
-        if (verificationNumberPart1 == "1103" && verificationNumberPart2 == "2488" && verificationNumberPart3 == "3517") {
-          return res.redirect("valid");
-        }
-        // FAIL: User enters a verification number that doesn't match the certificate being checked
-        else {
-          return res.redirect("not-valid");
-        }
-
-      }
-
-    }    
-
-    // Chris Harding (31.07.23) - Issue date: Error validation and routing
-    if (baseDir === "/issue-date-validation") {
-
-      // Linked parameters passed into this journey
-      var certificateValid = req.session.data.certificateValid;
-
-      // Data objects to be retrieved and queried
-      var day = req.session.data.certificateIssuedDay;
-      var month = req.session.data.certificateIssuedMonth;
-      var year = req.session.data.certificateIssuedYear;
-
-      // Logic and validation for routing
-      var errorCount = 0;
-      var error1 = "";
-      var error2 = "";
-      var error3 = "";
-
-      // Error validation - make sure user enters data into required fields
-      if (day == "") {
-        errorCount++;
-        error1 = "&error1=true";
-      }
-
-      if (month == "") {
-        errorCount++;
-        error2 = "&error2=true";
-      }
-
-      if (year == "") {
-        errorCount++;
-        error3 = "&error3=true";
-      }
-
-      // Routing - decide where to direct users to
-      if (errorCount > 0) {
-        return res.redirect("issue-date?error=true" + error1 + error2 + error3);
-      }
-      // FAIL: User has already entered a non-valid certificate number
-      else if (certificateValid == "no") {
-        return res.redirect("not-valid");
-      }
-      else {
-
-        // SUCCESS: User enters the correct details and finds a valid certificate
-        if ((day == "16") && (month == "6" || month == "06") && (year == "2023")) {
-          return res.redirect("valid");
-        }
-        // FAIL: User enters an issue date that doesn't match the certificate being checked
-        else {
-          return res.redirect("not-valid");
-        }
-
       }
 
     }

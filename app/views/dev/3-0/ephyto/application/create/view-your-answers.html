@@ -36,18 +36,18 @@
             {% if data.reforwarding %}
             Re-forwarding phytosanitary certificate for 
             {% if data.build == "development" %}
-            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% else %}{{data.commodity or data.id | appInformationV6('commodity_info') or "plants"}}{% endif %}
+            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% else %}{{data.commodity or data.id | appInformationV7('commodity_info') or "plants"}}{% endif %}
             {% else %}
-            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "seeds" %}seeds for planting{% elif data.commodity == "grain" %}unprocessed cereal grains{% else %}{{data.commodity or data.id | appInformationV6('commodity_info') or "plants"}}{% endif %}
+            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "seeds" %}seeds for planting{% elif data.commodity == "grain" %}unprocessed cereal grains{% else %}{{data.commodity or data.id | appInformationV7('commodity_info') or "plants"}}{% endif %}
             {% endif %}
             {% elif data.journey == "coc" %}
             Certificate of conformity
             {% else %}
             Phytosanitary certificate{% if data.commodity == "everything else" and data.subCommodity == "something else"%}{% else %} for{% endif %} 
             {% if data.build == "development" %}
-            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "everything else" %}{% if data.subCommodity != "something else" %}{{data.subCommodity or "clay"}}{% endif %}{% else %}{{data.commodity or data.id | appInformationV6('commodity_info') or "plants"}}{% endif %}
+            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "everything else" %}{% if data.subCommodity != "something else" %}{{data.subCommodity or "clay"}}{% endif %}{% else %}{{data.commodity or data.id | appInformationV7('commodity_info') or "plants"}}{% endif %}
             {% else %}
-            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "seeds" %}seeds for planting{% elif data.commodity == "grain" %}unprocessed cereal grains{% elif data.commodity == "everything else" %}{% if data.subCommodity != "something else" %}{{data.subCommodity or "clay"}}{% endif %}{% else %}{{data.commodity or data.id | appInformationV6('commodity_info') or "plants"}}{% endif %}
+            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "seeds" %}seeds for planting{% elif data.commodity == "grain" %}unprocessed cereal grains{% elif data.commodity == "everything else" %}{% if data.subCommodity != "something else" %}{{data.subCommodity or "clay"}}{% endif %}{% else %}{{data.commodity or data.id | appInformationV7('commodity_info') or "plants"}}{% endif %}
             {% endif %}
             {% endif %}
             {% else %}
@@ -59,12 +59,12 @@
 
         <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
           <dt class="govuk-summary-list__key">Destination</dt>
-          <dd class="govuk-summary-list__value">{{data.countrySelect[0] or (data.id | appInformationV6('destination')) or "France"}}</dd>
+          <dd class="govuk-summary-list__value">{{data.countrySelect[0] or (data.id | appInformationV7('destination')) or "France"}}</dd>
         </div>
 
         <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
           <dt class="govuk-summary-list__key">Your reference</dt>
-          <dd class="govuk-summary-list__value">{% if (query.id | appInformationV6('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformationV6('reference')}}{% endif %}</dd>
+          <dd class="govuk-summary-list__value">{% if (query.id | appInformationV7('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformationV7('reference')}}{% endif %}</dd>
         </div>
 
       </dl>
@@ -682,7 +682,7 @@
         <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
           <dt class="govuk-summary-list__key">Name and address of consignee</dt>          
           <dd class="govuk-summary-list__value">
-            {{data.consignee_name or query.id | appInformationV6('importer') | title or "Cubix"}}
+            {{data.consignee_name or query.id | appInformationV7('importer') | title or "Cubix"}}
             <br>
             {{data.consigneeAddressLine1 or "88 Jianguo Rd" }}{% if data.consigneeAddressLine2 %}, {{data.consigneeAddressLine2}}{% endif %}, {{data.consigneeAddressLine3 or "北京市"}}{% if data.consigneeAddressLine4 %}, {{data.consigneeAddressLine4}}{% endif %}, {{data.consigneeAddressLine5 or "3208"}}, {{data.countrySelect[0] or "China"}}
           </dd>

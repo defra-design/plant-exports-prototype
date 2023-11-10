@@ -1,11 +1,15 @@
 {% extends "layout.html" %}
+
 {% block pageTitle %}
-Check and amend your answers - GOV.UK
+  Update your answers before submitting your application - {{serviceName}} - GOV.UK
 {% endblock %}
+
 {% block beforeContent %}
 {{super()}}
+{% include "../modules/_account-banner.html" %}
 <a href="javascript:history.back()" class="govuk-back-link">Back</a>
 {% endblock %}
+
 {% block content %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-three-quarters">
@@ -270,19 +274,15 @@ Check and amend your answers - GOV.UK
           </a> -->
         </dd>
       </div>
+
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Point of entry into the destination country
-        </dt>
-        <dd class="govuk-summary-list__value">
-          {{data.point_of_entry or "Las Palmas"}}
-        </dd>
+        <dt class="govuk-summary-list__key">{% if data.do_you_know_point_of_entry == "Yes" %}Point of entry{% else %}Point of entry country{% endif %}</dt>
+        <dd class="govuk-summary-list__value">{% if data.do_you_know_point_of_entry == "Yes" %}{{data.port_entry[0] or "Carrieres-sous-Poissy (FR CSP)"}}{% else %}{{data.point_entry_country[0] or "France"}}{% endif %}</dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="shipping-amend?change=yes&return_url=check-your-answers-pre-inspect-amend-message">
-            Change <span class="govuk-visually-hidden">How will the consignment be transported?</span>
-          </a>
+          <a class="govuk-link" href="shipping-amend?change=yes&return_url=check-your-answers-post-inspect-amend">Change<span class="govuk-visually-hidden"> the {% if data.do_you_know_point_of_entry == "Yes" %}point of entry{% else %}point of entry country{% endif %}</span></a>
         </dd>
       </div>
+
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           How will the consignment be transported?
@@ -326,80 +326,135 @@ Check and amend your answers - GOV.UK
     </dl>
 
     <h2 class="govuk-heading-m">Who will receive this consignment?</h2>
-    <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+      
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Name of consignee
-        </dt>
+        <dt class="govuk-summary-list__key">Name and address of consignee</dt>          
         <dd class="govuk-summary-list__value">
-          {{data.consignee or 'Luis Fernandes'}}
+          {{data.consignee_name or query.id | appInformationV7('importer') | title or "Cubix"}}
+          <br>
+          {% if data.select_consignee_address == "address_0" %}88 Jianguo Rd, 北京市, 3208, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_1" %}Lillegardsvagen 1, Falkenberg, South-East, 311 50, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_2" %}Piazza Pietro Nenni, 4, Orta Nova Foggia, Foggia, 71045, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_3" %}Phase 3 St, Vaibhav Nagar, Katpadi, Vellore, Tamil Nadu, 632014, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_4" %}6347 Pacific Blvd, Huntington Park, California, 90255, {{data.countrySelect[0] or "France"}}{% else %}{{data.consigneeAddressLine1 or "88 Jianguo Rd" }}{% if data.consigneeAddressLine2 %}, {{data.consigneeAddressLine2}}{% endif %}, {{data.consigneeAddressLine3 or "北京市"}}{% if data.consigneeAddressLine4 %}, {{data.consigneeAddressLine4}}{% endif %}, {{data.consigneeAddressLine5 or "3208"}}, {{data.countrySelect[0] or "France"}}{% endif %}
         </dd>
         <dd class="govuk-summary-list__actions">
-          <!-- <a class="govuk-link" href="destination-consignee?change=yes&return_url=check-your-answers-pre-inspect-amend-message">
-            Change <span class="govuk-visually-hidden">Name of the consignee</span>
-          </a> -->
+          <!-- <a class="govuk-link" href="consignee-add">Change <span class="govuk-visually-hidden">who will receive this consignment</span></a> -->
         </dd>
       </div>
+
+      {% if data.commodity == "grain" %}
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-            Address of the consignee
-        </dt>
-        <dd class="govuk-summary-list__value">
-            {{ data.consignee_address or 'Las Patatas Imports, c/ Avenidos de los Gatos, Las Palmas, Canary Islands, Spain'}}
-        </dd>
+        <dt class="govuk-summary-list__key">Further information</dt>
+        <dd class="govuk-summary-list__value">{% if data.consignee_more == "Yes" %}{{data.consignee_more_detail or 'More information'}}{% else %}<span class="govuk-hint">Not entered</span>{% endif %}</dd>
         <dd class="govuk-summary-list__actions">
-          <!-- <a class="govuk-link" href="destination-consignee?change=yes&return_url=check-your-answers-pre-inspect-amend-message">
-            Change <span class="govuk-visually-hidden">How will the consignment be transported?</span>
-          </a> -->
+          <!-- <a class="govuk-link" href="consignee-further-information?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> the further information</span></a> -->
         </dd>
       </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Import permit number
-        </dt>
-        <dd class="govuk-summary-list__value">
-          {{data.import_permit_number or '2244668800'}}
-        </dd>
-        <dd class="govuk-summary-list__actions">
-          <!-- <a class="govuk-link" href="destination-consignee?change=yes&return_url=check-your-answers-pre-inspect-amend-message">
-            Change <span class="govuk-visually-hidden">Name of the consignee</span>
-          </a> -->
-        </dd>
-      </div>
+      {% endif %}
 
     </dl>
 
-    {% endif %}
-    <h3 class="govuk-heading-m">Supporting documents</h3>
+    <h2 class="govuk-heading-m">Import permits</h2>
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
-    <dl class="govuk-summary-list govuk-!-margin-bottom-9 ">
+      <!-- Set counts -->
+      {% set _importPermitCount = data['importPermitCount'] or 1 | int %}
+      {% set _importPermitDisplayedCount = data['importPermitDisplayedCount'] or 1 | int %}
+      {% set _importPermitCountDeleted = _importPermitDisplayedCount | int - 1 %}
+      {% set _supportingDocumentsDisplayedCount = data['supportingDocumentsDisplayedCount'] or 0 | int %}
+      {% set _totalDocumentsDisplayedCount = _importPermitDisplayedCount | float + _supportingDocumentsDisplayedCount | float %}
+      {% set _totalDocumentsDisplayedCount = _supportingDocumentsDisplayedCount | float %}
+
+      <!-- Set id to use -->
+      {% set _id = _importPermitCount %} <!-- 1 -->
+      {% set _haveImportPermits = data.import_permits or "Yes" %}
+      
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          File name<br>
-          File description
-        </dt>
+        <dt class="govuk-summary-list__key">Do you have any import permits?</dt>
+        <dd class="govuk-summary-list__value">{{_haveImportPermits}}</dd>
+        <dd class="govuk-summary-list__actions">
+          <!-- <a class="govuk-link" href="import-permits?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> whether you have any import permits</span></a> -->
+        </dd>
+      </div>
+
+      {% if _haveImportPermits ==  "Yes" %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Import permits</dt>
         <dd class="govuk-summary-list__value">
-          {% if data.file %}
-          <a href="#"><strong>{{data.file}}</strong></a><br>
-          <a href="#"><strong>{{data.description}}</strong></a>
+          {% if _importPermitCount == 1 %}
+          {{data['importPermitNumber' + _id] or '123456789ABC'}}
+          <br>
+          <a class="govuk-link govuk-link--no-visited-state" href="#">{{data['importPermitFile' + _id] or 'file-name.pdf'}}</a>
           {% else %}
-          You have uploaded no attachments
+          <ul class="govuk-list govuk-list--bullet">
+            {% for i in range(0, _importPermitCount) -%}
+            {% set _show = "true" %}
+            {% set _id = loop.index %}
+            {% set _deletedValue = data['importPermitDeleted' + _id] %}
+            {% if _deletedValue == "true" %}
+              {% set _show = "false" %}
+            {% endif %}
+            {% if _show == "true" %}
+            <li>
+              {{data['importPermitNumber' + _id] or '123456789ABC'}}
+              <br>
+              <a class="govuk-link govuk-link--no-visited-state" href="#">{{data['importPermitFile' + _id] or 'file-name.pdf'}}</a>
+            </li>
+            {% endif %}
+            {%- endfor %}
+          </ul>
           {% endif %}
         </dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link govuk-link--no-visited-state" href="#">
-            Change <span class="govuk-visually-hidden"></span>
-          </a>
+          <!-- <a class="govuk-link" href="import-permits-view?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> your import permits</span></a> -->
         </dd>
       </div>
+      {% else %}
+      
+      {% endif %}
     </dl>
 
-    <p class="govuk-body govuk-!-margin-top-6 govuk-!-display-inline-block">
+    {% endif %}
+    <h2 class="govuk-heading-m">Supporting documents (optional)</h2>
+    <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+      
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Supporting documents</dt>
+        <dd class="govuk-summary-list__value">
+          {% if _totalDocumentsDisplayedCount > 0 %}
+          {% if _supportingDocumentsDisplayedCount > 0 %}
+          {% if _supportingDocumentsDisplayedCount == 2 %}
+          <ul class="govuk-list govuk-list--bullet">
+            <li>
+              Another description of file
+              <br>
+              <a href="#" class="govuk-link">Another filename.pdf</a>
+            </li>
+            <li>
+              {% if data.fileDescription == "Add your own description" %}{{data.manualFileDescription or "Description of file"}}{% else %}{{data.fileDescription or "Description of file"}}{% endif %}
+              <br>
+              <a href="#" class="govuk-link">{{data.supportingDocument or "Filename.jpg"}}</a>
+            </li>
+          </ul>
+          {% else %}
+          {% if data.fileDescription == "Add your own description" %}{{data.manualFileDescription or "Description of file"}}{% else %}{{data.fileDescription or "Description of file"}}{% endif %}
+          <br>
+          <a href="#" class="govuk-link">{{data.supportingDocument or "Filename.jpg"}}</a>
+          {% endif %}
+          {% endif %}
+          {% else %}
+          No documents uploaded
+          {% endif %}
+        </dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="{% if data.supportingDocumentsExist == 'true' %}attachments-view{% else %}attachments-add{% endif %}?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> supporting documents</span></a>
+        </dd>
+      </div>
+
+    </dl>
+
+    <div class="govuk-button-group">
       <a href="../submit/submit-date-amend" class="govuk-button">Continue</a>
-    </p>
-    <p class="govuk-body govuk-!-display-inline-block govuk-!-margin-left-4" style="vertical-align:text-top;">
-      <a href="../../application-amend?id=4" class="govuk-link">Cancel</a>
-    </p>
+      <a class="govuk-link app-button--link" href="../../application-amend-potato?id=36&returnURL=dashboard-submitted">Cancel</a>
+    </div>
 
   </div>
 </div>

@@ -2,9 +2,9 @@
 
 {% block pageTitle %}
   {% if data.build == "development" %}
-  {% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %} {{query.id | appInformationV6('applicationID')}} - {{serviceName}} - GOV.UK
+  {% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %} {{query.id | appInformationV7('applicationID')}} - {{serviceName}} - GOV.UK
   {% else %}
-  Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %} {{query.id | appInformationV6('applicationID')}} - {{serviceName}} - GOV.UK
+  Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %} {{query.id | appInformationV7('applicationID')}} - {{serviceName}} - GOV.UK
   {% endif %}
 {% endblock %}
 
@@ -65,11 +65,11 @@
       {% if data.build == "development" %}
       {% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %} 
       <br>
-      {{query.id | appInformationV6('applicationID')}}
+      {{query.id | appInformationV7('applicationID')}}
       {% else %}
       Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %}
       <br>
-      {{query.id | appInformationV6('applicationID')}}
+      {{query.id | appInformationV7('applicationID')}}
       {% endif %}
     </h1>
 
@@ -86,8 +86,8 @@
         <dt class="govuk-summary-list__key">Status</dt>
         <dd class="govuk-summary-list__value">
           
-          <div class="govuk-tag govuk-tag--{{query.id | appInformationV6('tag')}}">
-            {{query.id | appInformationV6('status')}}
+          <div class="govuk-tag govuk-tag--{{query.id | appInformationV7('tag')}}">
+            {{query.id | appInformationV7('status')}}
           </div>
 
         </dd>
@@ -95,27 +95,27 @@
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Your reference</dt>
-        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV6('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformationV6('reference')}}{% endif %}</dd>
+        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV7('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformationV7('reference')}}{% endif %}</dd>
       </div>
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Type</dt>
-        <dd class="govuk-summary-list__value">Phytosanitary certificate for {{data.commodity or query.id | appInformationV6('commodity_info') or "crops"}}</dd>
+        <dd class="govuk-summary-list__value">Phytosanitary certificate for {{data.commodity or query.id | appInformationV7('commodity_info') or "crops"}}</dd>
       </div>
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Destination country</dt>
-        <dd class="govuk-summary-list__value">{{query.id | appInformationV6('destination')}}</dd>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV7('destination')}}</dd>
       </div>
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">{% if data.build == "development" %}Customer{% else %}Consignee{% endif %}</dt>
-        <dd class="govuk-summary-list__value">{{query.id | appInformationV6('importer') | title or 'Las Patatas Imports'}}</dd>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV7('importer') | title or 'Las Patatas Imports'}}</dd>
       </div>
     </dl>
 
     <ul class="govuk-list">
-      {% if (query.id | appInformationV6('status')) == 'exporter action' %}
+      {% if (query.id | appInformationV7('status')) == 'exporter action' %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-pre-inspect-amend-message">Update this application</a></li>
       {% else %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-pre-inspect-amend?id={{query.id or 1}}&is_group={{query.is_group}}&is_amend=yes">Update this application</a></li>

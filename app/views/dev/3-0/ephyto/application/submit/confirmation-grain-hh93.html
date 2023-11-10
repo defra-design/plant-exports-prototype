@@ -31,7 +31,7 @@
     {% set _ePhytoOptedIn = "false" %}
     {% set _ePhytoOptedOut = "false" %}
 
-    {% if data.service == "ePhyto" %}
+    {% if data.certificateFormat == "digital" %}
       <!-- ephyto -->
       {% set _ePhyto = "true" %}
       {% if _notificationSetting == "None" %}
@@ -76,31 +76,28 @@
 
       <!-- NON ephyto -->
       {% if _ePhyto == "false" %}
-        <li>If there are no problems, we will issue your paper {% if data.reforwarding == "1" %}re-forwarding{% endif %} certificate.</li>
+      <li>If there are no problems, we will issue your paper {% if data.reforwarding == "1" %}re-forwarding{% endif %} certificate.</li>
       {% endif %}
 
       <!-- EPHYTO -->
       {% if _ePhyto == "true" %}
+      
+      <!-- OPTED OUT -->
+      {% if _ePhytoOptedOut == "true" %}
+      <li>Your applications page will show when your digital certificate is issued. If you'd prefer to get an email, go to <a href="../../account/notifications" class="govuk-link govuk-link--no-visited-state">manage your email settings</a>.</li>
+      {% endif %}
 
-        <!-- OPTED OUT -->
-        {% if _ePhytoOptedOut == "true" %}
-          <li>Your applications page will show when your digital certificate is issued. If you'd prefer to get an email, go to <a href="../../account/notifications" class="govuk-link govuk-link--no-visited-state">manage your email settings</a>.</li>
-        {% endif %}
-
-        {% if _ePhytoOptedIn == "true" %}
-        <li>We'll send an email to your.email@email.com when your digital certificate is issued and sent. If other users get email notifications from this account, we'll email them too.
-          <br>
-          <a href="../../account/notifications" class="govuk-link govuk-link--no-visited-state">Manage email settings</a>
-        </li>
-        {% endif %}
-
-        <li>You do not need to print or email your digital certificate. We'll make it available to anyone that needs to see it.</li>
-
+      {% if _ePhytoOptedIn == "true" %}
+      <li>
+        We'll send an email to your.email@email.com when your digital certificate is issued and sent. If other users get email notifications from this account, we'll email them too.
+        <br>
+        <a href="../../account/notifications" class="govuk-link govuk-link--no-visited-state">Manage email settings</a>
+      </li>
+      {% endif %}
+      <li>You do not need to print or email your digital certificate. We'll make it available to anyone that needs to see it.</li>
       {% endif %}
 
       <li>We will then send you an invoice.</li>
-
-        
     </ol>
 
     <form action="{% if data.route == 'new' %}../../dashboard-one{% else %}../../dashboard-submitted{% endif %}" method="post">

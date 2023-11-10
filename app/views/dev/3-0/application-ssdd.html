@@ -59,9 +59,9 @@
 
 {% block pageTitle %}
   {% if data.build == "development" %}
-  {% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %} {{query.id | appInformationV6('applicationID')}} - {{serviceName}} - GOV.UK
+  {% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %} {{query.id | appInformationV7('applicationID')}} - {{serviceName}} - GOV.UK
   {% else %}
-  Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %} {{query.id | appInformationV6('applicationID')}} - {{serviceName}} - GOV.UK
+  Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %} {{query.id | appInformationV7('applicationID')}} - {{serviceName}} - GOV.UK
   {% endif %}
 {% endblock %}
 
@@ -144,11 +144,11 @@
       {% if data.build == "development" %}
       {% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %} 
       <br>
-      {{query.id | appInformationV6('applicationID')}}
+      {{query.id | appInformationV7('applicationID')}}
       {% else %}
       Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %}
       <br>
-      {{query.id | appInformationV6('applicationID')}}
+      {{query.id | appInformationV7('applicationID')}}
       {% endif %}
     </h1>
   </div>
@@ -158,6 +158,7 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-one-half">
+    <h2 class="govuk-heading-m">Your application</h2>
     {% if query.is_block == "yes" %}
     <p class="govuk-body">This is a block application of 100 certificates</p>
     {% elif query.is_group == "yes" %}
@@ -196,7 +197,7 @@
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Your reference</dt>
-        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV6('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformationV6('reference')}}{% endif %}</dd>
+        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV7('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformationV7('reference')}}{% endif %}</dd>
       </div>
 
       <div class="govuk-summary-list__row">
@@ -207,12 +208,12 @@
       {% if query.id != 6 %}
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Destination country</dt>
-        <dd class="govuk-summary-list__value">{{query.id | appInformationV6('destination')}}</dd>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV7('destination')}}</dd>
       </div>
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">{% if data.build == "development" %}Customer{% else %}Consignee{% endif %}</dt>
-        <dd class="govuk-summary-list__value">{{query.id | appInformationV6('importer') | title or 'XYZ Trading Limited'}}</dd>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV7('importer') | title or 'XYZ Trading Limited'}}</dd>
       </div>
       {% endif %}
 
@@ -225,17 +226,17 @@
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Phytosanitary certificate number</dt>
-        <dd class="govuk-summary-list__value">UK/GB/E&W/{{query.id | appInformationV6('certificate') or "2022/4236522044833"}} R5</dd>
+        <dd class="govuk-summary-list__value">UK/GB/E&W/{{query.id | appInformationV7('certificate') or "2022/4236522044833"}} R5</dd>
       </div>
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Certificate issue date</dt>
-        <dd class="govuk-summary-list__value">{{query.id | appInformationV6('certificateIssueDate') or "01 January 2022"}}</dd>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV7('certificateIssueDate') or "01 January 2022"}}</dd>
       </div>
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Certificate expiry date</dt>
-        <dd class="govuk-summary-list__value">{{query.id | appInformationV6('certificateExpiryDate') or "15 January 2022"}}</dd>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV7('certificateExpiryDate') or "15 January 2022"}}</dd>
       </div>
 
     </dl>
@@ -258,18 +259,19 @@
   
   <div class="govuk-grid-column-two-thirds">
     <ul class="govuk-list govuk-!-margin-bottom-8 noprint">
-      {% if (query.id | appInformationV6('status')) == 'draft' %}
-      <li><a class="govuk-link govuk-link--no-visited-state" href="certificate/check-your-progress?certificate=ehc2849">Continue this application</a></li>
-      {% else %}
-      <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-viewonly">View application details</a></li>
+      {% if (query.id | appInformationV7('status')) == 'draft' %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="#">Continue this application</a></li>      
       {% endif %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="copy-as-coc?id={{query.id or 0}}&is_group={{query.is_group}}">Use this application to apply for a certificate of conformity</a></li>
       <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 0}}&is_group={{query.is_group}}">Copy as new  application</a></li>
-      {% if (query.id | appInformationV6('status')) == 'submitted' or (query.id | appInformationV6('status')) == 'preparing re-issue' or (query.id | appInformationV6('status')) == 'processing' or (query.id | appInformationV6('status')) == 'with inspector' or (query.id |
-      appInformationV6('status')) == 'exporter action' or (query.id | appInformationV6('status')) == 'preparing certificate' or (query.id | appInformationV6('status')) == 'returned' %}
+      {% if (query.id | appInformationV7('status')) != 'draft' %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-viewonly">View application details</a></li>
+      {% endif %}
+      {% if (query.id | appInformationV7('status')) == 'submitted' or (query.id | appInformationV7('status')) == 'preparing re-issue' or (query.id | appInformationV7('status')) == 'processing' or (query.id | appInformationV7('status')) == 'with inspector' or (query.id |
+      appInformationV7('status')) == 'exporter action' or (query.id | appInformationV7('status')) == 'preparing certificate' or (query.id | appInformationV7('status')) == 'returned' %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="cancel">Cancel this application</a></li>
       {% endif %}
-      {% if (query.id | appInformationV6('status')) == 'draft' %}
+      {% if (query.id | appInformationV7('status')) == 'draft' %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="delete">Delete this application</a></li>
       {% endif %}
     </ul>
@@ -285,41 +287,196 @@
     <table class="govuk-table">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
-          <th class="govuk-table__header" scope="col">Commodity</th>
-          <th class="govuk-table__header" scope="col">Variety</th>
-          <th class="govuk-table__header" scope="col">Quantity</th>
+          <th class="govuk-table__header" scope="col">Description</th>
+          <th class="govuk-table__header" scope="col">Origin</th>
+          <th class="govuk-table__header" scope="col">Quantity and number of packages</th>
+          <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks</th>
           <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
         </tr>
       </thead>
       <tbody class="govuk-table__body">
         <tr class="govuk-table__row">
-          <td class="govuk-table__cell">Cabbage</td>
-          <td class="govuk-table__cell">Durham Early</td>
-          <td class="govuk-table__cell">17 tonnes</td>
-          <td class="govuk-table__cell govuk-table__cell--numeric">
-            <a class="govuk-link govuk-link--no-visited-state" href="application/create/stock-summary?stock=0">Draw down or view stock</a>
-            <!-- <br/>
-            <a class="govuk-link govuk-link--no-visited-state" href="application/create/stock-summary?stock=2">Draw down</a> -->
+          <td class="govuk-table__cell">
+            <span style="display: block; margin-bottom: 7px;">
+              {% if commodity.has_botanicial_name == "use_description" %}
+              <!-- use DESCRIPTION -->
+              <strong>{{commodity.commodity_description or "Description for plant"}}</strong>
+              {% elif commodity.genus %}
+              <!-- use GENUS + SPECIES -->
+              <strong>{{commodity.genus or "Genus unknown"}}, {{commodity.commodity_host_species or "Species unknown"}}</strong>
+              {% else %}
+              <!-- use BOTANICAL NAME -->
+              <strong>{{commodity.botanical_name or "Rosa ecae (ROSEC)"}}</strong>
+              {% endif %}
+            </span>
+            {% if commodity.commodity_variety != "" %}
+            <span style="display: block; margin-bottom: 7px;">'{{commodity.commodity_variety or "Red blossom"}}'</span>
+            {% endif %}
+            {% if query.design != "b" %}
+            <span style="display: block; margin-bottom: 7px;">
+              Commodity type:
+              {% if commodity.commodity_type == "produce" %}
+              Produce (fruit, flowers or vegetables)
+              {% else %}
+              {{commodity.commodity_type | capitalize or "Plants"}}
+              {% endif %}
+            </span>
+            {% endif %}
+          </td>
+          <td class="govuk-table__cell">
+            {% set _defaultCountry = "United Kingdom" %}
+            {% if commodity.filter_demo == "_unchecked" or commodity.filter_demo == undefined %}
+            {{_defaultCountry}}
+            {% else %}
+            {{commodity.filter_demo | join(", ") or _defaultCountry}}
+            {% endif %}
+            <!-- "filter_demo":["Afghanistan","Åland Islands","Albania"], -->
+          </td>
+          <td class="govuk-table__cell">
+            <span style="display: block; margin-bottom: 7px;">{{commodity.quantity or "20"}} {{commodity.units or "kilograms"}}</span>
+            <span style="display: block; margin-bottom: 7px;">{{commodity.number_of_packages or "5"}} packages</span>
+          </td>
+          <td class="govuk-table__cell">
+            <span style="display: block; margin-bottom: 7px;">{{commodity.packaging[0] or "Crate - bulk - cardboard"}}</span>
+            {% if query.design != "b" %}
+            {% if commodity.packing_material_used != "" %}
+            <span style="display: block; margin-bottom: 7px;">{{commodity.packing_material_used or "Cardboard"}}</span>
+            {% endif %}
+            {% if commodity.distinguishing_marks != "" %}
+            <span style="display: block; margin-bottom: 7px;">{{commodity.distinguishing_marks or "Brown marks"}}</span>
+            {% endif %}
+            {% endif %}
+            {% if data.reforwarding %}
+            <span style="display: block; margin-bottom: 7px;" >
+              Import certificates:<br>
+              {% if commodity['commodityIPCN-2'] %}
+              {{commodity['commodityIPCN-1'] or "123-456-789-0"}} and {{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
+              {% else %}
+              {{commodity['commodityIPCN-1'] or "123-456-789-0"}}
+              {% endif %}
+            </span>
+            {% endif %}
+          </td>
+          <td class="govuk-table__cell" style="text-align: right;">
+            <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+            <br>
+            <a href="#" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
           </td>
         </tr>
         <tr class="govuk-table__row">
-          <td class="govuk-table__cell">Cabbage</td>
-          <td class="govuk-table__cell">Avon Crest</td>
-          <td class="govuk-table__cell">35 tonnes</td>
-          <td class="govuk-table__cell govuk-table__cell--numeric">
-            <a class="govuk-link govuk-link--no-visited-state" href="application/create/stock-summary?stock=1">Draw down or view stock</a>
-            <!-- <br/>
-            <a class="govuk-link govuk-link--no-visited-state" href="application/create/stock-summary?stock=2">Draw down</a> -->
+          <td class="govuk-table__cell">
+            <span style="display: block; margin-bottom: 7px;">
+            {% if commodity.has_botanicial_name == "use_description" %}
+            <!-- use DESCRIPTION -->
+            <strong>{{commodity.commodity_description or "Description for plant"}}</strong>
+            {% elif commodity.genus %}
+            <!-- use GENUS + SPECIES -->
+            <strong>{{commodity.genus or "Genus unknown"}}, {{commodity.commodity_host_species or "Species unknown"}}</strong>
+            {% else %}
+            <!-- use BOTANICAL NAME -->
+            <strong>{{commodity.botanical_name or "RRRosa ecae (ROSEC)"}}</strong>
+            {% endif %}
+            </span>
+            {% if commodity.commodity_variety != "" %}
+            <span style="display: block; margin-bottom: 7px;">'{{commodity.commodity_variety or "Red blossom"}}'</span>
+            {% endif %}
+            {% if query.design != "b" %}
+            <span style="display: block; margin-bottom: 7px;">
+            Commodity type:
+            {% if commodity.commodity_type == "produce" %}
+            Produce (fruit, flowers or vegetables)
+            {% else %}
+            {{commodity.commodity_type | capitalize or "Plants"}}
+            {% endif %}
+            </span>
+            {% endif %}
+          </td>
+          <td class="govuk-table__cell">
+               {% set _defaultCountry = "United Kingdom" %}
+               {% if commodity.filter_demo == "_unchecked" or commodity.filter_demo == undefined %}
+               {{_defaultCountry}}
+               {% else %}
+               {{commodity.filter_demo | join(", ") or _defaultCountry}}
+               {% endif %}
+               <!-- "filter_demo":["Afghanistan","Åland Islands","Albania"], -->
+          </td>
+          <td class="govuk-table__cell">
+            <span style="display: block; margin-bottom: 7px;">{{commodity.quantity or "20"}} {{commodity.units or "kilograms"}}</span>
+            <span style="display: block; margin-bottom: 7px;">{{commodity.number_of_packages or "5"}} packages</span>
+          </td>
+          <td class="govuk-table__cell">
+            <span style="display: block; margin-bottom: 7px;">{{commodity.packaging[0] or "Crate - bulk - cardboard"}}</span>
+            {% if query.design != "b" %}
+            {% if commodity.packing_material_used != "" %}
+            <span style="display: block; margin-bottom: 7px;">{{commodity.packing_material_used or "Cardboard"}}</span>
+            {% endif %}
+            {% if commodity.distinguishing_marks != "" %}
+            <span style="display: block; margin-bottom: 7px;">{{commodity.distinguishing_marks or "Brown marks"}}</span>
+            {% endif %}
+            {% endif %}
+          </td>
+          <td class="govuk-table__cell" style="text-align: right;">
+            <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+            <br>
+            <a href="#" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
           </td>
         </tr>
         <tr class="govuk-table__row">
-          <td class="govuk-table__cell">Cabbage</td>
-          <td class="govuk-table__cell">Savoy</td>
-          <td class="govuk-table__cell">30 tonnes</td>
-          <td class="govuk-table__cell govuk-table__cell--numeric">
-            <a class="govuk-link govuk-link--no-visited-state" href="application/create/stock-summary?stock=2&expired=true">View stock</a>
-            <!-- <br/>
-            <a class="govuk-link govuk-link--no-visited-state" href="application/create/stock-summary?stock=2">Draw down</a> -->
+          <td class="govuk-table__cell">
+            <span style="display: block; margin-bottom: 7px;">
+            {% if commodity.has_botanicial_name == "use_description" %}
+            <!-- use DESCRIPTION -->
+            <strong>{{commodity.commodity_description or "Description for plant"}}</strong>
+            {% elif commodity.genus %}
+            <!-- use GENUS + SPECIES -->
+            <strong>{{commodity.genus or "Genus unknown"}}, {{commodity.commodity_host_species or "Species unknown"}}</strong>
+            {% else %}
+            <!-- use BOTANICAL NAME -->
+            <strong>{{commodity.botanical_name or "RRRosa ecae (ROSEC)"}}</strong>
+            {% endif %}
+            </span>
+            {% if commodity.commodity_variety != "" %}
+            <span style="display: block; margin-bottom: 7px;">'{{commodity.commodity_variety or "Red blossom"}}'</span>
+            {% endif %}
+            {% if query.design != "b" %}
+            <span style="display: block; margin-bottom: 7px;">
+            Commodity type:
+            {% if commodity.commodity_type == "produce" %}
+            Produce (fruit, flowers or vegetables)
+            {% else %}
+            {{commodity.commodity_type | capitalize or "Plants"}}
+            {% endif %}
+            </span>
+            {% endif %}
+          </td>
+          <td class="govuk-table__cell">
+            {% set _defaultCountry = "United Kingdom" %}
+            {% if commodity.filter_demo == "_unchecked" or commodity.filter_demo == undefined %}
+            {{_defaultCountry}}
+            {% else %}
+            {{commodity.filter_demo | join(", ") or _defaultCountry}}
+            {% endif %}
+            <!-- "filter_demo":["Afghanistan","Åland Islands","Albania"], -->
+          </td>
+          <td class="govuk-table__cell">
+            <span style="display: block; margin-bottom: 7px;">{{commodity.quantity or "20"}} {{commodity.units or "kilograms"}}</span>
+            <span style="display: block; margin-bottom: 7px;">{{commodity.number_of_packages or "5"}} packages</span>
+          </td>
+          <td class="govuk-table__cell">
+            <span style="display: block; margin-bottom: 7px;">{{commodity.packaging[0] or "Crate - bulk - cardboard"}}</span>
+            {% if query.design != "b" %}
+            {% if commodity.packing_material_used != "" %}
+            <span style="display: block; margin-bottom: 7px;">{{commodity.packing_material_used or "Cardboard"}}</span>
+            {% endif %}
+            {% if commodity.distinguishing_marks != "" %}
+            <span style="display: block; margin-bottom: 7px;">{{commodity.distinguishing_marks or "Brown marks"}}</span>
+            {% endif %}
+            {% endif %}
+          </td>
+          <td class="govuk-table__cell" style="text-align: right;">
+            <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+            <br>
+            <a href="#" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
           </td>
         </tr>
       </tbody>

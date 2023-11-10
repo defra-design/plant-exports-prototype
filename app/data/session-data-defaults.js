@@ -22,6 +22,7 @@ var applicationsv3 = require('./applications-v3.json');
 var applicationsv4 = require('./applications-v4.json');
 var applicationsv5 = require('./applications-v5.json');
 var applicationsv6 = require('./applications-v6.json');
+var applicationsv7 = require('./applications-v7.json');
 var sample = require('./sample.json');
 var countries = require('./countries-full.json');
 var countries2 = require('./countries-eu-ni.json');
@@ -36,6 +37,7 @@ module.exports = {
   "applicationsv4" : applicationsv4,
   "applicationsv5" : applicationsv5,
   "applicationsv6" : applicationsv6,
+  "applicationsv7" : applicationsv7,
   "commodities" : [],
   "id_count" : 1,
   "sample": sample,
@@ -47,5 +49,4 @@ module.exports = {
   "addresses3": addresses3,
   "ephytoEmailNotifications": "All"
   // Insert values here
-  
 }
