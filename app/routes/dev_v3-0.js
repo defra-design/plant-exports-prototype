@@ -557,14 +557,12 @@ module.exports = function(router) {
       var name = req.session.data.consignee_name;
       var consigneeAddressLine1 = req.session.data.consigneeAddressLine1;
       var consigneeAddressLine3 = req.session.data.consigneeAddressLine3;
-      var consigneeAddressLine5 = req.session.data.consigneeAddressLine5;
 
       // Logic and validation for routing
       var errorCount = 0;
       var error1 = "";
       var error2 = "";
       var error3 = "";
-      // var error4 = "";
       
       // Error validation - make sure user enters data into required fields
       if (name == "" || name == null) {
@@ -581,11 +579,6 @@ module.exports = function(router) {
         errorCount++;
         error3 = "&error3=true";
       }
-
-      // if (consigneeAddressLine5 == "" || consigneeAddressLine5 == null) {
-      //   errorCount++;
-      //   error4 = "&error4=true";
-      // }
 
       // Routing - decide where to direct users to
       if (errorCount > 0) {
@@ -605,6 +598,10 @@ module.exports = function(router) {
         }
         
       }
+      // else {
+      //   req.session.data.consignee_task_list_data = "Completed";
+      //   return res.redirect("task-list");
+      // }
 
     }
 
