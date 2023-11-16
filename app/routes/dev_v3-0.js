@@ -588,9 +588,20 @@ module.exports = function(router) {
         return res.redirect(return_url + "?return_url=");
       }
       else {
-        req.session.data.consignee_task_list_data = "Completed";
-        return res.redirect("task-list");
+        
+        if (commodity == "grain") {
+          return res.redirect("consignee-further-information");
+        }
+        else {
+          req.session.data.consignee_task_list_data = "Completed";
+          return res.redirect("task-list");
+        }
+        
       }
+      // else {
+      //   req.session.data.consignee_task_list_data = "Completed";
+      //   return res.redirect("task-list");
+      // }
 
     }
 
