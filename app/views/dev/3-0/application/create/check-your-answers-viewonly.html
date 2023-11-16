@@ -1165,36 +1165,40 @@
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
         
         <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-          <dt class="govuk-summary-list__key">Name and address of consignee</dt>          
+          <dt class="govuk-summary-list__key">{% if data.commodity == "grain" %}Consignee details and further information{% else %}Name and address of consignee{% endif %}</dt>          
           <dd class="govuk-summary-list__value">
             {{data.consignee_name or query.id | appInformationV7('importer') | title or "Cubix"}}
             <br>
             {% if data.select_consignee_address == "address_0" %}88 Jianguo Rd, 北京市, 3208, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_1" %}Lillegardsvagen 1, Falkenberg, South-East, 311 50, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_2" %}Piazza Pietro Nenni, 4, Orta Nova Foggia, Foggia, 71045, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_3" %}Phase 3 St, Vaibhav Nagar, Katpadi, Vellore, Tamil Nadu, 632014, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_4" %}6347 Pacific Blvd, Huntington Park, California, 90255, {{data.countrySelect[0] or "France"}}{% else %}{{data.consigneeAddressLine1 or "88 Jianguo Rd" }}{% if data.consigneeAddressLine2 %}, {{data.consigneeAddressLine2}}{% endif %}, {{data.consigneeAddressLine3 or "北京市"}}{% if data.consigneeAddressLine4 %}, {{data.consigneeAddressLine4}}{% endif %}, {{data.consigneeAddressLine5 or "3208"}}, {{data.countrySelect[0] or "France"}}{% endif %}
+            {% if data.commodity == "grain" %}
+            <br>
+            {% if data.consignee_more_detail %}{{data.consignee_more_detail or 'More information'}}{% else %}<span class="govuk-hint">Not entered</span>{% endif %}
+            {% endif %}
           </dd>
         </div>
 
-        {% if data.commodity == "grain" %}
+        <!-- {% if data.commodity == "grain" %}
         <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
           <dt class="govuk-summary-list__key">Further information</dt>
           <dd class="govuk-summary-list__value">{% if data.consignee_more == "Yes" %}{{data.consignee_more_detail or 'More information'}}{% else %}<span class="govuk-hint">Not entered</span>{% endif %}</dd>
         </div>
-        {% endif %}
+        {% endif %} -->
 
       </dl>
 
-      <h2 class="govuk-heading-m">Import permits</h2>
-      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+      <!-- <h2 class="govuk-heading-m">Import permits</h2>
+      <dl class="govuk-summary-list govuk-!-margin-bottom-9"> -->
 
         <!-- Set counts -->
-        {% set _importPermitCount = data['importPermitCount'] or 1 | int %}
+        <!-- {% set _importPermitCount = data['importPermitCount'] or 1 | int %}
         {% set _importPermitDisplayedCount = data['importPermitDisplayedCount'] or 1 | int %}
         {% set _importPermitCountDeleted = _importPermitDisplayedCount | int - 1 %}
         {% set _supportingDocumentsDisplayedCount = data['supportingDocumentsDisplayedCount'] or 0 | int %}
         {% set _totalDocumentsDisplayedCount = _importPermitDisplayedCount | float + _supportingDocumentsDisplayedCount | float %}
-        {% set _totalDocumentsDisplayedCount = _supportingDocumentsDisplayedCount | float %}
+        {% set _totalDocumentsDisplayedCount = _supportingDocumentsDisplayedCount | float %} -->
 
         <!-- Set id to use -->
-        {% set _id = _importPermitCount %} <!-- 1 -->
+        <!-- {% set _id = _importPermitCount %}
         {% set _haveImportPermits = data.import_permits or "Yes" %}
         
         <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
@@ -1234,7 +1238,7 @@
         {% else %}
         
         {% endif %}
-      </dl>
+      </dl> -->
 
       <h2 class="govuk-heading-m">Supporting documents (optional)</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
@@ -1252,13 +1256,13 @@
                 <a href="#" class="govuk-link">Another filename.pdf</a>
               </li>
               <li>
-                {% if data.fileDescription == "Add your own description" %}{{data.manualFileDescription or "Description of file"}}{% else %}{{data.fileDescription or "Description of file"}}{% endif %}
+                {% if data.fileDescription == "Add your own description" %}{{data.manualFileDescription or "Description of file"}}{% elif data.fileDescription == "Import permit" %}Import permit ({{data.importPermitNumber or "123456789ABC"}}){% else %}{{data.fileDescription or "Description of file"}}{% endif %}
                 <br>
                 <a href="#" class="govuk-link">{{data.supportingDocument or "Filename.jpg"}}</a>
               </li>
             </ul>
             {% else %}
-            {% if data.fileDescription == "Add your own description" %}{{data.manualFileDescription or "Description of file"}}{% else %}{{data.fileDescription or "Description of file"}}{% endif %}
+            {% if data.fileDescription == "Add your own description" %}{{data.manualFileDescription or "Description of file"}}{% elif data.fileDescription == "Import permit" %}Import permit ({{data.importPermitNumber or "123456789ABC"}}){% else %}{{data.fileDescription or "Description of file"}}{% endif %}
             <br>
             <a href="#" class="govuk-link">{{data.supportingDocument or "Filename.jpg"}}</a>
             {% endif %}

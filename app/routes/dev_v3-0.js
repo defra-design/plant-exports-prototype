@@ -588,20 +588,9 @@ module.exports = function(router) {
         return res.redirect(return_url + "?return_url=");
       }
       else {
-        
-        if (commodity == "grain") {
-          return res.redirect("consignee-further-information");
-        }
-        else {
-          req.session.data.consignee_task_list_data = "Completed";
-          return res.redirect("task-list");
-        }
-        
+        req.session.data.consignee_task_list_data = "Completed";
+        return res.redirect("task-list");
       }
-      // else {
-      //   req.session.data.consignee_task_list_data = "Completed";
-      //   return res.redirect("task-list");
-      // }
 
     }
 
@@ -610,8 +599,8 @@ module.exports = function(router) {
 
       // Data objects to be retrieved and queried
       var supportingDocument = req.session.data.supportingDocument;
-      // var supportingDocumentType = supportingDocument.split('.').pop();
       var fileDescription = req.session.data.fileDescription;
+      var importPermitNumber = req.session.data.importPermitNumber;
       var manualFileDescription = req.session.data.manualFileDescription;
 
       // Logic and validation for routing
@@ -619,17 +608,13 @@ module.exports = function(router) {
       var error1 = "";
       var error2 = "";
       var error3 = "";
-      // var error4 = "";
+      var error5 = "";
       
       // Error validation - make sure user enters data into required fields
       if (supportingDocument == "" || supportingDocument == null) {
         errorCount++;
         error1 = "&error1=true";
       }
-      // else if (supportingDocumentType != "gif" && supportingDocumentType != "jpeg" && supportingDocumentType != "jpg" && supportingDocumentType != "pdf" && supportingDocumentType != "png") {
-      //   errorCount++;
-      //   error4 = "&error4=true";
-      // }
 
       if (fileDescription == "" || fileDescription == null) {
         errorCount++;
@@ -637,16 +622,20 @@ module.exports = function(router) {
       }
       else {
 
-        if (fileDescription == "Add your own description" && (manualFileDescription == "" || manualFileDescription == null)) {
+        if (fileDescription == "Import permit" && (importPermitNumber == "" || importPermitNumber == null)) {
+          errorCount++;
+          error5 = "&error5=true";
+        }
+        else if (fileDescription == "Add your own description" && (manualFileDescription == "" || manualFileDescription == null)) {
           errorCount++;
           error3 = "&error3=true";
         }
 
-      }      
+      }
 
       // Routing - decide where to direct users to
       if (errorCount > 0) {
-        return res.redirect("attachments-add?error=true" + error1 + error2 + error3);
+        return res.redirect("attachments-add?error=true" + error1 + error2 + error3 + error5);
       }
       else {
         return res.redirect("attachments-view?supportingDocumentAdded=true&supportingDocumentsExist=true&supportingDocumentsDisplayedCount=1");
