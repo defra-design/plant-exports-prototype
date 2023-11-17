@@ -84,15 +84,30 @@
         <tbody class="govuk-table__body">
           <!-- Supporting documents (START) -->
           {% if query.manualLinkOverride == "true" %}
+          {% if query.count == "2" %}
           <tr class="govuk-table__row">
             <td class="govuk-table__cell">Another description of file</td>
             <td scope="row" class="govuk-table__cell"><a href="#" class="govuk-link govuk-link--no-visited-state"><span class="govuk-visually-hidden">Download </span>Another filename.pdf</a></td>
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              <!-- <a href="attachments-add" class="govuk-link govuk-link--no-visited-state">Change <span class="govuk-visually-hidden">{{data.supportingDocument or "Filename.jpg"}}</span></a>
-              <br> -->
               <a href="#" class="govuk-link govuk-link--no-visited-state">Delete <span class="govuk-visually-hidden">Another filename.pdf</span></a>
             </td>
           </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Description of file</td>
+            <td scope="row" class="govuk-table__cell"><a href="#" class="govuk-link govuk-link--no-visited-state"><span class="govuk-visually-hidden">Download </span>Filename.jpg</a></td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              <a href="#" class="govuk-link govuk-link--no-visited-state">Delete <span class="govuk-visually-hidden">Another filename.jpg</span></a>
+            </td>
+          </tr>
+          {% else %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Description of file</td>
+            <td scope="row" class="govuk-table__cell"><a href="#" class="govuk-link govuk-link--no-visited-state"><span class="govuk-visually-hidden">Download </span>Filename.jpg</a></td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              <a href="#" class="govuk-link govuk-link--no-visited-state">Delete <span class="govuk-visually-hidden">Another filename.jpg</span></a>
+            </td>
+          </tr>
+          {% endif %}
           {% endif %}
           {% set _deleteReturnLink = "attachments-view" %}
           {% if _totalDocumentsDisplayedCount | int == 1 %}
@@ -103,8 +118,6 @@
             <td class="govuk-table__cell">{% if data.fileDescription == "Add your own description" %}{{data.manualFileDescription or "Description of file"}}{% elif data.fileDescription == "Import permit" %}Import permit ({{data.importPermitNumber or "123456789ABC"}}){% else %}{{data.fileDescription or "Description of file"}}{% endif %}</td>
             <td scope="row" class="govuk-table__cell"><a href="#" class="govuk-link govuk-link--no-visited-state"><span class="govuk-visually-hidden">Download </span>{{data.supportingDocument or "Filename.jpg"}}</a></td>
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              <!-- <a href="attachments-add" class="govuk-link govuk-link--no-visited-state">Change <span class="govuk-visually-hidden">{{data.supportingDocument or "Filename.jpg"}}</span></a>
-              <br> -->
               <a href="attachments-delete?deleteReturnLink=task-list" class="govuk-link govuk-link--no-visited-state">Delete <span class="govuk-visually-hidden">{{data.supportingDocument or "Filename.jpg"}}</span></a>
             </td>
           </tr>
@@ -137,8 +150,6 @@
               {% set _deleteReturnLink = "import-permits" %}
             {% endif %}
             <td class="govuk-table__cell govuk-table__cell--numeric">
-              <!-- <a href="import-permits-add?edit={{_id}}" class="govuk-link govuk-link--no-visited-state">Change <span class="govuk-visually-hidden">import permit {{data['importPermitNumber' + _id] or '123456789ABC'}}</span></a>
-              <br> -->
               <a href="attachments-ip-delete?deleteReturnLink={{_deleteReturnLink}}&deleteID={{_id}}&count={{_importPermitCountDeleted}}" class="govuk-link govuk-link--no-visited-state">Delete <span class="govuk-visually-hidden">import permit {{data['importPermitNumber' + _id] or '123456789ABC'}}</span></a>
             </td>
           </tr>
