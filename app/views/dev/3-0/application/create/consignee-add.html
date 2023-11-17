@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if query.error == "true" %}Error: {% endif %}Who will receive this consignment? - Phytosanitary certificate - {{serviceName}} - GOV.UK
+  {% if query.error == "true" %}Error: {% endif %}{% if data.commodity == "grain" %}Consignee details{% else %}Who are you sending this consignment to?{% endif %} - Phytosanitary certificate - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -29,10 +29,7 @@
             <li><a href="#consignee-address-line-1">Enter address line 1 of the consignee address</a></li>
             {% endif %}
             {% if query.error3 == "true" %}
-            <li><a href="#consignee-address-line-3">Enter town or city 1 of the consignee address</a></li>
-            {% endif %}
-            {% if query.error4 == "true" %}
-            <li><a href="#consignee-address-line-5">Enter postal code or zip code of the consignee address</a></li>
+            <li><a href="#consignee-address-line-3">Enter the town or city of the consignee address</a></li>
             {% endif %}
           </ul>
         </div>
@@ -43,82 +40,67 @@
     {% endif %}
 
     <form action="consignee-add-validation?return_url={{data.return_url}}" method="post">
-      <fieldset class="govuk-fieldset">
-        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
-          <h1 class="govuk-fieldset__heading">Who will receive this consignment?</h1>
-        </legend>
-        <p class="govuk-hint">The consignee is the importer or customer who receives your consignment when it arrives in {{data.countrySelect[0] or "France"}}</p>
+      {% if data.commodity == "grain" %}
+      <h1 class="govuk-heading-xl">Consignee details</h1>
+      {% else %}
+      <h1 class="govuk-heading-xl">Who are you sending this consignment to?</h1>
+      {% endif %}
 
-        <div class="govuk-form-group{% if query.error1 == 'true' %} govuk-form-group--error{% endif %}">
-          <label class="govuk-label" for="consignee_name">Consignee name</label>
-          {% if query.error1 == 'true' %}
-          <p id="consignee_name-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Enter the name of the consignee</p>
-          {% endif %}
-          <input class="govuk-input" id="consignee_name" name="consignee_name" type="text" value="{{data.consignee_name}}"{% if query.error1 == 'true' %} aria-describedby="consignee_name-error"{% endif %}>
+      <div class="govuk-form-group{% if query.error1 == 'true' %} govuk-form-group--error{% endif %}">
+        <label class="govuk-label" for="consignee_name">Consignee name</label>
+
+        <div id="consignee_name-hint" class="govuk-hint">
+          The consignee is the business you are sending your goods to.
         </div>
 
-        {% if query.addAddressDesign == "1" %}
-        <div class="govuk-form-group{% if query.error2 == 'true' %} govuk-form-group--error{% endif %}">
-          <label class="govuk-label" for="consignee_address">Consignee address</label>
-          {% if query.error2 == 'true' %}
-          <p id="consignee_address-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Enter the address of the consignee</p>
-          {% endif %}
-          <textarea class="govuk-textarea" id="consignee_address" name="consignee_address" rows="5"{% if query.error2 == 'true' %} aria-describedby="consignee_address-error{% endif %}">{{data.consignee_address}}</textarea>
-        </div>
-        {% else %}
-        <fieldset class="govuk-fieldset">
-          <legend class="govuk-fieldset__legend">
-            <h1 class="govuk-fieldset__heading">Consignee address</h1>
-          </legend>
-
-          <div class="govuk-form-group{% if query.error2 == 'true' %} govuk-form-group--error{% endif %}">
-            <label class="govuk-label" for="consignee-address-line-1">Address line 1</label>
-
-            <div id="consignee-address-line-1-hint" class="govuk-hint">
-              Include flat and floor numbers, where appropriate
-            </div>
-
-            {% if query.error2 == 'true' %}
-            <p id="consignee-address-line-1-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Enter address line 1 of the consignee address</p>
-            {% endif %}
-            <input class="govuk-input" id="consignee-address-line-1" name="consigneeAddressLine1" type="text" aria-describedby="consignee-address-line-1-hint{% if query.error1 == 'true' %} consignee-address-line-1-error{% endif %}" autocomplete="address-line1" value="{{data.consigneeAddressLine1}}">
-          </div>
-
-          <div class="govuk-form-group">
-            <label class="govuk-label" for="consignee-address-line-2">Address line 2 (optional)</label>
-            <input class="govuk-input" id="consignee-address-line-2" name="consigneeAddressLine2" type="text" autocomplete="address-line2" value="{{data.consigneeAddressLine2}}">
-          </div>
-
-          <div class="govuk-form-group{% if query.error3 == 'true' %} govuk-form-group--error{% endif %}">
-            <label class="govuk-label" for="consignee-address-line-3">Town or city</label>
-            {% if query.error3 == 'true' %}
-            <p id="consignee-address-line-3-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Enter town or city 1 of the consignee address</p>
-            {% endif %}
-            <input class="govuk-input govuk-!-width-two-thirds" id="consignee-address-line-3" name="consigneeAddressLine3" type="text" autocomplete="address-level2" value="{{data.consigneeAddressLine3}}"{% if query.error3 == 'true' %} aria-describedby="consignee-address-line-3-error"{% endif %}>
-          </div>
-
-          <div class="govuk-form-group">
-            <label class="govuk-label" for="consignee-address-line-4">County, state or province (optional)</label>
-            <input class="govuk-input govuk-!-width-two-thirds" id="consignee-address-line-4" name="consigneeAddressLine4" type="text" autocomplete="address-level1" value="{{data.consigneeAddressLine4}}">
-          </div>
-
-          <div class="govuk-form-group{% if query.error4 == 'true' %} govuk-form-group--error{% endif %}">
-            <label class="govuk-label" for="consignee-address-line-5">Postal code or zip code (optional)</label>
-            {% if query.error4 == 'true' %}
-            <p id="consignee-address-line-5-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Enter postal code or zip code of the consignee address</p>
-            {% endif %}
-            <input class="govuk-input govuk-!-width-one-quarter" id="consignee-address-line-5" name="consigneeAddressLine5" type="text" autocomplete="postal-code" value="{{data.consigneeAddressLine5}}"{% if query.error4 == 'true' %} aria-describedby="consignee-address-line-5-error"{% endif %}>
-          </div>
-
-        </fieldset>
+        {% if query.error1 == 'true' %}
+        <p id="consignee_name-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Enter the name of the consignee</p>
         {% endif %}
+        <input class="govuk-input" id="consignee_name" name="consignee_name" type="text" value="{{data.consignee_name}}" aria-describedby="consignee_name-hint{% if query.error1 == 'true' %} consignee_name-error{% endif %}">
+      </div>
+
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend">
+          <h2 class="govuk-fieldset__heading">Consignee address</h2>
+        </legend>
+
+        <div class="govuk-form-group{% if query.error2 == 'true' %} govuk-form-group--error{% endif %}">
+          <label class="govuk-label" for="consignee-address-line-1">Address line 1</label>
+          {% if query.error2 == 'true' %}
+          <p id="consignee-address-line-1-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Enter address line 1 of the consignee address</p>
+          {% endif %}
+          <input class="govuk-input" id="consignee-address-line-1" name="consigneeAddressLine1" type="text"{% if query.error2 == 'true' %}aria-describedby="consignee-address-line-1-error"{% endif %} autocomplete="address-line1" value="{{data.consigneeAddressLine1}}">
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="consignee-address-line-2">Address line 2 (optional)</label>
+          <input class="govuk-input" id="consignee-address-line-2" name="consigneeAddressLine2" type="text" autocomplete="address-line2" value="{{data.consigneeAddressLine2}}">
+        </div>
+
+        <div class="govuk-form-group{% if query.error3 == 'true' %} govuk-form-group--error{% endif %}">
+          <label class="govuk-label" for="consignee-address-line-3">Town or city</label>
+          {% if query.error3 == 'true' %}
+          <p id="consignee-address-line-3-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Enter the town or city of the consignee address</p>
+          {% endif %}
+          <input class="govuk-input govuk-!-width-two-thirds" id="consignee-address-line-3" name="consigneeAddressLine3" type="text" autocomplete="address-level2" value="{{data.consigneeAddressLine3}}"{% if query.error3 == 'true' %} aria-describedby="consignee-address-line-3-error"{% endif %}>
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="consignee-address-line-4">County, state or province (optional)</label>
+          <input class="govuk-input govuk-!-width-two-thirds" id="consignee-address-line-4" name="consigneeAddressLine4" type="text" autocomplete="address-level1" value="{{data.consigneeAddressLine4}}">
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="consignee-address-line-5">Postcode or zip code (if there is one)</label>
+          <input class="govuk-input govuk-!-width-one-quarter" id="consignee-address-line-5" name="consigneeAddressLine5" type="text" autocomplete="postal-code" value="{{data.consigneeAddressLine5}}">
+        </div>
 
       </fieldset>
 
       {% if data.commodity == "grain" %}
       <div class="govuk-form-group">
         <label class="govuk-label" for="consignee_more_detail">Further information{% if data.reforwarding %} or additional declarations{% endif %} (optional)</label>
-        <span id="consignee_more_detail-hint" class="govuk-hint">Anything you put here will be added to your certificate. If the destination country requires information to be provided in foreign language translation, you should enter it here</span>
+        <span id="consignee_more_detail-hint" class="govuk-hint">Add extra information for your certificate. For example, translations for the destination country.</span>
         <textarea class="govuk-textarea" id="consignee_more_detail" name="consignee_more_detail" rows="5" aria-describedby="consignee_more_detail-hint">{{data.consignee_more_detail}}</textarea>
       </div>
       {% endif %}
