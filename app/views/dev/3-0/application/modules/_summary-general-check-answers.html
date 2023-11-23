@@ -41,24 +41,12 @@
           <strong>{{commodity.botanical_name or "Rosa ecae (ROSEC)"}}</strong>
       {% endif %}
   </span>
-    {% if commodity.commodity_variety != "" %}
-    <!-- <span style="display: block; margin-bottom: 7px;">'{{commodity.commodity_variety or "Red GGblossom"}}'</span> -->
     
-    <!-- {% endif %}
-    {% if query.design != "b" %}
-    <span style="display: block; margin-bottom: 7px;">
-      Commodity type:
-      <br>
-      {% if commodity.commodity_type == "produce" %}
-      Produce (fruit, flowers or vegetables)
-      {% else %}
-      {{commodity.commodity_type | capitalize or "Unprocessed cereal grains"}}
-      {% endif %}
-    </span>
-    {% endif %} -->
     
   </td>
   <td class="govuk-table__cell">
+
+    <span style="display: block; margin-bottom: 7px;" >
     <!-- {% if commodity.filter_demo %}
     {{commodity.filter_demo or "United Kingdom"}}
     {% else %}
@@ -71,6 +59,20 @@
     {{commodity.filter_demo | join(", ") or _defaultCountry}}
     {% endif %}
     <!-- "filter_demo":["Afghanistan","Åland Islands","Albania"], -->
+  </span>
+
+    {% if data.reforwarding == "1" %}
+    <span style="display: block; margin-bottom: 7px;" >
+      {% if commodity['commodityIPCN-2'] %}
+        {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
+      {% elif commodity['commodityIPCN-1'] %}
+        {{commodity['commodityIPCN-1'] or "123-456-789-0"}}
+      {% else %}
+        {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
+      {% endif %}
+    </span>
+    {% endif %}
+    
   </td>
   <td class="govuk-table__cell">
     <span style="display: block; margin-bottom: 7px;">{{commodity.quantity or "20"}} {{commodity.units or "kilograms"}}</span>

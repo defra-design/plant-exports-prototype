@@ -31,14 +31,29 @@
       {% endif %}
       <h1 class="govuk-heading-xl">Your commodities</h1>
 
+      {% set _originColHeader = "Origin" %}
+      {% if data.reforwarding == "1" %}
+        {% set _originColHeader = "Origin and import certificates" %}
+      {% endif %}
+      {% if data.commodity == "used farm machinery" %}
+        {% set _originColHeader = "Country of last use" %}
+        {% if data.build == "development" %}
+          {% set _originColHeader = "Country where this machinery was last used" %}
+        {% endif %}
+        {% if data.reforwarding == "1" %}
+          {% set _originColHeader = "Country of last use and import certificates" %}
+          {% if data.build == "development" %}
+            {% set _originColHeader = "Country where this machinery was last used and import certificates" %}
+          {% endif %}
+        {% endif %}
+      {% endif %}
+
       <table class="govuk-table govuk-!-margin-bottom-7" id="commodityTable">
         <thead class="govuk-table__head">
           {% if data.commodity == "bulbs" %}
           <tr class="govuk-table__row">
-
-            
             <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">Origin</th>
+            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
             <th class="govuk-table__header" scope="col">Quantity and number of packages</th>
             <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks</th>
             <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
@@ -46,7 +61,7 @@
           {% elif data.commodity == "potatoes" %}
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">Origin</th>
+            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
             <th class="govuk-table__header" scope="col">Quantity and number of packages</th>
             <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks</th>
             <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
@@ -54,7 +69,7 @@
           {% elif data.commodity == "grain" %}
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">Origin</th>
+            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
             <th class="govuk-table__header" scope="col">Quantity and number of packages</th>
             <th class="govuk-table__header" scope="col">Type of packaging</th>
             <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
@@ -63,7 +78,7 @@
           {% if query.design == "b" %}
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">Origin</th>
+            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
             <th class="govuk-table__header" scope="col">Quantity and number of packages</th>
             <th class="govuk-table__header" scope="col">Type of packaging</th>
             <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
@@ -71,7 +86,7 @@
           {% else %}
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">Origin</th>
+            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
             <th class="govuk-table__header" scope="col">Quantity and number of packages</th>
             <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks</th>
             <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
@@ -81,7 +96,7 @@
           {% if query.design == "b" %}
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">Origin</th>
+            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
             <th class="govuk-table__header" scope="col">Quantity and number of packages</th>
             <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks</th>
             <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
@@ -89,7 +104,7 @@
           {% else %}
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">Origin</th>
+            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
             <th class="govuk-table__header" scope="col">Quantity and number of packages</th>
             <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks</th>
             <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
@@ -98,7 +113,7 @@
           {% elif data.commodity == "seeds" %}
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">Origin</th>
+            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
             <th class="govuk-table__header" scope="col">Quantity and number of packages</th>
             <th class="govuk-table__header" scope="col">Packaging</th>
             <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
@@ -106,14 +121,14 @@
           {% elif data.commodity == "used farm machinery" %}
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">{% if data.build == "development" %}Country where this machinery was last used{% else %}Country of last use{% endif %}</th>
+            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
             <th class="govuk-table__header" scope="col">Unique ID</th>
             <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
           </tr>
           {% else %}
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">Origin</th>
+            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
             <th class="govuk-table__header" scope="col">Quantity and number of packages</th>
             <th class="govuk-table__header" scope="col">Packaging</th>
             <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
@@ -166,16 +181,44 @@
           <!-- Smart commodity looping (END) - Added by a previous designer to always add another row to the commodity table each time a new commodity is added -->
           <!-- OTHER COMMODITIES (when nothing has been manually added)-->
           {% else %}
-            {% if data.commodity == "potatoes" %}
+            {% if data.commodity == "bulbs" %}
+              {% set commodity_page = "bulbs" %}
+              {% block summaryBulbs2 %}{% include "../modules/_summary-bulbs.html" %}{% endblock %}
+            {% elif data.commodity == "potatoes" %}
               {% set commodity_page = "commodity-page" %}
               {% block summaryPotatoes2 %}{% include "../modules/_summary-potatoes.html" %}{% endblock %}
             {% elif data.commodity == "plants" %}
               {% set commodity_page = "commodity-page" %}
               {% block summaryPlants2 %}{% include "../modules/_summary-plants.html" %}{% endblock %}
+            {% elif data.commodity == "plant products" %}
+              {% set commodity_page = "how-to-identify" %}
+              {% block summaryPlantProducts2 %}{% include "../modules/_summary-processed-plant-products.html" %}{% endblock %}
+            {% elif data.commodity == "seeds" %}
+              {% set showChange = "true" %}
+              {% set showDelete = "true" %}
+              {% include "../modules/_summary-seed-cya.html" %}
+            {% elif data.commodity == "used farm machinery" %}
+              {% set commodity_page = "commodity-page-machinery" %}
+              {% block summaryUsedFarmMachinery2 %}{% include "../modules/_summary-machinery-check-answers.html" %}{% endblock %}
             {% else %}
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell"><strong>{{data.commodity_host_species or data.genus or data.commodity_common_name or "Oxalis tuberosa (OXATU)"}}</strong></td>
-                <td class="govuk-table__cell">{{commodity.countryOfOriginSelect[0] or "United Kingdom"}}</td>
+                <td class="govuk-table__cell">
+                  <span style="display: block; margin-bottom: 7px;" >
+                    {{commodity.countryOfOriginSelect[0] or "United Kingdom"}}
+                  </span>
+                  {% if data.reforwarding == "1" %}
+                  <span style="display: block; margin-bottom: 7px;" >
+                    {% if commodity['commodityIPCN-2'] %}
+                      {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
+                    {% elif commodity['commodityIPCN-1'] %}
+                      {{commodity['commodityIPCN-1'] or "123-456-789-0"}}
+                    {% else %}
+                      {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
+                    {% endif %}
+                  </span>
+                  {% endif %}
+                </td>
                 <td class="govuk-table__cell govuk-table__cell">{{commodity.quantity or "100"}}{{commodity.unit or " kilograms"}} <br> {{commodity.number_of_packages or "5"}} packages</td>
                 <td class="govuk-table__cell govuk-table__cell">{{commodity.packing_material_used or "Cardboard"}}</td>
                 <td class="govuk-table__cell" style="text-align: right;">

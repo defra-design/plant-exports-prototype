@@ -246,6 +246,17 @@
 
       </dl>
 
+      {% set _originColHeader = "Origin" %}
+      {% if data.reforwarding == "1" %}
+        {% set _originColHeader = "Origin and import certificates" %}
+      {% endif %}
+      {% if data.commodity == "used farm machinery" %}
+        {% set _originColHeader = "Country where machinery was last used" %}
+        {% if data.reforwarding == "1" %}
+          {% set _originColHeader = "Country where machinery was last used and import certificates" %}
+        {% endif %}
+      {% endif %}
+
       <!-- Your commodities -->
       {% if data.commodity == "bulbs" %}
       <h2 class="govuk-heading-m" id="your-consignment">Your consignment</h2>
@@ -254,7 +265,7 @@
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th class="govuk-table__header govuk-summary-list__key" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">Origin</th>
+            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
             <th class="govuk-table__header" scope="col">Quantity and number of packages</th>
             <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks</th>
             <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
@@ -281,23 +292,13 @@
       
       <table class="govuk-table govuk-!-margin-bottom-4">
         <thead class="govuk-table__head">
-          {% if query.design == "b" %}
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">Origin</th>
+            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
             <th class="govuk-table__header" scope="col">Quantity and number of packages</th>
             <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks</th>
             <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
           </tr>
-          {% else %}
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">Origin</th>
-            <th class="govuk-table__header" scope="col">Quantity and number of packages</th>
-            <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks</th>
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
-          </tr>
-          {% endif %}
         </thead>
         <tbody class="govuk-table__body" style="text-align: right;">
           {% if query.pheatsError1 == "true" or query.prepop == "true" %}
@@ -320,7 +321,7 @@
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">Origin</th>
+            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
             <th class="govuk-table__header" scope="col">Quantity and number of packages</th>
             <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks</th>
             <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
@@ -344,7 +345,7 @@
           {% if query.design == "b" %}
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">Origin</th>
+            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
             <th class="govuk-table__header" scope="col">Quantity and number of packages</th>
             <th class="govuk-table__header" scope="col">Type of packaging</th>
             <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
@@ -352,7 +353,7 @@
           {% else %}
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">Origin</th>
+            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
             <th class="govuk-table__header" scope="col">Quantity and number of packages</th>
             <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks</th>
             <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
@@ -376,7 +377,7 @@
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">Origin</th>
+            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
             <th class="govuk-table__header" scope="col">Quantity and number of packages</th>
             <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks</th>
             <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
@@ -397,8 +398,7 @@
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">Country where machinery was last used</th>
-            <!-- <th class="govuk-table__header" scope="col">{% if data.build == "development" %}Country where machinery was last used{% else %}Origin{% endif %}</th> -->
+            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
             <th class="govuk-table__header govuk-table__header" scope="col">Unique ID</th>
             <th class="govuk-table__header govuk-table__header--numeric" scope="col">Action</th>
           </tr>
@@ -418,7 +418,20 @@
               {{commodity.machinery_make or 'Massey Ferguson'}} {{commodity.machinery_model or "B2741"}}
             </td>
             <td class="govuk-table__cell">
-              {{commodity.countrySelect[0] or "United Kingdom"}}
+              <span style="display: block; margin-bottom: 7px;" >
+                {{commodity.countrySelect[0] or "United Kingdom"}}
+              </span>
+              {% if data.reforwarding == "1" %}
+              <span style="display: block; margin-bottom: 7px;" >
+                {% if commodity['commodityIPCN-2'] %}
+                  {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
+                {% elif commodity['commodityIPCN-1'] %}
+                  {{commodity['commodityIPCN-1'] or "123-456-789-0"}}
+                {% else %}
+                  {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
+                {% endif %}
+              </span>
+              {% endif %}
             </td>
             <td class="govuk-table__cell govuk-table__cell">
               {{data.machinery_id or '5456987452Z'}}
@@ -464,7 +477,7 @@
             <th class="govuk-table__header" scope="col">Description</th>
             {% if data.commodity != "seeds" %}
             <th class="govuk-table__header" scope="col">
-              Origin
+              {{_originColHeader}}
             </th>
             {% endif %}
             <th class="govuk-table__header" scope="col">Quantity and number of packages</th>
@@ -489,10 +502,36 @@
           <!-- Smart commodity looping (END) - Added by a previous designer to always add another row to the commodity table each time a new commodity is added -->
           {% else %}
           <tr class="govuk-table__row">
-            <td class="govuk-table__cell">{{data.commodity_host_species or data.genus or data.commodity_common_name or "Oxalis tuberosa (OXATU)"}}</td>
-            <td class="govuk-table__cell">{{commodity.countryOfOriginSelect[0] or "United Kingdom"}}</td>
-            <td class="govuk-table__cell">{{commodity.quantity or "100"}} {{commodity.unit or "kilograms"}},<br>{{commodity.number_of_packages or "5"}} packages</td>
-            <td class="govuk-table__cell govuk-table__cell">{{commodity.packaging[0] or "Crate - bulk - cardboard"}},<br>{{commodity.packing_material_used or "Cardboard"}},<br>{{commodity.distinguishing_marks or "Brown marks"}}</td>
+            <td class="govuk-table__cell">
+              <span style="display: block; margin-bottom: 7px;">
+                <strong>{{data.commodity_host_species or data.genus or data.commodity_common_name or "Oxalis tuberosa (OXATU)"}}</strong>
+              </span>
+            </td>
+            <td class="govuk-table__cell">
+              <span style="display: block; margin-bottom: 7px;">
+                {{commodity.countryOfOriginSelect[0] or "United Kingdom"}}
+              </span>
+              {% if data.reforwarding == "1" %}
+              <span style="display: block; margin-bottom: 7px;" >
+                {% if commodity['commodityIPCN-2'] %}
+                  {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
+                {% elif commodity['commodityIPCN-1'] %}
+                  {{commodity['commodityIPCN-1'] or "123-456-789-0"}}
+                {% else %}
+                  {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
+                {% endif %}
+              </span>
+              {% endif %}
+            </td>
+            <td class="govuk-table__cell">
+              <span style="display: block; margin-bottom: 7px;">{{commodity.quantity or "100"}} {{commodity.unit or "kilograms"}}</span>
+              <span style="display: block; margin-bottom: 7px;">{{commodity.number_of_packages or "5"}} packages</span>
+            </td>
+            <td class="govuk-table__cell govuk-table__cell">
+              <span style="display: block; margin-bottom: 7px;">{{commodity.packaging[0] or "Crate - bulk - cardboard"}}</span>
+              <span style="display: block; margin-bottom: 7px;">{{commodity.packing_material_used or "Cardboard"}}</span>
+              <span style="display: block; margin-bottom: 7px;">{{commodity.distinguishing_marks or "Brown marks"}}</span>
+            </td>
             <td class="govuk-table__cell" style="text-align: right;">
               <a href="how-to-identify?return_url=check-your-answers" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
               <br>

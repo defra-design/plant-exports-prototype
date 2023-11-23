@@ -42,20 +42,40 @@
       {% endif %}
     </span>
     {% endif %}
+
+
+    
   </td>
   <td class="govuk-table__cell">
+    <span style="display: block; margin-bottom: 7px;" >
     <!-- {% if commodity.filter_demo %}
     {{commodity.filter_demo or "United Kingdom"}}
     {% else %}
     United Kingdom 
     {% endif %} -->
     {% set _defaultCountry = "United Kingdom" %}
+    {% if data.reforwarding == "1" %}
+      {% set _defaultCountry = "Spain" %}
+    {% endif %}
     {% if commodity.filter_demo == "_unchecked" or commodity.filter_demo == undefined %}
     {{_defaultCountry}}
     {% else %}
     {{commodity.filter_demo | join(", ") or _defaultCountry}}
     {% endif %}
     <!-- "filter_demo":["Afghanistan","Åland Islands","Albania"], -->
+  </span>
+
+    {% if data.reforwarding == "1" %}
+    <span style="display: block; margin-bottom: 7px;" >
+      {% if commodity['commodityIPCN-2'] %}
+        {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
+      {% elif commodity['commodityIPCN-1'] %}
+        {{commodity['commodityIPCN-1'] or "123-456-789-0"}}
+      {% else %}
+        {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
+      {% endif %}
+    </span>
+    {% endif %}
   </td>
   <td class="govuk-table__cell">
     <span style="display: block; margin-bottom: 7px;">{{commodity.quantity or "20"}} {{commodity.units or "kilograms"}}</span>
@@ -70,17 +90,6 @@
     {% if commodity.distinguishing_marks != "" %}
     <span style="display: block; margin-bottom: 7px;">{{commodity.distinguishing_marks or "Brown marks"}}</span>
     {% endif %}
-    {% endif %}
-
-    {% if data.reforwarding %}
-    <span style="display: block; margin-bottom: 7px;" >
-      Import certificates:<br>
-      {% if commodity['commodityIPCN-2'] %}
-        {{commodity['commodityIPCN-1'] or "123-456-789-0"}} and {{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
-      {% else %}
-        {{commodity['commodityIPCN-1'] or "123-456-789-0"}}
-      {% endif %}
-    </span>
     {% endif %}
   </td>
 
