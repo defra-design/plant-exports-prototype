@@ -12,42 +12,9 @@
 {% block content %}
 <div class="govuk-grid-row">
 
-  {% if data.supportingDocumentsExist == "false" %}
-  <!-- Scenario where 0 supporting documents have been added for an application -->
   <div class="govuk-grid-column-two-thirds">
-
-    <form action="upload-type?return_url=view" method="post">
-      <span class="govuk-caption-xl">Application reference 1760 96929 3035</span>
-      <h1 class="govuk-heading-xl">Supporting documents</h1>
-      <p class="govuk-body">There are no supporting documents attached to this application.</p>
-      <a href="upload-type?return_url=view&subHeading=view" class="govuk-button govuk-button--secondary" data-module="govuk-button">Add a supporting document</a>
-    </form>
-    
-  </div>
-  {% else %}
-  <!-- Scenario where 1 or more supporting documents have been added for an application -->
-  <div class="govuk-grid-column-two-thirds">
-
-    {% if query.supportingDocumentAdded == "true" %}
-    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-  
-      <div class="govuk-notification-banner__header">
-        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">Success</h2>
-      </div>
-
-      <div class="govuk-notification-banner__content">
-        <h3 class="govuk-notification-banner__heading">You added {{data.supportingDocument or "Filename.jpg"}} to this application</h3>
-      </div>
-
-    </div>
-    {% endif %}
-
-    <form action="upload-type?return_url=view" method="post">
-      <span class="govuk-caption-xl">Application reference 1760 96929 3035</span>
-      <h1 class="govuk-heading-xl">Supporting documents</h1>
-      <a href="upload-type?return_url=view&subHeading=view" class="govuk-button govuk-button--secondary" data-module="govuk-button">Add a supporting document</a>
-    </form>
-    
+    <span class="govuk-caption-xl">Application reference 1760 96929 3035</span>
+    <h1 class="govuk-heading-xl">Supporting documents</h1>    
   </div>
 
   <div class="govuk-grid-column-full">
@@ -58,37 +25,25 @@
         <tr class="govuk-table__row">
           <th scope="col" class="govuk-table__header">Description</th>
           <th scope="col" class="govuk-table__header">File name</th>
-          <th scope="col" class="govuk-table__header">Added by</th>
         </tr>
       </thead>
       <tbody class="govuk-table__body">
-        {% if data.row1 == "true" %}
-        <tr class="govuk-table__row">
-          <td class="govuk-table__cell">{% if data.fileDescription == "Add your own description" %}{{data.manualFileDescription or "Description of file"}}{% elif data.fileDescription == "Import permit" %}Import permit ({{data.importPermitNumber or "123456789ABC"}}){% else %}{{data.fileDescription or "Description of file"}}{% endif %}</td>
-          <td scope="row" class="govuk-table__cell"><a href="#" class="govuk-link govuk-link--no-visited-state"><span class="govuk-visually-hidden">Download </span>{{data.supportingDocument or "Filename.jpg"}}</a></td>
-          <td class="govuk-table__cell">Prototype user</td>
-        </tr>
-        {% endif %}
         <tr class="govuk-table__row">
           <td class="govuk-table__cell">Packing list or invoice</td>
           <td scope="row" class="govuk-table__cell"><a href="#" class="govuk-link govuk-link--no-visited-state"><span class="govuk-visually-hidden">Download </span>Packing list.docx</a></td>
-          <td class="govuk-table__cell">Bill Shoggins (B.K. Shoggins Agricultural Machinery Limited)</td>
         </tr>
         <tr class="govuk-table__row">
           <td class="govuk-table__cell">Additional information from our customer</td>
           <td scope="row" class="govuk-table__cell"><a href="#" class="govuk-link govuk-link--no-visited-state"><span class="govuk-visually-hidden">Download </span>Email from Customer (24.05.23).jpg</a></td>
-          <td class="govuk-table__cell">Ruth Shoggins (B.K. Shoggins Agricultural Machinery Limited)</td>
         </tr>
         <tr class="govuk-table__row">
           <td class="govuk-table__cell">Import permit (DK11223344)</td>
           <td scope="row" class="govuk-table__cell"><a href="#" class="govuk-link govuk-link--no-visited-state"><span class="govuk-visually-hidden">Download </span>Import permit (DK11223344).pdf</a></td>
-          <td class="govuk-table__cell">Bill Shoggins (B.K. Shoggins Agricultural Machinery Limited)</td>
         </tr>
       </tbody>
     </table>
 
   </div>
-  {% endif %}
 
 </div>
 {% endblock %}
