@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  Inspection addresses - Manage account - {{serviceName}} - GOV.UK
+Do you want to get progress emails about ePhytos? - Manage account - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -34,22 +34,6 @@
 
     {% set _notificationSetting = data["ephytoEmailNotifications"] %}
 
-    {% if query.saved %}
-    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-        <div class="govuk-notification-banner__header">
-            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-            Success
-            </h2>
-        </div>
-        <div class="govuk-notification-banner__content">
-            <h3 class="govuk-notification-banner__heading">
-              Your email settings were updated. The change will affect ePhytos issued from now on.
-            </h3>
-            <!-- <p class="govuk-body">[message about settings saved]</p> -->
-        </div>
-    </div>
-    {% endif %}
-
 
     <form method="post" novalidate>
 
@@ -57,31 +41,35 @@
         <fieldset class="govuk-fieldset">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
             <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">
-              Do you want to get progress updates for your ePhytos?
+              Do you want to get progress emails about ePhytos?
             </h1>
           </legend>
 
-          <p class="govuk-body">We'll email your.email@email.com when an ePhyto is sent, when it's received at the destination country, and if there are any delays.</p>
+          <p class="govuk-body">We will email your.email@email.com:</p>
+          <ul class="govuk-list govuk-list--bullet">
+            <li>when the destination country has received your ePhyto</li>
+            <li>if there are any delays</li>
+          </ul>
           <p class="govuk-body govuk-!-margin-bottom-6"><a class="govuk-link govuk-link--no-visited-state" href="defra-account">Change this email address</a></p>
           
           <div class="govuk-radios" data-module="govuk-radios">
             
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="ephytoEmailNotifications-1" name="ephytoEmailNotifications" type="radio" value="All~notifications?saved=true" {% if _notificationSetting == "All" %}checked{% endif %} >
+              <input class="govuk-radios__input" id="ephytoEmailNotifications-1" name="ephytoEmailNotifications" type="radio" value="All~../account?ephytoemails=true" {% if _notificationSetting == "All" %}checked{% endif %} >
               <label class="govuk-label govuk-radios__label" for="ephytoEmailNotifications-1">
-                Yes, I want to be emailed about all ePhytos issued for my organisation's account
+                Yes, email me about all my organisation’s ePhytos
               </label>
             </div>
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="ephytoEmailNotifications-2" name="ephytoEmailNotifications" type="radio" value="Own~notifications?saved=true" {% if _notificationSetting == "Own" %}checked{% endif %} >
+              <input class="govuk-radios__input" id="ephytoEmailNotifications-2" name="ephytoEmailNotifications" type="radio" value="Own~../account?ephytoemails=true" {% if _notificationSetting == "Own" %}checked{% endif %} >
               <label class="govuk-label govuk-radios__label" for="ephytoEmailNotifications-2">
                 Yes, email me about ePhytos I applied for
               </label>
             </div>
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="ephytoEmailNotifications-3" name="ephytoEmailNotifications" type="radio" value="None~notifications?saved=true" {% if _notificationSetting == "None" %}checked{% endif %} >
+              <input class="govuk-radios__input" id="ephytoEmailNotifications-3" name="ephytoEmailNotifications" type="radio" value="None~../account?ephytoemails=true" {% if _notificationSetting == "None" %}checked{% endif %} >
               <label class="govuk-label govuk-radios__label" for="ephytoEmailNotifications-3">
-                No, never email me with ePhyto updates
+                No, do not email me about any ePhytos
               </label>
             </div>
 
@@ -93,7 +81,7 @@
         Save
       </button>
 
-      <p class="govuk-body govuk-!-margin-top-"><a href="../account" class="govuk-link govuk-link--no-visited-state">Back to manage account</a></p>
+      <!-- <p class="govuk-body govuk-!-margin-top-"><a href="../account" class="govuk-link govuk-link--no-visited-state">Back to manage account</a></p> -->
 
     </form>
 
