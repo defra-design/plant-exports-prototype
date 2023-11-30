@@ -502,6 +502,19 @@ module.exports = function(router) {
       return res.redirect("declaration");
 
     }
+    if (baseDir === "/setup/what-country") {
+
+      req.session.data.countrySelect = req.body.countrySelect || ["United Kingdom (Northern Ireland)","NO"];
+      
+      if (req.session.data.countrySelect[0] == "United Kingdom (Northern Ireland)") {
+        req.session.data.certificateFormat = "digital";
+      } else {
+        req.session.data.certificateFormat = "nondigital";
+      }
+
+      // return res.redirect("declaration");
+
+    }
     
     // Chris Harding - USDA Bulbs: Decide whether to redirect users to the USDA page when they are exporting bulbs to the United States
     if (baseDir === "/setup/bulbs-declaration") {
