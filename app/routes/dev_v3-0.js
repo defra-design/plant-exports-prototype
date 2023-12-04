@@ -515,6 +515,30 @@ module.exports = function(router) {
       // return res.redirect("declaration");
 
     }
+
+    //Decide whether to redirect users away from blue page if NOT northern ireland
+    if (baseDir === "/setup/digital-phytosanitary-certificate") {
+
+      req.session.data.countrySelect = req.session.data.countrySelect || ["United Kingdom (Northern Ireland)","NO"];
+      var countrySelect = req.session.data.countrySelect[0];
+
+      if (countrySelect != "United Kingdom (Northern Ireland)") {
+        
+        var page = ""
+        req.session.data.certificateFormat = "nondigital";
+        if (req.session.data.has_reference == "coc"){
+          page = req.query.return_url || '/' + base_url + 'application/setup/reference?journey=coc'
+        } else if (req.session.data.commodity == "bulbs"){
+          page = req.query.return_url || '/' + base_url + 'application/setup/bulbs-declaration'
+        } else {
+          page = req.query.return_url || '/' + base_url + 'application/setup/declaration'
+        }
+        res.redirect(301, page);
+      } else {
+        req.session.data.certificateFormat = "digital";
+      }
+
+    }
     
     // Chris Harding - USDA Bulbs: Decide whether to redirect users to the USDA page when they are exporting bulbs to the United States
     if (baseDir === "/setup/bulbs-declaration") {

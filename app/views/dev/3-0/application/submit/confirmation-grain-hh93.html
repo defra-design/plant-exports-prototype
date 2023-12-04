@@ -28,6 +28,8 @@
     {% set _notificationSetting = data["ephytoEmailNotifications"] %}
     {% set _ePhyto = "false" %}
     {% set _ePhytoOptedIn = "false" %}
+    {% set _ePhytoOptedInAll = "false" %}
+    {% set _ePhytoOptedInMine = "false" %}
     {% set _ePhytoOptedOut = "false" %}
 
     {% if data.certificateFormat == "digital" %}
@@ -36,68 +38,93 @@
       {% if _notificationSetting == "None" %}
         <!-- ephyto opted out -->
         {% set _ePhytoOptedOut = "true" %}
-      {% else %}
-        <!-- ephyto opted in -->
+      {% elif _notificationSetting == "All" %}
+        <!-- ephyto opted in to all -->
         {% set _ePhytoOptedIn = "true" %}
+        {% set _ePhytoOptedInAll = "true" %}
+      {% else %}
+        <!-- ephyto opted in just mine -->
+        {% set _ePhytoOptedIn = "true" %}
+        {% set _ePhytoOptedInMine = "true" %}
       {% endif %}
     {% else %}
       <!-- [non ePhyto] -->
     {% endif %}
 
     <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-6">
-      <h1 class="govuk-panel__title">You have successfully submitted your application{% if data.reforwarding == "1" %} for a re-forwarding certificate{% endif %}</h1>
-      
+      <h1 class="govuk-panel__title">{% if data.reforwarding == "1" %}Re-forwarding application complete{% else %}Application complete{% endif %}</h1>
+
       <div class="govuk-panel__body">
-        The <abbr title="Animal and Plant Health Agency">APHA</abbr> reference is
+        <abbr title="Animal and Plant Health Agency">APHA</abbr> reference
         <br>
-        <strong class="bold">1721 14800 4809</strong>
+        <strong class="bold">1721 14800 5555</strong>
       </div>
 
     </div>
 
     {% if _ePhyto == "true" %}
     <div class="govuk-inset-text">
-      <p class="govuk-body govuk-!-margin-bottom-1">You will not get a paper certificate.</p>
-      <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="../../guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#digital-phytosanitary-certificates" target="_blank">Read more about ePhyto (opens in new tab)</a></p>
+      <h2 class="govuk-heading-m">You will not get a paper certificate</h2>
+      <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="../../guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#digital-phytosanitary-certificates" target="_blank">Read more about ePhyto certificates (opens in new tab)</a></p>
     </div>
     {% endif %}
 
     <h2 class="govuk-heading-m">What happens next</h2>
-    <ol class="govuk-list govuk-list--number">
+
+    <p class="govuk-body">We will:</p>
+    
+    <ul class="govuk-list govuk-list--bullet">
 
       {% if data.reforwarding == "1" %}
-      <li>We will decide if an inspection is necessary. If we decide that you need an inspection, the inspector will contact you.</li>
-      <li>If an inspection is necessary, we will arrange it within 7 working days.</li>
+        <li>decide if you need an inspection</li>
+        <li>arrange an inspection within 7 working days, if you need one</li>
       {% else %}
-      <li>We will arrange an inspection of your consignment within 7 working days.</li>
+        <li>arrange an inspection of your consignment within 7 working days</li>
       {% endif %}
 
       <!-- NON ephyto -->
       {% if _ePhyto == "false" %}
-      <li>If there are no problems, we will issue your paper {% if data.reforwarding == "1" %}re-forwarding{% endif %} certificate.</li>
+      <li>issue your paper {% if data.reforwarding == "1" %}re-forwarding{% endif %} certificate, if there are no problems</li>
       {% endif %}
 
       <!-- EPHYTO -->
       {% if _ePhyto == "true" %}
-      
-      <!-- OPTED OUT -->
-      {% if _ePhytoOptedOut == "true" %}
-      <li>Your applications page will show when your digital certificate is issued. If you'd prefer to get an email, go to <a href="../../account/notifications" class="govuk-link govuk-link--no-visited-state">manage your email settings</a>.</li>
+        <li>send your ePhyto certificate to the importing country's NPPO (National Plant Protection Organisation)</li>
+        
+        <!-- OPTED IN -->
+        {% if _ePhytoOptedIn == "true" %}
+          <li>email you when they have received it</li>
+        {% endif %}
+
+        <li>update the status on Your applications page</li>
+        <li>make a copy of your ePhyto available on the Manage application page</li>
       {% endif %}
+
+      <li>send you an invoice</li>
+    </ul>
+
+    {% if _ePhyto == "true" %}
+
+      <p class="govuk-body">You do not need to print your copy or send it with your consignment. It is not for official use. </p>
+
+      <h2 class="govuk-heading-m">Manage applications</h2>
 
       {% if _ePhytoOptedIn == "true" %}
-      <li>
-        We'll send an email to your.email@email.com when your digital certificate is issued and sent. If other users get email notifications from this account, we'll email them too.
-        <br>
-        <a href="../../account/notifications" class="govuk-link govuk-link--no-visited-state">Manage email settings</a>
-      </li>
+        <p class="govuk-body">We will send progress emails to:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>your.email@email.com</li>
+          <li>other users on your organisation’s account if they have chosen to get email updates</li>
+        </ul>
+        {% if _ePhytoOptedInAll == "true" %}
+          <p class="govuk-body"><a href="../../account/notifications" class="govuk-link govuk-link--no-visited-state">Change your email settings</a></p>
+        {% else %}
+          <p class="govuk-body">If you want to get emails about all your organisation's ePhytos you can <a href="../../account/notifications" class="govuk-link govuk-link--no-visited-state">change your email settings</a>.</p>
+        {% endif %}
+      {% else %}
+        <p class="govuk-body">If you want to get progress emails about ePhyto applications you can <a href="../../account/notifications" class="govuk-link govuk-link--no-visited-state">change your email settings</a>.</p>
       {% endif %}
 
-      <li>You do not need to print or email your digital certificate. We'll make it available to anyone that needs to see it.</li>
-      {% endif %}
-
-      <li>We will then send you an invoice.</li>
-    </ol>
+    {% endif %}
 
     <form action="{% if data.route == 'new' %}../../dashboard-one{% else %}../../dashboard-submitted{% endif %}" method="post">
       <button class="govuk-button govuk-!-margin-top-2 govuk-!-margin-bottom-7" data-module="govuk-button">View your applications</button>

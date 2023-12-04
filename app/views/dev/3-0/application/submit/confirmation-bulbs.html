@@ -28,6 +28,8 @@
     {% set _notificationSetting = data["ephytoEmailNotifications"] %}
     {% set _ePhyto = "false" %}
     {% set _ePhytoOptedIn = "false" %}
+    {% set _ePhytoOptedInAll = "false" %}
+    {% set _ePhytoOptedInMine = "false" %}
     {% set _ePhytoOptedOut = "false" %}
 
     {% if data.certificateFormat == "digital" %}
@@ -36,9 +38,14 @@
       {% if _notificationSetting == "None" %}
         <!-- ephyto opted out -->
         {% set _ePhytoOptedOut = "true" %}
-      {% else %}
-        <!-- ephyto opted in -->
+      {% elif _notificationSetting == "All" %}
+        <!-- ephyto opted in to all -->
         {% set _ePhytoOptedIn = "true" %}
+        {% set _ePhytoOptedInAll = "true" %}
+      {% else %}
+        <!-- ephyto opted in just mine -->
+        {% set _ePhytoOptedIn = "true" %}
+        {% set _ePhytoOptedInMine = "true" %}
       {% endif %}
     {% else %}
       <!-- [non ePhyto] -->
@@ -66,16 +73,13 @@
 
     <p class="govuk-body">We will:</p>
     
-
-
-
     <ul class="govuk-list govuk-list--bullet">
 
       {% if data.reforwarding == "1" %}
-      <li>decide if you need an inspection</li>
-      <li>arrange an inspection within 7 working days, if you need one</li>
+        <li>decide if you need an inspection</li>
+        <li>arrange an inspection within 7 working days, if you need one</li>
       {% else %}
-      <li>arrange an inspection of your consignment within 7 working days</li>
+        <li>arrange an inspection of your consignment within 7 working days</li>
       {% endif %}
 
       <!-- NON ephyto -->
@@ -85,46 +89,41 @@
 
       <!-- EPHYTO -->
       {% if _ePhyto == "true" %}
-
         <li>send your ePhyto certificate to the importing country's NPPO (National Plant Protection Organisation)</li>
-
-        <!-- OPTED OUT -->
-        {% if _ePhytoOptedOut == "true" %}
-        <!-- <li>Your applications page will show when your digital certificate is issued. If you'd prefer to get an email, go to <a href="../../account/notifications" class="govuk-link govuk-link--no-visited-state">manage your email settings</a>.</li> -->
-        {% endif %}
-
+        
         <!-- OPTED IN -->
         {% if _ePhytoOptedIn == "true" %}
-        <li>
-          email you when they have received it
-          <!-- <br>
-          <a href="../../account/notifications" class="govuk-link govuk-link--no-visited-state">Manage email settings</a> -->
-        </li>
+          <li>email you when they have received it</li>
         {% endif %}
 
         <li>update the status on Your applications page</li>
         <li>make a copy of your ePhyto available on the Manage application page</li>
-
       {% endif %}
 
       <li>send you an invoice</li>
     </ul>
 
     {% if _ePhyto == "true" %}
-    <p class="govuk-body">You do not need to print your copy or send it with your consignment. It is not for official use. </p>
 
-    <h2 class="govuk-heading-m">Manage applications</h2>
+      <p class="govuk-body">You do not need to print your copy or send it with your consignment. It is not for official use. </p>
+
+      <h2 class="govuk-heading-m">Manage applications</h2>
+
       {% if _ePhytoOptedIn == "true" %}
         <p class="govuk-body">We will send progress emails to:</p>
         <ul class="govuk-list govuk-list--bullet">
           <li>your.email@email.com</li>
           <li>other users on your organisation’s account if they have chosen to get email updates</li>
         </ul>
-        <p class="govuk-body">If you want to get emails about all your organisation's ePhytos you can <a href="../../account/notifications" class="govuk-link govuk-link--no-visited-state">change your email settings</a>.</p>
-      {% endif %}
-      {% if _ePhytoOptedOut == "true" %}
+        {% if _ePhytoOptedInAll == "true" %}
+          <p class="govuk-body"><a href="../../account/notifications" class="govuk-link govuk-link--no-visited-state">Change your email settings</a></p>
+        {% else %}
+          <p class="govuk-body">If you want to get emails about all your organisation's ePhytos you can <a href="../../account/notifications" class="govuk-link govuk-link--no-visited-state">change your email settings</a>.</p>
+        {% endif %}
+      {% else %}
         <p class="govuk-body">If you want to get progress emails about ePhyto applications you can <a href="../../account/notifications" class="govuk-link govuk-link--no-visited-state">change your email settings</a>.</p>
       {% endif %}
+
     {% endif %}
 
 
