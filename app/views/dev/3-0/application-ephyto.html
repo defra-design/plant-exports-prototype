@@ -93,9 +93,13 @@
           <div class="govuk-tag govuk-tag--red">
             Re-issue denied
           </div>
+          {% elif query.id | appInformationV7('status') == "certificate delayed" %}
+          <div class="govuk-tag govuk-tag--orange">
+            Certificate delayed
+          </div>
           {% else %}
           <div class="govuk-tag govuk-tag--green">
-            Certificate issued
+            Certificate received
           </div>
           {% endif %}
 
@@ -170,11 +174,21 @@
 
   </div>
 
+  
   <div class="govuk-grid-column-one-half govuk-!-margin-bottom-8">
     <h2 class="govuk-heading-m">About your certificate</h2>
+
+    {% if query.id | appInformationV7('status') == "certificate delayed" %}
+    <p class="govuk-body">There is a delay sending your ePhyto to Denmark.</p>
+    <p class="govuk-body">We will keep trying to send it and will update the status when Denmark receives it.</p>
+    <p class="govuk-body">If the delay lasts longer than 4 hours we will send you a paper phytosanitary certificate.</p>
+    {% else %}
     <a href="/public/certificates/ephyto/UK-GB-E&W-2023-7800562125823-3.pdf" role="button" draggable="false" class="govuk-button" data-module="govuk-button">View copy</a>
     <p class="govuk-body">Denmark's National Plant Protection Organisation has received your ePhyto.</p>
     <p class="govuk-body">You do not need to print your copy or send it with your consignment. It is not for official use. </p>
+    {% endif %}
+
+
     <ul class="govuk-list noprint">
       {% if data.reissue_certificate_data_pfp != "submitted" and data.reissue_certificate_data_pfp != "processing" %}
       <li>{% if data.reissue_certificate_data_pfp == 'draft' %}<a class="govuk-link govuk-link--no-visited-state" href="application/re-issue/amend-your-certificate?id={{query.id}}&is_group={{query.is_group}}&commodity=plants">Complete your re-issue application</a></li>{% else %}<a class="govuk-link govuk-link--no-visited-state" href="application/re-issue/introduction?id={{query.id}}&is_group={{query.is_group}}">Apply for re-issue </a>{% endif %}</li>
@@ -183,7 +197,11 @@
       {% endif %}
       {% endif %}
     </ul>
+
+
+
   </div>
+  
 
 </div>
 
