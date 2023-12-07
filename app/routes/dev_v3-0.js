@@ -317,6 +317,8 @@ module.exports = function(router) {
 
     console.log("(dev_v3-0.js)");
     console.log("default global GET routing page for: " + base_url + " plus " + req.params[0]);
+    // console.log("--------------------")
+    // console.log("req.session.data.alwaysephyto = " + req.session.data.alwaysephyto)
     
     var dir = req.params[0].split(/\/+/g);
     
@@ -522,21 +524,20 @@ module.exports = function(router) {
       req.session.data.countrySelect = req.session.data.countrySelect || ["United Kingdom (Northern Ireland)","NO"];
       var countrySelect = req.session.data.countrySelect[0];
 
-      if (countrySelect != "United Kingdom (Northern Ireland)") {
-        
-        var page = ""
-        req.session.data.certificateFormat = "nondigital";
-        if (req.session.data.has_reference == "coc"){
-          page = req.query.return_url || '/' + base_url + 'application/setup/reference?journey=coc'
-        } else if (req.session.data.commodity == "bulbs"){
-          page = req.query.return_url || '/' + base_url + 'application/setup/bulbs-declaration'
-        } else {
-          page = req.query.return_url || '/' + base_url + 'application/setup/declaration'
-        }
-        return res.redirect(301, page);
-      } else {
+      // if (countrySelect != "United Kingdom (Northern Ireland)") {
+      //   var page = ""
+      //   req.session.data.certificateFormat = "nondigital";
+      //   if (req.session.data.has_reference == "coc"){
+      //     page = req.query.return_url || '/' + base_url + 'application/setup/reference?journey=coc'
+      //   } else if (req.session.data.commodity == "bulbs"){
+      //     page = req.query.return_url || '/' + base_url + 'application/setup/bulbs-declaration'
+      //   } else {
+      //     page = req.query.return_url || '/' + base_url + 'application/setup/declaration'
+      //   }
+      //   return res.redirect(301, page);
+      // } else {
         req.session.data.certificateFormat = "digital";
-      }
+      // }
 
     }
     

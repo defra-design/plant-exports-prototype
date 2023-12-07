@@ -93,13 +93,17 @@
           <div class="govuk-tag govuk-tag--red">
             Re-issue denied
           </div>
-          {% elif query.id | appInformationV7('status') == "certificate delayed" %}
+          {% elif query.id | appInformationV7('status') == "ephyto delayed" %}
           <div class="govuk-tag govuk-tag--orange">
-            Certificate delayed
+            ePhyto delayed
+          </div>
+          {% elif query.id | appInformationV7('status') == "preparing ephyto" %}
+          <div class="govuk-tag govuk-tag--indigo">
+            Preparing ePhyto
           </div>
           {% else %}
           <div class="govuk-tag govuk-tag--green">
-            Certificate received
+            ePhyto received
           </div>
           {% endif %}
 
@@ -154,15 +158,19 @@
         <dd class="govuk-summary-list__value">UK/GB/E&W/{{query.id | appInformationV7('certificate') or "2022/4236522044833"}}{% if data.reissue_certificate_data_pfp == "approved" %} R1{% endif %}</dd>
       </div>
       
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Certificate issue date</dt>
-        <dd class="govuk-summary-list__value">{% if data.reissue_certificate_data_pfp == "approved" %}{{todaysDate}}{% else %}{{query.id | appInformationV7('certificateIssueDate') or "10 January 2023"}}{% endif %}</dd>
-      </div>
+      {% if query.id | appInformationV7('status') != "preparing ephyto" and query.id | appInformationV7('status') != "ephyto delayed" %}
+      
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Certificate issue date</dt>
+          <dd class="govuk-summary-list__value">{% if data.reissue_certificate_data_pfp == "approved" %}{{todaysDate}}{% else %}{{query.id | appInformationV7('certificateIssueDate') or "10 January 2023"}}{% endif %}</dd>
+        </div>
 
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Certificate expiry date</dt>
-        <dd class="govuk-summary-list__value">{% if data.reissue_certificate_data_pfp == "approved" %}{{todaysDateExpiry14Days}}{% else %}{{query.id | appInformationV7('certificateExpiryDate') or "24 January 2023"}}{% endif %}</dd>
-      </div>
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key">Certificate expiry date</dt>
+          <dd class="govuk-summary-list__value">{% if data.reissue_certificate_data_pfp == "approved" %}{{todaysDateExpiry14Days}}{% else %}{{query.id | appInformationV7('certificateExpiryDate') or "24 January 2023"}}{% endif %}</dd>
+        </div>
+
+      {% endif %}
 
     </dl>
 
@@ -176,18 +184,24 @@
 
   
   <div class="govuk-grid-column-one-half govuk-!-margin-bottom-8">
+
+    {% if query.id | appInformationV7('status') != "preparing ephyto" %}
+
     <h2 class="govuk-heading-m">About your certificate</h2>
 
-    {% if query.id | appInformationV7('status') == "certificate delayed" %}
-    <p class="govuk-body">There is a delay sending your ePhyto to Denmark.</p>
-    <p class="govuk-body">We will keep trying to send it and will update the status when Denmark receives it.</p>
-    <p class="govuk-body">If the delay lasts longer than 4 hours we will send you a paper phytosanitary certificate.</p>
+    {% if query.id | appInformationV7('status') == "ephyto delayed" %}
+
+    <p class="govuk-body">There is a delay sending your ePhyto to {{query.id | appInformationV7('destination')}}. This is because of a technical problem.</p>
+    <p class="govuk-body">We will:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>keep checking to see if the problem gets fixed</li>
+      <li>email you if {{query.id | appInformationV7('destination')}} receive it</li>
+    </ul>
     {% else %}
     <a href="/public/certificates/ephyto/UK-GB-E&W-2023-7800562125823-3.pdf" role="button" draggable="false" class="govuk-button" data-module="govuk-button">View copy</a>
-    <p class="govuk-body">Denmark's National Plant Protection Organisation has received your ePhyto.</p>
+    <p class="govuk-body">{{query.id | appInformationV7('destination')}}'s NPPO (National Plant Protection Organisation) has received your ePhyto.</p>
     <p class="govuk-body">You do not need to print your copy or send it with your consignment. It is not for official use. </p>
     {% endif %}
-
 
     <ul class="govuk-list noprint">
       {% if data.reissue_certificate_data_pfp != "submitted" and data.reissue_certificate_data_pfp != "processing" %}
@@ -198,7 +212,7 @@
       {% endif %}
     </ul>
 
-
+    {% endif %}
 
   </div>
   
