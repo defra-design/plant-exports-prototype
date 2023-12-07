@@ -533,7 +533,7 @@ module.exports = function(router) {
         } else {
           page = req.query.return_url || '/' + base_url + 'application/setup/declaration'
         }
-        res.redirect(301, page);
+        return res.redirect(301, page);
       } else {
         req.session.data.certificateFormat = "digital";
       }

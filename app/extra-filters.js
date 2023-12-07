@@ -41,6 +41,210 @@ module.exports = function(env) {
   ------------------------------------------------------------------ */
 
 
+  // Data sources (located in the 'app/data' root folder)
+  var applications = require('./data/applications.json');
+  var applicationsv2 = require('./data/applications-v2.json');;
+  var applicationsv3 = require('./data/applications-v3.json');
+  var applicationsv4 = require('./data/applications-v4.json');
+  var applicationsv5 = require('./data/applications-v5.json');
+  var applicationsv6 = require('./data/applications-v6.json');
+  var applicationsv7 = require('./data/applications-v7.json');
+  var sample = require('./data/sample.json');
+  const e = require('express');
+
+
+  // Get application information
+  // All prototype versions up to v1-34
+  filters.appInfo = function (id, key) {
+    
+    var app = {};
+    
+    applications.forEach(function (item) {
+      
+      if (item.index == id) {
+        app = item;
+      }
+
+    })
+
+    return app[key];
+  }
+
+  // Get application information (v2)
+  // Prototype versions 1-35 to 1-38
+  filters.appInformation = function (id, key) {
+    
+    var app = {};
+    
+    applicationsv2.forEach(function (item) {
+      
+      if (item.index == id) {
+        app = item;
+      }
+
+    })
+
+    return app[key];
+  }
+
+  // Get application information (v3)
+  // Prototype version 1-39
+  filters.appInformationV3 = function (id, key) {
+    
+    var app = {};
+    
+    applicationsv3.forEach(function (item) {
+      
+      if (item.index == id) {
+        app = item;
+      }
+
+    })
+
+    return app[key];
+  }
+
+  // Get application information (v4)
+  // Prototype version 1-40
+  filters.appInformationV4 = function (id, key) {
+    
+    var app = {};
+    
+    applicationsv4.forEach(function (item) {
+      
+      if (item.index == id) {
+        app = item;
+      }
+
+    })
+
+    return app[key];
+  }
+
+  // Get application information (v5)
+  // Prototype version 1-41 onward
+  filters.appInformationV5 = function (id, key) {
+    
+    var app = {};
+    
+    applicationsv5.forEach(function (item) {
+      
+      if (item.index == id) {
+        app = item;
+      }
+
+    })
+
+    return app[key];
+  }
+
+  // Get application information (v6)
+  // Prototype version 1-42 onward
+  filters.appInformationV6 = function (id, key) {
+    
+    var app = {};
+    
+    applicationsv6.forEach(function (item) {
+      
+      if (item.index == id) {
+        app = item;
+      }
+
+    })
+
+    return app[key];
+  }
+
+  // Get application information (v7)
+  // Prototype version 3-0 onward
+  filters.appInformationV7 = function (id, key) {
+    
+    var app = {};
+    
+    applicationsv7.forEach(function (item) {
+      
+      if (item.index == id) {
+        app = item;
+      }
+
+    })
+
+    return app[key];
+  }
+
+  // Show hide infomation based on search results
+  filters.showHide = function (obj, text) {
+    var query = text.split();
+    
+    for (key in obj) {
+      
+      for (var v = 0; v < query.length; v++) {
+        
+        if (obj[key].indexOf(query[v]) != -1) {
+          return "show";
+        }
+
+      }
+
+    }
+
+    return "hide";
+  }
+
+  // Way of increasing a number in nunjucks
+  filters.increase = function (num) {
+    return num += 1;
+  }
+
+  filters.toMonth = function (x) {
+    months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    
+    if (x > 0) {
+      // returns date as per month
+      return months[x - 1];
+    }
+    else {
+      return x;
+    }
+
+  }
+
+  filters.toMoney = function (x) {
+    return ("£" + x);
+    // TO ADD - case to handle nothing being there
+  }
+
+  filters.getCommodity = function (str, val) {
+    console.log("looking up commodity: " + val);
+    var regExp = /\(([^)]+)\)/;
+    var matches = regExp.exec(str);
+
+    // matches[1] contains the value between the parentheses
+    console.log(matches[1]);
+    
+    for (key in sample) {
+      console.log("found " + sample[key].eppocode);
+      
+      if (sample[key].eppocode == matches[1]) {
+        return sample[key][val];
+      }
+
+    }
+
+  }
+
+  // Way of increasing a number in nunjucks
+  filters.getRandomSerial = function (num) {
+    let str= "";
+    
+    for (var i=0; i<num; i++){
+      str += Math.floor(Math.random()*10);
+    }
+
+    return str;
+  }
+
+
   //filter for month implment on the page by using "| toMonth"
   filters.toMonth = function(x) {
     months = ["January ", "February ", "March ", "April ", "May ", "June ", "July ", "August ", "September ", "October ", "November ", "December "];

@@ -1,6 +1,12 @@
-const express = require('express');
-const app = express();
-const router = express.Router();
+//
+// For guidance on how to create routes see:
+// https://prototype-kit.service.gov.uk/docs/create-routes
+//
+
+const govukPrototypeKit = require('govuk-prototype-kit')
+const router = govukPrototypeKit.requests.setupRouter()
+
+// Add your routes here
 const radioButtonRedirect = require('radio-button-redirect');
 
 router.use(radioButtonRedirect);
@@ -20,7 +26,6 @@ router.use('/', (req, res, next) => {
 // GET SPRINT NAME - useful for relative templates
 /* Current sprint at time of versioning: Sprint 85 (02.11.23 to 15.11.23) */
 
-// Add your routes here - above the module.exports line
 // custom code to load any file from
 const fs = require('fs');
 const route_path = "./routes/";
@@ -41,4 +46,3 @@ require('./routes/routes.js')(router);
 // the version routes are processed before the global dev ones
 require('./routes/dev.js')(router);
 
-module.exports = router;
