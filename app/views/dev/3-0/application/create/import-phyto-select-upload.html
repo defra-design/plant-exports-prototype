@@ -95,6 +95,26 @@ Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
           {% block country %}{% include "../modules/_country-select-import-2.html" %}{% endblock %}
 
           <!-- FILE -->
+          {% if query.edit %}
+          <div class="govuk-form-group ">
+            <!-- <h2 class="govuk-heading-s">Current import phytosanitary certificate</h2> -->
+            <p class="govuk-body"><strong>Current import phytosanitary certificate</strong><br><a class="govuk-link govuk-link--no-visited-state" href="#">{{data['ipcFile'+_id] or "file-name.pdf"}}</a></p>
+
+            <h2 class="govuk-heading-m">Upload a new import phytosanitary certificate</h2>
+            <p class="govuk-body">The file must:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>be in PDF format</li>
+              <li>be fewer than 3 megabytes (3MB)</li>
+            </ul>
+            {{ govukFileUpload({
+              id: "ipcFile"+_ipcID,
+              name: "ipcFile"+_ipcID,
+              label: {
+                text: "Upload file"
+              }
+            }) }}
+          </div>
+          {% else %}
           <div class="govuk-form-group ">
             <h2 class="govuk-heading-m">Upload the import phytosanitary certificate</h2>
             <p class="govuk-body">The file must:</p>
@@ -110,6 +130,7 @@ Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
               }
             }) }}
           </div>
+          {% endif %}
 
         </div>
 
