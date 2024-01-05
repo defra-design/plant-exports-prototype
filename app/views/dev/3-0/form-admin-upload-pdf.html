@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  Manage account - {{serviceName}} - GOV.UK
+{% if query.error == "true" %}Error: {% endif %}Add details for a new EHC version
 {% endblock %}
 
 {% block beforeContent %}
@@ -19,22 +19,42 @@
 {% endblock %}
 
 {% block content %}
-<div class="govuk-grid-row govuk-!-margin-bottom-6">
+<div class="govuk-grid-row ">
   
   <div class="govuk-grid-column-two-thirds">
+
+
+    {% if query.error == "true" %}
+    <div class="govuk-error-summary" data-module="govuk-error-summary">
+      <div role="alert">
+        <h2 class="govuk-error-summary__title">
+          There is a problem
+        </h2>
+        <div class="govuk-error-summary__body">
+          <ul class="govuk-list govuk-error-summary__list">
+            <li>
+              <a href="#upload-pdf-file-1">Upload an EHC template</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+
 
    
 
     <span class="govuk-caption-xl">test-name</span>
-    <!-- <h1 class="govuk-heading-xl">Create a new EHC version</h1> -->
+    <h1 class="govuk-heading-xl">Add details for a new EHC version</h1>
 
     
     <form action="/form-handler" method="post" novalidate>
       <div class="govuk-form-group">
-        <fieldset class="govuk-fieldset">
+        <!-- <fieldset class="govuk-fieldset">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-6">
             Add details for a new EHC version
-          </legend>
+          </legend> -->
           
 
           <div class="govuk-form-group govuk-!-margin-bottom-7">
@@ -45,16 +65,21 @@
             <input class="govuk-input govuk-input--width-5 govuk-input--extra-letter-spacing" id="upload-pdf-version" name="upload-pdf-version" type="text" spellcheck="false" value="" >
           </div>
 
-          <div class="govuk-form-group">
+          <div class="govuk-form-group {% if query.error == 'true' %}govuk-form-group--error{% endif %}">
             <label class="govuk-label govuk-!-font-weight-bold" for="upload-pdf-file-1">
               EHC template
             </label>
             <div id="upload-pdf-file-1-hint" class="govuk-hint">
               File must be in PDF format and smaller than 10MB
             </div>
-            <input class="govuk-file-upload" id="upload-pdf-file-1" name="upload-pdf-file-1" type="file" aria-describedby="upload-pdf-file-1-hint">
+            {% if query.error == "true" %}
+            <p id="upload-pdf-file-1-error" class="govuk-error-message">
+              <span class="govuk-visually-hidden">Error:</span> Upload an EHC template
+            </p>
+            {% endif %}
+            <input class="govuk-file-upload {% if query.error == 'true' %}govuk-input--error{% endif %}" id="upload-pdf-file-1" name="upload-pdf-file-1" type="file" aria-describedby="upload-pdf-file-1-hint {% if query.error == 'true' %}upload-pdf-file-1-error{% endif %}">
           </div>
-
+          {% if query.ephyto == "true" %}
           <div class="govuk-form-group">
             <label class="govuk-label govuk-!-font-weight-bold" for="upload-pdf-file-2">
               ePhyto copy template
@@ -64,7 +89,8 @@
             </div>
             <input class="govuk-file-upload" id="upload-pdf-file-2" name="upload-pdf-file-2" type="file" aria-describedby="upload-pdf-file-2-hint">
           </div>
-        </fieldset>
+          {% endif %}
+        <!-- </fieldset> -->
       </div>
 
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
