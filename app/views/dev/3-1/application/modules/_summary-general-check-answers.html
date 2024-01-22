@@ -1,0 +1,96 @@
+<!-- 
+{% if commodity.has_botanicial_name == "yes" %}
+  {% set commodity_id_name = commodity.genus %}
+{% else %}
+  {% set commodity_id_name = commodity.commodity_common_name %}
+{% endif %}
+
+<tr class="govuk-table__row">
+  <td class="govuk-table__cell">
+    {{data.commodity_host_species or data.genus or data.commodity_common_name or "Corylus avellana"}}
+  </td>
+  <td class="govuk-table__cell">
+    {{commodity.countrySelect[0] or "United Kingdom"}}
+  </td>
+  <td class="govuk-table__cell govuk-table__cell">
+    {{commodity.quantity or "25"}}{{commodity.unit or "kg"}}
+  </td>
+  <td class="govuk-table__cell" style="text-align: right;">
+    <a href="how-to-identify?change=yes&return_url=check-your-answers" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+    <br>
+    <a href="#" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+  </td>
+</tr> -->
+
+
+
+
+
+
+<tr class="govuk-table__row">
+  <td class="govuk-table__cell">
+    <span style="display: block; margin-bottom: 7px;">
+      {% if commodity.has_botanicial_name == "use_description" %}
+          <!-- use DESCRIPTION -->
+          <strong>{{commodity.commodity_description or "Description for plant"}}</strong>
+      {% elif commodity.genus %}
+          <!-- use GENUS + SPECIES -->
+          <strong>{{commodity.genus or "Genus unknown"}}, {{commodity.commodity_host_species or "Species unknown"}}</strong>
+      {% else %}
+          <!-- use BOTANICAL NAME -->
+          <strong>{{commodity.botanical_name or "Rosa ecae (ROSEC)"}}</strong>
+      {% endif %}
+  </span>
+    
+    
+  </td>
+  <td class="govuk-table__cell">
+
+    <span style="display: block; margin-bottom: 7px;" >
+    <!-- {% if commodity.filter_demo %}
+    {{commodity.filter_demo or "United Kingdom"}}
+    {% else %}
+    United Kingdom 
+    {% endif %} -->
+    {% set _defaultCountry = "United Kingdom, United States of America, Costa Rica, Columbia" %}
+    {% if commodity.filter_demo == "_unchecked" or commodity.filter_demo == undefined %}
+    {{_defaultCountry}}
+    {% else %}
+    {{commodity.filter_demo | join(", ") or _defaultCountry}}
+    {% endif %}
+    <!-- "filter_demo":["Afghanistan","Åland Islands","Albania"], -->
+  </span>
+
+    {% if data.reforwarding == "1" %}
+    <span style="display: block; margin-bottom: 7px;" >
+      {% if commodity['commodityIPCN-2'] %}
+        {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
+      {% elif commodity['commodityIPCN-1'] %}
+        {{commodity['commodityIPCN-1'] or "123-456-789-0"}}
+      {% else %}
+        {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
+      {% endif %}
+    </span>
+    {% endif %}
+    
+  </td>
+  <td class="govuk-table__cell">
+    <span style="display: block; margin-bottom: 7px;">{{commodity.quantity or "20"}} {{commodity.units or "kilograms"}}</span>
+    <span style="display: block; margin-bottom: 7px;">{{commodity.number_of_packages or "5"}} packages</span>
+  </td>
+  <td class="govuk-table__cell">
+    <span style="display: block; margin-bottom: 7px;">{{commodity.packaging[0] or "Crate - bulk - cardboard"}}</span>
+    
+    <!-- <span style="display: block; margin-bottom: 7px;">{{commodity.packing_material_used or "Cardboard"}}</span>
+    
+    <span style="display: block; margin-bottom: 7px;">{{commodity.distinguishing_marks or "Brown marks"}}</span> -->
+  
+  </td>
+  <td class="govuk-table__cell" style="text-align: right;">
+    <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+    <br>
+    {% if query.cloned != "yes" %}
+    <a href="#" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+    {% endif %}
+  </td>
+</tr>

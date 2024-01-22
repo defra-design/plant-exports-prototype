@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Do you want to reuse the same application reference? - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+
+{% set journey = "coc" %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    
+    <div class="app-alert app-alert--success" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
+      <p class="govuk-body" id="govuk-notification-banner-message">You have successfully copied this application</p>
+    </div>
+
+    <h1 class="govuk-heading-xl">
+      Do you want to reuse the same application reference?
+    </h1>
+    <p class="govuk-body govuk-!-font-weight-bold">Reference: PO 24477 Canaries{{query.id | appInformationV7('reference')}}</p>
+    <form method="post" novalidate>
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              {%set orig_ref_num = query.id | appInformationV7('reference')%}
+              <input class="govuk-radios__input" id="reuse" name="reuse" type="radio" value="yes~application/create/complete-coc" data-aria-controls="conditional-reuse">
+              <label class="govuk-label govuk-radios__label" for="reuse">
+                Yes, use PO 24477 Canaries{{ query.id | appInformationV7('reference') }}
+              </label>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="reuse-2" name="reuse" type="radio" value="no~application/create/complete-coc" data-aria-controls="conditional-reuse-2">
+              <label class="govuk-label govuk-radios__label" for="reuse-2">
+                No, use a different reference
+              </label>
+            </div>
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-contact-2">
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="new_ref_num">
+                  Enter your reference name or number (max 20 characters)
+                </label>
+                <input class="govuk-input govuk-!-width-one-half" id="new_ref_num" name="new_ref_num" type="text"></div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <button class="govuk-button" data-module="govuk-button">
+        Save and continue
+      </button>
+    </form>
+
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+    <p class="govuk-body">
+      <a href="check-your-answers-copy-as-coc" class="govuk-link">Option 2: Check your answers version</a>
+    </p>
+
+  </div>
+</div>
+{% endblock %}

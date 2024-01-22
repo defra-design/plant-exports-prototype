@@ -1,0 +1,444 @@
+{% extends "layout.html" %}
+
+{% set items = [
+  {
+  date: '23 Sep 2021',
+  application_number: '120664110369',
+  description: 'White cabbage',
+  details: 'Durham Early',
+  amount: '100kg',
+  total: '500kg'
+  },
+  {
+  date: '21 Sep 2021',
+  application_number: '120664110283',
+  description: 'White cabbage',
+  details: 'Durham Early',
+  amount: '50kg',
+  total: '400kg'
+  },
+  {
+  date: '19 Sep 2021',
+  application_number: '120664110233',
+  description: 'White cabbage',
+  details: 'Durham Early',
+  amount: '100kg',
+  total: '350kg'
+  },
+  {
+  date: '16 Sep 2021',
+  application_number: '120664110167',
+  description: 'White cabbage',
+  details: 'Durham Early',
+  amount: '100kg',
+  total: '250kg'
+  },
+  {
+  date: '14 Sep 2021',
+  application_number: '120664110123',
+  description: 'White cabbage',
+  details: 'Avon Crest',
+  amount: '50kg',
+  total: '150kg'
+  },
+  {
+  date: '12 Sep 2021',
+  application_number: '120664109150',
+  description: 'White cabbage',
+  details: 'Durham Early',
+  amount: '100kg',
+  total: '100kg'
+  }
+  
+  ] %}
+
+{% block pageTitle %}
+  {% if data.build == "development" %}
+  {% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %} {{query.id | appInformationV7('applicationID')}} - {{serviceName}} - GOV.UK
+  {% else %}
+  Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %} {{query.id | appInformationV7('applicationID')}} - {{serviceName}} - GOV.UK
+  {% endif %}
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="account?returnURL={{query.returnURL or 'dashboard-submitted'}}" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
+  </ul>
+</div>
+
+<a href="javascript:history.back()" class="govuk-back-link">Return to your applications</a>
+<style>
+
+  /* Needs extracting and adding to the external Sass or CSS */
+  .govuk-width-three-tenths {
+    width: 15% !important;
+  }
+
+  .govuk-width-one-fifth {
+    width: 20% !important;
+  }
+
+  .govuk-status--warning {
+    width: auto !important;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    padding-bottom: 1px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    display: inline-block;
+    color: #0b0c0c;
+    background: #FFBF47;
+    border: 3px solid #FFBF47;
+  }
+
+  .doc-icon::before {
+    content: '';
+    width: 1em;
+    height: 1.5em;
+    margin-right: 1em;
+    position: relative;
+    top: 0.5em;
+    display: inline-block;
+    background: #bfc1c3;
+    box-shadow: 3px -3px 0 #fff, 6px -6px 0 #bfc1c3;
+  }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      {% if data.build == "development" %}
+      {% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %} 
+      <br>
+      {{query.id | appInformationV7('applicationID')}}
+      {% else %}
+      Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %}
+      <br>
+      {{query.id | appInformationV7('applicationID')}}
+      {% endif %}
+    </h1>
+  </div>
+
+</div>
+
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+    <dl class="govuk-summary-list govuk-summary-list--no-border">
+      
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Status</dt>
+        <dd class="govuk-summary-list__value">
+          
+          <div class="govuk-tag govuk-tag--{{query.id | appInformationV7('tag')}}">
+            {{query.id | appInformationV7('status')}}
+          </div>
+
+        </dd>
+      </div>
+      
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Your reference</dt>
+        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV7('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformationV7('reference')}}{% endif %}</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Type</dt>
+        <dd class="govuk-summary-list__value">
+          Phytosanitary certificate for {{data.commodity or query.id | appInformationV7('commodity_info') or "crops"}}
+        </dd>
+      </div>
+
+      {% if query.id != 6 %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Destination country</dt>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV7('destination')}}</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">{% if data.build == "development" %}Customer{% else %}Consignee{% endif %}</dt>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV7('importer') | title or 'XYZ Trading Limited'}}</dd>
+      </div>
+      {% endif %}
+
+      {% if query.id == 0 %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Agent</dt>
+        <dd class="govuk-summary-list__value">Agent name</dd>
+      </div>
+      {% endif %}
+
+      {% if (query.id | appInformationV7('status')) == 'certificate issued' or (query.id | appInformationV7('status')) == 'certificate re-issued' %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Phytosanitary certificate number</dt>
+        <dd class="govuk-summary-list__value">UK/GB/E&W/{{query.id | appInformationV7('certificate') or "2022/4236522044833"}}</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Certificate issue date</dt>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV7('certificateIssueDate') or "01 January 2022"}}</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Certificate expiry date</dt>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV7('certificateExpiryDate') or "15 January 2022"}}</dd>
+      </div>
+      {% endif %}
+
+    </dl>
+
+    <div class="govuk-inset-text">
+      <p class="govuk-body">You will also need a certificate of conformity for this export.</p>
+      <ul class="govuk-list noprint">
+        <li><a class="govuk-link govuk-link--no-visited-state" href="copy-as-coc?id={{query.id or 0}}&is_group={{query.is_group}}">Apply for a certificate of conformity</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+    <ul class="govuk-list govuk-!-margin-bottom-8 noprint">
+      {% if (query.id | appInformationV7('status')) == 'draft' %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="#">{% if data.build == "development" %}Edit and submit{% else %}Continue{% endif %} this application</a></li>
+      {% else %}
+      {% if (query.id | appInformationV7('status')) != 'certificate issued' %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-viewonly">View application details</a></li>
+      {% endif %}
+      {% endif %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 0}}&is_group={{query.is_group}}">Copy this application</a></li>
+      {% if (query.id | appInformationV7('status')) == 'certificate issued' %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-viewonly">View application details</a></li>
+      {% endif %}
+      {% if (query.id | appInformationV7('status')) == 'submitted' or (query.id | appInformationV7('status')) == 'processing' or (query.id | appInformationV7('status')) == 'with inspector' or (query.id | appInformationV7('status')) == 'exporter action' or (query.id | appInformationV7('status')) == 'preparing certificate' or (query.id | appInformationV7('status')) == 'returned' %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="cancel">Cancel this application</a></li>
+      {% endif %}
+      {% if (query.id | appInformationV7('status')) == 'draft' %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="delete">Delete this application</a></li>
+      {% endif %}
+    </ul>
+  </div>
+
+</div>
+
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-full">
+    <h2 class="govuk-heading-m">Commodities in this application</h2>
+
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">Description</th>
+          <th class="govuk-table__header" scope="col">Origin</th>
+          <th class="govuk-table__header" scope="col">Quantity and number of packages</th>
+          <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks</th>
+          <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            <span style="display: block; margin-bottom: 7px;">
+              {% if commodity.has_botanicial_name == "use_description" %}
+              <!-- use DESCRIPTION -->
+              <strong>{{commodity.commodity_description or "Description for plant"}}</strong>
+              {% elif commodity.genus %}
+              <!-- use GENUS + SPECIES -->
+              <strong>{{commodity.genus or "Genus unknown"}}, {{commodity.commodity_host_species or "Species unknown"}}</strong>
+              {% else %}
+              <!-- use BOTANICAL NAME -->
+              <strong>{{commodity.botanical_name or "Rosa ecae (ROSEC)"}}</strong>
+              {% endif %}
+            </span>
+            {% if commodity.commodity_variety != "" %}
+            <span style="display: block; margin-bottom: 7px;">'{{commodity.commodity_variety or "Red blossom"}}'</span>
+            {% endif %}
+            {% if query.design != "b" %}
+            <span style="display: block; margin-bottom: 7px;">
+              Commodity type:
+              {% if commodity.commodity_type == "produce" %}
+              Produce (fruit, flowers or vegetables)
+              {% else %}
+              {{commodity.commodity_type | capitalize or "Plants"}}
+              {% endif %}
+            </span>
+            {% endif %}
+          </td>
+          <td class="govuk-table__cell">
+            {% set _defaultCountry = "United Kingdom" %}
+            {% if commodity.filter_demo == "_unchecked" or commodity.filter_demo == undefined %}
+            {{_defaultCountry}}
+            {% else %}
+            {{commodity.filter_demo | join(", ") or _defaultCountry}}
+            {% endif %}
+            <!-- "filter_demo":["Afghanistan","Åland Islands","Albania"], -->
+          </td>
+          <td class="govuk-table__cell">
+            <span style="display: block; margin-bottom: 7px;">{{commodity.quantity or "20"}} {{commodity.units or "kilograms"}}</span>
+            <span style="display: block; margin-bottom: 7px;">{{commodity.number_of_packages or "5"}} packages</span>
+          </td>
+          <td class="govuk-table__cell">
+            <span style="display: block; margin-bottom: 7px;">{{commodity.packaging[0] or "Crate - bulk - cardboard"}}</span>
+            {% if query.design != "b" %}
+            {% if commodity.packing_material_used != "" %}
+            <span style="display: block; margin-bottom: 7px;">{{commodity.packing_material_used or "Cardboard"}}</span>
+            {% endif %}
+            {% if commodity.distinguishing_marks != "" %}
+            <span style="display: block; margin-bottom: 7px;">{{commodity.distinguishing_marks or "Brown marks"}}</span>
+            {% endif %}
+            {% endif %}
+            {% if data.reforwarding %}
+            <span style="display: block; margin-bottom: 7px;" >
+              Import certificates:<br>
+              {% if commodity['commodityIPCN-2'] %}
+              {{commodity['commodityIPCN-1'] or "123-456-789-0"}} and {{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
+              {% else %}
+              {{commodity['commodityIPCN-1'] or "123-456-789-0"}}
+              {% endif %}
+            </span>
+            {% endif %}
+          </td>
+          <td class="govuk-table__cell" style="text-align: right;">
+            <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+            <br>
+            <a href="#" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+          </td>
+        </tr>
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            <span style="display: block; margin-bottom: 7px;">
+            {% if commodity.has_botanicial_name == "use_description" %}
+            <!-- use DESCRIPTION -->
+            <strong>{{commodity.commodity_description or "Description for plant"}}</strong>
+            {% elif commodity.genus %}
+            <!-- use GENUS + SPECIES -->
+            <strong>{{commodity.genus or "Genus unknown"}}, {{commodity.commodity_host_species or "Species unknown"}}</strong>
+            {% else %}
+            <!-- use BOTANICAL NAME -->
+            <strong>{{commodity.botanical_name or "RRRosa ecae (ROSEC)"}}</strong>
+            {% endif %}
+            </span>
+            {% if commodity.commodity_variety != "" %}
+            <span style="display: block; margin-bottom: 7px;">'{{commodity.commodity_variety or "Red blossom"}}'</span>
+            {% endif %}
+            {% if query.design != "b" %}
+            <span style="display: block; margin-bottom: 7px;">
+            Commodity type:
+            {% if commodity.commodity_type == "produce" %}
+            Produce (fruit, flowers or vegetables)
+            {% else %}
+            {{commodity.commodity_type | capitalize or "Plants"}}
+            {% endif %}
+            </span>
+            {% endif %}
+          </td>
+          <td class="govuk-table__cell">
+               {% set _defaultCountry = "United Kingdom" %}
+               {% if commodity.filter_demo == "_unchecked" or commodity.filter_demo == undefined %}
+               {{_defaultCountry}}
+               {% else %}
+               {{commodity.filter_demo | join(", ") or _defaultCountry}}
+               {% endif %}
+               <!-- "filter_demo":["Afghanistan","Åland Islands","Albania"], -->
+          </td>
+          <td class="govuk-table__cell">
+            <span style="display: block; margin-bottom: 7px;">{{commodity.quantity or "20"}} {{commodity.units or "kilograms"}}</span>
+            <span style="display: block; margin-bottom: 7px;">{{commodity.number_of_packages or "5"}} packages</span>
+          </td>
+          <td class="govuk-table__cell">
+            <span style="display: block; margin-bottom: 7px;">{{commodity.packaging[0] or "Crate - bulk - cardboard"}}</span>
+            {% if query.design != "b" %}
+            {% if commodity.packing_material_used != "" %}
+            <span style="display: block; margin-bottom: 7px;">{{commodity.packing_material_used or "Cardboard"}}</span>
+            {% endif %}
+            {% if commodity.distinguishing_marks != "" %}
+            <span style="display: block; margin-bottom: 7px;">{{commodity.distinguishing_marks or "Brown marks"}}</span>
+            {% endif %}
+            {% endif %}
+          </td>
+          <td class="govuk-table__cell" style="text-align: right;">
+            <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+            <br>
+            <a href="#" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+          </td>
+        </tr>
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            <span style="display: block; margin-bottom: 7px;">
+            {% if commodity.has_botanicial_name == "use_description" %}
+            <!-- use DESCRIPTION -->
+            <strong>{{commodity.commodity_description or "Description for plant"}}</strong>
+            {% elif commodity.genus %}
+            <!-- use GENUS + SPECIES -->
+            <strong>{{commodity.genus or "Genus unknown"}}, {{commodity.commodity_host_species or "Species unknown"}}</strong>
+            {% else %}
+            <!-- use BOTANICAL NAME -->
+            <strong>{{commodity.botanical_name or "RRRosa ecae (ROSEC)"}}</strong>
+            {% endif %}
+            </span>
+            {% if commodity.commodity_variety != "" %}
+            <span style="display: block; margin-bottom: 7px;">'{{commodity.commodity_variety or "Red blossom"}}'</span>
+            {% endif %}
+            {% if query.design != "b" %}
+            <span style="display: block; margin-bottom: 7px;">
+            Commodity type:
+            {% if commodity.commodity_type == "produce" %}
+            Produce (fruit, flowers or vegetables)
+            {% else %}
+            {{commodity.commodity_type | capitalize or "Plants"}}
+            {% endif %}
+            </span>
+            {% endif %}
+          </td>
+          <td class="govuk-table__cell">
+            {% set _defaultCountry = "United Kingdom" %}
+            {% if commodity.filter_demo == "_unchecked" or commodity.filter_demo == undefined %}
+            {{_defaultCountry}}
+            {% else %}
+            {{commodity.filter_demo | join(", ") or _defaultCountry}}
+            {% endif %}
+            <!-- "filter_demo":["Afghanistan","Åland Islands","Albania"], -->
+          </td>
+          <td class="govuk-table__cell">
+            <span style="display: block; margin-bottom: 7px;">{{commodity.quantity or "20"}} {{commodity.units or "kilograms"}}</span>
+            <span style="display: block; margin-bottom: 7px;">{{commodity.number_of_packages or "5"}} packages</span>
+          </td>
+          <td class="govuk-table__cell">
+            <span style="display: block; margin-bottom: 7px;">{{commodity.packaging[0] or "Crate - bulk - cardboard"}}</span>
+            {% if query.design != "b" %}
+            {% if commodity.packing_material_used != "" %}
+            <span style="display: block; margin-bottom: 7px;">{{commodity.packing_material_used or "Cardboard"}}</span>
+            {% endif %}
+            {% if commodity.distinguishing_marks != "" %}
+            <span style="display: block; margin-bottom: 7px;">{{commodity.distinguishing_marks or "Brown marks"}}</span>
+            {% endif %}
+            {% endif %}
+          </td>
+          <td class="govuk-table__cell" style="text-align: right;">
+            <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+            <br>
+            <a href="#" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,146 @@
+{% extends "govuk-prototype-kit/layouts/unbranded.html" %}
+
+{% block pageTitle %}
+  Sampling reference information - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+<style>
+
+  .govuk-phase-banner {
+    display: none !important;
+  }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-full">
+    <h1 class="govuk-heading-xl">Sampling reference information</h1>
+    <p class="govuk-body">You must label each sample with its sample reference.</p>
+    <dl class="govuk-summary-list govuk-summary-list--no-border">
+      
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key govuk-!-padding-top-1 govuk-!-padding-bottom-1"><abbr title="Animal and Plant Health Agency">APHA</abbr> reference</dt>
+        <dd class="govuk-summary-list__value govuk-!-padding-top-1 govuk-!-padding-bottom-1">1721 14800 4809</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key govuk-!-padding-top-1 govuk-!-padding-bottom-1">Your reference</dt>
+        <dd class="govuk-summary-list__value govuk-!-padding-top-1 govuk-!-padding-bottom-1">{% if (query.id | appInformationV7('reference')) %}{{query.id | appInformationV7('reference')}}{% elif data.reference_num %}{{data.reference_num or "PO 10028 G" }}{% else %}&nbsp;{% endif %}</dd>
+      </div>
+      
+      <!-- <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key govuk-!-padding-top-1 govuk-!-padding-bottom-1">Import permit</dt>
+        <dd class="govuk-summary-list__value govuk-!-padding-top-1 govuk-!-padding-bottom-1">ABCD1234</dd>
+      </div> -->
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key govuk-!-padding-top-1 govuk-!-padding-bottom-1">Destination countries</dt>
+        <dd class="govuk-summary-list__value govuk-!-padding-top-1 govuk-!-padding-bottom-1">Canada, China, France, Ghana, Latvia, Norway, Tunisia</dd>
+      </div>
+
+    </dl>
+    <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-top-9 govuk-!-margin-bottom-9">
+    <!-- <h2 class="govuk-heading-l govuk-!-margin-top-9">Sampling reference information</h2> -->
+
+    <table class="govuk-table">
+      <caption class="govuk-table__caption govuk-visually-hidden">Sampling reference information</caption>
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">Description</th>
+          <th scope="col" class="govuk-table__header">Distinguishing marks</th>
+          <th scope="col" class="govuk-table__header">Total quantity</th>
+          <th scope="col" class="govuk-table__header">Remaining quantity</th>
+          <th scope="col" class="govuk-table__header">Country</th>
+          <th scope="col" class="govuk-table__header"><abbr title="Animal and Plant Health Agency">APHA</abbr> sample reference</th>
+          <!-- <th scope="col" class="govuk-table__header">Results</th> -->
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <td scope="row" class="govuk-table__cell">{% if data.has_botanicial_name3 == "use_description" %}{{data.description_details3 or "Cat nip" }}{% else %}{{data.botanical_name3 or "Lophospermum atrosanguineum (RHWAT)"}}{% endif %}</td>
+          <td class="govuk-table__cell">{% if data.distinguishing_marks3 %}{{data.distinguishing_marks3 or "Earl Grey"}}{% else %}&nbsp;{% endif %}</td>
+          <td class="govuk-table__cell">{{data.quantity3 or "1,460"}}{% if data.units3 == "Grams" %}g{% elif data.units3 == "Kilograms" %}kg{% elif data.units3 == "Litres" %}l{% elif data.units3 == "Millilitres" %}ml{% elif data.units3 == "Tonnes" %}t{% else %}t{% endif %}</td>
+          <td class="govuk-table__cell">{{data.quantity3 or "1,460"}}{% if data.units3 == "Grams" %}g{% elif data.units3 == "Kilograms" %}kg{% elif data.units3 == "Litres" %}l{% elif data.units3 == "Millilitres" %}ml{% elif data.units3 == "Tonnes" %}t{% else %}t{% endif %}</td>
+          <td class="govuk-table__cell">Canada</td>
+          <td class="govuk-table__cell">10009347</td>
+          <!-- <td class="govuk-table__cell">Pass</td> -->
+        </tr>
+        <tr class="govuk-table__row">
+          <td scope="row" class="govuk-table__cell">{% if data.has_botanicial_name3 == "use_description" %}{{data.description_details3 or "Cat nip" }}{% else %}{{data.botanical_name3 or "Lophospermum atrosanguineum (RHWAT)"}}{% endif %}</td>
+          <td class="govuk-table__cell">{% if data.distinguishing_marks3 %}{{data.distinguishing_marks3 or "Earl Grey"}}{% else %}&nbsp;{% endif %}</td>
+          <td class="govuk-table__cell">{{data.quantity3 or "1,460"}}{% if data.units3 == "Grams" %}g{% elif data.units3 == "Kilograms" %}kg{% elif data.units3 == "Litres" %}l{% elif data.units3 == "Millilitres" %}ml{% elif data.units3 == "Tonnes" %}t{% else %}t{% endif %}</td>
+          <td class="govuk-table__cell">{{data.quantity3 or "1,460"}}{% if data.units3 == "Grams" %}g{% elif data.units3 == "Kilograms" %}kg{% elif data.units3 == "Litres" %}l{% elif data.units3 == "Millilitres" %}ml{% elif data.units3 == "Tonnes" %}t{% else %}t{% endif %}</td>
+          <td class="govuk-table__cell">Norway</td>
+          <td class="govuk-table__cell">10009347</td>
+          <!-- <td class="govuk-table__cell">Fail</td> -->
+        </tr>
+        <tr class="govuk-table__row">
+          <td scope="row" class="govuk-table__cell">{% if data.has_botanicial_name2 == "use_description" %}{{data.description_details2 or "Tea leaves" }}{% else %}{{data.botanical_name2 or "Alsophila latebrosa (ASWLA)"}}{% endif %}</td>
+          <td class="govuk-table__cell">{% if data.distinguishing_marks2 %}{{data.distinguishing_marks2 or "PG Tips"}}{% else %}Ground coffee{% endif %}</td>
+          <td class="govuk-table__cell">{{data.quantity2 or "30"}}{% if data.units2 == "Grams" %}g{% elif data.units2 == "Kilograms" %}kg{% elif data.units2 == "Litres" %}l{% elif data.units2 == "Millilitres" %}ml{% elif data.units2 == "Tonnes" %}t{% else %}g{% endif %}</td>
+          <td class="govuk-table__cell">{{data.quantity2 or "30"}}{% if data.units2 == "Grams" %}g{% elif data.units2 == "Kilograms" %}kg{% elif data.units2 == "Litres" %}l{% elif data.units2 == "Millilitres" %}ml{% elif data.units2 == "Tonnes" %}t{% else %}g{% endif %}</td>
+          <td class="govuk-table__cell">China</td>
+          <td class="govuk-table__cell">10009348</td>
+          <!-- <td class="govuk-table__cell">Fail</td> -->
+        </tr>
+        <tr class="govuk-table__row">
+          <td scope="row" class="govuk-table__cell">{% if data.has_botanicial_name2 == "use_description" %}{{data.description_details2 or "Tea leaves" }}{% else %}{{data.botanical_name2 or "Alsophila latebrosa (ASWLA)"}}{% endif %}</td>
+          <td class="govuk-table__cell">{% if data.distinguishing_marks2 %}{{data.distinguishing_marks2 or "PG Tips"}}{% else %}Ground coffee{% endif %}</td>
+          <td class="govuk-table__cell">{{data.quantity2 or "30"}}{% if data.units2 == "Grams" %}g{% elif data.units2 == "Kilograms" %}kg{% elif data.units2 == "Litres" %}l{% elif data.units2 == "Millilitres" %}ml{% elif data.units2 == "Tonnes" %}t{% else %}g{% endif %}</td>
+          <td class="govuk-table__cell">{{data.quantity2 or "30"}}{% if data.units2 == "Grams" %}g{% elif data.units2 == "Kilograms" %}kg{% elif data.units2 == "Litres" %}l{% elif data.units2 == "Millilitres" %}ml{% elif data.units2 == "Tonnes" %}t{% else %}g{% endif %}</td>
+          <td class="govuk-table__cell">Ghana</td>
+          <td class="govuk-table__cell">10009348</td>
+          <!-- <td class="govuk-table__cell">Pass</td> -->
+        </tr>
+        <tr class="govuk-table__row">
+          <td scope="row" class="govuk-table__cell">{% if data.has_botanicial_name2 == "use_description" %}{{data.description_details2 or "Tea leaves" }}{% else %}{{data.botanical_name2 or "Alsophila latebrosa (ASWLA)"}}{% endif %}</td>
+          <td class="govuk-table__cell">{% if data.distinguishing_marks2 %}{{data.distinguishing_marks2 or "PG Tips"}}{% else %}Ground coffee{% endif %}</td>
+          <td class="govuk-table__cell">{{data.quantity2 or "30"}}{% if data.units2 == "Grams" %}g{% elif data.units2 == "Kilograms" %}kg{% elif data.units2 == "Litres" %}l{% elif data.units2 == "Millilitres" %}ml{% elif data.units2 == "Tonnes" %}t{% else %}g{% endif %}</td>
+          <td class="govuk-table__cell">{{data.quantity2 or "30"}}{% if data.units2 == "Grams" %}g{% elif data.units2 == "Kilograms" %}kg{% elif data.units2 == "Litres" %}l{% elif data.units2 == "Millilitres" %}ml{% elif data.units2 == "Tonnes" %}t{% else %}g{% endif %}</td>
+          <td class="govuk-table__cell">Latvia</td>
+          <td class="govuk-table__cell">10009348</td>
+          <!-- <td class="govuk-table__cell">Pass</td> -->
+        </tr>
+        <tr class="govuk-table__row">
+          <td scope="row" class="govuk-table__cell">{% if data.has_botanicial_name2 == "use_description" %}{{data.description_details2 or "Tea leaves" }}{% else %}{{data.botanical_name2 or "Alsophila latebrosa (ASWLA)"}}{% endif %}</td>
+          <td class="govuk-table__cell">{% if data.distinguishing_marks2 %}{{data.distinguishing_marks2 or "PG Tips"}}{% else %}Ground coffee{% endif %}</td>
+          <td class="govuk-table__cell">{{data.quantity2 or "30"}}{% if data.units2 == "Grams" %}g{% elif data.units2 == "Kilograms" %}kg{% elif data.units2 == "Litres" %}l{% elif data.units2 == "Millilitres" %}ml{% elif data.units2 == "Tonnes" %}t{% else %}g{% endif %}</td>
+          <td class="govuk-table__cell">{{data.quantity2 or "30"}}{% if data.units2 == "Grams" %}g{% elif data.units2 == "Kilograms" %}kg{% elif data.units2 == "Litres" %}l{% elif data.units2 == "Millilitres" %}ml{% elif data.units2 == "Tonnes" %}t{% else %}g{% endif %}</td>
+          <td class="govuk-table__cell">Tunisia</td>
+          <td class="govuk-table__cell">10009348</td>
+          <!-- <td class="govuk-table__cell">Pass</td> -->
+        </tr>
+        <tr class="govuk-table__row">
+          <td scope="row" class="govuk-table__cell">{% if data.has_botanicial_name == "use_description" %}{{data.description_details or "Coffee beans" }}{% else %}{{data.botanical_name or "Corylus (1CYLG)"}}{% endif %}</td>
+          <td class="govuk-table__cell">{% if data.distinguishing_marks %}{{data.distinguishing_marks or "N/A"}}{% else %}&nbsp;{% endif %}</td>
+          <td class="govuk-table__cell">{{data.quantity or "10"}}{% if data.units == "Grams" %}g{% elif data.units == "Kilograms" %}kg{% elif data.units == "Litres" %}l{% elif data.units == "Millilitres" %}ml{% elif data.units == "Tonnes" %}t{% else %}kg{% endif %}</td>
+          <td class="govuk-table__cell">{{data.quantity or "10"}}{% if data.units == "Grams" %}g{% elif data.units == "Kilograms" %}kg{% elif data.units == "Litres" %}l{% elif data.units == "Millilitres" %}ml{% elif data.units == "Tonnes" %}t{% else %}kg{% endif %}</td>
+          <td class="govuk-table__cell">France</td>
+          <td class="govuk-table__cell">10009349</td>
+          <!-- <td class="govuk-table__cell">Fail</td> -->
+        </tr>
+      </tbody>
+    </table>
+
+    <p class="govuk-body govuk-!-padding-top-4">Send your samples for inspection to:</p>
+    <p class="govuk-body">
+      Plant Clinic
+      <br>
+      Block 4
+      <br>
+      National Agri-Food Campus
+      <br>
+      Sand Hutton
+      <br>
+      York
+      <br>
+      YO41 1LZ
+    </p>
+  </div>
+
+</div>
+{% endblock %}

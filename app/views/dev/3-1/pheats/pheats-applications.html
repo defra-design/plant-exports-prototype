@@ -1,0 +1,203 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Inspection addresses - Manage account - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="../account" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
+  </ul>
+</div>
+
+<!-- <a href="{% if query.returnURL == 'dashboard-submitted' %}../dashboard-submitted{% elif query.returnURL == 'dashboard-submitted' %}../dashboard-submitted{% elif data.has_reference == 'gsi' %}../application/gsi/create/task-list{% elif data.has_reference == 'seed sampling' %}../application/seeds/create/task-list{% elif data.has_reference == 'soil sampling' %}../application/soil/create/task-list{% else %}../application/create/task-list{% endif %}" class="govuk-back-link">Back to apply for plant export certificates and inspections</a> -->
+<div class="govuk-breadcrumbs">
+  <ol class="govuk-breadcrumbs__list">
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="../dashboard-submitted">Your applications</a>
+    </li>
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="../account">Manage account</a>
+    </li>
+  </ol>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if query.deletedDraft %}
+    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+            <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+            Success
+            </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+            <h3 class="govuk-notification-banner__heading">
+              Draft PHEATS application deleted
+            </h3>
+            <!-- <p class="govuk-body">{{data['apName' + query.deleted] or 'Jane Doe'}} has been deleted.</p> -->
+        </div>
+    </div>
+    {% endif %}
+
+    {% if query.noApplications == 'true' %}
+      <h1 class="govuk-heading-xl">PHEATS addresses</h1>
+      <p class="govuk-body">You are not currently in the plant health exports audited trader scheme (PHEATS). To join the scheme you must add an address.</p>
+      <a href="pheats-start" class="govuk-button" role="button" draggable="false" data-module="govuk-button">Add a new PHEATS address</a>
+    {% else %}
+      <h1 class="govuk-heading-xl">PHEATS addresses</h1>
+      <p class="govuk-body">Your organisation has applied to do PHEATS at all these addresses. If you add a new PHEATS address it will need to be approved before you can use it.</p> 
+      <a href="pheats-start" class="govuk-button" role="button" draggable="false" data-module="govuk-button">Add a new PHEATS address</a>
+    {% endif %}
+    
+
+  </div>
+</div>
+
+{% if query.noApplications == 'true' %}
+{% else %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-full">
+
+    <table class="govuk-table responsive">
+        <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header ">Address</th>
+                <th scope="col" class="govuk-table__header  address-column" >Person responsible</th>
+                <th scope="col" class="govuk-table__header  name-column" >PHEATS registration</th>
+                <th scope="col" class="govuk-table__header " style="text-align: right;">Action</th>
+            </tr>
+        </thead>
+
+        <tbody class="govuk-table__body">
+
+          {% for _address in data['addresses3'] %}
+          
+          {% if _address.pheats.status != "notregistered" and _address.pheats.status != "updated" %}
+          <tr class="govuk-table__row">
+
+            <th scope="row" class="govuk-table__header">
+              <p class="govuk-body govuk-!-margin-bottom-2">
+                <!-- <a href="#?address={{_address.id}}" class="govuk-link govuk-link--no-visited-state"> -->
+                  {{_address.address1}}<br>
+                  {{_address.address2}}<br>
+                  {{_address.address3}}<br>
+                  {{_address.address4}}<br>
+                  {{_address.postcode}}
+                <!-- </a> -->
+              </p>
+            </th>
+
+            <td class="govuk-table__cell address-column" >  
+              <p class="govuk-body govuk-!-margin-bottom-2">
+                {{_address.pheats.personresponsible.name}}<br>
+                {{_address.pheats.personresponsible.email}}<br>
+                {% if _address.pheats.personresponsible.mobile %}
+                  {{_address.pheats.personresponsible.mobile}}<br>
+                {% endif %}
+                {% if _address.pheats.personresponsible.telephone %}
+                  {{_address.pheats.personresponsible.telephone}}
+                {% endif %}
+              </p>
+            </td>
+
+            <td class="govuk-table__cell">
+              <p class="govuk-body govuk-!-margin-bottom-2">
+
+                {% set _pheatsHREF = "../pheats/pheats-manage?address=" + _address.id %}
+                {% set _pheatsLinkText = "Manage" %}
+
+                {% if _address.pheats.status == "notregistered" %}
+                  <!-- NOT REGISTERED -->
+                  <strong class="govuk-tag govuk-tag--grey">
+                      Not registered
+                  </strong>
+                  {% set _pheatsHREF = "../pheats/pheats-start?address=" + _address.id %}
+                  {% set _pheatsLinkText = "Add to PHEATS" %}
+                {% elif _address.pheats.status == "draft" %}
+
+                  <!-- DRAFT -->
+                  <strong class="govuk-tag govuk-tag--red">
+                    Draft
+                  </strong>
+                {% elif _address.pheats.status == "registered" %}
+                  <!-- REGISTERED -->
+                  <strong class="govuk-tag govuk-tag--green">
+                    Registered
+                  </strong>
+                {% elif _address.pheats.status == "updated" %}
+                  <!-- REGISTERED and UPDATED-->
+                  <strong class="govuk-tag govuk-tag--blue">
+                    Registered
+                  </strong>
+                  <!-- <span class="govuk-!-margin-bottom-2 govuk-!-margin-top-2" style="display: block">and </span>
+                  <span class="govuk-!-font-weight-bold">Updating</span> -->
+                  <span class="govuk-!-margin-bottom-2 govuk-!-margin-top-2" style="display: block">and </span>
+                  <strong class="govuk-tag govuk-tag--orange">
+                    Updating
+                  </strong>
+                {% elif _address.pheats.status == "pending" %}
+                  <!-- PENDING -->
+                  <strong class="govuk-tag govuk-tag--blue">
+                    Updating
+                  </strong>
+                {% elif _address.pheats.status == "paused" %}
+                  <!-- PAUSED -->
+                  <strong class="govuk-tag govuk-tag--grey">
+                    Paused
+                  </strong>
+                {% elif _address.pheats.status == "rejected" %}
+                    <!-- REJECTED -->
+                    <strong class="govuk-tag govuk-tag--grey">
+                      Denied
+                    </strong>
+                {% elif _address.pheats.status == "withdrew" %}
+                    <!-- WITHDREW -->
+                    <strong class="govuk-tag govuk-tag--grey">
+                      Withdrew
+                    </strong>
+                {% elif _address.pheats.status == "withtrader" %}
+                    <!-- WITH TRADER -->
+                    <strong class="govuk-tag govuk-tag--red">
+                      Take action
+                    </strong>
+                {% endif %}
+              </p>
+              <!-- <p class="govuk-body govuk-!-margin-bottom-2">
+                <a href="{{_pheatsHREF}}" class="govuk-link govuk-link--no-visited-state" >{{_pheatsLinkText}}</a>
+              </p> -->
+            </td>
+
+            <td class="govuk-table__cell" style="text-align: right;">
+              <p class="govuk-body govuk-!-margin-bottom-2">
+                <a href="{{_pheatsHREF}}" class="govuk-link govuk-link--no-visited-state" >
+                  {{_pheatsLinkText}}
+                </a>
+              </p>
+              <!-- <p class="govuk-body govuk-!-margin-bottom-2">
+                <a href="confirm-delete" class="govuk-link govuk-link--no-visited-state" >Delete</a>
+              </p> -->
+            </td>
+
+          </tr>
+          {% endif %}
+
+          {% endfor %}
+
+        </tbody>
+
+      </table>
+  </div>
+</div>
+{% endif %}
+
+    
+{% endblock %}

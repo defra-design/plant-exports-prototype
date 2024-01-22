@@ -1,0 +1,136 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Upload completed - {{serviceName}} - GOV UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-width-container">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <form method="post">
+
+        {% set commodity = data.commodity or "products" %}
+        {% set url = query.return_url or "task-list" %}
+
+        {% if query.return_url != "check-your-answers-seeds" %}
+        <div class="app-alert app-alert--success" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
+          <p class="govuk-body" id="govuk-notification-banner-message">108 commodity records uploaded successfully</p>
+        </div>
+        {% endif %}
+
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-xl govuk-!-margin-top-4">File uploaded</h1>
+
+<!--             <p class="govuk-body">A summary is shown as there are too many records to display.</p> -->
+            <h2 class="govuk-heading-m">Upload summary</h1>
+
+              <dl class="govuk-summary-list">
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key govuk-!-width-two-thirds">
+                    File
+                  </dt>
+                  <dd class="govuk-summary-list__value ">
+                    21.11.30 XXXXXXX C144158.csv
+                  </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    Number of commodity records
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    108
+                  </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                  <dt class="govuk-summary-list__key">
+                    Total quantity
+                  </dt>
+                  <dd class="govuk-summary-list__value">
+                    29.53kg
+                  </dd>
+                </div>
+                <div class="govuk-summary-list__row">
+                </div>
+              </dl>
+          </div>
+        </div>
+
+        <p class="govuk-body govuk-!-margin-top-4 govuk-!-margin-bottom-9" style="clear:right;">
+          <a class="govuk-link" href="commodity-list-seeds-100-check">
+            View all commodities
+          </a>
+        <p>
+
+        {{ govukRadios({
+        idPrefix: "next",
+        name: "next",
+        fieldset:
+        {
+        legend:
+        {
+        text: "Do you want to keep this file?",
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--m govuk-!-margin-top-6"
+        }
+        },
+        items: [
+        {
+        value: "confirm~" + url,
+        text: "Yes, keep this file"
+        },
+        {
+        value: "upload~upload",
+        text: "No, upload a different file and delete this one"
+        }
+        ]
+        }) }}
+
+
+        {{ govukButton({
+        text: "Save and continue"
+        }) }}
+
+      </form>
+
+
+      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+      <ul class="govuk-list govuk-list govuk-!-margin-top-9">
+        <li>
+          <a href="upload-error-alert" class="govuk-link govuk-link-no-visited-state">"Problems with your file upload"
+            screen</a>
+        </li>
+        <li>
+          <a href="upload-validation-errors" class="govuk-link govuk-link-no-visited-state">"There is a problem"
+            (Existing file completed with errors) screen</a>
+        </li>
+        <li>
+          <a href="upload-completed-with-errors-seeds" class="govuk-link govuk-link-no-visited-state">"File has errors"
+            screen</a>
+        </li>
+        <li>
+          <a href="upload-completed-with-errors-seeds-generic" class="govuk-link govuk-link-no-visited-state">Generic
+            "File has errors" screen</a>
+        </li>
+        <br />
+        <li>
+          <a href="commodity-list-seeds-mixed-v1" class="govuk-link govuk-link-no-visited-state">Mixed commodity list</a>
+        </li>
+        <li>
+          <a href="commodity-list-seeds" class="govuk-link govuk-link-no-visited-state">Example table with 108 rows</a>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
