@@ -49,6 +49,7 @@ module.exports = function(env) {
   var applicationsv5 = require('./data/applications-v5.json');
   var applicationsv6 = require('./data/applications-v6.json');
   var applicationsv7 = require('./data/applications-v7.json');
+  var applicationsv8 = require('./data/applications-v8.json');
   var sample = require('./data/sample.json');
   const e = require('express');
 
@@ -162,6 +163,23 @@ module.exports = function(env) {
     var app = {};
     
     applicationsv7.forEach(function (item) {
+      
+      if (item.index == id) {
+        app = item;
+      }
+
+    })
+
+    return app[key];
+  }
+
+  // Get application information (v8)
+  // Prototype version 3-1 onward
+  filters.appInformationV8 = function (id, key) {
+    
+    var app = {};
+    
+    applicationsv8.forEach(function (item) {
       
       if (item.index == id) {
         app = item;

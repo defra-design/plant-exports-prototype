@@ -2,9 +2,9 @@
 
 {% block pageTitle %}
   {% if data.build == "development" %}
-  {% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %} {{query.id | appInformationV7('applicationID')}} - {{serviceName}} - GOV.UK
+  {% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %} {{query.id | appInformationV8('applicationID')}} - {{serviceName}} - GOV.UK
   {% else %}
-  Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %} {{query.id | appInformationV7('applicationID')}} - {{serviceName}} - GOV.UK
+  Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %} {{query.id | appInformationV8('applicationID')}} - {{serviceName}} - GOV.UK
   {% endif %}
 {% endblock %}
 
@@ -51,11 +51,11 @@
       {% if data.build == "development" %}
       {% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %} 
       <br>
-      {{query.id | appInformationV7('applicationID')}}
+      {{query.id | appInformationV8('applicationID')}}
       {% else %}
       Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %}
       <br>
-      {{query.id | appInformationV7('applicationID')}}
+      {{query.id | appInformationV8('applicationID')}}
       {% endif %}
     </h1>
   </div>
@@ -93,13 +93,37 @@
           <div class="govuk-tag govuk-tag--red">
             Re-issue denied
           </div>
-          {% elif query.id | appInformationV7('status') == "ephyto delayed" %}
+          {% elif query.id | appInformationV8('status') == "ephyto delayed" %}
           <div class="govuk-tag govuk-tag--orange">
             ePhyto delayed
           </div>
-          {% elif query.id | appInformationV7('status') == "preparing ephyto" %}
+          {% elif query.id | appInformationV8('status') == "preparing ephyto" %}
           <div class="govuk-tag govuk-tag--indigo">
             Preparing ePhyto
+          </div>
+          {% elif query.id | appInformationV8('status') == "ephyto withdrawn" %}
+          <div class="govuk-tag govuk-tag--{{query.id | appInformationV8('tag') | lower}}">
+            ePhyto withdrawn
+          </div>
+          {% elif query.id | appInformationV8('status') == "ephyto re-issue requested" %}
+          <div class="govuk-tag govuk-tag--{{query.id | appInformationV8('tag') | lower}}">
+            ePhyto re-issue requested
+          </div>
+          {% elif query.id | appInformationV8('status') == "processing ephyto re-issue" %}
+          <div class="govuk-tag govuk-tag--{{query.id | appInformationV8('tag') | lower}}">
+            Processing ePhyto re-issue
+          </div>
+          {% elif query.id | appInformationV8('status') == "ephyto re-issue delayed" %}
+          <div class="govuk-tag govuk-tag--{{query.id | appInformationV8('tag') | lower}}">
+            ePhyto re-issue delayed
+          </div>
+          {% elif query.id | appInformationV8('status') == "ephyto re-issue received" %}
+          <div class="govuk-tag govuk-tag--{{query.id | appInformationV8('tag') | lower}}">
+            ePhyto re-issue received
+          </div>
+          {% elif query.id | appInformationV8('status') == "ephyto re-issue denied" %}
+          <div class="govuk-tag govuk-tag--{{query.id | appInformationV8('tag') | lower}}">
+            ePhyto re-issue denied
           </div>
           {% else %}
           <div class="govuk-tag govuk-tag--green">
@@ -112,24 +136,24 @@
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Your reference</dt>
-        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV7('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformationV7('reference')}}{% endif %}</dd>
+        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV8('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformationV8('reference')}}{% endif %}</dd>
       </div>
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Type</dt>
         <dd class="govuk-summary-list__value">
-          {% if (query.id | appInformationV7('cert_info')) == 'Conformity' %}
-          Certificate of conformity for {{query.id | appInformationV7('commodity_info') or "crops"}}
-          {% elif (query.id | appInformationV7('cert_info')) == 'Growing season inspection' %}
-          Growing season inspection for {{query.id | appInformationV7('commodity_info') or "crops"}}
-          {% elif (query.id | appInformationV7('cert_info')) == 'Seed sampling' %}
-          Seed sampling for {{query.id | appInformationV7('commodity_info') or "crops"}}
-          {% elif (query.id | appInformationV7('cert_info')) == 'Soil sampling' %}
-          Soil sampling for {{query.id | appInformationV7('commodity_info') or "crops"}}
-          {% elif (query.id | appInformationV7('cert_info')) == 'Phytosanitary' %}
-          Phytosanitary certificate for {{query.id | appInformationV7('commodity_info') or "crops"}}
-          {% elif (query.id | appInformationV7('cert_info')) == 'Re-forwarding' %}
-          Re-forwarding phytosanitary certificate for {{query.id | appInformationV7('commodity_info') or "crops"}}
+          {% if (query.id | appInformationV8('cert_info')) == 'Conformity' %}
+          Certificate of conformity for {{query.id | appInformationV8('commodity_info') or "crops"}}
+          {% elif (query.id | appInformationV8('cert_info')) == 'Growing season inspection' %}
+          Growing season inspection for {{query.id | appInformationV8('commodity_info') or "crops"}}
+          {% elif (query.id | appInformationV8('cert_info')) == 'Seed sampling' %}
+          Seed sampling for {{query.id | appInformationV8('commodity_info') or "crops"}}
+          {% elif (query.id | appInformationV8('cert_info')) == 'Soil sampling' %}
+          Soil sampling for {{query.id | appInformationV8('commodity_info') or "crops"}}
+          {% elif (query.id | appInformationV8('cert_info')) == 'Phytosanitary' %}
+          Phytosanitary certificate for {{query.id | appInformationV8('commodity_info') or "crops"}}
+          {% elif (query.id | appInformationV8('cert_info')) == 'Re-forwarding' %}
+          Re-forwarding phytosanitary certificate for {{query.id | appInformationV8('commodity_info') or "crops"}}
           {% else %}
           Phytosanitary certificate for crops
           {% endif %}
@@ -138,12 +162,12 @@
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Destination country</dt>
-        <dd class="govuk-summary-list__value">{{query.id | appInformationV7('destination')}}</dd>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV8('destination')}}</dd>
       </div>
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">{% if data.build == "development" %}Customer{% else %}Consignee{% endif %}</dt>
-        <dd class="govuk-summary-list__value">{{query.id | appInformationV7('importer') | title or "Example consignee name"}}</dd>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV8('importer') | title or "Example consignee name"}}</dd>
       </div>
 
       {% if query.id == 0 %}
@@ -155,26 +179,26 @@
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Phytosanitary certificate number</dt>
-        <dd class="govuk-summary-list__value">UK/GB/E&W/{{query.id | appInformationV7('certificate') or "2022/4236522044833"}}{% if data.reissue_certificate_data_pfp == "approved" %} R1{% endif %}</dd>
+        <dd class="govuk-summary-list__value">UK/GB/E&W/{{query.id | appInformationV8('certificate') or "2022/4236522044833"}}{% if data.reissue_certificate_data_pfp == "approved" %} R1{% endif %}</dd>
       </div>
       
-      {% if query.id | appInformationV7('status') != "preparing ephyto" and query.id | appInformationV7('status') != "ephyto delayed" %}
+      {% if query.id | appInformationV8('status') != "preparing ephyto" and query.id | appInformationV8('status') != "ephyto delayed" %}
       
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Certificate issue date</dt>
-          <dd class="govuk-summary-list__value">{% if data.reissue_certificate_data_pfp == "approved" %}{{todaysDate}}{% else %}{{query.id | appInformationV7('certificateIssueDate') or "10 January 2023"}}{% endif %}</dd>
+          <dd class="govuk-summary-list__value">{% if data.reissue_certificate_data_pfp == "approved" %}{{todaysDate}}{% else %}{{query.id | appInformationV8('certificateIssueDate') or "10 January 2023"}}{% endif %}</dd>
         </div>
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Certificate expiry date</dt>
-          <dd class="govuk-summary-list__value">{% if data.reissue_certificate_data_pfp == "approved" %}{{todaysDateExpiry14Days}}{% else %}{{query.id | appInformationV7('certificateExpiryDate') or "24 January 2023"}}{% endif %}</dd>
+          <dd class="govuk-summary-list__value">{% if data.reissue_certificate_data_pfp == "approved" %}{{todaysDateExpiry14Days}}{% else %}{{query.id | appInformationV8('certificateExpiryDate') or "24 January 2023"}}{% endif %}</dd>
         </div>
 
       {% endif %}
 
     </dl>
 
-    {% if query.id | appInformationV7('commodity_info') == "plants" %}
+    {% if query.id | appInformationV8('commodity_info') == "plants" %}
     <div class="govuk-inset-text">
       <p class="govuk-body">Draw down stock is available</p>
     </div>
@@ -185,13 +209,13 @@
   
   <div class="govuk-grid-column-one-half govuk-!-margin-bottom-8">
 
-    {% if query.id | appInformationV7('status') != "preparing ephyto" %}
+    {% if query.id | appInformationV8('status') != "preparing ephyto" and query.id | appInformationV8('status') != "ephyto withdrawn" %}
 
     <h2 class="govuk-heading-m">About your certificate</h2>
 
-    {% if query.id | appInformationV7('status') == "ephyto delayed" %}
+    {% if query.id | appInformationV8('status') == "ephyto delayed" %}
 
-    <p class="govuk-body">There is a delay sending your ePhyto to {{query.id | appInformationV7('destination')}}. This is because of a technical problem.</p>
+    <p class="govuk-body">There is a delay sending your ePhyto to {{query.id | appInformationV8('destination')}}. This is because of a technical problem.</p>
     <p class="govuk-body">We will:</p>
     <ul class="govuk-list govuk-list--bullet">
       <li>keep checking to see if the problem gets fixed</li>
@@ -199,12 +223,12 @@
     </ul>
     {% else %}
     <a href="/public/certificates/ephyto/UK-GB-E&W-2023-7800562125823-3.pdf" role="button" draggable="false" class="govuk-button" data-module="govuk-button">View copy</a>
-    <p class="govuk-body">{{query.id | appInformationV7('destination')}}'s National Plant Protection Organisation has received your ePhyto.</p>
+    <p class="govuk-body">{{query.id | appInformationV8('destination')}}'s National Plant Protection Organisation has received your ePhyto.</p>
     <p class="govuk-body">You do not need to print your copy or send it with your consignment. It is not for official use. </p>
     {% endif %}
 
     <ul class="govuk-list noprint">
-      {% if data.reissue_certificate_data_pfp != "submitted" and data.reissue_certificate_data_pfp != "processing" and query.id | appInformationV7('status') != "ephyto delayed" %}
+      {% if data.reissue_certificate_data_pfp != "submitted" and data.reissue_certificate_data_pfp != "processing" and query.id | appInformationV8('status') != "ephyto delayed" %}
       <li>{% if data.reissue_certificate_data_pfp == 'draft' %}<a class="govuk-link govuk-link--no-visited-state" href="application/re-issue/amend-your-certificate?id={{query.id}}&is_group={{query.is_group}}&commodity=plants">Complete your re-issue application</a></li>{% else %}<a class="govuk-link govuk-link--no-visited-state" href="application/re-issue/introduction?id={{query.id}}&is_group={{query.is_group}}">Apply for re-issue </a>{% endif %}</li>
       {% if data.reissue_certificate_data_pfp == "approved" %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="#">View certificate issue history</a></li>
@@ -222,7 +246,7 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
-    <ul class="govuk-list{% if query.id | appInformationV7('commodity_info') == 'plants' %} govuk-!-margin-bottom-8{% endif %} noprint">
+    <ul class="govuk-list{% if query.id | appInformationV8('commodity_info') == 'plants' %} govuk-!-margin-bottom-8{% endif %} noprint">
       <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id}}&is_group={{query.is_group}}">Copy as new application</a></li>
       <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-viewonly?id={{query.id}}&is_group={{query.is_group}}&commodity=plants&row1=true&row2=true&row3=true">View application details</a></li>
     </ul>
@@ -230,7 +254,7 @@
   
 </div>
 
-{% if query.id | appInformationV7('commodity_info') == "plants" %}
+{% if query.id | appInformationV8('commodity_info') == "plants" %}
 <div class="govuk-grid-row">
   
   <div class="govuk-grid-column-full">

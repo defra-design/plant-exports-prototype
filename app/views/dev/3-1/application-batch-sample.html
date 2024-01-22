@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.build == "development" %}Application{% else %}Manage application{% endif %} {{query.id | appInformationV7('applicationID') or "1234 00000 1234"}} - {{serviceName}} - GOV.UK
+  {% if data.build == "development" %}Application{% else %}Manage application{% endif %} {{query.id | appInformationV8('applicationID') or "1234 00000 1234"}} - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -48,7 +48,7 @@
       Manage application
       {% endif %}
       <br>
-      {{query.id | appInformationV7('applicationID') or "1234 00000 1234"}}
+      {{query.id | appInformationV8('applicationID') or "1234 00000 1234"}}
     </h1>
   </div>
 
@@ -63,8 +63,8 @@
         <dt class="govuk-summary-list__key">Status</dt>
         <dd class="govuk-summary-list__value">
          
-          <div class="govuk-tag govuk-tag--{{query.id | appInformationV7('tag')}}">
-            {{query.id | appInformationV7('status') or "report issued"}}
+          <div class="govuk-tag govuk-tag--{{query.id | appInformationV8('tag')}}">
+            {{query.id | appInformationV8('status') or "report issued"}}
           </div>
 
         </dd>
@@ -72,17 +72,17 @@
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Your reference</dt>
-        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV7('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformationV7('reference') or "Reference"}}{% endif %}</dd>
+        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV8('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformationV8('reference') or "Reference"}}{% endif %}</dd>
       </div>
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Type</dt>
         <dd class="govuk-summary-list__value">Set up one time testing</dd>
       </div>
-      {% if (query.id | appInformationV7('status')) == "report issued" %}
+      {% if (query.id | appInformationV8('status')) == "report issued" %}
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Sampled on</dt>
-        <dd class="govuk-summary-list__value">{{query.id | appInformationV7('date') or "18 June 2022"}}</dd>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV8('date') or "18 June 2022"}}</dd>
       </div>
 
       <div class="govuk-summary-list__row">
@@ -192,7 +192,7 @@
     </tbody>
   </table>
 
-  {% if (query.id | appInformationV7('status')) == "report issued" %}
+  {% if (query.id | appInformationV8('status')) == "report issued" %}
   {% else %}
   <p class="govuk-body">Send your samples to:</p>
     <p class="govuk-body">
