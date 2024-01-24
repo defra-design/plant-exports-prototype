@@ -1,5 +1,8 @@
 {% extends "layout.html" %}
 
+{% set _applicationID = query.id or "27" %} <!-- ephyto received (27) is default -->
+{% set _applicationStatus = query.id | appInformationV8('status') %}
+
 {% block pageTitle %}
   {% if data.build == "development" %}
   {% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %} {{query.id | appInformationV8('applicationID')}} - {{serviceName}} - GOV.UK
@@ -22,6 +25,7 @@
 {% endblock %}
 
 {% block content %}
+
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
@@ -30,7 +34,7 @@
       <p class="govuk-body" id="govuk-notification-banner-message">A re-issue application has been started but not submitted. If you asked for any changes as part of the re-issue, these are still saved.</p>
       <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="application/re-issue/amend-your-certificate?id={{query.id}}&is_group={{query.is_group}}&commodity=plants">Complete your re-issue application</a></p>
     </div>
-    {% elif data.reissue_certificate_data_pfp == "rejected" %}
+    {% elif data.reissue_certificate_data_pfp == "rejected" or _applicationStatus == "ephyto re-issue denied" %}
     <div class="app-alert app-alert--warning" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
       {% if query.rejectionReason == "1" %}
       <p class="govuk-body" id="govuk-notification-banner-message">The inspector decided your certificate cannot be re-issued. The inspector said: <strong>"Mandatory free text added by the inspector"</strong>.</p>
@@ -93,37 +97,41 @@
           <div class="govuk-tag govuk-tag--red">
             Re-issue denied
           </div>
-          {% elif query.id | appInformationV8('status') == "ephyto delayed" %}
+          {% elif _applicationStatus == "ephyto delayed" %}
           <div class="govuk-tag govuk-tag--orange">
             ePhyto delayed
           </div>
-          {% elif query.id | appInformationV8('status') == "preparing ephyto" %}
+          {% elif _applicationStatus == "preparing ephyto" %}
           <div class="govuk-tag govuk-tag--indigo">
             Preparing ePhyto
           </div>
-          {% elif query.id | appInformationV8('status') == "ephyto withdrawn" %}
+          {% elif _applicationStatus == "ephyto withdrawn" %}
           <div class="govuk-tag govuk-tag--{{query.id | appInformationV8('tag') | lower}}">
             ePhyto withdrawn
           </div>
-          {% elif query.id | appInformationV8('status') == "ephyto re-issue requested" %}
+          {% elif _applicationStatus == "ephyto re-issue requested" %}
           <div class="govuk-tag govuk-tag--{{query.id | appInformationV8('tag') | lower}}">
             ePhyto re-issue requested
           </div>
-          {% elif query.id | appInformationV8('status') == "processing ephyto re-issue" %}
+          {% elif _applicationStatus == "processing ephyto re-issue" %}
           <div class="govuk-tag govuk-tag--{{query.id | appInformationV8('tag') | lower}}">
             Processing ePhyto re-issue
           </div>
-          {% elif query.id | appInformationV8('status') == "ephyto re-issue delayed" %}
+          {% elif _applicationStatus == "ephyto re-issue delayed" %}
           <div class="govuk-tag govuk-tag--{{query.id | appInformationV8('tag') | lower}}">
             ePhyto re-issue delayed
           </div>
-          {% elif query.id | appInformationV8('status') == "ephyto re-issue received" %}
+          {% elif _applicationStatus == "ephyto re-issue received" %}
           <div class="govuk-tag govuk-tag--{{query.id | appInformationV8('tag') | lower}}">
             ePhyto re-issue received
           </div>
-          {% elif query.id | appInformationV8('status') == "ephyto re-issue denied" %}
+          {% elif _applicationStatus == "ephyto re-issue denied" %}
           <div class="govuk-tag govuk-tag--{{query.id | appInformationV8('tag') | lower}}">
             ePhyto re-issue denied
+          </div>
+          {% elif _applicationStatus == "ephyto re-issue received" %}
+          <div class="govuk-tag govuk-tag--{{query.id | appInformationV8('tag') | lower}}">
+            ePhyto re-issue received
           </div>
           {% else %}
           <div class="govuk-tag govuk-tag--green">
@@ -182,7 +190,7 @@
         <dd class="govuk-summary-list__value">UK/GB/E&W/{{query.id | appInformationV8('certificate') or "2022/4236522044833"}}{% if data.reissue_certificate_data_pfp == "approved" %} R1{% endif %}</dd>
       </div>
       
-      {% if query.id | appInformationV8('status') != "preparing ephyto" and query.id | appInformationV8('status') != "ephyto delayed" %}
+      {% if _applicationStatus != "preparing ephyto" and _applicationStatus != "ephyto delayed" %}
       
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Certificate issue date</dt>
@@ -209,11 +217,11 @@
   
   <div class="govuk-grid-column-one-half govuk-!-margin-bottom-8">
 
-    {% if query.id | appInformationV8('status') != "preparing ephyto" and query.id | appInformationV8('status') != "ephyto withdrawn" %}
+    {% if _applicationStatus != "preparing ephyto" %}
 
     <h2 class="govuk-heading-m">About your certificate</h2>
 
-    {% if query.id | appInformationV8('status') == "ephyto delayed" %}
+    {% if _applicationStatus == "ephyto delayed" or _applicationStatus == "ephyto re-issue delayed" %}
 
     <p class="govuk-body">There is a delay sending your ePhyto to {{query.id | appInformationV8('destination')}}. This is because of a technical problem.</p>
     <p class="govuk-body">We will:</p>
@@ -221,20 +229,27 @@
       <li>keep checking to see if the problem gets fixed</li>
       <li>update the status once we know more</li>
     </ul>
-    {% else %}
+    {% elif _applicationStatus != "ephyto withdrawn" %}
     <a href="/public/certificates/ephyto/UK-GB-E&W-2023-7800562125823-3.pdf" role="button" draggable="false" class="govuk-button" data-module="govuk-button">View copy</a>
     <p class="govuk-body">{{query.id | appInformationV8('destination')}}'s National Plant Protection Organisation has received your ePhyto.</p>
     <p class="govuk-body">You do not need to print your copy or send it with your consignment. It is not for official use. </p>
     {% endif %}
 
+    {% if _applicationStatus == "ephyto re-issue received" %}
+    <p class="govuk-body">This certificate has been re-issued.</p>
+    <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="re-issue-history?id={{query.id or 1}}&is_group={{query.is_group}}">View certificate issue history</a></p>
+    {% endif %}
+
+    {% if _applicationStatus != "ephyto re-issue requested" and _applicationStatus != "processing ephyto re-issue" and _applicationStatus != "ephyto re-issue delayed" %}
     <ul class="govuk-list noprint">
-      {% if data.reissue_certificate_data_pfp != "submitted" and data.reissue_certificate_data_pfp != "processing" and query.id | appInformationV8('status') != "ephyto delayed" %}
+      {% if data.reissue_certificate_data_pfp != "submitted" and data.reissue_certificate_data_pfp != "processing" and _applicationStatus != "ephyto delayed" %}
       <li>{% if data.reissue_certificate_data_pfp == 'draft' %}<a class="govuk-link govuk-link--no-visited-state" href="application/re-issue/amend-your-certificate?id={{query.id}}&is_group={{query.is_group}}&commodity=plants">Complete your re-issue application</a></li>{% else %}<a class="govuk-link govuk-link--no-visited-state" href="application/re-issue/introduction?id={{query.id}}&is_group={{query.is_group}}">Apply for re-issue </a>{% endif %}</li>
       {% if data.reissue_certificate_data_pfp == "approved" %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="#">View certificate issue history</a></li>
       {% endif %}
       {% endif %}
     </ul>
+    {% endif %}
 
     {% endif %}
 
