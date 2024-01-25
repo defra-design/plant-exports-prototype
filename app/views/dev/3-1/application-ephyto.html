@@ -223,7 +223,12 @@
 
     {% if _applicationStatus == "ephyto delayed" or _applicationStatus == "ephyto re-issue delayed" %}
 
-    <p class="govuk-body">There is a delay sending your ePhyto to {{query.id | appInformationV8('destination')}}. This is because of a technical problem.</p>
+    {% if _applicationStatus == "ephyto delayed" %}
+      <p class="govuk-body">There is a delay sending your ePhyto to {{query.id | appInformationV8('destination')}}. This is because of a technical problem.</p>
+    {% elif _applicationStatus == "ephyto re-issue delayed" %}
+      <p class="govuk-body">There is a delay sending your re-issued ePhyto to {{query.id | appInformationV8('destination')}}. This is because of a technical problem.</p>
+    {% endif %}
+
     <p class="govuk-body">We will:</p>
     <ul class="govuk-list govuk-list--bullet">
       <li>keep checking to see if the problem gets fixed</li>
@@ -231,7 +236,13 @@
     </ul>
     {% elif _applicationStatus != "ephyto withdrawn" %}
     <a href="/public/certificates/ephyto/UK-GB-E&W-2023-7800562125823-3.pdf" role="button" draggable="false" class="govuk-button" data-module="govuk-button">View copy</a>
-    <p class="govuk-body">{{query.id | appInformationV8('destination')}}'s National Plant Protection Organisation has received your ePhyto.</p>
+
+    {% if _applicationStatus == "ephyto re-issue delayed" %}
+      <p class="govuk-body">{{query.id | appInformationV8('destination')}}'s National Plant Protection Organisation has received your ePhyto.</p>
+    {% else %}
+      <p class="govuk-body">{{query.id | appInformationV8('destination')}}'s National Plant Protection Organisation has received your re-issued ePhyto.</p>
+    {% endif %}
+
     <p class="govuk-body">You do not need to print your copy or send it with your consignment. It is not for official use. </p>
     {% endif %}
 
