@@ -109,19 +109,30 @@
 
   <div class="govuk-grid-column-two-thirds">
 
-    <div class="app-alert app-alert--warning" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
-      {% if query.rejectionReason == "1" %}
-      <p class="govuk-body" id="govuk-notification-banner-message">The inspector decided your certificate cannot be re-issued. The inspector said: <strong>"Mandatory free text added by the inspector"</strong>.</p>
-      {% elif query.rejectionReason == "2" %}
-      <p class="govuk-body" id="govuk-notification-banner-message">The inspector decided your certificate cannot be re-issued as you need a new import permit. The inspector also said: <strong>"Mandatory free text added by the inspector"</strong>.</p>
-      {% elif query.rejectionReason == "3" %}
-      <p class="govuk-body" id="govuk-notification-banner-message">The inspector decided your certificate cannot be re-issued as your consignment would need to be tested again. The inspector also said: <strong>"Mandatory free text added by the inspector"</strong>.</p>
-      {% elif query.rejectionReason == "4" %}
-      <p class="govuk-body" id="govuk-notification-banner-message">The inspector decided your certificate cannot be re-issued. The inspector said: <strong>"Mandatory free text added by the inspector"</strong>.</p>
-      {% else %}
-      <p class="govuk-body" id="govuk-notification-banner-message">The inspector decided your certificate cannot be re-issued. The inspector said: <strong>"Mandatory free text added by the inspector"</strong>.</p>
-      {% endif %}
-      <p class="govuk-body">If you asked for any changes as part of the re-issue, these are still saved in the application.</p>
+    <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+      <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+          Important
+        </h2>
+      </div>
+      <div class="govuk-notification-banner__content">
+        <p class="govuk-notification-banner__heading">
+          {% if query.rejectionReason == "1" %}
+          <!-- requries new application -->
+          Your certificate cannot be re-issued as you need to submit a new application
+        {% elif query.rejectionReason == "2" %}
+          <!-- need new import permit-->
+          Your certificate cannot be re-issued as you need a new import permit
+        {% elif query.rejectionReason == "3" %}
+          <!-- additional testing required-->
+          Your certificate cannot be re-issued as we would need to test your consignment again
+        {% else %}
+          Your certificate cannot be re-issued
+        {% endif %}
+        </p>
+        <p class="govuk-body" >The inspector said: "Mandatory free text added by the inspector".</p>
+        <p class="govuk-body">If you updated your details, these are still saved in your application.</p>
+      </div>
     </div>
 
     <h1 class="govuk-heading-xl">
@@ -142,6 +153,7 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-m">Your application</h2>
     <dl class="govuk-summary-list govuk-summary-list--no-border">
       
       <div class="govuk-summary-list__row">
