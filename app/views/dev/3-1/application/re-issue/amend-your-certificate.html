@@ -158,15 +158,7 @@
           </tr>
         </thead>
         <tbody class="govuk-table__body" style="text-align: right;">
-          {% if query.prepop == "true" %}
             {% include "../modules/_summary-bulbs-cya.html" %}
-          {% else %}
-            {% for commodity in data.commodities %}
-              {% block summaryBulb %}
-              {% include "../modules/_summary-bulbs-cya.html" %}
-              {% endblock %}
-            {% endfor %}
-          {% endif %}
         </tbody>
       </table>
 
@@ -191,15 +183,7 @@
           </tr>
         </thead>
         <tbody class="govuk-table__body" style="text-align: right;">
-          {% if query.pheatsError1 == "true" or query.prepop == "true" %}
-            {% include "../modules/_summary-plants-check-answers.html" %}
-          {% else %}
-            {% for commodity in data.commodities %}
-              {% block summaryPlantsAndFreshProduce %}
-              {% include "../modules/_summary-plants-check-answers.html" %}
-              {% endblock %}
-            {% endfor %}
-          {% endif %}
+          {% include "../modules/_summary-plants-check-answers.html" %}
         </tbody>
       </table>
 
@@ -218,15 +202,7 @@
           </tr>
         </thead>
         <tbody class="govuk-table__body">
-          {% if query.prepop == "true" %}
             {% include "../modules/_summary-potatoes-check-answers.html" %}
-          {% else %}
-            {% for commodity in data.commodities %}
-              {% block summaryPotatoes %}
-              {% include "../modules/_summary-potatoes-check-answers.html" %}
-              {% endblock %}
-            {% endfor %}
-          {% endif %}
         </tbody>
       </table>
 
@@ -255,15 +231,7 @@
           {% endif %}
         </thead>
         <tbody class="govuk-table__body" style="text-align: right;">
-          {% if query.prepop == "true" %}
             {% include "../modules/_summary-processed-plant-products-check-answers.html" %}
-          {% else %}
-            {% for commodity in data.commodities %}
-              {% block summaryPlantProducts %}
-              {% include "../modules/_summary-processed-plant-products-check-answers.html" %}
-              {% endblock %}
-            {% endfor %}
-          {% endif %}
         </tbody>
       </table>
 
@@ -471,7 +439,7 @@
       {% for _number in data.ipcNumbers %}
 
         {% set _id = loop.index %}
-        {% if data['ipcAdded'+_id] == 'true' or query.prepop == "true" %}
+
 
         {% set _ipcError1 = "false" %}
         {% if query.ipcError1 == "true" and loop.last %}
@@ -515,7 +483,7 @@
             </dd>
           </div>
         </dl>
-        {% endif %}
+
       {% endfor %}
 
       <h2 class="govuk-heading-m govuk-!-margin-top-9">Were imported consignments repacked?</h2>
@@ -906,7 +874,7 @@
               {% if query.ipcError1 == "true" and loop.last %}
                 {% set _ipcError1 = "true" %}
               {% endif %}
-              {% if data['ipcAdded'+_id] == 'true' or query.prepop == "true" %}
+
               {% if _ipcError1 != "true" %}
               <div class="govuk-summary-list__row">
                 <dt class="govuk-summary-list__key">
@@ -923,7 +891,7 @@
                   <a class="govuk-link" href="../create/attachments-view?change=yes&return_url=check-your-answers&importCerts=true">Change<span class="govuk-visually-hidden"> supporting documents</span></a>
                 </dd>
               </div>
-              {% endif %}
+
               {% endif %}
 
             {%- endfor %}
