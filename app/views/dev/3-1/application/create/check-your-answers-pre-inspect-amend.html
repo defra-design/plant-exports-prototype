@@ -266,11 +266,11 @@
           {% endif %}
         </dl>
 
-      <!--Transportation-->
-
-    {% if data.commodity != "bulbs" or  (data.countrySelect[0] == "United States" and data.commodity == "bulbs")%}
+    <!--Transportation-->
     <h2 class="govuk-heading-m govuk-!-margin-top-9 ">Transportation</h2>
     <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
+
+      <!-- VALUE -->
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Value of consignment
@@ -285,6 +285,7 @@
         </dd>
       </div>
 
+      <!-- POE -->
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">{% if data.do_you_know_point_of_entry == "Yes" %}Point of entry{% else %}Point of entry country{% endif %}</dt>
         <dd class="govuk-summary-list__value">{% if data.do_you_know_point_of_entry == "Yes" %}{{data.port_entry[0] or "Carrieres-sous-Poissy (FR CSP)"}}{% else %}{{data.point_entry_country[0] or "France"}}{% endif %}</dd>
@@ -293,6 +294,7 @@
         </dd>
       </div>
 
+      <!-- HOW TRANSPORT -->
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           How will the consignment be transported?
@@ -306,6 +308,19 @@
           </a>
         </dd>
       </div>
+
+      <!-- CONTAINER NUMBER -->
+      {% if data.commodity == "potatoes" %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Container number</dt>
+        <dd class="govuk-summary-list__value">{{data.container_num or "456"}}</dd>
+        <dd class="govuk-summary-list__actions">
+          <a class="govuk-link" href="shipping?change=yes&return_url=check-your-answers">Change<span class="govuk-visually-hidden"> the container number</span></a>
+        </dd>
+      </div>
+      {% endif %}
+
+      
 <!--       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Transportation identification
@@ -453,7 +468,7 @@
       {% endif %}
     </dl> -->
 
-    {% endif %}
+
     <h2 class="govuk-heading-m">Supporting documents (optional)</h2>
     <dl class="govuk-summary-list govuk-!-margin-bottom-9">
       
