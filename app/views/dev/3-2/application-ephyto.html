@@ -29,6 +29,8 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
+
+
     {% if data.reissue_certificate_data_pfp == "draft" %}
     <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
       <div class="govuk-notification-banner__header">
@@ -40,34 +42,6 @@
         <p class="govuk-notification-banner__heading">You have not submitted your re-issue application</p>
         <p class="govuk-body" >If you updated your details, these are still saved in your application.</p>
         <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="application/re-issue/amend-your-certificate?id={{query.id}}&is_group={{query.is_group}}&commodity=plants&certificateFormat=digital">Continue re-issue application</a></p>
-      </div>
-    </div>
-
-    <!-- re-issue request rejected -->
-    {% elif data.reissue_certificate_data_pfp == "rejected" or _applicationStatus == "ephyto re-issue denied" %}
-    <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-      <div class="govuk-notification-banner__header">
-        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-          Important
-        </h2>
-      </div>
-      <div class="govuk-notification-banner__content">
-        <p class="govuk-notification-banner__heading">
-          {% if query.rejectionReason == "1" %}
-          <!-- requries new application -->
-          Your certificate cannot be re-issued as you need to submit a new application
-        {% elif query.rejectionReason == "2" %}
-          <!-- need new import permit-->
-          Your certificate cannot be re-issued as you need a new import permit
-        {% elif query.rejectionReason == "3" %}
-          <!-- additional testing required-->
-          Your certificate cannot be re-issued as we would need to test your consignment again
-        {% else %}
-          Your certificate cannot be re-issued
-        {% endif %}
-        </p>
-        <p class="govuk-body" >The inspector said: "Mandatory free text added by the inspector".</p>
-        <p class="govuk-body">If you updated your details, these are still saved in your application.</p>
       </div>
     </div>
     {% endif %}
@@ -174,6 +148,44 @@
 
         </dd>
       </div>
+
+      <!-- re-issue request rejected -->
+      {% if data.reissue_certificate_data_pfp == "rejected" or _applicationStatus == "ephyto re-issue denied" %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Further information</dt>
+        <dd class="govuk-summary-list__value">
+          <p class="govuk-body">
+            {% if query.rejectionReason == "1" %}
+              <!-- requries new application -->
+              Your certificate cannot be re-issued as you need to submit a new application.
+            {% elif query.rejectionReason == "2" %}
+              <!-- need new import permit-->
+              Your certificate cannot be re-issued as you need a new import permit.
+            {% elif query.rejectionReason == "3" %}
+              <!-- additional testing required-->
+              Your certificate cannot be re-issued as we would need to test your consignment again.
+            {% else %}
+              Your certificate cannot be re-issued.
+            {% endif %}
+          </p>
+          <details class="govuk-details govuk-!-margin-bottom-2">
+            <summary class="govuk-details__summary">
+              <span class="govuk-details__summary-text">
+                Inspector notes
+              </span>
+            </summary>
+            <div class="govuk-details__text">
+              Mandatory free text added by the inspector
+            </div>
+          </details>
+          {% if data.reissue_certificate_data_pfp != "draft" %}
+          <p class="govuk-body">
+            If you updated your details, these are still saved in your application.
+          </p>
+          {% endif %}
+        </dd>
+      </div>
+      {% endif %}
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Your reference</dt>
