@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+Select your commodities to add to the certificate of conformity - {{serviceName}} - GOV.UK
+{% endblock %}
+
+
+{% set items = [
+  "Apples (braeburn), 1000kg",
+  "Apples (cripps pink), 750kg",
+  "Apples (jazz), 500kg",
+  "Beetroot, 1 tonne",
+  "French beans, 250kg"
+  ]
+%}
+{% block beforeContent %}
+{{super()}}
+<a href="{{page.content.prev or 'javascript:history.back()'}}" class="govuk-back-link">Back</a>
+{% endblock %}
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+
+    <form method="POST" action="commodity-list-copy-as-coc">
+      <input type="hidden" id="journey" name="journey" value="coc">
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" aria-describedby="waste-hint">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+            <h1 class="govuk-fieldset__heading">
+              Which commodities do you want to set a Class I?
+            </h1>
+          </legend>
+          <div id="prelist-hint" class="govuk-hint govuk-!-margin-bottom-6">
+          </div>
+          <div class="govuk-checkboxes  govuk-checkboxes--small" data-module="govuk-checkboxes">
+            <div class="govuk-checkboxes__item">
+              <input class="govuk-checkboxes__input" id="selectAll" name="selectAll" type="checkbox" value="" >
+              <label class="govuk-label govuk-checkboxes__label" for="selectAll">
+                Select All
+              </label>
+            </div>
+          </div>
+          <br/>
+
+          <div class=" govuk-!-margin-bottom-5">
+            &nbsp;
+          </div>
+          <div class="govuk-checkboxes  govuk-checkboxes--small" data-module="govuk-checkboxes">
+            {% for item in items %}
+            <div class="govuk-checkboxes__item">
+              <input class="govuk-checkboxes__input target" id="prelist" name="prelist" type="checkbox" value="apples" >
+              <label class="govuk-label govuk-checkboxes__label" for="prelist">
+                {{ item }} 
+              </label>
+            </div>
+            {% endfor %}
+
+          </div>
+
+        </fieldset>
+      </div>
+
+
+
+
+      <div class="govuk-!-margin-left-0 govuk-grid-column-one-quarter govuk-!-padding-0  govuk-!-margin-top-6">
+        <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+      </div>
+    </form>
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+<script type="text/javascript">
+  window.addEventListener('load', function() {
+    $("#selectAll").click(function(e) {
+        $('.target').prop('checked', this.checked);
+      });
+  });
+</script>
+{% endblock %}

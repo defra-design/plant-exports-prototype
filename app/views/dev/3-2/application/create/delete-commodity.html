@@ -1,0 +1,98 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Are you sure you want to delete this variety of {{data.commodity or "commodity"}}? - Phytosanitary certificate - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <form action="{{query.return_url or 'commodity-list'}}" method="post">
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+            <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-7">Are you sure you want to delete this variety of {{data.commodity or "commodity"}}?</h1>
+          </legend>
+          <dl class="govuk-summary-list govuk-summary-list--no-border">
+    
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Description</dt>
+              <dd class="govuk-summary-list__value">
+                {% if query.deleteRow1 == "true" %}
+                {% if data.has_botanicial_name == "use_description" %}{{data.commodity_description or "Oxalis tuberosa (OXATU)"}}{% else %}{{data.botanical_name or "Oxalis tuberosa (OXATU)"}}{% endif %}
+                {% elif query.deleteRow2 == "true" %}
+                {% if data.has_botanicial_name2 == "use_description" %}{{data.commodity_description2 or "Rosa davidii (ROSDA)"}}{% else %}{{data.botanical_name2 or "Rosa davidii (ROSDA)"}}{% endif %}
+                {% elif query.deleteRow3 == "true" %}
+                {% if data.has_botanicial_name3 == "use_description" %}{{data.commodity_description3 or "Anisodontea scabrosa (AODSC)"}}{% else %}{{data.botanical_name3 or "Anisodontea scabrosa (AODSC)"}}{% endif %}
+                {% elif query.deleteRow4 == "true" %}
+                {% if data.has_botanicial_name4 == "use_description" %}{{data.commodity_description4 or "Corylus ferox (CYLFE)"}}{% else %}{{data.botanical_name4 or "Corylus ferox (CYLFE)"}}{% endif %}
+                {% elif query.deleteRow5 == "true" %}
+                {% if data.has_botanicial_name5 == "use_description" %}{{data.commodity_description5 or "Pinus ponderosa (PIUPO)"}}{% else %}{{data.botanical_name5 or "Pinus ponderosa (PIUPO)"}}{% endif %}
+                {% else %}
+                Oxalis tuberosa (OXATU)
+                {% endif %}
+              </dd>
+              <dd class="govuk-summary-list__actions">&nbsp;</dd>
+            </div>
+      
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Country of origin</dt>
+              <dd class="govuk-summary-list__value">{% if data.countryOfOriginSelect == "GB" %}United Kingdom{% else %}{{data.countryOfOriginSelect[0] or "United Kingdom"}}{% endif %}</dd>
+              <dd class="govuk-summary-list__actions">&nbsp;</dd>
+            </div>
+      
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Quantity</dt>
+              <dd class="govuk-summary-list__value">
+                {% if query.deleteRow1 == "true" %}
+                {{data.quantity or "100"}}{% if data.units == "Grams" %}g{% elif data.units == "Kilograms" %}kg{% elif data.units == "Litres" %}l{% elif data.units == "Tonnes" %}t{% elif data.units == "Units" %} units{% else %}kg{% endif %}
+                {% elif query.deleteRow2 == "true" %}
+                {{data.quantity2 or "10"}}{% if data.units2 == "Grams" %}g{% elif data.units2 == "Kilograms" %}kg{% elif data.units2 == "Litres" %}l{% elif data.units2 == "Tonnes" %}t{% elif data.units2 == "Units" %} units2{% else %}t{% endif %}
+                {% elif query.deleteRow3 == "true" %}
+                {{data.quantity3 or "10"}}{% if data.units3 == "Grams" %}g{% elif data.units3 == "Kilograms" %}kg{% elif data.units3 == "Litres" %}l{% elif data.units3 == "Tonnes" %}t{% elif data.units3 == "Units" %} units3{% else %}t{% endif %}
+                {% elif query.deleteRow4 == "true" %}
+                {{data.quantity4 or "10"}}{% if data.units4 == "Grams" %}g{% elif data.units4 == "Kilograms" %}kg{% elif data.units4 == "Litres" %}l{% elif data.units4 == "Tonnes" %}t{% elif data.units4 == "Units" %} units4{% else %}t{% endif %}
+                {% elif query.deleteRow5 == "true" %}
+                {{data.quantity5 or "10"}}{% if data.units5 == "Grams" %}g{% elif data.units5 == "Kilograms" %}kg{% elif data.units5 == "Litres" %}l{% elif data.units5 == "Tonnes" %}t{% elif data.units5 == "Units" %} units5{% else %}t{% endif %}
+                {% else %}
+                100kg
+                {% endif %}
+              </dd>
+              <dd class="govuk-summary-list__actions">&nbsp;</dd>
+            </div>
+      
+          </dl>
+          
+          <div class="govuk-radios" data-module="govuk-radios">
+            
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="delete_yes" name="delete" type="radio" value="Yes~{% if data.rowCount == '1' %}input-method?commodity_task_list_data=&input_method=&{% else %}{{query.return_url or 'commodity-list'}}?{% endif %}{% if query.deleteRow1 == 'true' %}{% if data.rowCount == '1' %}has_botanicial_name=&commodity_description=&gsi_number=&countryOfOriginSelect=&quantity=&units=&number_of_packages=&packaging=&packing_material_used=&distinguishing_marks=&commodity_type=&ss_number=&row1=false{% else %}row1=false{% endif %}{% elif query.deleteRow2 == 'true' %}has_botanicial_name2=&commodity_description2=&commodity_type2=&countryOfOriginSelect=&quantity2=&units2=&number_of_packages2=&packaging=&row2=false{% elif query.deleteRow3 == 'true' %}has_botanicial_name3=&commodity_description3=&commodity_type3=&countryOfOriginSelect=&quantity3=&units3=&number_of_packages3=&packaging=&row3=false{% elif query.deleteRow4 == 'true' %}has_botanicial_name4=&commodity_description4=&commodity_type4=&countryOfOriginSelect=&quantity4=&units4=&number_of_packages4=&packaging=&row4=false{% elif query.deleteRow5 == 'true' %}has_botanicial_name5=&commodity_description5=&commodity_type5=&countryOfOriginSelect=&quantity5=&units5=&number_of_packages5=&packaging=&row5=false{% endif %}">
+              <label class="govuk-label govuk-radios__label govuk-radios-long-label" for="delete_yes">Yes, delete</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="delete_no" name="delete" type="radio" value="No~{{query.return_url or 'commodity-list'}}">
+              <label class="govuk-label govuk-radios__label govuk-radios-long-label" for="delete_no">Cancel and go back</label>
+            </div>
+
+          </div>
+
+        </fieldset>
+      </div>
+
+      <button class="govuk-button" type="submit" data-module="govuk-button">Confirm</button>
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

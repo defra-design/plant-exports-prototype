@@ -1,0 +1,255 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.reissue == "yes" %}Make your changes - Re-issue a phytosanitary certificate - {{serviceName}} - GOV.UK{% else %}{% if data.build == "development" %}Exports application - GOV.UK{% else %}Supporting documents - Phytosanitary certificate - {{serviceName}} - GOV.UK{% endif %}{% endif %}
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+    {% if query.delete_file == "yes" %}
+    
+    <div class="defra-alert defra-alert--success">
+      <p class="govuk-body govuk-!-margin-bottom-0">Succesfully deleted file {{data.file}}</p>
+    </div>
+
+    {% endif %}
+    {% if data.reissue == "yes" %}
+    <span class="govuk-caption-xl">Supporting documents</span>
+    <h1 class="govuk-heading-xl">Make your changes</h1>
+    {% else %}
+    <h1 class="govuk-heading-xl">Supporting documents</h1>
+    {% endif %}
+  </div>
+
+  {% if data.build == "development" %}
+  <div class="govuk-grid-column-full">
+    <p class="govuk-body">If you wish to attach any supporting documents to your application, you can upload them here. Otherwise, please click 'Save and continue' to skip this section.</p>
+  </div>
+
+  <div class="govuk-grid-column-two-thirds">
+    <p class="govuk-body">You can only upload one at a time. Each file must:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>be in PDF, Word, Excel or JPEG format</li>
+      <li>be smaller than 10 megabytes (10MB)</li>
+      <li>have a unique, meaningful file name</li>
+      <li>uploaded with a file description</li>
+    </ul>
+  </div>
+  {% else %}
+  <div class="govuk-grid-column-two-thirds">
+    <p class="govuk-body">If you wish to attach any supporting documents to your application, you can upload them here. Otherwise, please click 'Save and continue' to skip this section.</p>
+    <p class="govuk-body">You can only upload one at a time. Each file must:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>be in PDF, Word, Excel or JPEG format</li>
+      <li>be smaller than 10 megabytes (10MB)</li>
+      <li>have a unique, meaningful file name</li>
+      <li>upload with a file description</li>
+    </ul>
+  </div>
+  {% endif %}
+
+</div>
+
+{% set _importCertDisplayedCount = data['importCertDisplayedCount'] or 1 | int %}
+{% if query.importCerts == 'true' or _importCertDisplayedCount > 0 %}
+
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-full">
+
+    {% if data.reissue == "yes" %}
+    <form action="../re-issue/amend-your-certificate?id={{data.id}}&is_group={{data.is_group}}&commodity={{data.commodity or 'plants'}}&reissue_certificate_data_pfp=draft" method="post">
+    {% else %}
+    <form action="{{query.return_url or 'task-list'}}" method="post">
+    {% endif %}
+
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header app-custom-class govuk-!-width-one-half">File name</th>
+          <th scope="col" class="govuk-table__header app-custom-class govuk-!-width-two-fifths">File description</th>
+          <th scope="col" class="govuk-table__header app-custom-class">Action</th>
+        </tr>
+      </thead>
+
+      <tbody class="govuk-table__body">
+
+        {% if data.reforwarding == "1" %}
+          {% set _importCertsList = ["12345678","ABC123456"] %}
+          {% for _importCert in _importCertsList %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              {{_importCert}}.pdf
+            </td>
+            <td class="govuk-table__cell">
+              Import Phytosanitary Certificate ({{_importCert}})
+            </td>
+            <td class="govuk-table__cell">
+              <p class="govuk-body govuk-!-margin-bottom-2">
+                <a href="#" class="govuk-link">Download<span class="govuk-visually-hidden"> {{_importCert}}</span></a>
+              </p>
+              <!-- <p class="govuk-body govuk-!-margin-bottom-2">
+                <a href="#" class="govuk-link">Delete<span class="govuk-visually-hidden"> {{_importCert}}</span></a>
+              </p> -->
+            </td>
+          </tr>
+          {% endfor %}
+        {% endif %}
+
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            <input class="govuk-file-upload" id="file" name="file" type="file">
+          </td>
+          <td class="govuk-table__cell">
+            <textarea rows="2" id="description" name="description" class="govuk-textarea govuk-!-margin-bottom-0" maxlength="100">{% if data.description %}{{data.description}}{% else %}{% endif %}</textarea>
+          </td>
+          <td class="govuk-table__cell">
+            <a href="#" class="govuk-link govuk-link--no-visited-link">Upload</a>
+          </td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+    <div class="govuk-button-group">
+      <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      {% if data.reissue == "yes" %}
+      <a class="govuk-link app-button--link" href="../../application-re-issue?id={{data.id}}&is_group={{data.is_group}}">Cancel</a>
+      {% endif %}
+    </div>
+
+    <!-- Session data hook to update the task list so that this section is marked as 'COMPLETED' -->
+    <div class="govuk-form-group" hidden>
+      <label class="govuk-label" for="supporting_documents_task_list_data">Task list section URL</label>
+      <input class="govuk-input" id="supporting_documents_task_list_data" name="supporting_documents_task_list_data" type="text" value="Complete">
+    </div>
+
+  </form>
+
+  </div>
+
+</div>
+
+{% else %}
+
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-full">
+
+    {% if not data.file %}
+    {% else %}
+      <h2 class="govuk-heading-m"><span class="file_count">1</span> file uploaded</h2>
+    {% endif %}
+
+    <table class="govuk-table">
+      {% if data.file and query.delete_file != "yes" %}
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header app-custom-class govuk-!-width-one-half">File name</th>
+          <th scope="col" class="govuk-table__header app-custom-class govuk-!-width-two-fifths">File description</th>
+          <th scope="col" class="govuk-table__header app-custom-class">Actions</th>
+        </tr>
+      </thead>
+      {% endif %}
+
+      <tbody class="govuk-table__body">
+        {% if data.file and query.delete_file != "yes" %}
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            {{data.file}}
+          </td>
+          <td class="govuk-table__cell">
+            {{data.description}}
+          </td>
+          <td class="govuk-table__cell">
+
+            <p class="govuk-body govuk-!-margin-bottom-2">
+              <a href="#" class="govuk-link">Download<span class="govuk-visually-hidden"> {{data.file}}</span></a>
+            </p>
+
+            <p class="govuk-body govuk-!-margin-bottom-2">
+              <a href="#" class="govuk-link">Delete<span class="govuk-visually-hidden"> {{data.file}}</span></a>
+            </p>
+
+          </td>
+        </tr>
+        {% endif %}
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-full">
+
+    {% if data.reissue == "yes" %}
+    <form action="../re-issue/amend-your-certificate?id={{data.id}}&is_group={{data.is_group}}&commodity={{data.commodity or 'plants'}}&reissue_certificate_data_pfp=draft" method="post">
+    {% else %}
+    <form action="{{query.return_url or 'task-list'}}" method="post">
+    {% endif %}
+
+      <table class="govuk-table">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header govuk-!-width-one-half">File name</th>
+            <th scope="col" class="govuk-table__header govuk-!-width-two-fifths">File description</th>
+            <th scope="col" class="govuk-table__header">Action</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              <input class="govuk-file-upload" id="file" name="file" type="file">
+            </td>
+            <td class="govuk-table__cell">
+              <textarea rows="2" id="description" name="description" class="govuk-textarea govuk-!-margin-bottom-0" maxlength="100">{% if data.description %}{{data.description}}{% else %}{% endif %}</textarea>
+            </td>
+            <td class="govuk-table__cell">
+              <a href="#" class="govuk-link govuk-link--no-visited-link">Upload</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="govuk-button-group">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+        {% if data.reissue == "yes" %}
+        <a class="govuk-link app-button--link" href="../../application-re-issue?id={{data.id}}&is_group={{data.is_group}}">Cancel</a>
+        {% endif %}
+      </div>
+
+      <!-- Session data hook to update the task list so that this section is marked as 'COMPLETED' -->
+      <div class="govuk-form-group" hidden>
+        <label class="govuk-label" for="supporting_documents_task_list_data">Task list section URL</label>
+        <input class="govuk-input" id="supporting_documents_task_list_data" name="supporting_documents_task_list_data" type="text" value="Complete">
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+{% endif %}
+
+<!-- <script type="text/javascript">
+  
+  window.addEventListener('load', function() {
+    $('.file_count').text($('tbody .govuk-table__row').length)
+  });
+
+</script> -->
+{% endblock %}

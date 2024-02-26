@@ -1,0 +1,114 @@
+<!-- <tr class="govuk-table__row">
+  <td class="govuk-table__cell">
+    {{commodity.commodity_variety[0] or "Pink fir apple"}}
+  </td>
+  <td class="govuk-table__cell">
+    {{commodity.stock_number or "912345"}}
+  </td>
+  <td class="govuk-table__cell govuk-table__cell">
+    {{commodity.quantity or "25"}}{{commodity.unit or "kg"}}
+  </td>
+  <td class="govuk-table__cell" style="text-align: right;">
+    <a href="commodity-page" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+    <br>
+    <a href="#" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+  </td>
+</tr> -->
+
+
+
+
+
+<tr class="govuk-table__row">
+
+  
+  <td class="govuk-table__cell">
+
+    {% set _potatoType = "Ware" %}
+    {% if commodity.potato == "seed" %}
+      {% set _potatoType = "Seed" %}
+    {% endif %}
+
+    <span style="display: block; margin-bottom: 7px;">
+      <strong>{{_potatoType}}</strong>
+    </span>
+
+    {% set _variety = commodity.commodity_variety[0] or commodity.other_commodity_variety or "Pink fir apple" %}
+   
+    <span style="display: block; margin-bottom: 7px;">
+      Variety: {{_variety}}
+    </span>
+
+    <span style="display: block; margin-bottom: 7px;">
+      Chemicals used: {{commodity.chemicals_used or "rimsulfuron (herbicide)"}}
+    </span>
+
+    {% if _potatoType == "Ware" %}
+      <!-- <span style="display: block; margin-bottom: 7px;">
+        Soil sampling application number: {{commodity.stock_number or "912345"}}
+      </span> -->
+      <span style="display: block; margin-bottom: 7px;">
+        Lot reference: {{commodity.lot_reference or "LR12345"}}
+      </span>
+    {% endif %}
+
+    {% if _potatoType == "Seed" %}
+      <span style="display: block; margin-bottom: 7px;">
+        Stock number: {{commodity.certification_number or "LR12345"}}
+      </span>
+    {% endif %}
+    
+  </td>
+
+
+  <td class="govuk-table__cell">
+
+    <span style="display: block; margin-bottom: 7px;" >
+    <!-- {% if commodity.filter_demo %}
+    {{commodity.filter_demo or "United Kingdom"}}
+    {% else %}
+    United Kingdom 
+    {% endif %} -->
+    {% set _defaultCountry = "United Kingdom" %}
+    {% if commodity.filter_demo == "_unchecked" or commodity.filter_demo == undefined %}
+    {{_defaultCountry}}
+    {% else %}
+    {{commodity.filter_demo | join(", ") or _defaultCountry}}
+    {% endif %}
+    <!-- "filter_demo":["Afghanistan","Åland Islands","Albania"], -->
+  </span>
+
+    {% if data.reforwarding == "1" %}
+    <span style="display: block; margin-bottom: 7px;" >
+      {% if commodity['commodityIPCN-2'] %}
+        {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
+      {% elif commodity['commodityIPCN-1'] %}
+        {{commodity['commodityIPCN-1'] or "123-456-789-0"}}
+      {% else %}
+        {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
+      {% endif %}
+    </span>
+    {% endif %}
+  </td>
+  <td class="govuk-table__cell">
+    <span style="display: block; margin-bottom: 7px;">{{commodity.quantity or "20"}} {{commodity.units or "kilograms"}}</span>
+    <span style="display: block; margin-bottom: 7px;">{{commodity.number_of_packages or "5"}} packages</span>
+  </td>
+  <td class="govuk-table__cell">
+    <span style="display: block; margin-bottom: 7px;">{{commodity.packaging[0] or "Crate - bulk - cardboard"}}</span>
+    {% if query.design != "b" %}
+    {% if commodity.packing_material_used != "" %}
+    <span style="display: block; margin-bottom: 7px;">{{commodity.packing_material_used or "Cardboard"}}</span>
+    {% endif %}
+    {% if commodity.distinguishing_marks != "" %}
+    <span style="display: block; margin-bottom: 7px;">{{commodity.distinguishing_marks or "Brown marks"}}</span>
+    {% endif %}
+    {% endif %}
+
+  </td>
+  <td class="govuk-table__cell" style="text-align: right;">
+    <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+    <br>
+    <a href="#" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+  </td>
+</tr>

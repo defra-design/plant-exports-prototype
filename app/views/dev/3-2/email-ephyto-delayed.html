@@ -1,0 +1,116 @@
+{% extends "layout.html" %}
+
+{% set isEmailTemplate = true %}
+
+{% set serviceName = "" %}
+
+{% block pageTitle %}
+{% endblock %}
+
+{% block beforeContent %}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  {% set _country = "United Kingdom (Northern Ireland)" %}
+  {% if query.country == "eu" %}
+    {% set _country = "France" %}
+  {% elif query.country == "row" %}
+    {% set _country = "Brazil" %}
+  {% endif %}
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <h2 class="govuk-heading-l">
+      {% if query.reissue == "true" %}
+        ePhyto re-issue delayed 7800 56212 5823
+      {% else %}
+        ePhyto delayed 7800 56212 5823
+      {% endif %}
+    </h2>
+
+    <p class="govuk-body">Dear Jane Doe,</p>
+
+    {% if query.reissue == "true" and query.withdrawdelay == "true" %}
+      <p class="govuk-body">There is a delay with your re-issued ePhyto. This is because we have not had confirmation that {{_country}} has withdrawn your existing ePhyto.</p>
+    {% elif query.reissue == "true" %}
+      <p class="govuk-body">There is a delay with your re-issued ePhyto. This is because we have not had confirmation that {{_country}} has received it.</p>
+    {% else %}
+      <p class="govuk-body">There is a delay with your ePhyto. This is because we have not had confirmation that {{_country}} has received it.</p>
+    {% endif %}
+    
+    <p class="govuk-body">Phytosanitary certificate number: UK/GB/E&W/2023/7800562125823</p>
+    <p class="govuk-body">Your reference: PO 66622</p>
+    <!-- <p class="govuk-body">Certificate issued: 10 December 2023</p> -->
+    <p class="govuk-body">Submitted by: Joe Bloggs</p>
+    
+    <h2 class="govuk-heading-m">What happens now</h2>
+
+    <p class="govuk-body">We will:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>keep checking to see if the problem gets fixed</li>
+      {% if query.reissue == "true" %}
+      <li>email you if {{_country}} receives your re-issued certificate</li>
+      {% else %}
+      <li>email you if {{_country}} receive it</li>
+      {% endif %}
+    </ul>
+
+
+
+
+    <h2 class="govuk-heading-m">If the problem cannot be fixed</h2>
+
+    
+
+  
+    {% if query.country == "eu" %}
+    <p class="govuk-body">We will:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>put your details into TRACES</li>
+      <li>email you the TRACES reference number and a PDF copy of the phytosanitary certificate</li>
+    </ul>
+    {% elif query.country == "row" %}
+    <ol class="govuk-list govuk-list--number">
+      <li>We will send you a paper phytosanitary certificate and an email to let you know.</li>
+      <li>You will need to send the paper certificate with your consignment.</li>
+    </ol>
+    {% else %}
+    <p class="govuk-body">We will:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>email you a scanned phytosanitary certificate</li>
+      <li>send you a paper phytosanitary certificate in the post</li>
+    </ul>
+    {% endif %}
+   
+
+
+
+
+    <h2 class="govuk-heading-m">What is an ePhyto</h2>
+    <p class="govuk-body">Read more about ePhyto certificates: <a class="govuk-link govuk-link--no-visited-state" href="guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#digital-phytosanitary-certificates">https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland</a></p>
+
+    <h2 class="govuk-heading-m">Get help</h2>
+    <p class="govuk-body">This is an automated email. Please do not reply to this email as the account is not monitored. </p>
+    <p class="govuk-body">You can contact us on:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>0300 1000 313, Monday to Sunday 7am to 7pm</li>
+      <li><a href="mailto:planthealth.info@apha.gov.uk" class="govuk-link">planthealth.info@apha.gov.uk</a></li>
+    </ul>
+
+    <h2 class="govuk-heading-m">Manage email notifications</h2>
+    <p class="govuk-body">Change which emails you get about ePhytos in your account settings: <a class="govuk-link govuk-link--no-visited-state" href="account/notifications">https://exporter.apply-phytosanitary-certificate.defra.gov.uk/manage-email-notifications</a></p>
+
+    <h2 class="govuk-heading-m">Privacy policy</h2>
+    <p class="govuk-body">To learn about information rights and how we use information, read our Defra Personal Information Charter: <a class="govuk-link govuk-link--no-visited-state" href="https://www.gov.uk/government/organisations/department-for-environment-food-rural-affairs/about/personal-information-charter">https://www.gov.uk/government/organisations/department-for-environment-food-rural-affairs/about/personal-information-charter</a></p>
+
+    <p class="govvuk-body">Regards,</p>
+    <p class="govvuk-body">Animal and Plant Health Agency (APHA)</p>
+    <p class="govvuk-body">Centre for International Trade - York</p>
+
+
+
+  </div>
+</div>
+{% endblock %}

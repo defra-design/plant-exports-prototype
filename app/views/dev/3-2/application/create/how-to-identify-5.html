@@ -1,0 +1,499 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.build == "development" %}{% if data.commodity == "plant products" %}Plant Products{% else %}{{data.commodity | capitalize or 'Plant Products' }}{% endif %} Details - Exports application{% else %}Add {% if data.pheats_check != "yes" %}{% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "everything else" %}your commodity{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your {% if data.reforwarding %} re-forwarding{% endif %} consignment - Phytosanitary certificate - {{serviceName}}{% endif %} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <!-- Chris Harding (11.01.23) - Added this different scenario for usability testing of the HPUI 'Clone' designs -->
+    {% if query.change == "yes" %}
+    <form action="{{query.return_url or 'check-your-answers'}}?row2=true" method="post">
+    {% elif data.id == "34" %}
+    <form action="{{query.return_url or 'commodity-list'}}?row2=true" method="post">
+    {% elif data.commodity == "everything else" %}
+    <form action="{{query.return_url or 'commodity-list'}}?row2=true" method="post">
+    {% else %}
+    <form method="post">
+    {% endif %}
+      <h1 class="govuk-heading-xl" >{% if data.build == "development" %}Your commodity{% else %}Add {% if data.pheats_check != "yes" %}{% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "everything else" %}your commodity{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your{% if data.reforwarding %} re-forwarding{% endif %} consignment{% endif %}</h1>
+
+      <!-- 'Botanical/Scientific name or description' section (START) -->
+      <!-- 
+        6 of 8 commodities affected: 
+          1. Bulbs
+          2. Plants and fresh produce
+          3. Processed plant products
+          4. Seeds for planting
+          5. Unprocessed cereal grains
+          6. Everything else
+      -->
+      <div class="govuk-form-group govuk-!-margin-bottom-4">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend">How do you want to describe {% if data.build == "development" %}your commodity{% else %}{% if data.commodity == "plants" %}your plants and fresh produce{% elif data.commodity == "everything else" %}the thing you are exporting{% else %}your {{data.commodity or 'plant products'}}{% endif %}{% endif %}?</legend>        
+
+          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="has_botanicial_name_yes" name="has_botanicial_name5" type="radio" value="yes" aria-describedby="has_botanicial_name_yes-hint" data-aria-controls="has_botanicial_name_yes-conditional"{% if data.has_botanicial_name5 == "yes" %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="has_botanicial_name_yes">{% if data.commodity == "everything else" %}Scientific{% else %}Botanical{% endif %} name</label>
+              
+              <div id="has_botanicial_name_yes-hint" class="govuk-hint govuk-radios__hint">
+                Search by genus, species or common name
+              </div>
+
+            </div>
+
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="has_botanicial_name_yes-conditional">
+              {% if data.show_manual_input != "yes" %}
+              {% block genus %}
+              {% include "../modules/_genus-5.html" %}
+              {% endblock %}
+              {% else %}
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="commodity_genus">Genus</label>
+                <input class="govuk-input govuk-input--width-20" id="commodity_genus" name="genus" type="text" value="{{data.genus}}">
+              </div>
+              
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="commodity_host_species">Species{% if data.build != "ux" %} (optional){% endif %}</label>
+                <input class="govuk-input govuk-input--width-20" id="commodity_host_species" name="commodity_host_species" type="text" value="{{data.commodity_host_species}}">
+              </div>
+              {% endif %}
+
+              {% if data.show_manual_input == "yes" %}
+              <p id="commodity-lookup--manual" class="govuk-body" style="display: none;">The {% if data.commodity == "everything else" %}scientific{% else %}botanical{% endif %} name needs to be spelled correctly, if you are not sure <a href="?show_manual_input=no&has_botanicial_name2=yes" class="govuk-link govuk-link--no-visited-state">search for a {% if data.commodity == "everything else" %}scientific{% else %}botanical{% endif %} name</a></p>
+              {% else %}
+              <p id="commodity-lookup--manual" class="govuk-body" style="display: none;">If you cannot find your {% if data.commodity == "everything else" %}{% if data.subCommodity == "something else" %}commodity{% else %}{{data.subCommodity or "clay"}}{% endif %}{% else %}{{data.commodity or "plants and fresh produce"}}{% endif %}, but you know the {% if data.commodity == "everything else" %}scientific{% else %}botanical{% endif %} name, <a href="?show_manual_input=yes&has_botanicial_name2=yes" class="govuk-link govuk-link--no-visited-state">enter the {% if data.commodity == "everything else" %}scientific{% else %}botanical{% endif %} name manually</a></p>
+              {% endif %}
+
+              {% if data.commodity == "plants" or data.commodity == "seeds" or data.commodity == "bulbs" %}
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="commodity_variety">Variety (optional)</label>
+                <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety" type="text" value="{{data.commodity_variety}}">
+              </div>
+              {% endif %}
+
+            </div>
+
+            <div class="govuk-radios__divider">
+              or
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="has_botanicial_name_use_description" name="has_botanicial_name5" type="radio" value="use_description" data-aria-controls="has_botanicial_name_use_description-conditional"{% if data.has_botanicial_name5 == "use_description" %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="has_botanicial_name_use_description">Description</label>
+              
+              <div id="has_botanicial_name_use_description-hint" class="govuk-hint govuk-radios__hint">
+                {% if data.commodity == "everything else" %}If the thing you are exporting does not have a scientific name, enter a description instead{% else %}If you cannot find the botanical name, or your product is made of many {% if data.commodity == "bulbs" %}varieties{% else %}species{% endif %}, enter a description instead{% endif %}
+              </div>
+
+            </div>
+
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="has_botanicial_name_use_description-conditional">
+              
+              <div class="govuk-form-group">
+                <label class="govuk-visually-hidden" for="commodity_description">Description of the {{data.commodity or "plants and fresh produce"}}</label>
+                <textarea class="govuk-textarea" id="commodity_description" name="commodity_description5" rows="5" aria-describedby="more-detail-hint">{{data.commodity_description5}}</textarea>
+              </div>
+
+            </div>
+
+          </div>
+
+        </fieldset>
+      </div>
+      <!-- 'Botanical/Scientific name or description' section (END) -->
+
+      <!-- 'Commodity type' (bulbs) section (START) -->
+      <!-- 
+        1 of 8 commodities affected: 
+          1. Bulbs
+      -->
+      {% if data.commodity_type5 == "bulbs" %}
+      {% set radio1CheckedStatus = true %}
+      {% set radio2CheckedStatus = false %}
+      {% set radio3CheckedStatus = false %}
+      {% set radio4CheckedStatus = false %}
+      {% set radio5CheckedStatus = false %}
+      {% set radio6CheckedStatus = false %}
+      {% elif data.commodity_type5 == "corms" %}
+      {% set radio1CheckedStatus = false %}
+      {% set radio2CheckedStatus = true %}
+      {% set radio3CheckedStatus = false %}
+      {% set radio4CheckedStatus = false %}
+      {% set radio5CheckedStatus = false %}
+      {% set radio6CheckedStatus = false %}
+      {% elif data.commodity_type5 == "crowns" %}
+      {% set radio1CheckedStatus = false %}
+      {% set radio2CheckedStatus = false %}
+      {% set radio3CheckedStatus = true %}
+      {% set radio4CheckedStatus = false %}
+      {% set radio5CheckedStatus = false %}
+      {% set radio6CheckedStatus = false %}
+      {% elif data.commodity_type5 == "tuberous" %}
+      {% set radio1CheckedStatus = false %}
+      {% set radio2CheckedStatus = false %}
+      {% set radio3CheckedStatus = false %}
+      {% set radio4CheckedStatus = true %}
+      {% set radio5CheckedStatus = false %}
+      {% set radio6CheckedStatus = false %}
+      {% elif data.commodity_type5 == "tubers" %}
+      {% set radio1CheckedStatus = false %}
+      {% set radio2CheckedStatus = false %}
+      {% set radio3CheckedStatus = false %}
+      {% set radio4CheckedStatus = false %}
+      {% set radio5CheckedStatus = true %}
+      {% set radio6CheckedStatus = false %}
+      {% elif data.commodity_type5 == "rhizomes" %}
+      {% set radio1CheckedStatus = false %}
+      {% set radio2CheckedStatus = false %}
+      {% set radio3CheckedStatus = false %}
+      {% set radio4CheckedStatus = false %}
+      {% set radio5CheckedStatus = false %}
+      {% set radio6CheckedStatus = true %}
+      {% else %}
+      {% set radio1CheckedStatus = false %}
+      {% set radio2CheckedStatus = false %}
+      {% set radio3CheckedStatus = false %}
+      {% set radio4CheckedStatus = false %}
+      {% set radio5CheckedStatus = false %}
+      {% set radio6CheckedStatus = false %}
+      {% endif %}
+
+      {% if data.commodity == "bulbs" and data.build == "development" %}
+      {{ govukRadios({
+        idPrefix: "commodity_type5",
+        name: "commodity_type5",
+        fieldset: {
+          legend: {
+            text: "Commodity type",
+            classes: "govuk-!-font-weight-bold"
+          }
+        },
+        items: [
+          {
+            value: "bulbs",
+            text: "Bulbs",
+            checked: radio1CheckedStatus
+          },
+          {
+            value: "corms",
+            text: "Corms",
+            checked: radio2CheckedStatus
+          },
+          {
+            value: "tubers",
+            text: "Tubers",
+            checked: radio5CheckedStatus
+          },
+          {
+            value: "rhizomes",
+            text: "Rhizomes",
+            checked: radio6CheckedStatus
+          }
+        ]
+      }) }}
+      {% elif data.commodity == "bulbs" %}
+      {{ govukRadios({
+        idPrefix: "commodity_type5",
+        name: "commodity_type5",
+        fieldset: {
+          legend: {
+            text: "Commodity type",
+            classes: ""
+          }
+        },
+        items: [
+          {
+            value: "bulbs",
+            text: "Bulbs",
+            checked: radio1CheckedStatus
+          },
+          {
+            value: "corms",
+            text: "Corms",
+            checked: radio2CheckedStatus
+          },
+          {
+            value: "crowns",
+            text: "Crowns",
+            checked: radio3CheckedStatus
+          },
+          {
+            value: "tuberous",
+            text: "Tuberous roots",
+            checked: radio4CheckedStatus
+          },
+          {
+            value: "tubers",
+            text: "Tubers",
+            checked: radio5CheckedStatus
+          },
+          {
+            value: "rhizomes",
+            text: "Rhizomes",
+            checked: radio6CheckedStatus
+          }
+        ]
+      }) }}        
+      {% endif %}
+      <!-- 'Commodity type' (bulbs) section (END) -->
+
+      <!-- 'Commodity type' (plants and fresh produce) section (START) -->
+      <!-- 
+        1 of 8 commodities affected: 
+          1. Plants and fresh produce
+      -->
+      {% if data.commodity == "plants" %}
+      {% if data.build == "development" %}
+      {% set class="govuk-!-font-weight-bold" %}
+      {% set hint="" %}
+      {% else %}
+      {% set class="" %}
+      {% set hint="If you plan to apply under PHEATS, you must select 'Produce (fruit, flowers or vegetables)'" %}
+      {% if data.commodity_type5 == "micropropagated material" %}
+      {% set radio1CheckedStatus = true %}
+      {% set radio2CheckedStatus = false %}
+      {% set radio3CheckedStatus = false %}
+      {% elif data.commodity_type5 == "plants" %}
+      {% set radio1CheckedStatus = false %}
+      {% set radio2CheckedStatus = true %}
+      {% set radio3CheckedStatus = false %}
+      {% elif data.commodity_type5 == "produce" %}
+      {% set radio1CheckedStatus = false %}
+      {% set radio2CheckedStatus = false %}
+      {% set radio3CheckedStatus = true %}
+      {% else %}
+      {% set radio1CheckedStatus = false %}
+      {% set radio2CheckedStatus = false %}
+      {% set radio3CheckedStatus = false %}
+      {% endif %}
+      {% endif %}
+      
+      {{ govukRadios({
+        idPrefix: "commodity_type5",
+        name: "commodity_type5",
+        fieldset: {
+          legend: {
+            text: "Commodity type",
+            classes: class
+          }
+        },
+        hint: {
+          text: hint
+        },
+        items: [
+          {
+            value: "micropropagated material",
+            text: "Micropropagated material",
+            checked: radio1CheckedStatus
+          },
+          {
+            value: "plants",
+            text: "Plants",
+            checked: radio2CheckedStatus
+          },
+          {
+            value: "produce",
+            text: "Produce (fruit, flowers or vegetables)",
+            checked: radio3CheckedStatus
+          }
+        ]
+      }) }}
+      {% endif %}
+      <!-- 'Commodity type' (plants and fresh produce) section (END) -->
+
+      <!-- 'Growing season inspection number' and 'Soil sampling application number' sections (START) -->
+      <!-- 
+        2 of 8 commodities affected: 
+          1. Bulbs
+          2. Plants and fresh produce
+      -->
+      {% if data.commodity == "bulbs" or data.commodity == "plants" %}
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="gsi_number5">Growing season inspection number (optional)</label>
+        <input class="govuk-input govuk-!-width-one-half" id="gsi_number5" name="gsi_number5" type="text" spellcheck="false" value="{{data.gsi_number5}}">
+      </div>
+
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="ss_number5">Soil sampling application number (optional)</label>
+        <input class="govuk-input govuk-!-width-one-half" id="ss_number5" name="ss_number5" type="text" spellcheck="false" value="{{data.ss_number5}}">
+      </div>
+      {% endif %}
+      <!-- 'Growing season inspection number' and 'Soil sampling application number' sections (END) -->
+
+      <!-- 'Country/Countries of origin' section (START) -->
+      <!-- 
+        6 of 8 commodities affected: 
+          1. Bulbs
+          2. Plants and fresh produce
+          3. Processed plant products
+          4. Seeds for planting
+          5. Unprocessed cereal grains
+          6. Everything else
+      -->  
+      {% block country %}
+      {% if data.commodity == "plant products" or data.build == "development" %}
+      {% set country_module_label = "Primary country of origin" %}
+      {% else %}
+      {% set country_module_label = "Country of origin" %}
+      {% endif %}
+      {% include "../modules/_country-of-origin-select-5.html" %}
+      {% endblock %}
+      <!-- 'Country/Countries of origin' section (END) -->
+
+      <!-- 'Additional countries of origin' section (START) -->
+      <!-- 
+        1 of 8 commodities affected: 
+          1. Processed plant products
+      -->
+      {% if data.commodity == "plant products" %}
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="additional_countries_of_origin5">Additional countries of origin (optional)</label>
+        <input class="govuk-input govuk-input--width-20" id="additional_countries_of_origin5" name="additional_countries_of_origin5" type="text" value="{{data.additional_countries_of_origin5}}">
+      </div>
+      {% endif %}
+      <!-- 'Additional countries of origin' section (END) -->
+
+      <!-- 'Lot reference' and 'APHA sample reference' sections (START) -->
+      <!-- 
+        1 of 8 commodities affected: 
+          1. Seeds for planting
+      -->
+      {% if data.commodity == "seeds" %}
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="commodity_lot5">Lot reference</label>
+        <input class="govuk-input govuk-input--width-20" id="commodity_lot5" name="commodity_lot5" type="text" value="{{data.commodity_lot5}}">
+      </div>
+
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="apha_sample_reference5"><abbr title="Animal and Plant Health Agency">APHA</abbr> sample reference</label>
+        <input class="govuk-input govuk-input--width-20" id="apha_sample_reference5" name="apha_sample_reference5" type="text" value="{{data.apha_sample_reference5}}">
+      </div>
+      {% endif %}
+      <!-- 'Lot reference' and 'APHA sample reference' sections (END) -->
+
+      <!-- 'Quantity and unit of measurement', 'Number of packages' and 'Type of packaging' sections (START) -->
+      <!-- 
+        6 of 8 commodities affected: 
+          1. Bulbs
+          2. Plants and fresh produce
+          3. Processed plant products
+          4. Seeds for planting
+          5. Unprocessed cereal grains
+          6. Everything else
+      -->
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend">
+            <h2 class="govuk-body govuk-!-margin-bottom-0">Quantity and unit of measurement</h2>
+          </legend>
+          <span id="quantity-hint" class="govuk-hint">For example, 50 kilograms</span>
+      
+          <div class="govuk-date-input__item">
+                    
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="quantity5">Quantity</label>
+              <input class="govuk-input govuk-input--width-5" id="quantity5" name="quantity5" type="text" aria-label="Quantity" aria-describedby="quantity-hint" value="{{data.quantity5}}">
+            </div>
+      
+          </div>
+      
+          <div class="govuk-date-input__item">
+                  
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="units5">Unit of measurement</label>
+              <select name="units5" id="units5" class="govuk-select" aria-label="Unit of measurement">
+                <option value="" selected>Unit of measurement</option>
+                {% if data.commodity == "seeds" %}
+                <option value="Grams"{% if data.units5 == "Grams" %} selected{% endif %}>Grams</option>
+                <option value="Kilograms"{% if data.units5 == "Kilograms" %} selected{% endif %}>Kilograms</option>
+                <option value="Tonnes"{% if data.units5 == "Tonnes" %} selected{% endif %}>Tonnes</option>
+                {% else %}              
+                <option value="Grams"{% if data.units5 == "Grams" %} selected{% endif %}>Grams</option>
+                <option value="Kilograms"{% if data.units5 == "Kilograms" %} selected{% endif %}>Kilograms</option>
+                <option value="Litres"{% if data.units5 == "Litres" %} selected{% endif %}>Litres</option>
+                <option value="Tonnes"{% if data.units5 == "Tonnes" %} selected{% endif %}>Tonnes</option>
+                <option value="Units"{% if data.units5 == "Units" %} selected{% endif %}>Units</option>
+                {% endif %}
+              </select>
+            </div>
+                    
+          </div>
+      
+        </fieldset>
+      </div>    
+
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="number_of_packages5">Number of packages</label>
+        <input class="govuk-input govuk-input--width-5" id="number_of_packages5" name="number_of_packages5" type="text" inputmode="numeric" pattern="[0-9]*" value="{{data.number_of_packages5}}">
+      </div>
+
+      {% set country_module_label = "Packaging type" %}
+      {% block packing %}
+      {% include "../modules/_packaging_not_bold-5.html" %}
+      {% endblock %}
+      <!-- 'Quantity and unit of measurement', 'Number of packages' and 'Type of packaging' sections (END) -->
+
+      <!-- 'Packing material' and 'Distinguishing marks' sections (START) -->
+      <!-- 
+        5 of 8 commodities affected: 
+          1. Bulbs
+          2. Plants and fresh produce
+          3. Processed plant products
+          4. Seeds for planting
+          5. Everything else
+      -->
+      {% if data.commodity != "grain" %}
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="packing_material_used5">Packing material (optional)</label>
+        <input class="govuk-input govuk-input--width-20" id="packing_material_used5" name="packing_material_used5" type="text" value="{{data.packing_material_used5}}">
+      </div>
+
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="distinguishing_marks5">Distinguishing marks (optional)</label>
+        <span id="distinguishing-mark-hint" class="govuk-hint">
+          {% if data.build == "development" %}
+          For example, container numbers, lot numbers 
+          {% else %}
+          For example, a container number or your own identification reference for this product
+          {% endif %}
+        </span>
+        <input class="govuk-input govuk-input--width-20" id="distinguishing_marks5" name="distinguishing_marks5" type="text" aria-describedby="distinguishing-mark-hint" value="{{data.distinguishing_marks5}}">
+      </div>
+      {% endif %}
+      <!-- 'Packing material' and 'Distinguishing marks' sections (START) -->
+
+      <div class="govuk-form-group govuk-!-margin-top-3 govuk-!-margin-bottom-6">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      </div>
+
+      {% block continueLater %}
+      {% include "../modules/_save-continue-later.html" %}
+      {% endblock %}
+    </form>
+
+  </div>
+  
+</div>
+
+<script type="text/javascript">
+  
+  window.addEventListener('load', function() {
+    $("#commodity-botanical_name").hide()
+    $("#commoditiy-botanical-lookup").show()
+    $("#commodity-lookup--manual").show()
+  });
+
+</script>
+{% endblock %}

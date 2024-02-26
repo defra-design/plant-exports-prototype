@@ -1,0 +1,228 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Manage application - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Return to your applications</a>
+<style>
+
+  .govuk-status--warning {
+    width: auto !important;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    padding-bottom: 1px;
+    letter-spacing: 1px;
+    text-decoration: none;
+    display: inline-block;
+    color: #0b0c0c;
+    background: #FFBF47;
+    border: 3px solid #FFBF47;
+  }
+
+  .doc-icon::before {
+    content: '';
+    width: 1em;
+    height: 1.5em;
+    margin-right: 1em;
+    position: relative;
+    top: 0.5em;
+    display: inline-block;
+    background: #bfc1c3;
+    box-shadow: 3px -3px 0 #fff, 6px -6px 0 #bfc1c3;
+  }
+  
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row govuk-!-margin-bottom-6">
+  <div class="govuk-grid-column-two-thirds govuk-!-margin-bottom-6">
+    <h1 class="govuk-heading-xl">Manage application <span style="white-space: nowrap;">{{query.id | appInformationV8('applicationID')}}</span></h1>
+
+    <div class="app-alert app-alert--info" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
+      <p class="govuk-body" id="govuk-notification-banner-message">This application has been amended. You must resubmit your application using the 'Update this application link' for these changes to appear on your certificate.</p>
+    </div>
+  </div>
+
+  <div class="govuk-grid-column-one-half">
+    <dl class="govuk-summary-list govuk-summary-list--no-border">
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Status
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <div class="govuk-tag govuk-tag--{{query.id | appInformationV8('tag')}}">
+            {{query.id | appInformationV8('status')}}
+          </div>
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Your reference
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {% if (query.id | appInformationV8('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformationV8('reference')}}{% endif %}
+        </dd>
+      </div>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          {% if query.id == 6 %}Application{% else %}Certificate{% endif %}
+        </dt>
+        <dd class="govuk-summary-list__value">
+          Certificate of conformity
+        </dd>
+      </div>
+      {% if query.id != 6 %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Destination country
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{query.id | appInformationV8('destination')}}
+        </dd>
+      </div>
+      <!--<div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Consignee
+        </dt>
+        <dd class="govuk-summary-list__value">
+          {{query.id | appInformationV8('importer') or 'XYZ Trading Limited'}}
+        </dd>
+      </div>-->
+      {% endif %}
+      {% if query.id == 0 %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">
+          Agent
+        </dt>
+        <dd class="govuk-summary-list__value">
+          <!--Export name-->
+          Agent name
+        </dd>
+      </div>
+      {% endif %}
+    </dl>
+
+    <ul class="govuk-list govuk-!-margin-top-6 govuk-!-margin-bottom-6 noprint">
+      <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-viewonly">View application details</a></li>
+      {% if (query.id | appInformationV8('status')) == 'draft' %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="#">Edit and submit this application</a></li>
+      {% endif %}
+      <!--<li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{query.is_group}}">Copy as new phytosanitary certificate application</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{query.is_group}}">Copy as new certificate of conformity application</a></li>-->
+      {% if (query.id | appInformationV8('status')) == 'submitted' or (query.id | appInformationV8('status')) == 'processing' or (query.id | appInformationV8('status')) == 'with inspector' or (query.id | appInformationV8('status')) == 'exporter action' or (query.id | appInformationV8('status')) == 'preparing certificate' or (query.id | appInformationV8('status')) == 'returned' %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="cancel">Cancel this application</a></li>
+      {% endif %}
+      {% if (query.id | appInformationV8('status')) == 'draft' %}
+      <li><a class="govuk-link govuk-link--no-visited-state" href="delete">Delete this application</a></li>
+      {% endif %}
+    </ul>
+
+  </div>
+
+  <div class="govuk-grid-column-one-half govuk-!-margin-bottom-9">
+    <h2 class="govuk-heading-m">Your certificate</h2>
+    <p class="govuk-body">
+      Not all your commodities passed inspection. Your certificate of conformity is only for those commodities that met the relevant marketing standards.
+    </p>
+    <ul class="govuk-list  noprint">
+    <li><p class="doc-icon"><a href="#" class="govuk-link govuk-link--no-visited-state">Certificate of conformity (pdf)</a>
+    </p></li>  
+      
+<!--     <li><p class="doc-icon"><a href="#" class="govuk-link govuk-link--no-visited-state">Certificate of non-conformity (pdf)</a></p></li> -->
+    </ul>
+
+  </div>
+  </div>
+  <div class="govuk-grid-row govuk-!-margin-bottom-6">
+  <div class="govuk-grid-column-full-width" style="padding: 0 15px;">
+    <h2 class="govuk-heading-m">Summary of commodity details</h2>
+    <table class="govuk-table govuk-!-margin-bottom-9">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">
+            Commodity
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Variety or type
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Total net weight
+          </th>
+          <th class="govuk-table__header" scope="col">
+            Inspection status
+          </th>
+<!--           <th class="govuk-table__header" scope="col">
+            Action
+          </th> -->
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            Citrus - Clementines
+          </td>
+          <td class="govuk-table__cell">
+            Marisol
+          </td>
+          <td class="govuk-table__cell">
+            1000kg (5kg x 200 packages)
+          </td>
+          <td class="govuk-table__cell">
+            <div class="govuk-tag govuk-tag--green">
+              passed
+            </div>
+          </td>
+<!--           <td class="govuk-table__cell">
+          </td> -->
+        </tr>
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            Citrus - Clementines
+          </td>
+          <td class="govuk-table__cell">
+            Hemandina
+          </td>
+          <td class="govuk-table__cell">
+            1000kg (5kg x 200 packages)
+          </td>
+          <td class="govuk-table__cell">
+            <div class="govuk-tag govuk-tag--blue">
+              pending
+            </div>
+          </td>
+<!--           <td class="govuk-table__cell">
+          </td> -->
+        </tr>
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            Citrus - Tangerines
+          </td>
+          <td class="govuk-table__cell">
+            Murcott
+          </td>
+          <td class="govuk-table__cell">
+            100kg (5kg x 20 packages)
+          </td>
+          <td class="govuk-table__cell">
+            <div class="govuk-tag govuk-tag--red">
+              failed
+            </div>
+          </td>
+<!--           <td class="govuk-table__cell">
+            <a href="#" class="govuk-link govuk-link--no-visited-state">View certificate</a>
+          </td> -->
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+</div>
+
+{% endblock %}
