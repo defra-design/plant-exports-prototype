@@ -49,7 +49,19 @@
         </h2>
       </div>
       <div class="govuk-notification-banner__content">
-        <p class="govuk-body" id="govuk-notification-banner-message">This application has been amended. You must resubmit your application using the 'Update this application' link for these changes to appear on your certificate.</p>
+        <p class="govuk-notification-banner__heading">
+          You have not submitted your updated application
+        </p>
+        <p class="govuk-body" id="govuk-notification-banner-message">
+          {% set _amendLink = "application/create/check-your-answers-pre-inspect-amend-message" %}
+          {% if (query.id | appInformationV8('status')) == 'exporter action' %}
+          {% elif (query.id | appInformationV8('status')) == 'preparing certificate'  %}
+            {% set _amendLink = "application/create/check-your-answers-post-inspect-amend?is_amend=yes" %}
+          {% else %}
+            {% set _amendLink = "application/create/check-your-answers-pre-inspect-amend?is_amend=yes" %}
+          {% endif %}
+          <a href="{{_amendLink}}" class="govuk-link govuk-link--no-visited-state">Continue application update</a>
+        </p>
       </div>
     </div>
 
@@ -140,11 +152,11 @@
     <ul class="govuk-list noprint">
       {% if (query.id | appInformationV8('status')) == 'certificate issued' %}
       {% elif (query.id | appInformationV8('status')) == 'exporter action' %}
-      <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-pre-inspect-amend-message">Update this application</a></li>
+      <!-- <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-pre-inspect-amend-message">Update this application</a></li> -->
       {% elif (query.id | appInformationV8('status')) == 'preparing certificate'  %}
-      <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-post-inspect-amend?is_amend=yes">Update this application</a> - change details such as weight or number of packages</li>
+      <!-- <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-post-inspect-amend?is_amend=yes">Update this application</a> - change details such as weight or number of packages</li> -->
       {% else %}
-      <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-pre-inspect-amend?is_amend=yes">Update this application</a> - change details such as weight or number of packages</li>
+      <!-- <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-pre-inspect-amend?is_amend=yes">Update this application</a> - change details such as weight or number of packages</li> -->
       {% endif %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-viewonly">View this application</a></li>
       <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{query.is_group}}">Copy as new application</a></li>
