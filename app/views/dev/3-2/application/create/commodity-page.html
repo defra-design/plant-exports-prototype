@@ -45,23 +45,17 @@
             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-contact">
 
               <div class="govuk-form-group">
-                {% if data.build == "development" %}
+
                 <label class="govuk-label" for="stock_number">Soil sampling application number (optional)</label>
-                {% else %}
-                <label class="govuk-label" for="stock_number">Stock number</label>
-                <div id="quantity-hint" class="govuk-hint">Enter the stock number for stock that was soil sampled<br/> For ware potatoes grown in a seed certification scheme, enter "Seed"</div>                
-                {% endif %}
+                
                 <input class="govuk-input govuk-!-width-one-half" id="stock_number" name="stock_number" type="text" spellcheck="false" value="{{data.stock_number}}">
               </div>
 
               <div class="govuk-form-group">
-                {% if data.build == "development" %}
+
                 <label class="govuk-label" for="lot_reference">Lot reference (optional)</label>
                 <div id="quantity-hint" class="govuk-hint">This is the number that will go on the bag labels</div>
-                {% else %}
-                <label class="govuk-label" for="lot_reference">Lot reference</label>
-                <div id="quantity-hint" class="govuk-hint">This is the number that will go on the bag labels.<br/> For ware potatoes grown in a seed certification scheme, enter the certification number</div>
-                {% endif %}
+                
                 <input class="govuk-input govuk-!-width-one-half" id="lot_reference" name="lot_reference" type="text" spellcheck="false" value="{{data.lot_reference}}">
               </div>
 
@@ -74,12 +68,10 @@
 
             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-contact-2">
               <div class="govuk-form-group">
-                {% if data.build == "development" %}
+
                 <label class="govuk-label" for="certification_number">Stock number</label>
                 <div id="quantity-hint" class="govuk-hint">You may know this as the lot reference</div>
-                {% else %}
-                <label class="govuk-label" for="certification_number">Certification number</label>                
-                {% endif %}
+                
                 <input class="govuk-input govuk-!-width-one-half" id="certification_number" name="certification_number" type="text" value="{{data.certification_number}}">
               </div>
 
@@ -107,18 +99,20 @@
             </div>
 
             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-how-contacted-conditional">
-              {% if data.build == "development" %}
-              <label class="govuk-label" for="stock_number">Search for a variety</label>
-              {% endif %}
+              
+
+              <label class="govuk-label" for="commodity_variety">Search for a variety</label>
+
+
               {% if data.show_manual_input != "yes" %}
-              {% block potatoVariety %}
-              {% include "../modules/_potatoes-variety-select.html" %}
-              {% endblock %}
+                {% block potatoVariety %}
+                {% include "../modules/_potatoes-variety-select.html" %}
+                {% endblock %}
               {% else %}
-              <div class="govuk-form-group">
-                <label class="govuk-label" for="commodity_host_species">Variety</label>
-                <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety" type="text" value="{% if query.has_commodity %}{{query.genus}}{% endif %}">
-              </div>
+                <div class="govuk-form-group">
+                  <label class="govuk-label" for="commodity_host_species">Variety</label>
+                  <input class="govuk-input govuk-input--width-20" id="commodity_variety" name="commodity_variety" type="text" value="{% if query.has_commodity %}{{query.genus}}{% endif %}">
+                </div>
               {% endif %}
             </div>
 
@@ -127,11 +121,9 @@
               <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-3">Other</label>
               
               <div id="more-detail-hint" class="govuk-hint govuk-radios__hint">
-                {% if data.build == "development" %}
+
                 If you can't find the name of your variety, enter the variety name in the 'other' field instead
-                {% else %}
-                If you can't find the variety by searching in the field above, select other and enter the variety              
-                {% endif %}
+
               </div>
 
             </div>
@@ -155,13 +147,9 @@
         <label class="govuk-label" for="chemicals_used">Growing season inspection number</label>
 
         <div id="gsi-number-hint" class="govuk-hint govuk-input--width-20">
-          {% if data.build == "development" %}
+
           Enter ‘eDomero’ if the application for a growing season inspection was done using the eDomero system
-          {% else %}
-          Enter the growing season inspection number.
-          <br>
-          Enter ‘eDomero’ if the application for a growing season inspection was done using the eDomero system          
-          {% endif %}
+          
         </div>
 
         <input class="govuk-input govuk-input--width-20" id="gsi_number" name="gsi_number" type="text" aria-describedby="gsi-number-hint" value="{{data.gsi_number}}">
