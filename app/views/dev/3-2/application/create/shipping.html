@@ -219,9 +219,44 @@
         {% if data.journey != "coc" %}
         {% if data.reissue == "yes" %}
         <div class="govuk-form-group">
-          <label class="{{label_class}}" for="reference_num">Point of entry into the destination country</label>
-          <div id="waste-hint" class="govuk-hint">Enter the port or airport where the consignment will arrive</div>
-          <input class="govuk-input govuk-input--width-20" id="reference_num" name="port_entry" value="{{data.port_entry}}" type="text">
+          <fieldset class="govuk-fieldset" aria-describedby="do_you_know_point_of_entry-hint">
+            <legend class="govuk-fieldset__legend">Do you know the point of entry?</legend>
+            
+            <div id="do_you_know_point_of_entry-hint" class="govuk-hint">
+              The point of entry is where the consignment enters the destination country or EU
+            </div>
+
+            {% set reIssueKnowPOE = data.do_you_know_point_of_entry or "Yes" %}
+
+            <div class="govuk-radios" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="do_you_know_point_of_entry_yes" name="do_you_know_point_of_entry" type="radio" value="Yes" data-aria-controls="do_you_know_point_of_entry_yes-hidden"{% if reIssueKnowPOE == 'Yes' %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="do_you_know_point_of_entry_yes">Yes</label>
+              </div>
+              
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="do_you_know_point_of_entry_yes-hidden">
+                
+
+                {% include "../modules/_point-of-entry.html" %}
+
+
+              </div>
+
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="do_you_know_point_of_entry_no" name="do_you_know_point_of_entry" type="radio" value="No" data-aria-controls="do_you_know_point_of_entry_no-hidden"{% if reIssueKnowPOE == 'No' %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="do_you_know_point_of_entry_no">No</label>
+              </div>
+
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="do_you_know_point_of_entry_no-hidden">
+                
+
+                {% include "../modules/_point-of-entry-country.html" %}
+
+
+              </div>
+
+            </div>
+          </fieldset>
         </div>
         {% else %}
         <div class="govuk-form-group">

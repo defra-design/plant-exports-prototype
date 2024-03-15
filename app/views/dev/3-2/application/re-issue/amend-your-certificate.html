@@ -638,6 +638,8 @@
         </dl>
       {% endif %}
 
+      {% set _poeKnown = data.do_you_know_point_of_entry or "Yes" %}
+
       <!-- Transportation -->
       {% if data.build == "development" %}
         <h2 class="govuk-heading-m govuk-!-margin-top-9">How will the consignment be transported?</h2>
@@ -645,7 +647,7 @@
           
           {% if data.journey != "coc" and data.commodity != "bulbs" %}
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Value of your consignment (pounds)</dt>
+            <dt class="govuk-summary-list__key">Value of your consignment, in pounds</dt>
             <dd class="govuk-summary-list__value">10,000</dd>
             <dd class="govuk-summary-list__actions">&nbsp;</dd>
           </div>
@@ -653,10 +655,10 @@
           
           {% if data.journey != "coc" %}
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Point of entry into the destination country</dt>
+            <dt class="govuk-summary-list__key">{% if _poeKnown == "Yes" %}Point of entry{% else %}Point of entry country{% endif %}</dt>
             <dd class="govuk-summary-list__value">{{data.port_entry or "Port of Hope"}}</dd>
             <dd class="govuk-summary-list__actions">
-              <a class="govuk-link" href="../create/shipping?change=yes&return_url=../re-issue/amend-your-certificate&port_entry={{data.port_entry or 'Port of Hope'}}&transport_method={{data.transport_method or 'Air'}}&reissue=yes">Change<span class="govuk-visually-hidden"> the point of entry into the destination country</span></a>
+              <a class="govuk-link" href="../create/shipping?change=yes&return_url=../re-issue/amend-your-certificate&port_entry={{data.port_entry or 'Port of Hope'}}&transport_method={{data.transport_method or 'Air'}}&reissue=yes">Change<span class="govuk-visually-hidden"> the {% if _poeKnown == "Yes" %}point of entry{% else %}point of entry country{% endif %}</span></a>
             </dd>
           </div>
           {% endif %}
@@ -689,7 +691,7 @@
 
           {% if data.journey != "coc" and data.commodity == "bulbs" %}
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Value of consignment</dt>
+            <dt class="govuk-summary-list__key">Value of your consignment, in pounds</dt>
             <dd class="govuk-summary-list__value">10,000</dd>
             <dd class="govuk-summary-list__actions">&nbsp;</dd>
           </div>
@@ -718,16 +720,16 @@
           
           {% if data.journey != "coc" %}
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Value of your consignment (pounds)</dt>
+            <dt class="govuk-summary-list__key">Value of your consignment, in pounds</dt>
             <dd class="govuk-summary-list__value">10,000</dd>
             <dd class="govuk-summary-list__actions">&nbsp;</dd>
           </div>
 
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Point of entry into the destination country</dt>
+            <dt class="govuk-summary-list__key">{% if _poeKnown == "Yes" %}Point of entry{% else %}Point of entry country{% endif %}</dt>
             <dd class="govuk-summary-list__value">{{data.port_entry or "Port of Hope"}}</dd>
             <dd class="govuk-summary-list__actions">
-              <a class="govuk-link" href="../create/shipping?change=yes&return_url=../re-issue/amend-your-certificate&port_entry={{data.port_entry or 'Port of Hope'}}&transport_method={{data.transport_method or 'Air'}}&reissue=yes">Change<span class="govuk-visually-hidden"> the point of entry into the destination country</span></a>
+              <a class="govuk-link" href="../create/shipping?change=yes&return_url=../re-issue/amend-your-certificate&port_entry={{data.port_entry or 'Port of Hope'}}&transport_method={{data.transport_method or 'Air'}}&reissue=yes">Change<span class="govuk-visually-hidden"> the {% if _poeKnown == "Yes" %}point of entry{% else %}point of entry country{% endif %}</span></a>
             </dd>
           </div>
           {% endif %}
@@ -778,7 +780,7 @@
       {% endif %}
 
       {% if data.journey != "coc" %}
-        <h2 class="govuk-heading-m">Who will receive this consignment?</h2>
+        <h2 class="govuk-heading-m">Consignee details</h2>
         <dl class="govuk-summary-list govuk-!-margin-bottom-9 govuk-summary-list__m">
           
           {% if data.build == "development" %}
@@ -791,30 +793,16 @@
           {% endif %}
 
           <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Name of consignee</dt>          
-            <dd class="govuk-summary-list__value">{{data.consignee_name or data.id | appInformationV8('importer') | title}}</dd>
+            <dt class="govuk-summary-list__key">Who are you sending this consignment to?</dt>          
+            <dd class="govuk-summary-list__value">
+              {{data.consignee_name or query.id | appInformationV8('importer') | title or "Cubix"}}
+            <br>
+            {% if data.select_consignee_address == "address_0" %}88 Jianguo Rd, 北京市, 3208, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_1" %}Lillegardsvagen 1, Falkenberg, South-East, 311 50, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_2" %}Piazza Pietro Nenni, 4, Orta Nova Foggia, Foggia, 71045, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_3" %}Phase 3 St, Vaibhav Nagar, Katpadi, Vellore, Tamil Nadu, 632014, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_4" %}6347 Pacific Blvd, Huntington Park, California, 90255, {{data.countrySelect[0] or "France"}}{% else %}{{data.consigneeAddressLine1 or "88 Jianguo Rd" }}{% if data.consigneeAddressLine2 %}, {{data.consigneeAddressLine2}}{% endif %}, {{data.consigneeAddressLine3 or "北京市"}}{% if data.consigneeAddressLine4 %}, {{data.consigneeAddressLine4}}{% endif %}, {{data.consigneeAddressLine5 or "3208"}}, {{data.countrySelect[0] or "France"}}{% endif %}
+            </dd>
             <dd class="govuk-summary-list__actions">
               <a class="govuk-link" href="../create/destination-consignee?change=yes&return_url=../re-issue/amend-your-certificate&consignee_name={{data.consignee_name or data.id | appInformationV8('importer')}}&consignee_address={{data.consignee_address or 'Danish Place, Danish Lane, Dane, Denmark'}}&reissue=yes">Change <span class="govuk-visually-hidden">who will receive this consignment</span></a>
             </dd>
           </div>
-
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Address of the consignee</dt>
-            <dd class="govuk-summary-list__value">{{data.consignee_address or 'Danish Place, Danish Lane, Dane, Denmark'}}</dd>
-            <dd class="govuk-summary-list__actions">
-              <a class="govuk-link" href="../create/destination-consignee?change=yes&return_url=../re-issue/amend-your-certificate&consignee_name={{data.consignee_name or data.id | appInformationV8('importer')}}&consignee_address={{data.consignee_address or 'Danish Place, Danish Lane, Dane, Denmark'}}&reissue=yes">Change<span class="govuk-visually-hidden"> the address of the consignee</span></a>
-            </dd>
-          </div>
-
-          {% if data.commodity == "grain" %}
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Further information</dt>
-            <dd class="govuk-summary-list__value">{{data.consignee_more_detail or 'More information'}}</dd>
-            <dd class="govuk-summary-list__actions">
-              <a class="govuk-link" href="../create/destination-consignee?change=yes&return_url=../re-issue/amend-your-certificate&consignee_name={{data.consignee_name or data.id | appInformationV8('importer')}}&consignee_address={{data.consignee_address or 'Danish Place, Danish Lane, Dane, Denmark'}}&consignee_more_detail={{data.consignee_more_detail or 'More information'}}&reissue=yes">Change<span class="govuk-visually-hidden"> the address of the consignee</span></a>
-            </dd>
-          </div>
-          {% endif %}
 
           {% if data.commodity != "bulbs" %}
           <div class="govuk-summary-list__row">
@@ -823,38 +811,48 @@
             <dd class="govuk-summary-list__actions">&nbsp;</dd>
           </div>
           {% endif %}
-          {% else %}
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Name of consignee</dt>          
-            <dd class="govuk-summary-list__value">{{data.consignee_name or data.id | appInformationV8('importer') | title}}</dd>
-            <dd class="govuk-summary-list__actions">
-              <a class="govuk-link" href="../create/destination-consignee?change=yes&return_url=../re-issue/amend-your-certificate&consignee_name={{data.consignee_name or data.id | appInformationV8('importer')}}&consignee_address={{data.consignee_address or 'Danish Place, Danish Lane, Dane, Denmark'}}&reissue=yes">Change <span class="govuk-visually-hidden">who will receive this consignment</span></a>
-            </dd>
-          </div>
-
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key">Address of the consignee</dt>
-            <dd class="govuk-summary-list__value">{{data.consignee_address or 'Danish Place, Danish Lane, Dane, Denmark'}}</dd>
-            <dd class="govuk-summary-list__actions">
-              <a class="govuk-link" href="../create/destination-consignee?change=yes&return_url=../re-issue/amend-your-certificate&consignee_name={{data.consignee_name or data.id | appInformationV8('importer')}}&consignee_address={{data.consignee_address or 'Danish Place, Danish Lane, Dane, Denmark'}}&reissue=yes">Change<span class="govuk-visually-hidden"> the address of the consignee</span></a>
-            </dd>
-          </div>
 
           {% if data.commodity == "grain" %}
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Further information</dt>
             <dd class="govuk-summary-list__value">{{data.consignee_more_detail or 'More information'}}</dd>
             <dd class="govuk-summary-list__actions">
-              <a class="govuk-link" href="../create/destination-consignee?change=yes&return_url=../re-issue/amend-your-certificate&consignee_name={{data.consignee_name or data.id | appInformationV8('importer')}}&consignee_address={{data.consignee_address or 'Danish Place, Danish Lane, Dane, Denmark'}}&consignee_more_detail={{data.consignee_more_detail or 'More information'}}&reissue=yes">Change<span class="govuk-visually-hidden"> the address of the consignee</span></a>
+              <a class="govuk-link" href="../create/destination-consignee?change=yes&return_url=../re-issue/amend-your-certificate&consignee_name={{data.consignee_name or data.id | appInformationV8('importer')}}&consignee_address={{data.consignee_address or 'Danish Place, Danish Lane, Dane, Denmark'}}&consignee_more_detail={{data.consignee_more_detail or 'More information'}}&reissue=yes">Change<span class="govuk-visually-hidden"> the further information</span></a>
             </dd>
           </div>
           {% endif %}
+
+          {% else %}
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Who are you sending this consignment to?</dt>          
+            <dd class="govuk-summary-list__value">
+              {{data.consignee_name or query.id | appInformationV8('importer') | title or "Cubix"}}
+              <br>
+              {% if data.select_consignee_address == "address_0" %}88 Jianguo Rd, 北京市, 3208, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_1" %}Lillegardsvagen 1, Falkenberg, South-East, 311 50, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_2" %}Piazza Pietro Nenni, 4, Orta Nova Foggia, Foggia, 71045, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_3" %}Phase 3 St, Vaibhav Nagar, Katpadi, Vellore, Tamil Nadu, 632014, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_4" %}6347 Pacific Blvd, Huntington Park, California, 90255, {{data.countrySelect[0] or "France"}}{% else %}{{data.consigneeAddressLine1 or "88 Jianguo Rd" }}{% if data.consigneeAddressLine2 %}, {{data.consigneeAddressLine2}}{% endif %}, {{data.consigneeAddressLine3 or "北京市"}}{% if data.consigneeAddressLine4 %}, {{data.consigneeAddressLine4}}{% endif %}, {{data.consigneeAddressLine5 or "3208"}}, {{data.countrySelect[0] or "France"}}{% endif %}
+            </dd>
+            <dd class="govuk-summary-list__actions">
+              <a class="govuk-link" href="../create/destination-consignee?change=yes&return_url=../re-issue/amend-your-certificate&consignee_name={{data.consignee_name or data.id | appInformationV8('importer')}}&consignee_address={{data.consignee_address or 'Danish Place, Danish Lane, Dane, Denmark'}}&reissue=yes">Change <span class="govuk-visually-hidden">who will receive this consignment</span></a>
+            </dd>
+          </div>
+
+          
           
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">Import permit number</dt>
             <dd class="govuk-summary-list__value">2244668800</dd>
             <dd class="govuk-summary-list__actions">&nbsp;</dd>
-          </div>        
+          </div>  
+          
+          {% if data.commodity == "grain" %}
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Further information</dt>
+            <dd class="govuk-summary-list__value">{{data.consignee_more_detail or 'More information'}}</dd>
+            <dd class="govuk-summary-list__actions">
+              <a class="govuk-link" href="../create/destination-consignee?change=yes&return_url=../re-issue/amend-your-certificate&consignee_name={{data.consignee_name or data.id | appInformationV8('importer')}}&consignee_address={{data.consignee_address or 'Danish Place, Danish Lane, Dane, Denmark'}}&consignee_more_detail={{data.consignee_more_detail or 'More information'}}&reissue=yes">Change<span class="govuk-visually-hidden"> the further information</span></a>
+            </dd>
+          </div>
+          {% endif %}
+          
           {% endif %}
 
         </dl>
