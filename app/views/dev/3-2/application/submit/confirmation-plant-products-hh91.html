@@ -69,6 +69,12 @@
     <!-- </div> -->
     {% endif %}
 
+
+
+
+
+
+    {% if data.reforwarding != "1" %}
     <h2 class="govuk-heading-m">Label and send your samples</h2>
  
     <div class="govuk-warning-text">
@@ -133,25 +139,43 @@
     </p>
     <p class="govuk-body "><a href="../../print-label-print?id=10" class="govuk-link govuk-link-no-visited-state" target="_blank">See, print or copy this information (opens in new tab)</a></p>
 
+    {% endif %}
+
 
 
 
     <h2 class="govuk-heading-m">What happens next</h2>
 
+
+
+
+
+
+
+
+
+    {% if data.reforwarding == "1" %}
+    <p class="govuk-body">We will:</p>
+    {% else %}
     <p class="govuk-body">We will test your samples. If there are no issues, we will:</p>
+    {% endif %}
 
     <ul class="govuk-list govuk-list--bullet">
 
       {% if data.reforwarding == "1" %}
-        <!-- <li>decide if you need an inspection</li>
-        <li>arrange an inspection within 7 working days, if you need one</li> -->
+        <li>decide if you need an inspection</li>
+        <li>arrange an inspection within 7 working days, if you need one</li>
       {% else %}
         <!-- <li>arrange an inspection of your consignment within 7 working days</li> -->
       {% endif %}
 
       <!-- NON ephyto -->
       {% if _ePhyto == "false" %}
-      <li>issue your paper {% if data.reforwarding == "1" %}re-forwarding{% endif %} certificate, if there are no problems</li>
+        {% if data.reforwarding == "1" %}
+        <li>issue your paper re-forwarding certificate, if there are no problems</li>
+        {% else %}
+        <li>issue your paper certificate</li>
+        {% endif %}
       {% endif %}
 
       <!-- EPHYTO -->
