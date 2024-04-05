@@ -1,0 +1,654 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  You have successfully submitted your application - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+{% endblock %}
+
+{% block content %}
+<style>
+
+  /* Needs extracting and adding to the external Sass or CSS */
+  .govuk-feedback-box {
+    padding: 20px;
+    background-color: lightgray;
+    border-left-color: #666;
+  }
+
+</style>
+
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    {% set _notificationSetting = data["ephytoEmailNotifications"] %}
+    {% set _ePhyto = "false" %}
+    {% set _ePhytoOptedIn = "false" %}
+    {% set _ePhytoOptedInAll = "false" %}
+    {% set _ePhytoOptedInMine = "false" %}
+
+
+    {% if data.certificateFormat == "digital" %}
+      <!-- ephyto -->
+      {% set _ePhyto = "true" %}
+
+      {% if _notificationSetting == "None" %}
+        <!-- ephyto opted out -->
+        {% set _ePhytoOptedIn = "false" %}
+        {% set _ePhytoOptedInAll = "false" %}
+        {% set _ePhytoOptedInMine = "false" %}
+      {% elif _notificationSetting == "All" %}
+        <!-- ephyto opted in to all -->
+        {% set _ePhytoOptedIn = "true" %}
+        {% set _ePhytoOptedInAll = "true" %}
+        {% set _ePhytoOptedInMine = "false" %}
+      {% else %}
+        <!-- ephyto opted in just mine -->
+        {% set _ePhytoOptedIn = "true" %}
+        {% set _ePhytoOptedInAll = "false" %}
+        {% set _ePhytoOptedInMine = "true" %}
+      {% endif %}
+
+    {% else %}
+      <!-- [non ePhyto] -->
+      {% set _ePhyto = "false" %}
+    {% endif %}
+
+
+    <!-- 
+      parameters for link building
+
+        bulbs
+          reforwarding=false
+            1.certificateFormat=nondigital
+              certificateFormat=digital
+              2. ephytoEmailNotifications=None
+              3. ephytoEmailNotifications=All
+              4. ephytoEmailNotifications=Mine
+          reforwarding=1
+            5.certificateFormat=nondigital
+              certificateFormat=digital
+              6. ephytoEmailNotifications=None
+              7. ephytoEmailNotifications=All
+              8. ephytoEmailNotifications=Mine
+
+
+        
+        plants  (pheats_check=yes/no, ssdd=true/false)
+          reforwarding=false
+            pheats_check=no 
+              1.certificateFormat=nondigital
+                certificateFormat=digital
+                2. ephytoEmailNotifications=None
+                3. ephytoEmailNotifications=All
+                4. ephytoEmailNotifications=Mine
+            pheats_check=yes 
+              5.certificateFormat=nondigital
+                certificateFormat=digital
+                6. ephytoEmailNotifications=None
+                7. ephytoEmailNotifications=All
+                8. ephytoEmailNotifications=Mine
+            ssdd=true 
+              9.certificateFormat=nondigital
+                certificateFormat=digital
+                  10. ephytoEmailNotifications=None
+                  11. ephytoEmailNotifications=All
+                  12. ephytoEmailNotifications=Mine
+            ssdd=false
+              13.certificateFormat=nondigital
+                certificateFormat=digital
+                  14. ephytoEmailNotifications=None
+                  15. ephytoEmailNotifications=All
+                  16. ephytoEmailNotifications=Mine
+          reforwarding=1
+            ssdd=true
+              17.certificateFormat=nondigital
+                certificateFormat=digital
+                  18. ephytoEmailNotifications=None
+                  19. ephytoEmailNotifications=All
+                  20. ephytoEmailNotifications=Mine
+            ssdd=false
+              21.certificateFormat=nondigital
+                certificateFormat=digital
+                  22. ephytoEmailNotifications=None
+                  23. ephytoEmailNotifications=All
+                  24. ephytoEmailNotifications=Mine
+        
+        
+        potatoes
+          reforwarding=false
+            1.certificateFormat=nondigital
+              certificateFormat=digital
+              2. ephytoEmailNotifications=None
+              3. ephytoEmailNotifications=All
+              4. ephytoEmailNotifications=Mine
+          reforwarding=1
+            5.certificateFormat=nondigital
+              certificateFormat=digital
+              6. ephytoEmailNotifications=None
+              7. ephytoEmailNotifications=All
+              8. ephytoEmailNotifications=Mine
+        
+        
+        plant products
+          reforwarding=false
+            1.certificateFormat=nondigital
+              certificateFormat=digital
+              2. ephytoEmailNotifications=None
+              3. ephytoEmailNotifications=All
+              4. ephytoEmailNotifications=Mine
+          reforwarding=1
+            5.certificateFormat=nondigital
+              certificateFormat=digital
+              6. ephytoEmailNotifications=None
+              7. ephytoEmailNotifications=All
+              8. ephytoEmailNotifications=Mine
+        
+        
+        seeds
+          reforwarding=false
+            1.certificateFormat=nondigital
+              certificateFormat=digital
+              2. ephytoEmailNotifications=None
+              3. ephytoEmailNotifications=All
+              4. ephytoEmailNotifications=Mine
+          reforwarding=1
+            5.certificateFormat=nondigital
+              certificateFormat=digital
+              6. ephytoEmailNotifications=None
+              7. ephytoEmailNotifications=All
+              8. ephytoEmailNotifications=Mine
+        
+        
+        grain
+          reforwarding=false
+            1.certificateFormat=nondigital
+              certificateFormat=digital
+              2. ephytoEmailNotifications=None
+              3. ephytoEmailNotifications=All
+              4. ephytoEmailNotifications=Mine
+          reforwarding=1
+            5.certificateFormat=nondigital
+              certificateFormat=digital
+              6. ephytoEmailNotifications=None
+              7. ephytoEmailNotifications=All
+              8. ephytoEmailNotifications=Mine
+        
+        
+        used farm machinery
+          reforwarding=false
+            1.certificateFormat=nondigital
+              certificateFormat=digital
+              2. ephytoEmailNotifications=None
+              3. ephytoEmailNotifications=All
+              4. ephytoEmailNotifications=Mine
+          reforwarding=1
+            5.certificateFormat=nondigital
+              certificateFormat=digital
+              6. ephytoEmailNotifications=None
+              7. ephytoEmailNotifications=All
+              8. ephytoEmailNotifications=Mine
+        
+        
+        everything else
+          reforwarding=false
+            1.certificateFormat=nondigital
+              certificateFormat=digital
+              2. ephytoEmailNotifications=None
+              3. ephytoEmailNotifications=All
+              4. ephytoEmailNotifications=Mine
+          reforwarding=1
+            5.certificateFormat=nondigital
+              certificateFormat=digital
+              6. ephytoEmailNotifications=None
+              7. ephytoEmailNotifications=All
+              8. ephytoEmailNotifications=Mine
+
+
+
+
+
+
+
+        - commodity=bulbs/plants/potatoes/plant products/seeds/grain/used farm machinery/everything else
+
+        - certificateFormat=digital/nondigital
+
+        - reforwarding=1/false
+
+        ePhyto only
+          - ephytoEmailNotifications=None/All/Mine
+
+        plants only
+          - pheats_check=yes/no
+          - ssdd=true/false 
+    -->
+
+    
+    <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-6">
+      <h1 class="govuk-panel__title">
+
+        {% if data.commodity == "plants" and data.pheats_check == "yes" %}
+          <!-- PLANTS and PHEATS -->
+          PHEATS application complete
+        {% elif data.reforwarding == "1" %}
+          <!-- RE-FORWARDING -->
+          Re-forwarding application complete
+        {% else %}
+          <!-- PHYTO -->
+          Application complete
+        {% endif %}
+
+      </h1>
+
+      <div class="govuk-panel__body">
+        <abbr title="Animal and Plant Health Agency">APHA</abbr> reference
+        <br>
+        <strong class="bold">1721 14800 5555</strong>
+      </div>
+
+    </div>
+
+
+    {% if _ePhyto == "true" %}
+      <h2 class="govuk-heading-m">We will not send you a phytosanitary certificate</h2>
+      <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="../../guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#digital-phytosanitary-certificates" target="_blank" rel="noreferrer noopener" >Read more about ePhyto certificates (opens in new tab)</a></p>
+    {% endif %}
+
+
+
+    <!--  
+      PPP and NOT RF 
+    -->
+    {% if data.commodity == "plant products" and data.reforwarding != "1" %}
+
+      <h2 class="govuk-heading-m">Label and send your samples</h2>
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-warning-text__assistive">Warning</span>
+          Your certificate may be delayed if you do not label your samples with <abbr title="Animal and Plant Health Agency">APHA</abbr> sample reference numbers.
+        </strong>
+      </div>
+      <ul class="govuk-list govuk-list--number">
+        <li>Use the same packaging you would normally use to send samples to customers.</li>
+        <li>You must clearly label each sample with its <abbr title="Animal and Plant Health Agency">APHA</abbr> sample reference.</li>
+        <li>Send your labelled samples to the address on this screen.</li>
+      </ul>
+      <h3 class="govuk-heading-s">Sampling reference information</h3>
+      <table class="govuk-table">
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Description</th>
+            <th scope="col" class="govuk-table__header">Quantity</th>
+            <th scope="col" class="govuk-table__header">Distinguishing marks</th>
+            <th scope="col" class="govuk-table__header"><abbr title="Animal and Plant Health Agency">APHA</abbr> sample <br> reference</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          {% set items = [
+            {ref:1, description:"Quercus acuta", country:"Denmark", quantity:"55kg", marks:"SCU 23422"},
+            {ref:2, description:"Quercus acuta", country:"Denmark", quantity:"55kg", marks:"SCU 23423"},
+            {ref:3, description:"Pinus albicaulis", country:"Denmark", quantity:"55kg", marks:"SCU 23424"},
+            {ref:4, description:"Pinus albicaulis", country:"Denmark", quantity:"55kg", marks:"SCU 23425"},
+            {ref:5, description:"Pinus albicaulis", country:"Germany", quantity:"105kg", marks:"SCU 23426"}
+          ] %}
+          {% for item in items %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">{{item.description}}</td>
+            <td class="govuk-table__cell">{{item.quantity}}</td>
+            <td class="govuk-table__cell">{{item.marks}}</td>
+            <td scope="row" class="govuk-table__cell ">{{10009346 + item.ref}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <p class="govuk-body">
+        Send your samples to:
+        <br>
+        <br>
+        Plant Clinic
+        <br>
+        Block 4
+        <br>
+        National Agri-Food Campus
+        <br>
+        Sand Hutton
+        <br>
+        York
+        <br>
+        YO41 1LZ
+        <br>
+      </p>
+      <p class="govuk-body "><a href="../../print-label-print?id=10" class="govuk-link govuk-link-no-visited-state" target="_blank" rel="noreferrer noopener">See, print or copy this information (opens in new tab)</a></p>
+
+    {% endif %}
+
+
+    <h2 class="govuk-heading-m">What happens next</h2>
+
+
+
+    <!-- 
+      
+      WHAT HAPPENS NEXT CONTENT.
+    
+    -->
+
+    <!-- non REFORWARIDNG and non EPHYTO -->
+    {% if data.reforwarding != "1" and _ePhyto != "true" %}
+
+
+        <!--  PPP. non REFORWARIDNG and non EPHYTO -->
+        {% if 
+          data.commodity == "plant products" 
+        %}
+          <p class="govuk-body">We will test your samples. If there are no issues, we will:</p>
+          <ul class="govuk-list govuk-list--bullet">
+            <li>issue your paper certificate</li>
+            <li>send you an invoice</li>
+          </ul>
+        {% endif %}
+
+
+        <!-- non PPP and non SSDD. non REFORWARIDNG and non EPHYTO -->
+        {% if 
+          (data.commodity != "plant products" and data.commodity != "plants")
+          or (data.commodity == "plants" and data.ssdd != "true") 
+        %}
+          <p class="govuk-body">We will:</p>
+          <ul class="govuk-list govuk-list--bullet">
+            <!-- non GRAIN, non SEEDS, non PHEATS  -->
+            {% if 
+              (data.commodity != "seeds" and data.commodity != "grain" and data.commodity != "plants")
+              or (data.commodity == "plants" and data.pheats_check != "yes") 
+            %}
+              <li>arrange an inspection of your consignment within 7 working days</li>
+            {% endif %}
+            <li>issue your paper certificate, if there are no problems</li>
+            <li>send you an invoice</li>
+          </ul>
+          <!-- non GRAIN, non SEEDS, non rf -->
+          {% if data.commodity != "seeds" and data.commodity != "grain" %}
+            <p class="govuk-body">You can reduce the final weight of your consignment later.</p>
+          {% endif %}
+        {% endif %}
+
+
+        <!-- SSDD. non REFORWARIDNG and non EPHYTO -->
+        {% if 
+          (data.commodity == "plants" and data.ssdd == "true") 
+        %}
+          <p class="govuk-body">We will:</p>
+          <ul class="govuk-list govuk-list--bullet">
+            <li>check and process your application for stock draw down</li>
+            <li>arrange another inspection, if one is needed</li>
+            <li>issue your paper certificate, if there are no problems</li>
+            <li>send you an invoice</li>
+          </ul>
+        {% endif %}
+
+
+
+    <!-- non REFORWARDING and EPHYTO -->
+    {% elif data.reforwarding != "1" and _ePhyto == "true" %}
+
+
+        <!--  PPP. non REFORWARDING and EPHYTO -->
+        {% if 
+          data.commodity == "plant products" 
+        %}
+          <p class="govuk-body">We will test your samples. If there are no issues, we will:</p>
+          <ul class="govuk-list govuk-list--bullet">
+            <li>send your ePhyto certificate to the importing country's NPPO (National Plant Protection Organisation)</li>
+            {% if _ePhytoOptedIn == "true" %}
+              <li>email you when they have received it</li>
+            {% endif %}
+            <li>update the status on Your applications page</li>
+            <li>make a copy of your ePhyto available on the Manage application page</li>
+            <li>send you an invoice</li>
+          </ul>
+          <p class="govuk-body">You do not need to print your copy or send it with your consignment. It is for your records and not for official use.</p>
+        {% endif %}
+
+        <!-- non PPP and non SSDD. non REFORWARDING and EPHYTO -->
+        {% if 
+          (data.commodity != "plant products" and data.commodity != "plants")
+          or (data.commodity == "plants" and data.ssdd != "true") 
+        %}
+          <p class="govuk-body">We will:</p>
+          <ul class="govuk-list govuk-list--bullet">
+            <!-- non GRAIN, non SEEDS, non PHEATS  -->
+            {% if 
+              (data.commodity != "seeds" and data.commodity != "grain" and data.commodity != "plants") 
+              or (data.commodity == "plants" and data.pheats_check != "yes") 
+            %}
+              <li>arrange an inspection of your consignment within 7 working days</li>
+            {% endif %}
+            <li>send your ePhyto certificate to the importing country's NPPO (National Plant Protection Organisation)</li>
+            <!-- opted in  -->
+            {% if _ePhytoOptedIn == "true" %}
+              <li>email you when they have received it</li>
+            {% endif %}
+            <li>update the status on Your applications page</li>
+            <li>make a copy of your ePhyto available on the Manage application page</li>
+            <li>send you an invoice</li>
+          </ul>
+          <!-- non GRAIN, non SEEDS, non RF  -->
+          {% if data.commodity != "seeds" and data.commodity != "grain" %}
+            <p class="govuk-body">You can reduce the final weight of your consignment later.</p>
+          {% endif %}
+          <p class="govuk-body">You do not need to print your copy or send it with your consignment. It is for your records and not for official use.</p>
+        {% endif %}
+
+
+        <!-- SSDD. non REFORWARDING and EPHYTO -->
+        {% if 
+          (data.commodity == "plants" and data.ssdd == "true") 
+        %}
+          <p class="govuk-body">We will:</p>
+          <ul class="govuk-list govuk-list--bullet">
+            <li>check and process your application for stock draw down</li>
+            <li>arrange another inspection, if one is needed</li>
+            <li>send your ePhyto certificate to the importing country's NPPO (National Plant Protection Organisation), if there are no problems</li>
+            <!-- opted in  -->
+            {% if _ePhytoOptedIn == "true" %}
+              <li>email you when they have received it</li>
+            {% endif %}
+            <li>update the status on Your applications page</li>
+            <li>make a copy of your ePhyto available on the Manage application page</li>
+            <li>send you an invoice</li>
+          </ul>
+          <p class="govuk-body">You do not need to print your copy or send it with your consignment. It is for your records and not for official use.</p>
+        {% endif %}
+
+
+
+    <!-- REFORWARIDNG and non EPHYTO -->
+    {% elif data.reforwarding == "1" and _ePhyto != "true" %}
+
+          <!-- NOT SSDD. REFORWARIDNG and non EPHYTO -->
+          {% if 
+            data.commodity != "plants" 
+            or (data.commodity == "plants" and data.ssdd != "true") 
+          %}
+            <p class="govuk-body">We will:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <!-- non GRAIN, non SEEDS  -->
+              {% if 
+                data.commodity != "seeds" 
+                and data.commodity != "grain" 
+              %}
+                <li>decide if you need an inspection</li>
+                <li>arrange an inspection within 7 working days, if you need one</li>
+              {% endif %}
+              <li>issue your paper re-forwarding certificate, if there are no problems</li>
+              <li>send you an invoice</li>
+            </ul>
+          {% endif %}
+
+          <!-- SSDD. REFORWARIDNG and non EPHYTO -->
+          {% if 
+            (data.commodity == "plants" and data.ssdd == "true") 
+          %}
+            <p class="govuk-body">We will:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>check and process your application for stock draw down</li>
+              <li>arrange another inspection, if one is needed</li>
+              <li>issue your paper re-forwarding certificate, if there are no problems</li>
+              <li>send you an invoice</li>
+            </ul>
+          {% endif %}
+
+
+    <!-- REFORWARIDNG and EPHYTO -->
+    {% elif data.reforwarding == "1" and _ePhyto == "true" %}
+          
+          <!-- NOT SSDD. REFORWARIDNG and EPHYTO -->
+          {% if 
+            data.commodity != "plants" 
+            or (data.commodity == "plants" and data.ssdd != "true") 
+          %}
+            <p class="govuk-body">We will:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <!-- non GRAIN, non SEEDS -->
+              {% if 
+                data.commodity != "seeds" 
+                and data.commodity != "grain" 
+              %}
+                <li>decide if you need an inspection</li>
+                <li>arrange an inspection within 7 working days, if you need one</li>
+              {% endif %}
+              <li>send your re-forwarding ePhyto certificate to the importing country's NPPO (National Plant Protection Organisation), if there are no problems</li>
+              <!-- opted in  -->
+              {% if _ePhytoOptedIn == "true" %}
+                <li>email you when they have received it</li>
+              {% endif %}
+              <li>update the status on Your applications page</li>
+              <li>make a copy of your ePhyto available on the Manage application page</li>
+              <li>send you an invoice</li>
+            </ul>
+            <p class="govuk-body">You do not need to print your copy or send it with your consignment. It is for your records and not for official use.</p>
+          {% endif %}
+
+
+          <!-- SSDD. REFORWARIDNG and EPHYTO -->
+          {% if 
+            (data.commodity == "plants" and data.ssdd == "true") 
+          %}
+            <p class="govuk-body">We will:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>check and process your application for stock draw down</li>
+              <li>arrange another inspection, if one is needed</li>
+              <li>send your re-forwarding ePhyto certificate to the importing country's NPPO (National Plant Protection Organisation), if there are no problems</li>
+              <!-- opted in  -->
+              {% if _ePhytoOptedIn == "true" %}
+                <li>email you when they have received it</li>
+              {% endif %}
+              <li>update the status on Your applications page</li>
+              <li>make a copy of your ePhyto available on the Manage application page</li>
+              <li>send you an invoice</li>
+            </ul>
+            <p class="govuk-body">You do not need to print your copy or send it with your consignment. It is for your records and not for official use.</p>
+          {% endif %}
+
+
+    {% endif %}
+
+    <!---
+
+      END. WHAT HAPPENS NEXT CONTENT.
+
+    -->
+
+
+
+
+    
+    <!-- 
+      ePHYTO MANAGE APPLICATIONS 
+    -->
+    {% if _ePhyto == "true" %}
+      <h2 class="govuk-heading-m">Manage applications</h2>
+
+
+      {% if _ePhytoOptedIn == "true" %}
+
+        <p class="govuk-body">We will send progress emails to:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>your.email@email.com</li>
+          <li>other users on your organisation’s account if they have chosen to get email updates</li>
+        </ul>
+        {% if _ePhytoOptedInAll == "true" %}
+          <p class="govuk-body"><a href="../../account/notifications" class="govuk-link govuk-link--no-visited-state">Change your email settings</a></p>
+        {% elif _ePhytoOptedInMine == "true" %}
+          <p class="govuk-body">If you want to get emails about all your organisation's ePhytos you can <a href="../../account/notifications" class="govuk-link govuk-link--no-visited-state">change your email settings</a>.</p>
+        {% endif %}
+
+      {% else %}
+        <p class="govuk-body">If you want to get progress emails about ePhyto applications you can <a href="../../account/notifications" class="govuk-link govuk-link--no-visited-state">change your email settings</a>.</p>
+      {% endif %}
+
+    {% endif %}
+
+
+
+    {% if 
+      data.commodity == "plants" 
+    %}
+    <div class="govuk-inset-text">
+      <p class="govuk-body">If you’re {% if data.countrySelect[0] == "United Kingdom (Northern Ireland)" %}sending{% else %}exporting{% endif %} plants, you will also need a certificate of conformity.</p>
+      <ul class="govuk-list noprint">
+        <li><a class="govuk-link govuk-link--no-visited-state" href="copy-as-coc?id={{query.id or 0}}&is_group={{query.is_group}}">Apply for a certificate of conformity</a></li>
+      </ul>
+    </div>
+    {% endif %}
+      
+
+
+    <form action="{% if data.route == 'new' %}../../dashboard-one{% else %}../../dashboard-submitted{% endif %}" method="post">
+      <button class="govuk-button govuk-!-margin-top-2 govuk-!-margin-bottom-7" data-module="govuk-button">View your applications</button>
+
+      <!-- Session data hook to update the dashboard so that it knows a new application has been submitted -->
+      <div class="govuk-form-group" hidden>
+        <label class="govuk-label" for="application_submission_data">Application submission status</label>
+        <input class="govuk-input" id="application_submission_data" name="application_submission_data" type="text" value="submitted">
+      </div>
+
+    </form>
+
+
+
+    <p class="govuk-body">Find out <a href="../../guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_blank" rel="noreferrer noopener">what fees you will pay (opens in new tab)</a> for this application.</p>
+
+
+
+
+    <h2 class="govuk-heading-m">If you need help</h2>
+    <p class="govuk-body">Contact us quoting your <abbr title="Animal and Plant Health Agency">APHA</abbr> reference <strong>1721 14800 4809</strong>{% if data.build == "development" %}:{% else %} on:{% endif %}</p>
+    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-8">
+      <li>0300 1000 313, Monday to Sunday 7am to 7pm</li>
+      <li><a href="mailto:planthealth.info@apha.gov.uk" class="govuk-link">planthealth.info@apha.gov.uk</a></li>
+    </ul>
+
+
+
+
+    <div class="govuk-feedback-box govuk-!-margin-top-6">
+      <h2 class="govuk-heading-m">Give feedback on this service</h2>
+      <p class="govuk-body">Take a 3 minute survey about your application so that we can improve the service.</p>
+      <p class="govuk-body"><a href="https://defragroup.eu.qualtrics.com/jfe/form/SV_1RDraVxZ03Ja2qy" class="govuk-link" target="_blank" class="govuk-link" rel="noreferrer noopener">Give feedback (opens in new tab)</a></p>
+    </div>
+
+
+
+
+  </div>
+
+</div>
+
+{% endblock %}
