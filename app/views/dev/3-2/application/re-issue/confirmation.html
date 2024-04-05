@@ -32,24 +32,31 @@
     {% set _ePhytoOptedInAll = "false" %}
     {% set _ePhytoOptedInMine = "false" %}
 
+
     {% if data.certificateFormat == "digital" %}
       <!-- ephyto -->
       {% set _ePhyto = "true" %}
+
       {% if _notificationSetting == "None" %}
         <!-- ephyto opted out -->
         {% set _ePhytoOptedIn = "false" %}
+        {% set _ePhytoOptedInAll = "false" %}
+        {% set _ePhytoOptedInMine = "false" %}
       {% elif _notificationSetting == "All" %}
         <!-- ephyto opted in to all -->
         {% set _ePhytoOptedIn = "true" %}
         {% set _ePhytoOptedInAll = "true" %}
+        {% set _ePhytoOptedInMine = "false" %}
       {% else %}
         <!-- ephyto opted in just mine -->
         {% set _ePhytoOptedIn = "true" %}
         {% set _ePhytoOptedInAll = "false" %}
         {% set _ePhytoOptedInMine = "true" %}
       {% endif %}
+
     {% else %}
       <!-- [non ePhyto] -->
+      {% set _ePhyto = "false" %}
     {% endif %}
     
     <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-6">
@@ -69,22 +76,26 @@
     {% endif %}
 
     <h2 class="govuk-heading-m">What happens next</h2>
-    <p class="govuk-body">We prioritise certificate re-issues over other types of application.</p>
+    
 
     <!--ephyto-->
     {% if _ePhyto == "true" %}
-    <p class="govuk-body">We will:</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>check and process your re-issue application</li>
-      <li>send your re-issued ePhyto certificate to the importing country's NPPO (National Plant Protection Organisation), if there are no problems</li>
-      <li>email you when they have received it</li>
-      <li>update the status on Your applications page</li>
-      <li>make a copy of your ePhyto available on the Manage application page</li>
-      <li>send you an invoice</li>
-    </ul>
-    <p class="govuk-body">You do not need to print your copy or send it with your consignment. It is for your records and not for official use. </p>
+    <p class="govuk-body">We prioritise certificate re-issues over other types of application.</p>
+      <p class="govuk-body">We will:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>check and process your re-issue application</li>
+        <li>send your re-issued ePhyto certificate to the importing country's NPPO (National Plant Protection Organisation), if there are no problems</li>
+        {% if _ePhytoOptedIn == "true" %}
+          <li>email you when they have received it</li>
+        {% endif %}
+        <li>update the status on Your applications page</li>
+        <li>make a copy of your ePhyto available on the Manage application page</li>
+        <li>send you an invoice</li>
+      </ul>
+      <p class="govuk-body">You do not need to print your copy or send it with your consignment. It is for your records and not for official use.</p>
     {% else %}
     <!-- non ephyto -->
+    <p class="govuk-body">We prioritise certificate re-issues over other types of application.</p>
     <p class="govuk-body">We will:</p>
     <ul class="govuk-list govuk-list--bullet">
       <li>check and process your re-issue application</li>
@@ -94,7 +105,7 @@
     <p class="govuk-body">
       CIT Plants Headquarters
       <br>
-      <abbr title="Animal and Plant Health Agency">APHA</abbr>
+      APHA
       <br>
       Foss House
       <br>
@@ -106,14 +117,21 @@
       <br>
       YO1 7PX
     </p>
-    <p class="govuk-body govuk-!-margin-bottom-2">We'll only contact you if there is a problem with your application.</p>
+    <!-- <p class="govuk-body govuk-!-margin-bottom-2">We'll only contact you if there is a problem with your application.</p> -->
     {% endif %}
 
-    {% if _ePhyto == "true" %}
 
+
+
+    <!-- 
+      ePHYTO MANAGE APPLICATIONS 
+    -->
+    {% if _ePhyto == "true" %}
       <h2 class="govuk-heading-m">Manage applications</h2>
 
+
       {% if _ePhytoOptedIn == "true" %}
+
         <p class="govuk-body">We will send progress emails to:</p>
         <ul class="govuk-list govuk-list--bullet">
           <li>your.email@email.com</li>
@@ -121,13 +139,26 @@
         </ul>
         {% if _ePhytoOptedInAll == "true" %}
           <p class="govuk-body"><a href="../../account/notifications" class="govuk-link govuk-link--no-visited-state">Change your email settings</a></p>
-        {% else %}
+        {% elif _ePhytoOptedInMine == "true" %}
           <p class="govuk-body">If you want to get emails about all your organisation's ePhytos you can <a href="../../account/notifications" class="govuk-link govuk-link--no-visited-state">change your email settings</a>.</p>
         {% endif %}
+
       {% else %}
         <p class="govuk-body">If you want to get progress emails about ePhyto applications you can <a href="../../account/notifications" class="govuk-link govuk-link--no-visited-state">change your email settings</a>.</p>
       {% endif %}
 
+    {% endif %}
+
+
+    {% if 
+      data.commodity == "plants" 
+    %}
+    <div class="govuk-inset-text">
+      <p class="govuk-body">If you’re {% if data.countrySelect[0] == "United Kingdom (Northern Ireland)" %}sending{% else %}exporting{% endif %} plants, you will also need a certificate of conformity.</p>
+      <ul class="govuk-list noprint">
+        <li><a class="govuk-link govuk-link--no-visited-state" href="copy-as-coc?id={{query.id or 0}}&is_group={{query.is_group}}">Apply for a certificate of conformity</a></li>
+      </ul>
+    </div>
     {% endif %}
 
 
@@ -144,17 +175,22 @@
     </form>
 
     <p class="govuk-body">You will pay a <a href="https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_blank">lower fee (opens in new tab)</a> to get a phytosanitary certificate re-issued. If you need a re-issue because <abbr title="Animal and Plant Health Agency">APHA</abbr> made an error, you will not be charged.</p>
-    <h2 class="govuk-heading-m govuk-!-padding-top-4">If you need help</h2>
-    <p class="govuk-body">Contact us quoting your <abbr title="Animal and Plant Health Agency">APHA</abbr> reference <strong>7800 56212 5823</strong>{% if data.build == "development" %}:{% else %} on:{% endif %}</p>
+
+
+    <h2 class="govuk-heading-m">If you need help</h2>
+    <p class="govuk-body">Contact us quoting your <abbr title="Animal and Plant Health Agency">APHA</abbr> reference <strong>1721 14800 4809</strong> on:</p>
     <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-8">
-      <li><span id="phoneNumber">0300 1000 313</span>, Monday to Sunday 7am to 7pm</li>
-      <li><a href="mailto:planthealth.info@apha.gov.uk" class="govuk-link" id="emailLink">planthealth.info@apha.gov.uk</a></li>
+      <li>0300 1000 313, Monday to Sunday 7am to 7pm</li>
+      <li><a href="mailto:planthealth.info@apha.gov.uk" class="govuk-link">planthealth.info@apha.gov.uk</a></li>
     </ul>
+
+
+
 
     <div class="govuk-feedback-box govuk-!-margin-top-6">
       <h2 class="govuk-heading-m">Give feedback on this service</h2>
-      <p class="govuk-body">Take a 3 minute survey about your application so that we can improve the service.{% if data.build == "development" %} The survey will open in a new tab.{% endif %}</p>
-      <p class="govuk-body"><a href="https://defragroup.eu.qualtrics.com/jfe/form/SV_1RDraVxZ03Ja2qy" class="govuk-link" target="_blank" class="govuk-link">Give feedback{% if data.build == "development" %}{% else %} (opens in new tab){% endif %}</a></p>
+      <p class="govuk-body">Take a 3 minute survey about your application so that we can improve the service.</p>
+      <p class="govuk-body"><a href="https://defragroup.eu.qualtrics.com/jfe/form/SV_1RDraVxZ03Ja2qy" class="govuk-link" target="_blank" class="govuk-link" rel="noreferrer noopener">Give feedback (opens in new tab)</a></p>
     </div>
 
   </div>
