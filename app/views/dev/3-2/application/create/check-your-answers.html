@@ -169,7 +169,7 @@
           <dt class="govuk-summary-list__key">Certificate</dt>
           <dd class="govuk-summary-list__value">
             {% if data.pheats_check != "yes" %}
-            {% if data.reforwarding %}
+            {% if data.reforwarding == "1" %}
             Re-forwarding phytosanitary certificate for 
             {% if data.build == "development" %}
             {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% else %}{{data.commodity or data.id | appInformationV8('commodity_info') or "plants"}}{% endif %}
@@ -532,7 +532,7 @@
 
 
       <!-- Re-forwarding import details. START -->
-      {% if data.reforwarding %}
+      {% if data.reforwarding == "1" %}
       <h2 class="govuk-heading-m govuk-!-margin-top-9 govuk-!-margin-bottom-6">Import phytosanitary certificate details</h2>
 
       {% if query.ipcError4 == 'true' %}
@@ -747,7 +747,7 @@
           {% set inpection_date_month_name = "December" %}
         {% endif %}
         
-        {% if not data.reforwarding %}
+        {% if not data.reforwarding == "1" %}
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Date when your consignment will be ready for inspection</dt>
           <dd class="govuk-summary-list__value">{{data.inpection_date_day or "12"}} {{inpection_date_month_name or "August"}} {{data.inpection_date_year or "2023"}}</dd>
@@ -1036,7 +1036,7 @@
 
       <h2 class="govuk-heading-m">Supporting documents (optional)</h2>
 
-      {% if data.reforwarding %}
+      {% if data.reforwarding == "1" %}
 
         
         {% set _importCertCount = data['importCertCount'] or 1 | int %}
