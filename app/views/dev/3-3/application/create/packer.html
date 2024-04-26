@@ -1,0 +1,128 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.build == "development" %}What's the packing information?{% else %}What are the packing details as they appear on the packaging? - Certificate of conformity{% endif %} - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <form action="{{query.return_url or '../create/task-list'}}" method="post">
+      
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="applicant-conditional-4">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
+            <h1 class="govuk-fieldset__heading">What are the packing details as they appear on the packaging?</h1>
+          </legend>
+
+          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+            
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="applicant-conditional-4" name="packer" type="radio" value="packer_code" data-aria-controls="conditional-applicant-conditional-4">
+              <label class="govuk-label govuk-radios__label" for="applicant-conditional-4">
+                Use a packer code or Defra code
+              </label>
+            </div>
+
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-applicant-conditional-4">
+              
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="packer_code">Packer code</label>
+                <span id="packer_code-hint" class="govuk-hint">You may know this as the Defra code. This is the unique, officially accepted code for the premises where the goods are being packed. For example, E12345 or P123456</span>
+                <input class="govuk-input govuk-input--width-10" id="packer_code" name="packer_code" type="text">
+              </div>
+
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="applicant-conditional" name="packer" type="radio" value="Acme Ltd, Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH">
+              <label class="govuk-label govuk-radios__label" for="applicant-conditional">Acme Ltd, Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH</label>
+            </div>
+
+            {% if data.applicant == "different" %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="applicant-conditional-2" name="packer" type="radio" value="ZYX LIMITED, 95 Church Lane, CAMBRIDGE, CB84 2JU">
+              <label class="govuk-label govuk-radios__label" for="applicant-conditional-2">ZYX LIMITED, 95 Church Lane, CAMBRIDGE, CB84 2JU</label>
+            </div>
+            {% endif %}
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="applicant-conditional-3" name="packer" type="radio" value="different" data-aria-controls="conditional-applicant-conditional-3">
+              <label class="govuk-label govuk-radios__label" for="applicant-conditional-3">I want to enter different details</label>
+            </div>
+
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-applicant-conditional-3">
+              
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="packer_name">Name on the consignment</label>
+                <span id="waste-hint" class="govuk-hint">For example, the name of the packing operator or the brand owner</span>
+                <input class="govuk-input govuk-!-width-two-thirds" id="packer_name" name="packer_name" type="text" autocomplete="organization">
+              </div>
+
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="address-line-1">Sub-building name</label>
+                <span id="waste-hint" class="govuk-hint">For example, the unit, room or apartment number</span>
+                <input class="govuk-input govuk-!-width-two-thirds" id="address-line-1" name="address-line-1" type="text">
+              </div>
+
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="address-line-1">Building name or number</label>
+                <input class="govuk-input govuk-!-width-two-thirds" id="address-line-1" name="address-line-1" type="text" autocomplete="address-line1">
+              </div>
+
+              <!-- <div class="govuk-form-group">
+                <label class="govuk-label" for="address-line-1">Building name</label>
+                <input class="govuk-input govuk-!-width-two-thirds" id="address-line-1" name="address-line-1" type="text">
+              </div> -->
+
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="address-line-2">Street name</label>
+                <input class="govuk-input govuk-!-width-two-thirds" id="address-line-2" name="address-line-2" type="text" autocomplete="address-line2">
+              </div>
+
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="address-town">Town or city</label>
+                <input class="govuk-input govuk-!-width-two-thirds" id="address-town" name="address-town" type="text" autocomplete="address-line3">
+              </div>
+
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="address-postcode">Zip or postal code</label>
+                <input class="govuk-input govuk-input--width-10" id="address-postcode" name="address-postcode" type="text" autocomplete="postal-code">
+              </div>
+
+              {% set country_module_label = "Country" %}
+              {% block countrySelect %}
+              {% include "../modules/_country-select.html" %}
+              {% endblock %}
+            </div>
+
+          </div>
+          
+        </fieldset>
+      </div>
+
+      <div class="govuk-button-group govuk-!-margin-top-4 govuk-!-margin-bottom-7">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      </div>
+
+      {% block continueLater %}
+      {% include "../modules/_save-continue-later.html" %}
+      {% endblock %}
+    </form>
+
+    {% if query.extras == "yes" %}
+    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible govuk-!-margin-top-9">
+    <p class="govuk-body"><a href="packer-error" class="govuk-link govuk-link-no-visited-state">View this screen with a validation error called on packer code</a></p>
+    {% endif %}    
+  </div>
+
+</div>
+{% endblock %}

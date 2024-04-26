@@ -1,0 +1,195 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.reissue == "yes" %}Make your changes - Re-issue a phytosanitary certificate - {{serviceName}} - GOV.UK{% else %}Supporting documents - Phytosanitary certificate - {{serviceName}} - GOV.UK{% endif %}
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <form action="{{query.return_url or 'task-list'}}" method="post" novalidate>
+
+      <!-- Set counts -->
+      {% set _importPermitCount = data['importPermitCount'] or 1 | int %}
+      {% set _importPermitDisplayedCount = data['importPermitDisplayedCount'] or 1 | int %}
+      {% set _importPermitCountDeleted = _importPermitDisplayedCount | int - 1 %}
+      {% set _supportingDocumentsDisplayedCount = data['supportingDocumentsDisplayedCount'] or 0 | int %}
+      {% set _totalDocumentsDisplayedCount = _importPermitDisplayedCount | float + _supportingDocumentsDisplayedCount | float %}
+
+      <!-- Set id to use -->
+      {% set _id = _importPermitCount %} <!-- 1 -->
+
+      {% if query.supportingDocumentAdded == "true" %}
+      <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+    
+        <div class="govuk-notification-banner__header">
+          <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">Success</h2>
+        </div>
+
+        <div class="govuk-notification-banner__content">
+          <h3 class="govuk-notification-banner__heading">You added {{data.supportingDocument or "Filename.jpg"}} to this application</h3>
+        </div>
+
+      </div>
+      {% endif %}
+
+      {% if query.deleted %}
+      <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="gzovuk-notification-banner-title" data-module="govuk-notification-banner">
+          
+        <div class="govuk-notification-banner__header">
+          <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">Success</h2>
+        </div>
+
+        <div class="govuk-notification-banner__content">
+          <h3 class="govuk-notification-banner__heading">Permit deleted</h3>
+          <p class="govuk-body">Import permit number {{data['importPermitNumber' + query.deleted] or '123456789ABC'}} has been deleted.</p>
+        </div>
+
+      </div>
+      {% endif %}
+
+      {% if query.supportingDocumentDeleted == "true" %}
+      <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+    
+        <div class="govuk-notification-banner__header">
+          <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">Success</h2>
+        </div>
+
+        <div class="govuk-notification-banner__content">
+          <h3 class="govuk-notification-banner__heading">You deleted {{data.supportingDocument or "Filename.jpg"}} from this application</h3>
+        </div>
+
+      </div>
+      {% endif %}
+
+      <h1 class="govuk-heading-xl">Supporting documents</h1>
+
+      <table class="govuk-table govuk-!-margin-bottom-7">
+        <caption class="govuk-table__caption"><span class="govuk-visually-hidden">Supporting documents for your phytosanitary certificate application</span></caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th scope="col" class="govuk-table__header">Description</th>
+            <th scope="col" class="govuk-table__header">File name</th>
+            <th scope="col" class="govuk-table__header govuk-table__header--numeric">Action</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body">
+          <!-- Supporting documents (START) -->
+          {% if query.manualLinkOverride == "true" %}
+          {% if query.count == "2" %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Another description of file</td>
+            <td scope="row" class="govuk-table__cell"><a href="#" class="govuk-link govuk-link--no-visited-state"><span class="govuk-visually-hidden">Download </span>Another filename.pdf</a></td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              <a href="#" class="govuk-link govuk-link--no-visited-state">Delete <span class="govuk-visually-hidden">Another filename.pdf</span></a>
+            </td>
+          </tr>
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Description of file</td>
+            <td scope="row" class="govuk-table__cell"><a href="#" class="govuk-link govuk-link--no-visited-state"><span class="govuk-visually-hidden">Download </span>Filename.jpg</a></td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              <a href="#" class="govuk-link govuk-link--no-visited-state">Delete <span class="govuk-visually-hidden">Another filename.jpg</span></a>
+            </td>
+          </tr>
+          {% else %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Description of file</td>
+            <td scope="row" class="govuk-table__cell"><a href="#" class="govuk-link govuk-link--no-visited-state"><span class="govuk-visually-hidden">Download </span>Filename.jpg</a></td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              <a href="#" class="govuk-link govuk-link--no-visited-state">Delete <span class="govuk-visually-hidden">Another filename.jpg</span></a>
+            </td>
+          </tr>
+          {% endif %}
+          {% endif %}
+          {% set _deleteReturnLink = "attachments-view" %}
+          {% if _totalDocumentsDisplayedCount | int == 1 %}
+            {% set _deleteReturnLink = "task-list" %}
+          {% endif %}
+          {% if _supportingDocumentsDisplayedCount > 0 %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">{% if data.fileDescription == "Add your own description" %}{{data.manualFileDescription or "Description of file"}}{% elif data.fileDescription == "Import permit" %}Import permit ({{data.importPermitNumber or "123456789ABC"}}){% else %}{{data.fileDescription or "Description of file"}}{% endif %}</td>
+            <td scope="row" class="govuk-table__cell"><a href="#" class="govuk-link govuk-link--no-visited-state"><span class="govuk-visually-hidden">Download </span>{{data.supportingDocument or "Filename.jpg"}}</a></td>
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              <a href="attachments-delete?deleteReturnLink=task-list" class="govuk-link govuk-link--no-visited-state">Delete <span class="govuk-visually-hidden">{{data.supportingDocument or "Filename.jpg"}}</span></a>
+            </td>
+          </tr>
+          {% endif %}
+          <!-- Supporting documents (END) -->
+          <!-- Import permits (START) -->
+          {% for i in range(0, _importPermitCount) -%}
+          {% set _show = "true" %}
+          {% set _id = loop.index %}
+          {% set _deletedValue = data['importPermitDeleted' + _id] %}
+          {% if _deletedValue == "true" %}
+            {% set _show = "false" %}
+          {% endif %}
+
+          <!-- ADDED SO IMPORT PERMITS DONT SHOW HERE. BUT LEAVING CODE IN CASE NEEDED LATER. -->
+          {% set _show = "false" %}
+          <!-- -->
+
+          {% if _show == "true" %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              Import permit ({{data['importPermitNumber' + _id] or '123456789ABC'}})
+            </td>
+            <td class="govuk-table__cell">
+              <a class="govuk-link govuk-link--no-visited-state" href="#">{{data['importPermitFile' + _id] or 'file-name.pdf'}}</a>
+            </td>
+            <!-- {% set _deleteLinkSuffix = "?deleted=" + _id + "&importPermitDeleted" + _id + "=true" + "&importPermitDisplayedCount=" + _importPermitCountDeleted | int %} -->
+            {% set _deleteReturnLink = "attachments-view" %}
+            {% if _totalDocumentsDisplayedCount | int == 1 %}
+              {% set _deleteReturnLink = "import-permits" %}
+            {% endif %}
+            <td class="govuk-table__cell govuk-table__cell--numeric">
+              <a href="attachments-ip-delete?deleteReturnLink={{_deleteReturnLink}}&deleteID={{_id}}&count={{_importPermitCountDeleted}}" class="govuk-link govuk-link--no-visited-state">Delete <span class="govuk-visually-hidden">import permit {{data['importPermitNumber' + _id] or '123456789ABC'}}</span></a>
+            </td>
+          </tr>
+          {% endif %}
+          {%- endfor %}
+          <!-- Import permits (END) -->
+        </tbody>
+      </table>
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m govuk-!-margin-top-4">Do you want to upload another supporting document?</legend>
+      
+          <div class="govuk-radios govuk-!-margin-bottom-4">
+            
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="uploadAnother_yes" name="uploadAnother" type="radio" value="Yes~attachments-add">
+              <label class="govuk-label govuk-radios__label" for="uploadAnother_yes">Yes, upload another</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="uploadAnother_no" name="uploadAnother" type="radio" value="No~{% if query.change == 'yes' %}{{query.return_url or 'check-your-answers'}}{% else %}task-list{% endif %}">
+              <label class="govuk-label govuk-radios__label" for="uploadAnother_no">No, I have finished uploading</label>
+            </div>
+
+          </div>
+
+        </fieldset>
+      </div>
+
+      <div class="govuk-form-group govuk-!-margin-bottom-6">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      </div>
+
+      {% block continueLater %}
+      {% include "../modules/_save-continue-later.html" %}
+      {% endblock %}
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

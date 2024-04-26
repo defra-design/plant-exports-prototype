@@ -1,0 +1,92 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Do you want to get progress emails about ePhytos? - Manage account - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="../account" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
+  </ul>
+</div>
+
+<!-- <a href="{% if query.returnURL == 'dashboard-submitted' %}../dashboard-submitted{% elif query.returnURL == 'dashboard-submitted' %}../dashboard-submitted{% elif data.has_reference == 'gsi' %}../application/gsi/create/task-list{% elif data.has_reference == 'seed sampling' %}../application/seeds/create/task-list{% elif data.has_reference == 'soil sampling' %}../application/soil/create/task-list{% else %}../application/create/task-list{% endif %}" class="govuk-back-link">Back to apply for plant export certificates and inspections</a> -->
+<div class="govuk-breadcrumbs">
+  <ol class="govuk-breadcrumbs__list">
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="../dashboard-submitted">Your applications</a>
+    </li>
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="../account">Manage account</a>
+    </li>
+  </ol>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    {% set _notificationSetting = data["ephytoEmailNotifications"] %}
+
+
+    <form method="post" novalidate>
+
+      <div class="govuk-form-group ">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+            <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">
+              Do you want to get progress emails about ePhytos?
+            </h1>
+          </legend>
+
+          <p class="govuk-body">We will email your.email@email.com:</p>
+          <ul class="govuk-list govuk-list--bullet">
+            <li>when the destination country has received your ePhyto</li>
+            <li>if there are any delays</li>
+          </ul>
+          <p class="govuk-body govuk-!-margin-bottom-6"><a class="govuk-link govuk-link--no-visited-state" href="defra-account">Change this email address</a></p>
+          
+          <div class="govuk-radios" data-module="govuk-radios">
+            
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="ephytoEmailNotifications-1" name="ephytoEmailNotifications" type="radio" value="All~../account?ephytoemails=true" {% if _notificationSetting == "All" %}checked{% endif %} >
+              <label class="govuk-label govuk-radios__label" for="ephytoEmailNotifications-1">
+                Yes, email me about all my organisation’s ePhytos
+              </label>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="ephytoEmailNotifications-2" name="ephytoEmailNotifications" type="radio" value="Own~../account?ephytoemails=true" {% if _notificationSetting == "Own" %}checked{% endif %} >
+              <label class="govuk-label govuk-radios__label" for="ephytoEmailNotifications-2">
+                Yes, email me about ePhytos I applied for
+              </label>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="ephytoEmailNotifications-3" name="ephytoEmailNotifications" type="radio" value="None~../account?ephytoemails=true" {% if _notificationSetting == "None" %}checked{% endif %} >
+              <label class="govuk-label govuk-radios__label" for="ephytoEmailNotifications-3">
+                No, do not email me about ePhytos
+              </label>
+            </div>
+
+          </div>
+        </fieldset>
+      </div>
+
+      <button class="govuk-button" data-module="govuk-button">
+        Save
+      </button>
+
+      <!-- <p class="govuk-body govuk-!-margin-top-"><a href="../account" class="govuk-link govuk-link--no-visited-state">Back to manage account</a></p> -->
+
+    </form>
+
+
+  </div>
+
+</div>
+{% endblock %}

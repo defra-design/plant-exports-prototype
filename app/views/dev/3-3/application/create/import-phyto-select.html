@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      {% set _link = 'import-phyto-select-upload' %}
+
+      <form action="{{_link}}" method="post" novalidate>
+       
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+              <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">
+                Which import phytosanitary certificate will you add details for?
+              </h1>
+            </legend>
+            <!-- <div id="contact-hint" class="govuk-hint">
+              Select one option.
+            </div> -->
+            <div class="govuk-radios" data-module="govuk-radios">
+
+              {% for _number in data.ipcNumbers %}
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="ipcNumber{{loop.index}}" name="ipcNumber" type="radio" value="{{loop.index}}">
+                <label class="govuk-label govuk-radios__label" for="ipcNumber{{loop.index}}">
+                  {{_number}}
+                </label>
+              </div>
+              {% endfor %}
+             
+            </div>
+          </fieldset>
+        </div>
+
+        {{ govukButton({
+          text: "Save and continue"
+        }) }}
+
+      </form>
+      {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+    </div>
+  </div>
+  
+
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends "layout-certificate-checker.html" %}
+
+{% block pageTitle %}
+  This certificate is not valid - GOV.UK
+{% endblock %}
+
+{% block content %}
+<!-- Chris Harding (23.08.23) - Font Awesome (4) external CSS library for new icons -->
+<link rel="stylesheet" href="/public/css/font-awesome-4.7.0/css/font-awesome.min.css">
+<style>
+
+  /* Chris Harding (21.07.23) - Expanded on the GOV.UK Design System panel component (https://design-system.service.gov.uk/components/panel) to include a red coloured 'not valid' */
+  .govuk-panel--rejection {
+    background: #d4351c !important;
+  }
+
+</style>
+
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <div class="govuk-panel govuk-panel--confirmation govuk-panel--rejection govuk-!-margin-bottom-6">
+      <h1 class="govuk-panel__title">
+        <i class="fa fa-times" alt="This is not a valid certificate" title="This is not a valid certificate" aria-hidden="true"></i>
+        <br>
+        This is not a valid certificate
+      </h1>
+    </div>
+
+    <p class="govuk-body">The information you provided doesn't match any authentic UK issued phytosanitary certificate.</p>
+    <p class="govuk-body">If you think you've made a mistake, <a class="govuk-link" href="certificate-number">enter the certificate details again</a>.</p>
+
+    <h2 class="govuk-heading-m">Your details</h2>
+    <dl class="govuk-summary-list">
+      
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Phytosanitary certificate number</dt>
+        <dd class="govuk-summary-list__value">{{data.certificateNumberPart1 or "2013"}}/{{data.certificateNumberPart2 or "1234567891234"}}</dd>
+      </div>
+      
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Verification number</dt>
+        <dd class="govuk-summary-list__value">{{data.verificationNumberPart1 or "1111"}}-{{data.verificationNumberPart2 or "2222"}}-{{data.verificationNumberPart3 or "3333"}}</dd>
+      </div>
+
+      {% if data.providedSecurityData == "place" %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Place of issue</dt>
+        <dd class="govuk-summary-list__value">{{data.whereCertificateIssued or "York"}}, UK</dd>
+      </div>
+      {% elif data.providedSecurityData == "date" %}
+
+      {% if data.certificateIssuedMonth == "01" or data.certificateIssuedMonth == "1" %}
+        {% set certificateIssuedMonthName = "January" %}
+      {% elif data.certificateIssuedMonth == "02" or data.certificateIssuedMonth == "2" %}
+        {% set certificateIssuedMonthName = "February" %}
+      {% elif data.certificateIssuedMonth == "03" or data.certificateIssuedMonth == "3" %}
+        {% set certificateIssuedMonthName = "March" %}
+      {% elif data.certificateIssuedMonth == "04" or data.certificateIssuedMonth == "4" %}
+        {% set certificateIssuedMonthName = "April" %}
+      {% elif data.certificateIssuedMonth == "05" or data.certificateIssuedMonth == "5" %}
+        {% set certificateIssuedMonthName = "May" %} 
+      {% elif data.certificateIssuedMonth == "06" or data.certificateIssuedMonth == "6" %}
+        {% set certificateIssuedMonthName = "June" %}
+      {% elif data.certificateIssuedMonth == "07" or data.certificateIssuedMonth == "7" %}
+        {% set certificateIssuedMonthName = "July" %}
+      {% elif data.certificateIssuedMonth == "08" or data.certificateIssuedMonth == "8" %}
+        {% set certificateIssuedMonthName = "August" %}
+      {% elif data.certificateIssuedMonth == "09" or data.certificateIssuedMonth == "9" %}
+        {% set certificateIssuedMonthName = "September" %}
+      {% elif data.certificateIssuedMonth == "10" %}
+        {% set certificateIssuedMonthName = "October" %}
+      {% elif data.certificateIssuedMonth == "11" %}
+        {% set certificateIssuedMonthName = "November" %}
+      {% elif data.certificateIssuedMonth == "12" %}
+        {% set certificateIssuedMonthName = "December" %}
+      {% endif %}
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Certificate issue date</dt>
+        <dd class="govuk-summary-list__value">{{data.certificateIssuedDay or "16"}} {{certificateIssuedMonthName or "June"}} {{data.certificateIssuedYear or "2023"}}</dd>
+      </div>
+      {% endif %}
+
+    </dl>
+
+    <p class="govuk-body"><a class="govuk-link" href="certificate-number?certificateNumberPart1=&certificateNumberPart2=&verificationNumberPart1=&verificationNumberPart2=&verificationNumberPart3=">Check another certificate</a></p>
+    <!-- <a href="certificate-number?certificateNumberPart1=&certificateNumberPart2=&verificationNumberPart1=&verificationNumberPart2=&verificationNumberPart3=" class="govuk-button govuk-button--secondary" data-module="govuk-button">Check another certificate</a> -->
+
+    <h3 class="govuk-heading-s">Advice on certificate authenticity</h3>
+    <p class="govuk-body">If you are concerned that this certificate is not authentic, contact <a href="mailto:planthealth.info@apha.gov.uk" class="govuk-link">planthealth.info@apha.gov.uk</a> for advice. You must include a photo or scan of the certificate.</p>
+  </div>
+
+</div>
+{% endblock %}

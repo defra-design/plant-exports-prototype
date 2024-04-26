@@ -1,0 +1,223 @@
+{% extends "layout-certificate-checker.html" %}
+
+{% block pageTitle %}
+  {% if query.error == "true" %}Error: {% endif %}What is the certificate number? - GOV.UK
+{% endblock %}
+
+{% block content %}
+<style>
+
+  /* Chris Harding (25.08.23) - Added CSS used on the 'Apply for a passport' service (https://www.gov.uk/apply-renew-passport) to add separators between text input fields (e.g. using the '/' symbol) */
+  .certificate-number .certificate-number__separator {
+    margin-top: .5em;
+    font-weight: bold;
+    font-size: 25px
+  }
+
+  .certificate-number .govuk-input {
+    display: inline-block
+  }
+
+  .certificate-number .govuk-form-group {
+    display: inline-block;
+    margin-bottom: 0
+  }
+
+  /* Chris Harding (25.08.23) - Styling for custom images and illustrations created  */
+  
+  /* DESIGN 1 - STACKED */
+  .image-wrapper {
+    padding-bottom: 20px;
+  }
+  @media (min-width: 40.0625em) {
+    .image-wrapper {
+      padding-bottom: 30px;
+    }
+  }
+
+  .image-wrapper img {
+    width: 70%;
+  }
+  @media (min-width: 40.0625em) {
+    .image-wrapper img {
+      width: 60%;
+    }
+  }
+
+  /* DESIGN 2 - SIDE SECTION */
+  .app-related-items {
+    border-top: none;
+    padding-top: 0px;
+  }
+  @media (min-width: 40.0625em) {
+    .app-related-items {
+      border-top: 2px solid #1d70b8;
+      padding-top: 10px;
+    }
+  }
+
+  .image-side-bar {
+    padding-bottom: 20px;
+  }
+  @media (min-width: 40.0625em) {
+    .image-side-bar {
+      padding-bottom: 30px;
+    }
+  }
+
+  .image-side-bar img {
+    width: 100%;
+  }
+
+</style>
+
+<div class="govuk-grid-row">
+
+  <form action="certificate-number-validation" method="post" novalidate>
+
+    <div class="govuk-grid-column-two-thirds">
+
+      {% if query.error == "true" %}
+      <div class="govuk-error-summary" data-module="govuk-error-summary">
+        <div role="alert">
+          <h2 class="govuk-error-summary__title">There is a problem</h2>
+          
+          <div class="govuk-error-summary__body">
+            <ul class="govuk-list govuk-error-summary__list">
+              <li><a href="#{% if query.error1 == 'true' %}certificate-number-part-1{% else %}certificate-number-part-2{% endif %}">Enter a complete certificate number</a></li>
+            </ul>
+          </div>
+
+        </div>
+
+      </div>
+      {% endif %}    
+
+      <!-- <div class="govuk-form-group{% if query.error == 'true' %} govuk-form-group--error{% endif %}">
+        <h1 class="govuk-label-wrapper govuk-!-margin-bottom-8">
+          <label class="govuk-label govuk-label--xl" for="certificate-number">What is the certificate number?</label>
+        </h1>
+
+        <div id="certificate-number-hint" class="govuk-hint">
+          The certificate number is on the top right corner of the certificate. For example, UK/GB/E&W/2023/1234567891234
+        </div>
+
+        {% if query.error == "true" %}
+        <p id="certificate-number-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Enter the certificate number</p>
+        {% endif %}
+
+        <div class="govuk-input__wrapper">
+
+          <div class="govuk-input__prefix" aria-hidden="true">
+            UK/GB/E&W/
+          </div>
+
+          <input class="govuk-input govuk-input--width-20{% if query.error == 'true' %} govuk-input--error{% endif %}" id="certificate-number" name="certificateNumber" type="text" aria-describedby="certificate-number-hint{% if query.error == 'true' %} certificate-number-error{% endif %}" value="{{data.certificateNumber}}">
+        </div>
+        
+      </div> -->
+      <div class="govuk-form-group certificate-number{% if query.error == 'true' %} govuk-form-group--error{% endif %}">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="certificate-number-hint">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+            <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-7">What is the certificate number?</h1>
+          </legend>
+
+          {% if data.design != "b" %}
+          <div class="image-wrapper">
+            <img src="/public/images/where-to-find-your-certificate-number.svg" alt="The certificate number is on the top right corner of the certificate.">
+          </div>
+          {% endif %}
+
+          <div id="certificate-number-hint" class="govuk-hint">
+            The certificate number is on the top right corner of the certificate. For example, UK/GB/E&W/2023/1234567891234
+          </div>
+
+          {% if query.error == "true" %}
+          <p id="certificate-number-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Enter a complete certificate number</p>
+          {% endif %}
+
+          <div class="govuk-input__wrapper">
+
+            <div class="govuk-input__prefix" aria-hidden="true">
+              UK/GB/E&W/
+            </div>
+
+            <div class="govuk-form-group">
+              <label class="govuk-label govuk-visually-hidden" id="certificate-number-part-1-label" for="certificate-number-part-1">Enter certificate number part 1</label>
+              <input class="govuk-input govuk-input--width-4{% if query.error1 == 'true' %} govuk-input--error{% endif %}" id="certificate-number-part-1" name="certificateNumberPart1" type="text"{% if query.error1 == 'true' %} aria-describedby="certificate-number-error"{% endif %} maxlength="4" spellcheck="false" inputmode="numeric" value="{{data.certificateNumberPart1}}">
+            </div>
+
+            <!-- <span class="certificate-number__separator">/</span> -->
+            <div class="govuk-input__prefix govuk-input__suffix" aria-hidden="true">
+              /
+            </div>
+
+            <div class="govuk-form-group">
+              <label class="govuk-label govuk-visually-hidden" id="certificate-number-part-2-label" for="certificate-number-part-2">Enter certificate number part 2</label>
+              <input class="govuk-input govuk-input--width-20{% if query.error2 == 'true' %} govuk-input--error{% endif %}" id="certificate-number-part-2" name="certificateNumberPart2" type="text"{% if query.error2 == 'true' %} aria-describedby="certificate-number-error"{% endif %} maxlength="13" spellcheck="false" inputmode="numeric" value="{{data.certificateNumberPart2}}">
+            </div>
+
+          </div>          
+
+        </fieldset>
+      </div>
+
+      <div class="govuk-form-group">
+        <details class="govuk-details" data-module="govuk-details">
+          <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">Certificates you can check in this service</span>
+          </summary>
+
+          <div class="govuk-details__text">
+            You can check phytosanitary certificates issued by Defra in England and Wales.
+          </div>
+
+        </details>
+      </div>
+
+      <div class="govuk-button-group">
+        <button class="govuk-button" data-module="govuk-button">Continue</button>
+      </div>
+
+    </div>
+
+    {% if data.design == "b" %}
+    <div class="govuk-grid-column-one-third">
+
+      <aside class="app-related-items" role="complementary">
+        <h2 class="govuk-heading-m" id="related-content-title">Where to find your certificate number</h2>
+        <nav role="navigation" aria-labelledby="related-content-title">
+          
+          <div class="image-side-bar">
+            <img src="/public/images/where-to-find-your-certificate-number.svg" alt="The certificate number is on the top right corner of the certificate.">
+          </div>
+          
+        </nav>
+      </aside>
+
+    </div>
+    {% endif %}
+
+  </form>
+
+</div>
+
+<!-- JavaScript (START) -->
+<!-- <script type="text/javascript" src="/public/javascripts/jquery-3.6.0.js"></script>
+<script type="text/javascript">
+
+  // Always add a '/' between each section of the phytosanitary certificate number
+  $("#certificate-number").keydown(function (e) {
+      
+    if (e.keyCode == 32) {
+      // Append '/' to the input
+      $(this).val($(this).val() + "/"); 
+      // Return false to prevent space from being added
+      return false; 
+    }
+
+  });
+
+</script> -->
+<!-- JavaScript (END) -->
+{% endblock %}
