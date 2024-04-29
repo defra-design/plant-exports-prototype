@@ -512,7 +512,7 @@
                     
             <div class="govuk-form-group">
               <label class="govuk-label" for="quantity">Quantity</label>
-              <input class="govuk-input govuk-input--width-5" id="quantity" name="quantity" type="text" aria-label="Quantity" aria-describedby="quantity-hint" value="{{data.quantity}}">
+              <input class="govuk-input govuk-input--width-5" id="quantity" name="quantity" type="text" aria-describedby="quantity-hint" value="{{data.quantity}}">
             </div>
       
           </div>
@@ -521,7 +521,7 @@
                   
             <div class="govuk-form-group">
               <label class="govuk-label" for="units">Unit of measurement</label>
-              <select name="units" id="units" class="govuk-select" aria-label="Unit of measurement">
+              <select name="units" id="units" class="govuk-select" >
                 <option value="" selected>Unit of measurement</option>
                 {% if data.commodity == "seeds" %}
                 <option value="Grams"{% if data.units == "Grams" %} selected{% endif %}>Grams</option>
@@ -541,6 +541,40 @@
       
         </fieldset>
       </div>
+
+      {% if data.commodity == "plant products" %}
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend">
+            <h2 class="govuk-body govuk-!-margin-bottom-0">[Gross weight quantity and unit of measurement (Optional)]</h2>
+          </legend>
+          <div id="gross_quantity-hint" class="govuk-hint">[For example, 50 kilograms]</div>
+      
+          <div class="govuk-date-input__item">     
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="gross_quantity">[Gross quantity]</label>
+              <input class="govuk-input govuk-input--width-5" id="gross_quantity" name="gross_quantity" type="text" aria-describedby="gross_quantity-hint" value="{{data.gross_quantity}}">
+            </div>
+          </div>
+      
+          <div class="govuk-date-input__item">
+            <div class="govuk-form-group">
+              <label class="govuk-label" for="gross_units">[Gross unit of measurement]</label>
+              <select name="gross_units" id="gross_units" class="govuk-select">
+                <option value="" selected>Unit of measurement</option>            
+                <option value="Grams"{% if data.gross_units == "Grams" %} selected{% endif %}>Grams</option>
+                <option value="Kilograms"{% if data.gross_units == "Kilograms" %} selected{% endif %}>Kilograms</option>
+                <option value="Millilitres"{% if data.gross_units == "Millilitres" %} selected{% endif %}>Millilitres</option>
+                <option value="Litres"{% if data.gross_units == "Litres" %} selected{% endif %}>Litres</option>
+                <option value="Tonnes"{% if data.gross_units == "Tonnes" %} selected{% endif %}>Tonnes</option>
+                <option value="Units"{% if data.gross_units == "Units" %} selected{% endif %}>Units</option>
+              </select>
+            </div>   
+          </div>
+      
+        </fieldset>
+      </div>
+      {% endif %}
 
       <div class="govuk-form-group">
         <label class="govuk-label" for="number_of_packages">Number of packages</label>
@@ -571,19 +605,32 @@
         <input class="govuk-input govuk-input--width-20" id="packing_material_used" name="packing_material_used" type="text" value="{{data.packing_material_used}}">
       </div>
 
+      {% if data.commodity == "plant products" %}
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="container_number">[Container number (optional)]</label>
+        <input class="govuk-input govuk-input--width-20" id="container_number" name="container_number" type="text" value="{{data.container_number}}">
+      </div>
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="seal_number">[Seal number (optional)]</label>
+        <input class="govuk-input govuk-input--width-20" id="seal_number" name="seal_number" type="text" value="{{data.seal_number}}">
+      </div>
+      <div class="govuk-form-group">
+        <label class="govuk-label" for="batch_code">[Batch code (optional)]</label>
+        <input class="govuk-input govuk-input--width-20" id="batch_code" name="batch_code" type="text" value="{{data.batch_code}}">
+      </div>
+      {% endif %}
+
       <div class="govuk-form-group">
         <label class="govuk-label" for="distinguishing_marks">Distinguishing marks (optional)</label>
         <div id="distinguishing-mark-hint" class="govuk-hint">
-          {% if data.build == "development" %}
-          For example, container numbers, lot numbers 
-          {% else %}
           For example, a container number or your own identification reference for this product
-          {% endif %}
         </div>
         <input class="govuk-input govuk-input--width-20" id="distinguishing_marks" name="distinguishing_marks" type="text" aria-describedby="distinguishing-mark-hint" value="{{data.distinguishing_marks}}">
       </div>
       {% endif %}
-      <!-- 'Packing material' and 'Distinguishing marks' sections (START) -->
+      <!-- 'Packing material' and 'Distinguishing marks' sections (END) -->
+
+      
 
       <!-- 'Country/Countries of origin' section (START) -->
       <!-- Multi select (up to 10 countries) -->
