@@ -23,13 +23,26 @@
 
 <div class="govuk-grid-row">
 
-  <div class="govuk-grid-column-three-quarters">
+  <div class="govuk-grid-column-two-thirds">
 
     <form action="submit-date?id={{data.id}}&is_group={{data.is_group}}" method="post">
       <h1 class="govuk-heading-xl">Change certificate details</h1>
+
+      {% if query.reasonlockedin == "afterreason" %}
+        <!-- <div class="govuk-warning-text">
+          <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+          <strong class="govuk-warning-text__text">
+            <span class="govuk-visually-hidden">Warning</span>
+            You can no longer change the reason for your re-issue request.
+          </strong>
+        </div> -->
+      {% endif %}
       
       <div class="govuk-inset-text">
-        You will not be able to change all of the details on your certificate.
+        {% if query.reasonlockedin == "afterreason" %}
+        <p class="govuk-body">You can no longer change the reason for this re-issue request. If you selected this reason by mistake, submit this request without making any changes. You can request another re-issue later.</p>
+        {% endif %}
+        <p class="govuk-body">You will not be able to change all of the details on your certificate.</p>
       </div>
       
       <h2 class="govuk-heading-m">Application summary</h2>
