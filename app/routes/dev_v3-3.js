@@ -649,10 +649,10 @@ module.exports = function(router) {
       var error5 = "";
       
       // Error validation - make sure user enters data into required fields
-      if (supportingDocument == "" || supportingDocument == null) {
-        errorCount++;
-        error1 = "&error1=true";
-      }
+      // if (supportingDocument == "" || supportingDocument == null) {
+      //   errorCount++;
+      //   error1 = "&error1=true";
+      // }
 
       if (fileDescription == "" || fileDescription == null) {
         errorCount++;
