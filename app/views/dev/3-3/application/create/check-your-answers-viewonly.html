@@ -36,18 +36,18 @@
             {% if data.reforwarding %}
             Re-forwarding phytosanitary certificate for 
             {% if data.build == "development" %}
-            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% else %}{{data.commodity or data.id | appInformationV8('commodity_info') or "plants"}}{% endif %}
+            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% else %}{{data.commodity or data.id | appInformationV9('commodity_info') or "plants"}}{% endif %}
             {% else %}
-            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "seeds" %}seeds for planting{% elif data.commodity == "grain" %}unprocessed cereal grains{% else %}{{data.commodity or data.id | appInformationV8('commodity_info') or "plants"}}{% endif %}
+            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "seeds" %}seeds for planting{% elif data.commodity == "grain" %}unprocessed cereal grains{% else %}{{data.commodity or data.id | appInformationV9('commodity_info') or "plants"}}{% endif %}
             {% endif %}
             {% elif data.journey == "coc" %}
             Certificate of conformity
             {% else %}
             Phytosanitary certificate{% if data.commodity == "everything else" and data.subCommodity == "something else"%}{% else %} for{% endif %} 
             {% if data.build == "development" %}
-            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "everything else" %}{% if data.subCommodity != "something else" %}{{data.subCommodity or "clay"}}{% endif %}{% else %}{{data.commodity or data.id | appInformationV8('commodity_info') or "plants"}}{% endif %}
+            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "everything else" %}{% if data.subCommodity != "something else" %}{{data.subCommodity or "clay"}}{% endif %}{% else %}{{data.commodity or data.id | appInformationV9('commodity_info') or "plants"}}{% endif %}
             {% else %}
-            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "seeds" %}seeds for planting{% elif data.commodity == "grain" %}unprocessed cereal grains{% elif data.commodity == "everything else" %}{% if data.subCommodity != "something else" %}{{data.subCommodity or "clay"}}{% endif %}{% else %}{{data.commodity or data.id | appInformationV8('commodity_info') or "plants"}}{% endif %}
+            {% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "plant products" %}processed plant products{% elif data.commodity == "seeds" %}seeds for planting{% elif data.commodity == "grain" %}unprocessed cereal grains{% elif data.commodity == "everything else" %}{% if data.subCommodity != "something else" %}{{data.subCommodity or "clay"}}{% endif %}{% else %}{{data.commodity or data.id | appInformationV9('commodity_info') or "plants"}}{% endif %}
             {% endif %}
             {% endif %}
             {% else %}
@@ -59,7 +59,7 @@
 
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Destination</dt>
-          <dd class="govuk-summary-list__value">{{data.countrySelect[0] or (data.id | appInformationV8('destination')) or "France"}}</dd>
+          <dd class="govuk-summary-list__value">{{data.countrySelect[0] or (data.id | appInformationV9('destination')) or "France"}}</dd>
         </div>
 
         <div class="govuk-summary-list__row">
@@ -945,7 +945,7 @@
           </tr>
         </tbody>
       </table>
-      {% elif data.commodity == "used farm machinery" %} 
+      {% elif data.commodity == "used farm and forestry machinery" %} 
       <table class="govuk-table govuk-!-margin-bottom-4" id="commodityTable">
         <caption class="govuk-table__caption govuk-visually-hidden">Your consignment</caption>
         <thead class="govuk-table__head">
@@ -1096,7 +1096,7 @@
       <!-- Inspection details -->
       {% if data.commodity == "plant products" or data.commodity == "seeds" or data.commodity == "grain" %}
 
-      {% elif data.commodity == "bulbs" or data.commodity == "plants" or data.commodity == "potatoes" or data.commodity == "used farm machinery" or data.journey == "coc" %}
+      {% elif data.commodity == "bulbs" or data.commodity == "plants" or data.commodity == "potatoes" or data.commodity == "used farm and forestry machinery" or data.journey == "coc" %}
       <h2 class="govuk-heading-m govuk-!-margin-top-9">Inspection details</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
 
@@ -1343,7 +1343,7 @@
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Who are you sending this consignment to?</dt>
           <dd class="govuk-summary-list__value">
-            {{data.consignee_name or query.id | appInformationV8('importer') | title or "Cubix"}}
+            {{data.consignee_name or query.id | appInformationV9('importer') | title or "Cubix"}}
             <br>
             {% if data.select_consignee_address == "address_0" %}88 Jianguo Rd, 北京市, 3208, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_1" %}Lillegardsvagen 1, Falkenberg, South-East, 311 50, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_2" %}Piazza Pietro Nenni, 4, Orta Nova Foggia, Foggia, 71045, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_3" %}Phase 3 St, Vaibhav Nagar, Katpadi, Vellore, Tamil Nadu, 632014, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_4" %}6347 Pacific Blvd, Huntington Park, California, 90255, {{data.countrySelect[0] or "France"}}{% else %}{{data.consigneeAddressLine1 or "88 Jianguo Rd" }}{% if data.consigneeAddressLine2 %}, {{data.consigneeAddressLine2}}{% endif %}, {{data.consigneeAddressLine3 or "北京市"}}{% if data.consigneeAddressLine4 %}, {{data.consigneeAddressLine4}}{% endif %}, {{data.consigneeAddressLine5 or "3208"}}, {{data.countrySelect[0] or "France"}}{% endif %}
           </dd>
@@ -1367,7 +1367,7 @@
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Who are you sending this consignment to?</dt>          
           <dd class="govuk-summary-list__value">
-            {{data.consignee_name or query.id | appInformationV8('importer') | title or "Cubix"}}
+            {{data.consignee_name or query.id | appInformationV9('importer') | title or "Cubix"}}
             <br>
             {% if data.select_consignee_address == "address_0" %}88 Jianguo Rd, 北京市, 3208, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_1" %}Lillegardsvagen 1, Falkenberg, South-East, 311 50, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_2" %}Piazza Pietro Nenni, 4, Orta Nova Foggia, Foggia, 71045, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_3" %}Phase 3 St, Vaibhav Nagar, Katpadi, Vellore, Tamil Nadu, 632014, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_4" %}6347 Pacific Blvd, Huntington Park, California, 90255, {{data.countrySelect[0] or "France"}}{% else %}{{data.consigneeAddressLine1 or "88 Jianguo Rd" }}{% if data.consigneeAddressLine2 %}, {{data.consigneeAddressLine2}}{% endif %}, {{data.consigneeAddressLine3 or "北京市"}}{% if data.consigneeAddressLine4 %}, {{data.consigneeAddressLine4}}{% endif %}, {{data.consigneeAddressLine5 or "3208"}}, {{data.countrySelect[0] or "France"}}{% endif %}
           </dd>

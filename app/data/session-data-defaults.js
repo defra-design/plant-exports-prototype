@@ -24,6 +24,7 @@ var applicationsv5 = require('./applications-v5.json');
 var applicationsv6 = require('./applications-v6.json');
 var applicationsv7 = require('./applications-v7.json');
 var applicationsv8 = require('./applications-v8.json');
+var applicationsv9 = require('./applications-v9.json');
 var sample = require('./sample.json');
 var countries = require('./countries-full.json');
 var countries2 = require('./countries-eu-ni.json');
@@ -40,6 +41,7 @@ module.exports = {
   "applicationsv6" : applicationsv6,
   "applicationsv7" : applicationsv7,
   "applicationsv8" : applicationsv8,
+  "applicationsv9" : applicationsv9,
   "commodities" : [],
   "id_count" : 1,
   "sample": sample,

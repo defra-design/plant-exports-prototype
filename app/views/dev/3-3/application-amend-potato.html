@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if data.build == "development" %}Application{% else %}Manage application{% endif %} {{query.id | appInformationV8('applicationID')}} - {{serviceName}} - GOV.UK
+  {% if data.build == "development" %}Application{% else %}Manage application{% endif %} {{query.id | appInformationV9('applicationID')}} - {{serviceName}} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -54,8 +54,8 @@
         </p>
         <p class="govuk-body" id="govuk-notification-banner-message">
           {% set _amendLink = "application/create/check-your-answers-pre-inspect-amend-message?commodity=potatoes" %}
-          {% if (query.id | appInformationV8('status')) == 'exporter action' %}
-          {% elif (query.id | appInformationV8('status')) == 'preparing certificate'  %}
+          {% if (query.id | appInformationV9('status')) == 'exporter action' %}
+          {% elif (query.id | appInformationV9('status')) == 'preparing certificate'  %}
             {% set _amendLink = "application/create/check-your-answers-post-inspect-amend?is_amend=yes&commodity=potatoes" %}
           {% else %}
             {% set _amendLink = "application/create/check-your-answers-pre-inspect-amend?is_amend=yes&commodity=potatoes" %}
@@ -68,7 +68,7 @@
     <h1 class="govuk-heading-xl">
       {% if data.build == "development" %}Application{% else %}Manage application{% endif %}
       <br>
-      {{query.id | appInformationV8('applicationID')}}
+      {{query.id | appInformationV9('applicationID')}}
     </h1>
 
     <h2 class="govuk-heading-m">Your application</h2>
@@ -78,8 +78,8 @@
         <dt class="govuk-summary-list__key">Status</dt>
         <dd class="govuk-summary-list__value">
           
-          <div class="govuk-tag govuk-tag--{{query.id | appInformationV8('tag')}}">
-            {{query.id | appInformationV8('status')}}
+          <div class="govuk-tag govuk-tag--{{query.id | appInformationV9('tag')}}">
+            {{query.id | appInformationV9('status')}}
           </div>
 
         </dd>
@@ -87,39 +87,39 @@
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Your reference</dt>
-        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV8('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformationV8('reference')}}{% endif %}</dd>
+        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV9('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformationV9('reference')}}{% endif %}</dd>
       </div>
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Type</dt>
         <dd class="govuk-summary-list__value">
-          {% if (query.id | appInformationV8('cert_info')) == 'Conformity' %}
-          Certificate of conformity for {{query.id | appInformationV8('commodity_info') or "crops"}}
-          {% elif (query.id | appInformationV8('cert_info')) == 'Growing season inspection' %}
-          Growing season inspection for {{query.id | appInformationV8('commodity_info') or "crops"}}
-          {% elif (query.id | appInformationV8('cert_info')) == 'Seed sampling' %}
-          Seed sampling for {{query.id | appInformationV8('commodity_info') or "crops"}}
-          {% elif (query.id | appInformationV8('cert_info')) == 'Soil sampling' %}
-          Soil sampling for {{query.id | appInformationV8('commodity_info') or "crops"}}
-          {% elif (query.id | appInformationV8('cert_info')) == 'Phytosanitary' %}
-          Phytosanitary certificate for {{query.id | appInformationV8('commodity_info') or "crops"}}
-          {% elif (query.id | appInformationV8('cert_info')) == 'Re-forwarding' %}
-          Re-forwarding phytosanitary certificate for {{query.id | appInformationV8('commodity_info') or "crops"}}
+          {% if (query.id | appInformationV9('cert_info')) == 'Conformity' %}
+          Certificate of conformity for {{query.id | appInformationV9('commodity_info') or "crops"}}
+          {% elif (query.id | appInformationV9('cert_info')) == 'Growing season inspection' %}
+          Growing season inspection for {{query.id | appInformationV9('commodity_info') or "crops"}}
+          {% elif (query.id | appInformationV9('cert_info')) == 'Seed sampling' %}
+          Seed sampling for {{query.id | appInformationV9('commodity_info') or "crops"}}
+          {% elif (query.id | appInformationV9('cert_info')) == 'Soil sampling' %}
+          Soil sampling for {{query.id | appInformationV9('commodity_info') or "crops"}}
+          {% elif (query.id | appInformationV9('cert_info')) == 'Phytosanitary' %}
+          Phytosanitary certificate for {{query.id | appInformationV9('commodity_info') or "crops"}}
+          {% elif (query.id | appInformationV9('cert_info')) == 'Re-forwarding' %}
+          Re-forwarding phytosanitary certificate for {{query.id | appInformationV9('commodity_info') or "crops"}}
           {% else %}
           Phytosanitary certificate for crops
           {% endif %}
         </dd>
       </div>
 
-      {% if (query.id | appInformationV8('cert_info')) == 'Conformity' or (query.id | appInformationV8('cert_info')) == 'Phytosanitary' or (query.id | appInformationV8('cert_info')) == 'Re-forwarding' %}
+      {% if (query.id | appInformationV9('cert_info')) == 'Conformity' or (query.id | appInformationV9('cert_info')) == 'Phytosanitary' or (query.id | appInformationV9('cert_info')) == 'Re-forwarding' %}
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Destination country</dt>
-        <dd class="govuk-summary-list__value">{{query.id | appInformationV8('destination')}}</dd>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV9('destination')}}</dd>
       </div>
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">{% if data.build == "development" %}Customer{% else %}Consignee{% endif %}</dt>
-        <dd class="govuk-summary-list__value">{{query.id | appInformationV8('importer') | title or "Example consignee name"}}</dd>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV9('importer') | title or "Example consignee name"}}</dd>
       </div>
       {% endif %}
 
@@ -130,30 +130,30 @@
       </div>
       {% endif %}
 
-      {% if (query.id | appInformationV8('status')) == 'certificate issued' or (query.id | appInformationV8('status')) == 'certificate re-issued' %}
+      {% if (query.id | appInformationV9('status')) == 'certificate issued' or (query.id | appInformationV9('status')) == 'certificate re-issued' %}
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Phytosanitary certificate number</dt>
-        <dd class="govuk-summary-list__value">UK/GB/E&W/{{query.id | appInformationV8('certificate') or "2022/4236522044833"}}</dd>
+        <dd class="govuk-summary-list__value">UK/GB/E&W/{{query.id | appInformationV9('certificate') or "2022/4236522044833"}}</dd>
       </div>
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Certificate issue date</dt>
-        <dd class="govuk-summary-list__value">{{query.id | appInformationV8('certificateIssueDate') or "01 January 2022"}}</dd>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV9('certificateIssueDate') or "01 January 2022"}}</dd>
       </div>
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Certificate expiry date</dt>
-        <dd class="govuk-summary-list__value">{{query.id | appInformationV8('certificateExpiryDate') or "15 January 2022"}}</dd>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV9('certificateExpiryDate') or "15 January 2022"}}</dd>
       </div>
       {% endif %}
 
     </dl>
 
     <ul class="govuk-list noprint">
-      {% if (query.id | appInformationV8('status')) == 'certificate issued' %}
-      {% elif (query.id | appInformationV8('status')) == 'exporter action' %}
+      {% if (query.id | appInformationV9('status')) == 'certificate issued' %}
+      {% elif (query.id | appInformationV9('status')) == 'exporter action' %}
       <!-- <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-pre-inspect-amend-message">Update this application</a></li> -->
-      {% elif (query.id | appInformationV8('status')) == 'preparing certificate'  %}
+      {% elif (query.id | appInformationV9('status')) == 'preparing certificate'  %}
       <!-- <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-post-inspect-amend?is_amend=yes">Update this application</a> - change details such as weight or number of packages</li> -->
       {% else %}
       <!-- <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-pre-inspect-amend?is_amend=yes">Update this application</a> - change details such as weight or number of packages</li> -->
@@ -161,7 +161,7 @@
       <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-viewonly">View this application</a></li>
       <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id or 1}}&is_group={{query.is_group}}">Copy as new application</a></li>
       <li><a class="govuk-link govuk-link--no-visited-state" href="cancel-reason">Cancel this application</a></li>
-      {% if (query.id | appInformationV8('status')) == 'draft' %}
+      {% if (query.id | appInformationV9('status')) == 'draft' %}
       <li><a class="govuk-link govuk-link--no-visited-state" href="delete">Delete this application</a></li>
       {% endif %}
     </ul>
