@@ -15,7 +15,7 @@
 
   <div class="govuk-grid-column-two-thirds">
         
-    <form action="amend-your-certificate?id={{query.id}}&is_group={{query.is_group}}&commodity=plants&row1=true&row2=true&row3=true{% if query.reasonlockedin == 'afterreason' %}&reasonlockedin=afterreason{% endif %}" method="post">
+    <form action="amend-your-certificate?id={{query.id}}&is_group={{query.is_group}}&commodity=plants&row1=true&row2=true&row3=true" method="post">
 
       <div class="govuk-form-group">
         <fieldset class="govuk-fieldset">
@@ -26,13 +26,11 @@
           <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
 
             <div class="govuk-radios__item">
-              <input {% if query.reasonlockedin == 'afterreason' %} aria-describedby="needsUpdate-hint" {% endif %} class="govuk-radios__input" id="needsUpdate" name="reason" type="radio" value="I need to change details on the certificate~amend-your-certificate?id={{query.id}}&is_group={{query.is_group}}&commodity=plants&row1=true&row2=true&row3=true&reissue_certificate_data_pfp=draft{% if query.certificateFormat == 'digital' %}&certificateFormat=digital{% endif %}{% if query.reasonlockedin == 'afterreason' %}&reasonlockedin=afterreason{% endif %}"{% if data.reason == "I need to change details on the certificate" %} checked{% endif %}>
+              <input aria-describedby="needsUpdate-hint" class="govuk-radios__input" id="needsUpdate" name="reason" type="radio" value="I need to change details on the certificate~amend-your-certificate?id={{query.id}}&is_group={{query.is_group}}&commodity=plants&row1=true&row2=true&row3=true&reissue_certificate_data_pfp=draft{% if query.certificateFormat == 'digital' %}&certificateFormat=digital{% endif %}"{% if data.reason == "I need to change details on the certificate" %} checked{% endif %}>
               <label class="govuk-label govuk-radios__label" for="needsUpdate">I need to change details on the certificate</label>
-              {% if query.reasonlockedin == 'afterreason' %}
               <div id="needsUpdate-hint" class="govuk-hint govuk-radios__hint">
                 You cannot change this reason after you select 'continue'
               </div>
-              {% endif %}
             </div>
 
             {% if query.certificateFormat != "digital" %}
@@ -87,7 +85,6 @@
         </fieldset>
       </div>
 
-      {% if query.reasonlockedin == "afterreason" %}
       <div class="govuk-warning-text">
         <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
         <strong class="govuk-warning-text__text">
@@ -95,7 +92,6 @@
           If you select 'I need to change details on the certificate', you cannot change this reason after you select 'continue'
         </strong>
       </div>
-      {% endif %}
 
       <div class="govuk-button-group">
         <button class="govuk-button" type="submit" data-module="govuk-button">Continue</button>
