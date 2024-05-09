@@ -38,12 +38,25 @@ module.exports = function(router) {
   const db = []
 
   function addCommodity(data, list) {
-    console.log("adding commodity")
+    console.log("adding commodity");
     var newCommodity = {}
     for (var k in data) {
       var o = {}
       var name = ""
-      console.log(k)
+
+      //removing _unchecked from country arrays (known 'bug' with req.body)
+      if(k == "filter_demo"){
+        if(Array.isArray(data["filter_demo"])){
+          let i = data["filter_demo"].length;
+          while (i--) {
+            if (data["filter_demo"][i] == "_unchecked") {
+              // Remove element
+              data["filter_demo"].splice(i, 1);
+            }
+          }
+        }
+      }
+
       if (data.hasOwnProperty(k)) {
         var name = k;
       }
