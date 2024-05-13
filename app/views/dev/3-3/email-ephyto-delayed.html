@@ -24,26 +24,54 @@
 
     <h2 class="govuk-heading-l">
       {% if query.reissue == "true" %}
-        ePhyto re-issue delayed 7800 56212 5823
+        
+        {% if query.delay == "second" %}
+          ePhyto re-issue still delayed 7800 56212 5823
+        {% else %}
+          ePhyto re-issue delayed 7800 56212 5823
+        {% endif %}
+
       {% else %}
-        ePhyto delayed 7800 56212 5823
+
+        {% if query.delay == "second" %}
+          ePhyto still delayed 7800 56212 5823
+        {% else %}
+          ePhyto delayed 7800 56212 5823
+        {% endif %}
+        
       {% endif %}
     </h2>
 
     <p class="govuk-body">Dear Jane Doe,</p>
 
+
     {% if query.reissue == "true" and query.withdrawdelay == "true" %}
       <p class="govuk-body">There is a delay with your re-issued ePhyto. This is because we have not had confirmation that {{_country}} has withdrawn your existing ePhyto.</p>
+
     {% elif query.reissue == "true" %}
-      <p class="govuk-body">There is a delay with your re-issued ePhyto. This is because we have not had confirmation that {{_country}} has received it.</p>
+      {% if query.delay == "second" %}
+        <p class="govuk-body">There is still a delay with your re-issued ePhyto. This is because we have not had confirmation that {{_country}} has received it.</p>
+      {% else %}
+        <p class="govuk-body">There is a delay with your re-issued ePhyto. This is because we have not had confirmation that {{_country}} has received it.</p>
+      {% endif %}
+
     {% else %}
-      <p class="govuk-body">There is a delay with your ePhyto. This is because we have not had confirmation that {{_country}} has received it.</p>
+      {% if query.delay == "second" %}
+        <p class="govuk-body">There is still a delay with your ePhyto. This is because we have not had confirmation that {{_country}} has received it.</p>
+      {% else %}
+        <p class="govuk-body">There is a delay with your ePhyto. This is because we have not had confirmation that {{_country}} has received it.</p>
+      {% endif %}
+      <p class="govuk-body">We ask you not to send your consignment to {{_country}} until we have confirmation that they have received it.</p>
     {% endif %}
+
+
+
     
     <p class="govuk-body">Phytosanitary certificate number: UK/GB/E&W/2023/7800562125823</p>
     <p class="govuk-body">Your reference: PO 66622</p>
-    <!-- <p class="govuk-body">Certificate issued: 10 December 2023</p> -->
     <p class="govuk-body">Submitted by: Joe Bloggs</p>
+
+
     
     <h2 class="govuk-heading-m">What happens now</h2>
 
@@ -59,45 +87,71 @@
 
 
 
-
     <h2 class="govuk-heading-m">If the problem cannot be fixed</h2>
 
-    
+    {% if query.delay == "second" %}
 
-  
-    {% if query.country == "eu" %}
-    <p class="govuk-body">We will:</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>put your details into TRACES</li>
-      <li>email you the TRACES reference number and a PDF copy of the phytosanitary certificate</li>
-    </ul>
-    {% elif query.country == "row" %}
-    <ol class="govuk-list govuk-list--number">
-      <li>We will send you a paper phytosanitary certificate and an email to let you know.</li>
-      <li>You will need to send the paper certificate with your consignment.</li>
-    </ol>
-    {% else %}
-    <p class="govuk-body">We will:</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>email you a scanned phytosanitary certificate</li>
-      <li>send you a paper phytosanitary certificate in the post</li>
-    </ul>
+      <!-- 5 hour delay -->
+      {% if query.country == "eu" %}
+        <p class="govuk-body">You can ask us to enter the details into TRACES and send you:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>the TRACES reference number</li>
+          <li>a PDF copy of the phytosanitary certificate</li>
+        </ul>
+      {% elif query.country == "row" %}
+        <p class="govuk-body">You can ask us to send you a paper phytosanitary certificate and an email to let you know.</p>
+        <p class="govuk-body">You will need to send the paper certificate with your consignment.</p>
+      {% else %}
+        <p class="govuk-body">You can ask us to enter the details into TRACES and send you a:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>scanned phytosanitary certificate</li>
+          <li>paper phytosanitary certificate in the post</li>
+        </ul>
+      {% endif %}
+
+    {% else %} <!-- 1 hour delay -->
+
+      {% if query.country == "eu" %}
+      <p class="govuk-body">We will:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>put your details into TRACES</li>
+        <li>email you the TRACES reference number and a PDF copy of the phytosanitary certificate</li>
+      </ul>
+      {% elif query.country == "row" %}
+      <ol class="govuk-list govuk-list--number">
+        <li>We will send you a paper phytosanitary certificate and an email to let you know.</li>
+        <li>You will need to send the paper certificate with your consignment.</li>
+      </ol>
+      {% else %}
+      <p class="govuk-body">We will:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>email you a scanned phytosanitary certificate</li>
+        <li>send you a paper phytosanitary certificate in the post</li>
+      </ul>
+      {% endif %}
+
     {% endif %}
-   
 
 
+    {% if query.delay != "second" %}
+      <h2 class="govuk-heading-m">What is an ePhyto</h2>
+      <p class="govuk-body">Read more about ePhyto certificates: <a class="govuk-link govuk-link--no-visited-state" href="guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#digital-phytosanitary-certificates">https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland</a></p>
+    {% endif %}
 
 
-    <h2 class="govuk-heading-m">What is an ePhyto</h2>
-    <p class="govuk-body">Read more about ePhyto certificates: <a class="govuk-link govuk-link--no-visited-state" href="guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#digital-phytosanitary-certificates">https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland</a></p>
-
-    <h2 class="govuk-heading-m">Get help</h2>
-    <p class="govuk-body">This is an automated email. Please do not reply to this email as the account is not monitored. </p>
+    <h2 class="govuk-heading-m">Contact us</h2>
     <p class="govuk-body">You can contact us on:</p>
     <ul class="govuk-list govuk-list--bullet">
       <li>0300 1000 313, Monday to Sunday 7am to 7pm</li>
       <li><a href="mailto:planthealth.info@apha.gov.uk" class="govuk-link">planthealth.info@apha.gov.uk</a></li>
     </ul>
+    <p class="govuk-body">This is an automated email. Please do not reply to this email as the account is not monitored.</p>
+
+
+    {% if query.delay == "second" %}
+      <h2 class="govuk-heading-m">What is an ePhyto</h2>
+      <p class="govuk-body">Read more about ePhyto certificates: <a class="govuk-link govuk-link--no-visited-state" href="guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#digital-phytosanitary-certificates">https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland</a></p>
+    {% endif %}
 
     <h2 class="govuk-heading-m">Manage email notifications</h2>
     <p class="govuk-body">Change which emails you get about ePhytos in your account settings: <a class="govuk-link govuk-link--no-visited-state" href="account/notifications">https://exporter.apply-phytosanitary-certificate.defra.gov.uk/manage-email-notifications</a></p>
