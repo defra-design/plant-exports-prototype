@@ -96,6 +96,10 @@
           <div class="govuk-tag govuk-tag--orange">
             ePhyto delayed
           </div>
+          {% elif _applicationStatus == "ephyto still delayed" %}
+          <div class="govuk-tag govuk-tag--orange">
+            ePhyto delayed
+          </div>
           {% elif _applicationStatus == "preparing ephyto" %}
           <div class="govuk-tag govuk-tag--indigo">
             Preparing ePhyto
@@ -235,7 +239,7 @@
         <dd class="govuk-summary-list__value">UK/GB/E&W/{{query.id | appInformationV9('certificate') or "2022/4236522044833"}}{% if data.reissue_certificate_data_pfp == "approved" %} R1{% endif %}</dd>
       </div>
       
-      {% if _applicationStatus != "preparing ephyto" and _applicationStatus != "ephyto delayed" %}
+      {% if _applicationStatus != "preparing ephyto" and _applicationStatus != "ephyto delayed" and _applicationStatus != "ephyto still delayed" %}
       
         <div class="govuk-summary-list__row">
           <dt class="govuk-summary-list__key">Certificate issue date</dt>
@@ -266,9 +270,9 @@
 
     <h2 class="govuk-heading-m">Your certificate</h2>
 
-    {% if _applicationStatus == "ephyto delayed" or _applicationStatus == "ephyto re-issue delayed" %}
+    {% if _applicationStatus == "ephyto delayed" or _applicationStatus == "ephyto re-issue delayed" or _applicationStatus == "ephyto still delayed" %}
 
-    {% if _applicationStatus == "ephyto delayed" %}
+    {% if _applicationStatus == "ephyto delayed" or _applicationStatus == "ephyto still delayed" %}
       <p class="govuk-body">There is a delay sending your ePhyto to {{query.id | appInformationV9('destination')}}. This is because of a technical problem.</p>
     {% elif _applicationStatus == "ephyto re-issue delayed" %}
       <p class="govuk-body">There is a delay sending your re-issued ePhyto to {{query.id | appInformationV9('destination')}}. This is because of a technical problem.</p>
@@ -279,6 +283,12 @@
       <li>keep checking to see if the problem gets fixed</li>
       <li>update the status once we know more</li>
     </ul>
+    {% if _applicationStatus == "ephyto still delayed" %}
+    <!-- 
+      NEW CONTENT FOR 767 GOES HERE
+     -->
+    {% endif %}
+
     {% elif _applicationStatus != "ephyto withdrawn" and _applicationStatus != "withdrawn" %}
     <a href="/public/certificates/ephyto/UK-GB-E&W-2023-7800562125823-3.pdf" role="button" draggable="false" class="govuk-button" data-module="govuk-button">View copy</a>
 
@@ -310,7 +320,7 @@
       <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-viewonly?id={{query.id}}&is_group={{query.is_group}}&commodity=plants&row1=true&row2=true&row3=true">View application details</a></li>
       {% if _applicationStatus != "ephyto re-issue requested" and _applicationStatus != "processing ephyto re-issue" and _applicationStatus != "ephyto re-issue delayed" and _applicationStatus != "re-issue requested" and _applicationStatus != "processing re-issue"  %}
 
-      {% if data.reissue_certificate_data_pfp != "submitted" and data.reissue_certificate_data_pfp != "processing" and _applicationStatus != "ephyto delayed" and data.reissue_certificate_data_pfp != 'draft' and _applicationStatus != "preparing ephyto" %}
+      {% if data.reissue_certificate_data_pfp != "submitted" and data.reissue_certificate_data_pfp != "processing" and _applicationStatus != "ephyto delayed" and _applicationStatus != "ephyto still delayed" and data.reissue_certificate_data_pfp != 'draft' and _applicationStatus != "preparing ephyto" %}
         <li><a class="govuk-link govuk-link--no-visited-state" href="application/re-issue/introduction?id={{query.id}}&is_group={{query.is_group}}&certificateFormat=digital">Apply for re-issue </a></li>
       {% endif %}
 
