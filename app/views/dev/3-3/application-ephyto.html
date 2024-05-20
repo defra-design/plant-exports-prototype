@@ -132,6 +132,10 @@
           <div class="govuk-tag govuk-tag--{{query.id | appInformationV9('tag') | lower}}">
             ePhyto re-issue delayed
           </div>
+          {% elif _applicationStatus == "ephyto re-issue still delayed" %}
+          <div class="govuk-tag govuk-tag--{{query.id | appInformationV9('tag') | lower}}">
+            ePhyto re-issue delayed
+          </div>
           {% elif _applicationStatus == "ephyto re-issue received" %}
           <div class="govuk-tag govuk-tag--{{query.id | appInformationV9('tag') | lower}}">
             ePhyto re-issue received
@@ -270,23 +274,44 @@
 
     <h2 class="govuk-heading-m">Your certificate</h2>
 
-    {% if _applicationStatus == "ephyto delayed" or _applicationStatus == "ephyto re-issue delayed" or _applicationStatus == "ephyto still delayed" %}
+    {% if _applicationStatus == "ephyto delayed" or _applicationStatus == "ephyto re-issue delayed" or _applicationStatus == "ephyto re-issue still delayed" or _applicationStatus == "ephyto still delayed" %}
 
-    {% if _applicationStatus == "ephyto delayed" or _applicationStatus == "ephyto still delayed" %}
+
+
+    {% if _applicationStatus == "ephyto delayed" %}
       <p class="govuk-body">There is a delay sending your ePhyto to {{query.id | appInformationV9('destination')}}. This is because of a technical problem.</p>
+      <p class="govuk-body">We will:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>keep checking to see if the problem gets fixed</li>
+        <li>update the status once we know more</li>
+      </ul>
+
+    {% elif _applicationStatus == "ephyto still delayed" %}
+    <p class="govuk-body">There is a delay sending your ePhyto to {{query.id | appInformationV9('destination')}}. This is because of a technical problem.</p>
+    <p class="govuk-body">We will keep trying to send your ePhyto until 24 hours have passed.</p>
+    <p class="govuk-body">If this causes any problems, contact us on:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>0300 1000 313, Monday to Sunday 7am to 7pm</li>
+      <li><a href="mailto:planthealth.info@apha.gov.uk" class="govuk-link">planthealth.info@apha.gov.uk</a></li>
+    </ul>
+
     {% elif _applicationStatus == "ephyto re-issue delayed" %}
       <p class="govuk-body">There is a delay sending your re-issued ePhyto to {{query.id | appInformationV9('destination')}}. This is because of a technical problem.</p>
-    {% endif %}
+      <p class="govuk-body">We will:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>keep checking to see if the problem gets fixed</li>
+        <li>update the status once we know more</li>
+      </ul>
 
-    <p class="govuk-body">We will:</p>
+    {% elif _applicationStatus == "ephyto re-issue still delayed" %}
+    <p class="govuk-body">There is a delay sending your re-issued ePhyto to {{query.id | appInformationV9('destination')}}. This is because of a technical problem.</p>
+    <p class="govuk-body">We will keep trying to send your re-issued ePhyto until 24 hours have passed.</p>
+    <p class="govuk-body">If this causes any problems, contact us on:</p>
     <ul class="govuk-list govuk-list--bullet">
-      <li>keep checking to see if the problem gets fixed</li>
-      <li>update the status once we know more</li>
+      <li>0300 1000 313, Monday to Sunday 7am to 7pm</li>
+      <li><a href="mailto:planthealth.info@apha.gov.uk" class="govuk-link">planthealth.info@apha.gov.uk</a></li>
     </ul>
-    {% if _applicationStatus == "ephyto still delayed" %}
-    <!-- 
-      NEW CONTENT FOR 767 GOES HERE
-     -->
+
     {% endif %}
 
     {% elif _applicationStatus != "ephyto withdrawn" and _applicationStatus != "withdrawn" %}
@@ -318,7 +343,7 @@
     <ul class="govuk-list{% if query.id | appInformationV9('commodity_info') == 'plants' %} govuk-!-margin-bottom-8{% endif %} noprint">
       <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id}}&is_group={{query.is_group}}">Copy as new application</a></li>
       <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-viewonly?id={{query.id}}&is_group={{query.is_group}}&commodity=plants&row1=true&row2=true&row3=true">View application details</a></li>
-      {% if _applicationStatus != "ephyto re-issue requested" and _applicationStatus != "processing ephyto re-issue" and _applicationStatus != "ephyto re-issue delayed" and _applicationStatus != "re-issue requested" and _applicationStatus != "processing re-issue"  %}
+      {% if _applicationStatus != "ephyto re-issue requested" and _applicationStatus != "processing ephyto re-issue" and _applicationStatus != "ephyto re-issue delayed" and _applicationStatus != "ephyto re-issue still delayed" and _applicationStatus != "re-issue requested" and _applicationStatus != "processing re-issue"  %}
 
       {% if data.reissue_certificate_data_pfp != "submitted" and data.reissue_certificate_data_pfp != "processing" and _applicationStatus != "ephyto delayed" and _applicationStatus != "ephyto still delayed" and data.reissue_certificate_data_pfp != 'draft' and _applicationStatus != "preparing ephyto" %}
         <li><a class="govuk-link govuk-link--no-visited-state" href="application/re-issue/introduction?id={{query.id}}&is_group={{query.is_group}}&certificateFormat=digital">Apply for re-issue </a></li>
