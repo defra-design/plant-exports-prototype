@@ -77,8 +77,11 @@
     {% endif %}
 
 
-    <p class="govuk-body">We would like to ask you not to send your consignment until they confirm that they have received it.</p>
-
+    {% if query.reissue == "true" %}
+    <p class="govuk-body">We’d like to ask you not to send your consignment until we get confirmation that they have received your re-issued ePhyto.</p>
+    {% else %}
+    <p class="govuk-body">We’d like to ask you not to send your consignment until we get confirmation that they have received your ePhyto.</p>
+    {% endif %}
     
     <p class="govuk-body">Phytosanitary certificate number: UK/GB/E&W/2023/7800562125823</p>
     <p class="govuk-body">Your reference: PO 66622</p>
@@ -92,7 +95,12 @@
     {% if query.reissue == "true" %}
       <!-- Re-issue 5 hour -->
       {% if query.delay == "second" %}
-      <p class="govuk-body">We will keep trying to send your re-issued ePhyto to {{_country}} until 24 hours have passed.</p>
+      <p class="govuk-body">We will keep trying to send your re-issued ePhyto to {{_country}}. We will let you know if they receive it.</p>
+      <p class="govuk-body">If the problem cannot be fixed within 24 hours we will:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>email you a re-issued scanned phytosanitary certificate</li>
+        <li>send you a re-issued paper phytosanitary certificate in the post</li>
+      </ul>
       <p class="govuk-body">If this causes any problems, contact us on:</p>
       <ul class="govuk-list govuk-list--bullet">
         <li>0300 1000 313, Monday to Sunday 7am to 7pm</li>
@@ -114,7 +122,12 @@
     {% else %}
       <!-- Send 5 hour -->
       {% if query.delay == "second" %}
-      <p class="govuk-body">We will keep trying to send your ePhyto to {{_country}} until 24 hours have passed.</p>
+      <p class="govuk-body">We will keep trying to send your ePhyto to {{_country}}. We will let you know if they receive it.</p>
+      <p class="govuk-body">If the problem cannot be fixed within 24 hours we will:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>email you a scanned phytosanitary certificate</li>
+        <li>send you a paper phytosanitary certificate in the post</li>
+      </ul>
       <p class="govuk-body">If this causes any problems, contact us on:</p>
       <ul class="govuk-list govuk-list--bullet">
         <li>0300 1000 313, Monday to Sunday 7am to 7pm</li>
