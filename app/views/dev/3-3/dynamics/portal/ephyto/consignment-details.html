@@ -94,6 +94,7 @@
     
       </div>
 
+      <!-- list for seeds -->
       {% set items = [
         {
           "commodity": "Antirrhinum majus",
@@ -802,26 +803,209 @@
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
             <th scope="col" class="govuk-table__header">Description</th>
-            <th scope="col" class="govuk-table__header">Origin</th>
-            <th scope="col" class="govuk-table__header">Net quantity and number of packages</th>
-            <th scope="col" class="govuk-table__header">Packaging</th>
+
+            {% if data.commodity == "used farm and forestry machinery" %}
+              {% if data.reforwarding == "1" %}
+              <th scope="col" class="govuk-table__header">Country of last use and import certificate numbers</th>
+              {% else %}
+              <th scope="col" class="govuk-table__header">Country of last use</th>
+              {% endif %}
+            {% else %}
+              {% if data.reforwarding == "1" %}
+              <th scope="col" class="govuk-table__header">Origin and import certificate numbers</th>
+              {% else %}
+              <th scope="col" class="govuk-table__header">Origin</th>
+              {% endif %}
+            {% endif %}
+
+            {% if data.commodity == "used farm and forestry machinery" %}
+              <th scope="col" class="govuk-table__header">Unique ID</th>
+            {% else %}
+              <th scope="col" class="govuk-table__header">Net quantity and number of packages</th>
+            {% endif %}
+
+            {% if data.commodity != "used farm and forestry machinery" %}
+              {% if data.commodity == "plant products" %}
+              <th scope="col" class="govuk-table__header">Packaging, packing material, container number, seal number, batch code and distinguishing marks</th>
+              {% else %}
+              <th scope="col" class="govuk-table__header">Packaging, packing material and distinguishing marks</th>
+              {% endif %}
+            {% endif %}
+
           </tr>
         </thead>
         <tbody class="govuk-table__body">
-          {% for item in items %}
-          <tr class="govuk-table__row">
-            <td scope="row" class="govuk-table__cell">
-              <span class="govuk-table-td-block govuk-!-font-weight-bold">{{item.commodity}} '{{item.variety}}'</span>
-              <span class="govuk-table-td-block-last">Lot reference: {{item.lot}}</span>
-            </td>
-            <td class="govuk-table__cell">{{item.country}}</td>
-            <td class="govuk-table__cell">
-              <span class="govuk-table-td-block">{{item.quantity}} tonnes</span>
-              <span class="govuk-table-td-block-last">20 packages</span>
-            </td>
-            <td class="govuk-table__cell">Crate - bulk - cardboard</td>
-          </tr>
-          {% endfor %}
+          {% if data.commodity == "bulbs" %}
+            {% for i in range(0, 100) -%}
+            <tr class="govuk-table__row">
+              <td scope="row" class="govuk-table__cell">
+                <span class="govuk-table-td-block govuk-!-font-weight-bold">Spondias tuberosa (SPXTU) 'Dry'</span>
+                <span class="govuk-table-td-block-last">Commodity type: bulbs</span>
+              </td>
+              <td class="govuk-table__cell">
+                <span class="govuk-table-td-block">United Kingdom</span>
+                {% if data.reforwarding == "1" %}
+                <span class="govuk-table-td-block-last" >123-456-789-0, ABC-123-456-789-0</span>
+                {% endif %}
+              </td>
+              <td class="govuk-table__cell">
+                <span class="govuk-table-td-block">82 tonnes</span>
+                <span class="govuk-table-td-block-last">239 packages</span>
+              </td>
+              <td class="govuk-table__cell">Crate - bulk - wooden</td>
+            </tr>
+            {%- endfor %}
+          {% elif data.commodity == "plants" %}
+            {% for i in range(0, 100) -%}
+            <tr class="govuk-table__row">
+              <td scope="row" class="govuk-table__cell">
+                <span class="govuk-table-td-block govuk-!-font-weight-bold">Cabbage 'Durham Early'</span>
+                <span class="govuk-table-td-block-last">Commodity type: plants</span>
+              </td>
+              <td class="govuk-table__cell">
+                <span class="govuk-table-td-block">United Kingdom</span>
+                {% if data.reforwarding == "1" %}
+                <span class="govuk-table-td-block-last" >123-456-789-0, ABC-123-456-789-0</span>
+                {% endif %}
+              </td>
+              <td class="govuk-table__cell">
+                <span class="govuk-table-td-block">17 tonnes</span>
+                <span class="govuk-table-td-block-last">68 packages</span>
+              </td>
+              <td class="govuk-table__cell">Crate - bulk - wooden</td>
+            </tr>
+            {%- endfor %}
+          {% elif data.commodity == "potatoes" %}
+            {% for i in range(0, 100) -%}
+            <tr class="govuk-table__row">
+              <td scope="row" class="govuk-table__cell">
+                <span class="govuk-table-td-block govuk-!-font-weight-bold">Ware potatoes 'Maris piper'</span>
+                <span class="govuk-table-td-block">Chemical used: rimsulfuron (herbicide)</span>
+                <span class="govuk-table-td-block">Stock number: 99372</span>
+                <span class="govuk-table-td-block">Lot reference: JSSG&SG*YISKS</span>
+                <span class="govuk-table-td-block-last">Chemical used: rimsulfuron (herbicide)</span>
+              </td>
+              <td class="govuk-table__cell">
+                <span class="govuk-table-td-block">United Kingdom</span>
+                {% if data.reforwarding == "1" %}
+                <span class="govuk-table-td-block-last" >123-456-789-0, ABC-123-456-789-0</span>
+                {% endif %}
+              </td>
+              <td class="govuk-table__cell">
+                <span class="govuk-table-td-block">82 tonnes</span>
+                <span class="govuk-table-td-block-last">154 packages</span>
+              </td>
+              <td class="govuk-table__cell">
+                <span class="govuk-table-td-block">Crate - bulk - cardboard</span>
+                <span class="govuk-table-td-block">Cardboard</span>
+                <span class="govuk-table-td-block-last">Blue star on packaging</span>
+              </td>
+            </tr>
+            {%- endfor %}
+          {% elif data.commodity == "plant products" %}
+            {% for i in range(0, 100) -%}
+            <tr class="govuk-table__row">
+              <td scope="row" class="govuk-table__cell">Protea erosa (LCSGR)</td>
+              <td class="govuk-table__cell">
+                <span class="govuk-table-td-block">Columbia, Cost Rica, United Kingdom</span>
+                {% if data.reforwarding == "1" %}
+                <span class="govuk-table-td-block-last" >123-456-789-0, ABC-123-456-789-0</span>
+                {% endif %}
+              </td>
+              <td class="govuk-table__cell">
+                <span class="govuk-table-td-block">82 tonnes</span>
+                <span class="govuk-table-td-block-last">929 packages</span>
+              </td>
+              <td class="govuk-table__cell">
+                <span class="govuk-table-td-block">Crate - bulk - wooden</span>
+                <span class="govuk-table-td-block">Wood</span>
+                <span class="govuk-table-td-block">C-123456</span>
+                <span class="govuk-table-td-block">S-123456</span>
+                <span class="govuk-table-td-block">B-123456</span>
+                <span class="govuk-table-td-block-last">N/A</span>
+              </td>
+            </tr>
+            {%- endfor %}
+          {% elif data.commodity == "seeds" %}
+            {% for item in items %}
+            <tr class="govuk-table__row">
+              <td scope="row" class="govuk-table__cell">
+                <span class="govuk-table-td-block govuk-!-font-weight-bold">{{item.commodity}} '{{item.variety}}'</span>
+                <span class="govuk-table-td-block">Lot reference: {{item.lot}}</span>
+                <span class="govuk-table-td-block-last">APHA sample reference: 2345678</span>
+              </td>
+              <td class="govuk-table__cell">
+                <span class="govuk-table-td-block">{{item.country}}</span>
+                {% if data.reforwarding == "1" %}
+                <span class="govuk-table-td-block-last" >123-456-789-0, ABC-123-456-789-0</span>
+                {% endif %}
+              </td>
+              <td class="govuk-table__cell">
+                <span class="govuk-table-td-block">{{item.quantity}} tonnes</span>
+                <span class="govuk-table-td-block-last">20 packages</span>
+              </td>
+              <td class="govuk-table__cell">Crate - bulk - cardboard</td>
+            </tr>
+            {% endfor %}
+          {% elif data.commodity == "grain" %}
+            {% for i in range(0, 100) -%}
+            <tr class="govuk-table__row">
+              <td scope="row" class="govuk-table__cell">
+                <span class="govuk-!-font-weight-bold">Androsace adfinis subsp. puberula (ANSAP) 'Dry grain'</span>
+              </td>
+              <td class="govuk-table__cell">
+                <span class="govuk-table-td-block">Costa Rica, United States of America</span>
+                {% if data.reforwarding == "1" %}
+                <span class="govuk-table-td-block-last" >123-456-789-0, ABC-123-456-789-0</span>
+                {% endif %}
+              </td>
+              <td class="govuk-table__cell">
+                <span class="govuk-table-td-block">82 tonnes</span>
+                <span class="govuk-table-td-block-last">2,010 packages</span>
+              </td>
+              <td class="govuk-table__cell">
+                Crate - bulk - wooden
+              </td>
+            </tr>
+            {%- endfor %}
+          {% elif data.commodity == "used farm and forestry machinery" %}
+            {% for i in range(0, 100) -%}
+            <tr class="govuk-table__row">
+              <td scope="row" class="govuk-table__cell">
+                <span class="govuk-table-td-block">Machinery type: Tractor</span>
+                <span class="govuk-table-td-block">Make: Massey Ferguson</span>
+                <span class="govuk-table-td-block-last">Model: B2741</span>
+              </td>
+              <td class="govuk-table__cell">
+                <span class="govuk-table-td-block">Spain</span>
+                {% if data.reforwarding == "1" %}
+                <span class="govuk-table-td-block-last" >123-456-789-0, ABC-123-456-789-0</span>
+                {% endif %}
+              </td>
+              <td class="govuk-table__cell">5456987452Z</td>
+            </tr>
+            {%- endfor %}
+          {% else %}
+            {% for i in range(0, 100) -%}
+            <tr class="govuk-table__row">
+              <td scope="row" class="govuk-table__cell">
+                <span class="govuk-table-td-block govuk-!-font-weight-bold">Cabbage 'Durham Early'</span>
+                <span class="govuk-table-td-block-last">Commodity type: plants</span>
+              </td>
+              <td class="govuk-table__cell">
+                <span class="govuk-table-td-block">United Kingdom</span>
+                {% if data.reforwarding == "1" %}
+                <span class="govuk-table-td-block-last" >123-456-789-0, ABC-123-456-789-0</span>
+                {% endif %}
+              </td>
+              <td class="govuk-table__cell">
+                <span class="govuk-table-td-block">17 tonnes</span>
+                <span class="govuk-table-td-block-last">68 packages</span>
+              </td>
+              <td class="govuk-table__cell">Crate - bulk - wooden</td>
+            </tr>
+            {%- endfor %}
+          {% endif %}
         </tbody>
       </table>
 
@@ -848,7 +1032,7 @@
 
       <div class="govuk-form-block govuk-!-margin-top-4">
         <p class="govuk-body">
-          <a class="govuk-link" href="{{query.returnURL or 'review-certificate'}}?commodity={{data.commodity}}&consignmentSize={{data.consignmentSize}}">Return to check the ePhyto</a>
+          <a class="govuk-link" href="{{query.returnURL or 'view-certificate'}}?commodity={{data.commodity}}&consignmentSize={{data.consignmentSize}}&reforwarding={{data.reforwarding}}">Return to check the ePhyto</a>
         <p>
       </div>
 
