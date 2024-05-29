@@ -21,7 +21,8 @@ example {{commodity.quantity}}
 -->
 <tr class="govuk-table__row">
   <td class="govuk-table__cell">
-    <span style="display: block; margin-bottom: 7px;">
+    <span class="table-heading" >Description </span>
+    <!-- <span style="display: block; margin-bottom: 7px;"> -->
       {% if commodity.has_botanicial_name == "use_description" %}
           <!-- use DESCRIPTION -->
           <strong>{{commodity.commodity_description or "Description for plant"}}</strong>
@@ -32,12 +33,16 @@ example {{commodity.quantity}}
           <!-- use BOTANICAL NAME -->
           <strong>{{commodity.botanical_name or "Rosa ecae (ROSEC)"}}</strong>
       {% endif %}
-  </span>
+  <!-- </span> -->
     
   </td>
   <td class="govuk-table__cell">
-
-    <span style="display: block; margin-bottom: 7px;" >
+    {% if data.reforwarding == "1" %}
+    <span class="table-heading" >Origin and import certificate numbers</span>
+    {% else %}
+    <span class="table-heading" >Origin</span>
+    {% endif %}
+    <!-- <span style="display: block; margin-bottom: 7px;" > -->
       <!-- {% if commodity.filter_demo %}
       {{commodity.filter_demo or "United Kingdom"}}
       {% else %}
@@ -50,10 +55,12 @@ example {{commodity.quantity}}
         {{commodity.filter_demo | join(", ") or _defaultCountry}}
       {% endif %}
       <!-- "filter_demo":["Afghanistan","Åland Islands","Albania"], -->
-    </span>
+    <!-- </span> -->
 
     {% if data.reforwarding == "1" %}
-    <span style="display: block; margin-bottom: 7px;" >
+    <br>
+    <!-- <span class="table-heading" >Import certificate numbers </span> -->
+    <!-- <span style="display: block; margin-bottom: 7px;" > -->
       {% if commodity['commodityIPCN-2'] %}
         {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
       {% elif commodity['commodityIPCN-1'] %}
@@ -61,36 +68,54 @@ example {{commodity.quantity}}
       {% else %}
         {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
       {% endif %}
-    </span>
+    <!-- </span> -->
     {% endif %}
 
   </td>
   <td class="govuk-table__cell">
-    <span style="display: block; margin-bottom: 7px;">{{commodity.quantity or "20"}} {{commodity.units or "kilograms"}}</span>
-    <span style="display: block; margin-bottom: 7px;">{{commodity.gross_quantity or "20"}} {{commodity.gross_units or "kilograms"}}</span>
-    <span style="display: block; margin-bottom: 7px;">{{commodity.number_of_packages or "5"}} packages</span>
+    <span class="table-heading" >Net quantity, gross quantity and number of packages</span>
+    <!-- <span style="display: block; margin-bottom: 7px;"> -->
+      {{commodity.quantity or "20"}} {{commodity.units or "kilograms"}}<br>
+    <!-- </span> -->
+    <!-- <span style="display: block; margin-bottom: 7px;"> -->
+      {{commodity.gross_quantity or "20"}} {{commodity.gross_units or "kilograms"}}<br>
+    <!-- </span> -->
+    <!-- <span style="display: block; margin-bottom: 7px;"> -->
+      {{commodity.number_of_packages or "5"}} packages
+    <!-- </span> -->
   </td>
   <td class="govuk-table__cell">
+    <span class="table-heading" >Packaging, packing material, container number, seal number, batch code and distinguishing marks</span>
     <span style="display: block; margin-bottom: 7px;">{{commodity.packaging[0] or "Crate - bulk - cardboard"}}</span>
       {% if commodity.packing_material_used != "" %}
-        <span style="display: block; margin-bottom: 7px;">{{commodity.packing_material_used or "Cardboard"}}</span>
+        <!-- <span style="display: block; margin-bottom: 7px;"> -->
+          {{commodity.packing_material_used or "Cardboard"}}<br>
+        <!-- </span> -->
       {% endif %}
 
       {% if commodity.container_number != "" %}
-        <span style="display: block; margin-bottom: 7px;">{{commodity.container_number or "123456789"}}</span>
+        <!-- <span style="display: block; margin-bottom: 7px;"> -->
+          {{commodity.container_number or "123456789"}}<br>
+        <!-- </span> -->
       {% endif %}
       {% if commodity.seal_number != "" %}
-        <span style="display: block; margin-bottom: 7px;">{{commodity.seal_number or "S-909-12345"}}</span>
+        <!-- <span style="display: block; margin-bottom: 7px;"> -->
+          {{commodity.seal_number or "S-909-12345"}}<br>
+        <!-- </span> -->
       {% endif %}
       {% if commodity.batch_code != "" %}
-        <span style="display: block; margin-bottom: 7px;">{{commodity.batch_code or "BC112 23344"}}</span>
+        <!-- <span style="display: block; margin-bottom: 7px;"> -->
+          {{commodity.batch_code or "BC112 23344"}}<br>
+        <!-- </span> -->
       {% endif %}
 
       {% if commodity.distinguishing_marks != "" %}
-        <span style="display: block; margin-bottom: 7px;">{{commodity.distinguishing_marks or "Brown marks"}}</span>
+        <!-- <span style="display: block; margin-bottom: 7px;"> -->
+          {{commodity.distinguishing_marks or "Brown marks"}}
+        <!-- </span> -->
       {% endif %}
   </td>
-  <td class="govuk-table__cell" style="text-align: right;">
+  <td class="govuk-table__cell actions" style="text-align: right;">
     <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
     <br>
     <a href="#" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
