@@ -15,7 +15,7 @@
 
   <div class="govuk-grid-column-two-thirds">
       
-    <form action="upload-in-progress" method="post" novalidate>
+    <form action="upload-coc-in-progress" method="post" novalidate>
     
       <!--
         Chris Harding (07.06.22) - Here we set:
@@ -40,127 +40,66 @@
       {% endif %}
 
       <div class="govuk-form-group govuk-!-margin-bottom-9">
-        <fieldset class="govuk-fieldset">
-          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-            <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-6">Upload a file</h1>
-          </legend>
-        </fieldset>
-        <p class="govuk-body"><a href="/public/templates/{{template}}" class="govuk-link govuk-link--no-visited-state" >Download the template (CSV, 3KB)</a></p>
-        <p class="govuk-body govuk-!-margin-bottom-6">Open the file in whatever software program you use to edit comma-separated values (CSV) files. Fill in the template using the guidance notes on how to edit the file, then save and upload it.</p>
         
-        <!-- Dynamic sections (START) -->
-        {% if data.bulkCommodities == "sms" %}
-        <h2 class="govuk-heading-m">Guidance on how to edit the SMS file</h2>
-         <ol class="govuk-list govuk-list--number govuk-list--spaced">
-          <li>You must complete all fields that are mandatory.</li>
-          <li>
-            You must use the correct country code for the country of origin.<a href="https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes" class="govuk-link" rel="noreferrer noopener" target="_blank">Find a country code (opens in new tab)</a>. The only exceptions to this list are: Northern Ireland and Palestine. For Northern Ireland, use GB-NIR, for Palestine use PS.
-          </li> 
-          <li>For product type, quality class, packaging type, and packaging reusable or reclaimed, you must choose from the options listed in the template and delete any options you do not use.</li>
-          <li>Enter the net weight up to 1 decimal place.</li>
-          <li>Do not enter more than 500 rows of data.</li>
-          <li>Save your completed file as a .CSV file and upload it.</li>
-        </ol>
+        <h1 class="govuk-heading-xl">Upload a file</h1>
+
+        <p class="govuk-body"><a href="/public/templates/{{template}}" class="govuk-link govuk-link--no-visited-state" >Download the CSV template (3KB)</a></p>
+
+        <p class="govuk-body govuk-!-margin-bottom-6">Open the template in the software program you prefer to use to edit comma-separated values (CSV) files. Fill in the template using the guidance notes on how to edit the file, then save and upload it.</p>
+
+        <h2 class="govuk-heading-m">What you will need to fill in the template</h2>
+
+        <p class="govuk-body">You must tell us:</p>
+
+        <ul class="govuk-list govuk-list--bullet">
+
+          {% if data.bulkCommodities == "sms" %}
+            <li>the product type</li>
+          {% endif %}
+
+          {% if data.bulkCommodities == "gms" %}
+            <li>the species</li>
+          {% endif %}
+
+          {% if data.bulkCommodities == "sms" %}
+            <li>the quality class - choose from the list and delete any you do not use</li>
+          {% endif %}
+
+          <li>the country of origin, use the <a href="https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes" class="govuk-link govuk-link--no-visited-state" rel="noreferrer noopener" target="_blank">correct country of origin codes (opens in new tab)</a> - except for Northern Ireland (use GB-NIR) and Palestine (use PS)</li>
+
+          <li>the net weight per package in kilograms</li>
+          <li>the number of packages and packaging type - choose from the list and delete any you do not use</li>
+          <li>if the packaging is reusable or reclaimed</li>
+          <li>the variety (optional)</li>
+        </ul>
+
+        <p class="govuk-body">If some of the packages in your consignment have different places of origin, you must add them as separate rows. For example, if 5 packages of your commodity come from France and Italy, and 3 packages come from Germany. In this case, add the details for the 5 packages in one row. You will add FR as the country code for country of origin 1 and IT as the country code for country of origin 2. Add another row for the 3 from Germany. In this row, the country code for country of origin 1 will be DE.</p>
+
+        <p class="govuk-body">Do not enter more than 500 rows of data.</p>
+
+        <p class="govuk-body">Save your completed file as a .CSV file and upload it.</p>
+
         <details class="govuk-details" data-module="govuk-details">
           <summary class="govuk-details__summary">
-            <span class="govuk-details__summary-text">Further advice</span>
+          <span class="govuk-details__summary-text">Further advice</span>
           </summary>
-
+      
           <div class="govuk-details__text">
-            <!-- <h3 class="govuk-heading-s">If you are having problems with the upload</h3> -->
-            <p class="govuk-body">If you are having problems with the upload</p>
-            <ul class="govuk-list govuk-list--bullet">
-              <li>make sure that you have used the correct country code for the country of origin</li>
-              <li>make sure you have made entries in all fields that are mandatory</li>
-              <li>make sure you have not changed or deleted any columns or headers from the template</li>
-              <li>make sure the headers are consistently capitalised</li>
-              <li>check that you have not added extra commas</li>
-              <li>if you have edited the template using the Numbers application, be aware that this program sometimes adds extra columns to the file. If there are any empty columns without headers in your file, you should delete these columns completely.</li>
-              <li>check that when you edited the template, your software didn't add extra commas into your CSV file</li>
-              <li>for product type, quality class, packaging type, and packaging reusable or reclaimed, make sure you have used only the options provided without changing them</li>
-              <li>for product type, quality class, packaging type, and packaging reusable or reclaimed, make sure that you have deleted any options you have not used</li>
-            </ul>
+          <p class="govuk-body">If you're having problems uploading the file, make sure that:</p>
+          <ul class="govuk-list govuk-list--bullet">
+
+            <li>you've entered all mandatory information</li>
+            <li>the file is a .CSV file</li>
+            <li>you've used the correct country codes</li>
+            <li>whichever software you're using to edit the template, there have not been any columns, headers or commas added or deleted</li>
+            <li>the headers are consistently capitalised</li>
+            <li>there are no empty columns</li>
+            <li>you have not entered more than 500 rows of data</li>
+      
+          </ul>
           </div>
-
-        </details>
-        {% elif data.bulkCommodities == "gms" %}
-        <h2 class="govuk-heading-m">Guidance on how to edit the GMS file</h2>
-         <ol class="govuk-list govuk-list--number govuk-list--spaced">
-          <li>You must complete all fields that are mandatory.</li>
-          <li>
-            Use the correct species EPPO code to describe your commodity. <a href="https://gd.eppo.int/search" class="govuk-link" rel="noreferrer noopener" target="_blank">Find the EPPO code for your species (opens in new tab)</a>.
-          </li>
-          <li>
-            You must use the correct country code for the country of origin.<a href="https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes" class="govuk-link" rel="noreferrer noopener" target="_blank">Find a country code (opens in new tab)</a>. The only exceptions to this list are: Northern Ireland and Palestine. For Northern Ireland, use GB-NIR, for Palestine use PS.
-          </li> 
-          <li>For columns called packaging type, and packaging reusable or reclaimed, you must choose from the options listed in the template and delete any options you do not use.</li>
-          <li>Enter the net weight up to 1 decimal place.</li>
-          <li>Do not enter more than 500 rows of data.</li>
-          <li>Save your completed file as a .CSV file and upload it.</li>
-        </ol>
-        <details class="govuk-details" data-module="govuk-details">
-          <summary class="govuk-details__summary">
-            <span class="govuk-details__summary-text">Further advice</span>
-          </summary>
-
-          <div class="govuk-details__text">
-            <!-- <h3 class="govuk-heading-s">If you are having problems with the upload</h3> -->
-            <p class="govuk-body">If you are having problems with the upload</p>
-            <ul class="govuk-list govuk-list--bullet">
-              <li>make sure that you have used the correct country code for the country of origin</li>
-              <li>make sure that you have used a valid EPPO code</li>
-              <li>make sure you have made entries in all fields that are mandatory</li>
-              <li>make sure you have not changed or deleted any columns or headers from the template</li>
-              <li>make sure the headers are consistently capitalised</li>
-              <li>check that you have not added extra commas</li>
-              <li>if you have edited the template using the Numbers application, be aware that this program sometimes adds extra columns to the file. If there are any empty columns without headers in your file, you should delete these columns completely.</li>
-              <li>check that when you edited the template, your software didn't add extra commas into your CSV file</li>
-              <li>for packaging type, and packaging reusable or reclaimed, make sure you have used only the options provided without changing them</li>
-              <li>for packaging type, and packaging reusable or reclaimed, make sure that you have deleted any options you have not used</li>
-            </ul>
-          </div>
-
-        </details>
-        {% else %}
-        <h2 class="govuk-heading-m">Guidance on how to edit the GMS file</h2>
-         <ol class="govuk-list govuk-list--number govuk-list--spaced">
-          <li>You must complete all fields that are mandatory.</li>
-          <li>
-            Use the correct species EPPO code to describe your commodity. <a href="https://gd.eppo.int/search" class="govuk-link" rel="noreferrer noopener" target="_blank">Find the EPPO code for your species (opens in new tab)</a>.
-          </li>
-          <li>
-            You must use the correct country code for the country of origin.<a href="https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes" class="govuk-link" rel="noreferrer noopener" target="_blank">Find a country code (opens in new tab)</a>. The only exceptions to this list are: Northern Ireland and Palestine. For Northern Ireland, use GB-NIR, for Palestine use PS.
-          </li> 
-          <li>For columns called packaging type, and packaging reusable or reclaimed, you must choose from the options listed in the template and delete any options you do not use.</li>
-          <li>Enter the net weight up to 1 decimal place.</li>
-          <li>Do not enter more than 500 rows of data.</li>
-          <li>Save your completed file as a .CSV file and upload it.</li>
-        </ol>
-        <details class="govuk-details" data-module="govuk-details">
-          <summary class="govuk-details__summary">
-            <span class="govuk-details__summary-text">Further advice</span>
-          </summary>
-
-          <div class="govuk-details__text">
-            <!-- <h3 class="govuk-heading-s">If you are having problems with the upload</h3> -->
-            <p class="govuk-body">If you are having problems with the upload</p>
-            <ul class="govuk-list govuk-list--bullet">
-              <li>make sure that you have used the correct country code for the country of origin</li>
-              <li>make sure that you have used a valid EPPO code</li>
-              <li>make sure you have made entries in all fields that are mandatory</li>
-              <li>make sure you have not changed or deleted any columns or headers from the template</li>
-              <li>make sure the headers are consistently capitalised</li>
-              <li>check that you have not added extra commas</li>
-              <li>if you have edited the template using the Numbers application, be aware that this program sometimes adds extra columns to the file. If there are any empty columns without headers in your file, you should delete these columns completely.</li>
-              <li>check that when you edited the template, your software didn't add extra commas into your CSV file</li>
-              <li>for packaging type, and packaging reusable or reclaimed, make sure you have used only the options provided without changing them</li>
-              <li>for packaging type, and packaging reusable or reclaimed, make sure that you have deleted any options you have not used</li>
-            </ul>
-          </div>
-
-        </details>
-        {% endif %}
-        <!-- Dynamic sections (END) -->
+      
+      </details>
 
         {{ govukFileUpload({
           id: "fileUpload1",
