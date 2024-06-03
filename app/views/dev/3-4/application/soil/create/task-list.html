@@ -1,0 +1,101 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+	Arrange soil sampling for {% if data.commodity == "potatoes" %}ware potatoes{% else %}{{data.commodity or "crops"}}{% endif %} - Soil inspection - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="../../../account?returnURL=application" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
+  </ul>
+</div>
+
+<a href="../../../dashboard-submitted" class="govuk-back-link">Return to your applications</a>
+{% endblock %}
+
+{% block content %}
+{% if data.build == "development" %}
+<style>
+
+  /* Needs extracting and adding to the external Sass or CSS */
+  .govuk-tag--grey {
+    background-color: white;
+    border: solid 1px #cbcbcb;
+  }
+
+</style>
+{% endif %}
+<div class="govuk-grid-row">
+
+	<div class="govuk-grid-column-two-thirds">
+		{% if data.build == "development" %}
+		<h1 class="govuk-heading-xl">Arrange soil sampling</h1>
+		{% else %}
+		{% if data.reference_num %}<span class="govuk-caption-xl">{{data.reference_num}}</span>{% endif %}
+		<h1 class="govuk-heading-xl">Arrange soil sampling for {% if data.commodity == "potatoes" %}ware potatoes{% else %}{{data.commodity or "crops"}}{% endif %}</h1>
+		{% endif %}
+		<p class="govuk-hint govuk-!-margin-bottom-7">Complete these details to arrange a soil sampling inspection</p>
+		<ol class="app-task-list">
+			<li>
+				<h2 class="app-task-list__section"><span class="app-task-list__section-number">1. </span> Application details</h2>
+				<ul class="app-task-list__items">
+					<li class="app-task-list__item">
+						<span class="app-task-list__task-name"><a href="reference?change=yes" aria-describedby="create_a_reference">Create a reference</a></span>
+						{% if data.reference_num != "" %}
+						<strong class="govuk-tag app-task-list__tag" id="create_a_reference">Complete</strong>
+						{% else %}
+						<strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="create_a_reference">Not started</strong>
+						{% endif %}
+					</li>
+          <li class="app-task-list__item">
+						<span class="app-task-list__task-name"><a href="inspection-addresses" aria-describedby="inspection_details">What are the inspection details?</a></span>
+						{% if data.inspection_task_list_data == 'Complete' %}
+						<strong class="govuk-tag app-task-list__tag" id="inspection_details">Complete</strong>
+						{% else %}
+						<strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="inspection_details">Not started</strong>
+						{% endif %}
+					</li>
+          <li class="app-task-list__item">
+						{% if data.field_task_list_data == "Not Completed" %}
+						<span class="app-task-list__task-name"><a href="field" aria-describedby="sampling_site_details">Where is the sampling site?</a></span>
+						<strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="sampling_site_details">Not started</strong>
+						{% elif data.field_task_list_data %}
+						<span class="app-task-list__task-name"><a href="{{data.field_task_list_data or 'field'}}" aria-describedby="sampling_site_details">Where is the sampling site?</a></span>
+						<strong class="govuk-tag app-task-list__tag" id="sampling_site_details">Complete</strong>
+						{% else %}
+						<span class="app-task-list__task-name"><a href="{{data.field_task_list_data or 'field'}}" aria-describedby="sampling_site_details">Where is the sampling site?</a></span>
+						<strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="sampling_site_details">Not started</strong>
+						{% endif %}
+					</li>
+				</ul>
+			</li>
+			<li>
+        <h2 class="app-task-list__section"><span class="app-task-list__section-number">2. </span> Check and submit your application</h2>
+        <ul class="app-task-list__items">
+          <li class="app-task-list__item">
+            {% if data.inspection_task_list_data == 'Complete' and data.field_task_list_data %}
+            <span class="app-task-list__task-name"><a href="check-your-answers" aria-describedby="check_your_answers">Check your answers and submit your application</a></span>
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="check_your_answers">Not started</strong>
+            {% else %}
+            <span class="app-task-list__task-name">Check your answers and submit your application</span>
+						{% if data.build == "development" %}
+						{% else %}
+            <strong class="govuk-tag govuk-tag--grey app-task-list__tag" id="check_your_answers">Cannot start yet</strong>
+						{% endif %}
+            {% endif %}
+          </li>
+	      </ul>
+	    </li>
+	  </ol>
+    
+    {% block continueLater %}
+    {% include "../modules/_save-continue-later.html" %}
+    {% endblock %}
+	</div>
+
+</div>
+{% endblock %}

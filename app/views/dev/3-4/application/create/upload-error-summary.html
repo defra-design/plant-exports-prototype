@@ -1,0 +1,171 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Error: There is a problem - Phytosanitary certificate - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    {% set _errorMessage = "" %}
+    {% if query.maxLimitReached == "yes" %}
+      {% set _errorMessage = "You can only add 500 commodities to this application" %}
+    {% elif query.columnError == "yes" %}
+      {% set _errorMessage = "Do not change or delete columns or headers in the template" %}
+    {% else %}
+      {% set _errorMessage = "Correct the problems with your file and then upload the file again" %}
+    {% endif %}
+
+    {% if query.maxLimitReached == "yes" %}
+    <div class="govuk-error-summary" data-module="govuk-error-summary">
+      <div role="alert">
+        <h2 class="govuk-error-summary__title" >There is a problem</h2>
+        <div class="govuk-error-summary__body">
+          <ul class="govuk-list govuk-error-summary__list">
+            <li><a href="#fileUpload1">{{_errorMessage}}</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    {% elif query.columnError == "yes" %}
+    <div class="govuk-error-summary" data-module="govuk-error-summary">
+      <div role="alert">
+        <h2 class="govuk-error-summary__title" >There is a problem</h2>
+        <div class="govuk-error-summary__body">
+          <ul class="govuk-list govuk-error-summary__list">
+            <li><a href="#fileUpload1">{{_errorMessage}}</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div class="govuk-error-summary" data-module="govuk-error-summary">
+      <div role="alert">
+        <h2 class="govuk-error-summary__title" >There is a problem</h2>
+        <div class="govuk-error-summary__body">
+          <h3 class="govuk-heading-s">There are 203 errors in your file</h3>
+          <ul class="govuk-list govuk-error-summary__list">
+            <li>
+              <a href="#fileUpload1">{{_errorMessage}}</a>
+              <ul class="govuk-list govuk-list--bullet">
+                <li>You must enter information in the column called botanical name or description (row 9)</li>
+                <li>You must enter information in the column called commodity type (100 rows)</li>
+                <li>You must enter information in the column called country code for country of origin (60 rows)</li>
+                <li>You must enter information in the column called quantity (20 rows)</li>
+                <li>The information in the column called quantity is not what is needed. Try checking the guidance notes. (row 1)</li>
+                <li>The information in the column called quantity is too long. It should be 100 characters or fewer. (12 rows)</li>
+                <li>You must enter information in the column called number of packages (row 28)</li>
+                <li>You must enter information in the column called packaging type (7 rows)</li>
+                <li>The information in the column called EPPO code is not the right kind of information (row 14)</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Chris Harding (10.01.23) - Added this different scenario for usability testing of the HPUI 'Clone' designs -->
+    {% if data.id == "34" %}
+    <form action="upload-in-progress{% if query.change == 'yes' %}?change=yes&return_url={{data.return_url or 'check-your-answers'}}{% endif %}&has_botanicial_name2=use_description&commodity_description2=Rosa davidii (ROSDA)&commodity_type2=plants&countryOfOriginSelect2=GB&quantity2=10&units2=Tonnes&number_of_packages2=5&packaging2=BG&row2=true&has_botanicial_name3=use_description&commodity_description3=Anisodontea scabrosa (AODSC)&commodity_type3=plants&countryOfOriginSelect3=GB&quantity3=10&units3=Tonnes&number_of_packages3=5&packaging3=BG&row3=true&has_botanicial_name4=use_description&commodity_description4=Corylus ferox (CYLFE)&commodity_type4=plants&countryOfOriginSelect4=GB&quantity4=10&units4=Tonnes&number_of_packages4=5&packaging4=BG&row4=true&has_botanicial_name5=use_description&commodity_description5=Pinus ponderosa (PIUPO)&commodity_type5=plants&countryOfOriginSelect5=GB&quantity5=10&units5=Tonnes&number_of_packages5=5&packaging5=BG&row5=true" method="post" novalidate>
+    {% else %}
+    <form action="upload-in-progress{% if query.change == 'yes' %}?change=yes&return_url={{data.return_url or 'check-your-answers'}}{% endif %}" method="post" novalidate>
+    {% endif %}
+    
+      <!--
+        Chris Harding (06.06.22) - Here we set:
+          a) template
+          b) example template
+        This is based on the commodity and application type provided.
+      -->
+
+      <!-- Default commodity value (e.g. if no commodity and application type exists) -->
+      {% set commodity = data.commodity or "plants" %}
+
+      <!-- Tailored values for template and example template based on based on commodity and application type -->
+      {% if commodity == "bulbs" %}
+        {% set template = "template-bulbs-3.csv" %}
+        {% if data.reforwarding == "1" %}
+          {% set template = "template-bulbs-rf-2.csv" %}
+        {% endif %}
+        {% set exampleTemplate = "example-bulbs.csv" %}
+      {% elif commodity == "plants" %}
+        {% set template = "template-plants-3.csv" %}
+        {% if data.reforwarding == "1" %}
+          {% set template = "template-plants-rf-2.csv" %}
+        {% endif %}
+        {% set exampleTemplate = "example-plant.csv" %}
+      {% elif commodity == "potatoes" %}
+        {% set template = "template-potatoes-3.csv" %}
+        {% if data.reforwarding == "1" %}
+          {% set template = "template-potatoes-rf-2.csv" %}
+        {% endif %}
+        {% set exampleTemplate = "example-potatoes.csv" %}
+      {% elif commodity == "plant products" %}
+        {% set template = "template-plant-products-3.csv" %}
+        {% if data.reforwarding == "1" %}
+          {% set template = "template-plant-products-rf-2.csv" %}
+        {% endif %}
+        {% set exampleTemplate = "example-plant-products.csv" %}
+      {% elif commodity == "seeds" %}
+        {% set template = "template-seeds-3.csv" %}
+        {% if data.reforwarding == "1" %}
+          {% set template = "template-seeds-rf-2.csv" %}
+        {% endif %}
+        {% set exampleTemplate = "example-seeds.csv" %}
+      {% elif commodity == "used farm and forestry machinery" %}
+        {% set template = "template-used-farm-machinery.csv" %}
+        {% if data.reforwarding == "1" %}
+          {% set template = "template-used-farm-machinery-rf-2.csv" %}
+        {% endif %}
+        {% set exampleTemplate = "example-used-farm-machinery.csv" %}
+      {% else %}
+        {% set template = "template-plants-3.csv" %}
+        {% if data.reforwarding == "1" %}
+          {% set template = "template-plants-rf-2.csv" %}
+        {% endif %}
+        {% set exampleTemplate = "example-plant.csv" %}
+      {% endif %}
+
+      <div class="govuk-form-group govuk-!-margin-bottom-9">
+        
+        <h1 class="govuk-heading-xl">Upload a file</h1>
+
+        <p class="govuk-body"><a href="/public/templates/{{template}}" class="govuk-link govuk-link--no-visited-state" >Download the CSV template (3KB)</a></p>
+        
+
+        {% include "./upload-guidance-content-module.html" %}
+
+
+        {{ govukFileUpload({
+          id: "fileUpload1",
+          name: "fileUpload1",
+          label: {
+            text: "Upload your completed CSV file"
+          },
+          errorMessage: {
+            text: _errorMessage
+          }
+        }) }}
+
+      </div>
+
+      {{ govukButton({
+        text: "Upload"
+      }) }}
+
+     
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+{% if query.error == "true" %}Error: {% endif %}Add details for a new EHC version
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new">Prototype user</li>
+    <!-- <li class="login-nav__list-item-new"><a href="account" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li> -->
+    <!-- <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li> -->
+  </ul>
+</div>
+
+<!-- <a href="{{query.returnURL or 'dashboard-submitted'}}" class="govuk-back-link">Back to apply for plant export certificates and inspections</a> -->
+
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row ">
+  
+  <div class="govuk-grid-column-two-thirds">
+
+
+    {% if query.error == "true" %}
+    <div class="govuk-error-summary" data-module="govuk-error-summary">
+      <div role="alert">
+        <h2 class="govuk-error-summary__title">
+          There is a problem
+        </h2>
+        <div class="govuk-error-summary__body">
+          <ul class="govuk-list govuk-error-summary__list">
+            <li>
+              <a href="#upload-pdf-file-1">Upload an EHC template</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+
+
+   
+
+    <span class="govuk-caption-xl">test-name</span>
+    <h1 class="govuk-heading-xl">Add details for a new EHC version</h1>
+
+    
+    <form action="/form-handler" method="post" novalidate>
+      <div class="govuk-form-group">
+        <!-- <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-6">
+            Add details for a new EHC version
+          </legend> -->
+          
+
+          <div class="govuk-form-group govuk-!-margin-bottom-7">
+            <label class="govuk-label govuk-!-font-weight-bold" for="upload-pdf-version">
+              Version
+            </label>
+
+            <input class="govuk-input govuk-input--width-5 govuk-input--extra-letter-spacing" id="upload-pdf-version" name="upload-pdf-version" type="text" spellcheck="false" value="" >
+          </div>
+
+          <div class="govuk-form-group {% if query.error == 'true' %}govuk-form-group--error{% endif %}">
+            <label class="govuk-label govuk-!-font-weight-bold" for="upload-pdf-file-1">
+              EHC template
+            </label>
+            <div id="upload-pdf-file-1-hint" class="govuk-hint">
+              File must be in PDF format and smaller than 10MB
+            </div>
+            {% if query.error == "true" %}
+            <p id="upload-pdf-file-1-error" class="govuk-error-message">
+              <span class="govuk-visually-hidden">Error:</span> Upload an EHC template
+            </p>
+            {% endif %}
+            <input class="govuk-file-upload {% if query.error == 'true' %}govuk-input--error{% endif %}" id="upload-pdf-file-1" name="upload-pdf-file-1" type="file" aria-describedby="upload-pdf-file-1-hint {% if query.error == 'true' %}upload-pdf-file-1-error{% endif %}">
+          </div>
+          {% if query.ephyto == "true" %}
+          <div class="govuk-form-group">
+            <label class="govuk-label govuk-!-font-weight-bold" for="upload-pdf-file-2">
+              ePhyto copy template
+            </label>
+            <div id="upload-pdf-file-2-hint" class="govuk-hint">
+              File must be in PDF format and smaller than 10MB
+            </div>
+            <input class="govuk-file-upload" id="upload-pdf-file-2" name="upload-pdf-file-2" type="file" aria-describedby="upload-pdf-file-2-hint">
+          </div>
+          {% endif %}
+        <!-- </fieldset> -->
+      </div>
+
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+      <div class="govuk-button-group">
+        <button type="submit" class="govuk-button" data-module="govuk-button">
+          Save and manage EHC form pages
+        </button>
+        <button type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+          Save EHC as draft
+        </button>
+      </div>
+
+    </form>
+      
+  </div>
+
+</div>
+{% endblock %}

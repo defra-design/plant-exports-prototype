@@ -1,0 +1,261 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+You have successfully submitted your application - {{serviceName}} - GOV.UK
+{% endblock %}
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+{% endblock %}
+{% block content %}
+<style>
+
+  /* Needs extracting and adding to the external Sass or CSS */
+  .govuk-feedback-box {
+    padding: 20px;
+    background-color: lightgray;
+    border-left-color: #666;
+  }
+
+</style>
+<div class="govuk-grid-row">
+
+      <div class="govuk-grid-column-two-thirds">
+
+        {% set _notificationSetting = data["ephytoEmailNotifications"] %}
+        {% set _ePhyto = "false" %}
+        {% set _ePhytoOptedIn = "false" %}
+        {% set _ePhytoOptedInAll = "false" %}
+        {% set _ePhytoOptedInMine = "false" %}
+
+
+        {% if data.certificateFormat == "digital" %}
+          <!-- ephyto -->
+          {% set _ePhyto = "true" %}
+
+          {% if _notificationSetting == "None" %}
+            <!-- ephyto opted out -->
+            {% set _ePhytoOptedIn = "false" %}
+            {% set _ePhytoOptedInAll = "false" %}
+            {% set _ePhytoOptedInMine = "false" %}
+          {% elif _notificationSetting == "All" %}
+            <!-- ephyto opted in to all -->
+            {% set _ePhytoOptedIn = "true" %}
+            {% set _ePhytoOptedInAll = "true" %}
+            {% set _ePhytoOptedInMine = "false" %}
+          {% else %}
+            <!-- ephyto opted in just mine -->
+            {% set _ePhytoOptedIn = "true" %}
+            {% set _ePhytoOptedInAll = "false" %}
+            {% set _ePhytoOptedInMine = "true" %}
+          {% endif %}
+
+        {% else %}
+          <!-- [non ePhyto] -->
+          {% set _ePhyto = "false" %}
+        {% endif %}
+
+
+        <div class="govuk-panel govuk-panel--confirmation govuk-!-margin-bottom-6">
+          <h1 class="govuk-panel__title">
+            Updated application complete
+          </h1>
+
+          <div class="govuk-panel__body">
+            <abbr title="Animal and Plant Health Agency">APHA</abbr> reference <br>
+            <strong class="bold" id="applicationFormId" data-qa-id="TextDisplay-CVEDReferenceNumber">1721 14800 0489</strong>
+          </div>
+        </div>
+
+        {% if _ePhyto == "true" %}
+          <h2 class="govuk-heading-m">We will not send you a phytosanitary certificate</h2>
+          <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="../../guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#digital-phytosanitary-certificates" target="_blank" rel="noreferrer noopener" >Read more about ePhyto certificates (opens in new tab)</a></p>
+        {% endif %}
+
+
+
+        <h2 class="govuk-heading-m">What happens next</h2>
+
+
+        {% if query.inspect == "post" %}
+
+              {% if _ePhyto == "true" %}
+                  <p class="govuk-body">We will:</p>
+                  <ul class="govuk-list govuk-list--bullet">
+                    <li>check and process your updated application</li>
+                    <li>send your updated ePhyto certificate to the importing country's NPPO (National Plant Protection Organisation), if there are no problems</li>
+                    <!-- opted in  -->
+                    {% if _ePhytoOptedIn == "true" %}
+                      <li>email you when they have received it</li>
+                    {% endif %}
+                    <li>update the status on Your applications page</li>
+                    <li>make a copy of your ePhyto available on the Manage application page</li>
+                    <li>send you an invoice</li>
+                  </ul>
+                  <p class="govuk-body">You do not need to print your copy or send it with your consignment. It is for your records and not for official use.</p>
+              {% else %}
+                  <p class="govuk-body">We will:</p>
+                  <ul class="govuk-list govuk-list--bullet">
+                    <li>check and process your updated application</li>
+                    <li>issue your certificate with the new details, if there are no problems</li>
+                    <li>send you an invoice</li>
+                  </ul>
+              {% endif %}
+
+
+        {% else %}
+
+
+
+            <!-- pre inspect SSDD -->
+            {% if 
+              (data.commodity == "plants" and data.ssdd == "true") 
+            %}
+
+                {% if _ePhyto == "true" %}
+                    <p class="govuk-body">We will:</p>
+                    <ul class="govuk-list govuk-list--bullet">
+                      <li>check and process your updated application for stock draw down</li>
+                      <li>arrange another inspection, if one is needed</li>
+                      <li>send your updated ePhyto certificate to the importing country's NPPO (National Plant Protection Organisation), if there are no problems</li>
+                      <!-- opted in  -->
+                      {% if _ePhytoOptedIn == "true" %}
+                        <li>email you when they have received it</li>
+                      {% endif %}
+                      <li>update the status on Your applications page</li>
+                      <li>make a copy of your ePhyto available on the Manage application page</li>
+                      <li>send you an invoice</li>
+                    </ul>
+                    <p class="govuk-body">You do not need to print your copy or send it with your consignment. It is for your records and not for official use.</p>
+                {% else %}
+                    <p class="govuk-body">We will:</p>
+                    <ul class="govuk-list govuk-list--bullet">
+                      <li>check and process your updated application for stock draw down</li>
+                      <li>arrange another inspection, if one is needed</li>
+                      <li>issue your certificate with the new details, if there are no problems</li>
+                      <li>send you an invoice</li>
+                    </ul>
+                {% endif %}
+
+            <!-- pre inspect non SSDD -->
+            {% else %}
+
+                {% if _ePhyto == "true" %}
+                    <p class="govuk-body">We will:</p>
+                    <ul class="govuk-list govuk-list--bullet">
+                      <li>check and process your updated application</li>
+                      {% if data.commodity == "bulbs" or data.commodity == "everything else" or data.commodity == "used farm and forestry machinery" or data.commodity == "plants" or data.commodity == "potatoes" %}
+                        <li>arrange an inspection of your consignment within 7 working days</li>
+                      {% endif %}
+                      <li>send your updated ePhyto certificate to the importing country's NPPO (National Plant Protection Organisation), if there are no problems</li>
+                      <!-- opted in  -->
+                      {% if _ePhytoOptedIn == "true" %}
+                        <li>email you when they have received it</li>
+                      {% endif %}
+                      <li>update the status on Your applications page</li>
+                      <li>make a copy of your ePhyto available on the Manage application page</li>
+                      <li>send you an invoice</li>
+                    </ul>
+                    <p class="govuk-body">You do not need to print your copy or send it with your consignment. It is for your records and not for official use.</p>
+                {% else %}
+                    <p class="govuk-body">We will:</p>
+                    <ul class="govuk-list govuk-list--bullet">
+                      <li>check and process your updated application</li>
+                      {% if data.commodity == "bulbs" or data.commodity == "everything else" or data.commodity == "used farm and forestry machinery" or data.commodity == "plants" or data.commodity == "potatoes" %}
+                        <li>arrange an inspection of your consignment within 7 working days</li>
+                      {% endif %}
+                      <li>issue your certificate with the new details, if there are no problems</li>
+                      <li>send you an invoice</li>
+                    </ul>
+                {% endif %}
+            {% endif %}
+
+        {% endif %}
+        
+
+
+
+
+
+
+
+
+
+        <!-- 
+          ePHYTO MANAGE APPLICATIONS 
+        -->
+        {% if _ePhyto == "true" %}
+        <h2 class="govuk-heading-m">Manage applications</h2>
+
+
+        {% if _ePhytoOptedIn == "true" %}
+
+          <p class="govuk-body">We will send progress emails to:</p>
+          <ul class="govuk-list govuk-list--bullet">
+            <li>your.email@email.com</li>
+            <li>other users on your organisation’s account if they have chosen to get email updates</li>
+          </ul>
+          {% if _ePhytoOptedInAll == "true" %}
+            <p class="govuk-body"><a href="../../account/notifications" class="govuk-link govuk-link--no-visited-state">Change your email settings</a></p>
+          {% elif _ePhytoOptedInMine == "true" %}
+            <p class="govuk-body">If you want to get emails about all your organisation's ePhytos you can <a href="../../account/notifications" class="govuk-link govuk-link--no-visited-state">change your email settings</a>.</p>
+          {% endif %}
+
+        {% else %}
+          <p class="govuk-body">If you want to get progress emails about ePhyto applications you can <a href="../../account/notifications" class="govuk-link govuk-link--no-visited-state">change your email settings</a>.</p>
+        {% endif %}
+
+      {% endif %}
+
+
+
+        {% if 
+          data.commodity == "plants" 
+        %}
+        <div class="govuk-inset-text">
+          <p class="govuk-body">If you’re {% if data.countrySelect[0] == "United Kingdom (Northern Ireland)" %}sending{% else %}exporting{% endif %} plants, you will also need a certificate of conformity.</p>
+          <ul class="govuk-list noprint">
+            <li><a class="govuk-link govuk-link--no-visited-state" href="../../copy-as-coc?id={{query.id or 0}}&is_group={{query.is_group}}">Apply for a certificate of conformity</a></li>
+          </ul>
+        </div>
+        {% endif %}
+
+
+
+        <form action="../../dashboard-submitted" method="post">
+          <button class="govuk-button govuk-!-margin-top-2 govuk-!-margin-bottom-7" data-module="govuk-button">View your applications</button>
+    
+          <!-- Session data hook to update the dashboard so that it knows a new application has been submitted -->
+          <div class="govuk-form-group" hidden>
+            <label class="govuk-label" for="application_submission_data">Application submission status</label>
+            <input class="govuk-input" id="application_submission_data" name="application_submission_data" type="text" value="submitted">
+          </div>
+    
+        </form>
+    
+    
+    
+        <p class="govuk-body">Find out <a href="../../guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#fees" class="govuk-link" target="_blank" rel="noreferrer noopener">what fees you will pay (opens in new tab)</a> for this application.</p>
+    
+    
+    
+    
+        <h2 class="govuk-heading-m">If you need help</h2>
+    <p class="govuk-body">Contact us quoting your <abbr title="Animal and Plant Health Agency">APHA</abbr> reference <strong>1721 14800 4809</strong> on:</p>
+    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-8">
+      <li>0300 1000 313, Monday to Sunday 7am to 7pm</li>
+      <li><a href="mailto:planthealth.info@apha.gov.uk" class="govuk-link">planthealth.info@apha.gov.uk</a></li>
+    </ul>
+
+
+
+
+    <div class="govuk-feedback-box govuk-!-margin-top-6">
+      <h2 class="govuk-heading-m">Give feedback on this service</h2>
+      <p class="govuk-body">Take a 3 minute survey about your application so that we can improve the service.</p>
+      <p class="govuk-body"><a href="https://defragroup.eu.qualtrics.com/jfe/form/SV_1RDraVxZ03Ja2qy" class="govuk-link" target="_blank" class="govuk-link" rel="noreferrer noopener">Give feedback (opens in new tab)</a></p>
+    </div>
+
+      </div>
+    </div>
+
+{% endblock %}

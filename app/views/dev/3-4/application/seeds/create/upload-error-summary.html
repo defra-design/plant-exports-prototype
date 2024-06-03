@@ -1,0 +1,142 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.build == "development" %}Add commodities by uploading a file - GOV.UK{% else %}Error: There is a problem - Seed sampling - {{serviceName}} - GOV.UK{% endif %}
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../../modules/_account-banner.html" %}
+<a href="{{page.content.prev or 'javascript:history.back()'}}" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if query.maxLimitReached == "yes" %}
+    <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+      <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
+      
+      <div class="govuk-error-summary__body">
+        <ul class="govuk-list govuk-error-summary__list">
+          <li><a href="#fileUpload1">You are trying to add too many commodities to this application. You can add a maximum of 500.</a></li>
+        </ul>
+      </div>
+
+    </div>
+    {% else %}
+    <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+      <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
+      <h3 class="govuk-heading-s">There are 203 errors in your file</h3>
+
+      <div class="govuk-error-summary__body">
+        <ul class="govuk-list govuk-error-summary__list">
+          <li><a href="#fileUpload1">Correct the problems with your file and then upload the file again</a></li>
+        </ul>
+        <ul class="govuk-list govuk-list--bullet">
+          <!-- <li>Botanical name or description is missing (row 9)</li>
+          <li>Commodity type is missing (100 rows)</li>
+          <li>Country of origin is missing (60 rows)</li>
+          <li>Quantity is missing (20 rows)</li>
+          <li>Quantity does not match the expected type of Number (row 1)</li>
+          <li>Quantity is too long. It should be 8 characters or fewer, up to 3 decimal places (12 rows)</li>
+          <li>Number of packages is missing (row 28)</li>
+          <li>Packaging type is missing (7 rows)</li> -->
+          <li>You must enter information in the column called botanical name or description (row 9)</li>
+          <li>You must enter information in the column called commodity type (100 rows)</li>
+          <li>You must enter information in the column called country code for country of origin (60 rows)</li>
+          <li>You must enter information in the column called quantity (20 rows)</li>
+          <li>The information in the column called quantity is not what is needed. Try checking the guidance notes. (row 1)</li>
+          <li>The information in the column called quantity is too long. It should be 100 characters or fewer. (12 rows)</li>
+          <li>You must enter information in the column called number of packages (row 28)</li>
+          <li>You must enter information in the column called packaging type (7 rows)</li>
+          <li>The information in the column called EPPO code is not the right kind of information (row 14)</li>
+        </ul>
+      </div>
+
+    </div>
+    {% endif %}
+
+    <form action="upload-in-progress{% if query.change == 'yes' %}?change=yes&return_url={{data.return_url or 'check-your-answers'}}{% endif %}" method="post" novalidate>
+
+      <div class="govuk-form-group govuk-!-margin-bottom-9">
+        <h1 class="govuk-heading-xl">Upload a file</h1>
+
+        <p class="govuk-body"><a href="/public/templates/template-seeds-sampling-2.csv" class="govuk-link govuk-link--no-visited-state" >Download the CSV template (3KB)</a></p>
+
+        <p class="govuk-body govuk-!-margin-bottom-6">Open the template in the software program you prefer to use to edit comma-separated values (CSV) files. Fill in the template using the guidance notes on how to edit the file, then save and upload it.</p>
+
+        <h2 class="govuk-heading-m">What you will need to fill in the template</h2>
+
+        <p class="govuk-body">You must tell us at least one of the following:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>the <a href="https://gd.eppo.int/search" class="govuk-link govuk-link--no-visited-state" rel="noreferrer noopener" target="_blank">correct EPPO code (opens in new tab)</a></li>
+            <li>genus</li>
+            <li>description of your commodity</li>
+        </ul>
+
+        <p class="govuk-body">You must tell us:</p>
+
+        <ul class="govuk-list govuk-list--bullet">
+          <li>the lot reference</li>
+          <li>the variety</li>
+          <li>the <a href="https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes" class="govuk-link govuk-link--no-visited-state" rel="noreferrer noopener" target="_blank">correct country code (opens in new tab)</a> for the country where the seeds were grown - except for Northern Ireland (use GB-NIR) and Palestine (use PS)</li>
+          <li>up to 10 destination countries, use the <a href="https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes" class="govuk-link govuk-link--no-visited-state" rel="noreferrer noopener" target="_blank">correct country codes (opens in new tab)</a> - except for Northern Ireland (use GB-NIR) and Palestine (use PS)</li>
+        </ul>
+
+        <p class="govuk-body">If you have it, you can tell us the:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>growing season inspection number</li>
+          <li>chemical treatment</li>
+          <li>packing material</li>
+          <li>distinguishing marks</li>
+        </ul>
+
+        <p class="govuk-body">Do not enter more than 500 rows of data.</p>
+
+        <p class="govuk-body">Save your completed file as a .CSV file and upload it.</p>
+
+        <details class="govuk-details" data-module="govuk-details">
+            <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">Further advice</span>
+            </summary>
+        
+            <div class="govuk-details__text">
+            <p class="govuk-body">If you're having problems uploading the file, make sure that:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>you've entered all mandatory information</li>
+              <li>the file is a .CSV file</li>
+              <li>you've used the correct country codes</li>
+              <li>you've provided either an EPPO code or genus</li>
+              <li>whichever software you're using to edit the template, there have not been any columns, headers or commas added or deleted</li>
+              <li>the headers are consistently capitalised</li>
+              <li>there are no empty columns</li>
+              <li>you have not entered more than 500 rows of data</li>
+            </ul>
+            </div>
+        
+        </details>
+
+        {{ govukFileUpload({
+          id: "fileUpload1",
+          name: "fileUpload1",
+          label: {
+            text: "Upload your completed CSV file"
+          }
+        }) }}
+
+      </div>
+
+      {{ govukButton({
+        text: "Upload"
+      }) }}
+
+      
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

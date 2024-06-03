@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+GOV.UK Prototype Kit
+{% endblock %}
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+{% block content %}
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      Change commodity details
+    </h1>
+
+    <!-- 
+      Net quantity (unit not editable), 
+      Number of packages, 
+      GSI number 
+
+          (all in that order) 
+    -->
+    
+    <form method="post" action="check-your-answers-amend">
+      
+
+      <fieldset class="govuk-fieldset" >
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="gsi">
+            Growing season inspection number
+          </label>
+          <div id="gsi-hint" class="govuk-hint">
+            Enter ‘eDomero’ if the application for a growing season inspection was done using the eDomero system.
+          </div>
+          <input class="govuk-input govuk-input--width-20" id="gsi" name="chemicals_used" type="text">
+        </div>
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="quantity">
+            Quantity in kilograms
+          </label>
+          <div id="quantity-hint" class="govuk-hint">
+            You can lower the quantity or keep it the same.
+          </div>
+          <div class="govuk-input__wrapper">
+            <input class="govuk-input govuk-input--width-5" id="quantity" name="quantity" type="text" aria-describedby="quantity" value="{{data.quantity or '2000'}}">
+            <div class="govuk-input__suffix" id="unit-label" aria-hidden="true">kilograms</div>
+          </div>
+        </div>
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="number_of_packages">
+            Number of packages
+          </label>
+          <input class="govuk-input govuk-input--width-5" id="number_of_packages" name="number_of_packages" type="packaging_type" value="200" aria-describedby="passport-number-hint">
+        </div>
+
+       
+
+        
+      </fieldset>
+      <input class="govuk-button" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+    </form>
+
+  </div>
+</div>
+{% endblock %}

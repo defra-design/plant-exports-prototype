@@ -1,0 +1,137 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  What are you exporting? - Phytosanitary certificate - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-two-thirds">
+
+    {% set url = "how-to-identify-coc" %}
+
+    {# NB POSTing to how-to-identify is redirect to commodity-list #}
+    <form method="post" action="{{query.return_url or 'coc-commodity'}}" class="form">
+      
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" aria-describedby="what-exporting-hint">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
+            <h1 class="govuk-fieldset__heading">What are you exporting?</h1>
+          </legend>
+
+          <div id="what-exporting-hint" class="govuk-hint">
+            Select one commodity at a time. You'll be able to add more later.
+          </div>
+
+          <div class="govuk-radios" data-module="govuk-radios">
+            
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="commodity_apples" name="commodity" type="radio" value="apples~{{url}}"{% if query.change and data.commodity == "apples" %} checked="checked"{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="commodity_apples">Apples</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="commodity_citrus" name="commodity" type="radio" value="citrus~{{url}}"{% if query.change and data.commodity == "citrus" %} checked="checked"{% endif %} data-aria-controls="conditional-commodity_citrus">
+              <label class="govuk-label govuk-radios__label" for="commodity_citrus">Citrus</label>
+            </div>
+
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-commodity_citrus">
+              {% set citrus_subtype_module_label = "What type of citrus are you exporting?" %}
+              {% set module_name = "citrus_subtype" %}
+              {% block citrusSubtype %}
+              {% include "../modules/_citrus-subtype-select.html" %}
+              {% endblock %}
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="commodity_grapes" name="commodity" type="radio" value="grapes~{{url}}"{% if query.change and data.commodity == "grapes" %} checked="checked"{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="commodity_grapes">Grapes</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="commodity_kiwi" name="commodity" type="radio" value="kiwi~{{url}}"{% if query.change and data.commodity == "kiwi" %} checked="checked"{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="commodity_kiwi">Kiwi fruit</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="commodity_lettuce" name="commodity" type="radio" value="lettuce~{{url}}"{% if query.change and data.commodity == "lettuce" %} checked="checked"{% endif %} data-aria-controls="conditional-commodity_lettuce">
+              <label class="govuk-label govuk-radios__label" for="commodity_lettuce">Lettuce</label>
+            </div>
+
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-commodity_lettuce">
+              {% set lettuce_subtype_module_label = "What type of lettuce are you exporting?" %}
+              {% set module_name = "lettuce_subtype" %}
+              {% block lettuceSubtype %}
+              {% include "../modules/_lettuce-subtype-select.html" %}
+              {% endblock %}
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="commodity_peaches" name="commodity" type="radio" value="nectarines~{{url}}"{% if query.change and data.commodity == "peaches" %} checked="checked"{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="commodity_peaches">Nectarines</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="commodity_peaches" name="commodity" type="radio" value="peaches~{{url}}"{% if query.change and data.commodity == "peaches" %} checked="checked"{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="commodity_peaches">Peaches</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="commodity_pears" name="commodity" type="radio" value="pears~{{url}}"{% if query.change and data.commodity == "pears" %} checked="checked"{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="commodity_pears">Pears</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="commodity_strawberries" name="commodity" type="radio" value="strawberries~{{url}}"{% if query.change and data.commodity == "strawberries" %} checked="checked"{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="commodity_strawberries">Strawberries</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="commodity_peppers" name="commodity" type="radio" value="peppers~{{url}}"{% if query.change and data.commodity == "peppers" %} checked="checked"{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="commodity_peppers">Sweet peppers</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="commodity_tomatoes" name="commodity" type="radio" value="tomatoes~{{url}}"{% if query.change and data.commodity == "tomatoes" %} checked="checked"{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="commodity_tomatoes">Tomatoes</label>
+            </div>
+
+            <div class="govuk-radios__divider">
+              or
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="commodity_gms" name="commodity" type="radio" value="gms~how-to-identify-gms" aria-describedby="commodity_gms-hint"{% if query.change and data.commodity == "gms" %} checked="checked"{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="commodity_gms">General marketing standards (GMS) commodity</label>
+
+              <div id="commodity_gms-hint" class="govuk-hint govuk-radios__hint">
+                Choose this option if a destination country asks for a certificate of conformity for a commodity not listed above.
+              </div>
+
+            </div>
+
+          </div>
+
+        </fieldset>
+      </div>
+
+      <div class="govuk-button-group govuk-!-margin-top-4 govuk-!-margin-bottom-8">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      </div>
+
+    </form>
+
+    {% block continueLater %}
+    {% include "../modules/_save-continue-later.html" %}
+    {% endblock %}
+  </div>
+
+</div>
+{% endblock %}
