@@ -81,7 +81,16 @@
       <h1 class="govuk-heading-xl">Consignment details</h1>
 
       <div class="search-wrapper govuk-form-group">
-        <label for="search-commodities" class="govuk-label">Search by description, lot reference, origin, quantity, number of packages or packaging</label>
+
+        <label for="search-commodities" class="govuk-label">
+          {% if data.commodity == "used farm and forestry machinery" %}
+            Search by description, country of last use or unique ID
+          {% elif data.commodity == "seeds" %}
+            Search by description or lot reference
+          {% else %}
+              Search by description
+          {% endif %}
+        </label>
     
         <div class="search-input-wrapper govuk-!-width-two-thirds">
           <input type="search" value="{{query.search or ''}}" id="search-commodities" name="search" title="Search" class="govuk-input">
