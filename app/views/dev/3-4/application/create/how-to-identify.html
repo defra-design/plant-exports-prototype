@@ -138,7 +138,14 @@
     {% else %}
     <form method="post">
     {% endif %}
-      <h1 class="govuk-heading-xl" >{% if data.build == "development" %}Your commodity{% else %}Add {% if data.pheats_check != "yes" %}{% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "everything else" %}your commodity{% else %}{{data.commodity or 'plant products'}}{% endif %}{% endif %} to your{% if data.reforwarding == "1" %} re-forwarding{% endif %} consignment{% endif %}</h1>
+
+      <h1 class="govuk-heading-xl" >
+        {% if data.build == "development" %}
+          Your commodity
+        {% else %}
+          Add {% if data.commodity == "plants" and data.pheats_check != "yes" %}{% else %}{% if data.commodity == "plants" %}plants and fresh produce{% elif data.commodity == "everything else" %}your commodity{% else %}{{data.commodity or 'plants and fresh produce'}}{% endif %}{% endif %} to your{% if data.reforwarding == "1" %} re-forwarding{% endif %} consignment
+        {% endif %}
+      </h1>
 
       <!-- 'Botanical/Scientific name or description' section (START) -->
       <!-- 
