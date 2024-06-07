@@ -256,306 +256,145 @@
 
       </dl>
 
-      {% set _originColHeader = "Countries of origin" %}
-      {% if data.reforwarding == "1" %}
-        {% set _originColHeader = "Countries of origin and import certificate numbers" %}
-      {% endif %}
-      {% if data.commodity == "used farm and forestry machinery" %}
-        {% set _originColHeader = "Country where machinery was last used" %}
-        {% if data.reforwarding == "1" %}
-          {% set _originColHeader = "Country where machinery was last used and import certificate numbers" %}
-        {% endif %}
-      {% endif %}
+      <!-- 
+
+        TODO on MONDAY 
+      - check where else these lists appear 
+      - and replace them with a standard one i.e. _summary-general-check-answers.html
+      - check which modules are now redundant - DELETE them
+      - list all affected pages on index page
+    
+    -->
 
       <!-- Your commodities -->
       {% if query.largelist == "true" or query.bulkUploadCompleted == "true" %}
-      <h2 class="govuk-heading-m" id="your-consignment">Your consignment</h2>
-      <dl class="govuk-summary-list">
-      
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Number of commodities</dt>
-          <dd class="govuk-summary-list__value">395</dd>
-          <dd class="govuk-summary-list__actions"><a class="govuk-link"
-          href="commodity-list-large-max?change=yes&return_url=check-your-answers?upload=1">Change<span class="govuk-visually-hidden"> commodity list</span></a></dd>
-        </div>
-  
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Total net quantity</dt>
-          <dd class="govuk-summary-list__value">
-            10.35kg
-            <br>
-            and 15 tonnes
-          </dd>
-          <dd class="govuk-summary-list__value">&nbsp;</dd>
-        </div>
-  
-        <!-- <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Destination countries</dt>
-          <dd class="govuk-summary-list__value">Belgium, France, Israel, New Zealand, Spain</dd>
-          <dd class="govuk-summary-list__value">&nbsp;</dd>
-        </div> -->
-  
-      </dl>
-      <p class="govuk-body"><a href="input-method?change=yes&return_url=check-your-answers">Add more</a></p>
-      {% elif data.commodity == "bulbs" %}
-      <h2 class="govuk-heading-m" id="your-consignment">Your consignment</h2>
-      
-      <table class="govuk-table govuk-!-margin-bottom-4">
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header govuk-summary-list__key" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
-            <th class="govuk-table__header" scope="col">Net quantity and number of packages</th>
-            <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks</th>
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body" style="text-align: right;">
-          {% if query.prepop == "true" %}
-            {% include "../modules/_summary-bulbs-cya.html" %}
-          {% else %}
-            {% for commodity in data.commodities %}
-              {% block summaryBulb %}
-              {% include "../modules/_summary-bulbs-cya.html" %}
-              {% endblock %}
-            {% endfor %}
-          {% endif %}
-        </tbody>
-      </table>
-
-      <p class="govuk-body"><a href="input-method?change=yes&return_url=check-your-answers">Add more</a></p>
-      {% elif data.commodity == "plants" %}
-      <h2 class="govuk-heading-m" id="your-consignment">Your consignment</h2>
-
-      {% if query.ipcError3 == 'true' %}
-      <p id="ipc3-error" class="govuk-error-message">
-        <span class="govuk-visually-hidden">Error:</span> {{_ipcErrors.ipcError3}}
-      </p>
-      {% endif %}
-      
-      <table class="govuk-table govuk-!-margin-bottom-4">
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
-            <th class="govuk-table__header" scope="col">Net quantity and number of packages</th>
-            <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks</th>
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body" style="text-align: right;">
-          {% if query.pheatsError1 == "true" or query.prepop == "true" %}
-            {% include "../modules/_summary-plants-check-answers.html" %}
-          {% else %}
-            {% for commodity in data.commodities %}
-              {% block summaryPlantsAndFreshProduce %}
-              {% include "../modules/_summary-plants-check-answers.html" %}
-              {% endblock %}
-            {% endfor %}
-          {% endif %}
-        </tbody>
-      </table>
-
-      <p class="govuk-body"><a href="input-method?change=yes&return_url=check-your-answers" {% if query.ipcError3 == 'true' %} id="changeIPC2" aria-describedby="ipc3-error" {% endif %}>Add more</a></p>
-
-      {% elif data.commodity == "potatoes" %}
-      <h2 class="govuk-heading-m">Your consignment</h2>
-      
-      <table class="govuk-table govuk-!-margin-bottom-4">
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
-            <th class="govuk-table__header" scope="col">Net quantity and number of packages</th>
-            <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks</th>
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-          {% if query.prepop == "true" %}
-            {% include "../modules/_summary-potatoes-check-answers.html" %}
-          {% else %}
-            {% for commodity in data.commodities %}
-              {% block summaryPotatoes %}
-              {% include "../modules/_summary-potatoes-check-answers.html" %}
-              {% endblock %}
-            {% endfor %}
-          {% endif %}
-        </tbody>
-      </table>
-
-      <p class="govuk-body"><a href="input-method?change=yes&return_url=check-your-answers">Add more</a></p>
-
-      {% elif data.commodity == "plant products" %}
-      <h2 class="govuk-heading-m" id="your-consignment">Your consignment</h2>
-      
-      <table class="govuk-table govuk-!-margin-bottom-4 responsive-table">
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
-            <th class="govuk-table__header" scope="col">Quantities and packages</th>
-            <th class="govuk-table__header" scope="col">Packaging information</th>
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body" style="text-align: right;">
-          {% if query.prepop == "true" %}
-            {% include "../modules/_summary-processed-plant-products-check-answers.html" %}
-          {% else %}
-            {% for commodity in data.commodities %}
-              {% block summaryPlantProducts %}
-              {% include "../modules/_summary-processed-plant-products-check-answers.html" %}
-              {% endblock %}
-            {% endfor %}
-          {% endif %}
-        </tbody>
-      </table>
-
-      <p class="govuk-body"><a href="input-method?change=yes&return_url=check-your-answers">Add more</a></p>
-      {% elif data.commodity == "seeds" %}
-      <h2 class="govuk-heading-m">Your consignment</h2>
-
-      <table class="govuk-table govuk-!-margin-bottom-4">
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
-            <th class="govuk-table__header" scope="col">Net quantity and number of packages</th>
-            <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks</th>
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-          {% set showDelete = "true" %}
-          {% set showChange = "true" %}
-          {% include "../modules/_summary-seed-no-country.html" %}
-        </tbody>
-      </table>
-
-      <p class="govuk-body"><a href="input-method?change=yes&return_url=check-your-answers">Add more</a></p>
-      {% elif data.commodity == "used farm and forestry machinery" %}
-      <h2 class="govuk-heading-m">Your consignment</h2>
+        <h2 class="govuk-heading-m" id="your-consignment">Your consignment</h2>
+        <dl class="govuk-summary-list">
+        
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Number of commodities</dt>
+            <dd class="govuk-summary-list__value">395</dd>
+            <dd class="govuk-summary-list__actions"><a class="govuk-link"
+            href="commodity-list-large-max?change=yes&return_url=check-your-answers?upload=1">Change<span class="govuk-visually-hidden"> commodity list</span></a></dd>
+          </div>
     
-      <table class="govuk-table govuk-!-margin-bottom-4">
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
-            <th class="govuk-table__header govuk-table__header" scope="col">Unique ID</th>
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Action</th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-          <!-- Smart commodity looping (START) - Added by a previous designer to always add another row to the commodity table each time a new commodity is added -->
-          {% if data.commodities and (data.commodities | length) > 0 %}
-          {% for commodity in data.commodities %}
-            {% block summaryMachinery %}
-            {% include "../modules/_summary-machinery-check-answers.html" %}
-            {% endblock %}
-          {% endfor %}
-          <!-- Smart commodity looping (END) - Added by a previous designer to always add another row to the commodity table each time a new commodity is added -->
-          {% else %}
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">
-              {{commodity.machinery_make or 'Massey Ferguson'}} {{commodity.machinery_model or "B2741"}}
-            </td>
-            <td class="govuk-table__cell">
-              <span style="display: block; margin-bottom: 7px;" >
-                {{commodity.countrySelect[0] or "United Kingdom"}}
-              </span>
-              {% if data.reforwarding == "1" %}
-              <span style="display: block; margin-bottom: 7px;" >
-                {% if commodity['commodityIPCN-2'] %}
-                  {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
-                {% elif commodity['commodityIPCN-1'] %}
-                  {{commodity['commodityIPCN-1'] or "123-456-789-0"}}
-                {% else %}
-                  {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
-                {% endif %}
-              </span>
-              {% endif %}
-            </td>
-            <td class="govuk-table__cell govuk-table__cell">
-              {{data.machinery_id or '5456987452Z'}}
-            </td>
-            <td class="govuk-table__cell" style="text-align: right;">
-              <a href="commodity-page-machinery?change=yes&return_url=check-your-answers" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Total net quantity</dt>
+            <dd class="govuk-summary-list__value">
+              10.35kg
               <br>
-              <a href="#" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
-            </td>
-          </tr>
-          {% endif %}
-        </tbody>
-      </table>
+              and 15 tonnes
+            </dd>
+            <dd class="govuk-summary-list__value">&nbsp;</dd>
+          </div>
+    
+          <!-- <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Destination countries</dt>
+            <dd class="govuk-summary-list__value">Belgium, France, Israel, New Zealand, Spain</dd>
+            <dd class="govuk-summary-list__value">&nbsp;</dd>
+          </div> -->
+    
+        </dl>
+        <p class="govuk-body"><a href="input-method?change=yes&return_url=check-your-answers">Add more</a></p>
 
-      <p class="govuk-body"><a href="input-method?change=yes&return_url=check-your-answers">Add more</a></p>
       {% elif data.journey == "coc" %}
-      <h2 class="govuk-heading-m">Your consignment</h2>
-      
-      <table class="govuk-table govuk-!-margin-bottom-4">
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Commodity</th>
-            <th class="govuk-table__header" scope="col">Variety or type</th>
-            <th class="govuk-table__header" scope="col">Class</th>
-            <th class="govuk-table__header" scope="col">Total net weight</th>
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-          {% block summaryCoc %}
-          {% include "../modules/_summary-coc.html" %}
-          {% endblock %}
-        </tbody>
-      </table>
-
-      <p class="govuk-body"><a href="input-method?change=yes&return_url=check-your-answers">Add more</a></p>
-      {% else %}
-      <h2 class="govuk-heading-m">Your consignment</h2>
-      
-      <table class="govuk-table govuk-!-margin-bottom-4" id="commodityTable">
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Description</th>
-            {% if data.commodity != "seeds" %}
-            <th class="govuk-table__header" scope="col">
-              {{_originColHeader}}
-            </th>
-            {% endif %}
-            <th class="govuk-table__header" scope="col">Net quantity and number of packages</th>
-            <th class="govuk-table__header" scope="col">Packaging and packing material</th>
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-          <!-- BULK UPLOAD (plants and fresh produce) -->
-          {% if data.id == "34" %}
-            {% block summaryBulkUploadAfterClone %}{% include "../modules/_summary-bulk-upload-after-clone-cya.html" %}{% endblock %}
-            <!-- EVERYTHING ELSE -->
-          {% elif data.commodity == "everything else" %}
-            {% block summarySomethingElse %}{% include "../modules/_summary-something-else-cya.html" %}{% endblock %}
-            <!-- Smart commodity looping (START) - Added by a previous designer to always add another row to the commodity table each time a new commodity is added -->
-          {% elif data.commodities and (data.commodities | length) > 0 %}
-            {% for commodity in data.commodities %}
-            {% block summaryGeneral %}
-              {% include "../modules/_summary-general-check-answers.html" %}
+        <h2 class="govuk-heading-m">Your consignment</h2>
+        
+        <table class="govuk-table govuk-!-margin-bottom-4">
+          <thead class="govuk-table__head">
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header" scope="col">Commodity</th>
+              <th class="govuk-table__header" scope="col">Variety or type</th>
+              <th class="govuk-table__header" scope="col">Class</th>
+              <th class="govuk-table__header" scope="col">Total net weight</th>
+              <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="govuk-table__body">
+            {% block summaryCoc %}
+            {% include "../modules/_summary-coc.html" %}
             {% endblock %}
-            {% endfor %}
-          <!-- Smart commodity looping (END) - Added by a previous designer to always add another row to the commodity table each time a new commodity is added -->
-          {% else %}
-            {% include "../modules/_summary-general-check-answers.html" %}
-          {% endif %}
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+  
+        <p class="govuk-body"><a href="input-method?change=yes&return_url=check-your-answers">Add more</a></p>
 
-      {% if data.commodity == "grain" or data.commodity == "everything else" %}
-      <p class="govuk-body"><a href="how-to-identify?change=yes&return_url=check-your-answers"{% if data.commodity == 'everything else' %} id="dynamic-add-more"{% endif %}>Add more</a></p>
       {% else %}
-      <p class="govuk-body">
-        <a href="input-method?change=yes&return_url=check-your-answers" >Add more</a>
-      </p>
-      {% endif %}
+
+        {% set _manualAddURL = "how-to-identify" %}
+        {% if data.commodity == "potatoes" %}
+          {% set _manualAddURL = "commodity-page" %}
+        {% elif data.commodity == "used farm and forestry machinery" %}
+          {% set _manualAddURL = "commodity-page-machinery" %}
+        {% endif %}
+
+        {% set _originColHeader = "Countries of origin" %}
+        {% if data.reforwarding == "1" %}
+          {% set _originColHeader = "Countries of origin and import certificate numbers" %}
+        {% endif %}
+        {% if data.commodity == "used farm and forestry machinery" %}
+          {% set _originColHeader = "Country of last use" %}
+          {% if data.reforwarding == "1" %}
+            {% set _originColHeader = "Country of last use and import certificate numbers" %}
+          {% endif %}
+        {% endif %}
+
+        {% set _quantityColHeader = "Quantity and packages" %}
+        {% if data.commodity == "plant products" %}
+          {% set _quantityColHeader = "Quantities and packages" %}
+        {% endif %}
+
+        {% set _packingColHeader = "Packaging information" %}
+
+        <h2 class="govuk-heading-m" id="your-consignment">Your consignment</h2>
+
+        {% if data.commodity == "plants" and query.ipcError3 == 'true' %}
+        <p id="ipc3-error" class="govuk-error-message">
+          <span class="govuk-visually-hidden">Error:</span> {{_ipcErrors.ipcError3}}
+        </p>
+        {% endif %}
+
+        <table class="govuk-table govuk-!-margin-bottom-4 responsive-table">
+          <thead class="govuk-table__head">
+            {% if data.commodity == "used farm and forestry machinery" %}
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header" scope="col">Description</th>
+              <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
+              <th class="govuk-table__header" scope="col">Unique ID</th>
+              <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
+            </tr>
+            {% else %}
+            <tr class="govuk-table__row">
+              <th class="govuk-table__header" scope="col">Description</th>
+              <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
+              <th class="govuk-table__header" scope="col">{{_quantityColHeader}}</th>
+              <th class="govuk-table__header" scope="col">{{_packingColHeader}}</th>
+              <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
+            </tr>
+            {% endif %}
+          </thead>
+          <tbody class="govuk-table__body">
+            {% if data.id == "34" %}
+              {% include "../modules/_summary-bulk-upload-after-clone-cya.html" %}
+            {% else %}
+              {% if query.ipcError3 != 'true' %}
+                {% set _change = "yes" %}
+                {% set _returnURL = "check-your-answers" %}
+                {% if data.commodities and (data.commodities | length) > 0 %}
+                  {% for commodity in data.commodities %}
+                    {% include "../modules/_summary-general-check-answers.html" %}
+                  {% endfor %}
+                {% else %}
+                  {% include "../modules/_summary-general-check-answers.html" %}
+                {% endif %}
+              {% endif %}
+            {% endif %}
+          </tbody>
+        </table>
+
+        <p class="govuk-body"><a href="{{_manualAddURL}}?change=yes&return_url=check-your-answers" {% if data.commodity == "plants" and query.ipcError3 == 'true' %} id="changeIPC2" aria-describedby="ipc3-error" {% endif %}>Add more</a></p>
+
+
       {% endif %}
 
 

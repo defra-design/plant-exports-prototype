@@ -15,6 +15,13 @@
   
   <div class="govuk-grid-column-full">
 
+    {% set _manualAddURL = "how-to-identify" %}
+    {% if data.commodity == "potatoes" %}
+      {% set _manualAddURL = "commodity-page" %}
+    {% elif data.commodity == "used farm and forestry machinery" %}
+      {% set _manualAddURL = "commodity-page-machinery" %}
+    {% endif %}
+
 
     <form action="{{query.return_url or 'task-list'}}" method="post">
       {% if query.bulkUploadCompleted == "true" %}
@@ -42,78 +49,22 @@
       {% endif %}
       {% if data.commodity == "used farm and forestry machinery" %}
         {% set _originColHeader = "Country of last use" %}
-        {% if data.build == "development" %}
-          {% set _originColHeader = "Country where this machinery was last used" %}
-        {% endif %}
         {% if data.reforwarding == "1" %}
           {% set _originColHeader = "Country of last use and import certificate numbers" %}
-          {% if data.build == "development" %}
-            {% set _originColHeader = "Country where this machinery was last used and import certificate numbers" %}
-          {% endif %}
         {% endif %}
       {% endif %}
 
+      {% set _quantityColHeader = "Quantity and packages" %}
+      {% if data.commodity == "plant products" %}
+        {% set _quantityColHeader = "Quantities and packages" %}
+      {% endif %}
+
+      {% set _packingColHeader = "Packaging information" %}
+
+
       <table class="govuk-table govuk-!-margin-bottom-7 responsive-table" id="commodityTable"  >
         <thead class="govuk-table__head">
-          {% if data.commodity == "bulbs" %}
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
-            <th class="govuk-table__header" scope="col">Net quantity and number of packages</th>
-            <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks</th>
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
-          </tr>
-          {% elif data.commodity == "potatoes" %}
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
-            <th class="govuk-table__header" scope="col">Net quantity and number of packages</th>
-            <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks</th>
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
-          </tr>
-          {% elif data.commodity == "grain" %}
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
-            <th class="govuk-table__header" scope="col">Net quantity and number of packages</th>
-            <th class="govuk-table__header" scope="col">Type of packaging</th>
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
-          </tr>
-          {% elif data.commodity == "plants" %}
-          {% if query.design == "b" %}
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
-            <th class="govuk-table__header" scope="col">Net quantity and number of packages</th>
-            <th class="govuk-table__header" scope="col">Type of packaging</th>
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
-          </tr>
-          {% else %}
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
-            <th class="govuk-table__header" scope="col">Net quantity and number of packages</th>
-            <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks</th>
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
-          </tr>
-          {% endif %}
-          {% elif data.commodity == "plant products" %}
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
-            <th class="govuk-table__header" scope="col">Quantities and packages</th>
-            <th class="govuk-table__header" scope="col">Packaging information</th>
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
-          </tr>
-          {% elif data.commodity == "seeds" %}
-          <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
-            <th class="govuk-table__header" scope="col">Net quantity and number of packages</th>
-            <th class="govuk-table__header" scope="col">Packaging</th>
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
-          </tr>
-          {% elif data.commodity == "used farm and forestry machinery" %}
+          {% if data.commodity == "used farm and forestry machinery" %}
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">Description</th>
             <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
@@ -124,8 +75,8 @@
           <tr class="govuk-table__row">
             <th class="govuk-table__header" scope="col">Description</th>
             <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
-            <th class="govuk-table__header" scope="col">Net quantity and number of packages</th>
-            <th class="govuk-table__header" scope="col">Packaging</th>
+            <th class="govuk-table__header" scope="col">{{_quantityColHeader}}</th>
+            <th class="govuk-table__header" scope="col">{{_packingColHeader}}</th>
             <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
           </tr>
           {% endif %}
@@ -133,96 +84,23 @@
         <tbody class="govuk-table__body">
           <!-- BULK UPLOAD (plants and fresh produce) -->
           {% if data.id == "34" %}
-            {% block summaryBulkUploadAfterClone %}{% include "../modules/_summary-bulk-upload-after-clone.html" %}{% endblock %}
-          <!-- EVERYTHING ELSE -->
-          {% elif data.commodity == "everything else" %}
-            {% block summarySomethingElse %}{% include "../modules/_summary-something-else.html" %}{% endblock %}
-          <!-- SEEDS -->
-          {% elif data.commodity == "seeds" %}
-            {% set showChange = "true" %}
-            {% set showDelete = "true" %}
-            {% include "../modules/_summary-seed-cya.html" %}
+            {% include "../modules/_summary-bulk-upload-after-clone.html" %}
           {% elif data.upload == 1 %}
             {% include "../modules/_summary-bulk.html" %}
-          <!-- Smart commodity looping (START) - Added by a previous designer to always add another row to the commodity table each time a new commodity is added -->
+
+          <!-- Smart commodity looping -->
           {% elif data.commodities and (data.commodities | length) > 0 %}
             {% for commodity in data.commodities %}
-              <!-- BULBS -->
-              {% if data.commodity == "bulbs" %}
-                {% set commodity_page = "bulbs" %}
-                {% block summaryBulbs %}{% include "../modules/_summary-bulbs.html" %}{% endblock %}
-              <!-- PLANTS (fresh produce) -->
-              {% elif data.commodity == "plants" %}
-                {% set commodity_page = "how-to-identify" %}
-                {% block summaryPlants %}{% include "../modules/_summary-plants.html" %}{% endblock %}
-              <!-- POTATOES -->
-              {% elif data.commodity == "potatoes" %}
-                {% set commodity_page = "commodity-page" %}
-                {% block summaryPotatoes1 %}{% include "../modules/_summary-potatoes.html" %}{% endblock %}
-              <!-- PROCESSED PLANT PRODUCTS -->
-              {% elif data.commodity == "plant products" %}
-                {% set commodity_page = "how-to-identify" %}
-                {% block summaryPlantProducts %}{% include "../modules/_summary-processed-plant-products.html" %}{% endblock %}
-              <!-- USED FARM AND FORESTRY MACHINERY -->
-              {% elif data.commodity == "used farm and forestry machinery" %}
-                {% set commodity_page = "commodity-page-machinery" %}
-                {% block summaryUsedFarmMachinery %}{% include "../modules/_summary-machinery-check-answers.html" %}{% endblock %}
-              <!-- OTHER COMMODITIES (when at least one commodity has been manually added)-->
-              {% else %}
-                {% set commodity_page = "commodity-page" %}
-                {% block summaryOther %}{% include "../modules/_summary-general-check-answers.html" %}{% endblock %}
-              {% endif %}
+              {% set _change = "no" %}
+              {% set _returnURL = "commodity-list" %}
+              {% include "../modules/_summary-general-check-answers.html" %}
             {% endfor %}
-          <!-- Smart commodity looping (END) - Added by a previous designer to always add another row to the commodity table each time a new commodity is added -->
-          <!-- OTHER COMMODITIES (when nothing has been manually added)-->
+
+          <!-- when nothing has been manually added -->
           {% else %}
-            {% if data.commodity == "bulbs" %}
-              {% set commodity_page = "bulbs" %}
-              {% block summaryBulbs2 %}{% include "../modules/_summary-bulbs.html" %}{% endblock %}
-            {% elif data.commodity == "potatoes" %}
-              {% set commodity_page = "commodity-page" %}
-              {% block summaryPotatoes2 %}{% include "../modules/_summary-potatoes.html" %}{% endblock %}
-            {% elif data.commodity == "plants" %}
-              {% set commodity_page = "commodity-page" %}
-              {% block summaryPlants2 %}{% include "../modules/_summary-plants.html" %}{% endblock %}
-            {% elif data.commodity == "plant products" %}
-              {% set commodity_page = "how-to-identify" %}
-              {% block summaryPlantProducts2 %}{% include "../modules/_summary-processed-plant-products.html" %}{% endblock %}
-            {% elif data.commodity == "seeds" %}
-              {% set showChange = "true" %}
-              {% set showDelete = "true" %}
-              {% include "../modules/_summary-seed-cya.html" %}
-            {% elif data.commodity == "used farm and forestry machinery" %}
-              {% set commodity_page = "commodity-page-machinery" %}
-              {% block summaryUsedFarmMachinery2 %}{% include "../modules/_summary-machinery-check-answers.html" %}{% endblock %}
-            {% else %}
-              <tr class="govuk-table__row">
-                <td class="govuk-table__cell"><strong>{{data.commodity_host_species or data.genus or data.commodity_common_name or "Oxalis tuberosa (OXATU)"}}</strong></td>
-                <td class="govuk-table__cell">
-                  <span style="display: block; margin-bottom: 7px;" >
-                    {{commodity.countryOfOriginSelect[0] or "United Kingdom"}}
-                  </span>
-                  {% if data.reforwarding == "1" %}
-                  <span style="display: block; margin-bottom: 7px;" >
-                    {% if commodity['commodityIPCN-2'] %}
-                      {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
-                    {% elif commodity['commodityIPCN-1'] %}
-                      {{commodity['commodityIPCN-1'] or "123-456-789-0"}}
-                    {% else %}
-                      {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
-                    {% endif %}
-                  </span>
-                  {% endif %}
-                </td>
-                <td class="govuk-table__cell govuk-table__cell">{{commodity.quantity or "100"}}{{commodity.unit or " kilograms"}} <br> {{commodity.number_of_packages or "5"}} packages</td>
-                <td class="govuk-table__cell govuk-table__cell">{{commodity.packing_material_used or "Cardboard"}}</td>
-                <td class="govuk-table__cell" style="text-align: right;">
-                  <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
-                  <br>
-                  <a href="#" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
-                </td>
-              </tr>
-            {% endif %}
+            {% set _change = "no" %}
+            {% set _returnURL = "commodity-list" %}
+            {% include "../modules/_summary-general-check-answers.html" %}
           {% endif %}
         </tbody>
       </table>
@@ -233,19 +111,10 @@
             <h2 class="govuk-fieldset__heading">{% if data.build == "development" %}{% if data.commodity == "seeds" %}Do you want to add more seeds to your consignment?{% else %}Do you want to add more commodities?{% endif %}{% else %}Do you want to add more commodities?{% endif %}</h2>
           </legend>
 
-          {% set url = "how-to-identify" %}
-          {% if data.commodity == "bulbs" %}
-            {% set url = "how-to-identify" %}
-          {% elif data.commodity == "potatoes" %}
-            {% set url = "commodity-page" %}
-          {% elif data.commodity == "used farm and forestry machinery" %}
-            {% set url = "commodity-page-machinery" %}
-          {% endif %}
-
           <div class="govuk-radios govuk-!-margin-bottom-4" data-module="govuk-radios">
 
             <div class="govuk-radios__item">
-              <input class="govuk-radios__input" id="{% if data.commodity == 'everything else' %}add_one_commodity-yes{% else %}add_one_commodities-yes{% endif %}" name="add_more_commodities" type="radio" value="yes~{{url}}">
+              <input class="govuk-radios__input" id="{% if data.commodity == 'everything else' %}add_one_commodity-yes{% else %}add_one_commodities-yes{% endif %}" name="add_more_commodities" type="radio" value="yes~{{_manualAddURL}}">
               <label class="govuk-label govuk-radios__label" for="{% if data.commodity == 'everything else' %}add_one_commodity-yes{% else %}add_one_commodities-yes{% endif %}">Yes, add one more commodity </label>
             </div>
             

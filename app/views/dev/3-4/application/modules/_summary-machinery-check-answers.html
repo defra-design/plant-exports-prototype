@@ -1,47 +1,58 @@
+
 <tr class="govuk-table__row">
   <td class="govuk-table__cell">
-
-    <span style="display: block; margin-bottom: 7px;">
-      Machinery type: {{data.machinery_type | capitalize or "Tractor"}}
-    </span>
-    
-    <span style="display: block; margin-bottom: 7px;" >
-      Make: {{commodity.machinery_make or 'Massey Ferguson'}} 
-    </span>
-
-    <span style="display: block; margin-bottom: 7px;" >
-      Model: {{commodity.machinery_model or "B2741"}}
-    </span>
-
+    <div class="govuk-table-heading-wrapper">
+      <span class="table-heading" >Description</span>
+    </div>
+    <div>
+      <span class="govuk-table-span">
+        Machinery type: {{data.machinery_type | capitalize or "Tractor"}}
+      </span>
+      <span class="govuk-table-span">
+        Make: {{commodity.machinery_make or 'Massey Ferguson'}} 
+      </span>
+      <span class="govuk-table-span">
+        Model: {{commodity.machinery_model or "B2741"}}
+      </span>
+    </div>
   </td>
   <td class="govuk-table__cell">
+    <div class="govuk-table-heading-wrapper">
+      <span class="table-heading" >{{_originColHeader}}</span>
+    </div>
+    <div>
+      <span class="govuk-table-span">
+        {{commodity.countrySelect[0] or "United Kingdom"}}
+      </span>
 
-    <span style="display: block; margin-bottom: 7px;" >
-      {{commodity.countrySelect[0] or "United Kingdom"}}
-    </span>
-
-    {% if data.reforwarding == "1" %}
-    <span style="display: block; margin-bottom: 7px;" >
-      {% if commodity['commodityIPCN-2'] %}
-        {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
-      {% elif commodity['commodityIPCN-1'] %}
-        {{commodity['commodityIPCN-1'] or "123-456-789-0"}}
-      {% else %}
-        {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
+      {% if data.reforwarding == "1" %}
+      <span class="govuk-table-span">
+        {% if commodity['commodityIPCN-2'] %}
+          {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
+        {% elif commodity['commodityIPCN-1'] %}
+          {{commodity['commodityIPCN-1'] or "123-456-789-0"}}
+        {% else %}
+          {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
+        {% endif %}
+      </span>
       {% endif %}
-    </span>
-    {% endif %}
+
+    </div>
 
   </td>
   <td class="govuk-table__cell govuk-table__cell">
-    {{data.machinery_id or '5456987452Z'}}
+    <div class="govuk-table-heading-wrapper">
+      <span class="table-heading" >Unique ID</span>
+    </div>
+    <div>
+      <span class="govuk-table-span">
+        {{data.machinery_id or '5456987452Z'}}
+      </span>
+    </div>
   </td>
   
-  <td class="govuk-table__cell" style="text-align: right;">
-    <a href="{{_changeCommodityURL or 'commodity-page-machinery?change=yes&return_url=check-your-answers'}}" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
-    <br>
-    {% if query.cloned != "yes" %}
-    <a href="#" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
-    {% endif %}
+  <td class="govuk-table__cell govuk-table__cell__actions">
+    <a href="{{url}}" class="govuk-link govuk-link--no-visited-state" >Change<span class="govuk-visually-hidden"> this commodity</span></a><br>
+    <a href="#" class="govuk-link govuk-link--no-visited-state" >Delete<span class="govuk-visually-hidden"> this commodity</span></a>
   </td>
 </tr>
