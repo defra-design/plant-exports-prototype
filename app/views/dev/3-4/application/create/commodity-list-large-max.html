@@ -120,14 +120,14 @@
     
       </div>
 
-      <div class="govuk-form-block responsive-table-select-all-mobile">
+      <div class="govuk-form-group ">
 
-        <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+        <div class="govuk-checkboxes govuk-checkboxes--small govuk-!-margin-bottom-8" data-module="govuk-checkboxes">
         
           <div class="govuk-checkboxes__item">
-            <input class="govuk-checkboxes__input" id="selectAllCheckboxMobile" name="selectAllCheckbox" type="checkbox" data-aria-controls="your-commodities-table" value="Select all commodities on this page">
-            <label class="govuk-label govuk-checkboxes__label" for="selectAllCheckbox">
-              <span class="govuk-visually-hidden">Select all commodities on this page</span>
+            <input class="govuk-checkboxes__input" id="selectAllCheckbox" name="selectAllCheckbox" type="checkbox" data-aria-controls="your-commodities-table" value="Select all commodities on this page">
+            <label class="govuk-label govuk-checkboxes__label" for="selectAllCheckbox" id="selectAllCheckboxLabel">
+              Select all commodities on this page
             </label>
           </div>
     
@@ -164,21 +164,7 @@
         <caption class="govuk-table__caption"><span class="govuk-visually-hidden">Your commodities</span></caption>
         <thead class="govuk-table__head govuk-body-s">
           <tr class="govuk-table__row">
-            <th class="govuk-table__header" scope="col">
-              <span class="responsive-table-select-all-mobile">Select all commodities on this page</span>
-            
-              <div class="govuk-checkboxes govuk-checkboxes--small responsive-table-select-all-desktop" data-module="govuk-checkboxes">
-      
-                <div class="govuk-checkboxes__item">
-                  <input class="govuk-checkboxes__input" id="selectAllCheckbox" name="selectAllCheckbox" type="checkbox" data-aria-controls="your-commodities-table" value="Select all commodities on this page">
-                  <label class="govuk-label govuk-checkboxes__label" for="selectAllCheckbox">
-                    <span class="govuk-visually-hidden">Select all commodities on this page</span>
-                  </label>
-                </div>
-          
-              </div>
-
-            </th>
+            <th class="govuk-table__header" scope="col"></th>
             {% if data.commodity == "used farm and forestry machinery" %}
               <th class="govuk-table__header" scope="col">Description</th>
               <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
@@ -277,16 +263,7 @@
     /* Select all link  */
     $("#selectAll").bind('click onKeyDown', function(e) {
       e.preventDefault();
-      var txt = $("#selectAll").text();
-
-      if (txt == "Deselect all commodities on this page") {
-        $("#selectAll").text("Select all commodities on this page");
-        checkBoxes.prop("checked", false)
-      }
-      else {
-        $("#selectAll").text("Deselect all commodities on this page");
-        checkBoxes.prop("checked", true)
-      }
+      changeLabelsCheckboxes()
 
       var len = $('.commodity_checkbox:checked').length;
       $("#deleteAll").text("(" + len + " selected)");
@@ -295,37 +272,27 @@
     /* Chris Harding (14.01.22) - Adding a checkbox allowing users to 'Select all commodities on this page' another way */
     /* DESKTOP */
     $("#selectAllCheckbox").bind('click onKeyDown', function() {
-      var txt = $("#selectAll").text();
-
-      if (txt == "Deselect all commodities on this page") {
-        $("#selectAll").text("Select all commodities on this page");
-        checkBoxes.prop("checked", false)
-      }
-      else {
-        $("#selectAll").text("Deselect all commodities on this page");
-        checkBoxes.prop("checked", true)
-      }
+      changeLabelsCheckboxes()
 
       var len = $('.commodity_checkbox:checked').length;
       $("#deleteAll").text("(" + len + " selected)");
     });
 
-    /* MOBILE */
-    $("#selectAllCheckboxMobile").bind('click onKeyDown', function() {
+    function changeLabelsCheckboxes(){
       var txt = $("#selectAll").text();
 
       if (txt == "Deselect all commodities on this page") {
         $("#selectAll").text("Select all commodities on this page");
+        $("#selectAllCheckboxLabel").text("Select all commodities on this page")
         checkBoxes.prop("checked", false)
       }
       else {
         $("#selectAll").text("Deselect all commodities on this page");
+        $("#selectAllCheckboxLabel").text("Deselect all commodities on this page")
         checkBoxes.prop("checked", true)
       }
+    }
 
-      var len = $('.commodity_checkbox:checked').length;
-      $("#deleteAll").text("(" + len + " selected)");
-    });
 
   });
 
