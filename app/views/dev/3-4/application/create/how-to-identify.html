@@ -242,7 +242,15 @@
               <label class="govuk-label govuk-radios__label" for="has_botanicial_name_use_description">Description</label>
               
               <div id="has_botanicial_name_use_description-hint" class="govuk-hint govuk-radios__hint">
-                {% if data.commodity == "everything else" %}If the thing you are exporting does not have a scientific name, enter a description instead{% else %}If you cannot find the botanical name, or your product is made of many {% if data.commodity == "bulbs" %}varieties{% else %}species{% endif %}, enter a description instead{% endif %}
+                {% if data.commodity == "everything else" %}
+                  If the thing you are exporting does not have a scientific name, enter a description instead
+                {% elif data.commodity == "bulbs" %}
+                  If you cannot find the botanical name, or your product is made of many varieties, enter a description instead
+                {% elif data.commodity == "plant products" %}
+                  If you cannot find the botanical name, or your commodity is several plant species, list them here.
+                {% else %}
+                  If you cannot find the botanical name, or your product is made of many species, enter a description instead
+                {% endif %}
               </div>
 
             </div>
@@ -250,7 +258,9 @@
             <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="has_botanicial_name_use_description-conditional">
               
               <div class="govuk-form-group">
-                <label class="govuk-visually-hidden" for="commodity_description">Description of the {{data.commodity or "plants and fresh produce"}}</label>
+                <label class="govuk-label" for="commodity_description">
+                  Enter a description of {% if data.commodity == "plants" %}your plants and fresh produce{% elif data.commodity == "everything else" %}your commodity{% else %}your {{data.commodity or 'plants and fresh produce'}}{% endif %}
+                </label>
                 <textarea class="govuk-textarea" id="commodity_description" name="commodity_description" rows="5" aria-describedby="more-detail-hint">{{data.commodity_description}}</textarea>
               </div>
 
