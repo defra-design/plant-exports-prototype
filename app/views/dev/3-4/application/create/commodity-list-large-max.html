@@ -135,10 +135,30 @@
 
       </div>
 
-      {% set _originColHeader = "Origin" %}
-      {% if data.reforwarding == "1" %}
-        {% set _originColHeader = "Origin and import certificate numbers" %}
+      {% set _manualAddURL = "how-to-identify" %}
+      {% if data.commodity == "potatoes" %}
+        {% set _manualAddURL = "commodity-page" %}
+      {% elif data.commodity == "used farm and forestry machinery" %}
+        {% set _manualAddURL = "commodity-page-machinery" %}
       {% endif %}
+
+      {% set _originColHeader = "Countries of origin" %}
+        {% if data.reforwarding == "1" %}
+          {% set _originColHeader = "Countries of origin and import certificate numbers" %}
+        {% endif %}
+        {% if data.commodity == "used farm and forestry machinery" %}
+          {% set _originColHeader = "Country of last use" %}
+          {% if data.reforwarding == "1" %}
+            {% set _originColHeader = "Country of last use and import certificate numbers" %}
+          {% endif %}
+        {% endif %}
+
+        {% set _quantityColHeader = "Quantity and packages" %}
+        {% if data.commodity == "plant products" %}
+          {% set _quantityColHeader = "Quantities and packages" %}
+        {% endif %}
+
+        {% set _packingColHeader = "Packaging information" %}
 
       <table id="your-commodities-table" class="govuk-table responsive-table">
         <caption class="govuk-table__caption"><span class="govuk-visually-hidden">Your commodities</span></caption>
@@ -159,90 +179,26 @@
               </div>
 
             </th>
-            <th class="govuk-table__header" scope="col">Description</th>
-            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
-            {% if data.commodity == "plant products" %}
-            <th class="govuk-table__header" scope="col">Net quantity, gross quantity and number of packages</th>
-            <th class="govuk-table__header" scope="col">Packaging, packing material, container number, seal number, batch code and distinguishing marks</th>
+            {% if data.commodity == "used farm and forestry machinery" %}
+              <th class="govuk-table__header" scope="col">Description</th>
+              <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
+              <th class="govuk-table__header" scope="col">Unique ID</th>
+              <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
             {% else %}
-            <th class="govuk-table__header" scope="col">Net quantity and number of packages</th> 
-            <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks</th>
+              <th class="govuk-table__header" scope="col">Description</th>
+              <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
+              <th class="govuk-table__header" scope="col">{{_quantityColHeader}}</th>
+              <th class="govuk-table__header" scope="col">{{_packingColHeader}}</th>
+              <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
             {% endif %}
-            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
           </tr>
         </thead>
         <tbody class="govuk-table__body govuk-body-s">
-          {% for i in range(0, 60) -%}
-          <tr class="govuk-table__row result">
-            <td class="govuk-table__cell" style="vertical-align: top;">
-
-              <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
-                
-                <div class="govuk-checkboxes__item">
-                  <input class="govuk-checkboxes__input commodity_checkbox" id="line_{{loop.index}}" name="line_{{loop.index}}" type="checkbox" value="">
-                  <label class="govuk-label govuk-checkboxes__label" for="line_{{loop.index}}">
-                    <span class="govuk-visually-hidden">Row {{loop.index}}</span>
-                  </label>
-                </div>
-
-              </div>
-
-            </td>
-
-            <td class="govuk-table__cell" scope="row" style="vertical-align: top;">
-              <span class="table-heading" aria-hidden="true">Description</span> 
-              <span style="display: block; margin-bottom: 7px;">
-                <strong>Narcissus pseudonarcissus</strong>
-              </span>
-              <span style="display: block; margin-bottom: 7px;">
-                Commodity type:
-                <br>
-                Plants
-              </span>
-            </td>
-            
-            <td class="govuk-table__cell" scope="row" style="vertical-align: top;">
-              <span class="table-heading" aria-hidden="true">{{_originColHeader}}</span> 
-              <span style="display: block; margin-bottom: 7px;" >United Arab Emirates</span> 
-              {% if data.reforwarding == "1" %}
-              <span style="display: block; margin-bottom: 7px;" >
-                {% if commodity['commodityIPCN-2'] %}
-                  {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
-                {% elif commodity['commodityIPCN-1'] %}
-                  {{commodity['commodityIPCN-1'] or "123-456-789-0"}}
-                {% else %}
-                  {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
-                {% endif %}
-              </span>
-              {% endif %}
-            </td>
-            
-            <td class="govuk-table__cell" scope="row" style="vertical-align: top;">
-              <span class="table-heading" aria-hidden="true">Net quantity and number of packages</span> 
-              <span style="display: block; margin-bottom: 7px;" >100 Grams</span> 
-              {% if data.commodity == "plant products" %}
-              <span style="display: block; margin-bottom: 7px;">100 Grams</span>
-              {% endif %}
-              <span style="display: block; margin-bottom: 7px;" >10 packages</span> 
-            </td>
-
-            <td class="govuk-table__cell" scope="row" style="vertical-align: top;">
-              <span class="table-heading" aria-hidden="true">Packaging, packing material and distinguishing marks</span> 
-              <span style="display: block; margin-bottom: 7px;">Bag</span> 
-              <span style="display: block; margin-bottom: 7px;">Cardboard</span>
-              {% if data.commodity == "plant products" %}
-              <span style="display: block; margin-bottom: 7px;">123456789</span>
-              <span style="display: block; margin-bottom: 7px;">S-909-12345</span>
-              <span style="display: block; margin-bottom: 7px;">BC112 23344</span>
-              {% endif %}
-              <span style="display: block; margin-bottom: 7px;">Brown marks</span>
-            </td>
-
-            <td class="govuk-table__cell govuk-table__cell--numeric" style="vertical-align: top;">
-              <a href="how-to-identify?change=yes" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> row {{loop.index}}</span></a>
-            </td>
-
-          </tr>
+          {% set _longlist = "yes" %}
+          {% set _change = "yes" %}
+          {% set _returnURL = "commodity-list-large-max" %}
+          {% for i in range(0, 100) -%}
+            {% include "../modules/_summary-general-check-answers.html" %}
           {%- endfor %}
         </tbody>
       </table>

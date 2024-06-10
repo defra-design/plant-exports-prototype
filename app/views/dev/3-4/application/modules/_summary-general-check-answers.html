@@ -1,5 +1,19 @@
 <tr class="govuk-table__row">
 
+  <!-- Checkbox (long list) -->
+  {% if _longlist == "yes" %}
+  <td class="govuk-table__cell" style="vertical-align: top;">
+    <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+      <div class="govuk-checkboxes__item">
+        <input class="govuk-checkboxes__input commodity_checkbox" id="line_{{loop.index}}" name="line_{{loop.index}}" type="checkbox" value="">
+        <label class="govuk-label govuk-checkboxes__label" for="line_{{loop.index}}">
+          <span class="govuk-visually-hidden">Row {{loop.index}}</span>
+        </label>
+      </div>
+    </div>
+  </td>
+  {% endif %}
+
   <!-- Description -->
   <td class="govuk-table__cell {% if data.commodity == 'plants' and query.pheatsError1 == 'true' %} govuk-form-group--error {% endif %}" {% if data.commodity == 'plants' and query.pheatsError1 == 'true' %} style="padding-left:15px" {% endif %}>
 
@@ -239,12 +253,16 @@
   {% endif %}
 
   <!-- Actions -->
+  {% if _viewOnly != "yes" %}
   <td class="govuk-table__cell govuk-table__cell__actions">
     
     <!-- TODO for check answers - href = _changeCommodityURL or 'how-to-identify?change=yes&return_url=check-your-answers' --- wrap with double braces AND change the or URL, check what _changeCommodityURL is -->
 
-    <a href="{{_manualAddURL}}?change={{_change}}&return_url={{_returnURL}}" class="govuk-link govuk-link--no-visited-state" {% if data.commodity == 'plants' and query.pheatsError1 == 'true' %}id="changeCommodity" aria-describedby="pheats1-error"{% endif %} >Change<span class="govuk-visually-hidden"> this commodity</span></a><br>
-    <a href="#" class="govuk-link govuk-link--no-visited-state" >Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+    <a href="{{_manualAddURL}}?change={{_change}}&return_url={{_returnURL}}" class="govuk-link govuk-link--no-visited-state" {% if data.commodity == 'plants' and query.pheatsError1 == 'true' %}id="changeCommodity" aria-describedby="pheats1-error"{% endif %} >Change<span class="govuk-visually-hidden"> {% if _longlist == "yes" %}row {{loop.index}}{% else %}this commodity{% endif %}</span></a>
+    {% if _longlist != "yes" %}
+      <br><a href="#" class="govuk-link govuk-link--no-visited-state" >Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+    {% endif %}
   </td>
+  {% endif %}
 
 </tr>
