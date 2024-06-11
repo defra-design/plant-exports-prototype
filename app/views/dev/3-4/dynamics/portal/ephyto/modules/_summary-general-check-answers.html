@@ -1,0 +1,268 @@
+<tr class="govuk-table__row">
+
+  <!-- Checkbox (long list) -->
+  {% if _longlist == "yes" %}
+  <td class="govuk-table__cell" style="vertical-align: top;">
+    <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+      <div class="govuk-checkboxes__item">
+        <input class="govuk-checkboxes__input commodity_checkbox" id="line_{{loop.index}}" name="line_{{loop.index}}" type="checkbox" value="">
+        <label class="govuk-label govuk-checkboxes__label" for="line_{{loop.index}}">
+          <span class="govuk-visually-hidden">Row {{loop.index}}</span>
+        </label>
+      </div>
+    </div>
+  </td>
+  {% endif %}
+
+  <!-- Description -->
+  <td class="govuk-table__cell {% if data.commodity == 'plants' and query.pheatsError1 == 'true' %} govuk-form-group--error {% endif %}" {% if data.commodity == 'plants' and query.pheatsError1 == 'true' %} style="padding-left:15px" {% endif %}>
+
+    <div class="govuk-table-heading-wrapper">
+      <span class="table-heading" >Description</span>
+    </div>
+    <div>
+
+      {% if data.commodity == 'plants' and query.pheatsError1 == 'true' %}
+      <p id="pheats1-error" class="govuk-error-message">
+        <span class="govuk-visually-hidden">Error:</span> {{_pheatsErrors.pheatsError1}}
+      </p>
+      {% endif %}
+
+      {% if data.commodity == "bulbs" or data.commodity == "plants" or data.commodity == "plant products" or data.commodity == "potatoes" or data.commodity == "seeds" or data.commodity == "used farm and forestry machinery" or data.commodity == "grain" or data.commodity == "everything else" %}
+
+        <!-- bulbs and plants and ppp and seeds and everything else -->
+        {% if data.commodity == "bulbs" or data.commodity == "plants" or data.commodity == "plant products" or data.commodity == "seeds" or data.commodity == "grain" or data.commodity == "everything else" %}
+          <span class="govuk-table-span">
+          {% if commodity.has_botanicial_name == "use_description" %}
+              <!-- use DESCRIPTION -->
+              <strong>{{commodity.commodity_description or "Description"}}</strong>
+          {% elif commodity.genus %}
+              <!-- use GENUS + SPECIES -->
+              <strong>{{commodity.genus or "Genus unknown"}}, {{commodity.commodity_host_species or "Species unknown"}}</strong>
+          {% else %}
+              <!-- use BOTANICAL NAME -->
+              <strong>{{commodity.botanical_name or "Rosa ecae (ROSEC)"}}</strong>
+          {% endif %}
+          </span>
+        {% endif %}
+
+        <!-- bulbs and plants -->
+        {% if data.commodity == "bulbs" or data.commodity == "plants" %}
+          {% if commodity.commodity_variety != "" %}
+          <span class="govuk-table-span">
+            '{{commodity.commodity_variety or "Red blossom"}}'
+          </span>
+          {% endif %}
+          <span class="govuk-table-span">
+            Commodity type: {% if commodity.commodity_type == "produce" %}Produce (fruit, flowers or vegetables){% else %}
+              {{commodity.commodity_type|capitalize or data.commodity|capitalize }}
+            {% endif %}
+          </span>
+        {% endif %}
+
+        <!-- potatoes -->
+        {% if data.commodity == "potatoes" %}
+          {% set _potatoType = "Ware" %}
+          {% if commodity.potato == "seed" %}
+            {% set _potatoType = "Seed" %}
+          {% endif %}
+          <span class="govuk-table-span">
+            <strong>{{_potatoType}}</strong>
+          </span>
+          {% set _variety = commodity.commodity_variety[0] or commodity.other_commodity_variety or "Pink fir apple" %}
+          <span class="govuk-table-span">
+            Variety: {{_variety}}
+          </span>
+          <span class="govuk-table-span">
+            Growing season inspection number: {{commodity.gsi_number or "GSI123456"}}
+          </span>
+          {% if commodity.chemicals_used != "" %}
+          <span class="govuk-table-span">
+            Chemicals used: {{commodity.chemicals_used or "rimsulfuron (herbicide)"}}
+          </span>
+          {% endif %}
+          {% if _potatoType == "Ware" %}
+            <span class="govuk-table-span">
+              Lot reference: {{commodity.lot_reference or "LR12345"}}
+            </span>
+          {% endif %}
+          {% if _potatoType == "Seed" %}
+            <span class="govuk-table-span">
+              Stock number: {{commodity.certification_number or "LR12345"}}
+            </span>
+          {% endif %}
+        {% endif %}
+
+        <!-- seeds -->
+        {% if data.commodity == "seeds" %}
+          <span class="govuk-table-span">
+            Lot reference: {{commodity.commodity_lot or "12345678"}}
+          </span>
+          <span class="govuk-table-span">
+            APHA sample reference: {{commodity.apha_sample_reference or "12345678"}}
+          </span>
+        {% endif %}
+
+        <!-- used farm and forestry machinery -->
+        {% if data.commodity == "used farm and forestry machinery" %}
+          <span class="govuk-table-span">
+            Machinery type: {{data.machinery_type | capitalize or "Tractor"}}
+          </span>
+          <span class="govuk-table-span">
+            Make: {{commodity.machinery_make or 'Massey Ferguson'}} 
+          </span>
+          <span class="govuk-table-span">
+            Model: {{commodity.machinery_model or "B2741"}}
+          </span>
+        {% endif %}
+
+    
+      <!-- fallback if commodity type not set -->
+      {% else %}
+        <span class="govuk-table-span">
+          <strong>Oxalis tuberosa (OXATU)</strong>
+        </span>
+      {% endif %}
+
+    </div>
+  </td>
+
+  <!-- Origin -->
+  <td class="govuk-table__cell">
+    <div class="govuk-table-heading-wrapper">
+      <span class="table-heading" >{{_originColHeader}}</span>
+    </div>
+    <div>
+      
+      {% if data.commodity == "used farm and forestry machinery" %}
+        <span class="govuk-table-span">
+          {{commodity.countrySelect[0] or "Spain"}}
+        </span>
+      {% else %}
+        <span class="govuk-table-span">
+          {% set _defaultCountry = "United Kingdom" %}
+          {% if data.reforwarding == "1" %}
+            {% set _defaultCountry = "Spain" %}
+          {% endif %}
+          {% if commodity.filter_demo == "_unchecked" or commodity.filter_demo == undefined %}
+            {{_defaultCountry}}
+          {% else %}
+            {{commodity.filter_demo | join("; ") or _defaultCountry}}
+          {% endif %}
+        </span>
+      {% endif %}
+
+      {% if data.reforwarding == "1" %}
+      <span class="govuk-table-span">
+        {% if commodity['commodityIPCN-2'] %}
+          {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
+        {% elif commodity['commodityIPCN-1'] %}
+          {{commodity['commodityIPCN-1'] or "123-456-789-0"}}
+        {% else %}
+          {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
+        {% endif %}
+      </span>
+      {% endif %}
+
+    </div>
+  </td>
+
+  <!-- Qtys / Unique ID -->
+  {% if data.commodity == "used farm and forestry machinery" %}
+  <td class="govuk-table__cell govuk-table__cell">
+    <div class="govuk-table-heading-wrapper">
+      <span class="table-heading" >Unique ID</span>
+    </div>
+    <div>
+      <span class="govuk-table-span">
+        {{data.machinery_id or '5456987452Z'}}
+      </span>
+    </div>
+  </td>
+  {% else %}
+  <td class="govuk-table__cell">
+    <div class="govuk-table-heading-wrapper">
+      <span class="table-heading" >{{_quantityColHeader}}</span>
+    </div>
+    <div>
+      <span class="govuk-table-span">
+        Net quantity: {{commodity.quantity or "20"}} {{commodity.units or "kilograms"}}
+      </span>
+      {% if data.commodity == "plant products" %}
+        {% if commodity.gross_quantity != "" %}
+        <span class="govuk-table-span">
+          Gross quantity: {{commodity.gross_quantity or "20"}} {{commodity.gross_units or "kilograms"}}
+        </span>
+        {% endif %}
+      {% endif %}
+      <span class="govuk-table-span">
+        Number of packages: {{commodity.number_of_packages or "5"}}
+      </span>
+    </div>
+  </td>
+  {% endif %}
+
+  <!-- Packaging -->
+  {% if data.commodity != "used farm and forestry machinery" %}
+  <td class="govuk-table__cell">
+    <div class="govuk-table-heading-wrapper">
+      <span class="table-heading" >Packaging information</span>
+    </div>
+
+    <div>
+        <span class="govuk-table-span">
+        Packaging: {{commodity.packaging[0] or "Crate - bulk - cardboard"}}
+        </span>
+
+        {% if data.commodity != "grain" %}
+
+          {% if commodity.packing_material_used != "" %}
+            <span class="govuk-table-span">
+              Packing material: {{commodity.packing_material_used or "Cardboard"}}
+            </span>
+          {% endif %}
+
+          {% if data.commodity == "plant products" %}
+            {% if commodity.container_number != "" %}
+              <span class="govuk-table-span">
+                Container numbers: {{commodity.container_number or "123456789"}}
+              </span>
+            {% endif %}
+            {% if commodity.seal_number != "" %}
+              <span class="govuk-table-span">
+                Seal numbers: {{commodity.seal_number or "S-909-12345"}}
+              </span>
+            {% endif %}
+            {% if commodity.batch_code != ""  %}
+              <span class="govuk-table-span">
+                Batch codes: {{commodity.batch_code or "BC112 23344"}}
+              </span>
+            {% endif %}
+          {% endif %}
+
+          {% if commodity.distinguishing_marks != "" %}
+            <span class="govuk-table-span">
+              Distinguishing marks: {{commodity.distinguishing_marks or "Striped boxes"}}
+            </span>
+          {% endif %}
+
+        {% endif %}
+
+      </div>
+  </td>
+  {% endif %}
+
+  <!-- Actions -->
+  {% if _viewOnly != "yes" %}
+  <td class="govuk-table__cell govuk-table__cell__actions">
+    
+    <!-- TODO for check answers - href = _changeCommodityURL or 'how-to-identify?change=yes&return_url=check-your-answers' --- wrap with double braces AND change the or URL, check what _changeCommodityURL is -->
+
+    <a href="{{_manualAddURL}}?change={{_change}}&return_url={{_returnURL}}" class="govuk-link govuk-link--no-visited-state" {% if data.commodity == 'plants' and query.pheatsError1 == 'true' %}id="changeCommodity" aria-describedby="pheats1-error"{% endif %} >Change<span class="govuk-visually-hidden"> {% if _longlist == "yes" %}row {{loop.index}}{% else %}this commodity{% endif %}</span></a>
+    {% if _longlist != "yes" %}
+      <br><a href="#" class="govuk-link govuk-link--no-visited-state" >Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+    {% endif %}
+  </td>
+  {% endif %}
+
+</tr>
