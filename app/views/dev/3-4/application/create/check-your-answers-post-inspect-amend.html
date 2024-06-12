@@ -24,6 +24,23 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-three-quarters">
+
+    {% set _showMessage = data.showMessage or 'no' %}
+    {% if _showMessage == "yes" %}
+    <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+      <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+          Important
+        </h2>
+      </div>
+      <div class="govuk-notification-banner__content">
+        <p class="govuk-notification-banner__heading">
+          You must resubmit your application for these changes to appear on your certificate.
+        </p>
+      </div>
+    </div>
+    {% endif %}
+
     <h1 class="govuk-heading-xl">
       Update your answers before submitting your application
     </h1>
@@ -58,10 +75,7 @@
           {{ data.countrySelect[0] or "Spain"}}
         </dd>
         <dd class="govuk-summary-list__actions">
-<!--           <a class="govuk-link" href="../setup/what-country?change=yes&return_url=../create/check-your-answers-pre-inspect-amend-message">
-            Change<span class="govuk-visually-hidden">
-              Certification region</span>
-          </a> -->
+
         </dd>
       </div>
       <div class="govuk-summary-list__row">
@@ -72,9 +86,8 @@
           {{ data.reference_num or "12345" }}
         </dd>
         <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="../setup/reference?change=yes&return_url=../create/check-your-answers-pre-inspect-amend-message">
-            Change<span class="govuk-visually-hidden">
-              Certification region</span>
+          <a class="govuk-link" href="../setup/reference?change=yes&return_url=../create/check-your-answers-post-inspect-amend">
+            Change<span class="govuk-visually-hidden"> your reference</span>
           </a>
         </dd>
       </div>
@@ -117,66 +130,60 @@
 
     <!--Your commodities-->
         <h2 class="govuk-heading-m">Your consignment</h2>
-        <table class="govuk-table govuk-!-margin-bottom-4">
-          <thead class="govuk-table__head">
-            <tr class="govuk-table__row">
-              <th class="govuk-table__header" scope="col">
-                Description
-              </th>
-              <th class="govuk-table__header" scope="col">
-                Stock number
-              </th>
-              <th class="govuk-table__header" scope="col">
-                Quantity
-              </th>
-              <th class="govuk-table__header" scope="col"></th>
-            </tr>
-          </thead>
-          <tbody class="govuk-table__body">
-            <tr class="govuk-table__row">
-              <td class="govuk-table__cell">
-                Maris piper
-              </td>
-              <td class="govuk-table__cell">
-                98765
-              </td>
-              <td class="govuk-table__cell govuk-table__cell">
-                {{data.quantity or '2000'}} kilograms
-              </td>
-              <td class="govuk-table__cell" style="text-align: right;">
-                <a href="commodity-page-amend-post-pots?change=yes&return_url=check-your-answers-pre-inspect-amend-message" class="govuk-link govuk-link--no-visited-state">
-                  Change
-                </a>
-                <!-- <br>
-                <a href="#" class="govuk-link govuk-link--no-visited-state">
-                  Delete
-                </a> -->
-              </td>
-            </tr>
-            <tr class="govuk-table__row">
-              <td class="govuk-table__cell">
-                Pink fir apple
-              </td>
-              <td class="govuk-table__cell">
-                91239
-              </td>
-              <td class="govuk-table__cell govuk-table__cell">
-                500 kilograms
-              </td>
-              <td class="govuk-table__cell" style="text-align: right;">
-                <a href="commodity-page-amend-post-pots?change=yes&return_url=check-your-answers-pre-inspect-amend-message" class="govuk-link govuk-link--no-visited-state">
-                  Change
-                </a>
-                <!-- <br>
-                <a href="#" class="govuk-link govuk-link--no-visited-state">
-                  Delete
-                </a> -->
-              </td>
-            </tr>
-          </tbody>
-        </table>
 
-        <!-- <p class="govuk-body"><a href="commodity-page?return_url=check-your-answers-pre-inspect-amend-message">Add commodities</a></p> -->
+        {% set _manualAddURL = "commodity-page-amend-post-pots" %}
+
+    {% set _originColHeader = "Countries of origin" %}
+    {% if data.reforwarding == "1" %}
+      {% set _originColHeader = "Countries of origin and import certificate numbers" %}
+    {% endif %}
+    {% if data.commodity == "used farm and forestry machinery" %}
+      {% set _originColHeader = "Country of last use" %}
+      {% if data.reforwarding == "1" %}
+        {% set _originColHeader = "Country of last use and import certificate numbers" %}
+      {% endif %}
+    {% endif %}
+
+    {% set _quantityColHeader = "Quantity and packages" %}
+    {% if data.commodity == "plant products" %}
+      {% set _quantityColHeader = "Quantities and packages" %}
+    {% endif %}
+
+    {% set _packingColHeader = "Packaging information" %}
+
+    <table class="govuk-table govuk-!-margin-bottom-4 responsive-table">
+      <thead class="govuk-table__head">
+        {% if data.commodity == "used farm and forestry machinery" %}
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">Description</th>
+          <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
+          <th class="govuk-table__header" scope="col">Unique ID</th>
+          <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
+        </tr>
+        {% else %}
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">Description</th>
+          <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
+          <th class="govuk-table__header" scope="col">{{_quantityColHeader}}</th>
+          <th class="govuk-table__header" scope="col">{{_packingColHeader}}</th>
+          <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
+        </tr>
+        {% endif %}
+      </thead>
+      <tbody class="govuk-table__body">
+          {% set _change = "yes" %}
+          {% set _allowDelete = "no" %}
+          {% set _returnURL = "check-your-answers-post-inspect-amend" %}
+          {% if data.commodities and (data.commodities | length) > 0 %}
+            {% for commodity in data.commodities %}
+              {% include "../modules/_summary-general-check-answers.html" %}
+            {% endfor %}
+          {% else %}
+            {% include "../modules/_summary-general-check-answers.html" %}
+          {% endif %}
+      </tbody>
+    </table>
+
 
         <!--Inspection details-->
         <h2 class="govuk-heading-m govuk-!-margin-top-9">Inspection details</h2>
@@ -200,10 +207,7 @@
               Acme Ltd
             </dd>
             <dd class="govuk-summary-list__actions">
-  <!--             <a class="govuk-link" href="exporter?change=yes&return_url=check-your-answers-pre-inspect-amend-message">
-                Change<span class="govuk-visually-hidden">
-                  Certification region</span>
-              </a> -->
+
             </dd>
           </div>
           <div class="govuk-summary-list__row">
@@ -214,10 +218,7 @@
               New Farm, Egg Lane, Sacrewell, Peterborough, Cambridgeshire, PO5 4GH
             </dd>
             <dd class="govuk-summary-list__actions">
-<!--               <a class="govuk-link" href="exporter?change=yes&return_url=check-your-answers-pre-inspect-amend-message">
-                Change<span class="govuk-visually-hidden">
-                  Certification region</span>
-              </a> -->
+
             </dd>
           </div>
           
@@ -229,10 +230,7 @@
               024 546 7069
             </dd>
             <dd class="govuk-summary-list__actions">
-<!--               <a class="govuk-link" href="exporter?change=yes&return_url=check-your-answers-pre-inspect-amend-message">
-                Change<span class="govuk-visually-hidden">
-                  Certification region</span>
-              </a> -->
+
             </dd>
           </div>
           <div class="govuk-summary-list__row">
@@ -243,10 +241,7 @@
                 {{data.inpection_date_day or "03"}} {{data.inpection_date_month or "Feb"}} {{data.inpection_date_year or "2021"}}
             </dd>
             <dd class="govuk-summary-list__actions">
-<!--               <a class="govuk-link" href="exporter?change=yes&return_url=check-your-answers-pre-inspect-amend-message">
-                Change<span class="govuk-visually-hidden">
-                  Certification region</span>
-              </a> -->
+
             </dd>
           </div>
           {% if data.commodity == "potatoes" %}
@@ -258,9 +253,8 @@
                 {{data.inspection_time_hour or "9"}}:{{data.inpection_time_minute or "00"}}{{data.inspection_time_period or "am"}}
             </dd>
             <dd class="govuk-summary-list__actions">
-              <a class="govuk-link" href="exporter?change=yes&return_url=check-your-answers-pre-inspect-amend-message">
-                Change<span class="govuk-visually-hidden">
-                  Certification region</span>
+              <a class="govuk-link" href="exporter?change=yes&return_url=check-your-answers-post-inspect-amend">
+                Change<span class="govuk-visually-hidden">  the time when your consignment will be ready for inspection</span>
               </a>
             </dd>
           </div>
@@ -280,9 +274,7 @@
           {{data.value or "10,000" | toMoney}}
         </dd>
         <dd class="govuk-summary-list__actions">
-          <!-- <a class="govuk-link" href="shipping?change=yes&return_url=check-your-answers-pre-inspect-amend-message">
-            Change <span class="govuk-visually-hidden">How will the consignment be transported?</span>
-          </a> -->
+
         </dd>
       </div>
 
@@ -302,37 +294,9 @@
           {{data.transportation_method or "Maritime"}}
         </dd>
         <dd class="govuk-summary-list__actions">
-         <!-- <a class="govuk-link" href="shipping?change=yes&return_url=check-your-answers-pre-inspect-amend-message">
-            Change <span class="govuk-visually-hidden">How will the consignment be transported?</span>
-          </a> -->
+
         </dd>
       </div>
-<!--       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Transportation identification
-        </dt>
-        <dd class="govuk-summary-list__value">
-          {{data.transport_id or "<span style='color:#999'>Not supplied</span>" | safe}}
-        </dd>
-        <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="shipping-amend?change=yes&return_url=check-your-answers-pre-inspect-amend-message">
-            Change <span class="govuk-visually-hidden">How will the consignment be transported?</span>
-          </a>
-        </dd>
-      </div>
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">
-          Container number
-        </dt>
-        <dd class="govuk-summary-list__value">
-          {{data.container_num or "<span style='color:#999'>Not supplied</span>" | safe}}
-        </dd>
-        <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="shipping-amend?change=yes&return_url=check-your-answers-pre-inspect-amend-message">
-            Change <span class="govuk-visually-hidden">How will the consignment be transported?</span>
-          </a>
-        </dd>
-      </div> -->
 
     </dl>
 
@@ -380,65 +344,6 @@
       </dl>
       {% endif %}
 
-    <!-- <h2 class="govuk-heading-m">Import permits</h2>
-    <dl class="govuk-summary-list govuk-!-margin-bottom-9"> -->
-
-      <!-- Set counts -->
-      <!-- {% set _importPermitCount = data['importPermitCount'] or 1 | int %}
-      {% set _importPermitDisplayedCount = data['importPermitDisplayedCount'] or 1 | int %}
-      {% set _importPermitCountDeleted = _importPermitDisplayedCount | int - 1 %}
-      {% set _supportingDocumentsDisplayedCount = data['supportingDocumentsDisplayedCount'] or 0 | int %}
-      {% set _totalDocumentsDisplayedCount = _importPermitDisplayedCount | float + _supportingDocumentsDisplayedCount | float %}
-      {% set _totalDocumentsDisplayedCount = _supportingDocumentsDisplayedCount | float %} -->
-
-      <!-- Set id to use -->
-      <!-- {% set _id = _importPermitCount %}
-      {% set _haveImportPermits = data.import_permits or "Yes" %}
-      
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Do you have any import permits?</dt>
-        <dd class="govuk-summary-list__value">{{_haveImportPermits}}</dd>
-        <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="import-permits?change=yes&return_url=check-your-answers-post-inspect-amend">Change<span class="govuk-visually-hidden"> whether you have any import permits</span></a>
-        </dd>
-      </div>
-
-      {% if _haveImportPermits ==  "Yes" %}
-      <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key">Import permits</dt>
-        <dd class="govuk-summary-list__value">
-          {% if _importPermitCount == 1 %}
-          {{data['importPermitNumber' + _id] or '123456789ABC'}}
-          <br>
-          <a class="govuk-link govuk-link--no-visited-state" href="#">{{data['importPermitFile' + _id] or 'file-name.pdf'}}</a>
-          {% else %}
-          <ul class="govuk-list govuk-list--bullet">
-            {% for i in range(0, _importPermitCount) -%}
-            {% set _show = "true" %}
-            {% set _id = loop.index %}
-            {% set _deletedValue = data['importPermitDeleted' + _id] %}
-            {% if _deletedValue == "true" %}
-              {% set _show = "false" %}
-            {% endif %}
-            {% if _show == "true" %}
-            <li>
-              {{data['importPermitNumber' + _id] or '123456789ABC'}}
-              <br>
-              <a class="govuk-link govuk-link--no-visited-state" href="#">{{data['importPermitFile' + _id] or 'file-name.pdf'}}</a>
-            </li>
-            {% endif %}
-            {%- endfor %}
-          </ul>
-          {% endif %}
-        </dd>
-        <dd class="govuk-summary-list__actions">
-          <a class="govuk-link" href="import-permits-view?change=yes&return_url=check-your-answers-post-inspect-amend">Change<span class="govuk-visually-hidden"> your import permits</span></a>
-        </dd>
-      </div>
-      {% else %}
-      
-      {% endif %}
-    </dl> -->
 
     {% endif %}
     <h2 class="govuk-heading-m">Supporting documents (optional)</h2>

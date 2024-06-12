@@ -26,9 +26,21 @@
 
   <div class="govuk-grid-column-three-quarters">
 
-    <div class="app-alert app-alert--info" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
-      <p class="govuk-body" id="govuk-notification-banner-message">You must resubmit your application for these changes to appear on your certificate.</p>
+    {% set _showMessage = data.showMessage or 'no' %}
+    {% if _showMessage == "yes" %}
+    <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+      <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+          Important
+        </h2>
+      </div>
+      <div class="govuk-notification-banner__content">
+        <p class="govuk-notification-banner__heading">
+          You must resubmit your application for these changes to appear on your certificate.
+        </p>
+      </div>
     </div>
+    {% endif %}
 
     <h1 class="govuk-heading-xl">Update your answers before submitting your application</h1>
 
@@ -122,63 +134,59 @@
 
 
     <!--Your commodities-->
-        <h2 class="govuk-heading-m">Your consignment</h2>
-        <table class="govuk-table govuk-!-margin-bottom-4">
-          <thead class="govuk-table__head">
-            <tr class="govuk-table__row">
-              <th class="govuk-table__header" scope="col">
-                Description
-              </th>
-              <th class="govuk-table__header" scope="col">
-                Stock number
-              </th>
-              <th class="govuk-table__header" scope="col">
-                Quantity
-              </th>
-              <th class="govuk-table__header" scope="col"></th>
-            </tr>
-          </thead>
-          <tbody class="govuk-table__body">
-            <tr class="govuk-table__row">
-              <td class="govuk-table__cell">
-                Maris piper
-              </td>
-              <td class="govuk-table__cell">
-                98765
-              </td>
-              <td class="govuk-table__cell govuk-table__cell">
-                {{data.quantity or '2000'}} kilograms
-              </td>
-              <td class="govuk-table__cell" style="text-align: right;">
-                <a href="commodity-page-amend-pots?change=yes&return_url=check-your-answers-pre-inspect-amend-message" class="govuk-link govuk-link--no-visited-state">
-                  Change
-                </a><br>
-                <a href="#" class="govuk-link govuk-link--no-visited-state">
-                  Delete
-                </a>
-              </td>
-            </tr>
-            <tr class="govuk-table__row">
-              <td class="govuk-table__cell">
-                Pink fir apple
-              </td>
-              <td class="govuk-table__cell">
-                91239
-              </td>
-              <td class="govuk-table__cell govuk-table__cell">
-                500 kilograms
-              </td>
-              <td class="govuk-table__cell" style="text-align: right;">
-                <a href="commodity-page-amend-pots?change=yes&return_url=check-your-answers-pre-inspect-amend-message" class="govuk-link govuk-link--no-visited-state">
-                  Change
-                </a><br>
-                <a href="#" class="govuk-link govuk-link--no-visited-state">
-                  Delete
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    <h2 class="govuk-heading-m">Your consignment</h2>
+
+    {% set _manualAddURL = "commodity-page-amend" %}
+
+    {% set _originColHeader = "Countries of origin" %}
+    {% if data.reforwarding == "1" %}
+      {% set _originColHeader = "Countries of origin and import certificate numbers" %}
+    {% endif %}
+    {% if data.commodity == "used farm and forestry machinery" %}
+      {% set _originColHeader = "Country of last use" %}
+      {% if data.reforwarding == "1" %}
+        {% set _originColHeader = "Country of last use and import certificate numbers" %}
+      {% endif %}
+    {% endif %}
+
+    {% set _quantityColHeader = "Quantity and packages" %}
+    {% if data.commodity == "plant products" %}
+      {% set _quantityColHeader = "Quantities and packages" %}
+    {% endif %}
+
+    {% set _packingColHeader = "Packaging information" %}
+
+    <table class="govuk-table govuk-!-margin-bottom-4 responsive-table">
+      <thead class="govuk-table__head">
+        {% if data.commodity == "used farm and forestry machinery" %}
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">Description</th>
+          <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
+          <th class="govuk-table__header" scope="col">Unique ID</th>
+          <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
+        </tr>
+        {% else %}
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">Description</th>
+          <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
+          <th class="govuk-table__header" scope="col">{{_quantityColHeader}}</th>
+          <th class="govuk-table__header" scope="col">{{_packingColHeader}}</th>
+          <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
+        </tr>
+        {% endif %}
+      </thead>
+      <tbody class="govuk-table__body">
+          {% set _change = "yes" %}
+          {% set _returnURL = "check-your-answers-pre-inspect-amend-message" %}
+          {% if data.commodities and (data.commodities | length) > 0 %}
+            {% for commodity in data.commodities %}
+              {% include "../modules/_summary-general-check-answers.html" %}
+            {% endfor %}
+          {% else %}
+            {% include "../modules/_summary-general-check-answers.html" %}
+          {% endif %}
+      </tbody>
+    </table>
 
         <p class="govuk-body"><a href="commodity-page?return_url=check-your-answers-pre-inspect-amend-message">Add commodities</a></p>
 
