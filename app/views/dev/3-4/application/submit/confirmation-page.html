@@ -111,30 +111,30 @@
         <li>Send your labelled samples to the address on this screen.</li>
       </ul>
       <h3 class="govuk-heading-s">Sampling reference information</h3>
-      <table class="govuk-table">
+      {% set _originColHeader = "Countries of origin" %}
+      {% if data.reforwarding == "1" %}
+        {% set _originColHeader = "Countries of origin and import certificate numbers" %}
+      {% endif %}
+
+      {% set _quantityColHeader = "Quantities and packages" %}
+
+      {% set _packingColHeader = "Packaging information" %}
+
+      <table class="govuk-table govuk-!-margin-bottom-4 responsive-table">
         <thead class="govuk-table__head">
           <tr class="govuk-table__row">
-            <th scope="col" class="govuk-table__header">Description</th>
-            <th scope="col" class="govuk-table__header">Quantity</th>
-            <th scope="col" class="govuk-table__header">Distinguishing marks</th>
+            <th class="govuk-table__header" scope="col">Description</th>
+            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
+            <th class="govuk-table__header" scope="col">{{_quantityColHeader}}</th>
+            <th class="govuk-table__header" scope="col">{{_packingColHeader}}</th>
             <th scope="col" class="govuk-table__header"><abbr title="Animal and Plant Health Agency">APHA</abbr> sample <br> reference</th>
           </tr>
         </thead>
         <tbody class="govuk-table__body">
-          {% set items = [
-            {ref:1, description:"Quercus acuta", country:"Denmark", quantity:"55kg", marks:"SCU 23422"},
-            {ref:2, description:"Quercus acuta", country:"Denmark", quantity:"55kg", marks:"SCU 23423"},
-            {ref:3, description:"Pinus albicaulis", country:"Denmark", quantity:"55kg", marks:"SCU 23424"},
-            {ref:4, description:"Pinus albicaulis", country:"Denmark", quantity:"55kg", marks:"SCU 23425"},
-            {ref:5, description:"Pinus albicaulis", country:"Germany", quantity:"105kg", marks:"SCU 23426"}
-          ] %}
-          {% for item in items %}
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">{{item.description}}</td>
-            <td class="govuk-table__cell">{{item.quantity}}</td>
-            <td class="govuk-table__cell">{{item.marks}}</td>
-            <td scope="row" class="govuk-table__cell ">{{10009346 + item.ref}}</td>
-          </tr>
+          {% set _viewOnly = "yes" %}
+          {% set _hasSample = "yes" %}
+          {% for i in range(0, 3) -%}
+            {% include "../modules/_summary-general-check-answers.html" %}
           {% endfor %}
         </tbody>
       </table>
