@@ -508,100 +508,36 @@
       </dl>
 
       {% if data.journey != "coc" %}
-      {% if data.commodity == "grain" %}
-      <h2 class="govuk-heading-m">Consignee details</h2>
-      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+        <h2 class="govuk-heading-m">Consignee details</h2>
+        <dl class="govuk-summary-list govuk-!-margin-bottom-9">
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Who are you sending this consignment to?</dt>
+            <dd class="govuk-summary-list__value">
+              {{data.consignee_name or query.id | appInformationV9('importer') | title or "Cubix"}}
+              <br>
+              {% if data.select_consignee_address == "address_0" %}88 Jianguo Rd, 北京市, 3208, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_1" %}Lillegardsvagen 1, Falkenberg, South-East, 311 50, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_2" %}Piazza Pietro Nenni, 4, Orta Nova Foggia, Foggia, 71045, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_3" %}Phase 3 St, Vaibhav Nagar, Katpadi, Vellore, Tamil Nadu, 632014, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_4" %}6347 Pacific Blvd, Huntington Park, California, 90255, {{data.countrySelect[0] or "France"}}{% else %}{{data.consigneeAddressLine1 or "88 Jianguo Rd" }}{% if data.consigneeAddressLine2 %}, {{data.consigneeAddressLine2}}{% endif %}, {{data.consigneeAddressLine3 or "北京市"}}{% if data.consigneeAddressLine4 %}, {{data.consigneeAddressLine4}}{% endif %}, {{data.consigneeAddressLine5 or "3208"}}, {{data.countrySelect[0] or "France"}}{% endif %}
+            </dd>
+          </div>
         
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Who are you sending this consignment to?</dt>
-          <dd class="govuk-summary-list__value">
-            {{data.consignee_name or query.id | appInformationV9('importer') | title or "Cubix"}}
-            <br>
-            {% if data.select_consignee_address == "address_0" %}88 Jianguo Rd, 北京市, 3208, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_1" %}Lillegardsvagen 1, Falkenberg, South-East, 311 50, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_2" %}Piazza Pietro Nenni, 4, Orta Nova Foggia, Foggia, 71045, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_3" %}Phase 3 St, Vaibhav Nagar, Katpadi, Vellore, Tamil Nadu, 632014, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_4" %}6347 Pacific Blvd, Huntington Park, California, 90255, {{data.countrySelect[0] or "France"}}{% else %}{{data.consigneeAddressLine1 or "88 Jianguo Rd" }}{% if data.consigneeAddressLine2 %}, {{data.consigneeAddressLine2}}{% endif %}, {{data.consigneeAddressLine3 or "北京市"}}{% if data.consigneeAddressLine4 %}, {{data.consigneeAddressLine4}}{% endif %}, {{data.consigneeAddressLine5 or "3208"}}, {{data.countrySelect[0] or "France"}}{% endif %}
-          </dd>
-        </div>
+        {% if data.commodity == "grain" or data.commodity == "plant products" %}
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Import permit number</dt>
+            <dd class="govuk-summary-list__value">{{data.consignee_import_permit or '123456789ABC'}}</dd>
+          </div>
+        {% endif %}
+          
+        {% if data.commodity == "grain" %}
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Further information</dt>
+            <dd class="govuk-summary-list__value">{% if data.consignee_more_detail %}{{data.consignee_more_detail or 'More information'}}{% else %}<span class="govuk-hint">Not entered</span>{% endif %}</dd>
+          </div>
+        {% endif %}
 
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Import permit number</dt>
-          <dd class="govuk-summary-list__value">{{data.consignee_import_permit or '123456789ABC'}}</dd>
-        </div>
-        
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Further information</dt>
-          <dd class="govuk-summary-list__value">{% if data.consignee_more_detail %}{{data.consignee_more_detail or 'More information'}}{% else %}<span class="govuk-hint">Not entered</span>{% endif %}</dd>
-        </div>
+        </dl>
 
-      </dl>
-      {% else %}
-      <h2 class="govuk-heading-m">Consignee details</h2>
-      <dl class="govuk-summary-list govuk-!-margin-bottom-9">
-        
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Who are you sending this consignment to?</dt>          
-          <dd class="govuk-summary-list__value">
-            {{data.consignee_name or query.id | appInformationV9('importer') | title or "Cubix"}}
-            <br>
-            {% if data.select_consignee_address == "address_0" %}88 Jianguo Rd, 北京市, 3208, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_1" %}Lillegardsvagen 1, Falkenberg, South-East, 311 50, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_2" %}Piazza Pietro Nenni, 4, Orta Nova Foggia, Foggia, 71045, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_3" %}Phase 3 St, Vaibhav Nagar, Katpadi, Vellore, Tamil Nadu, 632014, {{data.countrySelect[0] or "France"}}{% elif data.select_consignee_address == "address_4" %}6347 Pacific Blvd, Huntington Park, California, 90255, {{data.countrySelect[0] or "France"}}{% else %}{{data.consigneeAddressLine1 or "88 Jianguo Rd" }}{% if data.consigneeAddressLine2 %}, {{data.consigneeAddressLine2}}{% endif %}, {{data.consigneeAddressLine3 or "北京市"}}{% if data.consigneeAddressLine4 %}, {{data.consigneeAddressLine4}}{% endif %}, {{data.consigneeAddressLine5 or "3208"}}, {{data.countrySelect[0] or "France"}}{% endif %}
-          </dd>
-        </div>
-
-      </dl>
       {% endif %}
 
-      <!-- <h2 class="govuk-heading-m">Import permits</h2>
-      <dl class="govuk-summary-list govuk-!-margin-bottom-9"> -->
-
-        <!-- Set counts -->
-        <!-- {% set _importPermitCount = data['importPermitCount'] or 1 | int %}
-        {% set _importPermitDisplayedCount = data['importPermitDisplayedCount'] or 1 | int %}
-        {% set _importPermitCountDeleted = _importPermitDisplayedCount | int - 1 %}
-        {% set _supportingDocumentsDisplayedCount = data['supportingDocumentsDisplayedCount'] or 0 | int %}
-        {% set _totalDocumentsDisplayedCount = _importPermitDisplayedCount | float + _supportingDocumentsDisplayedCount | float %}
-        {% set _totalDocumentsDisplayedCount = _supportingDocumentsDisplayedCount | float %} -->
-
-        <!-- Set id to use -->
-        <!-- {% set _id = _importPermitCount %}
-        {% set _haveImportPermits = data.import_permits or "Yes" %}
-        
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Do you have any import permits?</dt>
-          <dd class="govuk-summary-list__value">{{_haveImportPermits}}</dd>
-        </div>
-
-        {% if _haveImportPermits ==  "Yes" %}
-        <div class="govuk-summary-list__row">
-          <dt class="govuk-summary-list__key">Import permits</dt>
-          <dd class="govuk-summary-list__value">
-            {% if _importPermitCount == 1 %}
-            {{data['importPermitNumber' + _id] or '123456789ABC'}}
-            <br>
-            <a class="govuk-link govuk-link--no-visited-state" href="#">{{data['importPermitFile' + _id] or 'file-name.pdf'}}</a>
-            {% else %}
-            <ul class="govuk-list govuk-list--bullet">
-              {% for i in range(0, _importPermitCount) -%}
-              {% set _show = "true" %}
-              {% set _id = loop.index %}
-              {% set _deletedValue = data['importPermitDeleted' + _id] %}
-              {% if _deletedValue == "true" %}
-                {% set _show = "false" %}
-              {% endif %}
-              {% if _show == "true" %}
-              <li>
-                {{data['importPermitNumber' + _id] or '123456789ABC'}}
-                <br>
-                <a class="govuk-link govuk-link--no-visited-state" href="#">{{data['importPermitFile' + _id] or 'file-name.pdf'}}</a>
-              </li>
-              {% endif %}
-              {%- endfor %}
-            </ul>
-            {% endif %}
-          </dd>
-        </div>
-        {% else %}
-        
-        {% endif %}
-      </dl> -->
-
+      {% if data.journey != "coc" %}
       <h2 class="govuk-heading-m">Supporting documents (optional)</h2>
       <dl class="govuk-summary-list govuk-!-margin-bottom-9">
         
