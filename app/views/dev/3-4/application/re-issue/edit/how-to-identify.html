@@ -142,8 +142,11 @@
           <label class="govuk-label" for="number_of_packages">Number of packages</label>
           {% if query.error2 == "true" %}
             <p id="number_of_packages-input-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> You cannot increase the number of packages, you can only decrease it</p>
-            {% endif %}
-          <input class="govuk-input{% if query.error2 == 'true' %} govuk-input--error{% endif %} govuk-input--width-5" id="number_of_packages" name="number_of_packages" type="text" inputmode="numeric" pattern="[0-9]*"{% if query.error2 == 'true' %}aria-describedby="number_of_packages-input-error"{% endif %} value="{% if query.change == 'yes' %}{{data.number_of_packages or '120'}}{% endif %}">
+          {% endif %}
+          <div id="number_of_packages-hint" class="govuk-hint">
+            You can lower the number of packages or keep it the same.
+          </div>
+          <input class="govuk-input{% if query.error2 == 'true' %} govuk-input--error{% endif %} govuk-input--width-5" id="number_of_packages" name="number_of_packages" type="text" inputmode="numeric" pattern="[0-9]*" aria-describedby="number_of_packages-hint {% if query.error2 == 'true' %} number_of_packages-input-error {% endif %}" value="{% if query.change == 'yes' %}{{data.number_of_packages or '120'}}{% endif %}">
         </div>
 
         {% if _commodity == "plant products" or data.commodity == "grain" %}
