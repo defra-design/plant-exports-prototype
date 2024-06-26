@@ -23,7 +23,7 @@
         <div class="govuk-error-summary__body">
           <ul class="govuk-list govuk-error-summary__list">
             {% if query.error1 == "true" %}
-            <li><a href="#quantity">You cannot increase the quantity, you can only decrease it</a></li>
+            <li><a href="#quantity">You cannot increase the net quantity, you can only decrease it</a></li>
             {% endif %}
             {% if query.error2 == "true" %}
             <li><a href="#number_of_packages">You cannot increase the number of packages, you can only decrease it</a></li>
@@ -66,15 +66,18 @@
           {% endif %}
         </div>
 
-        <div class="govuk-form-group">
+        <div class="govuk-form-group {% if query.error1 == 'true' %} govuk-form-group--error{% endif %}">
           <label class="govuk-label" for="quantity">
             Net quantity in kilograms
           </label>
           <div id="quantity-hint" class="govuk-hint">
             Total weight of this commodity excluding packaging. <br>You can lower the net quantity or keep it the same.
           </div>
+          {% if query.error1 == "true" %}
+          <p id="quantity-input-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> You cannot increase the net quantity, you can only decrease it</p>
+          {% endif %}
           <div class="govuk-input__wrapper">
-            <input class="govuk-input govuk-input--width-5" id="quantity" name="quantity" type="text" aria-describedby="quantity-hint" value="{{data.quantity or '2000'}}">
+            <input class="govuk-input govuk-input--width-5 {% if query.error1 == 'true' %} govuk-input--error{% endif %}" id="quantity" name="quantity" type="text" aria-describedby="quantity-hint" value="{{data.quantity or '2000'}}" aria-describedby="quantity-hint {% if query.error1 == 'true' %} quantity-input-error{% endif %}">
             <div class="govuk-input__suffix" aria-hidden="true">kilograms</div>
           </div>
         </div>
