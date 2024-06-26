@@ -34,54 +34,47 @@
 
       <!-- Tailored values for template and example template based on based on commodity and application type -->
       {% if commodity == "bulbs" %}
-        {% set template = "template-bulbs-3.csv" %}
+        {% set template = "template-export-bulbs.csv" %}
         {% if data.reforwarding == "1" %}
-          {% set template = "template-bulbs-rf-2.csv" %}
+          {% set template = "template-export-bulbs-rf.csv" %}
         {% endif %}
-        {% set exampleTemplate = "example-bulbs.csv" %}
       {% elif commodity == "plants" %}
-        {% set template = "template-plants-3.csv" %}
+        {% set template = "template-export-plants.csv" %}
         {% if data.reforwarding == "1" %}
-          {% set template = "template-plants-rf-2.csv" %}
+          {% set template = "template-export-plants-rf.csv" %}
         {% endif %}
-        {% set exampleTemplate = "example-plant.csv" %}
       {% elif commodity == "potatoes" %}
-        {% set template = "template-potatoes-3.csv" %}
+        {% set template = "template-export-potatoes.csv" %}
         {% if data.reforwarding == "1" %}
-          {% set template = "template-potatoes-rf-2.csv" %}
+          {% set template = "template-export-potatoes-rf.csv" %}
         {% endif %}
-        {% set exampleTemplate = "example-potatoes.csv" %}
       {% elif commodity == "plant products" %}
-        {% set template = "template-plant-products-4.csv" %}
+        {% set template = "template-export-plant-products.csv" %}
         {% if data.reforwarding == "1" %}
-          {% set template = "template-plant-products-rf-3.csv" %}
+          {% set template = "template-export-plant-products-rf.csv" %}
         {% endif %}
-        {% set exampleTemplate = "example-plant-products.csv" %}
       {% elif commodity == "seeds" %}
-        {% set template = "template-seeds-3.csv" %}
+        {% set template = "template-export-seeds.csv" %}
         {% if data.reforwarding == "1" %}
-          {% set template = "template-seeds-rf-2.csv" %}
+          {% set template = "template-export-seeds-rf.csv" %}
         {% endif %}
-        {% set exampleTemplate = "example-seeds.csv" %}
       {% elif commodity == "used farm and forestry machinery" %}
-        {% set template = "template-used-farm-machinery.csv" %}
+        {% set template = "template-export-used-farm-machinery.csv" %}
         {% if data.reforwarding == "1" %}
-          {% set template = "template-used-farm-machinery-rf-2.csv" %}
+          {% set template = "template-export-used-farm-machinery-rf.csv" %}
         {% endif %}
-        {% set exampleTemplate = "example-used-farm-machinery.csv" %}
       {% else %}
-        {% set template = "template-plants-3.csv" %}
+        {% set template = "template-export-plants.csv" %}
         {% if data.reforwarding == "1" %}
-          {% set template = "template-plants-rf-2.csv" %}
+          {% set template = "template-export-plants-rf.csv" %}
         {% endif %}
-        {% set exampleTemplate = "example-plant.csv" %}
       {% endif %}
 
       <div class="govuk-form-group govuk-!-margin-bottom-9">
 
         <h1 class="govuk-heading-xl">Upload a file</h1>
 
-        <p class="govuk-body"><a href="/public/templates/{{template}}" class="govuk-link govuk-link--no-visited-state" >Download the CSV template (3KB)</a></p>
+        <p class="govuk-body"><a href="/public/templates/{{template}}" class="govuk-link govuk-link--no-visited-state" >Download the CSV template (3KB)</a> (last updated 1 January 2024)</p>
 
 
         {% include "./upload-guidance-content-module.html" %}
@@ -101,34 +94,6 @@
         text: "Upload"
       }) }}
 
-      {% if query.extras == "yes" %}
-      <!-- <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-      <h3 class="govuk-heading-s">Bulk upload templates</h3>
-      <span class="govuk-body">Phytosanitary certificate</span>
-      <ul class="govuk-list">
-        <li><a href="/public/templates/template-bulbs-3.csv" class="govuk-link govuk-link-no-visited-state">Bulbs</a> | <a href="/public/templates/example-bulbs.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
-        <li><a href="/public/templates/template-plants-3.csv" class="govuk-link govuk-link-no-visited-state">Plants and fresh produce</a> | <a href="/public/templates/example-plant.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
-        <li><a href="/public/templates/template-potatoes-3.csv" class="govuk-link govuk-link-no-visited-state">Potatoes</a> | <a href="/public/templates/example-potatoes.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
-        <li><a href="/public/templates/template-plant-products-3.csv" class="govuk-link govuk-link-no-visited-state">Processed plant products</a> | <a href="/public/templates/example-plant-products.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
-        <li><a href="/public/templates/template-seeds-3.csv" class="govuk-link govuk-link-no-visited-state">Seeds for planting</a> | <a href="/public/templates/example-seeds.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
-        <li><a href="/public/templates/template-grain.csv" class="govuk-link govuk-link-no-visited-state">Unprocessed cereal grains</a> | <a href="/public/templates/example-grain.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
-        <li><a href="/public/templates/template-used-farm-machinery.csv" class="govuk-link govuk-link-no-visited-state">Used farm and forestry machinery</a> | <a href="/public/templates/example-used-farm-machinery.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
-      </ul>
-      <span class="govuk-body">Certificate of conformity</span>
-      <ul class="govuk-list">
-        <li><a href="/public/templates/template-sms.csv" class="govuk-link govuk-link-no-visited-state">SMS</a> | <a href="/public/templates/example-sms.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>
-        <li><a href="/public/templates/template-gms.csv" class="govuk-link govuk-link-no-visited-state">GMS</a> | <a href="/public/templates/example-gms.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>       
-      </ul>
-      <span class="govuk-body">Seed sampling</span>
-      <ul class="govuk-list">
-        <li><a href="/public/templates/template-seeds-sampling.csv" class="govuk-link govuk-link-no-visited-state">Seed sampling</a> | <a href="/public/templates/example-seeds-sampling.csv" class="govuk-link govuk-link-no-visited-state">Example data</a></li>      
-      </ul>
-      <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
-      <h3 class="govuk-heading-s">Error handling</h3>
-      <ul class="govuk-list">
-        <li><a href="upload-error-summary" class="govuk-link govuk-link-no-visited-state">View error summary of unique errors (occurences and rows listed)</a></li>
-      </ul> -->
-      {% endif %}
     </form>
 
   </div>
