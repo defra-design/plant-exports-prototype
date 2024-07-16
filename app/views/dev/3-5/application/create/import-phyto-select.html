@@ -18,6 +18,7 @@ Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
     <div class="govuk-grid-column-two-thirds">
 
       {% set _link = 'import-phyto-select-upload' %}
+      {% set _link2 = 'import-phyto-select-ephyto' %}
 
       <form action="{{_link}}" method="post" novalidate>
        
@@ -25,7 +26,7 @@ Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
           <fieldset class="govuk-fieldset">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
               <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">
-                Which import phytosanitary certificate will you add details for?
+                Which import phytosanitary certificate are you adding details to?
               </h1>
             </legend>
             <!-- <div id="contact-hint" class="govuk-hint">
@@ -34,12 +35,16 @@ Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
             <div class="govuk-radios" data-module="govuk-radios">
 
               {% for _number in data.ipcNumbers %}
-              <div class="govuk-radios__item">
-                <input class="govuk-radios__input" id="ipcNumber{{loop.index}}" name="ipcNumber" type="radio" value="{{loop.index}}">
-                <label class="govuk-label govuk-radios__label" for="ipcNumber{{loop.index}}">
-                  {{_number}}
-                </label>
-              </div>
+                {% set _overrideLink = _link %}
+                {% if _number == "123-456-789-0" %}
+                  {% set _overrideLink = _link2 %}
+                {% endif %}
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="ipcNumber{{loop.index}}" name="ipcNumber" type="radio" value="{{loop.index}}~{{_overrideLink}}">
+                  <label class="govuk-label govuk-radios__label" for="ipcNumber{{loop.index}}">
+                    {{_number}}
+                  </label>
+                </div>
               {% endfor %}
              
             </div>

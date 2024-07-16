@@ -18,7 +18,7 @@ Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
     <div class="govuk-grid-column-two-thirds">
 
       <!-- TO DO: Need make this page generate a green confirmation banner, on the next page, after each upload -->
-      {% set _link = 'import-phyto-select-uploaded' %}
+      {% set _link = 'import-phyto-select-ephyto-confirm' %}
       {% if query.changeanswers == 'true' %}
         {% set _link = 'check-your-answers' %}
       {% endif %}
@@ -71,7 +71,7 @@ Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
 
 
           <!-- Sets a value to say whether details were added for this number in the loop or not -->
-          <input id="ipcAdded{{_ipcID}}" name="ipcAdded{{_ipcID}}" type="hidden" value="true">
+          <!-- <input id="ipcAdded{{_ipcID}}" name="ipcAdded{{_ipcID}}" type="hidden" value="true"> -->
 
           <!-- COUNTRY -->
           {% set country_module_label = "Country of issue"%}
@@ -79,44 +79,49 @@ Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
           {% set _showHint = "yes" %}
           {% block country %}{% include "../modules/_country-select-import-2.html" %}{% endblock %}
 
-          <!-- FILE -->
-          {% if query.edit %}
-          <div class="govuk-form-group ">
-            <h2 class="govuk-heading-s govuk-!-margin-bottom-2" >Uploaded import phytosanitary certificate</h2>
-            <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="#">{{data['ipcFile'+_id] or "file-name.pdf"}}</a></p>
-            <!-- <p class="govuk-body"><strong>Current import phytosanitary certificate</strong><br><a class="govuk-link govuk-link--no-visited-state" href="#">{{data['ipcFile'+_id] or "file-name.pdf"}}</a></p> -->
-
-            <h2 class="govuk-heading-s">Upload a new import phytosanitary certificate</h2>
-            <p class="govuk-body">The file must:</p>
-            <ul class="govuk-list govuk-list--bullet">
-              <li>be in PDF format</li>
-              <li>be smaller than 3MB</li>
-            </ul>
-            {{ govukFileUpload({
-              id: "ipcFile"+_ipcID,
-              name: "ipcFile"+_ipcID,
-              label: {
-                text: "Upload file"
-              }
-            }) }}
+          <!-- DATE -->
+          {% set _dateID = 'ipcDate' + _ipcID %}
+          {% set _dayID = 'ipcDay' + _ipcID %}
+          {% set _monthID = 'ipcMonth' + _ipcID %}
+          {% set _yearID = 'ipcYear' + _ipcID %}
+          <div class="govuk-form-group">
+            <fieldset class="govuk-fieldset" role="group" aria-describedby="certificate-issued-hint">
+              <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                <h1 class="govuk-fieldset__heading">
+                  Date certificate was issued
+                </h1>
+              </legend>
+              <div id="certificate-issued-hint" class="govuk-hint">
+                For example, 31 3 2024
+              </div>
+              <div class="govuk-date-input" id="certificate-issued">
+                <div class="govuk-date-input__item">
+                  <div class="govuk-form-group">
+                    <label class="govuk-label govuk-date-input__label" for="{{_dayID}}">
+                      Day
+                    </label>
+                    <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="{{_dayID}}" name="{{_dayID}}" type="text" inputmode="numeric">
+                  </div>
+                </div>
+                <div class="govuk-date-input__item">
+                  <div class="govuk-form-group">
+                    <label class="govuk-label govuk-date-input__label" for="{{_monthID}}">
+                      Month
+                    </label>
+                    <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="{{_monthID}}" name="{{_monthID}}" type="text" inputmode="numeric">
+                  </div>
+                </div>
+                <div class="govuk-date-input__item">
+                  <div class="govuk-form-group">
+                    <label class="govuk-label govuk-date-input__label" for="{{_yearID}}">
+                      Year
+                    </label>
+                    <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="{{_yearID}}" name="{{_yearID}}" type="text" inputmode="numeric">
+                  </div>
+                </div>
+              </div>
+            </fieldset>
           </div>
-          {% else %}
-          <div class="govuk-form-group ">
-            <h2 class="govuk-heading-s">Upload the import phytosanitary certificate</h2>
-            <p class="govuk-body">The file must:</p>
-            <ul class="govuk-list govuk-list--bullet">
-              <li>be in PDF format</li>
-              <li>be smaller than 3MB</li>
-            </ul>
-            {{ govukFileUpload({
-              id: "ipcFile"+_ipcID,
-              name: "ipcFile"+_ipcID,
-              label: {
-                text: "Upload file"
-              }
-            }) }}
-          </div>
-          {% endif %}
 
         </div>
 

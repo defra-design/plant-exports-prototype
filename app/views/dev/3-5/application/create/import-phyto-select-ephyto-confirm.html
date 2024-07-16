@@ -1,0 +1,108 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <!-- TO DO: Need make this page generate a green confirmation banner, on the next page, after each upload -->
+      {% set _link = 'import-phyto-select-uploaded' %}
+      {% set _link2 = 'import-phyto-select-ephyto-dropout' %}
+
+      {% if query.changeanswers == 'true' %}
+        {% set _link = 'check-your-answers' %}
+      {% endif %}
+
+      <!-- Selected ipc number -->
+      {% set _ipcID = data['ipcNumber'] or 1 %}
+      {% if query.edit %}
+        {% set _ipcID = query.edit %}
+      {% endif %}
+
+      {% set _selectedipcNumber = data['ipcNumbers'][0] %}
+      {% for _ipcNumber2 in data['ipcNumbers'] %}
+        {% if loop.index == _ipcID %}
+          {% set _selectedipcNumber = _ipcNumber2 %}
+        {% endif %}
+      {% endfor %}
+
+      <form action="{{_link}}" method="post" novalidate>
+        <div class="govuk-form-group  govuk-!-margin-bottom-9">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+              <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">
+                Import phytosanitary certificate details
+              </h1>
+            </legend>
+          </fieldset>
+
+          <p class="govuk-body">We have found these details in our system.</p>
+
+          <p class="govuk-body">
+            <strong>Import phytosanitary certificate number</strong><br>
+            {{data.ipcNumbers[0]}}
+            <br><br>
+
+            <strong>Country of issue</strong><br>
+            {{data['ipcCountry1'][0] or "Bahamas"}}
+            <br><br>
+
+            <strong>Date certificate was issued</strong><br>
+            {{data['ipcDay1'] or "31"}} March 2024
+          </p>
+
+          <p class="govuk-body" style="color:red">STILL TO ADD THE ACTUAL 'DETAILS' WE'VE FOUND ON SYSTEM. TO HELP EXPORTER DECIDE IF THEY'VE USED THE CORRECT CERT, AND TO ANSWER THE QUESTION BELOW.</p>
+              
+        </div>
+
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              <h1 class="govuk-fieldset__heading">
+                Do you want to add these details to your consignment?
+              </h1>
+            </legend>
+            <div class="govuk-radios" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="addIPCDetailsYesNo" name="addIPCDetailsYesNo" type="radio" value="Yes~{{_link}}">
+                <label class="govuk-label govuk-radios__label" for="addIPCDetailsYesNo">
+                  Yes
+                </label>
+              </div>
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="addIPCDetailsYesNo-2" name="addIPCDetailsYesNo" type="radio" value="No~{{_link2}}">
+                <label class="govuk-label govuk-radios__label" for="addIPCDetailsYesNo-2">
+                  No
+                </label>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- Sets a value to say whether details were added for this number in the loop or not -->
+        <input id="ipcAdded{{_ipcID}}" name="ipcAdded{{_ipcID}}" type="hidden" value="true">
+
+        {{ govukButton({
+          text: "Save and continue"
+        }) }}
+
+
+      </form>
+      {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+    </div>
+  </div>
+  
+
+{% endblock %}
