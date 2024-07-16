@@ -1,0 +1,291 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Your commodities - Seed sampling - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../../modules/_account-banner.html" %}
+<a href="{{page.content.prev or 'javascript:history.back()'}}" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<style>
+
+  /* Needs extracting and adding to the external Sass or CSS */
+  .govuk-checkboxes__item {
+    top: -10px;
+  }
+
+  /* Chris Harding (20.10.22) - Expansion on the responsive PHES GOV.UK table component to always ensure the final 'Action' columnn aligns fully right */
+  .govuk-table__cell--numeric {
+    text-align: right !important;
+  }
+
+  /* Chris Harding (20.10.22) - Styles for the select all checkbox for mobile */
+  .responsive-table-select-all-desktop {
+    display: none;
+  }
+  @media (min-width: 40.0625em) {
+    .responsive-table-select-all-desktop {
+      display: inherit;
+    }
+  }
+
+  .responsive-table-select-all-mobile {
+    display: table;
+    margin-bottom: 15px;
+  }
+  @media (min-width: 40.0625em) {
+    .responsive-table-select-all-mobile {
+      display: none;
+    }
+  }
+
+  /* Chris Harding (10.06.22) - Defra pagination CSS fix to match the developed service implementation */
+  .defra-pagination {
+    margin: 0px;
+  }
+
+  .defra-pagination__list {
+    float: none;
+  }
+
+  .defra-pagination__link {
+    padding-top: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    padding-left: 0px;
+    text-align: left;
+    min-width: 20px;    
+  }
+  @media (min-width: 40.0625em) {
+    .defra-pagination__link {
+      padding-right: 10px;
+      min-width: 25px;
+    }
+  }
+  
+  .defra-pagination__item--prev {
+    padding-right: 10px;
+  }
+  @media (min-width: 40.0625em) {
+    .defra-pagination__item--prev {
+      padding-right: 15px;
+    }
+  }
+
+  .defra-pagination__results {
+    padding-top: 1px;
+    padding-right: 5px;
+    padding-bottom: 1px;
+    padding-left: 0px;    
+  }
+  @media (min-width: 40.0625em) {
+    .defra-pagination__results {
+      padding-right: 0px;
+      padding-left: 5px;
+    }
+  }
+
+</style>
+
+{% set url = query.return_url or "task-list" %}
+
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-full">
+
+    <form action="commodity-list-summary" method="post">
+      <h1 class="govuk-heading-xl">Your commodities</h1>
+      <p class="govuk-body">You can add a maximum of 500 commodities to this consignment.</p>
+
+      <div class="search-wrapper govuk-form-group">
+        <label for="search-commodities" class="govuk-label">Search by description, origin, quantity, package details or distinguishing marks</label>
+    
+        <div class="search-input-wrapper govuk-!-width-two-thirds">
+          <input type="search" value="{{query.search or ''}}" id="search-commodities" name="search" title="Search" class="govuk-input">
+          
+          <div class="search-input-submit-wrapper">
+            <button type="submit" class="search-submit">Search</button>
+          </div>
+    
+        </div>
+    
+      </div>
+
+      <div class="govuk-form-block responsive-table-select-all-mobile">
+
+        <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+        
+          <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" id="selectAllCheckboxMobile" name="selectAllCheckbox" type="checkbox" data-aria-controls="your-commodities-table" value="Select all commodities on this page">
+            <label class="govuk-label govuk-checkboxes__label" for="selectAllCheckbox">
+              <span class="govuk-visually-hidden">Select all commodities on this page</span>
+            </label>
+          </div>
+    
+        </div>
+
+      </div>
+
+      <table id="your-commodities-table" class="govuk-table responsive-table">
+        <caption class="govuk-table__caption"><span class="govuk-visually-hidden">Your commodities</span></caption>
+        <thead class="govuk-table__head govuk-body-s">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">
+              <span class="responsive-table-select-all-mobile">Select all commodities on this page</span>
+            
+              <div class="govuk-checkboxes govuk-checkboxes--small responsive-table-select-all-desktop" data-module="govuk-checkboxes">
+      
+                <div class="govuk-checkboxes__item">
+                  <input class="govuk-checkboxes__input" id="selectAllCheckbox" name="selectAllCheckbox" type="checkbox" data-aria-controls="your-commodities-table" value="Select all commodities on this page">
+                  <label class="govuk-label govuk-checkboxes__label" for="selectAllCheckbox">
+                    <span class="govuk-visually-hidden">Select all commodities on this page</span>
+                  </label>
+                </div>
+          
+              </div>
+
+            </th>
+            <!-- <th class="govuk-table__header" scope="col"><span class="govuk-visually-hidden">Check box</span></th> -->
+            <!-- <th class="govuk-table__header" scope="col">Row</th> -->
+            <th class="govuk-table__header" scope="col">Description</th>
+            
+            <th class="govuk-table__header" scope="col">Origin</th>
+            
+            <th class="govuk-table__header" scope="col">Net quantity and number of packages</th>
+            <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks</th> 
+            
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body govuk-body-s">
+          {% include "../../modules/_summary-potatoes-100-check.html" %}
+        </tbody>
+      </table>
+
+      <div class="govuk-form-block">
+        <nav class="defra-pagination" id="pagination-label">
+          <p class="govuk-visually-hidden" aria-labelledby="pagination-label">Pagination navigation</p>
+          <ul class="defra-pagination__list">
+            <li class="defra-pagination__item defra-pagination__item--active">
+              <span class="defra-pagination__link" style="color: black!important; font-weight: 700;">1</span>
+            </li>
+            <li class="defra-pagination__item">
+              <a class="defra-pagination__link" href="#">2</a>
+            </li>
+            <li class="defra-pagination__item">
+              <a class="defra-pagination__link" href="#">3</a>
+            </li>
+            <li class="defra-pagination__item">
+              <a class="defra-pagination__link" href="#">4</a>
+            </li>
+          </ul>
+          <p class="defra-pagination__results govuk-body">Showing <strong>1</strong> to <strong>100</strong> of <strong>395</strong> results</p>
+        </nav>
+      </div>
+
+      <div class="govuk-form-block govuk-!-margin-top-4 govuk-!-margin-bottom-9">
+        <p class="govuk-body">
+          <a class="govuk-link" href="#" id="selectAll">Select all commodities on this page</a>
+          <br>
+          <a class="govuk-link" href="confirm-delete">Delete selected commodities</a> <span id="deleteAll">(0 selected)</span>
+        <p>
+      </div>
+
+      <div class="govuk-form-group govuk-!-margin-bottom-6">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      </div>
+
+      {% block continueLater %}
+      {% include "../../modules/_save-continue-later.html" %}
+      {% endblock %}
+    </form>
+
+    {% if query.extras == "yes" %}
+    <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+    <ul class="govuk-list govuk-list--no-bullet">
+      <li><a href="commodity-list" class="govuk-link govuk-link-no-visited-state">Commodity list</a></li>
+      <li><a href="commodity-list-summary" class="govuk-link govuk-link-no-visited-state">Commodity list summary (30+ commodities)</a></li>
+      <li><a href="commodity-list-summary-max" class="govuk-link govuk-link-no-visited-state">Commodity list summary: 500 added (30+ commodities)</a></li>
+      <li><a href="commodity-list-large" class="govuk-link govuk-link-no-visited-state">Commodity list summary details (30+ commodities)</a></li>
+      <li><a href="commodity-list-large-max" class="govuk-link govuk-link-no-visited-state">Commodity list summary details: 500 added (30+ commodities)</a></li>
+    </ul>
+    {% endif %}
+  </div>
+
+</div>
+
+<!-- JavaScript (START) -->
+<script>
+
+  window.addEventListener('load', function() {
+    console.log('load');
+    var checkBoxes = $(".govuk-checkboxes__input");
+
+    /* Get the count for number of checkboxes selected on the page  */
+    checkBoxes.change(function() {
+      var len = $('.commodity_checkbox:checked').length;
+      $("#deleteAll").text("(" + len + " selected)");
+    });
+
+    /* Select all link  */
+    $("#selectAll").bind('click onKeyDown', function(e) {
+      e.preventDefault();
+      var txt = $("#selectAll").text();
+
+      if (txt == "Deselect all commodities on this page") {
+        $("#selectAll").text("Select all commodities on this page");
+        checkBoxes.prop("checked", false)
+      }
+      else {
+        $("#selectAll").text("Deselect all commodities on this page");
+        checkBoxes.prop("checked", true)
+      }
+
+      var len = $('.commodity_checkbox:checked').length;
+      $("#deleteAll").text("(" + len + " selected)");
+    });
+
+    /* Chris Harding (14.01.22) - Adding a checkbox allowing users to 'Select all commodities on this page' another way */
+    /* DESKTOP */
+    $("#selectAllCheckbox").bind('click onKeyDown', function() {
+      var txt = $("#selectAll").text();
+
+      if (txt == "Deselect all commodities on this page") {
+        $("#selectAll").text("Select all commodities on this page");
+        checkBoxes.prop("checked", false)
+      }
+      else {
+        $("#selectAll").text("Deselect all commodities on this page");
+        checkBoxes.prop("checked", true)
+      }
+
+      var len = $('.commodity_checkbox:checked').length;
+      $("#deleteAll").text("(" + len + " selected)");
+    });
+
+    /* MOBILE */
+    $("#selectAllCheckboxMobile").bind('click onKeyDown', function() {
+      var txt = $("#selectAll").text();
+
+      if (txt == "Deselect all commodities on this page") {
+        $("#selectAll").text("Select all commodities on this page");
+        checkBoxes.prop("checked", false)
+      }
+      else {
+        $("#selectAll").text("Deselect all commodities on this page");
+        checkBoxes.prop("checked", true)
+      }
+
+      var len = $('.commodity_checkbox:checked').length;
+      $("#deleteAll").text("(" + len + " selected)");
+    });
+
+  });
+
+</script>
+<!-- JavaScript (END) -->
+{% endblock %}

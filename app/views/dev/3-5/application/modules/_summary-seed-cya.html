@@ -1,0 +1,93 @@
+
+<tr class="govuk-table__row">
+  <td class="govuk-table__cell">
+    <div class="govuk-table-heading-wrapper">
+      <span class="table-heading" >Description</span>
+    </div>
+    <div>
+      <span class="govuk-table-span">
+        {% if commodity.has_botanicial_name == "use_description" %}
+            <!-- use DESCRIPTION -->
+            <strong>{{commodity.commodity_description or "Description for plant"}}</strong>
+        {% elif commodity.genus %}
+            <!-- use GENUS + SPECIES -->
+            <strong>{{commodity.genus or "Genus unknown"}}, {{commodity.commodity_host_species or "Species unknown"}}</strong>
+        {% else %}
+            <!-- use BOTANICAL NAME -->
+            <strong>{{commodity.botanical_name or "Rosa ecae (ROSEC)"}}</strong>
+        {% endif %}
+      </span>
+
+      <span class="govuk-table-span">
+        Lot reference: {% if commodity.commodity_type == "produce" %}Produce (fruit, flowers or vegetables){% else %}{{commodity.commodity_type | capitalize or "12345678"}}{% endif %}
+      </span>
+    </div>
+  </td>
+  <td class="govuk-table__cell">
+    <div class="govuk-table-heading-wrapper">
+      <span class="table-heading" >{{_originColHeader}}</span>
+    </div>
+    <div>
+      <span class="govuk-table-span">
+        {% set _defaultCountry = "United Kingdom" %}
+        {% if commodity.filter_demo == "_unchecked" or commodity.filter_demo == undefined %}
+          {{_defaultCountry}}
+        {% else %}
+          {{commodity.filter_demo | join("; ") or _defaultCountry}}
+        {% endif %}
+      </span>
+
+      {% if data.reforwarding == "1" %}
+      <span class="govuk-table-span">
+        {% if commodity['commodityIPCN-2'] %}
+          {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
+        {% elif commodity['commodityIPCN-1'] %}
+          {{commodity['commodityIPCN-1'] or "123-456-789-0"}}
+        {% else %}
+          {{commodity['commodityIPCN-1'] or "123-456-789-0"}}, <br>{{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
+        {% endif %}
+      </span>
+      {% endif %}
+    </div>
+
+  </td>
+  <td class="govuk-table__cell">
+    <div class="govuk-table-heading-wrapper">
+      <span class="table-heading" >{{_quantityColHeader}}</span>
+    </div>
+    <div>
+      <span class="govuk-table-span">
+        Net quantity: {{commodity.quantity or "20"}} {{commodity.units or "kilograms"}}
+      </span>
+      <span class="govuk-table-span">
+        Number of packages: {{commodity.number_of_packages or "5"}}
+      </span>
+    </div>
+  </td>
+  <td class="govuk-table__cell">
+    <div class="govuk-table-heading-wrapper">
+      <span class="table-heading" >{{_packingColHeader}}</span>
+    </div>
+    <div>
+      <span class="govuk-table-span">
+        Packaging: {{commodity.packaging[0] or "Crate - bulk - cardboard"}}
+      </span>
+
+      {% if commodity.packing_material_used != "" %}
+        <span class="govuk-table-span">
+          Packing material: {{commodity.packing_material_used or "Cardboard"}}
+        </span>
+      {% endif %}
+
+      {% if commodity.distinguishing_marks != "" %}
+        <span class="govuk-table-span">
+          Distinguishing marks: {{commodity.distinguishing_marks or "Striped boxes"}}
+        </span>
+      {% endif %}
+    </div>
+  </td>
+  <td class="govuk-table__cell govuk-table__cell__actions">
+    <a href="{{url}}" class="govuk-link govuk-link--no-visited-state" >Change<span class="govuk-visually-hidden"> this commodity</span></a><br>
+    <a href="#" class="govuk-link govuk-link--no-visited-state" >Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+  </td>
+</tr>

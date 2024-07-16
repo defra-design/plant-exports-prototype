@@ -1,0 +1,125 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Upload a file - Phytosanitary certificate - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+      
+    <form action="upload-coc-in-progress" method="post" novalidate>
+    
+      <!--
+        Chris Harding (07.06.22) - Here we set:
+          a) template
+          b) example template
+        This is based on the CoC commodity type provided.
+      -->
+
+      <!-- Default commodity value (e.g. if no commodity and application type exists) -->
+      {% set commodity = data.commodity or "plants" %}
+      {% set bulkCommodities = data.bulkCommodities or "gms" %}
+
+      <!-- Tailored values for template and example template based on based on the CoC commodity type -->
+      {% if bulkCommodities == "sms" %}
+        {% set template = "template-coc-sms.csv" %}
+        {% set exampleTemplate = "example-sms.csv" %}
+      {% elif bulkCommodities == "gms" %}
+        {% set template = "template-coc-gms.csv" %}
+        {% set exampleTemplate = "example-gms.csv" %}
+      {% else %}
+        {% set template = "template-coc-gms.csv" %}
+        {% set exampleTemplate = "example-gms.csv" %}
+      {% endif %}
+
+      <div class="govuk-form-group govuk-!-margin-bottom-9">
+        
+        <h1 class="govuk-heading-xl">Upload a file</h1>
+
+        <p class="govuk-body"><a href="/public/templates/{{template}}" class="govuk-link govuk-link--no-visited-state" >Download the CSV template (3KB)</a> (last updated 1 January 2024)</p>
+
+        <p class="govuk-body govuk-!-margin-bottom-6">Open the template in the software program you prefer to use to edit comma-separated values (CSV) files. Fill in the template using the guidance notes on how to edit the file, then save and upload it.</p>
+
+        <h2 class="govuk-heading-m">What you will need</h2>
+
+        <p class="govuk-body">You must tell us:</p>
+
+        <ul class="govuk-list govuk-list--bullet">
+
+          {% if bulkCommodities == "sms" %}
+            <li>the product type</li>
+          {% endif %}
+
+          {% if bulkCommodities == "gms" %}
+            <li>the species</li>
+          {% endif %}
+
+          {% if bulkCommodities == "sms" %}
+            <li>the quality class - choose from the list and delete any you do not use</li>
+          {% endif %}
+
+          <li>the country of origin, use the <a href="https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes" class="govuk-link govuk-link--no-visited-state" rel="noreferrer noopener" target="_blank">correct country of origin codes (opens in new tab)</a> - except for Northern Ireland (use GB-NIR) and Palestine (use PS)</li>
+
+          <li>the net weight per package in kilograms</li>
+          <li>the number of packages and packaging type - choose from the list and delete any you do not use</li>
+          <li>if the packaging is reusable or reclaimed</li>
+          <li>the variety (optional)</li>
+        </ul>
+
+        <p class="govuk-body">If some of the packages in your consignment have different places of origin, you must add them as separate rows. For example, if 5 packages of your commodity come from France and Italy, and 3 packages come from Germany. In this case, add the details for the 5 packages in one row. You will add FR as the country code for country of origin 1 and IT as the country code for country of origin 2. Add another row for the 3 from Germany. In this row, the country code for country of origin 1 will be DE.</p>
+
+        <p class="govuk-body">Do not enter more than 500 rows of data.</p>
+
+        <p class="govuk-body">Save your completed file as a .CSV file and upload it.</p>
+
+        <details class="govuk-details" data-module="govuk-details">
+          <summary class="govuk-details__summary">
+          <span class="govuk-details__summary-text">Further advice</span>
+          </summary>
+      
+          <div class="govuk-details__text">
+          <p class="govuk-body">If you're having problems uploading the file, make sure that:</p>
+          <ul class="govuk-list govuk-list--bullet">
+
+            <li>you've entered all mandatory information</li>
+            <li>the file is a .CSV file</li>
+            <li>you've used the correct country codes</li>
+            <li>whichever software you're using to edit the template, there have not been any columns, headers or commas added or deleted</li>
+            <li>the headers are consistently capitalised</li>
+            <li>there are no empty columns</li>
+            <li>you have not entered more than 500 rows of data</li>
+      
+          </ul>
+          </div>
+      
+      </details>
+
+        {{ govukFileUpload({
+          id: "fileUpload1",
+          name: "fileUpload1",
+          label: {
+            text: "Upload your completed CSV file"
+          }
+        }) }}
+
+      </div>
+
+      {{ govukButton({
+        text: "Upload"
+      }) }}
+
+      
+    </form>
+
+  </div>
+      
+</div>
+{% endblock %}

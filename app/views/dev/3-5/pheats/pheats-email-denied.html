@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% set isEmailTemplate = true %}
+
+{% set serviceName = "" %}
+
+{% block pageTitle %}
+{% endblock %}
+
+{% block beforeContent %}
+{% endblock %}
+
+<!-- Selected address -->
+{% set _addressID = data['address'] or 1 %}
+{% set _address = data['addresses3'][0] %}
+{% for _address2 in data['addresses3'] %}
+  {% if _address2.id == _addressID %}
+    {% set _address = _address2 %}
+  {% endif %}
+{% endfor %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <p class="govvuk-body">Dear Jane Doe,</p>
+
+    <p class="govvuk-body">The inspector has decided that your organisation is not able to join the plant health exports audited trader scheme (PHEATS) for this address:</p>
+
+    <p class="govvuk-body">
+      {{_address.address1}}<br>
+      {{_address.address2}}<br>
+      {{_address.address3}}<br>
+      {{_address.address4}}<br>
+      {{_address.postcode}}
+    </p>
+
+    <p class="govvuk-body">You will be sent a letter explaining why this application was denied. You can also discuss this with your inspector.</p>
+
+    <p class="govvuk-body">Regards,</p>
+    <p class="govvuk-body">Animal and Plant Health Agency (APHA)</p>
+    <p class="govvuk-body">Centre for International Trade - York</p>
+
+  </div>
+</div>
+{% endblock %}

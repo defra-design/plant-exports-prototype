@@ -1,0 +1,93 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.build == "development" %}Exports application - GOV.UK{% else %}[page title] - Phytosanitary certificate - GOV UK{% endif %}
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <h1 class="govuk-heading-xl">
+      Select the address
+    </h1>
+
+    <div class="govuk-form-group">
+
+      <p class="govuk-body govuk-!-margin-bottom-">
+          <span class="govuk-!-font-weight-bold">Postcode</span><br>
+          {% set _postCodeToShow = data["exporter-phyto-address-postcode"] or "B1 1AA" %}
+          {{_postCodeToShow}}<br>
+          <a class="govuk-link govuk-link--no-visited-state" href="exporter-phyto-address-postcode">
+              Change <span class="govuk-visually-hidden">postcode</span>
+          </a>
+      </p>
+    </div>
+
+    {% set _url = "task-list" %}
+    {% set _suffix = "" %} 
+    {% if data.change == 'yes' %}
+      {% set _url = data.return_url or "check-your-answers" %}
+      {% set _suffix = "?change=yes&return_url=" + (data.return_url or "check-your-answers") %} 
+    {% endif %}
+
+    <form method="post" novalidate action="{{_url}}{{_suffix}}">
+
+      {% set _value = data["exporter-phyto-address-select"] %}
+
+      <div class="govuk-form-group">
+                
+        <label class="govuk-label govuk-!-font-weight-bold" for="exporter-phyto-address-select">
+          Select the address
+        </label>
+
+        {% set _numberAddresses = 19 %}
+
+        <select class="govuk-select" id="exporter-phyto-address-select" name="exporter-phyto-address-select">
+            <option value="select" selected >{{_numberAddresses}} addresses found</option>
+            {% for i in range(1, _numberAddresses+1) -%}
+                {% set _street = i + ' High Street' %}
+                {% set _address = i + ' High Street, OXFORD, ' + _postCodeToShow %}
+                <option value="{{_address}}" {% if _value == _address %}selected{% endif %}>{{_address}}</option>
+            {%- endfor %}
+        </select>
+
+      </div>
+
+      <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+          <span class="govuk-details__summary-text">
+            Can't find your address?
+          </span>
+        </summary>
+        <div class="govuk-details__text">
+          <p class="govuk-body">If you are having problems finding your address:</p>
+          <ul class="govuk-list govuk-list--bullet">
+            <li>check you used the correct postcode</li>
+            <li>try using Royal Mail's <a href="https://www.royalmail.com/find-a-postcode" class="govuk-link" rel="noreferrer noopener" target="_blank">postcode finder (opens in new tab)</a> to check that the address is registered</li>
+          </ul>
+        </div>
+      </details>
+
+      <div class="govuk-button-group govuk-!-margin-top-3 govuk-!-margin-bottom-6">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      </div>
+
+      {% block continueLater %}
+        {% include "../modules/_save-continue-later.html" %}
+      {% endblock %}
+
+    </form>
+
+    
+  </div>
+
+</div>
+{% endblock %}

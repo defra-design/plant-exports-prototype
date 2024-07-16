@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Do you want to reuse {% if data.build == "development" %}the same application reference{% else %}your reference for this application{% endif %}? - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+{% set orig_ref_num = query.id | appInformationV9('reference') %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    
+    <div class="app-alert app-alert--success" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
+      <p class="govuk-body" id="govuk-notification-banner-message">You’re applying for stock draw down using application {{orig_ref_num or "SSDD 26599"}}</p>
+    </div>
+
+    <h1 class="govuk-heading-xl">Do you want to reuse {% if data.build == "development" %}the same application reference{% else %}your reference for this application{% endif %}?</h1>
+    <p class="govuk-body govuk-!-font-weight-bold">Your reference: {{orig_ref_num or "SSDD 26599"}}</p>
+    <form method="post" novalidate>
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+            <div class="govuk-radios__item">
+              
+              <input class="govuk-radios__input" id="contact" name="contact" type="radio" value="yes~ssdd-list" data-aria-controls="conditional-contact">
+              <label class="govuk-label govuk-radios__label" for="contact">
+                Yes, use {{ orig_ref_num or "SSDD 26599" }}
+              </label>
+            </div>
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="contact-2" name="contact" type="radio" value="no~complete-phyto" data-aria-controls="conditional-contact-2">
+              <label class="govuk-label govuk-radios__label" for="contact-2">
+                No, use a different reference
+              </label>
+            </div>
+            <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-contact-2">
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="reference_num">
+                  Enter your reference name or number (max 20 characters)
+                </label>
+                <input class="govuk-input govuk-!-width-one-half" id="reference_num" name="reference_num" type="text"></div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <button class="govuk-button" data-module="govuk-button">
+        Save and continue
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}

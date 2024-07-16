@@ -1,0 +1,139 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  [title] - Manage account - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="../account" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
+  </ul>
+</div>
+
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if query.addedNew %}
+    <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+      <div class="govuk-notification-banner__header">
+          <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+          Success
+          </h2>
+      </div>
+      <div class="govuk-notification-banner__content">
+          <h3 class="govuk-notification-banner__heading">
+              Address added successfully
+          </h3>
+      </div>
+    </div>
+    {% endif %}
+
+
+    {% set _addressCount = 0 %}
+    {% set _addressSelectableCount = 0 %}
+    {% set _addressNewlyAddedID = 0 %}
+    {% for _address in data.addresses3 %}
+      {% set _addressCount = _addressCount + 1 %}
+      {% if _address.pheats.status == "notregistered" %}
+        {% set _addressSelectableCount = _addressSelectableCount + 1 %}
+      {% endif %}
+    {% endfor %}
+    {% if query.addedNew %}
+      {% set _addressNewlyAddedID = _addressCount + 1 %}
+      {% set _addressCount = _addressCount + 1 %}
+      {% set _addressSelectableCount = _addressSelectableCount + 1 %}
+    {% endif %}
+
+    {% if query.noAddresses == 'true' %}
+    {% set _addressSelectableCount = 0 %}
+    {% endif %}
+
+
+    {% if _addressSelectableCount == 0 %}
+    <form method="post" novalidate action="../account/address-lookup?address={{_addressCount + 1}}&pheats=true">
+
+      <h1 class="govuk-heading-xl">Add new address</h1>
+
+      <p class="govuk-body">You need to add the address where you will do PHEATS inspections.</p>
+
+      {{ govukButton({
+        text: "Continue"
+      }) }}
+
+      <p class="govuk-body govuk-!-margin-top-2"><a href="pheats-applications" class="govuk-link govuk-link--no-visited-state">Cancel new address</a></p>
+
+    </form>
+    {% else %}
+    <form method="post" novalidate >
+
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" >
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+            <h1 class="govuk-fieldset__heading">
+              Which address will you use?
+            </h1>
+          </legend>
+
+          <div id="changed-name-hint" class="govuk-hint">
+            Select an address from the list or add a new one.
+          </div>
+         
+          <div class="govuk-radios" data-module="govuk-radios">
+            
+
+            {% if query.addedNew %}
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="pheats-address-{{_addressNewlyAddedID}}" name="pheats-address" type="radio" value="{{_addressNewlyAddedID}}~pheats-site?address={{_addressNewlyAddedID}}" >
+              <label class="govuk-label govuk-radios__label" for="pheats-address-{{_addressNewlyAddedID}}">
+                18 High Street, Coventry, Warwickshire, CV1 9BD
+              </label>
+            </div>
+            {% endif %}
+
+            {% for _address in data.addresses3 %}
+              {% if _address.pheats.status == "notregistered" %}
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="pheats-address-{{loop.index}}" name="pheats-address" type="radio" value="{{_address.id}}~pheats-site?address={{_address.id}}" >
+                <label class="govuk-label govuk-radios__label" for="pheats-address-{{loop.index}}">
+                  {{_address.address1}}, {{_address.address2}}, {{_address.address3}}, {{_address.address4}}, {{_address.postcode}}
+                </label>
+              </div>
+              {% endif %}
+            {% endfor %}
+
+            <div class="govuk-radios__divider">or</div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="pheats-address-new" name="pheats-address" type="radio" value="new~../account/address-lookup?address={{_addressCount + 1}}&pheats=true" >
+              <label class="govuk-label govuk-radios__label" for="pheats-address-new">
+                Add new address
+              </label>
+            </div>
+
+          </div>
+        </fieldset>
+      </div>
+
+      {{ govukButton({
+        text: "Continue"
+      }) }}
+
+      <p class="govuk-body govuk-!-margin-top-2"><a href="pheats-applications" class="govuk-link govuk-link--no-visited-state">Cancel new address</a></p>
+
+
+    </form>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

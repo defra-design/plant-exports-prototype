@@ -1,0 +1,130 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.build == "development" %}Add commodities by uploading a file - GOV.UK{% else %}Upload in progress... - Seed sampling - {{serviceName}} - GOV.UK{% endif %}
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../../modules/_account-banner.html" %}
+<a href="{{page.content.prev or 'javascript:history.back()'}}" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <div aria-live="assertive" class="app-alert app-alert--info">
+      <p class="govuk-body">Upload in progress...</p>
+    </div>
+
+    <form action="upload-in-progress{% if query.change == 'yes' %}?change=yes&return_url={{data.return_url or 'check-your-answers'}}{% endif %}" method="post" novalidate>
+
+      <div class="govuk-form-group govuk-!-margin-bottom-9">
+        <h1 class="govuk-heading-xl">Upload a file</h1>
+
+        <p class="govuk-body"><a href="#" class="govuk-link govuk-link--no-visited-state" >Download the CSV template (3KB)</a> (last updated 1 January 2024)</p>
+
+        <p class="govuk-body govuk-!-margin-bottom-6">Open the template in the software program you prefer to use to edit comma-separated values (CSV) files. Fill in the template using the guidance notes on how to edit the file, then save and upload it.</p>
+
+        <h2 class="govuk-heading-m">What you will need</h2>
+
+        <p class="govuk-body">At least one of the following:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>the <a href="https://gd.eppo.int/search" class="govuk-link govuk-link--no-visited-state" rel="noreferrer noopener" target="_blank">correct EPPO code (opens in new tab)</a></li>
+            <li>genus</li>
+            <li>description of your commodity</li>
+        </ul>
+
+        <p class="govuk-body">You must tell us:</p>
+
+        <ul class="govuk-list govuk-list--bullet">
+          <li>the lot reference</li>
+          <li>the variety</li>
+          <li>the <a href="https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes" class="govuk-link govuk-link--no-visited-state" rel="noreferrer noopener" target="_blank">correct country code (opens in new tab)</a> for the country where the seeds were grown - except for Northern Ireland (use GB-NIR) and Palestine (use PS)</li>
+          <li>up to 10 destination countries, use the <a href="https://www.gov.uk/government/publications/uk-trade-tariff-country-and-currency-codes/uk-trade-tariff-country-and-currency-codes" class="govuk-link govuk-link--no-visited-state" rel="noreferrer noopener" target="_blank">correct country codes (opens in new tab)</a> - except for Northern Ireland (use GB-NIR) and Palestine (use PS)</li>
+        </ul>
+
+        <p class="govuk-body">If you have it, you can tell us the:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>growing season inspection number</li>
+          <li>chemical treatment</li>
+          <li>packing material</li>
+          <li>distinguishing marks</li>
+        </ul>
+
+        <p class="govuk-body">Do not enter more than 500 rows of data.</p>
+
+        <p class="govuk-body">Save your completed file as a .CSV file and upload it.</p>
+
+        <details class="govuk-details" data-module="govuk-details">
+            <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">Further advice</span>
+            </summary>
+        
+            <div class="govuk-details__text">
+            <p class="govuk-body">If you're having problems uploading the file, make sure that:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>you've entered all mandatory information</li>
+              <li>the file is a .CSV file</li>
+              <li>you've used the correct country codes</li>
+              <li>you've provided either an EPPO code or genus</li>
+              <li>whichever software you're using to edit the template, there have not been any columns, headers or commas added or deleted</li>
+              <li>the headers are consistently capitalised</li>
+              <li>there are no empty columns</li>
+              <li>you have not entered more than 500 rows of data</li>
+            </ul>
+            </div>
+        
+        </details>
+
+        {{ govukFileUpload({
+          id: "fileUpload1",
+          name: "fileUpload1",
+          label: {
+            text: "Upload your completed CSV file"
+          }
+        }) }}
+
+      </div>
+
+      {{ govukButton({
+        text: "Upload"
+      }) }}
+    </form>
+
+    <ul class="govuk-list">
+      <li>
+        {% if data.change == "yes" %}
+        <a href="{{data.return_url or 'check-your-answers'}}?bulkUploadCompleted=true" class="govuk-link govuk-link-no-visited-state">Skip</a>
+        {% elif data.commodity == "seeds" %}
+        <a href="commodity-list-summary?bulkUploadCompleted=true" class="govuk-link govuk-link-no-visited-state">Skip</a>
+        {% else %}
+        <a href="commodity-list?bulkUploadCompleted=true" class="govuk-link govuk-link-no-visited-state">Skip</a>
+        {% endif %}
+        (page reloads after 10 seconds)
+      </li>
+    </ul>
+
+    
+  </div>
+
+</div>
+{% endblock %}
+
+{% block pageScripts %}
+<script>
+
+  var timer = setTimeout(function() {
+    {% if data.change == "yes" %}
+    window.location = '{{data.return_url or 'check-your-answers'}}?bulkUploadCompleted=true'
+    {% elif data.commodity == "seeds" %}
+    window.location='commodity-list-summary?bulkUploadCompleted=true'
+    {% else %}
+    window.location='commodity-list?bulkUploadCompleted=true'
+    {% endif %}
+  }, 10000);
+
+</script>
+{% endblock %}
