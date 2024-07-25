@@ -37,92 +37,52 @@ Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
       {% endfor %}
 
       <form action="{{_link}}" method="post" novalidate>
-        <div class="govuk-form-group  govuk-!-margin-bottom-9">
-          <fieldset class="govuk-fieldset">
+
+        <!-- Sets a value to say whether details were added for this number in the loop or not -->
+        <input id="ipcAdded{{_ipcID}}" name="ipcAdded{{_ipcID}}" type="hidden" value="true">
+
+        <!-- DATE -->
+        {% set _dateID = 'ipcDate' + _ipcID %}
+        {% set _dayID = 'ipcDay' + _ipcID %}
+        {% set _monthID = 'ipcMonth' + _ipcID %}
+        {% set _yearID = 'ipcYear' + _ipcID %}
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset" role="group" aria-describedby="certificate-issued-hint">
             <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-              <h1 class="govuk-fieldset__heading govuk-!-margin-bottom-4">
-                {% if query.edit %}
-                  Change details for import phytosanitary certificate number {{_selectedipcNumber}}
-                {% else %}
-                  Add details for import phytosanitary certificate number {{_selectedipcNumber}}
-                {% endif %}
+              <h1 class="govuk-fieldset__heading">
+                What is the date of issue for {{_selectedipcNumber}}?
               </h1>
             </legend>
+            <div id="certificate-issued-hint" class="govuk-hint">
+              For example, 31 3 2024
+            </div>
+            <div class="govuk-date-input" id="certificate-issued">
+              <div class="govuk-date-input__item">
+                <div class="govuk-form-group">
+                  <label class="govuk-label govuk-date-input__label" for="{{_dayID}}">
+                    Day
+                  </label>
+                  <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="{{_dayID}}" name="{{_dayID}}" type="text" inputmode="numeric">
+                </div>
+              </div>
+              <div class="govuk-date-input__item">
+                <div class="govuk-form-group">
+                  <label class="govuk-label govuk-date-input__label" for="{{_monthID}}">
+                    Month
+                  </label>
+                  <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="{{_monthID}}" name="{{_monthID}}" type="text" inputmode="numeric">
+                </div>
+              </div>
+              <div class="govuk-date-input__item">
+                <div class="govuk-form-group">
+                  <label class="govuk-label govuk-date-input__label" for="{{_yearID}}">
+                    Year
+                  </label>
+                  <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="{{_yearID}}" name="{{_yearID}}" type="text" inputmode="numeric">
+                </div>
+              </div>
+            </div>
           </fieldset>
-
-          {% if query.edit %}
-            <!-- nothing -->
-          {% else %}
-            <!-- <p class="govuk-body">You're adding details for import phytosanitary certificate {{_selectedipcNumber}}.</p> -->
-          {% endif %}
-          
-
-          <!-- prepop values if editing -->
-          {% set _prepopCountry = '' %}
-          {% for param in data['importCertCountry' + _id] %}
-            {% set _prepopCountry = param %}
-          {% endfor %}
-          {% if query.edit %}
-            {% set _prepopCountry = _prepopCountry or 'BS' %}
-            {% if _prepopCountry == 'none' %}
-              {% set _prepopCountry = 'BS' %}
-            {% endif %}
-          {% endif %}
-
-
-          <!-- Sets a value to say whether details were added for this number in the loop or not -->
-          <input id="ipcAdded{{_ipcID}}" name="ipcAdded{{_ipcID}}" type="hidden" value="true">
-
-          <!-- COUNTRY -->
-          {% set country_module_label = "Country of issue"%}
-          {% set module_name = "country_origin" %}
-          {% set _showHint = "yes" %}
-          {% block country %}{% include "../modules/_country-select-import-2.html" %}{% endblock %}
-
-          <!-- DATE -->
-          {% set _dateID = 'ipcDate' + _ipcID %}
-          {% set _dayID = 'ipcDay' + _ipcID %}
-          {% set _monthID = 'ipcMonth' + _ipcID %}
-          {% set _yearID = 'ipcYear' + _ipcID %}
-          <div class="govuk-form-group">
-            <fieldset class="govuk-fieldset" role="group" aria-describedby="certificate-issued-hint">
-              <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-                <h1 class="govuk-fieldset__heading">
-                  Date certificate was issued
-                </h1>
-              </legend>
-              <div id="certificate-issued-hint" class="govuk-hint">
-                For example, 31 3 2024
-              </div>
-              <div class="govuk-date-input" id="certificate-issued">
-                <div class="govuk-date-input__item">
-                  <div class="govuk-form-group">
-                    <label class="govuk-label govuk-date-input__label" for="{{_dayID}}">
-                      Day
-                    </label>
-                    <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="{{_dayID}}" name="{{_dayID}}" type="text" inputmode="numeric">
-                  </div>
-                </div>
-                <div class="govuk-date-input__item">
-                  <div class="govuk-form-group">
-                    <label class="govuk-label govuk-date-input__label" for="{{_monthID}}">
-                      Month
-                    </label>
-                    <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="{{_monthID}}" name="{{_monthID}}" type="text" inputmode="numeric">
-                  </div>
-                </div>
-                <div class="govuk-date-input__item">
-                  <div class="govuk-form-group">
-                    <label class="govuk-label govuk-date-input__label" for="{{_yearID}}">
-                      Year
-                    </label>
-                    <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="{{_yearID}}" name="{{_yearID}}" type="text" inputmode="numeric">
-                  </div>
-                </div>
-              </div>
-            </fieldset>
-          </div>
-
         </div>
 
         {{ govukButton({

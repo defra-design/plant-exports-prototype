@@ -58,7 +58,7 @@ Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
             </dd>
             {% if _number != "123-456-789-0" %}
             <dd class="govuk-summary-list__actions">
-               <a href="import-phyto-select-upload?edit={{_id}}&ipcNumber={{_id}}" class="govuk-link govuk-link--no-visited-state" >Change<span class="govuk-visually-hidden"> import certificate {{_number}} country of issue</span></a>
+               <a href="import-phyto-select-country?edit={{_id}}&ipcNumber={{_id}}&changeanswers1=true" class="govuk-link govuk-link--no-visited-state" >Change<span class="govuk-visually-hidden"> import certificate {{_number}} country of issue</span></a>
             </dd>
             {% endif %}
           </div>
@@ -95,7 +95,7 @@ Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
             </dd>
             {% if _number != "123-456-789-0" %}
             <dd class="govuk-summary-list__actions">
-               <a href="import-phyto-select-upload?edit={{_id}}&ipcNumber={{_id}}" class="govuk-link govuk-link--no-visited-state" >Change<span class="govuk-visually-hidden"> import certificate {{_number}} file</span></a>
+               <a href="import-phyto-select-upload?edit={{_id}}&ipcNumber={{_id}}&changeanswers1=true" class="govuk-link govuk-link--no-visited-state" >Change<span class="govuk-visually-hidden"> import certificate {{_number}} file</span></a>
             </dd>
             {% endif %}
           </div>
@@ -185,18 +185,12 @@ Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
             </div> -->
             <div class="govuk-radios" data-module="govuk-radios">
 
-              {% set _link = 'import-phyto-select-upload' %}
-              {% set _link2 = 'import-phyto-select-ephyto' %}
-
+              {% set _link = 'import-phyto-select-country' %}
 
               {% for _number in data.ipcNumbers %}
-                {% set _overrideLink = _link %}
-                {% if _number == "123-456-789-0" %}
-                  {% set _overrideLink = _link2 %}
-                {% endif %}
                 {% if data['ipcAdded'+loop.index] != 'true' %}
                 <div class="govuk-radios__item">
-                  <input class="govuk-radios__input" id="ipcNumber{{loop.index}}" name="ipcNumber" type="radio" value="{{loop.index}}~{{_overrideLink}}">
+                  <input class="govuk-radios__input" id="ipcNumber{{loop.index}}" name="ipcNumber" type="radio" value="{{loop.index}}~{{_link}}">
                   <label class="govuk-label govuk-radios__label" for="ipcNumber{{loop.index}}">
                     {{_number}}
                   </label>
