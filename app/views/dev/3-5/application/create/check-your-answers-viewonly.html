@@ -214,32 +214,94 @@
       {% for _number in data.ipcNumbers %}
 
         {% set _id = loop.index %}
+        {% if data['ipcAdded'+_id] == 'true' or query.prepop == "true" %}
+
+        {% set _ipcError1 = "false" %}
+        {% if query.ipcError1 == "true" and loop.last %}
+          {% set _ipcError1 = "true" %}
+        {% endif %}
+
+        {% set _ipcError4 = "false" %}
+        {% if query.ipcError4 == "true" and loop.first %}
+          {% set _ipcError4 = "true" %}
+        {% endif %}
         
         <h3 class="govuk-heading govuk-heading-s govuk-!-margin-bottom-1" >
           {{_number}}
         </h3>
         <hr class="govuk-section-break govuk-section-break--visible">
-        <dl class="govuk-summary-list govuk-!-margin-bottom-">
-          <div class="govuk-summary-list__row">
-            <dt class="govuk-summary-list__key" >
-              <span style="display: block; margin-bottom: 7px;">Origin</span>
-              <span style="display: block; margin-bottom: 7px;">File name</span>
+        <dl class="govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-0">
+
+          <!-- Country -->
+          <div class="govuk-summary-list__row {% if _number == '123-456-789-0' %} govuk-summary-list__row--no-actions {% endif %} {% if _ipcError1 == 'true' %} govuk-form-group--error {% endif %}">
+            <dt class="govuk-summary-list__key" {% if _ipcError1 == 'true' %} style="padding-left:15px" {% endif %}>
+              {% if _ipcError1 == 'true' %}
+              <p id="ipc1-error" class="govuk-error-message">
+                <span class="govuk-visually-hidden">Error:</span> {{_ipcErrors.ipcError1}}
+              </p>
+              {% endif %}
+              Country of issue
             </dt>
             <dd class="govuk-summary-list__value">
-              <span style="display: block; margin-bottom: 7px;">
-                  {{data['ipcCountry'+_id][0] or "Bahamas"}}
-              </span>
-              <span style="display: block; margin-bottom: 7px;">
-                <a class="govuk-link govuk-link--no-visited-state" href="#">
-                  {{data['ipcFile'+_id] or "file-name.pdf"}}
-                </a>
-              </span>
+              {% if _ipcError1 != "true" %}
+                {{data['ipcCountry'+_id][0] or "Bahamas"}}
+              {% endif %}
             </dd>
+            {% if _number != "123-456-789-0" %}
             <dd class="govuk-summary-list__actions">
               &nbsp;
             </dd>
+            {% endif %}
           </div>
+
+           <!-- Date -->
+           {% if _number == "123-456-789-0" %}
+           <div class="govuk-summary-list__row govuk-!-margin-bottom-0 govuk-summary-list__row--no-actions">
+             <dt class="govuk-summary-list__key">
+               Date certificate was issued
+             </dt>
+             <dd class="govuk-summary-list__value">
+               {{data['ipcDay1'] or "31"}} March 2024
+             </dd>
+           </div>
+           <!-- Type -->
+           <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
+             <dt class="govuk-summary-list__key">
+               Type
+             </dt>
+             <dd class="govuk-summary-list__value">
+               ePhyto
+             </dd>
+           </div>
+           {% else %}
+           <!-- File name -->
+           <div class="govuk-summary-list__row  {% if _number == '123-456-789-0' %} govuk-summary-list__row--no-actions {% endif %} {% if _ipcError1 == 'true' %} govuk-form-group--error {% endif %}">
+             <dt class="govuk-summary-list__key"  {% if _ipcError1 == 'true' %} style="padding-left:15px" {% endif %}>
+                {% if _ipcError1 == 'true' %}
+                <p id="ipc1-error" class="govuk-error-message">
+                  <span class="govuk-visually-hidden">Error:</span> {{_ipcErrors.ipcError1}}
+                </p>
+                {% endif %}
+               File name
+             </dt>
+             <dd class="govuk-summary-list__value">
+              {% if _ipcError1 != "true" %}
+               <a class="govuk-link govuk-link--no-visited-state" href="#">
+                 {{data['ipcFile'+_id] or "file-name.pdf"}}
+               </a>
+               {% endif %}
+             </dd>
+             {% if _number != "123-456-789-0" %}
+             <dd class="govuk-summary-list__actions">
+              &nbsp;
+             </dd>
+             {% endif %}
+           </div>
+           {% endif %}
+
         </dl>
+        <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-6">
+        {% endif %}
       {% endfor %}
 
       <h2 class="govuk-heading-m govuk-!-margin-top-9">Were imported consignments repacked?</h2>

@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block pageTitle %}
-  {% if query.pheatsError1 == "true" or query.pheatsError2 == "true" or query.ipcError1 == "true" or query.ipcError2 == "true" or query.ipcError3 == "true" or query.ipcError4 == "true" %}Error: {% endif %}{% if data.build == "development" %}Review Answers - Exports application{% else %}Check your answers before sending your application - Phytosanitary certificate - {{serviceName}}{% endif %} - GOV.UK
+  {% if query.pheatsError1 == "true" or query.pheatsError2 == "true" or query.ipcError1 == "true" or query.ipcError2 == "true" or query.ipcError3 == "true" or query.ipcError4 == "true" or query.ipcError5 == "true" or query.ipcError6 == "true" or query.ipcError7 == "true" %}Error: {% endif %}{% if data.build == "development" %}Review Answers - Exports application{% else %}Check your answers before sending your application - Phytosanitary certificate - {{serviceName}}{% endif %} - GOV.UK
 {% endblock %}
 
 {% block beforeContent %}
@@ -30,11 +30,14 @@
       "ipcError1": "Add details for import phytosanitary certificate",
       "ipcError2": "Select the repacking container type",
       "ipcError3": "Add consignment details",
-      "ipcError4": "Import phytosanitary certificates and their linked commodities must have the same country of origin"
+      "ipcError4": "Import phytosanitary certificates and their linked commodities must have the same country of origin",
+      "ipcError5": "[missing country]",
+      "ipcError6": "[missing file]",
+      "ipcError7": "[missing date]"
     }
     %}
 
-    {% if query.ipcError1 == "true" or query.ipcError2 == "true" or query.ipcError3 == "true" or query.ipcError4 == "true" %}
+    {% if query.ipcError1 == "true" or query.ipcError2 == "true" or query.ipcError3 == "true" or query.ipcError4 == "true" or query.ipcError5 == "true" or query.ipcError6 == "true" or query.ipcError7 == "true" %}
     <div class="govuk-error-summary" data-module="govuk-error-summary">
       <div role="alert">
         <h2 class="govuk-error-summary__title">
@@ -60,6 +63,21 @@
             {% if query.ipcError4 == "true" %}
             <li>
               <a href="#changeIPC3">{{_ipcErrors.ipcError4}}</a>
+            </li>
+            {% endif %}
+            {% if query.ipcError5 == "true" %}
+            <li>
+              <a href="#changeIPC5">{{_ipcErrors.ipcError5}}</a>
+            </li>
+            {% endif %}
+            {% if query.ipcError6 == "true" %}
+            <li>
+              <a href="#changeIPC6">{{_ipcErrors.ipcError6}}</a>
+            </li>
+            {% endif %}
+            {% if query.ipcError7 == "true" %}
+            <li>
+              <a href="#changeIPC7">{{_ipcErrors.ipcError7}}</a>
             </li>
             {% endif %}
           </ul>
@@ -425,45 +443,79 @@
         {% if query.ipcError4 == "true" and loop.first %}
           {% set _ipcError4 = "true" %}
         {% endif %}
+
+        {% set _ipcError5 = "false" %}
+        {% if query.ipcError5 == "true" and loop.first %}
+          {% set _ipcError5 = "true" %}
+        {% endif %}
+
+        {% set _ipcError6 = "false" %}
+        {% if query.ipcError6 == "true" and loop.last %}
+          {% set _ipcError6 = "true" %}
+        {% endif %}
+
+        {% set _ipcError7 = "false" %}
+        {% if query.ipcError7 == "true" and loop.first %}
+          {% set _ipcError7 = "true" %}
+        {% endif %}
         
         <h3 class="govuk-heading govuk-heading-s govuk-!-margin-bottom-1" >
           {{_number}}
         </h3>
         <hr class="govuk-section-break govuk-section-break--visible">
-        <dl class="govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-0">
+        <dl class="govuk-summary-list {% if _ipcError1 != 'true' and _ipcError5 != 'true' and _ipcError6 != 'true' and _ipcError7 != 'true' %}govuk-summary-list--no-border{% endif %} govuk-!-margin-bottom-0">
 
           <!-- Country -->
-          <div class="govuk-summary-list__row {% if _number == '123-456-789-0' %} govuk-summary-list__row--no-actions {% endif %} {% if _ipcError1 == 'true' %} govuk-form-group--error {% endif %}">
-            <dt class="govuk-summary-list__key" {% if _ipcError1 == 'true' %} style="padding-left:15px" {% endif %}>
+          <div class="govuk-summary-list__row {% if _number == '123-456-789-0' and _ipcError5 != 'true' %} govuk-summary-list__row--no-actions {% endif %} {% if _ipcError1 == 'true' or _ipcError5 == 'true' %} govuk-form-group--error {% endif %}">
+            <dt class="govuk-summary-list__key" {% if _ipcError1 == 'true' or _ipcError5 == 'true' %} style="padding-left:15px" {% endif %}>
               {% if _ipcError1 == 'true' %}
               <p id="ipc1-error" class="govuk-error-message">
                 <span class="govuk-visually-hidden">Error:</span> {{_ipcErrors.ipcError1}}
               </p>
               {% endif %}
+              {% if _ipcError5 == 'true' %}
+              <p id="ipc5-error" class="govuk-error-message">
+                <span class="govuk-visually-hidden">Error:</span> {{_ipcErrors.ipcError5}}
+              </p>
+              {% endif %}
               Country of issue
             </dt>
             <dd class="govuk-summary-list__value">
-              {% if _ipcError1 != "true" %}
+              {% if _ipcError1 != "true" and _ipcError5 != "true" %}
                 {{data['ipcCountry'+_id][0] or "Bahamas"}}
               {% endif %}
             </dd>
-            {% if _number != "123-456-789-0" %}
+            {% if _number != "123-456-789-0" or _ipcError5 == 'true' %}
             <dd class="govuk-summary-list__actions">
-              <a href="import-phyto-select-country?edit={{_id}}&ipcNumber={{_id}}&changeanswers=true" class="govuk-link govuk-link--no-visited-state" {% if _ipcError1 == "true" %} id="changeIPC" aria-describedby="ipc1-error" {% endif %} {% if _ipcError4 == "true" %} id="changeIPC3" aria-describedby="ipc4-error" {% endif %} >Change<span class="govuk-visually-hidden"> import certificate {{_number}} country of issue</span></a>
+              <a href="import-phyto-select-country?edit={{_id}}&ipcNumber={{_id}}&changeanswers=true" class="govuk-link govuk-link--no-visited-state" {% if _ipcError1 == "true" %} id="changeIPC" aria-describedby="ipc1-error" {% endif %} {% if _ipcError4 == "true" %} id="changeIPC3" aria-describedby="ipc4-error" {% endif %} {% if _ipcError5 == "true" %} id="changeIPC5" aria-describedby="ipc5-error" {% endif %}>Change<span class="govuk-visually-hidden"> import certificate {{_number}} country of issue</span></a>
             </dd>
             {% endif %}
           </div>
 
-           <!-- Date -->
            {% if _number == "123-456-789-0" %}
-           <div class="govuk-summary-list__row govuk-!-margin-bottom-0 govuk-summary-list__row--no-actions">
-             <dt class="govuk-summary-list__key">
+           <!-- Date -->
+           {% if _ipcError5 != "true" %}
+           <div class="govuk-summary-list__row {% if _ipcError7 != 'true' %} govuk-summary-list__row--no-actions {% endif %} {% if _ipcError7 == 'true' %} govuk-form-group--error {% endif %}">
+             <dt class="govuk-summary-list__key" {% if _ipcError7 == 'true' %} style="padding-left:15px" {% endif %}>
+                {% if _ipcError7 == 'true' %}
+                <p id="ipc7-error" class="govuk-error-message">
+                  <span class="govuk-visually-hidden">Error:</span> {{_ipcErrors.ipcError7}}
+                </p>
+                {% endif %}
                Date certificate was issued
              </dt>
              <dd class="govuk-summary-list__value">
+              {% if _ipcError7 != "true" %}
                {{data['ipcDay1'] or "31"}} March 2024
+              {% endif %}
              </dd>
+             {% if _ipcError7 == 'true' %}
+             <dd class="govuk-summary-list__actions">
+              <a href="import-phyto-select-ephyto?edit={{_id}}&ipcNumber={{_id}}&changeanswers=true" class="govuk-link govuk-link--no-visited-state" {% if _ipcError7 == "true" %} id="changeIPC7" aria-describedby="ipc7-error" {% endif %}>Change<span class="govuk-visually-hidden"> import certificate {{_number}} issued date</span></a>
+             </dd>
+             {% endif %}
            </div>
+           {% if _ipcError7 != "true" %}
            <!-- Type -->
            <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
              <dt class="govuk-summary-list__key">
@@ -473,19 +525,27 @@
                ePhyto
              </dd>
            </div>
+           {% endif %}
+           {% endif %}
            {% else %}
+
            <!-- File name -->
-           <div class="govuk-summary-list__row  {% if _number == '123-456-789-0' %} govuk-summary-list__row--no-actions {% endif %} {% if _ipcError1 == 'true' %} govuk-form-group--error {% endif %}">
-             <dt class="govuk-summary-list__key"  {% if _ipcError1 == 'true' %} style="padding-left:15px" {% endif %}>
+           <div class="govuk-summary-list__row  {% if _ipcError1 == 'true' or _ipcError6 == 'true' %} govuk-form-group--error {% endif %}">
+             <dt class="govuk-summary-list__key"  {% if _ipcError1 == 'true' or _ipcError6 == 'true' %} style="padding-left:15px" {% endif %}>
                 {% if _ipcError1 == 'true' %}
                 <p id="ipc1-error" class="govuk-error-message">
                   <span class="govuk-visually-hidden">Error:</span> {{_ipcErrors.ipcError1}}
                 </p>
                 {% endif %}
+                {% if _ipcError6 == 'true' %}
+                <p id="ipc6-error" class="govuk-error-message">
+                  <span class="govuk-visually-hidden">Error:</span> {{_ipcErrors.ipcError6}}
+                </p>
+                {% endif %}
                File name
              </dt>
              <dd class="govuk-summary-list__value">
-              {% if _ipcError1 != "true" %}
+              {% if _ipcError1 != "true" and _ipcError6 != "true" %}
                <a class="govuk-link govuk-link--no-visited-state" href="#">
                  {{data['ipcFile'+_id] or "file-name.pdf"}}
                </a>
@@ -493,10 +553,12 @@
              </dd>
              {% if _number != "123-456-789-0" %}
              <dd class="govuk-summary-list__actions">
-              <a href="import-phyto-select-upload?edit={{_id}}&ipcNumber={{_id}}&changeanswers=true" class="govuk-link govuk-link--no-visited-state" {% if _ipcError1 == "true" %} id="changeIPC" aria-describedby="ipc1-error" {% endif %} {% if _ipcError4 == "true" %} id="changeIPC3" aria-describedby="ipc4-error" {% endif %} >Change<span class="govuk-visually-hidden"> import certificate {{_number}} file</span></a>
+              <a href="import-phyto-select-upload?edit={{_id}}&ipcNumber={{_id}}&changeanswers=true" class="govuk-link govuk-link--no-visited-state" {% if _ipcError1 == "true" %} id="changeIPC" aria-describedby="ipc1-error" {% endif %} {% if _ipcError4 == "true" %} id="changeIPC3" aria-describedby="ipc4-error" {% endif %} {% if _ipcError6 == "true" %} id="changeIPC6" aria-describedby="ipc6-error" {% endif %}>Change<span class="govuk-visually-hidden"> import certificate {{_number}} file</span></a>
              </dd>
              {% endif %}
            </div>
+
+
            {% endif %}
 
         </dl>
