@@ -23,8 +23,9 @@
   
   <div class="govuk-grid-column-two-thirds">
 
+    <!-- ephyto=true&error=true -->
 
-    {% if query.error == "true" %}
+    {% if query.error == "true" or query.error2 == "true" %}
     <div class="govuk-error-summary" data-module="govuk-error-summary">
       <div role="alert">
         <h2 class="govuk-error-summary__title">
@@ -32,9 +33,15 @@
         </h2>
         <div class="govuk-error-summary__body">
           <ul class="govuk-list govuk-error-summary__list">
+            {% if query.error == "true" %}
             <li>
               <a href="#upload-pdf-file-1">Upload an EHC template</a>
             </li>
+            {% elif query.error2 == "true" %}
+            <li>
+              <a href="#upload-pdf-file-1">The selected EHC and ePhyto copy template files must be smaller than 10MB each</a>
+            </li>
+            {% endif %}
           </ul>
         </div>
       </div>
@@ -56,38 +63,45 @@
             Add details for a new EHC version
           </legend> -->
           
-
-          <div class="govuk-form-group govuk-!-margin-bottom-7">
-            <label class="govuk-label govuk-!-font-weight-bold" for="upload-pdf-version">
-              Version
-            </label>
-
-            <input class="govuk-input govuk-input--width-5 govuk-input--extra-letter-spacing" id="upload-pdf-version" name="upload-pdf-version" type="text" spellcheck="false" value="" >
-          </div>
-
-          <div class="govuk-form-group {% if query.error == 'true' %}govuk-form-group--error{% endif %}">
-            <label class="govuk-label govuk-!-font-weight-bold" for="upload-pdf-file-1">
-              EHC template
-            </label>
-            <div id="upload-pdf-file-1-hint" class="govuk-hint">
-              File must be in PDF format and smaller than 10MB
+            <div class="govuk-form-group govuk-!-margin-bottom-7">
+              <label class="govuk-label govuk-!-font-weight-bold" for="upload-pdf-version">
+                Version
+              </label>
+              <input class="govuk-input govuk-input--width-5 govuk-input--extra-letter-spacing" id="upload-pdf-version" name="upload-pdf-version" type="text" spellcheck="false" value="{% if query.error == 'true' or query.error2 == 'true' %}6-0{% endif %}" >
             </div>
-            {% if query.error == "true" %}
-            <p id="upload-pdf-file-1-error" class="govuk-error-message">
-              <span class="govuk-visually-hidden">Error:</span> Upload an EHC template
-            </p>
+
+            {% if query.error2 == 'true' %}
+            <div class="govuk-form-group govuk-form-group--error">
+              <p id="upload-pdf-file-2-error" class="govuk-error-message">
+                <span class="govuk-visually-hidden">Error:</span> The selected EHC and ePhyto copy template files must be smaller than 10MB each
+              </p>
             {% endif %}
-            <input class="govuk-file-upload {% if query.error == 'true' %}govuk-input--error{% endif %}" id="upload-pdf-file-1" name="upload-pdf-file-1" type="file" aria-describedby="upload-pdf-file-1-hint {% if query.error == 'true' %}upload-pdf-file-1-error{% endif %}">
-          </div>
-          {% if query.ephyto == "true" %}
-          <div class="govuk-form-group">
-            <label class="govuk-label govuk-!-font-weight-bold" for="upload-pdf-file-2">
-              ePhyto copy template
-            </label>
-            <div id="upload-pdf-file-2-hint" class="govuk-hint">
-              File must be in PDF format and smaller than 10MB
+            <div class="govuk-form-group {% if query.error == 'true' %}govuk-form-group--error{% endif %}">
+              <label class="govuk-label govuk-!-font-weight-bold" for="upload-pdf-file-1">
+                EHC template
+              </label>
+              <div id="upload-pdf-file-1-hint" class="govuk-hint">
+                File must be in PDF format and smaller than 10MB
+              </div>
+              {% if query.error == "true" %}
+              <p id="upload-pdf-file-1-error" class="govuk-error-message">
+                <span class="govuk-visually-hidden">Error:</span> Upload an EHC template
+              </p>
+              {% endif %}
+              <input class="govuk-file-upload {% if query.error == 'true' or query.error2 == 'true' %}govuk-input--error{% endif %}" id="upload-pdf-file-1" name="upload-pdf-file-1" type="file" aria-describedby="upload-pdf-file-1-hint {% if query.error == 'true' %}upload-pdf-file-1-error{% endif %} {% if query.error2 == 'true' %}upload-pdf-file-2-error{% endif %}">
             </div>
-            <input class="govuk-file-upload" id="upload-pdf-file-2" name="upload-pdf-file-2" type="file" aria-describedby="upload-pdf-file-2-hint">
+            {% if query.ephyto == "true" %}
+            <div class="govuk-form-group">
+              <label class="govuk-label govuk-!-font-weight-bold" for="upload-pdf-file-2">
+                ePhyto copy template
+              </label>
+              <div id="upload-pdf-file-2-hint" class="govuk-hint">
+                File must be in PDF format and smaller than 10MB
+              </div>
+              <input class="govuk-file-upload {% if query.error2 == 'true' %}govuk-input--error{% endif %}" id="upload-pdf-file-2" name="upload-pdf-file-2" type="file" aria-describedby="upload-pdf-file-2-hint {% if query.error2 == 'true' %}upload-pdf-file-2-error{% endif %}">
+            </div>
+            {% endif %}
+          {% if query.error2 == 'true' %}
           </div>
           {% endif %}
         <!-- </fieldset> -->
