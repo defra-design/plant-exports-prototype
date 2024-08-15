@@ -28,6 +28,7 @@ var applicationsv9 = require('./applications-v9.json');
 var sample = require('./sample.json');
 var countries = require('./countries-full.json');
 var countries2 = require('./countries-eu-ni.json');
+var countries3 = require('./countries-full-2.json');
 var addresses = require('./addresses.json');
 var addresses2 = require('./addresses-2.json');
 var addresses3 = require('./addresses-3.json');
@@ -48,6 +49,7 @@ module.exports = {
   "plants" : [],
   "countries-full": countries,
   "countries-eu-ni": countries2,
+  "countries-full-2": countries3,
   "addresses": addresses,
   "addresses2": addresses2,
   "addresses3": addresses3,
