@@ -1,0 +1,100 @@
+{% extends "govuk-prototype-kit/layouts/unbranded.html" %}
+
+{% block pageTitle %}
+  Sampling reference information - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+<style>
+
+  .govuk-phase-banner {
+    display: none !important;
+  }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">Sampling reference information</h1>
+    <p class="govuk-body">You must label each sample with its sample reference.</p>
+    <dl class="govuk-summary-list govuk-summary-list--no-border">
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key govuk-!-padding-top-1 govuk-!-padding-bottom-1">
+          <abbr title="Animal and Plant Health Agency">APHA</abbr> reference
+        </dt>
+        <dd class="govuk-summary-list__value govuk-!-padding-top-1 govuk-!-padding-bottom-1">
+          1721 1480 04809
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key govuk-!-padding-top-1 govuk-!-padding-bottom-1">Your reference</dt>
+        <dd class="govuk-summary-list__value govuk-!-padding-top-1 govuk-!-padding-bottom-1">{% if (query.id | appInformationV9('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformationV9('reference')}}{% endif %}</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key govuk-!-padding-top-1 govuk-!-padding-bottom-1">Import permit</dt>
+        <dd class="govuk-summary-list__value govuk-!-padding-top-1 govuk-!-padding-bottom-1">ABCD1234</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key govuk-!-padding-top-1 govuk-!-padding-bottom-1">Destination country</dt>
+        <dd class="govuk-summary-list__value govuk-!-padding-top-1 govuk-!-padding-bottom-1">New Zealand</dd>
+      </div>
+
+    </dl>
+    <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-9">
+    <!-- <h2 class="govuk-heading-l govuk-!-margin-top-9">Sampling reference information</h2> -->
+
+
+    {% set _originColHeader = "Countries of origin" %}
+    {% if data.reforwarding == "1" %}
+      {% set _originColHeader = "Countries of origin and import certificate numbers" %}
+    {% endif %}
+
+    {% set _quantityColHeader = "Quantities and packages" %}
+
+    {% set _packingColHeader = "Packaging information" %}
+
+    <table class="govuk-table govuk-!-margin-bottom-4">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">Description</th>
+          <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
+          <th class="govuk-table__header" scope="col">{{_quantityColHeader}}</th>
+          <th class="govuk-table__header" scope="col">{{_packingColHeader}}</th>
+          <th scope="col" class="govuk-table__header"><abbr title="Animal and Plant Health Agency">APHA</abbr> sample <br> reference</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        {% set _viewOnly = "yes" %}
+        {% set _hasSample = "yes" %}
+        {% set _nonResponsive = "yes" %}
+        {% for i in range(0, 3) -%}
+          {% include "./application/modules/_summary-general-check-answers.html" %}
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <p class="govuk-body govuk-!-padding-top-4">Send your samples for inspection to:</p>
+    <p class="govuk-body">
+      Plant Clinic
+      <br>
+      Block 4
+      <br>
+      National Agri-Food Campus
+      <br>
+      Sand Hutton
+      <br>
+      York
+      <br>
+      YO41 1LZ
+    </p>
+  </div>
+
+</div>
+{% endblock %}

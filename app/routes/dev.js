@@ -7,6 +7,7 @@ module.exports = function(router) {
   var client3 = new RestClient()
 
   // ADD extra routing here if needed.
+  require('./dev_v3-6.js')(router)
   require('./dev_v3-5.js')(router)
   require('./dev_v3-4.js')(router)
   require('./dev_v3-3.js')(router)

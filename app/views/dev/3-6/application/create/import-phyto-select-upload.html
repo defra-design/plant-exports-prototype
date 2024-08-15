@@ -1,0 +1,97 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <!-- TO DO: Need make this page generate a green confirmation banner, on the next page, after each upload -->
+      {% set _link = 'import-phyto-select-uploaded' %}
+      {% if query.changeanswers == 'true' %}
+        {% set _link = 'check-your-answers' %}
+      {% endif %}
+
+      <!-- Selected ipc number -->
+      {% set _ipcID = data['ipcNumber'] or 1 %}
+      {% if query.edit %}
+        {% set _ipcID = query.edit %}
+      {% endif %}
+
+      {% set _selectedipcNumber = data['ipcNumbers'][0] %}
+      {% for _ipcNumber2 in data['ipcNumbers'] %}
+        {% if loop.index == _ipcID %}
+          {% set _selectedipcNumber = _ipcNumber2 %}
+        {% endif %}
+      {% endfor %}
+
+      <form action="{{_link}}" method="post" novalidate>
+
+          <!-- Sets a value to say whether details were added for this number in the loop or not -->
+          <input id="ipcAdded{{_ipcID}}" name="ipcAdded{{_ipcID}}" type="hidden" value="true">
+          
+          <!-- FILE -->
+          {% if query.edit %}
+          <h1 class="govuk-heading-xl">
+            Change the import phytosanitary certificate for {{_selectedipcNumber}}
+          </h1>
+
+          <div class="govuk-form-group ">
+
+            <h2 class="govuk-heading-s govuk-!-margin-bottom-2" >Uploaded import phytosanitary certificate</h2>
+            <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="#">{{data['ipcFile'+_id] or "file-name.pdf"}}</a></p>
+
+            <label class="govuk-label govuk-!-font-weight-bold" for="ipcFile{{_ipcID}}">
+              Upload a new import phytosanitary certificate
+            </label>
+            <p class="govuk-body">The file must:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>be in PDF format</li>
+              <li>be smaller than 3MB</li>
+            </ul>
+
+            <input class="govuk-file-upload" id="ipcFile{{_ipcID}}" name="ipcFile{{_ipcID}}" type="file">
+
+          </div>
+          {% else %}
+          <div class="govuk-form-group ">
+            <h1 class="govuk-label-wrapper">
+              <label class="govuk-label govuk-label--xl" for="ipcFile{{_ipcID}}">
+                Upload the import phytosanitary certificate for {{_selectedipcNumber}}
+              </label>
+            </h1>
+
+            <p class="govuk-body">The file must:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>be in PDF format</li>
+              <li>be smaller than 3MB</li>
+            </ul>
+
+            <input class="govuk-file-upload" id="ipcFile{{_ipcID}}" name="ipcFile{{_ipcID}}" type="file">
+
+          </div>
+          {% endif %}
+
+        {{ govukButton({
+          text: "Save and continue"
+        }) }}
+
+
+      </form>
+      {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+    </div>
+  </div>
+  
+
+{% endblock %}

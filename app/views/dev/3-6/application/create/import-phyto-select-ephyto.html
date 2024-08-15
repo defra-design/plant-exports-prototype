@@ -1,0 +1,99 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <!-- TO DO: Need make this page generate a green confirmation banner, on the next page, after each upload -->
+      {% set _link = 'import-phyto-select-uploaded' %}
+      {% if query.changeanswers == 'true' %}
+        {% set _link = 'check-your-answers' %}
+      {% endif %}
+
+      <!-- Selected ipc number -->
+      {% set _ipcID = data['ipcNumber'] or 1 %}
+      {% if query.edit %}
+        {% set _ipcID = query.edit %}
+      {% endif %}
+
+      {% set _selectedipcNumber = data['ipcNumbers'][0] %}
+      {% for _ipcNumber2 in data['ipcNumbers'] %}
+        {% if loop.index == _ipcID %}
+          {% set _selectedipcNumber = _ipcNumber2 %}
+        {% endif %}
+      {% endfor %}
+
+      <form action="{{_link}}" method="post" novalidate>
+
+        <!-- Sets a value to say whether details were added for this number in the loop or not -->
+        <input id="ipcAdded{{_ipcID}}" name="ipcAdded{{_ipcID}}" type="hidden" value="true">
+
+        <!-- DATE -->
+        {% set _dateID = 'ipcDate' + _ipcID %}
+        {% set _dayID = 'ipcDay' + _ipcID %}
+        {% set _monthID = 'ipcMonth' + _ipcID %}
+        {% set _yearID = 'ipcYear' + _ipcID %}
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset" role="group" aria-describedby="certificate-issued-hint">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+              <h1 class="govuk-fieldset__heading">
+                What is the date of issue for {{_selectedipcNumber}}?
+              </h1>
+            </legend>
+            <div id="certificate-issued-hint" class="govuk-hint">
+              For example, 31 3 2024
+            </div>
+            <div class="govuk-date-input" id="certificate-issued">
+              <div class="govuk-date-input__item">
+                <div class="govuk-form-group">
+                  <label class="govuk-label govuk-date-input__label" for="{{_dayID}}">
+                    Day
+                  </label>
+                  <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="{{_dayID}}" name="{{_dayID}}" type="text" inputmode="numeric">
+                </div>
+              </div>
+              <div class="govuk-date-input__item">
+                <div class="govuk-form-group">
+                  <label class="govuk-label govuk-date-input__label" for="{{_monthID}}">
+                    Month
+                  </label>
+                  <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="{{_monthID}}" name="{{_monthID}}" type="text" inputmode="numeric">
+                </div>
+              </div>
+              <div class="govuk-date-input__item">
+                <div class="govuk-form-group">
+                  <label class="govuk-label govuk-date-input__label" for="{{_yearID}}">
+                    Year
+                  </label>
+                  <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="{{_yearID}}" name="{{_yearID}}" type="text" inputmode="numeric">
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        {{ govukButton({
+          text: "Save and continue"
+        }) }}
+
+
+      </form>
+      {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+    </div>
+  </div>
+  
+
+{% endblock %}

@@ -1,0 +1,120 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{{ govukBackLink({
+  text: "Back",
+  href: "javascript: window.history.go(-1)"
+}) }}
+{% endblock %}
+
+{% block content %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <!-- TO DO: Need make this page generate a green confirmation banner, on the next page, after each upload -->
+      
+
+      <!-- Selected ipc number -->
+      {% set _ipcID = data['ipcNumber'] or 1 %}
+      {% if query.edit %}
+        {% set _ipcID = query.edit %}
+      {% endif %}
+
+      {% set _selectedipcNumber = data['ipcNumbers'][0] %}
+      {% for _ipcNumber2 in data['ipcNumbers'] %}
+        {% if loop.index == _ipcID %}
+          {% set _selectedipcNumber = _ipcNumber2 %}
+        {% endif %}
+      {% endfor %}
+
+      {% set _link = 'import-phyto-select-upload' %}
+      {% if _selectedipcNumber == "123-456-789-0" %}
+        {% set _link = 'import-phyto-select-ephyto' %}
+      {% endif %}
+      {% if query.changeanswers == 'true' %}
+        {% set _link = 'check-your-answers' %}
+      {% endif %}
+      {% if query.changeanswers1 == 'true' %}
+        {% set _link = 'import-phyto-select-uploaded' %}
+      {% endif %}
+
+      <form action="{{_link}}" method="post" novalidate>
+
+        {% if query.edit %}
+          <!-- nothing -->
+        {% else %}
+          <!-- <p class="govuk-body">You're adding details for import phytosanitary certificate {{_selectedipcNumber}}.</p> -->
+        {% endif %}
+        
+
+        <!-- prepop values if editing -->
+        {% set _prepopCountry = '' %}
+        {% for param in data['importCertCountry' + _id] %}
+          {% set _prepopCountry = param %}
+        {% endfor %}
+        {% if query.edit %}
+          {% set _prepopCountry = _prepopCountry or 'BS' %}
+          {% if _prepopCountry == 'none' %}
+            {% set _prepopCountry = 'BS' %}
+          {% endif %}
+        {% endif %}
+
+
+        <!-- Sets a value to say whether details were added for this number in the loop or not -->
+        <input id="ipcAdded{{_ipcID}}" name="ipcAdded{{_ipcID}}" type="hidden" value="true">
+
+        {% set _countryID = 'ipcCountry' + _ipcID %}
+        <div class="govuk-form-group autocomplete-wrapper" >
+          <h1 class="govuk-label-wrapper">
+            <label class="govuk-label govuk-label--xl" for="{{_countryID}}">
+              {% if query.edit %}
+                What is the country of issue for {{_selectedipcNumber}}?
+              {% else %}
+                What is the country of issue for {{_selectedipcNumber}}?
+              {% endif %}
+            </label>
+          </h1>
+          <div style="max-width: 54ex;">
+            <div id="country-hint" class="govuk-hint">
+              This is the country where the consignment has come from.
+            </div>
+            <select id="{{_countryID}}" class="govuk-select" name="{{_countryID}}" {% if _showHint == 'yes' %} aria-describedby="country-hint" {% endif %}>
+              <option value="none"></option>
+              {% for _country in data['countries-full'] %}
+                <option value="{{_country.code}}" {% if query.edit and _prepopCountry == _country.code %} selected{% endif %}>{{_country.name}}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <script type="text/javascript" src="/public/javascripts/accessible-autocomplete.min.js"></script>
+        <script type="text/javascript">
+          window.addEventListener('load', function() {
+            var _countrynIDJQ = {{_countryID | dump | safe }};
+            var element = document.querySelector('#' + _countrynIDJQ);
+            accessibleAutocomplete.enhanceSelectElement({
+              selectElement: element,
+              id: _countrynIDJQ,
+              name: _countrynIDJQ
+            })
+          })
+        </script>
+
+
+        {{ govukButton({
+          text: "Save and continue"
+        }) }}
+
+
+      </form>
+      {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+    </div>
+  </div>
+  
+
+{% endblock %}
