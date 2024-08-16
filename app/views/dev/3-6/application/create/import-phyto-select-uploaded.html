@@ -27,7 +27,13 @@ Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
         </div>
 
         <div class="govuk-notification-banner__content">
-          <h3 class="govuk-notification-banner__heading">Import phytosanitary certificate number {{data['ipcNumbers' + _id] or '[IPC NUMBER]'}} has been added</h3>
+          <h3 class="govuk-notification-banner__heading">
+            {% if data.ipcNumber == "2" %}
+              Import ePhyto certificate number 123-456-789-0 has been added
+            {% else %}
+              Import phytosanitary certificate number ABC-123-456-789-0 has been added
+            {% endif %}
+          </h3>
         </div>
 
       </div>
@@ -69,16 +75,19 @@ Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
 
         {% if _showRow == 'true' %}
           {% set _addedOne = true %}
-          <h3 class="govuk-heading govuk-heading-m govuk-!-margin-bottom-" >
+          <h3 class="govuk-heading govuk-heading-m {% if _number == '123-456-789-0' %} govuk-!-margin-bottom-1 {% endif %}" >
             {{_number}}
           </h3>
+          {% if _number == "123-456-789-0" %}
+          <p class="govuk-body">ePhyto verified on our system</p>
+          {% endif %}
           <hr class="govuk-section-break govuk-section-break--visible">
           <dl class="govuk-summary-list govuk-summary-list--no-border govuk-!-margin-bottom-0">
 
             <!-- Country -->
             <div class="govuk-summary-list__row {% if _number == '123-456-789-0' %} govuk-summary-list__row--no-actions {% endif %}">
               <dt class="govuk-summary-list__key">
-                Country of issue
+                Country that issued the certificate
               </dt>
               <dd class="govuk-summary-list__value">
                   {{data['ipcCountry'+_id][0] or "Bahamas"}}
@@ -98,15 +107,6 @@ Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
               </dt>
               <dd class="govuk-summary-list__value">
                 {{data['ipcDay1'] or "31"}} March 2024
-              </dd>
-            </div>
-            <!-- Type -->
-            <div class="govuk-summary-list__row govuk-summary-list__row--no-actions">
-              <dt class="govuk-summary-list__key">
-                Type
-              </dt>
-              <dd class="govuk-summary-list__value">
-                ePhyto
               </dd>
             </div>
             {% else %}
