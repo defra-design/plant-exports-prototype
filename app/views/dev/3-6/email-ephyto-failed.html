@@ -24,9 +24,9 @@
 
     <h2 class="govuk-heading-l">
       {% if query.reissue == "true" %}
-        ePhyto re-issue not received 7800 56212 5823
+        ePhyto re-issue failed 7800 56212 5823
       {% else %}
-        ePhyto not received 7800 56212 5823
+        ePhyto failed 7800 56212 5823
       {% endif %}
     </h2>
 
@@ -34,39 +34,41 @@
 
 
     {% if query.reissue == "true" %}
-      <p class="govuk-body">Sorry, {{_country}} did not receive your re-issued ePhyto. This is because of a technical problem.</p>
+      <p class="govuk-body">Sorry, your re-issued ePhyto was not received. This is because of a technical problem.</p>
     {% else %}
-      <p class="govuk-body">Sorry, {{_country}} did not receive your ePhyto. This is because of a technical problem.</p>
+      <p class="govuk-body">Sorry, your ePhyto was not received. This is because of a technical problem.</p>
     {% endif %}
     
     
     <p class="govuk-body">Phytosanitary certificate number: UK/GB/E&W/2023/7800562125823</p>
     <p class="govuk-body">Your reference: PO 66622</p>
-    <!-- <p class="govuk-body">Certificate issued: 10 December 2023</p> -->
     <p class="govuk-body">Submitted by: Joe Bloggs</p>
     
     <h2 class="govuk-heading-m">What happens now</h2>
-   
-    {% if query.country == "eu" %}
-    <p class="govuk-body">We will:</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>put your details into TRACES</li>
-      <li>email you the TRACES reference number and a PDF copy of the phytosanitary certificate</li>
-    </ul>
-    {% elif query.country == "row" %}
-    <ol class="govuk-list govuk-list--number">
-      <li>We will send you a paper phytosanitary certificate and an email to let you know.</li>
-      <li>You will need to send the paper certificate with your consignment.</li>
-    </ol>
+    
+    {% if query.reissue == "true" %}
+      <p class="govuk-body">We will send your re-issued phytosanitary certificate in another format.</p>
     {% else %}
-    <p class="govuk-body">We will:</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>email you a scanned phytosanitary certificate</li>
-      <li>send you a paper phytosanitary certificate in the post</li>
-    </ul>
+      <p class="govuk-body">We will send your phytosanitary certificate in another format.</p>
     {% endif %}
 
+    <h3 class="govuk-heading-s">Exporting to Northern Ireland</h3>
+    <p class="govuk-body">We will send you:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>a paper {% if query.reissue == "true" %}re-issued {% endif %}phytosanitary certificate in the post</li>
+      <li>a PDF copy of the {% if query.reissue == "true" %}re-issued {% endif %}certificate in an email</li>
+    </ul>
 
+    <h3 class="govuk-heading-s">Exporting to European Union (EU)</h3>
+    <p class="govuk-body">We will send you:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>a TRACES NT reference number</li>
+      <li>a PDF copy of the {% if query.reissue == "true" %}re-issued {% endif %}certificate in an email</li>
+    </ul>
+
+    <h3 class="govuk-heading-s">Exporting to a Non-EU country</h3>
+    <p class="govuk-body">We will send you a paper {% if query.reissue == "true" %}re-issued {% endif %}phytosanitary certificate in the post.</p>
+    
 
    
     <h2 class="govuk-heading-m">What is an ePhyto</h2>
