@@ -28,6 +28,13 @@
 
 <div class="govuk-grid-row">
 
+  {% set _country = query.id | appInformationV9('destination') %}
+  {% if query.country == "eu" %}
+    {% set _country = "France" %}
+  {% elif query.country == "noneu" %}
+    {% set _country = "Mexico" %}
+  {% endif %}
+
   <div class="govuk-grid-column-two-thirds">
 
 
@@ -223,7 +230,7 @@
 
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">Destination country</dt>
-        <dd class="govuk-summary-list__value">{{query.id | appInformationV9('destination')}}</dd>
+        <dd class="govuk-summary-list__value">{{_country}}</dd>
       </div>
 
       <div class="govuk-summary-list__row">
@@ -279,7 +286,7 @@
 
 
     {% if _applicationStatus == "ephyto delayed" %}
-      <p class="govuk-body">There is a delay sending your ePhyto to {{query.id | appInformationV9('destination')}}. This is because of a technical problem.</p>
+      <p class="govuk-body">There is a delay sending your ePhyto to {{_country}}. We will let you know if they receive it or if there is a further delay.</p>
       <p class="govuk-body">We will:</p>
       <ul class="govuk-list govuk-list--bullet">
         <li>keep checking to see if the problem gets fixed</li>
@@ -287,20 +294,37 @@
       </ul>
 
     {% elif _applicationStatus == "ephyto still delayed" %}
-    <p class="govuk-body">We will keep trying to send your ePhyto to {{query.id | appInformationV9('destination')}}. We will let you know if they receive it.</p>
-    <p class="govuk-body">If the problem cannot be fixed within 24 hours we will:</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>email you a scanned phytosanitary certificate</li>
-      <li>send you a paper phytosanitary certificate in the post</li>
-    </ul>
-    <p class="govuk-body">If this causes any problems, contact us on:</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>0300 1000 313, Monday to Sunday 7am to 7pm</li>
-      <li><a href="mailto:planthealth.info@apha.gov.uk" class="govuk-link">planthealth.info@apha.gov.uk</a></li>
-    </ul>
+
+      <p class="govuk-body">We will keep trying to send your ePhyto to {{_country}}. We will let you know if they receive it.</p>
+      
+      <!-- eu -->
+      {% if query.country == "eu" %}
+        <p class="govuk-body">If the problem cannot be fixed within 24 hours we will send you:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>a TRACES NT reference number</li>
+          <li>a PDF copy of the certificate in an email</li>
+        </ul>
+      <!-- non-eu -->
+      {% elif query.country == "noneu" %}
+        <p class="govuk-body">If the problem cannot be fixed within 24 hours we will send you a paper phytosanitary certificate in the post.</p>
+      <!-- NI -->
+      {% else %}
+        <p class="govuk-body">If the problem cannot be fixed within 24 hours we will send you:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>a paper phytosanitary certificate in the post</li>
+          <li>a PDF copy of the certificate in an email</li>
+        </ul>
+      {% endif %}
+
+
+      <p class="govuk-body">If this causes any problems, contact us on:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>0300 1000 313, Monday to Sunday 7am to 7pm</li>
+        <li><a href="mailto:planthealth.info@apha.gov.uk" class="govuk-link">planthealth.info@apha.gov.uk</a></li>
+      </ul>
 
     {% elif _applicationStatus == "ephyto re-issue delayed" %}
-      <p class="govuk-body">There is a delay sending your re-issued ePhyto to {{query.id | appInformationV9('destination')}}. This is because of a technical problem.</p>
+      <p class="govuk-body">There is a delay sending your re-issued ePhyto to {{_country}}. We will let you know if they receive it or if there is a further delay.</p>
       <p class="govuk-body">We will:</p>
       <ul class="govuk-list govuk-list--bullet">
         <li>keep checking to see if the problem gets fixed</li>
@@ -308,12 +332,29 @@
       </ul>
 
     {% elif _applicationStatus == "ephyto re-issue still delayed" %}
-    <p class="govuk-body">We will keep trying to send your re-issued ePhyto to {{query.id | appInformationV9('destination')}}. We will let you know if they receive it.</p>
-    <p class="govuk-body">If the problem cannot be fixed within 24 hours we will:</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>email you a re-issued scanned phytosanitary certificate</li>
-      <li>send you a re-issued paper phytosanitary certificate in the post</li>
-    </ul>
+
+    <p class="govuk-body">We will keep trying to send your re-issued ePhyto to {{_country}}. We will let you know if they receive it.</p>
+      
+    <!-- eu -->
+    {% if query.country == "eu" %}
+      <p class="govuk-body">If the problem cannot be fixed within 24 hours we will send you:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>a TRACES NT reference number</li>
+        <li>a PDF copy of the re-issued certificate in an email</li>
+      </ul>
+    <!-- non-eu -->
+    {% elif query.country == "noneu" %}
+      <p class="govuk-body">If the problem cannot be fixed within 24 hours we will send you a paper re-issued phytosanitary certificate in the post.</p>
+    <!-- NI -->
+    {% else %}
+      <p class="govuk-body">If the problem cannot be fixed within 24 hours we will send you:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>a paper re-issued phytosanitary certificate in the post</li>
+        <li>a PDF copy of the re-issued certificate in an email</li>
+      </ul>
+    {% endif %}
+
+
     <p class="govuk-body">If this causes any problems, contact us on:</p>
     <ul class="govuk-list govuk-list--bullet">
       <li>0300 1000 313, Monday to Sunday 7am to 7pm</li>
@@ -326,9 +367,9 @@
     <a href="/public/certificates/ephyto/UK-GB-E&W-2023-7800562125823-3.pdf" role="button" draggable="false" class="govuk-button" data-module="govuk-button">View copy</a>
 
     {% if _applicationStatus == "ephyto re-issue received" %}
-      <p class="govuk-body">{{query.id | appInformationV9('destination')}}'s National Plant Protection Organisation has received your re-issued ePhyto.</p>
+      <p class="govuk-body">{{_country}}'s National Plant Protection Organisation has received your re-issued ePhyto.</p>
     {% else %}
-      <p class="govuk-body">{{query.id | appInformationV9('destination')}}'s National Plant Protection Organisation has received your ePhyto.</p>
+      <p class="govuk-body">{{_country}}'s National Plant Protection Organisation has received your ePhyto.</p>
     {% endif %}
 
     <p class="govuk-body">You do not need to print your copy or send it with your consignment. It is for your records and not for official use. </p>
