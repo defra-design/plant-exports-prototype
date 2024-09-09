@@ -23,6 +23,10 @@
 <div class="govuk-grid-row">
 
   <div class="{% if data.build == 'development' %}govuk-grid-column-full{% else %}govuk-grid-column-two-thirds{% endif %}">
+
+    {% include "../../modules/_payment-banner.html" %}
+
+
     <h1 class="govuk-heading-xl">Exporter declaration</h1>
     {% if data.pheats_check != "yes" %}
     <p class="govuk-body">By submitting this application form, you are agreeing that to the best of your knowledge and belief the statements made in this {% if data.reforwarding %}re-forwarding{% endif %} application are true and complete.<!-- You will comply with the legal requirements of UK law, including payment for official controls, repossession of any consignment rejected after transit from the UK to another country or costs of destruction if necessary. --></p>
@@ -46,11 +50,19 @@
 
       </div>
 
-      {% if data.journey == "coc" %}
-        <a class="govuk-button margin-top-30" href="confirmation-coc" value="Submit application" id="Button-SubmitApplication">Submit application</a>
+      {% if data.payments == "true" %}
+      <p class="govuk-body">
+        <a href="../../dashboard-draft" class="govuk-link govuk-button govuk-link--no-visited-state">Save and continue later</a>
+      </p>
       {% else %}
-        <a class="govuk-button margin-top-30" href="confirmation-page" value="Submit application" id="Button-SubmitApplication">Submit application</a>
+        {% if data.journey == "coc" %}
+          <a class="govuk-button margin-top-30" href="confirmation-coc" value="Submit application" id="Button-SubmitApplication">Submit application</a>
+        {% else %}
+          <a class="govuk-button margin-top-30" href="confirmation-page" value="Submit application" id="Button-SubmitApplication">Submit application</a>
+        {% endif %}
       {% endif %}
+
+      
       
     </form>
 
