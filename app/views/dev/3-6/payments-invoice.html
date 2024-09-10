@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% set serviceName = "Payments for APHA (Animal and Plant Health Agency)" %}
+
+{% block pageTitle %}
+Enter your Invoice Number(s) - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% set _backLink = "payments-home" %}
+{% set _forwardLink = "payments-amount" %}
+{% if query.change == "true" %}
+  {% set _backLink = "payments-check" %}
+  {% set _forwardLink = "payments-check" %}
+{% endif %}
+
+{% block beforeContent %}
+<a href="{{_backLink}}" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row govuk-!-margin-bottom-6">
+
+  <!-- replicated from the payments service - http://www.gov.uk/payments/animal-and-plant-health-agency/payments-for-apha -->
+  
+  <div class="govuk-grid-column-two-thirds">
+
+    <form method="post" novalidate action="{{_forwardLink}}">
+      <div class="govuk-form-group">
+        <h1 class="govuk-label-wrapper">
+          <label class="govuk-label govuk-label--l" for="paymentsInvoice">
+            Enter your Invoice Number(s)
+          </label>
+        </h1>
+        <div id="paymentsInvoice-hint" class="govuk-hint">
+          This can be found on the invoice you have received from APHA.
+        </div>
+        <input class="govuk-input" id="paymentsInvoice" name="paymentsInvoice" type="text" aria-describedby="paymentsInvoice-hint" value="{{data['paymentsInvoice'] or ''}}">
+      </div>
+      
+      {{ govukButton({
+        text: "Continue"
+      }) }}
+
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

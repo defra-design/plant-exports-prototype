@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+
+{% set serviceName = "Payments for APHA (Animal and Plant Health Agency)" %}
+
+{% block pageTitle %}
+Enter amount to pay - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% set _backLink = "payments-invoice" %}
+{% set _forwardLink = "payments-check" %}
+{% if query.change == "true" %}
+  {% set _backLink = "payments-check" %}
+  {% set _forwardLink = "payments-check" %}
+{% endif %}
+
+{% block beforeContent %}
+<a href="{{_backLink}}" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row govuk-!-margin-bottom-6">
+
+  <!-- replicated from the payments service - http://www.gov.uk/payments/animal-and-plant-health-agency/payments-for-apha -->
+  
+  <div class="govuk-grid-column-two-thirds">
+
+    <form method="post" novalidate action="{{_forwardLink}}">
+
+      <div class="govuk-form-group">
+        <h1 class="govuk-label-wrapper">
+          <label class="govuk-label govuk-label--l" for="paymentsAmount">
+            Enter amount to pay
+          </label>
+        </h1>
+        <div id="paymentsAmount-hint" class="govuk-hint">
+          Enter the amount you wish to pay
+        </div>
+        <div class="govuk-input__wrapper">
+          <div class="govuk-input__prefix" aria-hidden="true">£</div>
+          <input class="govuk-input govuk-input--width-5" id="paymentsAmount" name="paymentsAmount" type="text" spellcheck="false" value="{{data['paymentsAmount'] or ''}}">
+        </div>
+      </div>
+        
+      {{ govukButton({
+        text: "Continue"
+      }) }}
+      
+    </form>
+      
+  </div>
+
+</div>
+{% endblock %}

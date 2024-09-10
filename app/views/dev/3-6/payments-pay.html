@@ -1,0 +1,223 @@
+{% extends "layout.html" %}
+
+{% set serviceName = "Payments for APHA (Animal and Plant Health Agency)" %}
+
+{% block pageTitle %}
+Enter payment details - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% set _forwardLink = "payments-home" %}
+
+{% block beforeContent %}
+<style>
+  .paymentsSummary {
+    border-top: 2px solid #1d70b8;
+    padding: 15px;
+    background-color: #f3f2f1;
+  }
+  .acceptedCards {
+    display: block;
+    width: 100%;
+    margin: 15px 0 5px;
+    padding: 0;
+    float: none;
+    overflow: hidden;
+  }
+  .acceptedCards li {
+    display: block;
+    width: 3rem;
+    height: 0;
+    margin: 0 10px 5px 0;
+    padding-bottom: 2rem;
+    float: left;
+  }
+  .paymentsCVC {
+    float: left;
+    margin-right: 15px;
+  }
+  .paymentsCVCImage {
+    position: relative;
+    top: -1px;
+    max-height: 38px;
+    float: left;
+    margin-right: 15px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row govuk-!-margin-bottom-6">
+
+  <!-- replicated from the payments service - http://www.gov.uk/payments/animal-and-plant-health-agency/payments-for-apha -->
+  
+  <div class="govuk-grid-column-two-thirds">
+
+    <form method="post" novalidate action="{{_forwardLink}}">
+
+      <h1 class="govuk-heading-l ">Enter card details</h1>
+
+      <div class="paymentsSummary">
+        <h2 class="govuk-heading-m">Payment summary</h2>
+
+        <p class="govuk-body">Payments for APHA (Animal and Plant Health Agency)</p>
+
+        <p class="govuk-body govuk-!-margin-bottom-0">Total amount:<br><span class="govuk-!-font-size-36 govuk-!-font-weight-bold" >£{{data.paymentsAmount or "500.00"}}</span></p>
+      </div>
+
+
+      <div class="govuk-form-group govuk-!-margin-top-6" >
+        <label for="paymentsCardNum" class="govuk-label govuk-label--s govuk-!-width-three-quarters">
+            Card number
+        </label>
+        <div class="govuk-hint">
+            Accepted credit and debit card types
+        </div>
+
+        <ul class="acceptedCards">
+          <li>
+            <img src="/public/images/payments-visa.jpg" alt="Visa" style="width:50px">
+          </li>
+          <li>
+            <img src="/public/images/payments-mastercard.jpg" alt="Master Card" style="width:50px">
+          </li>
+        </ul>
+
+        <input id="paymentsCardNum" type="text" inputmode="numeric" pattern="[0-9]*" name="paymentsCardNum" maxlength="26" class="govuk-input govuk-!-width-three-quarters" value="">
+
+      </div>
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="paymentsExpiry-hint">
+          <legend class="govuk-fieldset__legend">
+            <h3 class="govuk-heading-s govuk-!-margin-bottom-0">
+              Expiry date
+            </h3>
+          </legend>
+          <div id="paymentsExpiry-hint" class="govuk-hint">
+            For example, 10/26
+          </div>
+          <div class="govuk-date-input" id="paymentsExpiry">
+            <div class="govuk-date-input__item">
+              <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" for="paymentsExpiry-month">
+                  Month
+                </label>
+                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="paymentsExpiry-month" name="paymentsExpiry-month" type="text" inputmode="numeric">
+              </div>
+            </div>
+            <div class="govuk-date-input__item">
+              <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" for="paymentsExpiry-year">
+                  Year
+                </label>
+                <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="paymentsExpiry-year" name="paymentsExpiry-year" type="text" inputmode="numeric">
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+
+      <div class="govuk-form-group" >
+        <label for="paymentsCardName" class="govuk-label govuk-label--s">
+          <span data-label-replace="cardholderName" data-original-label="Name on card" class="card-holder-name-label">
+            Name on card
+          </span>
+        </label>
+        <input id="paymentsCardName" data-cy="paymentsCardName" type="text" name="cardholderName" maxlength="200" class="govuk-input govuk-!-width-three-quarters" value="" >
+      </div>
+
+        <div class="govuk-form-group" >
+          <label for="paymentsCVC" class="govuk-label govuk-label--s">
+            <span class="paymentsCVC-label" data-original-label="Card security code">
+              Card security code
+            </span>
+          </label>
+          <div class="govuk-hint govuk-!-margin-bottom-2">
+              The last 3 digits on the back of the card
+          </div>
+          <input id="paymentsCVC" type="text" inputmode="numeric" pattern="[0-9]*" value="" name="paymentsCVC" class="govuk-input govuk-input--width-3 paymentsCVC" maxlength="4" autocomplete="cc-csc">
+          <img src="/public/images/payments-code.png" class="paymentsCVCImage" alt="The last 3 digits on the back of the card">
+         </div>
+
+
+
+
+          <div class="govuk-!-width-three-quarters govuk-!-margin-top-8">
+            <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+              <fieldset class="govuk-fieldset" aria-describedby="address-hint">
+                <legend>
+                  <h2 class="govuk-heading-m govuk-!-margin-bottom-1">Billing address</h2>
+                </legend>
+
+                <div id="address-hint" class="govuk-body govuk-!-margin-bottom-6">This is the address associated with the card</div>
+
+                <div class="govuk-form-group" >
+                  <label for="paymentsAddress1" class="govuk-label">
+                    Address line 1
+                  </label>
+                  <input id="paymentsAddress1" type="text" name="paymentsAddress1" maxlength="100" class="govuk-input" value="" >
+                </div>
+
+                <div class="govuk-form-group" >
+                  <label for="paymentsAddress2" class="govuk-label">
+                    Address line 2 (optional)
+                  </label>
+                  <input id="paymentsAddress2" type="text" name="paymentsAddress2" maxlength="100" class="govuk-input" value="" >
+                </div>
+
+                <div class="govuk-form-group govuk-!-width-three-quarters" >
+                  <label for="paymentsAddressCountry" class="govuk-label">
+                      Town or city
+                  </label>
+                  <input id="paymentsAddressCountry" type="text" name="paymentsAddressCountry" maxlength="100" class="govuk-input govuk-!-width-three-quarters" value="" >
+                </div>
+
+                <div class="govuk-form-group govuk-!-width-three-quarters" >
+                  <label for="paymentsAddressCountry" class="govuk-label">
+                      Country or territory
+                  </label>
+                  <input id="paymentsAddressCountry" type="text" name="paymentsAddressCountry" maxlength="100" class="govuk-input govuk-!-width-three-quarters" value="" >
+                </div>
+
+                <div class="govuk-form-group govuk-!-margin-bottom-0" >
+                  <label for="paymentsAddressPostcode" class="govuk-label">
+                      Postcode
+                  </label>
+                  <input id="paymentsAddressPostcode" type="text" name="paymentsAddressPostcode" maxlength="10" class="govuk-input govuk-!-width-one-quarter" value="" >
+                </div>
+            </fieldset>
+
+          </div>
+
+
+          <div class="govuk-!-width-three-quarters govuk-!-margin-top-8">
+            <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+            <fieldset class="govuk-fieldset" aria-describedby="paymentsEmail-hint">
+                <legend for="paymentsEmail" class="govuk-!-margin-bottom-6">
+                  <h2 class="govuk-heading-m govuk-!-margin-bottom-1 non-web-payment-button-section">Contact details</h2>
+                </legend>
+                <div id="paymentsEmail-hint" class="govuk-hint govuk-!-margin-bottom-2">We’ll send your payment confirmation here</div>
+
+                <div class="govuk-form-group " >
+                  <label for="paymentsEmail" class="govuk-label">
+                    Email
+                  </label>
+                  <input id="paymentsEmail" type="email" name="paymentsEmail" maxlength="254" class="govuk-input govuk-!-width-full" value="" >
+                </div>
+            </fieldset>
+          </div>
+
+          {{ govukButton({
+            text: "Continue"
+          }) }}
+
+    </form>
+        
+    <p class="govuk-body govuk-!-margin-top-4"><a href="payments-cancel" class="govuk-link govuk-link--no-visited-state">Cancel payment</a></p>
+      
+  </div>
+
+</div>
+{% endblock %}
