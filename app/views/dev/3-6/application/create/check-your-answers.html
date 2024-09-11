@@ -151,11 +151,7 @@
     </div>
     {% endif %}
     
-    {% if query.cloned == "yes" %}
-    <div class="app-alert app-alert--success" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
-      <p class="govuk-body" id="govuk-notification-banner-message">You have successfully copied this application</p>
-    </div>
-    {% elif query.bulkUploadCompleted == "true" %}
+    {% if query.bulkUploadCompleted == "true" %}
     {% if data.build == "development" %}
     <div class="app-alert app-alert--success" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
       <p class="govuk-body" id="govuk-notification-banner-message"><strong>{{data.fileUpload1 or "1 APHA_phytosanitary_certificate_csv_template - PLANTS 15112021.csv"}}</strong> with 4 commodity records uploaded successfully</p>
@@ -185,10 +181,10 @@
       <h1 class="govuk-heading-xl">Review your answers</h1>
       
       <div class="govuk-inset-text{% if data.build == 'development' %} govuk-!-font-weight-bold{% else %}{% endif %}">
-        Your application is now ready to be submitted.
-        <br>
-        <br>
-        {% if data.build == "development" %}Check{% else %}Check{% endif %} that the answers you've provided are correct.
+        {% if data.payments != "true" %}
+        <p class="govuk-body">Your application is now ready to be submitted.</p>
+        {% endif %}
+        <p class="govuk-body">Check that the answers you've provided are correct.</p>
       </div>
       {% endif %}
       
