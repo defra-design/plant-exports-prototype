@@ -272,6 +272,18 @@
     </div>
     {% endif %}
 
+    <ul class="govuk-list{% if query.id | appInformationV9('commodity_info') == 'plants' %} govuk-!-margin-bottom-8{% endif %} noprint">
+      <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id}}&is_group={{query.is_group}}">Copy as new application</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-viewonly?id={{query.id}}&is_group={{query.is_group}}&commodity=plants&row1=true&row2=true&row3=true">View application details</a></li>
+      {% if _applicationStatus != "ephyto re-issue requested" and _applicationStatus != "processing ephyto re-issue" and _applicationStatus != "ephyto re-issue delayed" and _applicationStatus != "ephyto re-issue still delayed" and _applicationStatus != "re-issue requested" and _applicationStatus != "processing re-issue"  %}
+
+      {% if data.reissue_certificate_data_pfp != "submitted" and data.reissue_certificate_data_pfp != "processing" and _applicationStatus != "ephyto delayed" and _applicationStatus != "ephyto still delayed" and data.reissue_certificate_data_pfp != 'draft' and _applicationStatus != "preparing ephyto" %}
+        <li><a class="govuk-link govuk-link--no-visited-state" href="application/re-issue/introduction?id={{query.id}}&is_group={{query.is_group}}&certificateFormat=digital">Apply for re-issue </a></li>
+      {% endif %}
+
+    {% endif %}
+    </ul>
+
   </div>
 
   
@@ -286,7 +298,8 @@
 
 
     {% if _applicationStatus == "ephyto delayed" %}
-      <p class="govuk-body">There is a delay sending your ePhyto to {{_country}}. We will let you know if they receive it or if there is a further delay.</p>
+      <p class="govuk-body">There is a delay with delivering your ePhyto. We will keep trying to send your ePhyto to your destination country.</p>
+      <p class="govuk-body">We will let you know if they receive it or if there is a further delay.</p>
       <p class="govuk-body">We will:</p>
       <ul class="govuk-list govuk-list--bullet">
         <li>keep checking to see if the problem gets fixed</li>
@@ -294,29 +307,22 @@
       </ul>
 
     {% elif _applicationStatus == "ephyto still delayed" %}
-
-      <p class="govuk-body">We will keep trying to send your ePhyto to {{_country}}. We will let you know if they receive it.</p>
-      
-      <!-- eu -->
-      {% if query.country == "eu" %}
-        <p class="govuk-body">If the problem cannot be fixed within 24 hours we will send you:</p>
-        <ul class="govuk-list govuk-list--bullet">
-          <li>a TRACES NT reference number</li>
-          <li>a PDF copy of the certificate in an email</li>
-        </ul>
-      <!-- non-eu -->
-      {% elif query.country == "noneu" %}
-        <p class="govuk-body">If the problem cannot be fixed within 24 hours we will send you a paper phytosanitary certificate in the post.</p>
-      <!-- NI -->
-      {% else %}
-        <p class="govuk-body">If the problem cannot be fixed within 24 hours we will send you:</p>
-        <ul class="govuk-list govuk-list--bullet">
-          <li>a paper phytosanitary certificate in the post</li>
-          <li>a PDF copy of the certificate in an email</li>
-        </ul>
-      {% endif %}
-
-
+      <p class="govuk-body">There is a delay with delivering your ePhyto. We will keep trying to send your ePhyto to your destination country.</p>
+      <p class="govuk-body">We will let you know if they receive it.</p>
+      <h3 class="govuk-heading-s">Moving goods to Northern Ireland</h3>
+      <p class="govuk-body">If the problem cannot be fixed we will send you:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>a paper phytosanitary certificate in the post</li>
+        <li>a PDF copy of the certificate in an email</li>
+      </ul>
+      <h3 class="govuk-heading-s">Exporting to European Union (EU)</h3>
+      <p class="govuk-body">If the problem cannot be fixed we will send you:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>a TRACES NT reference number</li>
+        <li>a PDF copy of the certificate in an email</li>
+      </ul>
+      <h3 class="govuk-heading-s">Exporting to a Non-EU country</h3>
+      <p class="govuk-body">If the problem cannot be fixed we will send you a paper phytosanitary certificate in the post.</p>
       <p class="govuk-body">If this causes any problems, contact us on:</p>
       <ul class="govuk-list govuk-list--bullet">
         <li>0300 1000 313, Monday to Sunday 7am to 7pm</li>
@@ -324,7 +330,8 @@
       </ul>
 
     {% elif _applicationStatus == "ephyto re-issue delayed" %}
-      <p class="govuk-body">There is a delay sending your re-issued ePhyto to {{_country}}. We will let you know if they receive it or if there is a further delay.</p>
+      <p class="govuk-body">There is a delay with delivering your re-issued ePhyto. We will keep trying to send your ePhyto to your destination country.</p>
+      <p class="govuk-body">We will let you know if they receive it or if there is a further delay.</p>
       <p class="govuk-body">We will:</p>
       <ul class="govuk-list govuk-list--bullet">
         <li>keep checking to see if the problem gets fixed</li>
@@ -332,34 +339,28 @@
       </ul>
 
     {% elif _applicationStatus == "ephyto re-issue still delayed" %}
-
-    <p class="govuk-body">We will keep trying to send your re-issued ePhyto to {{_country}}. We will let you know if they receive it.</p>
-      
-    <!-- eu -->
-    {% if query.country == "eu" %}
-      <p class="govuk-body">If the problem cannot be fixed within 24 hours we will send you:</p>
-      <ul class="govuk-list govuk-list--bullet">
-        <li>a TRACES NT reference number</li>
-        <li>a PDF copy of the re-issued certificate in an email</li>
-      </ul>
-    <!-- non-eu -->
-    {% elif query.country == "noneu" %}
-      <p class="govuk-body">If the problem cannot be fixed within 24 hours we will send you a paper re-issued phytosanitary certificate in the post.</p>
-    <!-- NI -->
-    {% else %}
-      <p class="govuk-body">If the problem cannot be fixed within 24 hours we will send you:</p>
+      <p class="govuk-body">There is a delay with delivering your re-issued ePhyto. We will keep trying to send your re-issued ePhyto to your destination country.</p>
+      <p class="govuk-body">We will let you know if they receive it.</p>
+      <h3 class="govuk-heading-s">Moving goods to Northern Ireland</h3>
+      <p class="govuk-body">If the problem cannot be fixed we will send you:</p>
       <ul class="govuk-list govuk-list--bullet">
         <li>a paper re-issued phytosanitary certificate in the post</li>
         <li>a PDF copy of the re-issued certificate in an email</li>
       </ul>
-    {% endif %}
-
-
-    <p class="govuk-body">If this causes any problems, contact us on:</p>
-    <ul class="govuk-list govuk-list--bullet">
-      <li>0300 1000 313, Monday to Sunday 7am to 7pm</li>
-      <li><a href="mailto:planthealth.info@apha.gov.uk" class="govuk-link">planthealth.info@apha.gov.uk</a></li>
-    </ul>
+      <h3 class="govuk-heading-s">Exporting to European Union (EU)</h3>
+      <p class="govuk-body">If the problem cannot be fixed we will send you:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>a TRACES NT reference number</li>
+        <li>a PDF copy of the re-issued certificate in an email</li>
+      </ul>
+      <h3 class="govuk-heading-s">Exporting to a Non-EU country</h3>
+      <p class="govuk-body">If the problem cannot be fixed we will send you a paper re-issued phytosanitary certificate in the post.</p>
+      <p class="govuk-body">If this causes any problems, contact us on:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>0300 1000 313, Monday to Sunday 7am to 7pm</li>
+        <li><a href="mailto:planthealth.info@apha.gov.uk" class="govuk-link">planthealth.info@apha.gov.uk</a></li>
+      </ul>
+    
 
     {% endif %}
 
@@ -389,17 +390,7 @@
 <div class="govuk-grid-row">
 
   <div class="govuk-grid-column-two-thirds">
-    <ul class="govuk-list{% if query.id | appInformationV9('commodity_info') == 'plants' %} govuk-!-margin-bottom-8{% endif %} noprint">
-      <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id}}&is_group={{query.is_group}}">Copy as new application</a></li>
-      <li><a class="govuk-link govuk-link--no-visited-state" href="application/create/check-your-answers-viewonly?id={{query.id}}&is_group={{query.is_group}}&commodity=plants&row1=true&row2=true&row3=true">View application details</a></li>
-      {% if _applicationStatus != "ephyto re-issue requested" and _applicationStatus != "processing ephyto re-issue" and _applicationStatus != "ephyto re-issue delayed" and _applicationStatus != "ephyto re-issue still delayed" and _applicationStatus != "re-issue requested" and _applicationStatus != "processing re-issue"  %}
-
-      {% if data.reissue_certificate_data_pfp != "submitted" and data.reissue_certificate_data_pfp != "processing" and _applicationStatus != "ephyto delayed" and _applicationStatus != "ephyto still delayed" and data.reissue_certificate_data_pfp != 'draft' and _applicationStatus != "preparing ephyto" %}
-        <li><a class="govuk-link govuk-link--no-visited-state" href="application/re-issue/introduction?id={{query.id}}&is_group={{query.is_group}}&certificateFormat=digital">Apply for re-issue </a></li>
-      {% endif %}
-
-    {% endif %}
-    </ul>
+    
   </div>
   
 </div>
