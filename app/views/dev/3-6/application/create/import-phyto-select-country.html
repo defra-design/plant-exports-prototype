@@ -44,6 +44,9 @@ Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
         {% set _link = 'import-phyto-select-uploaded' %}
       {% endif %}
 
+      <script type="text/javascript" src="/public/javascripts/accessible-autocomplete.min.js"></script>
+
+
       <form action="{{_link}}" method="post" novalidate>
 
         {% if query.edit %}
@@ -70,6 +73,15 @@ Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
         <input id="ipcAdded{{_ipcID}}" name="ipcAdded{{_ipcID}}" type="hidden" value="true">
 
         {% set _countryID = 'ipcCountry' + _ipcID %}
+        <ul class="data-list govuk-visually-hidden" >
+          {% for _countryData in data['countries-full-2'] %}
+          <li class="data-list--item">
+            <span class="data-name">{{_countryData.name}}</span>
+            <span class="data-code">{{_countryData.code}}</span>
+            <span class="data-alt">{% if _countryData.alt %}{{_countryData.alt | join(", ")}}{% endif %}</span>
+          </li>
+          {% endfor %}
+        </ul>
         <div class="govuk-form-group autocomplete-wrapper" >
           <h1 class="govuk-label-wrapper">
             <label class="govuk-label govuk-label--xl govuk-!-margin-bottom-4" for="{{_countryID}}">
@@ -85,16 +97,84 @@ Upload an import phytosanitary certificate - {{serviceName}} - GOV.UK
             </select>
           </div>
         </div>
-        <script type="text/javascript" src="/public/javascripts/accessible-autocomplete.min.js"></script>
         <script type="text/javascript">
+
           window.addEventListener('load', function() {
+
+
+            
+
+            // accessibleAutocomplete({
+
+            //   defaultValue: $('#commoditiy-botanical-lookup').attr('data-default'),
+
+            //   source: customSuggest,
+            //   templates: {
+            //     inputValue: inputValueTemplate,
+            //     suggestion: suggestionTemplate
+            //   }
+            // })
+
+
+
+
+            function getResults() {
+        
+              var list = $('.data-list--item')
+              var r = []
+        
+              $('.data-list--item').each(function() {
+                var obj={
+                  "name":$(this).find('.data-name').text(),
+                  "code":$(this).find('.data-code').text(),
+                  "alt":$(this).find('.data-alt').text()
+                }
+                r.push(obj)
+              })
+        
+              return r
+            }
+
+            var results = getResults()
+
+            function customSuggest (query, syncResults) {
+              syncResults(query
+                ? results.filter(function (result) {
+
+                    var nameContains = result.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+                    var codeContains = result.code.toLowerCase().indexOf(query.toLowerCase()) !== -1
+                    var altContains = result.alt.toLowerCase().indexOf(query.toLowerCase()) !== -1
+                    
+                    return nameContains || codeContains || altContains
+                  })
+                : []
+              )
+            }
+
+            function inputValueTemplate (result) {
+              return result && result.name
+            }
+
+            function suggestionTemplate (result) {
+              return result && '<span>' + result.name + '</span>'
+            }
+
             var _countrynIDJQ = {{_countryID | dump | safe }};
             var element = document.querySelector('#' + _countrynIDJQ);
+
             accessibleAutocomplete.enhanceSelectElement({
               selectElement: element,
               id: _countrynIDJQ,
-              name: _countrynIDJQ
+              name: _countrynIDJQ,
+              source: customSuggest,
+              templates: {
+                inputValue: inputValueTemplate,
+                suggestion: suggestionTemplate
+              }
             })
+
+
+
           })
         </script>
 
