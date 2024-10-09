@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+Add a new inspection address - {{serviceName}} - GOV.UK
+{% endblock %}
+{% block beforeContent %}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      Who is the contact for this application?
+    </h1>
+    <div class="govuk-hint">The inspector may contact this person about the application.</div>
+    {% if data.reforwarding %}
+    <form action="{{query.return_url or 'task-list'}}" method="POST">
+    {% else %}
+    <form action="{{query.return_url or 'inspection-dates'}}" method="POST">
+    {% endif %}
+
+
+      <div class="govuk-form-group">
+        <div class="govuk-form-group ">
+          <label class="govuk-label govuk-!-font-weight-bold" for="organiation_name">
+            Organisation name
+          </label>
+          <input class="govuk-input govuk-input--width-20" id="organiation_name" name="organiation_name" type="text" autocomplete="organiation_name">
+        </div>
+
+        <div class="govuk-form-group ">
+          <label class="govuk-label govuk-!-font-weight-bold" for="contact_name">
+            Contact name
+          </label>
+          <input class="govuk-input govuk-input--width-20" id="contact_name" name="contact_name" type="text" autocomplete="contact_name">
+        </div>
+
+        <div class="govuk-form-group ">
+          <label class="govuk-label govuk-!-font-weight-bold" for="address_phone">
+            Phone number
+          </label>
+          <input class="govuk-input govuk-input--width-20" id="address_phone" name="agent_phone" type="text" autocomplete="address_phone">
+        </div>
+
+        <div class="govuk-form-group ">
+          <label class="govuk-label govuk-!-font-weight-bold" for="email_address">
+            Email address
+          </label>
+          <input class="govuk-input govuk-input--width-20" id="email_address" name="email_address" type="text" autocomplete="email_address">
+        </div>
+      </div>
+
+      <input class="govuk-button govuk-!-margin-top-4" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+    </form>
+  </div>
+</div>
+
+{% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+{% endblock %}

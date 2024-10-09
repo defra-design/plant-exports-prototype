@@ -1,0 +1,84 @@
+<div class="govuk-form-group">
+  <label for="point-of-entry-country" class="govuk-label">Point of entry country</label>
+  <div class="govuk-hint" id="point-of-entry-country-hint">
+    Enter the destination country or country of entry to the EU
+  </div>
+  <ul class="data-list govuk-visually-hidden" >
+    {% for _countryData in data['countries-full-2'] %}
+    <li class="data-list--item">
+      <span class="data-name">{{_countryData.name}}</span>
+      <span class="data-code">{{_countryData.code}}</span>
+      <span class="data-alt">{% if _countryData.alt %}{{_countryData.alt | join(", ")}}{% endif %}</span>
+    </li>
+    {% endfor %}
+  </ul>
+  <div class="autocomplete-wrapper govuk-!-width-two-thirds">
+    <select id="point-of-entry-country" class="govuk-select" aria-describedby="point-of-entry-country-hint">
+      <option value="none"></option>
+
+      {% for _country in data['countries-poe'] %}
+        <option value="{{_country.code}}" {% for param in data.point_entry_country %}{% if param == _country.code %} selected {% endif %} {% endfor %}>{{_country.name}}</option>
+      {% endfor %}
+
+    </select>
+  </div>
+</div>
+
+<script type="text/javascript">
+  window.addEventListener('load', function() {
+
+    function getResults() {
+        
+        var list = $('.data-list--item')
+        var r = []
+  
+        $('.data-list--item').each(function() {
+          var obj={
+            "name":$(this).find('.data-name').text(),
+            "code":$(this).find('.data-code').text(),
+            "alt":$(this).find('.data-alt').text()
+          }
+          r.push(obj)
+        })
+  
+        return r
+      }
+
+      var results = getResults()
+
+      function customSuggest (query, syncResults) {
+        syncResults(query
+          ? results.filter(function (result) {
+
+              var nameContains = result.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+              var codeContains = result.code.toLowerCase().indexOf(query.toLowerCase()) !== -1
+              var altContains = result.alt.toLowerCase().indexOf(query.toLowerCase()) !== -1
+              
+              return nameContains || codeContains || altContains
+            })
+          : []
+        )
+      }
+
+      function inputValueTemplate (result) {
+        return result && result.name
+      }
+
+      function suggestionTemplate (result) {
+        return result && '<span>' + result.name + '</span>'
+      }
+
+    element = document.querySelector('#point-of-entry-country')
+    accessibleAutocomplete.enhanceSelectElement({
+      selectElement: element,
+      tAssistiveHint: function () {
+        return 'Enter the destination country or country of entry to the EU. When autocomplete results are available use up and down arrows to review and enter to select. Touch device users, explore by touch or with swipe gestures.'
+      },
+      source: customSuggest,
+      templates: {
+        inputValue: inputValueTemplate,
+        suggestion: suggestionTemplate
+      }
+    })
+  });
+</script>

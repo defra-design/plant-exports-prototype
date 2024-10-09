@@ -1,0 +1,93 @@
+<div class="govuk-form-group">
+  <fieldset class="govuk-fieldset">
+
+    <ul class="data-list govuk-visually-hidden" >
+      {% for _countryData in data['countries-full-2'] %}
+      <li class="data-list--item">
+        <span class="data-name">{{_countryData.name}}</span>
+        <span class="data-code">{{_countryData.code}}</span>
+        <span class="data-alt">{% if _countryData.alt %}{{_countryData.alt | join(", ")}}{% endif %}</span>
+      </li>
+      {% endfor %}
+    </ul>
+
+    <div id="usda-wrapper" class="govuk-form-group autocomplete-wrapper" style="max-width: 54ex;">
+      <label class="govuk-label" for="sort">{{country_module_label or "Search for a country"}}</label>
+      <select id="autocomplete-progressiveEnhancement-2" class="govuk-select" id="sort" name="{{module_name or 'countrySelect'}}">
+        <option value="none"></option>
+
+        {% for _country in data['countries-full-2'] %}
+          <option value="{{_country.code}}" {% for param in data.countrySelect %}{% if param == _country.code %} selected {% endif %} {% endfor %}>{{_country.name}}</option>
+        {% endfor %}
+        
+      </select>
+    </div>
+
+  </fieldset>
+</div>
+
+<script type="text/javascript" src="/public/javascripts/accessible-autocomplete.min.js"></script>
+<script type="text/javascript">
+
+  window.addEventListener('load', function() {
+
+    function getResults() {
+        
+        var list = $('.data-list--item')
+        var r = []
+  
+        $('.data-list--item').each(function() {
+          var obj={
+            "name":$(this).find('.data-name').text(),
+            "code":$(this).find('.data-code').text(),
+            "alt":$(this).find('.data-alt').text()
+          }
+          r.push(obj)
+        })
+  
+        return r
+      }
+
+      var results = getResults()
+
+      function customSuggest (query, syncResults) {
+        syncResults(query
+          ? results.filter(function (result) {
+
+              var nameContains = result.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+              var codeContains = result.code.toLowerCase().indexOf(query.toLowerCase()) !== -1
+              var altContains = result.alt.toLowerCase().indexOf(query.toLowerCase()) !== -1
+              
+              return nameContains || codeContains || altContains
+            })
+          : []
+        )
+      }
+
+      function inputValueTemplate (result) {
+        return result && result.name
+      }
+
+      function suggestionTemplate (result) {
+        return result && '<span>' + result.name + '</span>'
+      }
+    
+      var element = document.querySelector('#autocomplete-progressiveEnhancement-2');
+      idChris = 'usda';
+      var cl = $('#autocomplete-progressiveEnhancement-2').attr('name');
+      
+      accessibleAutocomplete.enhanceSelectElement({
+        selectElement: element,
+        id: idChris,
+        defaultValue: $('#autocomplete-progressiveEnhancement-2').attr('data-default'),
+        name: cl,
+        source: customSuggest,
+        templates: {
+          inputValue: inputValueTemplate,
+          suggestion: suggestionTemplate
+        }
+      });
+
+    });
+
+</script>

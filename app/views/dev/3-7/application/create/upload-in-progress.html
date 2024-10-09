@@ -1,0 +1,111 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.build == "development" %}Add commodities by uploading a file - GOV.UK{% else %}Upload in progress... - Phytosanitary certificate - {{serviceName}} - GOV.UK{% endif %}
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+      <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+          Important
+        </h2>
+      </div>
+      <div class="govuk-notification-banner__content">
+        <p class="govuk-notification-banner__heading">
+          Upload in progress...
+        </p>
+      </div>
+    </div>
+
+    <!-- Chris Harding (10.01.23) - Added this different scenario for usability testing of the HPUI 'Clone' designs -->
+    {% if data.id == "34" %}
+    <form action="upload-in-progress{% if query.change == 'yes' %}?change=yes&return_url={{data.return_url or 'check-your-answers'}}{% endif %}&has_botanicial_name2=use_description&commodity_description2=Rosa davidii (ROSDA)&commodity_type2=plants&countryOfOriginSelect2=GB&quantity2=10&units2=Tonnes&number_of_packages2=5&packaging2=BG&row2=true&has_botanicial_name3=use_description&commodity_description3=Anisodontea scabrosa (AODSC)&commodity_type3=plants&countryOfOriginSelect3=GB&quantity3=10&units3=Tonnes&number_of_packages3=5&packaging3=BG&row3=true&has_botanicial_name4=use_description&commodity_description4=Corylus ferox (CYLFE)&commodity_type4=plants&countryOfOriginSelect4=GB&quantity4=10&units4=Tonnes&number_of_packages4=5&packaging4=BG&row4=true&has_botanicial_name5=use_description&commodity_description5=Pinus ponderosa (PIUPO)&commodity_type5=plants&countryOfOriginSelect5=GB&quantity5=10&units5=Tonnes&number_of_packages5=5&packaging5=BG&row5=true" method="post" novalidate>
+    {% else %}
+    <form action="upload-in-progress{% if query.change == 'yes' %}?change=yes&return_url={{data.return_url or 'check-your-answers'}}{% endif %}" method="post" novalidate>
+    {% endif %}
+    
+      <!--
+        Chris Harding (06.06.22) - Here we set:
+          a) template
+          b) example template
+        This is based on the commodity and application type provided.
+      -->
+
+      <!-- Default commodity value (e.g. if no commodity and application type exists) -->
+      {% set commodity = data.commodity or "plants" %}
+
+      <div class="govuk-form-group govuk-!-margin-bottom-9">
+
+        <h1 class="govuk-heading-xl">Upload a file</h1>
+
+        <p class="govuk-body"><a href="#" class="govuk-link govuk-link--no-visited-state" >Download the CSV template (3KB)</a> (last updated 1 January 2024)</p>
+
+        
+        {% include "./upload-guidance-content-module.html" %}
+
+
+        {{ govukFileUpload({
+          id: "fileUpload1",
+          name: "fileUpload1",
+          label: {
+            text: "Upload your completed CSV file"
+          }
+        }) }}
+
+      </div>
+
+      <button type="submit" disabled aria-disabled="true" class="govuk-button" data-module="govuk-button">
+        Upload
+      </button>
+
+      <ul class="govuk-list">
+        <li>
+          {% if data.change == "yes" %}
+          <a href="{{data.return_url or 'check-your-answers'}}?bulkUploadCompleted=true" class="govuk-link govuk-link-no-visited-state">Skip</a>
+          {% elif data.journey == "coc" or data.journey == "both" %}
+          <a href="commodity-list-split?bulkUploadCompleted=true" class="govuk-link govuk-link-no-visited-state">Skip</a>
+          {% elif data.commodity == "seeds" %}
+          <a href="commodity-list-summary?bulkUploadCompleted=true" class="govuk-link govuk-link-no-visited-state">Skip</a>
+          {% else %}
+          <a href="commodity-list?bulkUploadCompleted=true" class="govuk-link govuk-link-no-visited-state">Skip</a>
+          {% endif %}
+          (page reloads after 5 seconds)
+        </li>
+      </ul>
+
+
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}
+
+{% block pageScripts %}
+<script>
+
+  var timer = setTimeout(function() {
+    {% if data.change == "yes" %}
+    window.location = '{{data.return_url or 'check-your-answers'}}?bulkUploadCompleted=true'
+    {% elif data.journey == "coc" %}
+    window.location = 'commodity-list-split?bulkUploadCompleted=true'
+    {% elif data.commodity == "seeds" %}
+    window.location = 'commodity-list-summary?bulkUploadCompleted=true'
+    {% else %}
+    window.location = 'commodity-list?bulkUploadCompleted=true'
+    {% endif %}
+  }, 5000);
+
+</script>
+{% endblock %}

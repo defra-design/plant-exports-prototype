@@ -1,0 +1,145 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Prototype config
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl">
+      <span class="govuk-caption-xl">Version {{data.version}}</span>
+      Prototype config
+    </h1>
+
+    <form action="{{query.return_url or 'config-routing'}}" method="post" novalidate>
+      <button class="govuk-button" data-module="govuk-button">Continue</button>
+      
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Which <a href="#" title="Find out what this term means" class="js-modal modal-link" data-modal-text="<p class='govuk-body'>We use a build flag in the prototype to hide designs and content that aren't yet ready for building into the <abbr title='{{serviceName}}'>PHES</abbr> service.</p><p class='govuk-body'><strong>Development</strong> - will only show design and content changes that have been agreed to build into the service.</p><p class='govuk-body'><strong>UX</strong> - will show all proposed future design and content changes (default).</p>" data-modal-title="Build" data-modal-close-text="Close" data-modal-close-title="Close this window">build</a> of this service do you want to view?</legend>
+          
+          <div class="govuk-radios" data-module="govuk-radios">            
+            
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="build_mvp" name="build" type="radio" value="development"{% if query.change == 'yes' and data.build == 'development' %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="build_mvp">Development</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="build_ux" name="build" type="radio" value="ux"{% if query.change == 'yes' and data.build == 'development' %}{% else %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="build_ux">UX</label>
+            </div>
+
+          </div>
+
+        </fieldset>
+      </div>
+      
+      {% if query.change == "yes" %}
+      {% else %}
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Which service?</legend>
+          
+          <div class="govuk-radios" data-module="govuk-radios" id="service">
+            
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="service_certificateChecker" name="service" type="radio" value="Certificate checker">
+              <label class="govuk-label govuk-radios__label" for="service_certificateChecker">Certificate checker</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="service_phes" name="service" type="radio" value="PHES" checked="checked">
+              <label class="govuk-label govuk-radios__label" for="service_phes">PHES (external users)</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="service_dynamics" name="service" type="radio" value="Dynamics">
+              <label class="govuk-label govuk-radios__label" for="service_dynamics">PHES (internal users)</label>
+            </div>
+
+          </div>
+
+        </fieldset>
+      </div>
+      
+      <!-- Additional config options for the ePhyto and PHES journeys (START) -->
+      <div id="additionalConfigOptions">
+
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              <span class="govuk-caption-m">PHES</span>
+              What user journey do you want to start with?
+            </legend>
+            
+            <div class="govuk-radios" data-module="govuk-radios">
+              
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="route_new" name="route" type="radio" value="new">
+                <label class="govuk-label govuk-radios__label" for="route_new">First time, no application</label>
+              </div>
+
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="route_returning" name="route" type="radio" value="existing" checked="checked">
+                <label class="govuk-label govuk-radios__label" for="route_returning">Returning user, has multiple applications</label>
+              </div>
+
+            </div>
+
+          </fieldset>
+        </div>
+
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+              <span class="govuk-caption-m">PHES</span>
+              Where do you want to start?
+            </legend>
+          
+            <div class="govuk-radios" data-module="govuk-radios">
+              
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="start_page_start" name="start_page" type="radio" value="Start">
+                <label class="govuk-label govuk-radios__label" for="start_page_start">Start page</label>
+              </div>
+
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="start_page_gateway" name="start_page" type="radio" value="Gateway">
+                <label class="govuk-label govuk-radios__label" for="start_page_gateway">Government gateway login</label>
+              </div>
+
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="start_page_dashboard" name="start_page" type="radio" value="Dashboard" checked="checked">
+                <label class="govuk-label govuk-radios__label" for="start_page_dashboard">Dashboard</label>
+              </div>
+
+            </div>
+
+          </fieldset>
+        </div>
+
+      </div>
+      <!-- Additional config options for the ePhyto and PHES journeys (END) -->
+      {% endif %}
+
+    </form>
+
+  </div>
+
+</div>
+
+<!-- JavaScript (START) -->
+<script src="/public/javascripts/jquery-3.6.0.js"></script>
+<!-- Tooltip taken from Nicolas Hoffmann (https://a11y.nicolas-hoffmann.net/modal/) -->
+<script src="/public/javascripts/jquery-accessible-modal-window-aria.js"></script>
+<script src="/public/javascripts/config.js"></script>
+<!-- JavaScript (END) -->
+{% endblock %}

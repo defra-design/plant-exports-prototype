@@ -1,0 +1,187 @@
+{% extends "layout.html" %}
+
+{% set isEmailTemplate = true %}
+
+{% set serviceName = "" %}
+
+{% block pageTitle %}
+{% endblock %}
+
+{% block beforeContent %}
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  {% set _country = "United Kingdom (Northern Ireland)" %}
+  {% if query.country == "eu" %}
+    {% set _country = "France" %}
+  {% elif query.country == "row" %}
+    {% set _country = "Brazil" %}
+  {% endif %}
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <h2 class="govuk-heading-l">
+      {% if query.reissue == "true" %}
+        
+        {% if query.delay == "second" %}
+          ePhyto re-issue still delayed 7800 56212 5823
+        {% else %}
+          ePhyto re-issue delayed 7800 56212 5823
+        {% endif %}
+
+      {% else %}
+
+        {% if query.delay == "second" %}
+          ePhyto still delayed 7800 56212 5823
+        {% else %}
+          ePhyto delayed 7800 56212 5823
+        {% endif %}
+        
+      {% endif %}
+    </h2>
+
+    <p class="govuk-body">Dear Jane Doe,</p>
+
+
+    <!-- Re-issue - Withdrawal -->
+    {% if query.reissue == "true" and query.withdrawdelay == "true" %}
+      <!-- Re-issue 5 hour -->
+      {% if query.delay == "second" %}
+        <p class="govuk-body">There is still a delay with delivering your re-issued ePhyto. We have not had confirmation that it has been received.</p>
+      <!-- Re-issue 1 hour -->
+      {% else %}
+        <p class="govuk-body">There is a delay with delivering your re-issued ePhyto. We have not had confirmation that it has been received.</p>
+      {% endif %}
+
+    <!-- Re-issue -->
+    {% elif query.reissue == "true" %}
+      <!-- Re-issue 5 hour -->
+      {% if query.delay == "second" %}
+        <p class="govuk-body">There is still a delay with delivering your re-issued ePhyto. We have not had confirmation that it has been received.</p>
+      <!-- Re-issue 1 hour -->
+      {% else %}
+        <p class="govuk-body">There is a delay with delivering your re-issued ePhyto. We have not had confirmation that it has been received.</p>
+      {% endif %}
+
+    <!-- Send -->
+    {% else %}
+      <!-- Send 5 hour -->
+      {% if query.delay == "second" %}
+        <p class="govuk-body">There is still a delay with delivering your ePhyto. We have not had confirmation that it has been received.</p>
+      <!-- Send 1 hour -->
+      {% else %}
+        <p class="govuk-body">There is a delay with delivering your ePhyto. We have not had confirmation that it has been received.</p>
+      {% endif %}
+    {% endif %}
+
+
+    {% if query.reissue == "true" %}
+    <p class="govuk-body">You should not send your consignment until confirmation has been received.</p>
+    {% else %}
+    <p class="govuk-body">You should not send your consignment until confirmation has been received.</p>
+    {% endif %}
+    
+    <p class="govuk-body">Phytosanitary certificate number: UK/GB/E&W/2023/7800562125823</p>
+    <p class="govuk-body">Your reference: PO 66622</p>
+    <p class="govuk-body">Submitted by: Joe Bloggs</p>
+
+
+    
+    <h2 class="govuk-heading-m">What happens now</h2>
+
+
+    <!-- Reissue delayed 1 hour -->
+    
+
+    <!-- Reissue 5 hour -->
+   
+
+    <!-- Delayed 1 hour -->
+   
+
+    <!-- Delayed 5 hour -->
+   
+
+
+
+
+
+
+
+
+    <!-- Re-issue -->
+    {% if query.reissue == "true" %}
+      <!-- Re-issue 5 hour -->
+      {% if query.delay == "second" %}
+      <p class="govuk-body"> We will keep trying to send your re-issued ePhyto to your destination country. We will let you know if they receive it.</p>
+
+      <!-- Re-issue 1 hour -->
+      {% else %}
+      <p class="govuk-body">We will keep trying to send your re-issued ePhyto to your destination country. We will let you know if they receive it or if there is a further delay.</p>
+      {% endif %}
+
+    <!-- Send -->
+    {% else %}
+      <!-- Send 5 hour -->
+      {% if query.delay == "second" %}
+      <p class="govuk-body"> We will keep trying to send your ePhyto to your destination country. We will let you know if they receive it.</p>
+      
+      <!-- Send 1 hour -->
+      {% else %}
+      <p class="govuk-body"> We will keep trying to send your ePhyto to your destination country. We will let you know if they receive it or if there is a further delay.</p>
+      {% endif %}
+    {% endif %}
+
+
+
+    <h3 class="govuk-heading-s">Moving goods to Northern Ireland</h3>
+    <p class="govuk-body">If the problem cannot be fixed we will send you:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>a paper {% if query.reissue == "true" %}re-issued {% endif %}phytosanitary certificate in the post</li>
+      <li>a PDF copy of the {% if query.reissue == "true" %}re-issued {% endif %}certificate in an email</li>
+    </ul>
+
+    <h3 class="govuk-heading-s">Exporting to an EU or non-EU country</h3>
+    <p class="govuk-body">If the problem cannot be fixed we will send you a paper {% if query.reissue == "true" %}re-issued {% endif %}phytosanitary certificate in the post.</p>
+
+
+    <!-- 1 hour delays (re-issue or send) -->
+    {% if query.delay == "second" %}
+      <p class="govuk-body">If this causes any problems, contact us on:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>0300 1000 313, Monday to Sunday 7am to 7pm</li>
+        <li><a href="mailto:planthealth.info@apha.gov.uk" class="govuk-link">planthealth.info@apha.gov.uk</a></li>
+      </ul>
+      <p class="govuk-body">This is an automated email. Please do not reply to this email as the account is not monitored.</p>
+    {% else %}
+      <h2 class="govuk-heading-m">Contact us</h2>
+      <p class="govuk-body">You can contact us on:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>0300 1000 313, Monday to Sunday 7am to 7pm</li>
+        <li><a href="mailto:planthealth.info@apha.gov.uk" class="govuk-link">planthealth.info@apha.gov.uk</a></li>
+      </ul>
+      <p class="govuk-body">This is an automated email. Please do not reply to this email as the account is not monitored.</p>
+    {% endif %}
+
+
+    <h2 class="govuk-heading-m">What is an ePhyto</h2>
+    <p class="govuk-body">Read more about ePhyto certificates: <a class="govuk-link govuk-link--no-visited-state" href="guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland#digital-phytosanitary-certificates">https://www.gov.uk/guidance/export-plants-and-plant-products-from-great-britain-and-northern-ireland</a></p>
+
+
+    <h2 class="govuk-heading-m">Manage email notifications</h2>
+    <p class="govuk-body">Change which emails you get about ePhytos in your account settings: <a class="govuk-link govuk-link--no-visited-state" href="account/notifications">https://exporter.apply-phytosanitary-certificate.defra.gov.uk/manage-email-notifications</a></p>
+
+    <h2 class="govuk-heading-m">Privacy policy</h2>
+    <p class="govuk-body">To learn about information rights and how we use information, read our Defra Personal Information Charter: <a class="govuk-link govuk-link--no-visited-state" href="https://www.gov.uk/government/organisations/department-for-environment-food-rural-affairs/about/personal-information-charter">https://www.gov.uk/government/organisations/department-for-environment-food-rural-affairs/about/personal-information-charter</a></p>
+
+    <p class="govvuk-body">Regards,</p>
+    <p class="govvuk-body">Animal and Plant Health Agency (APHA)</p>
+    <p class="govvuk-body">Centre for International Trade - York</p>
+
+
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,233 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.reissue == "yes" %}
+    Make your changes - {{serviceName}} - GOV.UK
+  {% elif data.journey == "coc" %}
+    How will this consignment be transported? - {{serviceName}} - GOV.UK
+  {% elif data.reforwarding == "1" %}
+    How will this re-forwarding consignment be transported? - {{serviceName}} - GOV.UK
+  {% else %}
+    How will this consignment be transported? - {{serviceName}} - GOV.UK
+  {% endif %}
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+      {% if data.journey != "coc" %}
+        {% if data.reissue == "yes" %}
+          <span class="govuk-caption-xl">Transportation</span>
+          <h1 class="govuk-heading-xl">Make your changes</h1>
+        {% else %}
+          <h1 class="govuk-heading-xl">
+            How will this {% if data.reforwarding == "1" %}re-forwarding {% endif %}consignment be transported?
+          </h1>
+        {% endif %}
+      {% endif %}
+
+      {% if data.reissue == "yes" %}
+        <form action="../re-issue/amend-your-certificate?id={{data.id}}&is_group={{data.is_group}}&commodity={{data.commodity or 'plants'}}&reissue_certificate_data_pfp=draft" method="post">
+      {% else %}
+        <form action="{{query.return_url or '../create/task-list'}}" method="post">
+      {% endif %}
+
+
+
+      {% if data.journey == "coc" %}
+
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-6">
+              <h1 class="govuk-fieldset__heading">How will this consignment be transported?</h1>
+            </legend>
+
+            <!-- How will this consignment be transported? - CoC radio options -->
+            {% set _optionsCOC = [
+              {
+                "type": "Air",
+                "reveal": "Air waybill number (optional)"
+              },
+              {
+                "type": "Maritime or deep sea freight",
+                "reveal": "Bill of lading number or container number (optional)"
+              },
+              {
+                "type": "Rail"
+              },
+              {
+                "type": "Road or ferry",
+                "reveal": "Road consignment (CMR) note number (optional)"
+              }
+            ] %}
+            <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+              {% for _option in _optionsCOC %}
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="transport_method{{loop.index}}" name="transport_method" type="radio" value="{{_option.type}}" data-aria-controls="conditional-transport_method{{loop.index}}" {% if data.transport_method == _option.type %} checked{% endif %}>
+                  <label class="govuk-label govuk-radios__label" for="transport_method{{loop.index}}">{{_option.type}}</label>
+                  {% if _option.hint %}
+                  <div class="govuk-hint govuk-radios__hint">
+                    {{_option.hint}}
+                  </div>
+                  {% endif %}
+                </div>
+                {% if _option.reveal %}
+                  <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-transport_method{{loop.index}}">
+                    <div class="govuk-form-group">
+                      <label class="govuk-label" for="transport_method-field-{{loop.index}}">{{_option.reveal}}</label>
+                      <input class="govuk-input govuk-!-width-two-thirds" id="transport_method-field-{{loop.index}}" name="transport_method-field-{{loop.index}}" type="text" spellcheck="false">
+                    </div>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+            
+          </fieldset>
+        </div>
+
+      {% else %}
+
+        {% if data.reissue != "yes" %}
+          <!-- Value of your consignment, in pounds -->
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="consignment-value">Value of your consignment, in pounds</label>
+            <div class="govuk-input__wrapper">
+              <div class="govuk-input__prefix" aria-hidden="true">£</div>
+              <input class="govuk-input govuk-input--width-10" id="consignment-value" name="consignment_value" type="text" spellcheck="false" value="{{data.consignment_value}}">
+            </div>
+          </div>
+        {% endif %}
+
+        <!-- Do you know the point of entry? -->
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset" aria-describedby="do_you_know_point_of_entry-hint">
+            <legend class="govuk-fieldset__legend">Do you know the point of entry?</legend>
+            
+            <div id="do_you_know_point_of_entry-hint" class="govuk-hint">
+              The point of entry is where the consignment enters the destination country or EU
+            </div>
+
+            {% set knowPOE = data.do_you_know_point_of_entry or "" %}
+            {% if data.reissue == "yes" %}
+              {% set knowPOE = knowPOE or "Yes" %}
+            {% endif %}
+
+            <div class="govuk-radios" data-module="govuk-radios">
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="do_you_know_point_of_entry_yes" name="do_you_know_point_of_entry" type="radio" value="Yes" data-aria-controls="do_you_know_point_of_entry_yes-hidden" >
+                <label class="govuk-label govuk-radios__label" for="do_you_know_point_of_entry_yes">Yes</label>
+              </div>
+              
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="do_you_know_point_of_entry_yes-hidden">
+                {% include "../modules/_point-of-entry.html" %}
+              </div>
+
+              <div class="govuk-radios__item">
+                <input class="govuk-radios__input" id="do_you_know_point_of_entry_no" name="do_you_know_point_of_entry" type="radio" value="No" data-aria-controls="do_you_know_point_of_entry_no-hidden"{% if knowPOE == 'No' %} checked{% endif %}>
+                <label class="govuk-label govuk-radios__label" for="do_you_know_point_of_entry_no">No</label>
+              </div>
+
+              <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="do_you_know_point_of_entry_no-hidden">
+                {% include "../modules/_point-of-entry-country.html" %}
+              </div>
+
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- How will the consignment be transported? -->
+        <div class="govuk-form-group">
+          <fieldset class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend">How will the consignment be transported?</legend>
+            
+            {% set _options = [
+              {
+                "type": "Air"
+              },
+              {
+                "type": "Maritime or deep sea freight"
+              },
+              {
+                "type": "Rail"
+              },
+              {
+                "type": "Road or ferry"
+              }
+            ] %}
+            <div class="govuk-radios govuk-radios--conditional" data-module="govuk-radios">
+              {% for _option in _options %}
+                <div class="govuk-radios__item">
+                  <input class="govuk-radios__input" id="transport_method{{loop.index}}" name="transport_method" type="radio" value="{{_option.type}}" data-aria-controls="conditional-transport_method{{loop.index}}" {% if data.transport_method == _option.type %} checked{% endif %}>
+                  <label class="govuk-label govuk-radios__label" for="transport_method{{loop.index}}">{{_option.type}}</label>
+                  {% if _option.hint %}
+                  <div class="govuk-hint govuk-radios__hint">
+                    {{_option.hint}}
+                  </div>
+                  {% endif %}
+                </div>
+                {% if _option.reveal %}
+                  <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-transport_method{{loop.index}}">
+                    <div class="govuk-form-group">
+                      <label class="govuk-label" for="transport_method-field-{{loop.index}}">{{_option.reveal}}</label>
+                      <input class="govuk-input govuk-!-width-two-thirds" id="transport_method-field-{{loop.index}}" name="transport_method-field-{{loop.index}}" type="text" spellcheck="false">
+                    </div>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+
+          </fieldset>
+        </div>
+
+        {% if data.commodity == "grain" %}
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="transport_maritime">Name of vessel</label>
+          <div id="vessel-hint" class="govuk-hint">Enter the vessel name or flight number</div>
+          <input class="govuk-input govuk-!-width-one-third" id="transport_maritime" name="transport_maritime" type="ship-name" spellcheck="false" aria-describedby="vessel-hint" value="{{data.transport_maritime}}">
+        </div>
+
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="port_export">Port of export from the UK</label>
+          <input class="govuk-input govuk-input--width-20" id="port_export" name="port_export" type="text" value="{{data.port_export}}">
+        </div>
+        {% endif %}
+        
+        {% if data.commodity == "potatoes" %}
+          {% if data.reissue != "yes" %}
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="container_num">Container number</label>
+            <input class="govuk-input govuk-input--width-20" id="container_num" name="container_num" value="{{data.container_num}}" type="text">
+          </div>
+          {% endif %}
+        {% endif %}
+
+      {% endif %}
+
+      <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+
+      <!-- Session data hook to update the task list so that this section is marked as 'COMPLETED' -->
+      <input class="govuk-input" id="shipping_task_list_data" name="shipping_task_list_data" type="hidden" value="Complete">
+
+      {% if data.reissue == "yes" %}
+        <p class="govuk-body"><a href="../../application-re-issue?id={{data.id}}&is_group={{data.is_group}}" class="govuk-link govuk-link--no-visited-state">Cancel</a></p>
+      {% else %}
+        {% include "../modules/_save-continue-later.html" %}
+      {% endif %}
+
+      <input type="hidden" name="showMessage" value="yes" >
+
+    </form>
+
+  </div>
+
+</div>
+<script type="text/javascript" src="/public/javascripts/accessible-autocomplete.min.js"></script>
+{% endblock %}

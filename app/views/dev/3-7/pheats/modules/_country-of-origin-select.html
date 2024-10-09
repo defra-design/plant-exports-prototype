@@ -1,0 +1,35 @@
+<div class="commodityOriginWrapper" >
+  <div class="govuk-form-group govuk-!-margin-bottom-0">
+    <fieldset class="govuk-fieldset">
+
+      <input id="{{_commodityOriginDeletedID}}" name="{{_commodityOriginDeletedID}}" type="hidden" value="false" class="deleteOriginVisibility">
+
+      <label class="govuk-label" for="{{_commodityOriginID}}">
+        Country of origin
+      </label>
+      <div class="deleteWrapper">
+        <div class="govuk-form-group autocomplete-wrapper" >
+
+          {% set _selectedOriginCountry = '' %}
+          {% for param in data[_commodityOriginID] %}
+            {% set _selectedOriginCountry = param %}
+          {% endfor %}
+
+          <select class="govuk-select pheats-country-select" id="{{_commodityOriginID}}" name="{{_commodityOriginID}}" >
+            <option value="none"></option>
+            {% for _country in data['countries-full-2'] %}
+              <option value="{{_country.code}}"{% if _selectedOriginCountry == _country.code %} selected{% endif %}>{{_country.name}}</option>
+            {% endfor %}
+          </select>
+
+        </div>
+        <div class="deleteButtonWrapper">
+          <a class="govuk-button govuk-button--secondary deleteOrigin" href="#" >Remove</a>
+        </div>
+      </div>
+      
+
+    </fieldset>
+  </div>
+
+</div>

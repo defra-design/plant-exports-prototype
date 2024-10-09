@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.build == "development" %}What country are you exporting to? - Exports application{% else %}Destination country - {{serviceName}}{% endif %} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    {% include "../../modules/_payment-banner.html" %}
+
+    {% if data.has_reference == "coc" %}
+    <!-- <form method="post" action="{{query.return_url or 'reference?journey=coc'}}" novalidate> -->
+    {% elif data.commodity == "bulbs" %}
+    <!-- <form method="post" action="{{query.return_url or 'bulbs-declaration'}}" novalidate>     -->
+    {% else %}
+    <!-- <form method="post" action="{{query.return_url or 'what-country-validation'}}" novalidate> -->
+    {% endif %}
+    <form method="post" action="{{query.return_url or 'digital-phytosanitary-certificate'}}" novalidate>
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-6">
+        <h1 class="govuk-fieldset__heading">Destination country</h1>
+      </legend>
+
+      
+      {% block countrySelect %}
+      {% include "../modules/_country-select.html" %}
+      {% endblock %}
+
+      <div class="govuk-button-group">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Continue</button>
+        <a class="govuk-link app-button--link" href="../../dashboard-submitted">Cancel</a>
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

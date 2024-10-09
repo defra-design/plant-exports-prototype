@@ -1,0 +1,102 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.build == "development" %}Exports application - GOV.UK{% else %}Upload a file - Phytosanitary certificate - {{serviceName}} - GOV.UK{% endif %}
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+    
+    <!-- Chris Harding (10.01.23) - Added this different scenario for usability testing of the HPUI 'Clone' designs -->
+    {% if data.id == "34" %}
+    <form action="upload-in-progress{% if query.change == 'yes' %}?change=yes&return_url={{data.return_url or 'check-your-answers'}}{% endif %}&has_botanicial_name2=use_description&commodity_description2=Rosa davidii (ROSDA)&commodity_type2=plants&countryOfOriginSelect2=GB&quantity2=10&units2=Tonnes&number_of_packages2=5&packaging2=BG&row2=true&has_botanicial_name3=use_description&commodity_description3=Anisodontea scabrosa (AODSC)&commodity_type3=plants&countryOfOriginSelect3=GB&quantity3=10&units3=Tonnes&number_of_packages3=5&packaging3=BG&row3=true&has_botanicial_name4=use_description&commodity_description4=Corylus ferox (CYLFE)&commodity_type4=plants&countryOfOriginSelect4=GB&quantity4=10&units4=Tonnes&number_of_packages4=5&packaging4=BG&row4=true&has_botanicial_name5=use_description&commodity_description5=Pinus ponderosa (PIUPO)&commodity_type5=plants&countryOfOriginSelect5=GB&quantity5=10&units5=Tonnes&number_of_packages5=5&packaging5=BG&row5=true" method="post" novalidate>
+    {% else %}
+    <form action="upload-in-progress{% if query.change == 'yes' %}?change=yes&return_url={{data.return_url or 'check-your-answers'}}{% endif %}" method="post" novalidate>
+    {% endif %}
+
+      <!--
+        Chris Harding (06.06.22) - Here we set:
+          a) template
+          b) example template
+        This is based on the commodity and application type provided.
+      -->
+
+      <!-- Default commodity value (e.g. if no commodity and application type exists) -->
+      {% set commodity = data.commodity or "plants" %}
+
+      <!-- Tailored values for template and example template based on based on commodity and application type -->
+      {% if commodity == "bulbs" %}
+        {% set template = "template-export-bulbs.csv" %}
+        {% if data.reforwarding == "1" %}
+          {% set template = "template-export-bulbs-rf.csv" %}
+        {% endif %}
+      {% elif commodity == "plants" %}
+        {% set template = "template-export-plants.csv" %}
+        {% if data.reforwarding == "1" %}
+          {% set template = "template-export-plants-rf.csv" %}
+        {% endif %}
+      {% elif commodity == "potatoes" %}
+        {% set template = "template-export-potatoes.csv" %}
+        {% if data.reforwarding == "1" %}
+          {% set template = "template-export-potatoes-rf.csv" %}
+        {% endif %}
+      {% elif commodity == "plant products" %}
+        {% set template = "template-export-plant-products.csv" %}
+        {% if data.reforwarding == "1" %}
+          {% set template = "template-export-plant-products-rf.csv" %}
+        {% endif %}
+      {% elif commodity == "seeds" %}
+        {% set template = "template-export-seeds.csv" %}
+        {% if data.reforwarding == "1" %}
+          {% set template = "template-export-seeds-rf.csv" %}
+        {% endif %}
+      {% elif commodity == "used farm and forestry machinery" %}
+        {% set template = "template-export-used-farm-machinery.csv" %}
+        {% if data.reforwarding == "1" %}
+          {% set template = "template-export-used-farm-machinery-rf.csv" %}
+        {% endif %}
+      {% else %}
+        {% set template = "template-export-plants.csv" %}
+        {% if data.reforwarding == "1" %}
+          {% set template = "template-export-plants-rf.csv" %}
+        {% endif %}
+      {% endif %}
+
+      <div class="govuk-form-group govuk-!-margin-bottom-9">
+
+        <h1 class="govuk-heading-xl">Upload a file</h1>
+
+        <p class="govuk-body"><a href="/public/templates/{{template}}" class="govuk-link govuk-link--no-visited-state" >Download the CSV template (3KB)</a> (last updated 1 January 2024)</p>
+
+
+        {% include "./upload-guidance-content-module.html" %}
+
+        
+        {{ govukFileUpload({
+          id: "fileUpload1",
+          name: "fileUpload1",
+          label: {
+            text: "Upload your completed CSV file"
+          }
+        }) }}
+
+      </div>
+
+      {{ govukButton({
+        text: "Upload"
+      }) }}
+
+    </form>
+
+  </div>
+      
+</div>
+{% endblock %}

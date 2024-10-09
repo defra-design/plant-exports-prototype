@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.build == "development" %}Declaration - Exports application{% else %}Exporter declaration - Phytosanitary certificate - {{serviceName}}{% endif %} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<style>
+  
+  /* Needs extracting and adding to the external Sass or CSS */
+  .govuk-checkboxes-long-label {
+    margin-top: -10px;
+  }
+
+</style>
+
+<div class="govuk-grid-row">
+
+  <div class="{% if data.build == 'development' %}govuk-grid-column-full{% else %}govuk-grid-column-two-thirds{% endif %}">
+
+    {% include "../../modules/_payment-banner.html" %}
+
+
+    <h1 class="govuk-heading-xl">Exporter declaration</h1>
+    {% if data.pheats_check != "yes" %}
+    <p class="govuk-body">By submitting this application form, you are agreeing that to the best of your knowledge and belief the statements made in this {% if data.reforwarding %}re-forwarding{% endif %} application are true and complete.<!-- You will comply with the legal requirements of UK law, including payment for official controls, repossession of any consignment rejected after transit from the UK to another country or costs of destruction if necessary. --></p>
+    {% else %}
+    <p class="govuk-body">By submitting this application form, you are agreeing that a PHEATS Authorised Person has carried out the official inspection of the consignment, and only those commodities that have passed this inspection have been entered in this application.</p>
+    {% endif %}
+    <p class="govuk-body">Date of declaration: {{todaysDate}}</p>
+
+    <form class="review-form" action="confirmation" method="post">
+
+      <div class="govuk-form-group">
+
+        <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+          
+          <div class="govuk-checkboxes__item">
+            <input class="govuk-checkboxes__input" type="checkbox" autofocus="autofocus" name="confirm" id="confirm" value="Declaration Accepted">
+            <label class="govuk-label govuk-checkboxes__label govuk-!-font-weight-bold govuk-checkboxes-long-label" for="confirm">I confirm that the information I have provided is correct to the best of my knowledge</label>
+          </div>
+
+        </div>
+
+      </div>
+
+      {% if data.payments == "true" %}
+      <p class="govuk-body">
+        <a href="../../dashboard-draft" class="govuk-link govuk-button govuk-link--no-visited-state">Save and continue later</a>
+      </p>
+      {% else %}
+        {% if data.journey == "coc" %}
+          <a class="govuk-button margin-top-30" href="confirmation-coc" value="Submit application" id="Button-SubmitApplication">Submit application</a>
+        {% else %}
+          <a class="govuk-button margin-top-30" href="confirmation-page" value="Submit application" id="Button-SubmitApplication">Submit application</a>
+        {% endif %}
+      {% endif %}
+
+      
+      
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,183 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Consignment details - {{serviceName}} - GOV.UK
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../../../application/modules/_account-banner.html" %}
+<a href="{{query.returnURL or 'review-certificate'}}?commodity={{data.commodity}}&consignmentSize={{data.consignmentSize}}" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<style>
+
+  /* Needs extracting and adding to the external Sass or CSS */
+  /* Chris Harding (17.10.23) - Expansion on the GOV.UK table component for styling the <td> in section 8.1 */
+  .govuk-table-td-block {
+    display: block;
+    margin-bottom: 7px;
+  }
+
+  .govuk-table-td-block-last {
+    display: block;
+  }
+
+  /* Chris Harding (10.06.22) - Defra pagination CSS fix to match the developed service implementation */
+  .defra-pagination {
+    margin: 0px;
+  }
+
+  .defra-pagination__list {
+    float: none;
+  }
+
+  .defra-pagination__link {
+    padding-top: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    padding-left: 0px;
+    text-align: left;
+    min-width: 20px;    
+  }
+  @media (min-width: 40.0625em) {
+    .defra-pagination__link {
+      padding-right: 10px;
+      min-width: 25px;
+    }
+  }
+  
+  .defra-pagination__item--prev {
+    padding-right: 10px;
+  }
+  @media (min-width: 40.0625em) {
+    .defra-pagination__item--prev {
+      padding-right: 15px;
+    }
+  }
+
+  .defra-pagination__results {
+    padding-top: 1px;
+    padding-right: 5px;
+    padding-bottom: 1px;
+    padding-left: 0px;    
+  }
+  @media (min-width: 40.0625em) {
+    .defra-pagination__results {
+      padding-right: 0px;
+      padding-left: 5px;
+    }
+  }
+
+</style>
+
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-full">
+
+    <form action="review-certificate" method="post">
+      <span class="govuk-caption-xl">Issue ePhyto 1760 96929 3035</span>
+      <h1 class="govuk-heading-xl">Consignment details</h1>
+
+      <div class="search-wrapper govuk-form-group">
+
+        <label for="search-commodities" class="govuk-label">
+          {% if data.commodity == "used farm and forestry machinery" %}
+            Search by description, country of last use or unique ID
+          {% elif data.commodity == "seeds" %}
+            Search by description or lot reference
+          {% else %}
+              Search by description
+          {% endif %}
+        </label>
+    
+        <div class="search-input-wrapper govuk-!-width-two-thirds">
+          <input type="search" value="{{query.search or ''}}" id="search-commodities" name="search" title="Search" class="govuk-input">
+          
+          <div class="search-input-submit-wrapper">
+            <button type="submit" class="search-submit">Search</button>
+          </div>
+    
+        </div>
+    
+      </div>
+
+      {% set _originColHeader = "Countries of origin" %}
+      {% if data.reforwarding == "1" %}
+        {% set _originColHeader = "Countries of origin and import certificate numbers" %}
+      {% endif %}
+      {% if data.commodity == "used farm and forestry machinery" %}
+        {% set _originColHeader = "Country of last use" %}
+        {% if data.reforwarding == "1" %}
+          {% set _originColHeader = "Country of last use and import certificate numbers" %}
+        {% endif %}
+      {% endif %}
+
+      {% set _quantityColHeader = "Quantity and packages" %}
+      {% if data.commodity == "plant products" %}
+        {% set _quantityColHeader = "Quantities and packages" %}
+      {% endif %}
+
+      {% set _packingColHeader = "Packaging information" %}
+
+      <table class="govuk-table govuk-!-margin-bottom-4 responsive-table">
+        <thead class="govuk-table__head">
+          {% if data.commodity == "used farm and forestry machinery" %}
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Description</th>
+            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
+            <th class="govuk-table__header" scope="col">Unique ID</th>
+            <!-- <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th> -->
+          </tr>
+          {% else %}
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Description</th>
+            <th class="govuk-table__header" scope="col">{{_originColHeader}}</th>
+            <th class="govuk-table__header" scope="col">{{_quantityColHeader}}</th>
+            <th class="govuk-table__header" scope="col">{{_packingColHeader}}</th>
+            <!-- <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th> -->
+          </tr>
+          {% endif %}
+        </thead>
+        <tbody class="govuk-table__body">
+          {% set _viewOnly = "yes" %}
+          {% for i in range(0, 100) -%}
+            {% include "./modules/_summary-general-check-answers.html" %}
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div class="govuk-form-block">
+        <nav class="defra-pagination" id="pagination-label">
+          <p class="govuk-visually-hidden" aria-labelledby="pagination-label">Pagination navigation</p>
+          <ul class="defra-pagination__list">
+            <li class="defra-pagination__item defra-pagination__item--active">
+              <span class="defra-pagination__link" style="color: black!important; font-weight: 700;">1</span>
+            </li>
+            <li class="defra-pagination__item">
+              <a class="defra-pagination__link" href="#">2</a>
+            </li>
+            <li class="defra-pagination__item">
+              <a class="defra-pagination__link" href="#">3</a>
+            </li>
+            <li class="defra-pagination__item">
+              <a class="defra-pagination__link" href="#">4</a>
+            </li>
+          </ul>
+          <p class="defra-pagination__results govuk-body">Showing <strong>1</strong> to <strong>100</strong> of <strong>395</strong> results</p>
+        </nav>
+      </div>
+
+      <div class="govuk-form-block govuk-!-margin-top-4">
+        <p class="govuk-body">
+          <a class="govuk-link" href="{{query.returnURL or 'view-certificate'}}?commodity={{data.commodity}}&consignmentSize={{data.consignmentSize}}&reforwarding={{data.reforwarding}}">Return to check the ePhyto</a>
+        <p>
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,558 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.build == "development" %}
+  {% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %} {{query.id | appInformationV9('applicationID')}} - {{serviceName}} - GOV.UK
+  {% else %}
+  Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %} {{query.id | appInformationV9('applicationID')}} - {{serviceName}} - GOV.UK
+  {% endif %}
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+<div class="login-nav login-border">
+  <ul class="login-nav__list">
+    <li class="login-nav__list-item-new">Prototype user</li>
+    <li class="login-nav__list-item-new"><a href="account?returnURL={{query.returnURL or 'dashboard-submitted'}}" class="govuk-link login-nav__link-new govuk-link--no-visited-state profile">Manage account</a></li>
+    <li class="login-nav__list-item-new"><a href="#" class="govuk-link login-nav__link-new govuk-link--no-visited-state">Sign out</a></li>
+  </ul>
+</div>
+
+<a href="javascript:history.back()" class="govuk-back-link">Return to your applications</a>
+{% endblock %}
+
+{% block content %}
+<!-- Chris Harding (14.12.22) - Plants and fresh produce -->
+{% if query.id == "34" %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if data.reissue_certificate_data_pfp == "draft" %}
+    <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+      <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+          Important
+        </h2>
+      </div>
+      <div class="govuk-notification-banner__content">
+        <p class="govuk-notification-banner__heading">You have not submitted your re-issue application</p>
+        <p class="govuk-body" >If you updated your details, these are still saved in your application.</p>
+        <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="application/re-issue/amend-your-certificate?id={{query.id}}&is_group={{query.is_group}}&commodity=plants&certificateFormat=nondigital">Continue re-issue application</a></p>
+      </div>
+    </div>
+    {% elif data.reissue_certificate_data_pfp == "rejected" %}
+    <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+      <div class="govuk-notification-banner__header">
+        <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+          Important
+        </h2>
+      </div>
+      <div class="govuk-notification-banner__content">
+        <p class="govuk-notification-banner__heading">
+          {% if query.rejectionReason == "1" %}
+          <!-- requries new application -->
+          Your certificate cannot be re-issued as you need to submit a new application
+        {% elif query.rejectionReason == "2" %}
+          <!-- need new import permit-->
+          Your certificate cannot be re-issued as you need a new import permit
+        {% elif query.rejectionReason == "3" %}
+          <!-- additional testing required-->
+          Your certificate cannot be re-issued as we would need to test your consignment again
+        {% else %}
+          Your certificate cannot be re-issued
+        {% endif %}
+        </p>
+        <p class="govuk-body" >The inspector said: "Mandatory free text added by the inspector".</p>
+        <p class="govuk-body">If you updated your details, these are still saved in your application.</p>
+      </div>
+    </div>
+    {% endif %}    
+
+    <h1 class="govuk-heading-xl">
+      {% if data.build == "development" %}
+      {% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %} 
+      <br>
+      {{query.id | appInformationV9('applicationID')}}
+      {% else %}
+      Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %}
+      <br>
+      {{query.id | appInformationV9('applicationID')}}
+      {% endif %}
+    </h1>
+  </div>
+
+</div>
+
+<div class="govuk-grid-row">
+  
+  <div class="{% if data.reissue_certificate_data_pfp == 'approved' %}govuk-grid-column-one-half{% else %}govuk-grid-column-two-thirds{% endif %}">
+
+    <h2 class="govuk-heading-m">Your application</h2>
+
+    {% if query.is_block == "yes" %}
+    <p class="govuk-body">This is a block application of 100 certificates</p>
+    {% elif query.is_group == "yes" %}
+    <p class="govuk-body">This is an application of 5 certificates</p>
+    {% endif %}    
+    <dl class="govuk-summary-list govuk-summary-list--no-border">
+      
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Status</dt>
+        <dd class="govuk-summary-list__value">
+          
+          {% if data.reissue_certificate_data_pfp == "submitted" %}
+          <div class="govuk-tag govuk-tag--white-tag-blue-border-and-text">
+            Re-issue requested
+          </div>
+          {% elif data.reissue_certificate_data_pfp == "processing" %}
+          <div class="govuk-tag govuk-tag--blue">
+            Processing re-issue
+          </div>
+          {% elif data.reissue_certificate_data_pfp == "approved" %}
+          <div class="govuk-tag govuk-tag--green">
+            Certificate re-issued
+          </div>
+          {% elif data.reissue_certificate_data_pfp == "rejected" %}
+          <div class="govuk-tag govuk-tag--red">
+            Re-issue denied
+          </div>
+          {% else %}
+          <div class="govuk-tag govuk-tag--green">
+            Certificate issued
+          </div>
+          {% endif %}
+
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Your reference</dt>
+        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV9('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformationV9('reference')}}{% endif %}</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Type</dt>
+        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV9('cert_info')) == 'Conformity' %}Certificate of conformity{% elif (query.id | appInformationV9('cert_info')) == 'Phytosanitary' %}Phytosanitary certificate{% elif (query.id | appInformationV9('cert_info')) == 'Re-forwarding' %}Re-forwarding phytosanitary certificate{% else %}Phytosanitary certificate{% endif %} for plants and fresh produce</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Destination country</dt>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV9('destination')}}</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">{% if data.build == "development" %}Customer{% else %}Consignee{% endif %}</dt>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV9('importer') | title or "Example consignee name"}}</dd>
+      </div>
+
+      {% if query.id == 0 %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Agent</dt>
+        <dd class="govuk-summary-list__value">Bill Shoggins</dd>
+      </div>
+      {% endif %}
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Phytosanitary certificate number</dt>
+        <dd class="govuk-summary-list__value">UK/GB/E&W/{{query.id | appInformationV9('certificate') or "2022/4236522044833"}}{% if data.reissue_certificate_data_pfp == "approved" %} R1{% endif %}</dd>
+      </div>
+      
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Certificate issue date</dt>
+        <dd class="govuk-summary-list__value">{% if data.reissue_certificate_data_pfp == "approved" %}{{todaysDate}}{% else %}{{query.id | appInformationV9('certificateIssueDate') or "10 January 2023"}}{% endif %}</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Certificate expiry date</dt>
+        <dd class="govuk-summary-list__value">{% if data.reissue_certificate_data_pfp == "approved" %}{{todaysDateExpiry14Days}}{% else %}{{query.id | appInformationV9('certificateExpiryDate') or "24 January 2023"}}{% endif %}</dd>
+      </div>
+
+    </dl>
+
+    <div class="govuk-inset-text">
+      <p class="govuk-body">Draw down stock is available</p>
+    </div>
+
+  </div>
+
+  {% if data.reissue_certificate_data_pfp == "approved" %}
+  <div class="govuk-grid-column-one-half govuk-!-margin-bottom-8">
+    <h2 class="govuk-heading-m">Your certificate</h2>
+    <p class="govuk-body">This certificate has been re-issued.</p>
+    <ul class="govuk-list govuk-!-margin-bottom-8 noprint">
+      <li><a class="govuk-link govuk-link--no-visited-state" href="re-issue-history?id={{query.id}}&is_group={{query.is_group}}">View certificate issue history</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="application/re-issue/introduction?id={{query.id}}&is_group={{query.is_group}}">Apply for re-issue</a></li>
+    </ul>
+  </div>
+  {% endif %}
+
+</div>
+
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+    <ul class="govuk-list govuk-!-margin-bottom-8 noprint">
+      <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id}}&is_group={{query.is_group}}">Copy as new application</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="#">View application details</a></li>
+      {% if data.reissue_certificate_data_pfp != "submitted" and data.reissue_certificate_data_pfp != "processing" and data.reissue_certificate_data_pfp != "approved" and data.reissue_certificate_data_pfp != 'draft' %}
+      <li>
+        <a class="govuk-link govuk-link--no-visited-state" href="application/re-issue/introduction?id={{query.id}}&is_group={{query.is_group}}">Apply for re-issue</a>
+      </li>
+      {% endif %}
+    </ul>
+  </div>
+  
+</div>
+
+<div class="govuk-grid-row">
+  
+  <div class="govuk-grid-column-full">
+    <h2 class="govuk-heading-m">Commodities in this application</h2>
+
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header" scope="col">Description</th>
+          <th class="govuk-table__header" scope="col">Origin</th>
+          <th class="govuk-table__header" scope="col">Net quantity and number of packages</th>
+          <th class="govuk-table__header" scope="col">Packaging, packing material and distinguishing marks</th>
+          <th class="govuk-table__header govuk-table__header--numeric" scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            <span style="display: block; margin-bottom: 7px;">
+              {% if commodity.has_botanicial_name == "use_description" %}
+              <!-- use DESCRIPTION -->
+              <strong>{{commodity.commodity_description or "Description for plant"}}</strong>
+              {% elif commodity.genus %}
+              <!-- use GENUS + SPECIES -->
+              <strong>{{commodity.genus or "Genus unknown"}}, {{commodity.commodity_host_species or "Species unknown"}}</strong>
+              {% else %}
+              <!-- use BOTANICAL NAME -->
+              <strong>{{commodity.botanical_name or "Rosa ecae (ROSEC)"}}</strong>
+              {% endif %}
+            </span>
+            {% if commodity.commodity_variety != "" %}
+            <span style="display: block; margin-bottom: 7px;">'{{commodity.commodity_variety or "Red blossom"}}'</span>
+            {% endif %}
+            {% if query.design != "b" %}
+            <span style="display: block; margin-bottom: 7px;">
+              Commodity type:
+              {% if commodity.commodity_type == "produce" %}
+              Produce (fruit, flowers or vegetables)
+              {% else %}
+              {{commodity.commodity_type | capitalize or "Plants"}}
+              {% endif %}
+            </span>
+            {% endif %}
+          </td>
+          <td class="govuk-table__cell">
+            {% set _defaultCountry = "United Kingdom" %}
+            {% if commodity.filter_demo == "_unchecked" or commodity.filter_demo == undefined %}
+            {{_defaultCountry}}
+            {% else %}
+            {{commodity.filter_demo | join(", ") or _defaultCountry}}
+            {% endif %}
+            <!-- "filter_demo":["Afghanistan","Åland Islands","Albania"], -->
+          </td>
+          <td class="govuk-table__cell">
+            <span style="display: block; margin-bottom: 7px;">{{commodity.quantity or "20"}} {{commodity.units or "kilograms"}}</span>
+            <span style="display: block; margin-bottom: 7px;">{{commodity.number_of_packages or "5"}} packages</span>
+          </td>
+          <td class="govuk-table__cell">
+            <span style="display: block; margin-bottom: 7px;">{{commodity.packaging[0] or "Crate - bulk - cardboard"}}</span>
+            {% if query.design != "b" %}
+            {% if commodity.packing_material_used != "" %}
+            <span style="display: block; margin-bottom: 7px;">{{commodity.packing_material_used or "Cardboard"}}</span>
+            {% endif %}
+            {% if commodity.distinguishing_marks != "" %}
+            <span style="display: block; margin-bottom: 7px;">{{commodity.distinguishing_marks or "Brown marks"}}</span>
+            {% endif %}
+            {% endif %}
+            {% if data.reforwarding %}
+            <span style="display: block; margin-bottom: 7px;" >
+              Import certificates:<br>
+              {% if commodity['commodityIPCN-2'] %}
+              {{commodity['commodityIPCN-1'] or "123-456-789-0"}} and {{commodity['commodityIPCN-2'] or "ABC-123-456-789-0"}}
+              {% else %}
+              {{commodity['commodityIPCN-1'] or "123-456-789-0"}}
+              {% endif %}
+            </span>
+            {% endif %}
+          </td>
+          <td class="govuk-table__cell" style="text-align: right;">
+            <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+            <br>
+            <a href="#" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+          </td>
+        </tr>
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            <span style="display: block; margin-bottom: 7px;">
+            {% if commodity.has_botanicial_name == "use_description" %}
+            <!-- use DESCRIPTION -->
+            <strong>{{commodity.commodity_description or "Description for plant"}}</strong>
+            {% elif commodity.genus %}
+            <!-- use GENUS + SPECIES -->
+            <strong>{{commodity.genus or "Genus unknown"}}, {{commodity.commodity_host_species or "Species unknown"}}</strong>
+            {% else %}
+            <!-- use BOTANICAL NAME -->
+            <strong>{{commodity.botanical_name or "RRRosa ecae (ROSEC)"}}</strong>
+            {% endif %}
+            </span>
+            {% if commodity.commodity_variety != "" %}
+            <span style="display: block; margin-bottom: 7px;">'{{commodity.commodity_variety or "Red blossom"}}'</span>
+            {% endif %}
+            {% if query.design != "b" %}
+            <span style="display: block; margin-bottom: 7px;">
+            Commodity type:
+            {% if commodity.commodity_type == "produce" %}
+            Produce (fruit, flowers or vegetables)
+            {% else %}
+            {{commodity.commodity_type | capitalize or "Plants"}}
+            {% endif %}
+            </span>
+            {% endif %}
+          </td>
+          <td class="govuk-table__cell">
+               {% set _defaultCountry = "United Kingdom" %}
+               {% if commodity.filter_demo == "_unchecked" or commodity.filter_demo == undefined %}
+               {{_defaultCountry}}
+               {% else %}
+               {{commodity.filter_demo | join(", ") or _defaultCountry}}
+               {% endif %}
+               <!-- "filter_demo":["Afghanistan","Åland Islands","Albania"], -->
+          </td>
+          <td class="govuk-table__cell">
+            <span style="display: block; margin-bottom: 7px;">{{commodity.quantity or "20"}} {{commodity.units or "kilograms"}}</span>
+            <span style="display: block; margin-bottom: 7px;">{{commodity.number_of_packages or "5"}} packages</span>
+          </td>
+          <td class="govuk-table__cell">
+            <span style="display: block; margin-bottom: 7px;">{{commodity.packaging[0] or "Crate - bulk - cardboard"}}</span>
+            {% if query.design != "b" %}
+            {% if commodity.packing_material_used != "" %}
+            <span style="display: block; margin-bottom: 7px;">{{commodity.packing_material_used or "Cardboard"}}</span>
+            {% endif %}
+            {% if commodity.distinguishing_marks != "" %}
+            <span style="display: block; margin-bottom: 7px;">{{commodity.distinguishing_marks or "Brown marks"}}</span>
+            {% endif %}
+            {% endif %}
+          </td>
+          <td class="govuk-table__cell" style="text-align: right;">
+            <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+            <br>
+            <a href="#" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+          </td>
+        </tr>
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">
+            <span style="display: block; margin-bottom: 7px;">
+            {% if commodity.has_botanicial_name == "use_description" %}
+            <!-- use DESCRIPTION -->
+            <strong>{{commodity.commodity_description or "Description for plant"}}</strong>
+            {% elif commodity.genus %}
+            <!-- use GENUS + SPECIES -->
+            <strong>{{commodity.genus or "Genus unknown"}}, {{commodity.commodity_host_species or "Species unknown"}}</strong>
+            {% else %}
+            <!-- use BOTANICAL NAME -->
+            <strong>{{commodity.botanical_name or "RRRosa ecae (ROSEC)"}}</strong>
+            {% endif %}
+            </span>
+            {% if commodity.commodity_variety != "" %}
+            <span style="display: block; margin-bottom: 7px;">'{{commodity.commodity_variety or "Red blossom"}}'</span>
+            {% endif %}
+            {% if query.design != "b" %}
+            <span style="display: block; margin-bottom: 7px;">
+            Commodity type:
+            {% if commodity.commodity_type == "produce" %}
+            Produce (fruit, flowers or vegetables)
+            {% else %}
+            {{commodity.commodity_type | capitalize or "Plants"}}
+            {% endif %}
+            </span>
+            {% endif %}
+          </td>
+          <td class="govuk-table__cell">
+            {% set _defaultCountry = "United Kingdom" %}
+            {% if commodity.filter_demo == "_unchecked" or commodity.filter_demo == undefined %}
+            {{_defaultCountry}}
+            {% else %}
+            {{commodity.filter_demo | join(", ") or _defaultCountry}}
+            {% endif %}
+            <!-- "filter_demo":["Afghanistan","Åland Islands","Albania"], -->
+          </td>
+          <td class="govuk-table__cell">
+            <span style="display: block; margin-bottom: 7px;">{{commodity.quantity or "20"}} {{commodity.units or "kilograms"}}</span>
+            <span style="display: block; margin-bottom: 7px;">{{commodity.number_of_packages or "5"}} packages</span>
+          </td>
+          <td class="govuk-table__cell">
+            <span style="display: block; margin-bottom: 7px;">{{commodity.packaging[0] or "Crate - bulk - cardboard"}}</span>
+            {% if query.design != "b" %}
+            {% if commodity.packing_material_used != "" %}
+            <span style="display: block; margin-bottom: 7px;">{{commodity.packing_material_used or "Cardboard"}}</span>
+            {% endif %}
+            {% if commodity.distinguishing_marks != "" %}
+            <span style="display: block; margin-bottom: 7px;">{{commodity.distinguishing_marks or "Brown marks"}}</span>
+            {% endif %}
+            {% endif %}
+          </td>
+          <td class="govuk-table__cell" style="text-align: right;">
+            <a href="how-to-identify" class="govuk-link govuk-link--no-visited-state">Change<span class="govuk-visually-hidden"> this commodity</span></a>
+            <br>
+            <a href="#" class="govuk-link govuk-link--no-visited-state">Delete<span class="govuk-visually-hidden"> this commodity</span></a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</div>
+<!-- Chris Harding (14.12.22) - Processed plant products -->
+{% else %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if data.reissue_certificate_data_ppp == "rejected" %}
+    <div class="app-alert app-alert--warning" role="region" aria-labelledby="govuk-notification-banner-message" data-module="govuk-notification-banner">
+      {% if query.rejectionReason == "1" %}
+      <p class="govuk-body" id="govuk-notification-banner-message">The inspector decided your certificate cannot be re-issued. The inspector said:</p>
+      {% elif query.rejectionReason == "2" %}
+      <p class="govuk-body" id="govuk-notification-banner-message">The inspector decided your certificate cannot be re-issued as you need a new import permit. The inspector also said:</p>
+      {% elif query.rejectionReason == "3" %}
+      <p class="govuk-body" id="govuk-notification-banner-message">The inspector decided your certificate cannot be re-issued as your consignment would need to be tested again. The inspector also said:</p>
+      {% elif query.rejectionReason == "4" %}
+      <p class="govuk-body" id="govuk-notification-banner-message">The inspector decided your certificate cannot be re-issued. The inspector said:</p>
+      {% else %}
+      <p class="govuk-body" id="govuk-notification-banner-message">The inspector decided your certificate cannot be re-issued. The inspector said:</p>
+      {% endif %}
+      <p class="govuk-body govuk-!-font-weight-bold">"Mandatory free text added by the inspector"</p>
+    </div>
+    {% endif %}
+
+    <h1 class="govuk-heading-xl">
+      {% if data.build == "development" %}
+      {% if query.is_block == "yes" %}Block application{% elif query.is_group == "yes" %}Group application{% else %}Application{% endif %} 
+      <br>
+      {{query.id | appInformationV9('applicationID')}}
+      {% else %}
+      Manage {% if query.is_block == "yes" %}block application{% elif query.is_group == "yes" %}group application{% else %}application{% endif %}
+      <br>
+      {{query.id | appInformationV9('applicationID')}}
+      {% endif %}
+    </h1>
+  </div>
+
+</div>
+
+<div class="govuk-grid-row">
+  
+  <div class="{% if data.reissue_certificate_data_ppp == 'approved' %}govuk-grid-column-one-half{% else %}govuk-grid-column-two-thirds{% endif %}">
+    <h2 class="govuk-heading-m">Your application</h2>
+    {% if query.is_block == "yes" %}
+    <p class="govuk-body">This is a block application of 100 certificates</p>
+    {% elif query.is_group == "yes" %}
+    <p class="govuk-body">This is an application of 5 certificates</p>
+    {% endif %}
+    <dl class="govuk-summary-list govuk-summary-list--no-border">
+      
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Status</dt>
+        <dd class="govuk-summary-list__value">
+          
+          {% if data.reissue_certificate_data_ppp == "submitted" %}
+          <div class="govuk-tag govuk-tag--white-tag-blue-border-and-text">
+            Re-issue requested
+          </div>
+          {% elif data.reissue_certificate_data_ppp == "processing" %}
+          <div class="govuk-tag govuk-tag--blue">
+            Processing re-issue
+          </div>
+          {% elif data.reissue_certificate_data_ppp == "approved" %}
+          <div class="govuk-tag govuk-tag--green">
+            Certificate re-issued
+          </div>
+          {% elif data.reissue_certificate_data_ppp == "rejected" %}
+          <div class="govuk-tag govuk-tag--red">
+            Re-issue denied
+          </div>
+          {% else %}
+          <div class="govuk-tag govuk-tag--green">
+            Certificate issued
+          </div>
+          {% endif %}
+
+        </dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Your reference</dt>
+        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV9('reference')) == "" %}<span class="govuk-hint">Not entered</span>{% else %}{{query.id | appInformationV9('reference')}}{% endif %}</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Type</dt>
+        <dd class="govuk-summary-list__value">{% if (query.id | appInformationV9('cert_info')) == 'Conformity' %}Certificate of conformity{% elif (query.id | appInformationV9('cert_info')) == 'Phytosanitary' %}Phytosanitary certificate{% elif (query.id | appInformationV9('cert_info')) == 'Re-forwarding' %}Re-forwarding phytosanitary certificate{% else %}Phytosanitary certificate{% endif %} for processed plant products</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Destination country</dt>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV9('destination')}}</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">{% if data.build == "development" %}Customer{% else %}Consignee{% endif %}</dt>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV9('importer') | title or "Example consignee name"}}</dd>
+      </div>
+
+      {% if query.id == 0 %}
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Agent</dt>
+        <dd class="govuk-summary-list__value">Bill Shoggins</dd>
+      </div>
+      {% endif %}
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Phytosanitary certificate number</dt>
+        <dd class="govuk-summary-list__value">UK/GB/E&W/{{query.id | appInformationV9('certificate') or "2022/4236522044833"}}</dd>
+      </div>
+      
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Certificate issue date</dt>
+        <dd class="govuk-summary-list__value">{% if data.reissue_certificate_data_ppp == "approved" %}18 December 2022{% else %}{{query.id | appInformationV9('certificateIssueDate') or "01 January 2022"}}{% endif %}</dd>
+      </div>
+
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key">Certificate expiry date</dt>
+        <dd class="govuk-summary-list__value">{{query.id | appInformationV9('certificateExpiryDate') or "15 January 2022"}}</dd>
+      </div>
+
+    </dl>
+  </div>
+
+  {% if data.reissue_certificate_data_ppp == "approved" %}
+  <div class="govuk-grid-column-one-half govuk-!-margin-bottom-8">
+    <h2 class="govuk-heading-m">Your certificate</h2>
+    <p class="govuk-body">This certificate has been re-issued.</p>
+    <p class="govuk-body"><a class="govuk-link govuk-link--no-visited-state" href="re-issue-history?id={{query.id}}&is_group={{query.is_group}}">View certificate issue history</a></p>
+  </div>
+  {% endif %}
+
+</div>
+
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+    <ul class="govuk-list noprint">
+      <li><a class="govuk-link govuk-link--no-visited-state" href="clone?id={{query.id}}&is_group={{query.is_group}}">Copy as new application</a></li>
+      <li><a class="govuk-link govuk-link--no-visited-state" href="#">View application details</a></li>
+    </ul>
+  </div>
+  
+</div>
+{% endif %}
+{% endblock %}

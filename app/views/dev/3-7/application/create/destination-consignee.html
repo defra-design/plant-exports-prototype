@@ -1,0 +1,137 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.reissue == "yes" %}Make your changes - Re-issue a phytosanitary certificate - {{serviceName}} - GOV.UK{% else %}{% if data.build == "development" %}Display question - Exports application - GOV.UK{% else %}Who will receive this consignment? - {{serviceName}} - GOV.UK{% endif %}{% endif %}
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{# set label as bold #}
+{% set label_class = "govuk-label govuk-!-font-weight-bold" %}
+{% if data.build != "development" %}
+{% set label_class = "govuk-label" %}
+{% endif %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    {% if data.journey == "coc" %}
+    <form action="{{query.return_url or 'complete-phyto'}}" method="post">
+    {% else %}
+    {% if data.reissue == "yes" %}
+    <form action="../re-issue/amend-your-certificate?id={{data.id}}&is_group={{data.is_group}}&commodity={{data.commodity or 'plants'}}&reissue_certificate_data_pfp=draft" method="post">
+    {% else %}
+    <form action="{{query.return_url or '../create/task-list'}}" method="post">
+    {% endif %}
+    {% endif %}
+      <fieldset class="govuk-fieldset">
+
+        {% if data.reissue == "yes" %}
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
+          <span class="govuk-caption-xl">Consignee details</span>
+          Make your changes
+        </legend>
+        {% else %}
+        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-9">
+          <h1 class="govuk-fieldset__heading">Who will receive this {% if data.reforwarding %}<br>re-forwarding{% endif %} consignment?</h1>
+        </legend>
+        {% endif %}
+
+
+
+        <div class="govuk-form-group{% if query.error1 == 'true' %} govuk-form-group--error{% endif %}">
+          <label class="govuk-label" for="consignee_name">Consignee name</label>
+  
+          <div id="consignee_name-hint" class="govuk-hint">
+            The consignee is the business you are sending your goods to.
+          </div>
+  
+          {% if query.error1 == 'true' %}
+          <p id="consignee_name-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Enter the name of the consignee</p>
+          {% endif %}
+          <input class="govuk-input" id="consignee_name" name="consignee_name" type="text" value="{{data.consignee_name}}" aria-describedby="consignee_name-hint{% if query.error1 == 'true' %} consignee_name-error{% endif %}">
+        </div>
+  
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend">
+            <h2 class="govuk-fieldset__heading">Consignee address</h2>
+          </legend>
+  
+          <div class="govuk-form-group{% if query.error2 == 'true' %} govuk-form-group--error{% endif %}">
+            <label class="govuk-label" for="consignee-address-line-1">Address line 1</label>
+            {% if query.error2 == 'true' %}
+            <p id="consignee-address-line-1-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Enter address line 1 of the consignee address</p>
+            {% endif %}
+            <input class="govuk-input" id="consignee-address-line-1" name="consigneeAddressLine1" type="text"{% if query.error2 == 'true' %}aria-describedby="consignee-address-line-1-error"{% endif %} autocomplete="address-line1" value="{{data.consigneeAddressLine1 or 'Danish Place'}}">
+          </div>
+  
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="consignee-address-line-2">Address line 2 (optional)</label>
+            <input class="govuk-input" id="consignee-address-line-2" name="consigneeAddressLine2" type="text" autocomplete="address-line2" value="{{data.consigneeAddressLine2 or 'Danish Lane'}}">
+          </div>
+  
+          <div class="govuk-form-group{% if query.error3 == 'true' %} govuk-form-group--error{% endif %}">
+            <label class="govuk-label" for="consignee-address-line-3">Town or city</label>
+            {% if query.error3 == 'true' %}
+            <p id="consignee-address-line-3-error" class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> Enter the town or city of the consignee address</p>
+            {% endif %}
+            <input class="govuk-input govuk-!-width-two-thirds" id="consignee-address-line-3" name="consigneeAddressLine3" type="text" autocomplete="address-level2" value="{{data.consigneeAddressLine3 or 'Dane'}}"{% if query.error3 == 'true' %} aria-describedby="consignee-address-line-3-error"{% endif %}>
+          </div>
+  
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="consignee-address-line-4">County, state or province (optional)</label>
+            <input class="govuk-input govuk-!-width-two-thirds" id="consignee-address-line-4" name="consigneeAddressLine4" type="text" autocomplete="address-level1" value="{{data.consigneeAddressLine4}}">
+          </div>
+  
+          <div class="govuk-form-group">
+            <label class="govuk-label" for="consignee-address-line-5">Postcode or zip code (if there is one)</label>
+            <input class="govuk-input govuk-!-width-one-quarter" id="consignee-address-line-5" name="consigneeAddressLine5" type="text" autocomplete="postal-code" value="{{data.consigneeAddressLine5}}">
+          </div>
+  
+        </fieldset>
+  
+        {% if data.commodity == "grain" %}
+        <div class="govuk-form-group">
+          <label class="govuk-label" for="consignee_more_detail">Further information{% if data.reforwarding %} or additional declarations{% endif %} (optional)</label>
+          <span id="consignee_more_detail-hint" class="govuk-hint">Add extra information for your certificate. For example, translations for the destination country.</span>
+          <textarea class="govuk-textarea" id="consignee_more_detail" name="consignee_more_detail" rows="5" aria-describedby="consignee_more_detail-hint">{{data.consignee_more_detail or 'More information'}}</textarea>
+        </div>
+        {% endif %}
+
+        
+
+        
+
+      </fieldset>
+      
+      <div class="govuk-button-group{% if data.reissue != 'yes' %} govuk-!-margin-bottom-9{% endif %}">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+        {% if data.reissue == "yes" %}
+        <a class="govuk-link app-button--link" href="../../application-re-issue?id={{data.id}}&is_group={{data.is_group}}">Cancel</a>
+        {% endif %}
+      </div>
+
+      <!-- Session data hook to update the task list so that this section is marked as 'COMPLETED' -->
+      <div class="govuk-form-group" hidden>
+        <label class="govuk-label" for="consignee_task_list_data">Task list section URL</label>
+        <input class="govuk-input" id="consignee_task_list_data" name="consignee_task_list_data" type="text" value="Complete">
+      </div>
+
+      {% if data.reissue != "yes" %}
+        {% block continueLater %}
+          {% include "../modules/_save-continue-later.html" %}
+        {% endblock %}
+      {% endif %}
+
+    </form>
+
+  </div>
+
+</div>
+{% endblock %}

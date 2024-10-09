@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  {% if data.build == "development" %}Exports application - GOV.UK{% else %}[page title] - Phytosanitary certificate - GOV UK{% endif %}
+{% endblock %}
+
+{% block beforeContent %}
+{{super()}}
+{% include "../modules/_account-banner.html" %}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+
+  <div class="govuk-grid-column-two-thirds">
+
+    <form method="post" novalidate>
+
+      {% set _yesURL = "task-list" %}
+      {% set _suffix = "" %} 
+      {% if query.change == 'yes' %}
+        {% set _yesURL = data.return_url or "check-your-answers" %}
+        {% set _suffix = "?change=yes&return_url=" + (data.return_url or "check-your-answers") %} 
+      {% endif %}
+
+      {% set _value = data["exporter-phyto-address"] %}
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl govuk-!-margin-bottom-6">
+            <h1 class="govuk-fieldset__heading">Is this the exporter address?</h1>
+          </legend>
+
+          <div class="govuk-form-group">
+            <p class="govuk-body">
+              New Farm<br>
+              Egg Lane<br>
+              Sacrewell<br>
+              Peterborough<br>
+              Cambridgeshire<br>
+              PO5 4GH
+            </p>
+            <p class="govuk-body">
+              This is the address saved to your Defra account.
+            </p>
+          </div>
+          
+          <div class="govuk-radios" data-module="govuk-radios">
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="exporter-phyto-address-1" name="exporter-phyto-address" type="radio" value="Yes~{{_yesURL}}{{_suffix}}" {% if _value == 'Yes' %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="exporter-phyto-address-1">Yes</label>
+            </div>
+
+            <div class="govuk-radios__item">
+              <input class="govuk-radios__input" id="exporter-phyto-address-2" name="exporter-phyto-address" type="radio" value="No~exporter-phyto-address-postcode{{_suffix}}" {% if _value == 'No' %} checked{% endif %}>
+              <label class="govuk-label govuk-radios__label" for="exporter-phyto-address-2">No</label>
+            </div>
+
+          </div>
+
+        </fieldset>
+      </div>
+
+      <div class="govuk-button-group govuk-!-margin-top-3 govuk-!-margin-bottom-6">
+        <button class="govuk-button" type="submit" data-module="govuk-button">Save and continue</button>
+      </div>
+
+      <input type="hidden" name="showMessage" value="yes" >
+
+
+    </form>
+
+    
+  </div>
+
+</div>
+{% endblock %}

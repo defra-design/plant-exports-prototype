@@ -1,0 +1,119 @@
+{% extends "layout.html" %}
+{% block pageTitle %}
+When will the consignment be ready? - {{serviceName}} - GOV.UK
+{% endblock %}
+{% block beforeContent %}
+{{super()}}
+<a href="javascript:history.back()" class="govuk-back-link">Back</a>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    
+    
+
+    <form action="{{query.return_url or '../create/complete-coc'}}" method="POST">
+
+      <h1 class="govuk-heading-xl">
+        When and where will the consignment be ready?
+      </h1>
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="submit-date-hint">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+            Date when your consignment will be ready for inspection
+          </legend>
+          <div id="submit-date-hint" class="govuk-hint">
+            For example, 27 3 2021
+          </div>
+          <div class="govuk-date-input" id="submit-date">
+            <div class="govuk-date-input__item">
+              <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" for="submit-date-day">
+                  Day
+                </label>
+                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="submit-date-day" name="inpection_date_day" type="text" pattern="[0-9]*" inputmode="numeric" value="3">
+              </div>
+            </div>
+            <div class="govuk-date-input__item">
+              <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" for="submit-date-month">
+                  Month
+                </label>
+                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="submit-date-month" name="inpection_date_month" type="text" pattern="[0-9]*" inputmode="numeric" value="2">
+              </div>
+            </div>
+            <div class="govuk-date-input__item">
+              <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" for="submit-date-year">
+                  Year
+                </label>
+                <input class="govuk-input govuk-date-input__input govuk-input--width-4" id="submit-date-year" name="inpection_date_year" type="text" pattern="[0-9]*" inputmode="numeric" value="2021">
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="govuk-form-group">
+        <fieldset class="govuk-fieldset" role="group" aria-describedby="submit-time-hint">
+          <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+              Time when your consignment will be ready for inspection
+          </legend>
+          <div id="submit-time-hint" class="govuk-hint">
+            For example, 9:30am
+          </div>
+          <div class="govuk-date-input" id="submit-time">
+            <div class="govuk-date-input__item">
+              <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" for="submit-time-hour">
+                  Hour
+                </label>
+                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="submit-time-hour" name="inspection_time_hour" type="text" pattern="[0-9]*" inputmode="numeric">
+              </div>
+            </div>
+
+            <div class="govuk-date-input__item">
+              <div class="govuk-form-group">
+                <label class="govuk-label govuk-date-input__label" for="submit-time-minute">
+                  Minute
+                </label>
+                <input class="govuk-input govuk-date-input__input govuk-input--width-2" id="submit-time-minute" name="inspection_time_minute" type="text" pattern="[0-9]*" inputmode="numeric">
+              </div>
+            </div>
+            <div class="govuk-date-input__item">
+              <div class="govuk-form-group">
+                <label class="govuk-label" for="submit-time-ampm">
+                  am or pm
+                </label>
+                <select class="govuk-select" style="min-width:inherit" id="submit-time-ampm" name="inspection_time_period">
+                  <option value="empty"></option>
+                  <option value="am">am</option>
+                  <option value="pm">pm</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="govuk-form-group">
+        <label class="govuk-label govuk-!-font-weight-bold" for="location">
+          Place where your consignment will be available for inspection (optional)
+        </label>
+        <div id="location-hint" class="govuk-hint">
+          For example, shed number 9
+        </div>
+        <input class="govuk-input govuk-input--width-20" id="location" name="location" type="text" aria-describedby="location-hint">
+      </div>
+
+      <input class="govuk-button govuk-!-margin-top-6" type="submit" name="saveAndContinue" value="Save and continue" id="Button-SaveAndContinue" data-qa-id="Button-SaveAndContinue">
+
+    </form>
+    {% block continueLater %}{% include "../modules/_save-continue-later.html" %}{% endblock %}
+
+  </div>
+</div>
+
+{% endblock %}

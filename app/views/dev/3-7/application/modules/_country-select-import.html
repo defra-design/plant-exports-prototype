@@ -1,0 +1,35 @@
+<div class="govuk-form-group">
+  <fieldset class="govuk-fieldset">
+    {% set _countryID = 'importCertCountry' + _id %}
+    <div class="govuk-form-group autocomplete-wrapper" style="max-width: 54ex;">
+      <label class="govuk-label govuk-!-font-weight-bold" for="{{_countryID}}">
+        {{country_module_label or "Search for a country" }}
+      </label>
+      <select id="{{_countryID}}" class="govuk-select" name="{{_countryID}}">
+
+        <option value="none"></option>
+
+        {% for _country in data['countries-full-2'] %}
+          <option value="{{_country.code}}" {% if _editing and _prepopCountry == _country.code %} selected{% endif %}>{{_country.name}}</option>
+        {% endfor %}
+
+      </select>
+    </div>
+
+  </fieldset>
+
+</div>
+
+
+<script type="text/javascript" src="/public/javascripts/accessible-autocomplete.min.js"></script>
+<script type="text/javascript">
+  window.addEventListener('load', function() {
+    var _countrynIDJQ = {{_countryID | dump | safe }};
+    var element = document.querySelector('#' + _countrynIDJQ);
+    accessibleAutocomplete.enhanceSelectElement({
+      selectElement: element,
+      id: _countrynIDJQ,
+      name: _countrynIDJQ
+    })
+  })
+</script>
