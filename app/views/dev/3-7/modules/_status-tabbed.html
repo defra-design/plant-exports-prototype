@@ -18,94 +18,134 @@
         <fieldset class="govuk-fieldset">
           <legend class="govuk-fieldset__legend govuk-fieldset__legend--m gem-c-checkboxes__legend--hidden">Filter by status</legend>
           <ul class="govuk-checkboxes gem-c-checkboxes__list">
-            <!-- <li class="govuk-checkboxes__item">
-              <input type="checkbox" name="filter_status" id="filter_status-awaiting_decision" value="Awaiting decision" class="govuk-checkboxes__input"{% for param in data.filter_status %}{% if param == 'Awaiting decision' %} checked{% endif %}{% endfor %}>
-              <label for="filter_status-awaiting_decision" class="govuk-label govuk-checkboxes__label">Awaiting decision</label>
-            </li> -->
+            
+            {% set _filterStatuses = [
+              {
+                "name": "Cancelled",
+                "id": "cancelled"
+              },
+              {
+                "name": "Certificate issued",
+                "id": "certificate_issued"
+              },
+              {
+                "name": "Certificate re-issued",
+                "id": "certificate_reissued"
+              },
+              {
+                "name": "ePhyto delayed",
+                "id": "ephyto_delayed"
+              },
+              {
+                "name": "ePhyto re-issue delayed",
+                "id": "ephyto_reissue_delayed"
+              },
+              {
+                "name": "ePhyto re-issue delayed",
+                "id": "ephyto_reissue_delayed"
+              },
+              {
+                "name": "ePhyto re-issue denied",
+                "id": "ephyto_reissue_denied"
+              },
+              {
+                "name": "ePhyto re-issue received",
+                "id": "ephyto_reissue_received"
+              },
+              {
+                "name": "ePhyto re-issue requested",
+                "id": "ephyto_reissue_requested"
+              },
+              {
+                "name": "ePhyto received",
+                "id": "ephyto_received"
+              },
+              {
+                "name": "ePhyto withdrawn",
+                "id": "ephyto_withdrawn"
+              },
+              {
+                "name": "Exporter action",
+                "id": "exporter_action"
+              },
+              {
+                "name": "Not required",
+                "id": "not_required"
+              },
+              {
+                "name": "Preparing certificate",
+                "id": "preparing_certificate"
+              },
+              {
+                "name": "Preparing ePhyto",
+                "id": "preparing_ephyto"
+              },
+              {
+                "name": "Preparing re-issue",
+                "id": "preparing_reissue"
+              },
+              {
+                "name": "Preparing report",
+                "id": "preparing_report"
+              },
+              {
+                "name": "Processing",
+                "id": "processing"
+              },
+              {
+                "name": "Processing ePhyto re-issue",
+                "id": "processing_ephyto_reissue"
+              },
+              {
+                "name": "Processing re-issue",
+                "id": "processing_reissue"
+              },
+              {
+                "name": "Re-issue denied",
+                "id": "reissue_denied"
+              },
+              {
+                "name": "Re-issue requested",
+                "id": "reissue_requested"
+              },
+              {
+                "name": "Rejected",
+                "id": "rejected"
+              },
+              {
+                "name": "Report issued",
+                "id": "report_issued"
+              },
+              {
+                "name": "Returned",
+                "id": "returned"
+              },
+              {
+                "name": "Submitted",
+                "id": "submitted"
+              },
+              {
+                "name": "Unknown",
+                "id": "unknown"
+              },
+              {
+                "name": "With inspector",
+                "id": "with_inspector"
+              },
+              {
+                "name": "Withdrawn",
+                "id": "withdrawn"
+              }
+             ] %}
+
+            {% for _filter in _filterStatuses %}
             <li class="govuk-checkboxes__item">
-              <input type="checkbox" name="filter_status" id="filter_status_cancelled" value="Cancelled" class="govuk-checkboxes__input"{% for param in data.filter_status %}{% if param == 'Cancelled' %} checked{% endif %}{% endfor %}>
-              <label for="filter_status_cancelled" class="govuk-label govuk-checkboxes__label">Cancelled</label>
+              <input type="checkbox" name="filter_status" id="filter_status_{{_filter.id}}" value="{{_filter.name}}" class="govuk-checkboxes__input"{% for param in data.filter_status %}{% if param == '{{_filter.name}}' %} checked{% endif %}{% endfor %}>
+              <label for="filter_status_{{_filter.id}}" class="govuk-label govuk-checkboxes__label">{{_filter.name}}</label>
             </li>
-            <!-- <li class="govuk-checkboxes__item">
-              <input type="checkbox" name="filter_status" id="filter_status_completed" value="Completed" class="govuk-checkboxes__input"{% for param in data.filter_status %}{% if param == 'Completed' %} checked{% endif %}{% endfor %}>
-              <label for="filter_status_completed" class="govuk-label govuk-checkboxes__label">Completed</label>
-            </li> -->
-            <li class="govuk-checkboxes__item">
-              <input type="checkbox" name="filter_status" id="filter_status_certificate_issued" value="Certificate issued" class="govuk-checkboxes__input"{% for param in data.filter_status %}{% if param == 'Certificate issued' %} checked{% endif %}{% endfor %}>
-              <label for="filter_status_certificate_issued" class="govuk-label govuk-checkboxes__label">Certificate issued</label>
-            </li>
-            <li class="govuk-checkboxes__item">
-              <input type="checkbox" name="filter_status" id="filter_status_certificate_reissued" value="Certificate re-issued" class="govuk-checkboxes__input"{% for param in data.filter_status %}{% if param == 'Certificate re-issued' %} checked{% endif %}{% endfor %}>
-              <label for="filter_status_certificate_reissued" class="govuk-label govuk-checkboxes__label">Certificate re-issued</label>
-            </li>
-            <!-- <li class="govuk-checkboxes__item">
-              <input type="checkbox" name="filter_status" id="filter_status_draft" value="Draft" class="govuk-checkboxes__input"{% for param in data.filter_status %}{% if param == 'Draft' %} checked{% endif %}{% endfor %}>
-              <label for="filter_status_draft" class="govuk-label govuk-checkboxes__label">Draft</label>
-            </li> -->
-            <li class="govuk-checkboxes__item">
-              <input type="checkbox" name="filter_status" id="filter_status_exporter_action" value="Exporter action" class="govuk-checkboxes__input"{% for param in data.filter_status %}{% if param == 'Exporter action' %} checked{% endif %}{% endfor %}>
-              <label for="filter_status_exporter_action" class="govuk-label govuk-checkboxes__label">Exporter action</label>
-            </li>
-            <li class="govuk-checkboxes__item">
-              <input type="checkbox" name="filter_status" id="filter_status_not_required" value="Not required" class="govuk-checkboxes__input"{% for param in data.filter_status %}{% if param == 'Not required' %} checked{% endif %}{% endfor %}>
-              <label for="filter_status_not_required" class="govuk-label govuk-checkboxes__label">Not required</label>
-            </li>
-            <li class="govuk-checkboxes__item">
-              <input type="checkbox" name="filter_status" id="filter_status_preparing_certificate" value="Preparing certificate" class="govuk-checkboxes__input"{% for param in data.filter_status %}{% if param == 'Preparing certificate' %} checked{% endif %}{% endfor %}>
-              <label for="filter_status_preparing_certificate" class="govuk-label govuk-checkboxes__label">Preparing certificate</label>
-            </li>
-            <li class="govuk-checkboxes__item">
-              <input type="checkbox" name="filter_status" id="filter_status_preparing_reissue" value="Preparing re-issue" class="govuk-checkboxes__input"{% for param in data.filter_status %}{% if param == 'Preparing re-issue' %} checked{% endif %}{% endfor %}>
-              <label for="filter_status_preparing_reissue" class="govuk-label govuk-checkboxes__label">Preparing re-issue</label>
-            </li>
-            <li class="govuk-checkboxes__item">
-              <input type="checkbox" name="filter_status" id="filter_status_preparing_report" value="Preparing report" class="govuk-checkboxes__input"{% for param in data.filter_status %}{% if param == 'Preparing report' %} checked{% endif %}{% endfor %}>
-              <label for="filter_status_preparing_report" class="govuk-label govuk-checkboxes__label">Preparing report</label>
-            </li>
-            <li class="govuk-checkboxes__item">
-              <input type="checkbox" name="filter_status" id="filter_status_processing" value="Processing" class="govuk-checkboxes__input"{% for param in data.filter_status %}{% if param == 'Processing' %} checked{% endif %}{% endfor %}>
-              <label for="filter_status_processing" class="govuk-label govuk-checkboxes__label">Processing</label>
-            </li>
-            <li class="govuk-checkboxes__item">
-              <input type="checkbox" name="filter_status" id="filter_status_processing_reissue" value="Processing re-issue" class="govuk-checkboxes__input"{% for param in data.filter_status %}{% if param == 'Processing re-issue' %} checked{% endif %}{% endfor %}>
-              <label for="filter_status_processing_reissue" class="govuk-label govuk-checkboxes__label">Processing re-issue</label>
-            </li>
-            <li class="govuk-checkboxes__item">
-              <input type="checkbox" name="filter_status" id="filter_status_reissue_denied" value="Re-issue denied" class="govuk-checkboxes__input"{% for param in data.filter_status %}{% if param == 'Re-issue denied' %} checked{% endif %}{% endfor %}>
-              <label for="filter_status_reissue_denied" class="govuk-label govuk-checkboxes__label">Re-issue denied</label>
-            </li>
-            <li class="govuk-checkboxes__item">
-              <input type="checkbox" name="filter_status" id="filter_status_reissue_requested" value="Re-issue requested" class="govuk-checkboxes__input"{% for param in data.filter_status %}{% if param == 'Re-issue requested' %} checked{% endif %}{% endfor %}>
-              <label for="filter_status_reissue_requested" class="govuk-label govuk-checkboxes__label">Re-issue requested</label>
-            </li>
-            <li class="govuk-checkboxes__item">
-              <input type="checkbox" name="filter_status" id="filter_status_rejected" value="Rejected" class="govuk-checkboxes__input"{% for param in data.filter_status %}{% if param == 'Rejected' %} checked{% endif %}{% endfor %}>
-              <label for="filter_status_rejected" class="govuk-label govuk-checkboxes__label">Rejected</label>
-            </li>
-            <li class="govuk-checkboxes__item">
-              <input type="checkbox" name="filter_status" id="filter_status_report_issued" value="Report issued" class="govuk-checkboxes__input"{% for param in data.filter_status %}{% if param == 'Report issued' %} checked{% endif %}{% endfor %}>
-              <label for="filter_status_report_issued" class="govuk-label govuk-checkboxes__label">Report issued</label>
-            </li>
-            <li class="govuk-checkboxes__item">
-              <input type="checkbox" name="filter_status" id="filter_status_returned" value="Returned" class="govuk-checkboxes__input"{% for param in data.filter_status %}{% if param == 'Returned' %} checked{% endif %}{% endfor %}>
-              <label for="filter_status_returned" class="govuk-label govuk-checkboxes__label">Returned</label>
-            </li>
-            <!-- <li class="govuk-checkboxes__item">
-              <input type="checkbox" name="filter_status" id="filter_status_scheduled" value="Scheduled" class="govuk-checkboxes__input"{% for param in data.filter_status %}{% if param == 'Scheduled' %} checked{% endif %}{% endfor %}>
-              <label for="filter_status_scheduled" class="govuk-label govuk-checkboxes__label">Scheduled</label>
-            </li> -->
-            <li class="govuk-checkboxes__item">
-              <input type="checkbox" name="filter_status" id="filter_status_submitted" value="Submitted" class="govuk-checkboxes__input"{% for param in data.filter_status %}{% if param == 'Submitted' %} checked{% endif %}{% endfor %}>
-              <label for="filter_status_submitted" class="govuk-label govuk-checkboxes__label">Submitted</label>
-            </li>
-            <li class="govuk-checkboxes__item">
-              <input type="checkbox" name="filter_status" id="filter_status_unknown" value="Unknown" class="govuk-checkboxes__input"{% for param in data.filter_status %}{% if param == 'Unknown' %} checked{% endif %}{% endfor %}>
-              <label for="filter_status_unknown" class="govuk-label govuk-checkboxes__label">Unknown</label>
-            </li>
-            <li class="govuk-checkboxes__item">
-              <input type="checkbox" name="filter_status" id="filter_status_with_inspector" value="With inspector" class="govuk-checkboxes__input"{% for param in data.filter_status %}{% if param == 'With inspector' %} checked{% endif %}{% endfor %}>
-              <label for="filter_status_with_inspector" class="govuk-label govuk-checkboxes__label">With inspector</label>
-            </li>
+            {% endfor %}
+            
+            
           </ul>
         </fieldset>
       </div>
