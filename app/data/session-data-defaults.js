@@ -34,6 +34,8 @@ var addresses = require('./addresses.json');
 var addresses2 = require('./addresses-2.json');
 var addresses3 = require('./addresses-3.json');
 
+var disinfectants = require('./disinfectants.json');
+
 module.exports = {
   "applications" : applications,
   "applicationsv2" : applicationsv2,
@@ -55,6 +57,7 @@ module.exports = {
   "addresses": addresses,
   "addresses2": addresses2,
   "addresses3": addresses3,
+  "disinfectants": disinfectants,
   "ephytoEmailNotifications": "All"
   // Insert values here
 }
