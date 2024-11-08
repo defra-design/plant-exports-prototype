@@ -38,6 +38,11 @@
   GOV.UK Prototype Kit
 {% endblock %}
 
+{% set _wideContainerClass = "" %}
+{% if wideContainer %}
+  {% set _wideContainerClass = " govuk-wide-container " %}
+{% endif %}
+
 {% block header %}
 
   {% set _blankEmailTemplateClass = "" %}
@@ -45,13 +50,15 @@
     {% set _blankEmailTemplateClass = " govuk-blank-email-template " %}
   {% endif %}
 
+  
+
   {% include "includes/cookie-banner.html" %}
   {# Set serviceNameV3 in config.js. #}
   {{ govukHeader({
     homepageUrl: "/",
     serviceName: serviceName,
     serviceUrl: "/",
-    containerClasses: "govuk-width-container" + _blankEmailTemplateClass,
+    containerClasses: "govuk-width-container" + _blankEmailTemplateClass + _wideContainerClass,
     useTudorCrown: true
   }) }}
 
@@ -75,6 +82,9 @@
 
 {% set mainClasses = mainClasses | default("govuk-main-wrapper--auto-spacing") %}
 
+{% set containerClasses = _wideContainerClass %}
+
+
 {% if useAutoStoreData %}
 {% block footer %}
 {% if isEmailTemplate or isBlankEmailTemplate %}
@@ -82,7 +92,7 @@
 {% else %}
 <footer class="govuk-footer" role="contentinfo">
 
-  <div class="govuk-width-container">
+  <div class="govuk-width-container {{_wideContainerClass}} ">
 
     <div class="govuk-footer__meta">
       

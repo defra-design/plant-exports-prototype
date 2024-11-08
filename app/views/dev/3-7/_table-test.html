@@ -1,6 +1,8 @@
 {% extends "layout.html" %}
 
-{% set serviceName = "table test" %}
+{% set wideContainer = true %}
+
+{% set serviceName = "Responsive table" %}
 
 {% block pageTitle %}
   Table test
@@ -18,29 +20,63 @@
     .break-word {
         word-wrap: break-word;
     }
+    .govuk-callout-box {
+        background: #f3f2f1
+    }
+    
 </style>
 <div class="govuk-grid-row govuk-!-margin-bottom-6">
-  
-  <div class="govuk-grid-column-full">
 
     {% set _merge = query.merge or "2" %}
 
-    {% if _merge == "2" %}
-    <h1 class="govuk-heading-l">Merging of first 2 columns</h1>
-    <p class="govuk-body">This table shows the first 2 columns merged.</p>
-    <a href="_table-test?merge=3">Show first 3 columns merged</a>
-    {% else %}
-    <h1 class="govuk-heading-l">Merging of first 3 columns</h1>
-    <p class="govuk-body">This table shows the first 3 columns merged.</p>
-    <a href="_table-test?merge=2">Show first 2 columns merged only</a>
-    {% endif %}
-    <br>
-    <hr>
-    <br><br><br><br><br>
+    <div class="govuk-grid-column-two-thirds">
+        <!-- <div class="govuk-feedback-box govuk-callout-box govuk-!-margin-bottom-6"> -->
+
+            <h1 class="govuk-heading-xl">Responsive table</h1>
+
+            <p>This is an example of a large table of data.</p>
+            <p>At different screen widths, the table layout adjusts.
+            <p><strong>Note:</strong> these breakpoints are defined for this specific set of data (large set in a wide page container). They might need more thought for general use.</p>
+            <p>Key differences:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>1015px or wider - standard table layout</li>
+                <li>480px to 1015px:
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>cells stacked vertically</li>
+                        <li>table header removed</li>
+                        <li>individual headings appear within each cell</li>
+                        <li>the headings and data are in a 2 column layout within each cell</li>
+                        <li>horizontal lines appear to help associate the headings with the data</li>
+                        <li>thicker lines seperate each row of data</li>
+                    </ul> 
+                </li>
+                <li>Less than 480px:
+                    <ul class="govuk-list govuk-list--bullet">
+                        <li>same as above except layout adjusted so that the headings and data within each cell stack vertically</li>
+                    </ul>
+                </li>
+            </ul>
+            
 
 
-    
 
+            <!-- <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible"> -->
+            <div class="govuk-feedback-box govuk-callout-box govuk-!-margin-bottom-6">
+            {% if _merge == "2" %}
+            <h2 class="govuk-heading-m">Merging of first 2 columns</h2>
+            <p class="govuk-body">This table shows the first 2 columns (name and company info) merged.</p>
+            <p><a href="_table-test?merge=3" class="govuk-link govuk-link--no-visited-state">Show first 3 columns merged</a></p>
+            {% else %}
+            <h2 class="govuk-heading-m">Merging of first 3 columns</h2>
+            <p class="govuk-body">This table shows the first 3 columns (name, company info and chemical group) merged.</p>
+            <p>This is an example of how columns can be merged, and then labels added within cells to differentiate the data.</p>
+            <p><a href="_table-test?merge=2" class="govuk-link govuk-link--no-visited-state">Show first 2 columns merged only</a></p>
+            {% endif %}
+        </div>
+
+    </div>
+  
+  <div class="govuk-grid-column-full">
     {% if _merge == "2" %}
         {% set _nameHeading = "Disinfectant name, company name and address" %}
     {% else %}
