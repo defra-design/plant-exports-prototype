@@ -29,6 +29,7 @@ var sample = require('./sample.json');
 var countries = require('./countries-full.json');
 var countries2 = require('./countries-eu-ni.json');
 var countries3 = require('./countries-full-2.json');
+var countries4 = require('./countries-full-2-poe.json');
 var addresses = require('./addresses.json');
 var addresses2 = require('./addresses-2.json');
 var addresses3 = require('./addresses-3.json');
@@ -52,6 +53,7 @@ module.exports = {
   "countries-full": countries,
   "countries-eu-ni": countries2,
   "countries-full-2": countries3,
+  "countries-full-2-poe": countries4,
   "addresses": addresses,
   "addresses2": addresses2,
   "addresses3": addresses3,
